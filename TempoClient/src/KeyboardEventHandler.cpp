@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "Global.h"
 #include "KeyboardEventHandler.h"
 
 bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa) {
@@ -7,7 +8,16 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAc
 	case osgGA::GUIEventAdapter::KEYDOWN:
 		switch (ea.getKey()) {
 		case 'w':
-			std::cout << "w key pressed" << std::endl;
+			position.y() += 0.05;
+			return false;
+		case 's':
+			position.y() -= 0.05;
+			return false;
+		case 'a':
+			position.x() -= 0.05;
+			return false;
+		case 'd':
+			position.x() += 0.05;
 			return false;
 		default:
 			return false;
