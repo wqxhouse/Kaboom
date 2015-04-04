@@ -10,31 +10,21 @@
 
 #include "KeyboardEventHandler.h"
 #include "PlayerNodeCallback.h"
+#include "Player.h"
 
-bool movingForward;
-bool movingBackward;
-bool movingLeft;
-bool movingRight;
-osg::Vec3 position;
-
-void moveForward() { movingForward = true; }
-void stopMoveForward() { movingForward = false; }
-void moveBackward() { movingBackward = true; }
-void stopMoveBackward() { movingBackward = false; }
-void moveLeft() { movingLeft = true; }
-void stopMoveLeft() { movingLeft = false; }
-void moveRight() { movingRight = true; }
-void stopMoveRight() { movingRight = false; }
+Player player;
 
 void setupKeyboardHandler(KeyboardEventHandler* handler) {
-	handler->registerKey('w', KeyboardEventHandler::KEY_DOWN, moveForward);
-	handler->registerKey('w', KeyboardEventHandler::KEY_UP, stopMoveForward);
-	handler->registerKey('s', KeyboardEventHandler::KEY_DOWN, moveBackward);
-	handler->registerKey('s', KeyboardEventHandler::KEY_UP, stopMoveBackward);
-	handler->registerKey('a', KeyboardEventHandler::KEY_DOWN, moveLeft);
-	handler->registerKey('a', KeyboardEventHandler::KEY_UP, stopMoveLeft);
-	handler->registerKey('d', KeyboardEventHandler::KEY_DOWN, moveRight);
-	handler->registerKey('d', KeyboardEventHandler::KEY_UP, stopMoveRight);
+	handler->registerKey('w', KeyboardEventHandler::KEY_DOWN, Player::moveForward);
+	handler->registerKey('w', KeyboardEventHandler::KEY_UP, Player::stopMoveForward);
+	handler->registerKey('s', KeyboardEventHandler::KEY_DOWN, Player::moveBackward);
+	handler->registerKey('s', KeyboardEventHandler::KEY_UP, Player::stopMoveBackward);
+	handler->registerKey('a', KeyboardEventHandler::KEY_DOWN, Player::moveLeft);
+	handler->registerKey('a', KeyboardEventHandler::KEY_UP, Player::stopMoveLeft);
+	handler->registerKey('d', KeyboardEventHandler::KEY_DOWN, Player::moveRight);
+	handler->registerKey('d', KeyboardEventHandler::KEY_UP, Player::stopMoveRight);
+	handler->registerKey(' ', KeyboardEventHandler::KEY_DOWN, Player::jump);
+	handler->registerKey(' ', KeyboardEventHandler::KEY_UP, Player::stopJump);
 }
 
 void setupCamera(osgViewer::Viewer& viewer) {
@@ -85,10 +75,10 @@ int main() {
 
 	mt->addUpdateCallback(new PlayerNodeCallback);
 
+	viewer.setSceneData(mt);
+
 	osg::ref_ptr<KeyboardEventHandler> kbdHandler = new KeyboardEventHandler;
 	setupKeyboardHandler(kbdHandler);
-
-	viewer.setSceneData(mt);
 	viewer.addEventHandler(kbdHandler);
 
 	viewer.realize();

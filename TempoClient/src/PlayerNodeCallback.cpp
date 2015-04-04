@@ -3,25 +3,33 @@
 #include <osg/MatrixTransform>
 #include "Global.h"
 
-void PlayerNodeCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)  {
-	if (movingForward) {
-		position.y() += 0.05;
+void PlayerNodeCallback::operator()(osg::Node* node, osg::NodeVisitor* nv) {
+	if (player.movingForward) {
+		player.velocity.y() = 0.05f;
+	} else if (player.movingBackward) {
+		player.velocity.y() = -0.05f;
+	} else {
+		player.velocity.y() = 0;
 	}
 
-	if (movingBackward) {
-		position.y() -= 0.05;
+	if (player.movingLeft) {
+		player.velocity.x() = -0.05f;
+	} else if (player.movingRight) {
+		player.velocity.x() = 0.05f;
+	} else {
+		player.velocity.x() = 0;
 	}
 
-	if (movingLeft) {
-		position.x() -= 0.05;
+	if (player.jumping) {
+		player.velocity.z() = 0.05f;
+	} else {
+		player.velocity.z() = 0;
 	}
 
-	if (movingRight) {
-		position.x() += 0.05;
-	}
+	player.position += player.velocity;
 
 	osg::MatrixTransform *mt = static_cast<osg::MatrixTransform *>(node);
 	osg::Matrix m;
-	m.makeTranslate(position);
+	m.makeTranslate(player.position);
 	mt->setMatrix(m);
 }
