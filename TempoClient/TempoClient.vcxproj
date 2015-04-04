@@ -120,11 +120,13 @@
   <ItemGroup>
     <ClCompile Include="src\KeyboardEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlayerNodeCallback.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Global.h" />
     <ClInclude Include="src\KeyboardEventHandler.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PlayerNodeCallback.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
