@@ -11,7 +11,31 @@
 #include "KeyboardEventHandler.h"
 #include "PlayerNodeCallback.h"
 
+bool movingForward;
+bool movingBackward;
+bool movingLeft;
+bool movingRight;
 osg::Vec3 position;
+
+void moveForward() { movingForward = true; }
+void stopMoveForward() { movingForward = false; }
+void moveBackward() { movingBackward = true; }
+void stopMoveBackward() { movingBackward = false; }
+void moveLeft() { movingLeft = true; }
+void stopMoveLeft() { movingLeft = false; }
+void moveRight() { movingRight = true; }
+void stopMoveRight() { movingRight = false; }
+
+void setupKeyboardHandler(KeyboardEventHandler* handler) {
+	handler->registerKey('w', KeyboardEventHandler::KEY_DOWN, moveForward);
+	handler->registerKey('w', KeyboardEventHandler::KEY_UP, stopMoveForward);
+	handler->registerKey('s', KeyboardEventHandler::KEY_DOWN, moveBackward);
+	handler->registerKey('s', KeyboardEventHandler::KEY_UP, stopMoveBackward);
+	handler->registerKey('a', KeyboardEventHandler::KEY_DOWN, moveLeft);
+	handler->registerKey('a', KeyboardEventHandler::KEY_UP, stopMoveLeft);
+	handler->registerKey('d', KeyboardEventHandler::KEY_DOWN, moveRight);
+	handler->registerKey('d', KeyboardEventHandler::KEY_UP, stopMoveRight);
+}
 
 void setupCamera(osgViewer::Viewer& viewer) {
 	const osg::Vec3 eye(0, -10, 0);
@@ -61,8 +85,11 @@ int main() {
 
 	mt->addUpdateCallback(new PlayerNodeCallback);
 
+	osg::ref_ptr<KeyboardEventHandler> kbdHandler = new KeyboardEventHandler;
+	setupKeyboardHandler(kbdHandler);
+
 	viewer.setSceneData(mt);
-	viewer.addEventHandler(new KeyboardEventHandler);
+	viewer.addEventHandler(kbdHandler);
 
 	viewer.realize();
 
