@@ -25,8 +25,8 @@ public:
 
 	typedef std::map<int, FunctionState> KeyFunctionMap;
 
-	bool registerKey(int key, Function func);
-	bool registerKey(int key, KeyState state, Function func);
+	bool bindKey(int key, Function func);
+    bool bindKey(int key, KeyState state, Function func);
 
 	virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 	virtual void accept(osgGA::GUIEventHandlerVisitor& v);
