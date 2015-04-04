@@ -4,16 +4,16 @@
 
 class Player {
 public:
-	static void moveForward();
-	static void stopMoveForward();
-	static void moveBackward();
-	static void stopMoveBackward();
-	static void moveLeft();
-	static void stopMoveLeft();
-	static void moveRight();
-	static void stopMoveRight();
-	static void jump();
-	static void stopJump();
+	static void moveForwardDown();
+	static void moveForwardUp();
+	static void moveBackwardDown();
+	static void moveBackwardUp();
+	static void moveLeftDown();
+	static void moveLeftUp();
+	static void moveRightDown();
+	static void moveRightUp();
+	static void jumpDown();
+	static void jumpUp();
 
 	bool movingForward;
 	bool movingBackward;

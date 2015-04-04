@@ -1,43 +1,43 @@
 #include "Global.h"
 #include "Player.h"
 
-void Player::moveForward() {
+void Player::moveForwardDown() {
 	player.movingForward = true;
 }
 
-void Player::moveBackward() {
+void Player::moveForwardUp() {
+    player.movingForward = false;
+}
+
+void Player::moveBackwardDown() {
 	player.movingBackward = true;
 }
 
-void Player::moveLeft() {
-	player.movingLeft = true;
+void Player::moveBackwardUp() {
+    player.movingBackward = false;
 }
 
-void Player::moveRight() {
+void Player::moveLeftDown() {
+    player.movingLeft = true;
+}
+
+void Player::moveLeftUp() {
+    player.movingLeft = false;
+}
+
+void Player::moveRightDown() {
 	player.movingRight = true;
 }
 
-void Player::stopMoveForward() {
-	player.movingForward = false;
+void Player::moveRightUp() {
+    player.movingRight = false;
 }
 
-void Player::stopMoveBackward() {
-	player.movingBackward = false;
-}
-
-void Player::stopMoveLeft() {
-	player.movingLeft = false;
-}
-
-void Player::stopMoveRight() {
-	player.movingRight = false;
-}
-
-void Player::jump() {
+void Player::jumpDown() {
 	player.jumping = true;
 }
 
-void Player::stopJump() {
+void Player::jumpUp() {
 	player.jumping = false;
 }
 
