@@ -8,23 +8,23 @@
 #include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
 
-#include "KeyboardEventHandler.h"
+#include "input/KeyboardEventHandler.h"
 #include "PlayerNodeCallback.h"
 #include "Player.h"
 
 Player player;
 
 void setupKeyboardHandler(KeyboardEventHandler* handler) {
-	handler->registerKey('w', KeyboardEventHandler::KEY_DOWN, Player::moveForward);
-	handler->registerKey('w', KeyboardEventHandler::KEY_UP, Player::stopMoveForward);
-	handler->registerKey('s', KeyboardEventHandler::KEY_DOWN, Player::moveBackward);
-	handler->registerKey('s', KeyboardEventHandler::KEY_UP, Player::stopMoveBackward);
-	handler->registerKey('a', KeyboardEventHandler::KEY_DOWN, Player::moveLeft);
-	handler->registerKey('a', KeyboardEventHandler::KEY_UP, Player::stopMoveLeft);
-	handler->registerKey('d', KeyboardEventHandler::KEY_DOWN, Player::moveRight);
-	handler->registerKey('d', KeyboardEventHandler::KEY_UP, Player::stopMoveRight);
-	handler->registerKey(' ', KeyboardEventHandler::KEY_DOWN, Player::jump);
-	handler->registerKey(' ', KeyboardEventHandler::KEY_UP, Player::stopJump);
+    handler->bindKey('w', KeyboardEventHandler::KEY_DOWN, Player::moveForward);
+    handler->bindKey('w', KeyboardEventHandler::KEY_UP, Player::stopMoveForward);
+    handler->bindKey('s', KeyboardEventHandler::KEY_DOWN, Player::moveBackward);
+    handler->bindKey('s', KeyboardEventHandler::KEY_UP, Player::stopMoveBackward);
+    handler->bindKey('a', KeyboardEventHandler::KEY_DOWN, Player::moveLeft);
+    handler->bindKey('a', KeyboardEventHandler::KEY_UP, Player::stopMoveLeft);
+    handler->bindKey('d', KeyboardEventHandler::KEY_DOWN, Player::moveRight);
+    handler->bindKey('d', KeyboardEventHandler::KEY_UP, Player::stopMoveRight);
+    handler->bindKey(' ', KeyboardEventHandler::KEY_DOWN, Player::jump);
+    handler->bindKey(' ', KeyboardEventHandler::KEY_UP, Player::stopJump);
 }
 
 void setupCamera(osgViewer::Viewer& viewer) {
