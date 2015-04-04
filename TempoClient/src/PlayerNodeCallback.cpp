@@ -1,7 +1,9 @@
 #include "PlayerNodeCallback.h"
 
 #include <osg/MatrixTransform>
+
 #include "Global.h"
+#include "PlayerNode.h"
 
 void PlayerNodeCallback::operator()(osg::Node* node, osg::NodeVisitor* nv) {
 	if (player.movingForward) {
@@ -28,8 +30,6 @@ void PlayerNodeCallback::operator()(osg::Node* node, osg::NodeVisitor* nv) {
 
 	player.position += player.velocity;
 
-	osg::MatrixTransform *mt = static_cast<osg::MatrixTransform *>(node);
-	osg::Matrix m;
-	m.makeTranslate(player.position);
-	mt->setMatrix(m);
+    PlayerNode *playerNode = static_cast<PlayerNode *>(node);
+    playerNode->setPosition(player.position);
 }

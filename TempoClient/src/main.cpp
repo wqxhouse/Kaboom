@@ -9,22 +9,23 @@
 #include <osgViewer/Viewer>
 
 #include "input/KeyboardEventHandler.h"
-#include "PlayerNodeCallback.h"
 #include "Player.h"
+#include "PlayerNode.h"
+#include "PlayerNodeCallback.h"
 
 Player player;
 
 void setupKeyboardHandler(KeyboardEventHandler* handler) {
-    handler->bindKey('w', KeyboardEventHandler::KEY_DOWN, Player::moveForward);
-    handler->bindKey('w', KeyboardEventHandler::KEY_UP, Player::stopMoveForward);
-    handler->bindKey('s', KeyboardEventHandler::KEY_DOWN, Player::moveBackward);
-    handler->bindKey('s', KeyboardEventHandler::KEY_UP, Player::stopMoveBackward);
-    handler->bindKey('a', KeyboardEventHandler::KEY_DOWN, Player::moveLeft);
-    handler->bindKey('a', KeyboardEventHandler::KEY_UP, Player::stopMoveLeft);
-    handler->bindKey('d', KeyboardEventHandler::KEY_DOWN, Player::moveRight);
-    handler->bindKey('d', KeyboardEventHandler::KEY_UP, Player::stopMoveRight);
-    handler->bindKey(' ', KeyboardEventHandler::KEY_DOWN, Player::jump);
-    handler->bindKey(' ', KeyboardEventHandler::KEY_UP, Player::stopJump);
+    handler->bindKey('w', KeyboardEventHandler::KEY_DOWN, Player::moveForwardDown);
+    handler->bindKey('w', KeyboardEventHandler::KEY_UP, Player::moveForwardUp);
+    handler->bindKey('s', KeyboardEventHandler::KEY_DOWN, Player::moveBackwardDown);
+    handler->bindKey('s', KeyboardEventHandler::KEY_UP, Player::moveBackwardUp);
+    handler->bindKey('a', KeyboardEventHandler::KEY_DOWN, Player::moveLeftDown);
+    handler->bindKey('a', KeyboardEventHandler::KEY_UP, Player::moveLeftUp);
+    handler->bindKey('d', KeyboardEventHandler::KEY_DOWN, Player::moveRightDown);
+    handler->bindKey('d', KeyboardEventHandler::KEY_UP, Player::moveRightUp);
+    handler->bindKey(' ', KeyboardEventHandler::KEY_DOWN, Player::jumpDown);
+    handler->bindKey(' ', KeyboardEventHandler::KEY_UP, Player::jumpUp);
 }
 
 void setupCamera(osgViewer::Viewer& viewer) {
@@ -60,22 +61,10 @@ void setupCamera(osgViewer::Viewer& viewer) {
 int main() {
 	osgViewer::Viewer viewer;
 
-	osg::ref_ptr<osg::Shape> player(new osg::Box);
-	osg::ref_ptr<osg::ShapeDrawable> playerDrawable(new osg::ShapeDrawable(player));
-	
-	osg::ref_ptr<osg::Geode> playerNode(new osg::Geode);
-	playerNode->addDrawable(playerDrawable);
+    osg::ref_ptr<PlayerNode> playerNode = new PlayerNode(&player);
+    playerNode->addUpdateCallback(new PlayerNodeCallback);
 
-	osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform;
-	mt->addChild(playerNode);
-
-	osg::Matrix m;
-	m.makeTranslate(osg::Vec3(5, 0, 1));
-	mt->setMatrix(m);
-
-	mt->addUpdateCallback(new PlayerNodeCallback);
-
-	viewer.setSceneData(mt);
+	viewer.setSceneData(playerNode);
 
 	osg::ref_ptr<KeyboardEventHandler> kbdHandler = new KeyboardEventHandler;
 	setupKeyboardHandler(kbdHandler);
