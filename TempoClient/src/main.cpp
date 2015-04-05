@@ -62,7 +62,7 @@ int main() {
     osg::ref_ptr<osg::Group> rootNode = new osg::Group;
 
     osg::ref_ptr<PlayerNode> playerNode = new PlayerNode(&player);
-    playerNode->addUpdateCallback = new PlayerNodeCallback;
+    playerNode->addUpdateCallback(new PlayerNodeCallback);
 
     Player player2;
     player2.position = osg::Vec3(2, 2, 0);
