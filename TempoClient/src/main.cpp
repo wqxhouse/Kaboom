@@ -61,10 +61,20 @@ void setupCamera(osgViewer::Viewer& viewer) {
 int main() {
 	osgViewer::Viewer viewer;
 
-    osg::ref_ptr<PlayerNode> playerNode = new PlayerNode(&player);
+    osg::ref_ptr<osg::Group> rootNode(new osg::Group);
+
+    osg::ref_ptr<PlayerNode> playerNode(new PlayerNode(&player));
     playerNode->addUpdateCallback(new PlayerNodeCallback);
 
-	viewer.setSceneData(playerNode);
+    Player player2;
+    player2.position = osg::Vec3(2, 2, 0);
+
+    osg::ref_ptr<PlayerNode> player2Node(new PlayerNode(&player2));
+
+    rootNode->addChild(playerNode);
+    rootNode->addChild(player2Node);
+
+    viewer.setSceneData(rootNode);
 
 	osg::ref_ptr<KeyboardEventHandler> kbdHandler = new KeyboardEventHandler;
 	setupKeyboardHandler(kbdHandler);

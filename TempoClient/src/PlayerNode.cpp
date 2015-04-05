@@ -14,6 +14,8 @@ PlayerNode::PlayerNode(Player *player) : player(player), positionTransform(new o
 
     this->addChild(positionTransform);
     positionTransform->addChild(model);
+
+    setPosition(player->position);
 }
 
 PlayerNode::~PlayerNode() {
