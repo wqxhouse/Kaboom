@@ -6,5 +6,5 @@
 
 class PlayerNodeCallback : public osg::NodeCallback {
 public:
-	virtual void operator()(osg::Node *node, osg::NodeVisitor *nv);
+    virtual void operator()(osg::Node *node, osg::NodeVisitor *nv);
 };

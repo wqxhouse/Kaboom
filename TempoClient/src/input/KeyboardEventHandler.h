@@ -6,32 +6,32 @@
 
 class KeyboardEventHandler : public osgGA::GUIEventHandler {
 public:
-	typedef void(*Function) ();
+    typedef void(*Function) ();
 
-	enum KeyState {
-		KEY_UP,
-		KEY_DOWN
-	};
+    enum KeyState {
+        KEY_UP,
+        KEY_DOWN
+    };
 
-	struct FunctionState {
-		FunctionState() {
-			keyState = KEY_UP;
-			keyFunction = NULL;
-		}
+    struct FunctionState {
+        FunctionState() {
+            keyState = KEY_UP;
+            keyFunction = NULL;
+        }
 
-		Function keyFunction;
-		KeyState keyState;
-	};
+        Function keyFunction;
+        KeyState keyState;
+    };
 
-	typedef std::map<int, FunctionState> KeyFunctionMap;
+    typedef std::map<int, FunctionState> KeyFunctionMap;
 
-	bool bindKey(int key, Function func);
+    bool bindKey(int key, Function func);
     bool bindKey(int key, KeyState state, Function func);
 
-	virtual bool handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &aa);
-	virtual void accept(osgGA::GUIEventHandlerVisitor &v);
+    virtual bool handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &aa);
+    virtual void accept(osgGA::GUIEventHandlerVisitor &v);
 
 protected:
-	KeyFunctionMap keyDownFuncMap;
-	KeyFunctionMap keyUpFuncMap;
+    KeyFunctionMap keyDownFuncMap;
+    KeyFunctionMap keyUpFuncMap;
 };

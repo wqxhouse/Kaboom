@@ -29,35 +29,35 @@ void setupKeyboardHandler(KeyboardEventHandler *handler) {
 }
 
 void setupCamera(osgViewer::Viewer &viewer) {
-	const osg::Vec3 eye(0, -10, 0);
-	const osg::Vec3 center(0, 1, 0);
+    const osg::Vec3 eye(0, -10, 0);
+    const osg::Vec3 center(0, 1, 0);
 
-	osgViewer::ViewerBase::Contexts context;
-	viewer.getContexts(context, true);
+    osgViewer::ViewerBase::Contexts context;
+    viewer.getContexts(context, true);
 
-	const osg::GraphicsContext::Traits* traits = context.front()->getTraits();
+    const osg::GraphicsContext::Traits *traits = context.front()->getTraits();
 
-	if (!traits) {
-		std::cerr << "Unable to detect screen resolution" << std::endl;
-		exit(1);
-	}
+    if (!traits) {
+        std::cerr << "Unable to detect screen resolution" << std::endl;
+        exit(1);
+    }
 
-	float screenHeight = traits->height;
-	float screenWidth = traits->width;
+    float screenHeight = traits->height;
+    float screenWidth = traits->width;
 
-	osg::Matrixf viewMat;
-	viewMat.makeLookAt(eye, center, osg::Vec3(0, 0, 1));
+    osg::Matrixf viewMat;
+    viewMat.makeLookAt(eye, center, osg::Vec3(0, 0, 1));
 
-	osg::Matrixf projMat;
-	projMat.makePerspective(30, screenWidth / screenHeight, 1, 1000);
+    osg::Matrixf projMat;
+    projMat.makePerspective(30, screenWidth / screenHeight, 1, 1000);
 
-	osg::Camera *camera = viewer.getCamera();
-	camera->setViewMatrix(viewMat);
-	camera->setProjectionMatrix(projMat);
+    osg::Camera *camera = viewer.getCamera();
+    camera->setViewMatrix(viewMat);
+    camera->setProjectionMatrix(projMat);
 }
 
 int main() {
-	osgViewer::Viewer viewer;
+    osgViewer::Viewer viewer;
 
     osg::ref_ptr<osg::Group> rootNode = new osg::Group;
 
@@ -74,15 +74,15 @@ int main() {
 
     viewer.setSceneData(rootNode);
 
-	osg::ref_ptr<KeyboardEventHandler> kbdHandler = new KeyboardEventHandler;
-	setupKeyboardHandler(kbdHandler);
-	viewer.addEventHandler(kbdHandler);
+    osg::ref_ptr<KeyboardEventHandler> kbdHandler = new KeyboardEventHandler;
+    setupKeyboardHandler(kbdHandler);
+    viewer.addEventHandler(kbdHandler);
 
-	viewer.realize();
+    viewer.realize();
 
-	setupCamera(viewer); // Need to be called after viewer.realize()
+    setupCamera(viewer); // Need to be called after viewer.realize()
 
-	while (!viewer.done()) {
-		viewer.frame();
-	}
+    while (!viewer.done()) {
+        viewer.frame();
+    }
 }
