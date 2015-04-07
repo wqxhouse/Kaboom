@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "InputManager.h"
+
 bool KeyboardEventHandler::bindKey(int key, Function func) {
     if (keyDownFuncMap.end() != keyDownFuncMap.find(key)) {
         std::cout << "Duplicate key '" << key << "' ignored." << std::endl;
@@ -30,6 +32,13 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIAc
     KeyFunctionMap::iterator itr;
     bool newKeyDownEvent = false;
     bool newKeyUpEvent = false;
+
+    int centerx = (ea.getWindowX() + ea.getWindowWidth()) / 2;
+    int centery = (ea.getWindowY() + ea.getWindowHeight()) / 2;
+    int x = ea.getX();
+    int y = ea.getY();
+    int deltaX = x - prevX;
+    int deltaY = y - prevY;
 
     switch (ea.getEventType()) {
     case osgGA::GUIEventAdapter::KEYDOWN:
@@ -64,6 +73,15 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIAc
             return true;
         }
 
+        return false;
+    case osgGA::GUIEventAdapter::MOVE:
+        if (deltaX != 0 || deltaY != 0) {
+            InputManager::look(deltaX, deltaY);
+
+            prevX = x;
+            prevY = y;
+            aa.requestWarpPointer(centerx, centery);
+        }
         return false;
     default:
         return false;
