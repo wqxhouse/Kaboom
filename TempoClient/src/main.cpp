@@ -12,6 +12,7 @@
 #include "core/Player.h"
 #include "PlayerNode.h"
 #include "PlayerNodeCallback.h"
+#include "util/ConfigSettings.h"
 
 Player player;
 
@@ -57,6 +58,9 @@ void setupCamera(osgViewer::Viewer &viewer) {
 }
 
 int main() {
+	// Load config file for the first time
+	ConfigSettings* config = ConfigSettings::config;
+
 	osgViewer::Viewer viewer;
 
     osg::ref_ptr<osg::Group> rootNode = new osg::Group;

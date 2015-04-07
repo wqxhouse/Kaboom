@@ -123,6 +123,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\PlayerNode.cpp" />
     <ClCompile Include="src\PlayerNodeCallback.cpp" />
+    <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Player.h" />
@@ -130,6 +131,7 @@
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
     <ClInclude Include="src\PlayerNode.h" />
     <ClInclude Include="src\PlayerNodeCallback.h" />
+    <ClInclude Include="src\util\ConfigSettings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
