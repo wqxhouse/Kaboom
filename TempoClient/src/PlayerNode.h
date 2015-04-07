@@ -15,7 +15,7 @@ public:
     void setPosition(const osg::Vec3 &position);
 
 protected:
-    Player* player;
+    Player *player;
 
     osg::ref_ptr<osg::MatrixTransform> positionTransform;
 };

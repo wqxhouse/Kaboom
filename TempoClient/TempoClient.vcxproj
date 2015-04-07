@@ -118,16 +118,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\Player.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlayerNode.cpp" />
     <ClCompile Include="src\PlayerNodeCallback.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\Player.h" />
     <ClInclude Include="src\Global.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
-    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PlayerNode.h" />
     <ClInclude Include="src\PlayerNodeCallback.h" />
   </ItemGroup>
