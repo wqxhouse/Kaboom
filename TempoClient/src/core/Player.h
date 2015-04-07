@@ -1,29 +1,21 @@
 #pragma once
 
-#include <osg/Vec3>
+#include <Windows.h>
 
-class Player {
+#include <osg/Group>
+#include <osg/MatrixTransform>
+
+#include "PlayerData.h"
+
+class Player : public osg::Group {
 public:
-    static void moveForwardDown();
-    static void moveForwardUp();
-    static void moveBackwardDown();
-    static void moveBackwardUp();
-    static void moveLeftDown();
-    static void moveLeftUp();
-    static void moveRightDown();
-    static void moveRightUp();
-    static void jumpDown();
-    static void jumpUp();
+    PlayerData *data;
 
-    bool movingForward;
-    bool movingBackward;
-    bool movingLeft;
-    bool movingRight;
-    bool jumping;
-
-    osg::Vec3 position;
-    osg::Vec3 velocity;
-
-    Player();
+    Player(PlayerData *data);
     ~Player();
+
+    void setPosition(const osg::Vec3 &position);
+
+protected:
+    osg::ref_ptr<osg::MatrixTransform> positionTransform;
 };

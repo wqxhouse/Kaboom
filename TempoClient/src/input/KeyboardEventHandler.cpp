@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "../Global.h"
-
 bool KeyboardEventHandler::bindKey(int key, Function func) {
     if (keyDownFuncMap.end() != keyDownFuncMap.find(key)) {
         std::cout << "Duplicate key '" << key << "' ignored." << std::endl;

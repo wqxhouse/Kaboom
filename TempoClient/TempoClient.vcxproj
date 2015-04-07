@@ -119,18 +119,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Player.cpp" />
+    <ClCompile Include="src\core\PlayerData.cpp" />
+    <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\PlayerNode.cpp" />
-    <ClCompile Include="src\PlayerNodeCallback.cpp" />
+    <ClCompile Include="src\network\MockClient.cpp" />
+    <ClCompile Include="src\network\MockClientUpdateCallback.cpp" />
     <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Player.h" />
+    <ClInclude Include="src\core\PlayerData.h" />
     <ClInclude Include="src\Global.h" />
+    <ClInclude Include="src\input\InputManager.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
-    <ClInclude Include="src\PlayerNode.h" />
-    <ClInclude Include="src\PlayerNodeCallback.h" />
+    <ClInclude Include="src\network\MockClient.h" />
+    <ClInclude Include="src\network\MockClientUpdateCallback.h" />
+    <ClInclude Include="src\network\MoveEvent.h" />
     <ClInclude Include="src\util\ConfigSettings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

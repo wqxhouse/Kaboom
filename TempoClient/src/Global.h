@@ -1,7 +1,5 @@
 #pragma once
 
-#include <osg/Vec3>
+#include "network/MockClient.h"
 
-#include "core/Player.h"
-
-extern Player player;
+extern MockClient g_client;
