@@ -3,7 +3,7 @@
 #include "../Global.h"
 
 void Player::moveForwardDown() {
-	player.movingForward = true;
+    player.movingForward = true;
 }
 
 void Player::moveForwardUp() {
@@ -11,7 +11,7 @@ void Player::moveForwardUp() {
 }
 
 void Player::moveBackwardDown() {
-	player.movingBackward = true;
+    player.movingBackward = true;
 }
 
 void Player::moveBackwardUp() {
@@ -27,7 +27,7 @@ void Player::moveLeftUp() {
 }
 
 void Player::moveRightDown() {
-	player.movingRight = true;
+    player.movingRight = true;
 }
 
 void Player::moveRightUp() {
@@ -35,11 +35,11 @@ void Player::moveRightUp() {
 }
 
 void Player::jumpDown() {
-	player.jumping = true;
+    player.jumping = true;
 }
 
 void Player::jumpUp() {
-	player.jumping = false;
+    player.jumping = false;
 }
 
 Player::Player() {
