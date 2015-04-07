@@ -1,49 +1,31 @@
 #include "Player.h"
 
-#include "../Global.h"
+#include <iostream>
 
-void Player::moveForwardDown() {
-    player.movingForward = true;
-}
+#include <osg/Geode>
+#include <osg/ShapeDrawable>
 
-void Player::moveForwardUp() {
-    player.movingForward = false;
-}
+Player::Player(PlayerData *data) : data(data), positionTransform(new osg::MatrixTransform) {
+    osg::ref_ptr<osg::Box> box = new osg::Box;
+    osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(box);
 
-void Player::moveBackwardDown() {
-    player.movingBackward = true;
-}
+    osg::ref_ptr<osg::Geode> model = new osg::Geode;
+    model->addDrawable(drawable);
 
-void Player::moveBackwardUp() {
-    player.movingBackward = false;
-}
+    this->addChild(positionTransform);
+    positionTransform->addChild(model);
 
-void Player::moveLeftDown() {
-    player.movingLeft = true;
-}
-
-void Player::moveLeftUp() {
-    player.movingLeft = false;
-}
-
-void Player::moveRightDown() {
-    player.movingRight = true;
-}
-
-void Player::moveRightUp() {
-    player.movingRight = false;
-}
-
-void Player::jumpDown() {
-    player.jumping = true;
-}
-
-void Player::jumpUp() {
-    player.jumping = false;
-}
-
-Player::Player() {
+    setPosition(data->position);
 }
 
 Player::~Player() {
+}
+
+void Player::setPosition(const osg::Vec3 &position) {
+    this->data->position = position;
+
+    osg::Matrix translationMat;
+    translationMat.makeTranslate(position);
+
+    positionTransform->setMatrix(translationMat);
 }

@@ -8,26 +8,14 @@
 #include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
 
-#include "input/KeyboardEventHandler.h"
 #include "core/Player.h"
-#include "PlayerNode.h"
-#include "PlayerNodeCallback.h"
+#include "core/PlayerData.h"
+#include "input/InputManager.h"
+#include "network/MockClient.h"
+#include "network/MockClientUpdateCallback.h"
 #include "util/ConfigSettings.h"
 
-Player player;
-
-void setupKeyboardHandler(KeyboardEventHandler *handler) {
-    handler->bindKey('w', KeyboardEventHandler::KEY_DOWN, Player::moveForwardDown);
-    handler->bindKey('w', KeyboardEventHandler::KEY_UP, Player::moveForwardUp);
-    handler->bindKey('s', KeyboardEventHandler::KEY_DOWN, Player::moveBackwardDown);
-    handler->bindKey('s', KeyboardEventHandler::KEY_UP, Player::moveBackwardUp);
-    handler->bindKey('a', KeyboardEventHandler::KEY_DOWN, Player::moveLeftDown);
-    handler->bindKey('a', KeyboardEventHandler::KEY_UP, Player::moveLeftUp);
-    handler->bindKey('d', KeyboardEventHandler::KEY_DOWN, Player::moveRightDown);
-    handler->bindKey('d', KeyboardEventHandler::KEY_UP, Player::moveRightUp);
-    handler->bindKey(' ', KeyboardEventHandler::KEY_DOWN, Player::jumpDown);
-    handler->bindKey(' ', KeyboardEventHandler::KEY_UP, Player::jumpUp);
-}
+MockClient g_client;
 
 void setupCamera(osgViewer::Viewer &viewer) {
     const osg::Vec3 eye(0, -10, 0);
@@ -61,26 +49,28 @@ int main() {
 	// Load config file for the first time
 	ConfigSettings* config = ConfigSettings::config;
 
-	osgViewer::Viewer viewer;
+    osgViewer::Viewer viewer;
+    InputManager inputManager(&viewer);
+    inputManager.loadConfig();
 
-    osg::ref_ptr<osg::Group> rootNode = new osg::Group;
+    osg::ref_ptr<osg::Group> root = new osg::Group;
+    root->addUpdateCallback(new MockClientUpdateCallback(&g_client));
 
-    osg::ref_ptr<PlayerNode> playerNode = new PlayerNode(&player);
-    playerNode->addUpdateCallback(new PlayerNodeCallback);
+    PlayerData player1Data;
+    player1Data.id = 1;
+    player1Data.position = osg::Vec3(0, 0, 0);
 
-    Player player2;
-    player2.position = osg::Vec3(2, 2, 0);
+    PlayerData player2Data;
+    player2Data.id = 2;
+    player2Data.position = osg::Vec3(2, 2, 0);
 
-    osg::ref_ptr<PlayerNode> player2Node = new PlayerNode(&player2);
+    osg::ref_ptr<Player> player1Node = new Player(&player1Data);
+    osg::ref_ptr<Player> player2Node = new Player(&player2Data);
 
-    rootNode->addChild(playerNode);
-    rootNode->addChild(player2Node);
+    root->addChild(player1Node);
+    root->addChild(player2Node);
 
-    viewer.setSceneData(rootNode);
-
-    osg::ref_ptr<KeyboardEventHandler> kbdHandler = new KeyboardEventHandler;
-    setupKeyboardHandler(kbdHandler);
-    viewer.addEventHandler(kbdHandler);
+    viewer.setSceneData(root);
 
     viewer.realize();
 
