@@ -2,6 +2,6 @@
 
 #include <osg/Vec3>
 
-#include "Player.h"
+#include "core/Player.h"
 
 extern Player player;

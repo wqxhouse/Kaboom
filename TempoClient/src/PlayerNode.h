@@ -5,7 +5,7 @@
 #include <osg/Group>
 #include <osg/MatrixTransform>
 
-#include "Player.h"
+#include "core/Player.h"
 
 class PlayerNode : public osg::Group {
 public:

@@ -1,7 +1,8 @@
+#include "KeyboardEventHandler.h"
+
 #include <iostream>
 
 #include "../Global.h"
-#include "KeyboardEventHandler.h"
 
 bool KeyboardEventHandler::bindKey(int key, Function func) {
     if (keyDownFuncMap.end() != keyDownFuncMap.find(key)) {

@@ -9,7 +9,7 @@
 #include <osgViewer/Viewer>
 
 #include "input/KeyboardEventHandler.h"
-#include "Player.h"
+#include "core/Player.h"
 #include "PlayerNode.h"
 #include "PlayerNodeCallback.h"
 

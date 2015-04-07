@@ -1,5 +1,6 @@
-#include "Global.h"
 #include "Player.h"
+
+#include "../Global.h"
 
 void Player::moveForwardDown() {
 	player.movingForward = true;
