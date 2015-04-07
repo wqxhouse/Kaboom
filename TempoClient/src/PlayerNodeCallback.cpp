@@ -5,7 +5,7 @@
 #include "Global.h"
 #include "PlayerNode.h"
 
-void PlayerNodeCallback::operator()(osg::Node* node, osg::NodeVisitor* nv) {
+void PlayerNodeCallback::operator()(osg::Node *node, osg::NodeVisitor *nv) {
 	if (player.movingForward) {
 		player.velocity.y() = 0.05f;
 	} else if (player.movingBackward) {

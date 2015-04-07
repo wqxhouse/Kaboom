@@ -15,7 +15,7 @@
 
 Player player;
 
-void setupKeyboardHandler(KeyboardEventHandler* handler) {
+void setupKeyboardHandler(KeyboardEventHandler *handler) {
     handler->bindKey('w', KeyboardEventHandler::KEY_DOWN, Player::moveForwardDown);
     handler->bindKey('w', KeyboardEventHandler::KEY_UP, Player::moveForwardUp);
     handler->bindKey('s', KeyboardEventHandler::KEY_DOWN, Player::moveBackwardDown);
@@ -28,7 +28,7 @@ void setupKeyboardHandler(KeyboardEventHandler* handler) {
     handler->bindKey(' ', KeyboardEventHandler::KEY_UP, Player::jumpUp);
 }
 
-void setupCamera(osgViewer::Viewer& viewer) {
+void setupCamera(osgViewer::Viewer &viewer) {
 	const osg::Vec3 eye(0, -10, 0);
 	const osg::Vec3 center(0, 1, 0);
 

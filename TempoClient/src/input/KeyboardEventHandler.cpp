@@ -27,7 +27,7 @@ bool KeyboardEventHandler::bindKey(int key, KeyState state, Function func) {
     }
 }
 
-bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa) {
+bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &aa) {
     KeyFunctionMap::iterator itr;
     bool newKeyDownEvent = false;
     bool newKeyUpEvent = false;
@@ -71,6 +71,6 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAc
     }
 }
 
-void KeyboardEventHandler::accept(osgGA::GUIEventHandlerVisitor& v) {
+void KeyboardEventHandler::accept(osgGA::GUIEventHandlerVisitor &v) {
     v.visit(*this);
 };
