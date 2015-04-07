@@ -118,7 +118,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\Player.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -126,7 +125,6 @@
     <ClCompile Include="src\PlayerNodeCallback.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\Player.h" />
     <ClInclude Include="src\Global.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
