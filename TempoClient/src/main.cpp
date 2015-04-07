@@ -49,6 +49,11 @@ int main() {
 	// Load config file for the first time
 	ConfigSettings* config = ConfigSettings::config;
 
+	int screen_width = 0;
+	config->getValue(ConfigSettings::str_screen_width, screen_width);
+
+	cout << "str_screen_width: " << screen_width << endl;
+
     osgViewer::Viewer viewer;
     InputManager inputManager(&viewer);
     inputManager.loadConfig();

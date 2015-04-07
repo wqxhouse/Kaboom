@@ -119,7 +119,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Player.cpp" />
-    <ClCompile Include="src\core\PlayerData.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
