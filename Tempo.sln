@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TempoClient", "TempoClient\TempoClient.vcxproj", "{A743928E-D773-42A3-89C1-A72D1319FAFD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TempoServer", "TempoServer\TempoServer.vcxproj", "{5689650A-21ED-4591-AFF2-30E7103901DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,12 @@ Global
 		{A743928E-D773-42A3-89C1-A72D1319FAFD}.Release|Win32.Build.0 = Release|Win32
 		{A743928E-D773-42A3-89C1-A72D1319FAFD}.Release|x64.ActiveCfg = Release|x64
 		{A743928E-D773-42A3-89C1-A72D1319FAFD}.Release|x64.Build.0 = Release|x64
+		{5689650A-21ED-4591-AFF2-30E7103901DF}.Debug|Win32.ActiveCfg = Release|x64
+		{5689650A-21ED-4591-AFF2-30E7103901DF}.Debug|Win32.Build.0 = Release|x64
+		{5689650A-21ED-4591-AFF2-30E7103901DF}.Debug|x64.ActiveCfg = Debug|Win32
+		{5689650A-21ED-4591-AFF2-30E7103901DF}.Release|Win32.ActiveCfg = Release|Win32
+		{5689650A-21ED-4591-AFF2-30E7103901DF}.Release|Win32.Build.0 = Release|Win32
+		{5689650A-21ED-4591-AFF2-30E7103901DF}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
