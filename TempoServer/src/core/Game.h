@@ -12,14 +12,17 @@ public:
     ~Game();
 
     void loadMap();
+	void addPlayer(Player *player);
     void update(float timestep);
 
 private:
+	typedef std::vector<Player *> PlayerList;
+
     btBroadphaseInterface *broadphase;
     btDefaultCollisionConfiguration *collisionConfiguration;
     btCollisionDispatcher *dispatcher;
     btSequentialImpulseConstraintSolver *solver;
     btDiscreteDynamicsWorld *world;
 
-    std::vector<Player *> players;
+	PlayerList players;
 };
