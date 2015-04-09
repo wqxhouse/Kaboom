@@ -30,11 +30,6 @@ void ClientUpdateCallback::operator()(osg::Node *node, osg::NodeVisitor *nv) {
     Player *player1 = findPlayer1(static_cast<osg::Group *>(node));
     Player *player2 = findPlayer2(static_cast<osg::Group *>(node));
 
-    player1->data->position.x() = evt->x1;
-    player1->data->position.y() = evt->y1;
-    player1->data->position.z() = evt->z1;
-
-    player2->data->position.x() = evt->x2;
-    player2->data->position.y() = evt->y2;
-    player2->data->position.z() = evt->z2;
+    player1->setPosition(osg::Vec3(evt->x1, evt->y1, evt->z1));
+    player2->setPosition(osg::Vec3(evt->x2, evt->y2, evt->z2));
 }
