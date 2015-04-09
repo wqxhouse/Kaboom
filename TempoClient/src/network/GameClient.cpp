@@ -19,14 +19,24 @@ GameStateUpdateEvent *GameClient::receive() {
         return NULL;
     }
 
+    printf("received len %d", len);
     packet.deserialize(networkData);
 
     GameStateUpdateEvent *gameStateUpdateEvent;
     
     switch (packet.packetType) {
     case GAME_STATE_UPDATE_EVENT:
+
         gameStateUpdateEvent = new GameStateUpdateEvent();
         gameStateUpdateEvent->deserialize(networkData);
+
+        printf("x1 %x\n", gameStateUpdateEvent->x1);
+        printf("y1 %x\n", gameStateUpdateEvent->y1);
+        printf("z1 %x\n", gameStateUpdateEvent->z1);
+        printf("x2 %x\n", gameStateUpdateEvent->x2);
+        printf("y2 %x\n", gameStateUpdateEvent->y2);
+        printf("z2 %x\n", gameStateUpdateEvent->z2);
+
         return gameStateUpdateEvent;
     default:
         printf("error in packet types\n");

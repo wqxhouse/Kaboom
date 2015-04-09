@@ -18,6 +18,8 @@ enum PacketTypes {
 
     JUMP_EVENT = 5,
 
+    GAME_STATE_UPDATE_EVENT = 6,
+
 };
 
 struct Packet {
@@ -40,11 +42,11 @@ struct MoveEvent : Packet {
     bool movingRight;
 
     void serialize(char * data) {
-        printf("serialize size of MoveEvent : %d\n", sizeof(MoveEvent));
+        //printf("serialize size of MoveEvent : %d\n", sizeof(MoveEvent));
         memcpy(data, this, sizeof(MoveEvent));
     }
     void deserialize(char * data) {
-        printf("deserialize size of MoveEvent : %d\n", sizeof(MoveEvent));
+        //printf("deserialize size of MoveEvent : %d\n", sizeof(MoveEvent));
         memcpy(this, data, sizeof(MoveEvent));
     }
 
@@ -53,7 +55,7 @@ struct MoveEvent : Packet {
 struct FireEvent : Packet {
     bool fired;
     void serialize(char * data) {
-        printf("size of FireEvent : %d", sizeof(FireEvent));
+        //printf("size of FireEvent : %d", sizeof(FireEvent));
         memcpy(data, this, sizeof(FireEvent));
     }
     void deserialize(char * data) {
@@ -66,7 +68,7 @@ struct LookEvent : Packet {
     float y;
     float z;
     void serialize(char * data) {
-        printf("size of LookEvent : %d", sizeof(LookEvent));
+        //printf("size of LookEvent : %d", sizeof(LookEvent));
         memcpy(data, this, sizeof(LookEvent));
     }
     void deserialize(char * data) {
@@ -77,7 +79,7 @@ struct LookEvent : Packet {
 struct JumpEvent : Packet {
     bool jumping;
     void serialize(char * data) {
-        printf("size of jumping : %d", sizeof(JumpEvent));
+        //printf("size of jumping : %d", sizeof(JumpEvent));
         memcpy(data, this, sizeof(JumpEvent));
     }
     void deserialize(char * data) {
@@ -85,3 +87,20 @@ struct JumpEvent : Packet {
     }
 };
 
+struct GameStateUpdateEvent : Packet {
+
+    float x1;
+    float y1;
+    float z1;
+
+    float x2;
+    float y2;
+    float z2;
+
+    void serialize(char * data) {
+        memcpy(data, this, sizeof(GameStateUpdateEvent));
+    }
+    void deserialize(char * data) {
+        memcpy(this, data, sizeof(GameStateUpdateEvent));
+    }
+};
