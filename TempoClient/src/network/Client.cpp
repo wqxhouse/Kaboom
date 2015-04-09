@@ -1,6 +1,8 @@
 #include "Client.h" 
 
-Client::Client(ConfigSettings * config) {
+#include "NetworkServices.h"
+
+Client::Client(ConfigSettings *config) {
     network = new ClientNetwork(config);
 
     // send init packet
@@ -12,7 +14,10 @@ Client::Client(ConfigSettings * config) {
 
     packet.serialize(packet_data);
     NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
+}
 
+Client::~Client() {
+    delete network;
 }
 
 void Client::receive() {
