@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\Player.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\NetworkServices.cpp" />
     <ClCompile Include="src\ServerGame.cpp" />
@@ -26,6 +28,9 @@
     <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\Game.h" />
+    <ClInclude Include="src\core\Player.h" />
+    <ClInclude Include="src\core\PlayerData.h" />
     <ClInclude Include="src\Event.h" />
     <ClInclude Include="src\NetworkData.h" />
     <ClInclude Include="src\NetworkServices.h" />
