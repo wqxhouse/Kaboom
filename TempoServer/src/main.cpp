@@ -1,4 +1,4 @@
-#include "ServerGame.h"
+#include "network/ServerGame.h"
 // used for multi-threading
 #include <process.h>
 

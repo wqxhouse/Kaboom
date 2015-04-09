@@ -3,6 +3,7 @@
 #include <osg/Group>
 
 #include "../core/Player.h"
+#include "../core/GameStateData.h"
 
 // HACK
 Player *findPlayer1(osg::Group *root) {
