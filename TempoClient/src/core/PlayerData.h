@@ -1,8 +1,9 @@
 #pragma once
 
-#include <osg/Vec3>
+#include "EntityData.h"
 
-struct PlayerData {
-    int id;
-    osg::Vec3 position;
+struct PlayerData : public EntityData {
+    float x;
+    float y;
+    float z;
 };

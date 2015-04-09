@@ -6,16 +6,17 @@
 #include <osg/MatrixTransform>
 
 #include "PlayerData.h"
+#include "Entity.h"
 
-class Player : public osg::Group {
+class Player : public Entity, public osg::Group {
 public:
-    PlayerData *data;
-
     Player(PlayerData *data);
     ~Player();
 
-    void setPosition(const osg::Vec3 &position);
+    virtual EntityData *getEntityData();
+    void setPosition(float x, float y, float z);
 
 protected:
     osg::ref_ptr<osg::MatrixTransform> positionTransform;
+    PlayerData *data;
 };
