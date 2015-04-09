@@ -2,6 +2,7 @@
 
 #include "ClientNetwork.h"
 #include "NetworkData.h"
+#include "../core/GameStateData.h"
 
 class GameClient {
 public:
@@ -13,5 +14,6 @@ public:
     char networkData[MAX_PACKET_SIZE];
 
     GameStateUpdateEvent *receive();
+
     void sendMoveEvent(bool movingForward, bool movingBackward, bool movingLeft, bool movingRight);
 };

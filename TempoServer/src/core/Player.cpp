@@ -22,8 +22,9 @@ void Player::update(btScalar timeStep) {
     data->x = position.getX();
     data->y = position.getY();
     data->z = position.getZ();
-
+	/*
     data->vx = velocity.getX();
     data->vy = velocity.getY();
     data->vz = velocity.getZ();
+	*/
 }

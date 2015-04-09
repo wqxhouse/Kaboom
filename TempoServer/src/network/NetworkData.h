@@ -8,7 +8,7 @@ enum PacketTypes {
 
     INIT_CONNECTION = 0,
 
-    ACTION_EVENT = 1,
+    ASSIGN_EVENT = 1,
 
     MOVE_EVENT = 2,
 
@@ -35,6 +35,17 @@ struct Packet {
 	}
 };
 
+struct AssignEvent : Packet{
+	int client_id;
+	void serialize(char * data) {
+		//printf("serialize size of MoveEvent : %d\n", sizeof(MoveEvent));
+		memcpy(data, this, sizeof(AssignEvent));
+	}
+	void deserialize(char * data) {
+		//printf("deserialize size of MoveEvent : %d\n", sizeof(MoveEvent));
+		memcpy(this, data, sizeof(AssignEvent));
+	}
+};
 struct MoveEvent : Packet {
     bool movingForward;
     bool movingBackward;
@@ -86,21 +97,10 @@ struct JumpEvent : Packet {
         memcpy(this, data, sizeof(JumpEvent));
     }
 };
+struct AlmostPlayerData{
+	int client_id;
 
-struct GameStateUpdateEvent : Packet {
-
-    float x1;
-    float y1;
-    float z1;
-
-    float x2;
-    float y2;
-    float z2;
-
-    void serialize(char * data) {
-        memcpy(data, this, sizeof(GameStateUpdateEvent));
-    }
-    void deserialize(char * data) {
-        memcpy(this, data, sizeof(GameStateUpdateEvent));
-    }
+	float x;
+	float y;
+	float z;
 };
