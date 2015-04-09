@@ -31,7 +31,7 @@ void Game::addPlayer(Player *player) {
 	btRigidBody::btRigidBodyConstructionInfo playerRigidBodyCI(player->mass, player->motionState, Player::collisionShape, btVector3(0, 0, 0));
 	btRigidBody *playerRigidBody = new btRigidBody(playerRigidBodyCI);
 
-	world->addRigidBody(playerRigidBody)
+	world->addRigidBody(playerRigidBody);
 }
 
 void Game::update(float timeStep) {
