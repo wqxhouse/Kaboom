@@ -12,7 +12,7 @@ public:
     int iResult;
 
     // socket for client to connect to server
-    SOCKET ConnectSocket;
+    SOCKET clientSocket;
 
     // ctor/dtor
     ClientNetwork(ConfigSettings *);

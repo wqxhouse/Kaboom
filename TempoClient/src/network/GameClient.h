@@ -3,15 +3,15 @@
 #include "ClientNetwork.h"
 #include "NetworkData.h"
 
-class Client {
+class GameClient {
 public:
-    Client(ConfigSettings *);
-    ~Client();
+    GameClient(ConfigSettings *);
+    ~GameClient();
 
     ClientNetwork *network;
 
-    char network_data[MAX_PACKET_SIZE];
+    char networkData[MAX_PACKET_SIZE];
 
-    void receive();
+    GameStateUpdateEvent *receive();
     void sendMoveEvent(bool movingForward, bool movingBackward, bool movingLeft, bool movingRight);
 };

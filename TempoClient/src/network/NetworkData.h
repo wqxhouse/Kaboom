@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstring>
-
 #include <iostream>
 
 #define MAX_PACKET_SIZE 1000000
@@ -13,16 +11,17 @@ enum PacketTypes {
     FIRE_EVENT = 3,
     LOOK_EVENT = 4,
     JUMP_EVENT = 5,
+    GAME_STATE_UPDATE_EVENT = 6
 };
 
 struct Packet {
-    unsigned int packet_type;
+    unsigned int packetType;
 
-    void serialize(char * data) {
+    void serialize(char *data) {
         memcpy(data, this, sizeof(Packet));
     }
 
-    void deserialize(char * data) {
+    void deserialize(char *data) {
         memcpy(this, data, sizeof(Packet));
     }
 };
@@ -33,13 +32,11 @@ struct MoveEvent : Packet {
     bool movingLeft;
     bool movingRight;
 
-    void serialize(char * data) {
-        printf("serialize size of MoveEvent : %d\n", sizeof(MoveEvent));
+    void serialize(char *data) {
         memcpy(data, this, sizeof(MoveEvent));
     }
 
-    void deserialize(char * data) {
-        printf("deserialize size of MoveEvent : %d\n", sizeof(MoveEvent));
+    void deserialize(char *data) {
         memcpy(this, data, sizeof(MoveEvent));
     }
 
@@ -48,12 +45,11 @@ struct MoveEvent : Packet {
 struct FireEvent : Packet {
     bool fired;
 
-    void serialize(char * data) {
-        printf("size of FireEvent : %d", sizeof(FireEvent));
+    void serialize(char *data) {
         memcpy(data, this, sizeof(FireEvent));
     }
 
-    void deserialize(char * data) {
+    void deserialize(char *data) {
         memcpy(this, data, sizeof(FireEvent));
     }
 };
@@ -63,12 +59,11 @@ struct LookEvent : Packet {
     float y;
     float z;
 
-    void serialize(char * data) {
-        printf("size of LookEvent : %d", sizeof(LookEvent));
+    void serialize(char *data) {
         memcpy(data, this, sizeof(LookEvent));
     }
 
-    void deserialize(char * data) {
+    void deserialize(char *data) {
         memcpy(this, data, sizeof(LookEvent));
     }
 };
@@ -76,12 +71,29 @@ struct LookEvent : Packet {
 struct JumpEvent : Packet {
     bool jumping;
 
-    void serialize(char * data) {
-        printf("size of jumping : %d", sizeof(JumpEvent));
+    void serialize(char *data) {
         memcpy(data, this, sizeof(JumpEvent));
     }
 
-    void deserialize(char * data) {
+    void deserialize(char *data) {
         memcpy(this, data, sizeof(JumpEvent));
+    }
+};
+
+struct GameStateUpdateEvent : Packet {
+    float x1;
+    float y1;
+    float z1;
+
+    float x2;
+    float y2;
+    float z2;
+
+    void serialize(char *data) {
+        memcpy(data, this, sizeof(GameStateUpdateEvent));
+    }
+
+    void deserialize(char *data) {
+        memcpy(this, data, sizeof(GameStateUpdateEvent));
     }
 };

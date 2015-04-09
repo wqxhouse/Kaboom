@@ -45,9 +45,6 @@
     <ClCompile Include="src\core\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\Client.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\ClientNetwork.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
@@ -55,6 +52,9 @@
       <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="src\network\ClientUpdateCallback.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\GameClient.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,9 +77,6 @@
     <ClInclude Include="src\util\ConfigSettings.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\Client.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\ClientNetwork.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
@@ -90,6 +87,9 @@
       <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="src\network\ClientUpdateCallback.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\GameClient.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>

@@ -124,7 +124,7 @@
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\network\Client.cpp" />
+    <ClCompile Include="src\network\GameClient.cpp" />
     <ClCompile Include="src\network\ClientNetwork.cpp" />
     <ClCompile Include="src\network\ClientUpdateCallback.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
@@ -136,7 +136,7 @@
     <ClInclude Include="src\Global.h" />
     <ClInclude Include="src\input\InputManager.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
-    <ClInclude Include="src\network\Client.h" />
+    <ClInclude Include="src\network\GameClient.h" />
     <ClInclude Include="src\network\ClientNetwork.h" />
     <ClInclude Include="src\network\ClientUpdateCallback.h" />
     <ClInclude Include="src\network\NetworkData.h" />
