@@ -6,15 +6,16 @@
 
 class Player {
 public:
-	static btCollisionShape *collisionShape;
+    static btCollisionShape *collisionShape;
+    static const btScalar mass;
 
-	btScalar mass;
-	btMotionState *motionState;
+    btMotionState *motionState;
+    btRigidBody *rigidBody;
 
     Player(PlayerData *data);
-	~Player();
+    ~Player();
 
-	void update(btScalar timeStep);
+    void update(btScalar timeStep);
 
 private:
     PlayerData *data;
