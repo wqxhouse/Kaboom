@@ -1,5 +1,12 @@
 #include "ClientNetwork.h"
 
+#include <cstdio>
+
+#include <WS2tcpip.h>
+
+#include "NetworkServices.h"
+#include "NetworkData.h"
+
 ClientNetwork::ClientNetwork(ConfigSettings * _config) {
     config = _config;
     string serverAddress;
@@ -95,6 +102,9 @@ ClientNetwork::ClientNetwork(ConfigSettings * _config) {
         exit(1);
     }
 
+}
+
+ClientNetwork::~ClientNetwork() {
 }
 
 int ClientNetwork::receivePackets(char * recvbuf) {
