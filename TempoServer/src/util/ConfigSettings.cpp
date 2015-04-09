@@ -1,12 +1,14 @@
 #include "ConfigSettings.h"
 
 //---------------- Add settings/properties here ----------------//
-string ConfigSettings::str_screen_width = "ScreenWidth";
-string ConfigSettings::str_screen_height = "ScreenHeight";
-string ConfigSettings::str_full_screen = "FullScreen";
+string ConfigSettings::str_server_port		  = "ServerPort";
+string ConfigSettings::str_max_client	      = "MaxClient";
+string ConfigSettings::str_channel		      = "Channel";
+string ConfigSettings::str_incoming_bandwidth = "IncomingBandwidth";
+string ConfigSettings::str_outgoing_bandwidth = "OutgoingBandwidth";
+string ConfigSettings::str_server_address	  = "ServerAddress";
 
-string ConfigSettings::str_server_port = "ServerPort";
-string ConfigSettings::str_server_address = "ServerAddress";
+string ConfigSettings::str_tick_time = "TickTime";
 
 
 typedef pair <string, string> String_Pair;

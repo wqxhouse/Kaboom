@@ -41,11 +41,14 @@ class ConfigSettings {
 
 public:
 	//---------------- Add settings/properties here ----------------//
-	static string str_screen_width;
-	static string str_screen_height;
-    static string str_full_screen;
-    static string str_server_address;
-    static string str_server_port;
+	static string str_server_address;
+	static string str_server_port;
+	static string str_max_client;
+	static string str_channel;
+	static string str_incoming_bandwidth;
+	static string str_outgoing_bandwidth;
+
+	static string str_tick_time;
 
 public:
 	static ConfigSettings * config; // Use this static reference instead of your own call to the constructor

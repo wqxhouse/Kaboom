@@ -34,4 +34,7 @@ public:
 protected:
     KeyFunctionMap keyDownFuncMap;
     KeyFunctionMap keyUpFuncMap;
+
+    int prevX;
+    int prevY;
 };

@@ -56,6 +56,10 @@ void InputManager::jumpUp() {
     jumping = false;
 }
 
+void InputManager::look(int deltaX, int deltaY) {
+
+}
+
 InputManager::InputManager(osgViewer::Viewer *viewer) {
     keyboardHandler = new KeyboardEventHandler();
     viewer->addEventHandler(keyboardHandler);
