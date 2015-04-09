@@ -28,16 +28,13 @@ void Game::loadMap() {
 }
 
 void Game::addPlayer(Player *player) {
-	btRigidBody::btRigidBodyConstructionInfo playerRigidBodyCI(player->mass, player->motionState, Player::collisionShape, btVector3(0, 0, 0));
-	btRigidBody *playerRigidBody = new btRigidBody(playerRigidBodyCI);
-
-	world->addRigidBody(playerRigidBody);
+	world->addRigidBody(player->rigidBody);
 }
 
 void Game::update(float timeStep) {
-	world->stepSimulation(timeStep);
+    world->stepSimulation(timeStep);
 
-	for (PlayerList::const_iterator it = players.cbegin(); it != players.cend(); ++it) {
-		(*it)->update(timeStep);
-	}
+    for (PlayerList::const_iterator it = players.cbegin(); it != players.cend(); ++it) {
+        (*it)->update(timeStep);
+    }
 }
