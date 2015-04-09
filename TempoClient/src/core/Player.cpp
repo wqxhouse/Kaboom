@@ -15,17 +15,23 @@ Player::Player(PlayerData *data) : data(data), positionTransform(new osg::Matrix
     this->addChild(positionTransform);
     positionTransform->addChild(model);
 
-    setPosition(data->position);
+    setPosition(data->x, data->y, data->z);
 }
 
 Player::~Player() {
 }
 
-void Player::setPosition(const osg::Vec3 &position) {
-    this->data->position = position;
+EntityData *Player::getEntityData() {
+    return data;
+}
+
+void Player::setPosition(float x, float y, float z) {
+    this->data->x = x;
+    this->data->y = y;
+    this->data->z = z;
 
     osg::Matrix translationMat;
-    translationMat.makeTranslate(position);
+    translationMat.makeTranslate(osg::Vec3(x, y, z));
 
     positionTransform->setMatrix(translationMat);
 }
