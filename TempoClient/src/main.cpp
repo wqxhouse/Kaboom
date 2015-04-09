@@ -49,8 +49,9 @@ int main() {
 	// Load config file for the first time
 	ConfigSettings* config = ConfigSettings::config;
 
-	int screen_width = 0;
+	int screen_width = 0, screen_height = 0;
 	config->getValue(ConfigSettings::str_screen_width, screen_width);
+	config->getValue(ConfigSettings::str_screen_height, screen_height);
 
 	cout << "str_screen_width: " << screen_width << endl;
 
@@ -78,6 +79,7 @@ int main() {
     root->addChild(player2Node);
 
     viewer.setSceneData(root);
+	viewer.setUpViewInWindow(100, 100, screen_width, screen_height);
 
     viewer.realize();
 
