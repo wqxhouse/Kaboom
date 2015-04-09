@@ -19,26 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ClientGame.cpp" />
-    <ClCompile Include="src\ClientNetwork.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\NetworkServices.cpp" />
-    <ClCompile Include="src\Server.cpp" />
     <ClCompile Include="src\ServerGame.cpp" />
     <ClCompile Include="src\ServerNetwork.cpp" />
     <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ClientGame.h" />
-    <ClInclude Include="src\ClientNetwork.h" />
     <ClInclude Include="src\Event.h" />
-    <ClInclude Include="src\FireClientEvent.h" />
-    <ClInclude Include="src\JumpClientEvent.h" />
-    <ClInclude Include="src\LookClientEvent.h" />
-    <ClInclude Include="src\MoveClientEvent.h" />
     <ClInclude Include="src\NetworkData.h" />
     <ClInclude Include="src\NetworkServices.h" />
-    <ClInclude Include="src\Server.h" />
     <ClInclude Include="src\ServerGame.h" />
     <ClInclude Include="src\ServerNetwork.h" />
     <ClInclude Include="src\util\ConfigSettings.h" />

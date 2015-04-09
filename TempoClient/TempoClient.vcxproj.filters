@@ -42,12 +42,6 @@
     <ClCompile Include="src\input\InputManager.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\MockClient.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\MockClientUpdateCallback.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,6 +54,9 @@
     <ClCompile Include="src\network\NetworkServices.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\ClientUpdateCallback.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Global.h">
@@ -70,15 +67,6 @@
     </ClInclude>
     <ClInclude Include="src\input\InputManager.h">
       <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\network\MoveEvent.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="src\network\MockClient.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="src\network\MockClientUpdateCallback.h">
-      <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="src\core\Player.h">
       <Filter>Header Files</Filter>
@@ -99,6 +87,9 @@
       <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="src\network\NetworkServices.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ClientUpdateCallback.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>

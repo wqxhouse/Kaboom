@@ -1,5 +1,5 @@
 #pragma once
 
-#include "network/MockClient.h"
+#include "network/Client.h"
 
-extern MockClient g_client;
+extern Client *g_client;
