@@ -99,7 +99,6 @@ bool ServerNetwork::acceptNewClient(unsigned int & id){
 
 		// insert new client into session id table
 		sessions.insert(pair<unsigned int, SOCKET>(id, ClientSocket));
-
 		return true;
 	}
 
@@ -114,8 +113,9 @@ int ServerNetwork::receiveData(unsigned int client_id, char * recvbuf)
 		iResult = NetworkServices::receiveMessage(currentSocket, recvbuf, MAX_PACKET_SIZE);
 		if (iResult == 0)
 		{
-			printf("Connection closed\n");
+			printf("<Server> Client Disconncect, closing connection\n");
 			closesocket(currentSocket);
+			sessions.erase(sessions.find(client_id));
 		}
 		return iResult;
 	}
@@ -139,6 +139,22 @@ void ServerNetwork::sendToAll(char * packets, int totalSize)
 		{
 			printf("send failed with error: %d\n", WSAGetLastError());
 			closesocket(currentSocket);
+			sessions.erase(iter);
 		}
 	}
+}
+void ServerNetwork::sendToOneClient(char * packets,int totalSize,int client_id)
+{
+	SOCKET currentSocket;
+	int iSendResult;
+	currentSocket = sessions.find(client_id)->second;
+	iSendResult = NetworkServices::sendMessage(currentSocket,packets, totalSize);
+
+	if (iSendResult == SOCKET_ERROR)
+	{
+		printf("send failed with error: %d\n", WSAGetLastError());
+		closesocket(currentSocket);
+		sessions.erase(client_id);
+	}
+	
 }
