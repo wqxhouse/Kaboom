@@ -10,6 +10,10 @@ PlayerUpdateCallback::~PlayerUpdateCallback() {
 }
 
 void PlayerUpdateCallback::operator()(osg::Node *node, osg::NodeVisitor *nv) {
+    if (g_gameState == NULL) {
+        return;
+    }
+
     Player *player = static_cast<Player *>(node);
 
     if (player->getEntityData()->id == 1) {
