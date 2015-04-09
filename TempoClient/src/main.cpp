@@ -11,12 +11,11 @@
 #include "core/Player.h"
 #include "core/PlayerData.h"
 #include "input/InputManager.h"
-#include "network/MockClient.h"
-#include "network/MockClientUpdateCallback.h"
+#include "network/Client.h"
+#include "network/ClientUpdateCallback.h"
 #include "util/ConfigSettings.h"
 
-
-MockClient g_client;
+Client *g_client;
 
 void setupCamera(osgViewer::Viewer &viewer) {
     const osg::Vec3 eye(0, -10, 0);
@@ -55,12 +54,14 @@ int main() {
 
 	cout << "str_screen_width: " << screen_width << endl;
 
+    g_client = new Client(config);
+
     osgViewer::Viewer viewer;
     InputManager inputManager(&viewer);
     inputManager.loadConfig();
 
     osg::ref_ptr<osg::Group> root = new osg::Group;
-    root->addUpdateCallback(new MockClientUpdateCallback(&g_client));
+    root->addUpdateCallback(new ClientUpdateCallback(g_client));
 
     PlayerData player1Data;
     player1Data.id = 1;
@@ -85,4 +86,6 @@ int main() {
     while (!viewer.done()) {
         viewer.frame();
     }
+
+    delete g_client;
 }

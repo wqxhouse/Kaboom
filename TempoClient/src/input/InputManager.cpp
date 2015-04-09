@@ -10,42 +10,42 @@ bool InputManager::jumping;
 
 void InputManager::moveForwardDown() {
     movingForward = true;
-    g_client.sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
 }
 
 void InputManager::moveForwardUp() {
     movingForward = false;
-    g_client.sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
 }
 
 void InputManager::moveBackwardDown() {
     movingBackward = true;
-    g_client.sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
 }
 
 void InputManager::moveBackwardUp() {
     movingBackward = false;
-    g_client.sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
 }
 
 void InputManager::moveLeftDown() {
     movingLeft = true;
-    g_client.sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
 }
 
 void InputManager::moveLeftUp() {
     movingLeft = false;
-    g_client.sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
 }
 
 void InputManager::moveRightDown() {
     movingRight = true;
-    g_client.sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
 }
 
 void InputManager::moveRightUp() {
     movingRight = false;
-    g_client.sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
 }
 
 void InputManager::jumpDown() {

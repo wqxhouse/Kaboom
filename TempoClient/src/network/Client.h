@@ -16,12 +16,9 @@ public:
 
     ClientNetwork* network;
 
-    void sendActionPackets();
-
     char network_data[MAX_PACKET_SIZE];
 
-    void update();
-
-    void sendMoveEvents();
+    void receive();
+    void sendMoveEvent(bool movingForward, bool movingBackward, bool movingLeft, bool movingRight);
 
 };

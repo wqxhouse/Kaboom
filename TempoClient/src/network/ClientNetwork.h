@@ -1,9 +1,11 @@
 #pragma once
+
+#include <cstdio>
+
 // Networking libraries
 #include <winsock2.h>
 #include <Windows.h>
 #include <ws2tcpip.h>
-#include <stdio.h>
 
 #include "../util/ConfigSettings.h"
 #include "NetworkServices.h"
