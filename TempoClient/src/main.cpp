@@ -15,6 +15,7 @@
 #include "network/MockClientUpdateCallback.h"
 #include "util/ConfigSettings.h"
 
+
 MockClient g_client;
 
 void setupCamera(osgViewer::Viewer &viewer) {
