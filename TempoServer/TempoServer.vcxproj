@@ -22,24 +22,22 @@
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\Player.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\NetworkServices.cpp" />
-    <ClCompile Include="src\ServerGame.cpp" />
-    <ClCompile Include="src\ServerNetwork.cpp" />
+    <ClCompile Include="src\network\NetworkServices.cpp" />
+    <ClCompile Include="src\network\ServerGame.cpp" />
+    <ClCompile Include="src\network\ServerNetwork.cpp" />
     <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Game.h" />
+    <ClInclude Include="src\core\GameStateData.h" />
     <ClInclude Include="src\core\Player.h" />
     <ClInclude Include="src\core\PlayerData.h" />
-    <ClInclude Include="src\Event.h" />
-    <ClInclude Include="src\NetworkData.h" />
-    <ClInclude Include="src\NetworkServices.h" />
-    <ClInclude Include="src\ServerGame.h" />
-    <ClInclude Include="src\ServerNetwork.h" />
+    <ClInclude Include="src\network\Event.h" />
+    <ClInclude Include="src\network\NetworkData.h" />
+    <ClInclude Include="src\network\NetworkServices.h" />
+    <ClInclude Include="src\network\ServerGame.h" />
+    <ClInclude Include="src\network\ServerNetwork.h" />
     <ClInclude Include="src\util\ConfigSettings.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\x64\Release\Config.ini" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56B7232B-1CBB-489A-B34A-EDF3151698B6}</ProjectGuid>

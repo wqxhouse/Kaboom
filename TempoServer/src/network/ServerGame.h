@@ -2,6 +2,8 @@
 #include "NetworkData.h"
 #include "NetworkServices.h"
 
+#include "../core/GameStateData.h"
+
 class ServerGame
 {
 
@@ -20,6 +22,8 @@ public:
 
     void sendGameStatePackets(GameStateUpdateEvent);
 
+	void sendAssignPackets(int);
+
 private:
 
 	// IDs for the clients connecting for table in ServerNetwork 
@@ -32,5 +36,7 @@ private:
 	char network_data[MAX_PACKET_SIZE];
 
     GameStateUpdateEvent gameState;
+
+	std::map<int, int> playerIndexNum;
 
 };

@@ -106,6 +106,8 @@
     </ClInclude>
     <ClInclude Include="src\core\PlayerUpdateCallback.h">
       <Filter>Header Files\Core</Filter>
+    <ClInclude Include="src\core\GameStateData.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -105,13 +105,16 @@ ClientNetwork::ClientNetwork(ConfigSettings * _config) {
 }
 
 ClientNetwork::~ClientNetwork() {
+	printf("<Client> disconnecting from server");
+	closesocket(clientSocket);
+	WSACleanup();
 }
 
 int ClientNetwork::receivePackets(char * recvbuf) {
     iResult = NetworkServices::receiveMessage(clientSocket, recvbuf, MAX_PACKET_SIZE);
 
     if (iResult == 0) {
-        printf("Connection closed\n");
+        printf("<Client> Server is disconnected, terminating connecting\n");
         closesocket(clientSocket);
         WSACleanup();
         exit(1);

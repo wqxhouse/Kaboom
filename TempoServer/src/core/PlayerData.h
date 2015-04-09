@@ -1,13 +1,10 @@
 #pragma once
 
 struct PlayerData {
-    int id;
+    int client_id;
 
     float x;
     float y;
     float z;
 
-    float vx;
-    float vy;
-    float vz;
 };

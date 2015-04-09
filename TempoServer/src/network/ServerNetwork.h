@@ -3,7 +3,7 @@
 #include <ws2tcpip.h>
 #include <map>
 
-#include "util/ConfigSettings.h"
+#include "../util/ConfigSettings.h"
 #include "NetworkServices.h"
 #include "NetworkData.h"
 
@@ -40,4 +40,7 @@ public:
 
 	// send data to all clients
 	void sendToAll(char * packets, int totalSize);
+
+	//send data to one client
+	void ServerNetwork::sendToOneClient(char * packets, int totalSize,int client_id);
 };
