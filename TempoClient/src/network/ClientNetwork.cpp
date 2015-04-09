@@ -23,7 +23,7 @@ ClientNetwork::ClientNetwork(ConfigSettings * _config) {
     WSADATA wsaData;
 
     // socket
-    ConnectSocket = INVALID_SOCKET;
+    clientSocket = INVALID_SOCKET;
 
     // holds address info for socket to connect to
     struct addrinfo *result = NULL,
@@ -58,21 +58,21 @@ ClientNetwork::ClientNetwork(ConfigSettings * _config) {
     for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
 
         // Create a SOCKET for connecting to server
-        ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
+        clientSocket = socket(ptr->ai_family, ptr->ai_socktype,
             ptr->ai_protocol);
 
-        if (ConnectSocket == INVALID_SOCKET) {
+        if (clientSocket == INVALID_SOCKET) {
             printf("<Client> socket failed with error: %ld\n", WSAGetLastError());
             WSACleanup();
             exit(1);
         }
 
         // Connect to server.
-        iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
+        iResult = connect(clientSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
         printf("iresult %d\n", iResult);
         if (iResult == SOCKET_ERROR) {
-            closesocket(ConnectSocket);
-            ConnectSocket = INVALID_SOCKET;
+            closesocket(clientSocket);
+            clientSocket = INVALID_SOCKET;
 
             printf("<Client> The server is down... did not connect %x\n", ptr->ai_addr);
         }
@@ -84,7 +84,7 @@ ClientNetwork::ClientNetwork(ConfigSettings * _config) {
     freeaddrinfo(result);
 
     // if connection failed
-    if (ConnectSocket == INVALID_SOCKET) {
+    if (clientSocket == INVALID_SOCKET) {
         printf("<Client> Unable to connect to server!\n");
         WSACleanup();
         exit(1);
@@ -94,10 +94,10 @@ ClientNetwork::ClientNetwork(ConfigSettings * _config) {
     // Set the mode of the socket to be nonblocking
     u_long iMode = 1;
 
-    iResult = ioctlsocket(ConnectSocket, FIONBIO, &iMode);
+    iResult = ioctlsocket(clientSocket, FIONBIO, &iMode);
     if (iResult == SOCKET_ERROR) {
         printf("<Client> ioctlsocket failed with error: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
+        closesocket(clientSocket);
         WSACleanup();
         exit(1);
     }
@@ -108,11 +108,11 @@ ClientNetwork::~ClientNetwork() {
 }
 
 int ClientNetwork::receivePackets(char * recvbuf) {
-    iResult = NetworkServices::receiveMessage(ConnectSocket, recvbuf, MAX_PACKET_SIZE);
+    iResult = NetworkServices::receiveMessage(clientSocket, recvbuf, MAX_PACKET_SIZE);
 
     if (iResult == 0) {
         printf("Connection closed\n");
-        closesocket(ConnectSocket);
+        closesocket(clientSocket);
         WSACleanup();
         exit(1);
     }

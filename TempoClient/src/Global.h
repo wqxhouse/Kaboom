@@ -1,5 +1,5 @@
 #pragma once
 
-#include "network/Client.h"
+#include "network/GameClient.h"
 
-extern Client *g_client;
+extern GameClient *g_client;

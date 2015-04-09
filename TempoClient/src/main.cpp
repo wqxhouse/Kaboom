@@ -11,11 +11,11 @@
 #include "core/Player.h"
 #include "core/PlayerData.h"
 #include "input/InputManager.h"
-#include "network/Client.h"
+#include "network/GameClient.h"
 #include "network/ClientUpdateCallback.h"
 #include "util/ConfigSettings.h"
 
-Client *g_client;
+GameClient *g_client;
 
 void setupCamera(osgViewer::Viewer &viewer) {
     const osg::Vec3 eye(0, -10, 0);
@@ -54,7 +54,7 @@ int main() {
 
 	cout << "str_screen_width: " << screen_width << endl;
 
-    g_client = new Client(config);
+    g_client = new GameClient(config);
 
     osgViewer::Viewer viewer;
     InputManager inputManager(&viewer);
