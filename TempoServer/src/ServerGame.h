@@ -17,6 +17,9 @@ public:
 	void sendActionPackets();
 
     void sendMovePackets();
+
+    void sendGameStatePackets(GameStateUpdateEvent);
+
 private:
 
 	// IDs for the clients connecting for table in ServerNetwork 
@@ -27,5 +30,7 @@ private:
 
 	// data buffer
 	char network_data[MAX_PACKET_SIZE];
+
+    GameStateUpdateEvent gameState;
 
 };
