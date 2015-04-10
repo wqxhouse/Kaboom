@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 
 #include "Component.h"
 
@@ -18,5 +18,5 @@ public:
 
 private:
     unsigned int id;
-    std::map<ComponentType, Component *> components;
+    std::unordered_map<ComponentType, Component *> components;
 };
