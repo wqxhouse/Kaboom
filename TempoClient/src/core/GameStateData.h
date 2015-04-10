@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../network/NetworkData.h"
-#include "PlayerData.h"
 
 struct GameStateUpdateEvent : Packet {
 	//	int packetSize;

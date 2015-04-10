@@ -8,8 +8,10 @@
 #include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
 
-#include "core/Player.h"
-#include "core/PlayerData.h"
+#include "core/Entity.h"
+#include "core/EntityManager.h"
+#include "core/SceneNodeComponent.h"
+#include "core/PositionComponent.h"
 #include "core/PlayerUpdateCallback.h"
 #include "input/InputManager.h"
 #include "network/GameClient.h"
@@ -46,6 +48,28 @@ void setupCamera(osgViewer::Viewer &viewer) {
     camera->setProjectionMatrix(projMat);
 }
 
+Entity * createPlayerEntity(EntityManager &entityManager, float x, float y, float z) {
+    Entity *player = entityManager.createEntity();
+
+    osg::Box *box = new osg::Box;
+    osg::ShapeDrawable *drawable = new osg::ShapeDrawable(box);
+    osg::Geode *model = new osg::Geode;
+    model->addDrawable(drawable);
+
+    osg::MatrixTransform *transformation = new osg::MatrixTransform;
+    transformation->addChild(model);
+
+    osg::Group *playerNode = new osg::Group;
+
+    playerNode->addChild(transformation);
+    playerNode->addUpdateCallback(new PlayerUpdateCallback(player));
+
+    player->attachComponent(new SceneNodeComponent(playerNode));
+    player->attachComponent(new PositionComponent(x, y, z));
+
+    return player;
+}
+
 int main() {
 	// Load config file for the first time
 	ConfigSettings* config = ConfigSettings::config;
@@ -54,34 +78,22 @@ int main() {
 	config->getValue(ConfigSettings::str_screen_width, screen_width);
 	config->getValue(ConfigSettings::str_screen_height, screen_height);
 
-	cout << "str_screen_width: " << screen_width << endl;
-
     g_client = new GameClient(config);
 
     osgViewer::Viewer viewer;
+
     InputManager inputManager(&viewer);
     inputManager.loadConfig();
 
+    EntityManager entityManager;
+
+    Entity *player1 = createPlayerEntity(entityManager, 0, 0, 0);
+    Entity *player2 = createPlayerEntity(entityManager, 2, 2, 0);
+
+    osg::Node *player1Node = static_cast<SceneNodeComponent *>(player1->getComponent(SCENE_NODE))->getNode();
+    osg::Node *player2Node = static_cast<SceneNodeComponent *>(player2->getComponent(SCENE_NODE))->getNode();
+
     osg::ref_ptr<osg::Group> root = new osg::Group;
-
-    PlayerData player1Data;
-    player1Data.id = 1;
-    player1Data.x = 0;
-    player1Data.y = 0;
-    player1Data.z = 0;
-
-    PlayerData player2Data;
-    player2Data.id = 2;
-    player2Data.x = 2;
-    player2Data.y = 2;
-    player2Data.z = 0;
-
-    osg::ref_ptr<Player> player1Node = new Player(&player1Data);
-    osg::ref_ptr<Player> player2Node = new Player(&player2Data);
-
-    player1Node->addUpdateCallback(new PlayerUpdateCallback);
-    player2Node->addUpdateCallback(new PlayerUpdateCallback);
-
     root->addChild(player1Node);
     root->addChild(player2Node);
 

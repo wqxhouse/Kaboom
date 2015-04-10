@@ -11,8 +11,12 @@ Entity *EntityManager::createEntity() {
         ++nextId;
     }
 
-    entities[nextId] = new Entity(nextId);
+    Entity *entity = new Entity(nextId);
+
+    entities[nextId] = entity;
     ++nextId;
+
+    return entity;
 }
 
 void EntityManager::destroyEntity(unsigned int id) {
