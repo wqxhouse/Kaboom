@@ -1,6 +1,7 @@
 #pragma once
 
 enum ComponentType {
+    SCENE_NODE,
     POSITION
 };
 
