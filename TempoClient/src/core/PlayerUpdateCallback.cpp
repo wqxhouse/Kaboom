@@ -22,11 +22,11 @@ void PlayerUpdateCallback::operator()(osg::Node *node, osg::NodeVisitor *nv) {
     float y;
     float z;
 
-    if (entity->getId() == 1) {
+    if (entity->getId() == 0) {
         x = g_gameState->x1;
         y = g_gameState->y1;
         z = g_gameState->z1;
-    } else if (entity->getId() == 2) {
+    } else if (entity->getId() == 1) {
         x = g_gameState->x2;
         y = g_gameState->y2;
         z = g_gameState->z2;
