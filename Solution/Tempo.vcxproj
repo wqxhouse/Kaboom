@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="SemiDebug|x64">
+      <Configuration>SemiDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Engine\include\Camera.h" />
+    <ClInclude Include="..\Engine\include\Core.h" />
+    <ClInclude Include="..\Engine\include\DirectionalLight.h" />
+    <ClInclude Include="..\Engine\include\EffectCompositor.h" />
+    <ClInclude Include="..\Engine\include\GeometryObject.h" />
+    <ClInclude Include="..\Engine\include\GeometryObjectManager.h" />
+    <ClInclude Include="..\Engine\include\Light.h" />
+    <ClInclude Include="..\Engine\include\LightBound.h" />
+    <ClInclude Include="..\Engine\include\LightManager.h" />
+    <ClInclude Include="..\Engine\include\LightPrePassCallback.h" />
+    <ClInclude Include="..\Engine\include\Material.h" />
+    <ClInclude Include="..\Engine\include\MaterialManager.h" />
+    <ClInclude Include="..\Engine\include\PointLight.h" />
+    <ClInclude Include="..\Engine\include\Scene.h" />
+    <ClInclude Include="..\Engine\include\SkyBox.h" />
+    <ClInclude Include="..\Engine\include\TwGUIManager.h" />
+    <ClInclude Include="..\Engine\include\World.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Engine\src\Core.cpp" />
+    <ClCompile Include="..\Engine\src\DirectionalLight.cpp" />
+    <ClCompile Include="..\Engine\src\EffectAnalysisHelper.cpp" />
+    <ClCompile Include="..\Engine\src\EffectCompositor.cpp" />
+    <ClCompile Include="..\Engine\src\EffectCompositorXML.cpp" />
+    <ClCompile Include="..\Engine\src\GeometryObject.cpp" />
+    <ClCompile Include="..\Engine\src\GeometryObjectManager.cpp" />
+    <ClCompile Include="..\Engine\src\Light.cpp" />
+    <ClCompile Include="..\Engine\src\LightBound.cpp" />
+    <ClCompile Include="..\Engine\src\LightManager.cpp" />
+    <ClCompile Include="..\Engine\src\LightPrePassCallback.cpp" />
+    <ClCompile Include="..\Engine\src\main.cpp" />
+    <ClCompile Include="..\Engine\src\Material.cpp" />
+    <ClCompile Include="..\Engine\src\MaterialManager.cpp" />
+    <ClCompile Include="..\Engine\src\PointLight.cpp" />
+    <ClCompile Include="..\Engine\src\Scene.cpp" />
+    <ClCompile Include="..\Engine\src\SkyBox.cpp" />
+    <ClCompile Include="..\Engine\src\TwGUIManager.cpp" />
+    <ClCompile Include="..\Engine\src\World.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\GeometryPassPlain.xml" />
+    <Xml Include="..\Media\EffectFiles\LightPassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\LightPrePassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\Pipeline.xml" />
+    <Xml Include="..\Media\EffectFiles\template.xml" />
+    <Xml Include="..\Media\EffectFiles\Test.xml" />
+    <Xml Include="..\Media\EffectFiles\TestWorld.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Media\Shaders\constant.glsl" />
+    <None Include="..\Media\Shaders\defaultQuad.vert" />
+    <None Include="..\Media\Shaders\gbufferUtil.glsl" />
+    <None Include="..\Media\Shaders\gbuffer_plain.frag" />
+    <None Include="..\Media\Shaders\gbuffer_plain.vert" />
+    <None Include="..\Media\Shaders\gbuffer_textured.frag" />
+    <None Include="..\Media\Shaders\gbuffer_textured.vert" />
+    <None Include="..\Media\Shaders\lightPass.frag" />
+    <None Include="..\Media\Shaders\lightPBRModel.glsl" />
+    <None Include="..\Media\Shaders\lightTiling.frag" />
+    <None Include="..\Media\Shaders\lightUtil.glsl" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E24D41A4-8D90-45FF-9C55-6466187744AD}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Tempo</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)../Engine/include;C:/3DEngine/AntTweakBar/include;$(OSG_INCLUDE_PATH);$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:/3DEngine/AntTweakBar/include;$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AntTweakBar64.lib;osg.lib;osgViewer.lib;osgAnimation.lib;osgDB.lib;osgGA.lib;OpenThreads.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <OptimizeReferences>
+      </OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)../Engine/include;C:/3DEngine/AntTweakBar/include;$(OSG_INCLUDE_PATH);$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:/3DEngine/AntTweakBar/include;$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AntTweakBar64.lib;osg.lib;osgViewer.lib;osgAnimation.lib;osgDB.lib;osgGA.lib;OpenThreads.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)../Engine/include;C:/3DEngine/AntTweakBar/include;$(OSG_INCLUDE_PATH);$(SolutionDir)</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <AdditionalLibraryDirectories>C:/3DEngine/AntTweakBar/lib;$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AntTweakBar64.lib;osg.lib;osgViewer.lib;osgAnimation.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;OpenThreads.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

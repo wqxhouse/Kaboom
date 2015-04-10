@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<compositor>
+  <include>EffectFiles/template.xml</include>
+  <include>EffectFiles/GeometryPassConfig.xml</include>
+
+  <uniform name="u_farPlane" type="float">
+    <inbuilt_value>far_plane</inbuilt_value>
+  </uniform>
+
+  <technique>
+    <forward_pass name="geometry_pass">
+      <clear_color>0 0 0 1</clear_color>
+      <uniform>u_farPlane</uniform>
+      <output_buffer target="color0">b_RT0</output_buffer>
+      <output_buffer target="color1">b_RT1</output_buffer>
+      <output_buffer target="color2">b_RT2</output_buffer>
+
+    </forward_pass>
+  </technique>
+
+</compositor>

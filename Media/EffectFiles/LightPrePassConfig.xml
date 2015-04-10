@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<compositor>
+  <!-- 32 * 8 / 32 * 8 -->
+  <buffer name="b_PerTileStorage" type="2d" width="256" height="256">
+    <internal_format>red32f</internal_format>
+    <source_format>red</source_format>
+    <source_type>float</source_type>
+    <binding>0</binding>
+    <filter param="min_filter">nearest</filter>
+    <filter param="mag_filter">nearest</filter>
+  </buffer>
+  
+  <!--<buffer name="b_PerTileStorage" type="2d" width="256" height="256">
+    <internal_format>rgba32f</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>float</source_type>
+    <binding>0</binding>
+    <filter param="min_filter">nearest</filter>
+    <filter param="mag_filter">nearest</filter>
+  </buffer>-->
+  
+  <buffer name="b_computeShaderTrigger" type="2d" width="1" height="0">
+    <internal_format>red</internal_format>
+    <source_format>red</source_format>
+    <source_type>ubyte</source_type>
+  </buffer>
+
+  <!--<buffer name="b_computeShaderTrigger" type="1d" width="2" height="0">
+    <internal_format>red</internal_format>
+    <source_format>red</source_format>
+    <source_type>ubyte</source_type>
+  </buffer>-->
+
+  <shader name="computeLightTile_fs" type="fragment">
+    <version>400</version>
+    <file>Shaders/lightTiling.frag</file>
+  </shader>
+  
+  <!-- Currently set light maximum to 256 -->
+  <uniform_buffer name="u_lightsBuffer" data_variance="dynamic" size="256">
+    <!--position-->
+    <value type="vec3">1.0 1.0 1.0</value>
+    <!--color-->
+    <value type="vec3">1.0 1.0 1.0</value>
+    <!--dirFromLight-->
+    <value type="vec3">1.0 1.0 1.0</value>
+    <!--radius-->
+    <value type="float">1.0</value>
+  </uniform_buffer>
+</compositor>

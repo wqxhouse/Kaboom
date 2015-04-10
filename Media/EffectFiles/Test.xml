@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="utf-8"?>
+<compositor>
+  <shader name="gbuffer_vs" type="vertex">
+    <version>130</version>
+	<source>
+	<![CDATA[
+  #include "Shaders/gbufferUtil.glsl"
+  
+  
+  #version 400
+  
+	varying vec4 v_color;
+	varying vec3 v_normal;
+	varying vec4 v_position;
+	varying float v_depth;
+	
+	uniform float u_near;
+	uniform float u_far;
+	
+	void main()
+	{
+		v_color = gl_Color;
+		v_position = gl_ModelViewMatrix * gl_Vertex;
+		v_normal = gl_NormalMatrix * gl_Normal;
+		
+		v_depth = -v_position.z / u_far;
+		gl_Position = ftransform();
+	}
+	]]>
+	</source>
+  </shader> 
+  
+  <shader name="gbuffer_ps" type="fragment">
+    <version>330</version>
+	<source>
+	<![CDATA[
+  /*
+  vec3 encodeNormal(vec3 n)
+  {
+    float p = sqrt(n.z * 8 + 8);
+	  vec2 enc_spheremap = n.xy / p + 0.5;
+  
+    vec2 enc255 = enc_spheremap * 255;
+    vec2 residual = floor(fract(enc255) * 16);
+    vec3 enc = vec3(floor(enc255), residual.x * 16 + residual.y) / 255;
+    
+    return enc;
+  }*/
+  
+  vec2 splitDepth2x16(float depth)
+  {
+    //uint bits = floatBitsToUint(depth);
+    
+    //uint left = (bits & uint(0xFFFF0000)) >> 16;
+    //uint right = bits & uint(0xFFFF);
+    
+    //float leftF = uintBitsToFloat(left);
+    //float rightF = uintBitsToFloat(right);
+    
+    //return vec2(leftF, rightF);
+    
+    const vec2 bitSh = vec2(65536.0, 1.0);
+  	const vec2 bitMsk = vec2(0.0, 1.0 / 65536.0);
+
+    vec2 result = fract(depth * bitSh);
+    result -= result * bitMsk;
+    return result;
+  }
+  
+  vec2 encodeNormalNew(vec3 n)
+  {
+    float p = sqrt(n.z * 8 + 8);
+	  vec2 enc_spheremap = n.xy / p + 0.5;
+    
+    return enc_spheremap;
+  }
+  
+	varying vec4 v_color;
+	varying vec3 v_normal;
+	varying vec4 v_position;
+	varying float v_depth;
+	void main()
+	{
+		gl_FragData[0] = v_color; // albedo
+		gl_FragData[1] = vec4(normalize(v_normal), v_depth);
+		gl_FragData[2] = v_position;
+    //gl_FragData[3] = vec4(encodeNormal(normalize(v_normal)), 1);
+    
+    vec2 packedDepth = splitDepth2x16(v_depth);
+    gl_FragData[3] = vec4(encodeNormalNew(normalize(v_normal)), packedDepth);
+	}
+	]]>
+	</source>
+	</shader>
+	
+	<shader name="finalPass_vs" type="vertex"> 
+	<source>
+	<![CDATA[
+	varying vec2 v_uvcoord;
+	varying vec3 v_viewRay;
+	
+	uniform mat4 u_inv_projectionMat;
+	
+	void main()
+	{
+		v_uvcoord = gl_MultiTexCoord0.st;
+		gl_Position = ftransform();
+		
+		float viewX = gl_Position.x;
+		float viewY = gl_Position.y;
+		float viewZ = 1;
+		
+		vec4 ndc_corner = u_inv_projectionMat * vec4(viewX, viewY, viewZ, 1);
+		ndc_corner /= ndc_corner.w;
+		ndc_corner /= ndc_corner.z;
+		
+		v_viewRay = ndc_corner.xyz;
+		}
+	]]>
+	</source>
+	</shader>
+	
+	<shader name="finalPass_ps" type="fragment">
+    <version>400</version>
+	<source>
+	<![CDATA[
+  
+  #extension GL_ARB_uniform_buffer_object : enable
+  
+  // testing struct 
+  struct Color
+  {
+    float x;
+    float y;
+  };
+  
+  struct TestColor
+  {
+    vec3 color0;
+    int color1;
+  };
+  
+  uniform Color u_color[3];
+  
+//  layout(std140) uniform TestColor u_testColor;
+  layout(std140) uniform u_testColor 
+  {
+    TestColor u_pass;
+  };
+  
+  uniform float u_array[3];
+  
+  #version 400
+  
+	varying vec2 v_uvcoord;
+	uniform sampler2D u_albedo;
+	uniform sampler2D u_normal;
+  uniform sampler2D u_position;
+  
+  uniform sampler2D u_compressedNormal;
+	
+	uniform mat4 u_inv_modelViewMat;
+	uniform mat4 u_inv_projectionMat;
+	uniform mat4 u_modelViewMat;
+  
+  uniform sampler2D u_depth;
+	
+	varying vec3 v_viewRay;
+	
+	uniform float u_far;
+  
+  vec3 decodeNormal(vec3 encNormal)
+  {
+    float nz = floor(encNormal.z * 255) / 16;
+  	encNormal.xy += vec2(floor(nz) / 16, fract(nz)) / 255;
+	  vec2 fenc = encNormal.xy * 4 - 2;
+  	float f = dot(fenc, fenc);
+	  float g = sqrt(1 - f / 4);
+
+	  vec3 normal;
+	  normal.xy = fenc * g;
+	  normal.z = 1 - f / 2; // OpenGL z neg
+	  return normal; 
+  }
+  
+  float recoverDepth(vec2 split_depth)
+  {
+    //uint bits = packUnorm2x16(split_depth);
+    //return uintBitsToFloat(bits);
+    
+    //uint x = floatBitsToUint(split_depth.x);
+    //uint y = floatBitsToUint(split_depth.y);
+    
+    //uint bits = (x << 16) | y;
+    //float depth = uintBitsToFloat(bits);
+    //return depth;
+  
+    const vec2 unshift = vec2(1.0 / 65536.0, 1.0);
+  	return dot(split_depth, unshift);  
+  }
+  
+  vec3 decodeNormalNew(vec2 encNormal)
+  { 
+	  vec2 fenc = encNormal.xy * 4 - 2;
+  	float f = dot(fenc, fenc);
+	  float g = sqrt(1 - f / 4);
+
+	  vec3 normal;
+	  normal.xy = fenc * g;
+	  normal.z = 1 - f / 2; // OpenGL z neg
+	  return normal; 
+  }
+	
+	void main()
+	{
+		vec4 albedoSample = texture2D(u_albedo, v_uvcoord);
+		vec4 normalSample = texture2D(u_normal, v_uvcoord);
+    
+    vec4 encNormalSample = texture2D(u_compressedNormal, v_uvcoord);
+    vec3 encNormal = encNormalSample.xyz;
+    //vec3 decodedNormal = decodeNormal(encNormal);
+    vec3 decodedNormal = decodeNormalNew(encNormal.xy);
+    
+    vec2 splitDepth = encNormalSample.zw;
+    float recoveredLinDepth = recoverDepth(splitDepth);
+    
+   // gl_FragColor = vec4(decodedNormal, 1);
+    
+		float linDepth = normalSample.w;
+    
+    float diff = linDepth - recoveredLinDepth;
+    
+    //gl_FragColor = vec4(vec2(splitDepth), 1, 1); 
+    gl_FragColor = vec4(diff);
+    
+		//if(linDepth == 1.0)
+		//{
+		//	linDepth = 0.0;
+		//}
+		//float dp = -(linDepth* u_far);
+    
+		vec3 viewPos = v_viewRay * (-linDepth * u_far);
+//		vec3 viewPos = v_viewRay * (-recoveredLinDepth * u_far);
+
+//   vec3 viewPos = texture2D(u_position, v_uvcoord).xyz;
+		
+	//	vec3 normal = normalSample.xyz;
+  vec3 normal = decodedNormal;
+
+  vec3 lightDir = (u_modelViewMat * vec4(1, 0, 0, 1)).xyz - viewPos;
+  vec3 R = normalize(reflect(lightDir, normal));
+  vec3 V = normalize(viewPos);
+
+  float lambert = max(dot(normal, normalize(lightDir)), 0.0);
+  
+  vec4 diffuse = vec4(0, 0, 0, 0);
+  vec4 specular = vec4(0, 0, 0, 0);
+  if (lambert > 0.0) {
+    float distance = length(lightDir);
+      
+      vec4 diffuseContribution = vec4(1, 0, 1, 1) * lambert;
+      vec4 specularContribution = vec4(1, 1, 0, 1) * pow(max(dot(R, V), 0.0), 10);
+      
+      diffuse += diffuseContribution;
+      specular += specularContribution;
+  }
+    
+  vec4 final_color = vec4(diffuse + specular);
+  
+		gl_FragColor = final_color;
+    
+    // test struct
+    vec3 colorx = vec3(u_color[0].x, u_color[1].x, u_color[2].x);
+    vec3 colory = vec3(u_color[0].y, u_color[1].y, u_color[2].y);
+    
+    //vec3 array = vec3(u_array[0], u_array[1], u_array[2]);
+    //gl_FragColor = vec4(colorx, 1);
+    
+    gl_FragColor = vec4(u_pass.color0, 1);
+	}
+	]]>
+	</source>
+	</shader>
+  
+  <!--<uniform_buffer name="u_testColor" data_variance="dynamic" size="2">
+    <element index="0">
+      <value type="vec3">1.0 0.3 0.7</value>
+      <value type="int">2</value>
+    </element>
+    
+    <element index="1">
+      <value type="vec3">1.0 0.3 0.7</value>
+      <value type="int">2</value>
+    </element>
+  </uniform_buffer>-->
+  <uniform_buffer name="u_testColor" data_variance="dynamic">
+    <value type="vec3">1.0 0.2 1.0</value>
+    <value type="int">1</value>
+  </uniform_buffer>
+  
+  <!-- test struct array-->
+  <uniform name="u_color.x" type="float" isArray="1" size="3">
+    <value index="0">0.1</value>
+    <value index="1">0.3</value>
+    <value index="2">0.5</value>
+  </uniform>
+  
+  <uniform name="u_color.y" type="float" isArray="1" size="3">
+    <value index="0">0.9</value>
+    <value index="1">0.7</value>
+    <value index="2">0.3</value>
+  </uniform>
+
+  <uniform name="u_array" type="float" isArray="1" size="3">
+    <value index="0">0.9</value>
+    <value index="1">0.3</value>
+    <value index="2">0.7</value>
+  </uniform>
+  
+	<uniform name="u_near" type="float">
+        <inbuilt_value>near_plane</inbuilt_value>
+    </uniform>
+    
+    <uniform name="u_far" type="float">
+        <inbuilt_value>far_plane</inbuilt_value>
+    </uniform>
+	
+	<uniform name="u_modelViewMat" type="mat4">
+		<inbuilt_value>modelview_matrix</inbuilt_value>
+	</uniform>
+	
+	<uniform name="u_inv_modelViewMat" type="mat4">
+		<inbuilt_value>inv_modelview_matrix</inbuilt_value>
+	</uniform>
+	
+	<uniform name="u_inv_projectionMat" type="mat4">
+		<inbuilt_value>inv_projection_matrix</inbuilt_value>
+	</uniform>
+
+  <buffer name="b_compressedNormal" type="2d">
+    <internal_format>rgba16f</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>float</source_type>
+  </buffer>
+
+	<buffer name="b_albedo" type="2d"> 
+		<internal_format>rgba</internal_format>
+		<source_format>rgba</source_format>
+		<source_type>ubyte</source_type>
+	</buffer>
+	
+	<buffer name="b_normal" type="2d">
+		<internal_format>rgba32f</internal_format>
+		<source_format>rgba</source_format>
+		<source_type>float</source_type>
+	</buffer> 
+	
+	<buffer name="b_position" type="2d">
+		<internal_format>rgba32f</internal_format>
+		<source_format>rgba</source_format>
+		<source_type>float</source_type>
+	</buffer>
+
+  <buffer name="originalDepth" type="2d" width="1024" height="1024">
+    <internal_format>depth24</internal_format>
+    <source_format>depth</source_format>
+    <source_type>float</source_type>
+  </buffer>
+	
+	<technique>
+		<forward_pass name="geometry_pass">
+			<clear_color>0 0 0 1</clear_color>
+			<uniform>u_near</uniform>
+			<uniform>u_far</uniform>
+			<output_buffer target="color0">b_albedo</output_buffer>
+			<output_buffer target="color1">b_normal</output_buffer>
+			<output_buffer target="color2">b_position</output_buffer>
+      <output_buffer target="depth">originalDepth</output_buffer>
+      <output_buffer target="color3">b_compressedNormal</output_buffer>
+			
+			<shader>gbuffer_vs</shader>
+			<shader>gbuffer_ps</shader>
+		</forward_pass>
+		
+		<deferred_pass name="final_pass">
+			<uniform>u_inv_modelViewMat</uniform>
+			<uniform>u_inv_projectionMat</uniform>
+			
+			<uniform>u_modelViewMat</uniform>
+
+      <uniform>u_color.x</uniform>
+      <uniform>u_color.y</uniform>
+
+      <uniform>u_array</uniform>
+
+      <uniform_buffer>u_testColor</uniform_buffer>
+			
+			<uniform>u_far</uniform>
+		
+			<clear_color>0 0 0 1</clear_color>
+			<input_buffer unit="0" varname="u_albedo">b_albedo</input_buffer>
+			<input_buffer unit="1" varname="u_normal">b_normal</input_buffer>
+			<input_buffer unit="2" varname="u_position">b_position</input_buffer>
+
+      <input_buffer unit="3" varname="u_depth">originalDepth</input_buffer>
+
+      <input_buffer unit="4" varname="u_compressedNormal">b_compressedNormal</input_buffer>
+			
+			<shader>finalPass_vs</shader>
+			<shader>finalPass_ps</shader>
+		</deferred_pass>
+	</technique>
+	
+</compositor>
