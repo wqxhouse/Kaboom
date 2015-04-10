@@ -1,10 +1,22 @@
 #pragma once
 
-#include "EntityData.h"
+#include <map>
+
+#include "Component.h"
 
 class Entity {
 public:
-    virtual ~Entity() {};
+    Entity(unsigned int id);
+    ~Entity();
 
-    virtual EntityData *getEntityData() = 0;
+    void attachComponent(Component *component);
+
+    bool hasComponent(ComponentType type);
+    Component *Entity::getComponent(ComponentType type);
+
+    unsigned int getId() const;
+
+private:
+    unsigned int id;
+    std::map<ComponentType, Component *> components;
 };

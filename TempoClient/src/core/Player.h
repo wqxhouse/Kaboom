@@ -6,9 +6,9 @@
 #include <osg/MatrixTransform>
 
 #include "PlayerData.h"
-#include "Entity.h"
+#include "OldEntity.h"
 
-class Player : public Entity, public osg::Group {
+class Player : public OldEntity, public osg::Group {
 public:
     Player(PlayerData *data);
     ~Player();
