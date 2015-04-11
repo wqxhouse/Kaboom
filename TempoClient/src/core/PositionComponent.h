@@ -8,8 +8,6 @@ public:
     PositionComponent(float x, float y, float z);
     ~PositionComponent();
 
-    virtual ComponentType getType() const;
-
     float getX() const;
     float getY() const;
     float getZ() const;
