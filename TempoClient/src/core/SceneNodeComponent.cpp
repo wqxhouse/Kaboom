@@ -7,10 +7,6 @@ SceneNodeComponent::SceneNodeComponent(osg::Node *node)
 SceneNodeComponent::~SceneNodeComponent() {
 }
 
-ComponentType SceneNodeComponent::getType() const {
-    return SCENE_NODE;
-}
-
 osg::Node *SceneNodeComponent::getNode() const {
     return node;
 }

@@ -71,12 +71,12 @@ Entity * createPlayerEntity(EntityManager &entityManager, float x, float y, floa
 }
 
 int main() {
-	// Load config file for the first time
-	ConfigSettings* config = ConfigSettings::config;
+    // Load config file for the first time
+    ConfigSettings* config = ConfigSettings::config;
 
-	int screen_width = 0, screen_height = 0;
-	config->getValue(ConfigSettings::str_screen_width, screen_width);
-	config->getValue(ConfigSettings::str_screen_height, screen_height);
+    int screen_width = 0, screen_height = 0;
+    config->getValue(ConfigSettings::str_screen_width, screen_width);
+    config->getValue(ConfigSettings::str_screen_height, screen_height);
 
     g_client = new GameClient(config);
 
@@ -90,15 +90,15 @@ int main() {
     Entity *player1 = createPlayerEntity(entityManager, 0, 0, 0);
     Entity *player2 = createPlayerEntity(entityManager, 2, 2, 0);
 
-    osg::Node *player1Node = static_cast<SceneNodeComponent *>(player1->getComponent(SCENE_NODE))->getNode();
-    osg::Node *player2Node = static_cast<SceneNodeComponent *>(player2->getComponent(SCENE_NODE))->getNode();
+    osg::Node *player1Node = player1->getComponent<SceneNodeComponent>()->getNode();
+    osg::Node *player2Node = player2->getComponent<SceneNodeComponent>()->getNode();
 
     osg::ref_ptr<osg::Group> root = new osg::Group;
     root->addChild(player1Node);
     root->addChild(player2Node);
 
     viewer.setSceneData(root);
-	viewer.setUpViewInWindow(100, 100, screen_width, screen_height);
+    viewer.setUpViewInWindow(100, 100, screen_width, screen_height);
 
     viewer.realize();
 

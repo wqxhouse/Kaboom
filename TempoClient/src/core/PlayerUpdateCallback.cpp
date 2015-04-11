@@ -39,9 +39,8 @@ void PlayerUpdateCallback::operator()(osg::Node *node, osg::NodeVisitor *nv) {
     mat.makeTranslate(osg::Vec3(x, y, z));
     transformationNode->setMatrix(mat);
 
-    PositionComponent *posCom = static_cast<PositionComponent *>(entity->getComponent(POSITION));
+    PositionComponent *posCom = entity->getComponent<PositionComponent>();
     posCom->setX(x);
     posCom->setY(y);
     posCom->setZ(z);
-
 }

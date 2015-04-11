@@ -11,10 +11,7 @@ public:
     SceneNodeComponent(osg::Node *node);
     ~SceneNodeComponent();
 
-    virtual ComponentType getType() const;
-
     osg::Node *getNode() const;
-
     void setNode(osg::Node *node);
 
 private:

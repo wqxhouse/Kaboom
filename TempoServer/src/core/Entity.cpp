@@ -8,19 +8,7 @@ Entity::~Entity() {
 }
 
 void Entity::attachComponent(Component *component) {
-    components[component->getType()] = component;
-}
-
-bool Entity::hasComponent(ComponentType type) {
-    return components.count(type) > 0;
-}
-
-Component *Entity::getComponent(ComponentType type) {
-    if (hasComponent(type)) {
-        return components[type];
-    } else {
-        return NULL;
-    }
+    components[&typeid(*component)] = component;
 }
 
 unsigned int Entity::getId() const {
