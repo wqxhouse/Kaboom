@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Network">
       <UniqueIdentifier>{c5019e3b-b4e1-41e4-a131-dc180bea0ab0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity Component System">
+      <UniqueIdentifier>{6757a7dd-4b7b-4603-8657-c637ee8bb7a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity Component System">
+      <UniqueIdentifier>{41b4b77d-48fd-4343-ac3f-f683d1b5d37f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\util\ConfigSettings.cpp">
@@ -47,6 +53,15 @@
     </ClCompile>
     <ClCompile Include="src\network\ServerNetwork.cpp">
       <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Entity.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\EntityManager.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\PositionComponent.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +94,18 @@
     </ClInclude>
     <ClInclude Include="src\core\PlayerData.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Component.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Entity.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\EntityManager.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\PositionComponent.h">
+      <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
