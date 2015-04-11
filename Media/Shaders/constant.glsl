@@ -7,7 +7,7 @@ const float sqrt_of_2 = 1.4142135623;
 
 #define LIGHTING_MIN_MAX_DEPTH_ACCURACY 1
 #define MAX_DIRECTIONAL_LIGHTS 1
-#define MAX_POINT_LIGHTS 256
-#define MAX_VISIBLE_LIGHTS 512 
+#define MAX_POINT_LIGHTS 512 
+#define MAX_VISIBLE_LIGHTS 256 
 
 #pragma optionNV (unroll all)

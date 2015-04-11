@@ -118,8 +118,16 @@ void Core::configLightPass()
 {
 	osgFX::EffectCompositor::PassData prePass;
 	_passes->getPassData("LightPrePass", prePass);
-	prePass.pass->getOrCreateStateSet()->
-		setUpdateCallback(new LightPrePassCallback(_world.getLightManager()));
+
+	if (prePass.pass != NULL)
+	{
+		prePass.pass->getOrCreateStateSet()->
+			setUpdateCallback(new LightPrePassCallback(_world.getLightManager()));
+	}
+	else
+	{
+		OSG_WARN << "Prepass not defined in the pipeline, check the xml file " << std::endl;
+	}
 }
 
 void Core::configSceneNode()

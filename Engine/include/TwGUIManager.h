@@ -45,7 +45,12 @@ protected:
 
 	virtual ~TwGUIManager()
 	{
+		// TODO: handle ESC key, currently crash the 
+		// program, since managers gets deallocated 
+		// before TwGUIManager
+		TwDeleteAllBars();
 		TwTerminate();
+		g_twBar = NULL;
 	}
 
 	TwMouseButtonID getTwButton(int button) const;

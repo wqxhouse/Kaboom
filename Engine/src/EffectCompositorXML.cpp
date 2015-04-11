@@ -821,7 +821,25 @@ osg::Uniform* EffectCompositor::createUniformFromXML(osgDB::XmlNode* xmlNode, bo
 		// get array num
 		int numElement = atoi(xmlNode->properties["size"].c_str());
 		uniform = new osg::Uniform(type, name, numElement);
-		if (numElement != xmlNode->children.size())
+	
+		// TODO: only support int for now
+		//if (xmlNode->children.size() == 0) // auto-fill zero
+		//{
+		//	switch (type)
+		//	{
+		//	case osg::Uniform::INT :
+		//		for (int i = 0; i < numElement; i++)
+		//		{
+		//			// used in LightPrePass
+		//			uniform->setElement(i, 0);
+		//		}
+		//		break;
+		//	default:
+		//		OSG_WARN << "Unsupported array type" << std::endl;
+		//	}
+		//}
+
+		if (xmlNode->children.size() != 0 && numElement != xmlNode->children.size())
 		{
 			OSG_WARN << "EffectCompositor: <uniform> " << name
 				<< " array size not matched with child number" << std::endl;

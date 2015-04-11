@@ -145,7 +145,7 @@
 //  layout(std140) uniform TestColor u_testColor;
   layout(std140) uniform u_testColor 
   {
-    TestColor u_pass;
+    TestColor u_pass[2];
   };
   
   uniform float u_array[3];
@@ -276,7 +276,7 @@
     //vec3 array = vec3(u_array[0], u_array[1], u_array[2]);
     //gl_FragColor = vec4(colorx, 1);
     
-    gl_FragColor = vec4(u_pass.color0, 1);
+    gl_FragColor = vec4(u_pass[1].color0, 1);
 	}
 	]]>
 	</source>
@@ -293,8 +293,8 @@
       <value type="int">2</value>
     </element>
   </uniform_buffer>-->
-  <uniform_buffer name="u_testColor" data_variance="dynamic">
-    <value type="vec3">1.0 0.2 1.0</value>
+  <uniform_buffer name="u_testColor" data_variance="dynamic" size="2">
+    <value type="vec3">0.0 1.0 1.0</value>
     <value type="int">1</value>
   </uniform_buffer>
   

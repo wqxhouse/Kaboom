@@ -10,7 +10,7 @@
     <file>Shaders/defaultQuad.vert</file>
   </shader>
 
-  <uniform name="u_modelViewMat" type="mat4">
+  <!--<uniform name="u_modelViewMat" type="mat4">
     <inbuilt_value>modelview_matrix</inbuilt_value>
   </uniform>
 
@@ -24,7 +24,7 @@
 
   <uniform name="u_inv_projMat" type="mat4">
     <inbuilt_value>inv_projection_matrix</inbuilt_value>
-  </uniform>
+  </uniform>-->
   
   <uniform name="u_farPlane" type="float">
     <inbuilt_value>far_plane</inbuilt_value>
@@ -45,8 +45,16 @@
       <output_buffer target="color">b_computeShaderTrigger</output_buffer>
       
       <uniform_buffer>u_lightsBuffer</uniform_buffer>
-      <uniform>u_modelViewMat</uniform> <!-- modelview need to manually resolve -->
+      <!--<uniform>u_viewMat</uniform> --><!-- modelview need to manually resolve --><!--
+      <uniform>u_projMat</uniform>-->
+      <uniform>u_countPointLight</uniform>
+      <uniform>u_countDirectionalLight</uniform>
+      <uniform>u_arrayDirectionalLight</uniform>
+      <uniform>u_arrayPointLight</uniform>
+      <uniform>u_destSize</uniform>
+
       <uniform>u_projMat</uniform>
+      <uniform>u_viewMat</uniform>
 
       <shader>defaultQuad_vs</shader>
       <shader>computeLightTile_fs</shader>

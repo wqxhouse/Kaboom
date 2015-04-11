@@ -24,8 +24,7 @@ LightPrePassCallback::~LightPrePassCallback()
 void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 {
 	// 1. light frustum culling 
-	std::vector<Light *> visible_lights;
-	performLightCulling();
+	std::vector<Light *> visible_lights = performLightCulling();
 
 	// 2. update shader input 
 	// retrieve ubb
@@ -36,12 +35,15 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		= static_cast<osg::UniformBufferObject*>(ubb->getBufferObject());
 
 	osg::FloatArray* array = static_cast<osg::FloatArray*>(ubo->getBufferData(0));
+	
+	std::vector<int> dirLightIds;
+	std::vector<int> pointLightIds;
 
 	int uboIndex = 0;
 	// TODO: add shadow information
-	for (int i = 0; i < _manager->getNumLights(); i++)
+	for (int i = 0; i < visible_lights.size(); i++)
 	{
-		Light *l = _manager->getLight(i);
+		Light *l = visible_lights[i];
 		//vec3 position;
 		//vec3 color;
 		//vec3 lookat; // directional light & spot light
@@ -56,11 +58,15 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		{
 			DirectionalLight *dirLight = l->asDirectionalLight();
 			dirFromLight = dirLight->getLightToWorldDirection();
+
+			dirLightIds.push_back(i);
 		}
 		else if (l->getLightType() == POINT)
 		{
 			PointLight *ptLight = l->asPointLight();
 			radius = ptLight->getRadius();
+
+			pointLightIds.push_back(i);
 		}
 
 		// TODO: think a way to do lazy updating 
@@ -83,6 +89,28 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	}
 
 	array->dirty();
+	// <==== finish ubo 
+
+	// set uniforms
+	ss->getUniform("u_countDirectionalLight")->set((int)dirLightIds.size());
+	ss->getUniform("u_countPointLight")->set((int)pointLightIds.size());
+
+	// set dirLight array
+	osg::Uniform *dirArray = ss->getUniform("u_arrayDirectionalLight");
+	for (int i = 0; i < dirLightIds.size(); i++)
+	{
+		dirArray->setElement(i, dirLightIds[i]);
+	}
+
+	osg::Uniform *pointArray = ss->getUniform("u_arrayPointLight");
+	for (int i = 0; i < pointLightIds.size(); i++)
+	{
+		pointArray->setElement(i, pointLightIds[i]);
+	}
+
+	// update mvp 
+	ss->getUniform("u_viewMat")->set(osg::Matrixf(Core::getMainCamera().getViewMatrix()));
+	ss->getUniform("u_projMat")->set(osg::Matrixf(Core::getMainCamera().getClampedProjectionMatrix()));
 }
 
 std::vector<Light *> LightPrePassCallback::performLightCulling()
@@ -94,24 +122,45 @@ std::vector<Light *> LightPrePassCallback::performLightCulling()
 
 	osg::Matrix inv_vp = osg::Matrix::inverse(viewMat * projMat);
 
+	//osg::Polytope frustum;
+	//frustum.setToUnitFrustum();
+	//frustum.transformProvidingInverse(inv_vp);
+
+	// debug 
+	/*osg::Matrix dview;
+	dview.makeLookAt(osg::Vec3(0, -100, 0), osg::Vec3(0, 0, 0), osg::Vec3(0, 0, 1));
+
+	osg::Matrix dproj;
+	dproj.makeFrustum(-1, 1, -1, 1, 0.1, 1000);
+
+	osg::Matrix dmvp = dview * dproj;
+	osg::Matrix invMvp;
+	invMvp.invert(dmvp);*/
+
 	osg::Polytope frustum;
 	frustum.setToUnitFrustum();
-	frustum.transformProvidingInverse(inv_vp);
+	frustum.transform(inv_vp); 
 
 	for (int i = 0; i < _manager->getNumLights(); i++)
 	{
 		Light *l = _manager->getLight(i);
-		bool visible = l->getLightBound().intersectBound(frustum);
 
-		// debug
-		if (l->getLightType() == POINT)
+		if (i >= 256)
 		{
-			std::cout << visible << std::endl;
+			OSG_WARN << "reaching maximum visible lights, skipping " << l->getName() << std::endl;
+			continue;
 		}
+
+		bool visible = l->getLightBound().intersectBound(frustum);
 
 		if (visible == true)
 		{
 			visibleLights.push_back(l);
+		}
+		else
+		{
+			// TODO: output light ... culled, use custom logging later
+			OSG_WARN << "light " << l->getName() << " frustum culled." << std::endl;
 		}
 	}
 

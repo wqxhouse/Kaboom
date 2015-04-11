@@ -9,28 +9,44 @@
 //layout (r32i) uniform iimage2D o_destination;
 layout (r32f, binding=0) uniform image2D o_destination;
 
-//layout(std140) uniform u_lightsBuffer
-//{
-//	// currently support up to 256 lights
-//	Light lights[MAX_VISIBLE_LIGHTS];
-//}
-
-void main()
+layout(std140) uniform u_lightsBuffer
 {
+	// currently support up to 256 visible lights
+	// due to uniform size limit & performance
+	Light lights[MAX_VISIBLE_LIGHTS];
+};
+
+uniform int u_countPointLight;
+uniform int u_arrayPointLight[MAX_POINT_LIGHTS];
+
+uniform int u_countDirectionalLight;
+uniform int u_arrayDirectionalLight[MAX_DIRECTIONAL_LIGHTS];
+
+uniform vec2 u_destSize;
+
+void debugFill(vec3 color)
+{
+	for(int i = 0; i < int(u_destSize.x); i++)
+	{
+		for(int j = 0; j < int(u_destSize.y); j++)
+		{
+			imageStore(o_destination, ivec2(i, j), vec4(color, 0));
+		}
+	}
+}
+
+//void main()
+//{
 	//if(gl_FragCoord.x - 0.5 > 0) 
 	//{
 	//	// work around texture minimum limitation
 	//	gl_FragColor = vec4(0.1, 0, 0, 0);
 	//	return;
 	//}
+//}
 
-	//imageStore(o_destination, storageCoord + ivec2(0, 0), ivec4(processedPointLights));
-	gl_FragColor = vec4(1, 0, 0, 0);
-}
-
-//in vec2 texcoord;
-
-//uniform sampler2D u_normalDepthTex;
+varying vec2 v_texcoord;
+uniform sampler2D u_normalDepthTex;
 
 //layout (r32i) uniform iimage2D o_destination;
 

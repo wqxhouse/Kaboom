@@ -36,9 +36,27 @@
     <version>400</version>
     <file>Shaders/lightTiling.frag</file>
   </shader>
+
+  <uniform name="u_destSize" type="vec2">
+    <value>256.0 256.0</value>
+  </uniform>
+
+  <uniform name="u_countPointLight" type="int">
+    <value>0</value>
+  </uniform>
+
+  <uniform name="u_countDirectionalLight" type="int">
+    <value>0</value>
+  </uniform>
+
+  <uniform name="u_viewMat" type="mat4"></uniform>
+  <uniform name="u_projMat" type="mat4"></uniform>
+
+  <uniform name="u_arrayDirectionalLight" type="int" size="1" isArray="1"/>
+  <uniform name="u_arrayPointLight" type="int" size="512" isArray="1" />
   
   <!-- Currently set light maximum to 256 -->
-  <uniform_buffer name="u_lightsBuffer" data_variance="dynamic" size="256">
+  <uniform_buffer name="u_lightsBuffer" data_variance="dynamic" size="1024">
     <!--position-->
     <value type="vec3">1.0 1.0 1.0</value>
     <!--color-->
