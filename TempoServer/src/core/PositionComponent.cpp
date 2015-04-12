@@ -11,6 +11,10 @@ PositionComponent::PositionComponent(float x, float y, float z)
 PositionComponent::~PositionComponent() {
 }
 
+void PositionComponent::update(float timeStep) {
+    // TODO update position
+}
+
 float PositionComponent::getX() const {
     return x;
 }
@@ -23,14 +27,14 @@ float PositionComponent::getZ() const {
     return z;
 }
 
-void PositionComponent::setX(const float &x) {
+void PositionComponent::setX(float x) {
     this->x = x;
 }
 
-void PositionComponent::setY(const float &y) {
+void PositionComponent::setY(float y) {
     this->y = y;
 }
 
-void PositionComponent::setZ(const float &z) {
+void PositionComponent::setZ(float z) {
     this->z = z;
 }

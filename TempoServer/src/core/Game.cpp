@@ -34,7 +34,7 @@ void Game::addPlayer(Player *player) {
 void Game::update(float timeStep) {
     world->stepSimulation(timeStep);
 
-    for (PlayerList::const_iterator it = players.cbegin(); it != players.cend(); ++it) {
-        (*it)->update(timeStep);
+    for (auto it : players) {
+        it->update(timeStep);
     }
 }

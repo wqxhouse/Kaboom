@@ -5,6 +5,8 @@
 
 #include "Component.h"
 
+class Component;
+
 class Entity {
 public:
     Entity(unsigned int id);
@@ -22,9 +24,11 @@ public:
         if (hasComponent<T>()) {
             return static_cast<T *>(components[&typeid(T)]);
         } else {
-            return NULL;
+            return nullptr;
         }
     }
+
+    virtual void update(float timeStep);
 
     unsigned int getId() const;
 
