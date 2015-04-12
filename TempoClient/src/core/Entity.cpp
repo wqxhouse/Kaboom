@@ -12,9 +12,9 @@ void Entity::attachComponent(Component *component) {
     components[&typeid(*component)] = component;
 }
 
-void Entity::update(const GameStateData &data) {
+void Entity::update(const GameStateData &gameState) {
     for (auto it : components) {
-        it.second->update(data);
+        it.second->update(gameState);
     }
 }
 

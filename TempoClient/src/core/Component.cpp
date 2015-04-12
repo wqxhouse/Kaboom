@@ -1,6 +1,6 @@
 #include "Component.h"
 
-void Component::update(const GameStateData &data) {
+void Component::update(const GameStateData &gameState) {
 }
 
 Entity *Component::getEntity() const {
