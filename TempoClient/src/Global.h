@@ -1,7 +1,5 @@
 #pragma once
 
-#include <osg/Vec3>
+#include "network/GameClient.h"
 
-#include "core/Player.h"
-
-extern Player player;
+extern GameClient *g_client;

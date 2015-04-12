@@ -8,81 +8,122 @@
 #include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
 
-#include "input/KeyboardEventHandler.h"
-#include "core/Player.h"
-#include "PlayerNode.h"
-#include "PlayerNodeCallback.h"
+#include "core/Entity.h"
+#include "core/EntityManager.h"
+#include "core/SceneNodeComponent.h"
+#include "core/PositionComponent.h"
+#include "input/InputManager.h"
+#include "network/GameClient.h"
+#include "util/ConfigSettings.h"
 
-Player player;
-
-void setupKeyboardHandler(KeyboardEventHandler *handler) {
-    handler->bindKey('w', KeyboardEventHandler::KEY_DOWN, Player::moveForwardDown);
-    handler->bindKey('w', KeyboardEventHandler::KEY_UP, Player::moveForwardUp);
-    handler->bindKey('s', KeyboardEventHandler::KEY_DOWN, Player::moveBackwardDown);
-    handler->bindKey('s', KeyboardEventHandler::KEY_UP, Player::moveBackwardUp);
-    handler->bindKey('a', KeyboardEventHandler::KEY_DOWN, Player::moveLeftDown);
-    handler->bindKey('a', KeyboardEventHandler::KEY_UP, Player::moveLeftUp);
-    handler->bindKey('d', KeyboardEventHandler::KEY_DOWN, Player::moveRightDown);
-    handler->bindKey('d', KeyboardEventHandler::KEY_UP, Player::moveRightUp);
-    handler->bindKey(' ', KeyboardEventHandler::KEY_DOWN, Player::jumpDown);
-    handler->bindKey(' ', KeyboardEventHandler::KEY_UP, Player::jumpUp);
-}
+GameClient *g_client;
 
 void setupCamera(osgViewer::Viewer &viewer) {
-	const osg::Vec3 eye(0, -10, 0);
-	const osg::Vec3 center(0, 1, 0);
+    const osg::Vec3 eye(0, -10, 0);
+    const osg::Vec3 center(0, 1, 0);
 
-	osgViewer::ViewerBase::Contexts context;
-	viewer.getContexts(context, true);
+    osgViewer::ViewerBase::Contexts context;
+    viewer.getContexts(context, true);
 
-	const osg::GraphicsContext::Traits* traits = context.front()->getTraits();
+    const osg::GraphicsContext::Traits *traits = context.front()->getTraits();
 
-	if (!traits) {
-		std::cerr << "Unable to detect screen resolution" << std::endl;
-		exit(1);
-	}
+    if (!traits) {
+        std::cerr << "Unable to detect screen resolution" << std::endl;
+        exit(1);
+    }
 
-	float screenHeight = traits->height;
-	float screenWidth = traits->width;
+    float screenHeight = traits->height;
+    float screenWidth = traits->width;
 
-	osg::Matrixf viewMat;
-	viewMat.makeLookAt(eye, center, osg::Vec3(0, 0, 1));
+    osg::Matrixf viewMat;
+    viewMat.makeLookAt(eye, center, osg::Vec3(0, 0, 1));
 
-	osg::Matrixf projMat;
-	projMat.makePerspective(30, screenWidth / screenHeight, 1, 1000);
+    osg::Matrixf projMat;
+    projMat.makePerspective(30, screenWidth / screenHeight, 1, 1000);
 
-	osg::Camera *camera = viewer.getCamera();
-	camera->setViewMatrix(viewMat);
-	camera->setProjectionMatrix(projMat);
+    osg::Camera *camera = viewer.getCamera();
+    camera->setViewMatrix(viewMat);
+    camera->setProjectionMatrix(projMat);
+}
+
+Entity * createPlayerEntity(EntityManager &entityManager, float x, float y, float z) {
+    Entity *player = entityManager.createEntity();
+
+    osg::Box *box = new osg::Box;
+    osg::ShapeDrawable *drawable = new osg::ShapeDrawable(box);
+    osg::Geode *model = new osg::Geode;
+    model->addDrawable(drawable);
+
+    osg::MatrixTransform *transformation = new osg::MatrixTransform;
+    transformation->addChild(model);
+
+    osg::Group *playerNode = new osg::Group;
+
+    playerNode->addChild(transformation);
+
+    player->attachComponent(new SceneNodeComponent(playerNode));
+    player->attachComponent(new PositionComponent(x, y, z));
+
+    return player;
+}
+
+void update(const EntityManager &entityManager, const GameStateData &gameState) {
+    Entity *player1 = entityManager.getEntity(0);
+    Entity *player2 = entityManager.getEntity(1);
+
+    player1->update(gameState);
+    player2->update(gameState);
 }
 
 int main() {
-	osgViewer::Viewer viewer;
+    // Load config file for the first time
+    ConfigSettings* config = ConfigSettings::config;
 
-    osg::ref_ptr<osg::Group> rootNode = new osg::Group;
+    int screen_width = 0, screen_height = 0;
+    config->getValue(ConfigSettings::str_screen_width, screen_width);
+    config->getValue(ConfigSettings::str_screen_height, screen_height);
 
-    osg::ref_ptr<PlayerNode> playerNode = new PlayerNode(&player);
-    playerNode->addUpdateCallback(new PlayerNodeCallback);
+    g_client = new GameClient(config);
 
-    Player player2;
-    player2.position = osg::Vec3(2, 2, 0);
+    osgViewer::Viewer viewer;
 
-    osg::ref_ptr<PlayerNode> player2Node = new PlayerNode(&player2);
+    InputManager inputManager(&viewer);
+    inputManager.loadConfig();
 
-    rootNode->addChild(playerNode);
-    rootNode->addChild(player2Node);
+    EntityManager entityManager;
 
-    viewer.setSceneData(rootNode);
+    Entity *player1 = createPlayerEntity(entityManager, 0, 0, 0);
+    Entity *player2 = createPlayerEntity(entityManager, 2, 2, 0);
 
-	osg::ref_ptr<KeyboardEventHandler> kbdHandler = new KeyboardEventHandler;
-	setupKeyboardHandler(kbdHandler);
-	viewer.addEventHandler(kbdHandler);
+    osg::Node *player1Node = player1->getComponent<SceneNodeComponent>()->getNode();
+    osg::Node *player2Node = player2->getComponent<SceneNodeComponent>()->getNode();
 
-	viewer.realize();
+    osg::ref_ptr<osg::Group> root = new osg::Group;
+    root->addChild(player1Node);
+    root->addChild(player2Node);
 
-	setupCamera(viewer); // Need to be called after viewer.realize()
+    viewer.setSceneData(root);
+    viewer.setUpViewInWindow(100, 100, screen_width, screen_height);
 
-	while (!viewer.done()) {
-		viewer.frame();
-	}
+    viewer.realize();
+
+    setupCamera(viewer); // Need to be called after viewer.realize()
+
+    try {
+        while (!viewer.done()) {
+            GameStateData *gameState = g_client->receive();
+
+            if (gameState != nullptr) {
+                update(entityManager, *gameState);
+            }
+
+            viewer.frame();
+
+            delete gameState;
+        }
+    } catch (std::exception &e) {
+        std::cerr << "ERROR: " << e.what() << std::endl;
+    }
+
+    delete g_client;
 }
