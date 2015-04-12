@@ -2,13 +2,7 @@
 
 #include "../network/NetworkData.h"
 
-struct GameStateUpdateEvent : Packet {
-	//	int packetSize;
-
-	//	int numOfPlayers;
-	//	std::vector<PlayerInfo> playerList;
-	//	int numOfBombs;
-	//	std::vector<Bomb> bombList;
+struct GameStateData {
 
 	float x1;
 	float y1;
@@ -18,12 +12,7 @@ struct GameStateUpdateEvent : Packet {
 	float y2;
 	float z2;
 
-	void serialize(char * data) {
-		memcpy(data, this, sizeof(GameStateUpdateEvent));
-	}
-	void deserialize(char * data) {
-		memcpy(this, data, sizeof(GameStateUpdateEvent));
-	}
+
 };
 /*
 struct PlayerInfo {

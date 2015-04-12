@@ -18,7 +18,7 @@
 #include "util/ConfigSettings.h"
 
 GameClient *g_client;
-GameStateUpdateEvent *g_gameState;
+GameStateData *g_gameState;
 
 void setupCamera(osgViewer::Viewer &viewer) {
     const osg::Vec3 eye(0, -10, 0);

@@ -87,7 +87,12 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config)
 		exit(1);
 	}
 
-	printf("<Server> Server is Running! %x\n", result->ai_addr);
+	struct sockaddr_in sin;
+	socklen_t len = sizeof(sin);
+	if (getsockname(ListenSocket, (struct sockaddr *)&sin, &len) == -1)
+		perror("getsockname");
+	else
+		printf("<Server> Begin listening on port %d\n", ntohs(sin.sin_port));
 }
 
 bool ServerNetwork::acceptNewClient(unsigned int & id){

@@ -20,7 +20,7 @@ public:
 
     void sendMovePackets();
 
-    void sendGameStatePackets(GameStateUpdateEvent);
+    void sendGameStatePackets();
 
 	void sendAssignPackets(int);
 
@@ -35,7 +35,12 @@ private:
 	// data buffer
 	char network_data[MAX_PACKET_SIZE];
 
-    GameStateUpdateEvent gameState;
+	// This is the game state data the server keep tracks of
+	GameStateData gameStateData;
+
+
+	// This is the game state data we send over the network
+    GameStateUpdateEvent gameStateUpdateEvent;
 
 	std::map<int, int> playerIndexNum;
 
