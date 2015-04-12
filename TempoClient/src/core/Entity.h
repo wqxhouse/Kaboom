@@ -4,6 +4,9 @@
 #include <unordered_map>
 
 #include "Component.h"
+#include "GameStateData.h"
+
+class Component;
 
 class Entity {
 public:
@@ -22,9 +25,11 @@ public:
         if (hasComponent<T>()) {
             return static_cast<T *>(components[&typeid(T)]);
         } else {
-            return NULL;
+            return nullptr;
         }
     }
+
+    virtual void update(const GameStateData &data);
 
     unsigned int getId() const;
 

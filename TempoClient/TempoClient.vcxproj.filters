@@ -81,6 +81,9 @@
     <ClCompile Include="src\core\SceneNodeComponent.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\Component.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Global.h">

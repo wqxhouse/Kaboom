@@ -1,5 +1,7 @@
 #include "EntityManager.h"
 
+#include <exception>
+
 EntityManager::EntityManager() {
 }
 
@@ -16,7 +18,7 @@ Entity *EntityManager::createEntity() {
 
 Entity *EntityManager::createEntity(unsigned int id) {
     if (isEntityAlive(id)) {
-        return NULL;
+        throw std::exception("Entity with this ID is alive");
     }
 
     Entity *entity = new Entity(id);
@@ -34,11 +36,11 @@ void EntityManager::destroyEntity(unsigned int id) {
 }
 
 Entity *EntityManager::getEntity(unsigned int id) {
-    if (isEntityAlive(id)) {
-        return entities[id];
-    } else {
-        return NULL;
+    if (!isEntityAlive(id)) {
+        throw std::exception("Entity with this ID is not alive");
     }
+
+    return entities[id];
 }
 
 bool EntityManager::isEntityAlive(unsigned int id) {
