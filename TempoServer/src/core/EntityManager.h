@@ -14,8 +14,8 @@ public:
 
     void destroyEntity(unsigned int id);
 
-    Entity *getEntity(unsigned int id);
-    bool isEntityAlive(unsigned int id);
+    Entity *getEntity(unsigned int id) const;
+    bool isEntityAlive(unsigned int id) const;
 
 private:
     std::unordered_map<unsigned int, Entity *> entities;

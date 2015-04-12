@@ -8,13 +8,15 @@ public:
     PositionComponent(float x, float y, float z);
     ~PositionComponent();
 
+    virtual void update(float timeStep);
+
     float getX() const;
     float getY() const;
     float getZ() const;
 
-    void setX(const float &x);
-    void setY(const float &y);
-    void setZ(const float &z);
+    void setX(float x);
+    void setY(float y);
+    void setZ(float z);
 
 private:
     float x;

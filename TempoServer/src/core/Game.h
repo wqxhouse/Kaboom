@@ -16,13 +16,11 @@ public:
     void update(float timestep);
 
 private:
-	typedef std::vector<Player *> PlayerList;
-
     btBroadphaseInterface *broadphase;
     btDefaultCollisionConfiguration *collisionConfiguration;
     btCollisionDispatcher *dispatcher;
     btSequentialImpulseConstraintSolver *solver;
     btDiscreteDynamicsWorld *world;
 
-	PlayerList players;
+    std::vector<Player *> players;
 };
