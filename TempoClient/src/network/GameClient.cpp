@@ -17,7 +17,7 @@ GameStateData *GameClient::receive() {
     int len = network->receivePackets(networkData);
 
     if (len <= 0) {
-        return NULL;
+        return nullptr;
     }
 
 	GameStateData *gameStateData = new GameStateData();
@@ -74,7 +74,7 @@ GameStateData *GameClient::receive() {
 			break;
 		default:
 			printf("error in packet types\n");
-			return NULL;
+			return nullptr;
 		}
 
 		i += packet.packet_size;
@@ -86,7 +86,7 @@ GameStateData *GameClient::receive() {
 	}
 	else {
 		delete gameStateData;
-		return NULL;
+        return nullptr;
 	}
 }
 

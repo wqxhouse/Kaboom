@@ -29,7 +29,7 @@ public:
         }
     }
 
-    virtual void update(const GameStateData &data);
+    virtual void update(const GameStateData &gameState);
 
     unsigned int getId() const;
 

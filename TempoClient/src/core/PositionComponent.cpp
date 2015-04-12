@@ -11,6 +11,18 @@ PositionComponent::PositionComponent(float x, float y, float z)
 PositionComponent::~PositionComponent() {
 }
 
+void PositionComponent::update(const GameStateData &gameState) {
+    if (entity->getId() == 0) {
+        setX(gameState.x1);
+        setY(gameState.y1);
+        setZ(gameState.z1);
+    } else if (entity->getId() == 1) {
+        setX(gameState.x2);
+        setY(gameState.y2);
+        setZ(gameState.z2);
+    }
+}
+
 float PositionComponent::getX() const {
     return x;
 }

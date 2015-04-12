@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 
-#include <exception>
+#include <stdexcept>
+#include <sstream>
 
 EntityManager::EntityManager() {
 }
@@ -18,7 +19,11 @@ Entity *EntityManager::createEntity() {
 
 Entity *EntityManager::createEntity(unsigned int id) {
     if (isEntityAlive(id)) {
-        throw std::exception("Entity with this ID is alive");
+        std::ostringstream error;
+        error << "Unable to create entity with ID " << id << ".";
+        error << "Entity with this ID is already alive.";
+
+        throw std::runtime_error(error.str());
     }
 
     Entity *entity = new Entity(id);
@@ -35,14 +40,18 @@ void EntityManager::destroyEntity(unsigned int id) {
     }
 }
 
-Entity *EntityManager::getEntity(unsigned int id) {
+Entity *EntityManager::getEntity(unsigned int id) const {
     if (!isEntityAlive(id)) {
-        throw std::exception("Entity with this ID is not alive");
+        std::ostringstream error;
+        error << "Unable to retrieve entity with ID " << id << ".";
+        error << "Entity with this ID is not alive.";
+
+        throw std::runtime_error(error.str());
     }
 
-    return entities[id];
+    return entities.at(id);
 }
 
-bool EntityManager::isEntityAlive(unsigned int id) {
+bool EntityManager::isEntityAlive(unsigned int id) const {
     return entities.count(id) > 0;
 }

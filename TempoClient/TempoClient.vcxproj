@@ -126,7 +126,6 @@
     <ClCompile Include="src\core\Component.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
-    <ClCompile Include="src\core\PlayerUpdateCallback.cpp" />
     <ClCompile Include="src\core\PositionComponent.cpp" />
     <ClCompile Include="src\core\SceneNodeComponent.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
@@ -143,7 +142,6 @@
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
     <ClInclude Include="src\core\GameStateData.h" />
-    <ClInclude Include="src\core\PlayerUpdateCallback.h" />
     <ClInclude Include="src\core\SceneNodeComponent.h" />
     <ClInclude Include="src\Global.h" />
     <ClInclude Include="src\input\InputManager.h" />

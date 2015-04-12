@@ -12,13 +12,11 @@
 #include "core/EntityManager.h"
 #include "core/SceneNodeComponent.h"
 #include "core/PositionComponent.h"
-#include "core/PlayerUpdateCallback.h"
 #include "input/InputManager.h"
 #include "network/GameClient.h"
 #include "util/ConfigSettings.h"
 
 GameClient *g_client;
-GameStateData *g_gameState;
 
 void setupCamera(osgViewer::Viewer &viewer) {
     const osg::Vec3 eye(0, -10, 0);
@@ -62,12 +60,19 @@ Entity * createPlayerEntity(EntityManager &entityManager, float x, float y, floa
     osg::Group *playerNode = new osg::Group;
 
     playerNode->addChild(transformation);
-    playerNode->addUpdateCallback(new PlayerUpdateCallback(player));
 
     player->attachComponent(new SceneNodeComponent(playerNode));
     player->attachComponent(new PositionComponent(x, y, z));
 
     return player;
+}
+
+void update(const EntityManager &entityManager, const GameStateData &gameState) {
+    Entity *player1 = entityManager.getEntity(0);
+    Entity *player2 = entityManager.getEntity(1);
+
+    player1->update(gameState);
+    player2->update(gameState);
 }
 
 int main() {
@@ -104,12 +109,20 @@ int main() {
 
     setupCamera(viewer); // Need to be called after viewer.realize()
 
-    while (!viewer.done()) {
-        g_gameState = g_client->receive();
+    try {
+        while (!viewer.done()) {
+            GameStateData *gameState = g_client->receive();
 
-        viewer.frame();
+            if (gameState != nullptr) {
+                update(entityManager, *gameState);
+            }
 
-        delete g_gameState;
+            viewer.frame();
+
+            delete gameState;
+        }
+    } catch (std::exception &e) {
+        std::cerr << "ERROR: " << e.what() << std::endl;
     }
 
     delete g_client;

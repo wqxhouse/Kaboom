@@ -34,9 +34,6 @@
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{a514288e-2015-4033-b8a9-81be6c6ee91d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{1248262d-2421-4a4a-b9dd-dfc681d1fe8e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Entity Component System">
       <UniqueIdentifier>{4b7d1707-0d09-4c94-bef4-96ef5fbb5675}</UniqueIdentifier>
     </Filter>
@@ -65,9 +62,6 @@
     </ClCompile>
     <ClCompile Include="src\util\ConfigSettings.cpp">
       <Filter>Source Files\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\PlayerUpdateCallback.cpp">
-      <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\core\Entity.cpp">
       <Filter>Source Files\Entity Component System</Filter>
@@ -110,12 +104,6 @@
     <ClInclude Include="src\network\GameClient.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\PlayerUpdateCallback.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\GameStateData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\Entity.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
@@ -130,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="src\core\SceneNodeComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\GameStateData.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
