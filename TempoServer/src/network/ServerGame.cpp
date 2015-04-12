@@ -6,10 +6,21 @@ ServerGame::ServerGame(ConfigSettings * config) {
     // id's to assign clients for our table
     client_id = 0;
 
+	printf("<Server> Creating a Network Server\n");
     // set up the server network to listen 
     network = new ServerNetwork(config);
 
-    gameState.packet_type = GAME_STATE_UPDATE_EVENT;
+
+	printf("<Sevrer> Initializing a Game\n");
+	int maxPlayers;
+	config->getValue(ConfigSettings::str_max_client, maxPlayers);
+
+	gameStateData.connectedPlayers = 0;
+	gameStateData.maxPlayers = maxPlayers;
+	//gameStateData.playerDataList.resize(maxPlayers);
+
+
+	//gameStateUpdateEvent.packet_type = GAME_STATE_UPDATE_EVENT; TODO
 
 }
 
@@ -18,15 +29,26 @@ void ServerGame::update() {
     if (network->acceptNewClient(client_id)) {
         printf("<Server> client %d has been connected to the server\n", client_id);
 
+		//check if maxPlayer is reached TODO
+		gameStateData.connectedPlayers += 1;
 		PlayerData playerData;
-		playerData.x = 0;
-		playerData.y = 0;
-		playerData.z = 0;
-		/*playerData.vx = 0;
-		playerData.vy = 0;
-		playerData.vz = 0;*/
 
-		gameState.addToPlayerList(playerData);
+		//spawn point, and initial velocity TODO
+		playerData.client_id = client_id;
+		playerData.x = playerData.y = playerData.z = playerData.vx = playerData.vy = playerData.vz = 1.1;
+
+		gameStateData.playerDataList.push_back(playerData);
+
+		NetworkPlayerData netPlayerData;
+		netPlayerData.client_id = client_id;
+		netPlayerData.x = netPlayerData.y = netPlayerData.z = 1.1;
+		
+		gameStateUpdateEvent.addToPlayerList(netPlayerData);
+
+		//cout << gameStateUpdateEvent.playerList[0].x << endl;
+		//printf("*** x %f\n", gameState.playerList[0].x);
+		//printf("*** y %f\n", gameState.playerList[0].y);
+		//printf("*** z %f\n", gameState.playerList[0].z);
 		
 		sendAssignPackets(client_id);
 
@@ -34,6 +56,9 @@ void ServerGame::update() {
     }
 
     receiveFromClients();
+
+
+	//updateGameLogic 
 }
 
 void ServerGame::receiveFromClients() {
@@ -45,68 +70,94 @@ void ServerGame::receiveFromClients() {
     for (iter = network->sessions.begin(); iter != network->sessions.end(); iter++) {
         int data_length = network->receiveData(iter->first, network_data);
 
-		
-        if (data_length <= 0) {
-            continue;//no data recieved
-        }
+		MoveEvent moveEvent;
+		if (data_length <= 0) {
+			//TODO if data_length == 0, client disconnected, need to update game state information about the client
+			continue;//no data recieved
+		}
 
-        packet.deserialize(network_data);
+		printf("len %d\n", data_length);
+		int i = 0;
+		while (i < (unsigned int)data_length) {
 
-        MoveEvent moveEvent;
-
-        switch (packet.packet_type) {
-        case INIT_CONNECTION:
-            printf("<Server> received init packet from client\n");
-            break;
-        case MOVE_EVENT:
-            moveEvent.deserialize(network_data);
-            printf("<Server> data length: %d\n", data_length);
-            printf("<Server>packet length is %d\n", data_length);
-
-            //printf("<Server> data is %x\n", packet);
-
-			printf("client_id %d\n", iter->first);
-            printf("back %d\n", moveEvent.movingBackward);
-            printf("forward %d\n", moveEvent.movingForward);
-            printf("left %d\n", moveEvent.movingLeft);
-            printf("right %d\n", moveEvent.movingRight);
-	
-            if (iter->first == 0) {
-                if (moveEvent.movingForward) {
-					gameState.playerList[0].y++;
-                } else if (moveEvent.movingBackward) {
-					gameState.playerList[0].y--;
-                }
-
-                if (moveEvent.movingRight) {
-					gameState.playerList[0].x++;
-                } else if (moveEvent.movingLeft) {
-					gameState.playerList[0].x--;
-                }
-            } else if (iter->first == 1) {
-                if (moveEvent.movingForward) {
-					gameState.playerList[1].y++;
-                } else if (moveEvent.movingBackward) {
-					gameState.playerList[1].y--;
-                }
-
-                if (moveEvent.movingRight) {
-					gameState.playerList[1].x++;
-                } else if (moveEvent.movingLeft) {
-					gameState.playerList[1].x--;
-                }
-            }
+			printf("received len %d\n", data_length);
+			packet.deserialize(&(network_data[i]));
 
 
-            sendGameStatePackets(gameState);
+			switch (packet.packet_type) {
+			case INIT_CONNECTION:
+				printf("<Server> received init packet from client\n");
+				break;
+			case MOVE_EVENT:
+				moveEvent.deserialize(&(network_data[i]));
 
-            break;
+				gameStateData.playerDataList[iter->first].setMove(moveEvent);
 
-        default:
-            printf("<Server> error in packet types\n");
-            break;
-        }
+				//printf("<Server> data length: %d\n", data_length);
+				//printf("<Server>packet length is %d\n", data_length);
 
+				printf("<Server> data is %x\n", packet);
+
+				cout << iter->first << endl;
+				cout << moveEvent.movingBackward << endl;
+				cout << moveEvent.movingForward << endl;
+				cout << moveEvent.movingLeft << endl;
+				cout << moveEvent.movingRight << endl;
+
+				//printf("client_id %d\n", iter->first);
+				//printf("back %d\n", moveEvent.movingBackward);
+				//printf("forward %d\n", moveEvent.movingForward);
+				//printf("left %d\n", moveEvent.movingLeft);
+				//printf("right %d\n", moveEvent.movingRight);
+				cout << "*******enter move event"<< endl;
+				if (iter->first == 0) {
+					cout << "*******enter move event part 2" << endl;
+					if (moveEvent.movingForward) {
+						gameStateData.playerDataList[0].y+=1;
+						cout << "*******enter move event part 3" << endl;
+					}
+					else if (moveEvent.movingBackward) {
+						gameStateData.playerDataList[0].y--;
+						cout << "*******enter move event part 3" << endl;
+					}
+
+					if (moveEvent.movingRight) {
+						gameStateData.playerDataList[0].x++;
+						cout << "*******enter move event part 3" << endl;
+					}
+					else if (moveEvent.movingLeft) {
+						gameStateData.playerDataList[0].x--;
+						cout << "*******enter move event part 3" << endl;
+					}
+				}
+				else if (iter->first == 1) {
+					if (moveEvent.movingForward) {
+						gameStateData.playerDataList[1].y++;
+					}
+					else if (moveEvent.movingBackward) {
+						gameStateData.playerDataList[1].y--;
+					}
+
+					if (moveEvent.movingRight) {
+						gameStateData.playerDataList[1].x++;
+					}
+					else if (moveEvent.movingLeft) {
+						gameStateData.playerDataList[1].x--;
+					}
+				}
+
+				
+				sendGameStatePackets();
+
+				break;
+
+			default:
+				printf("<Server> error in packet types\n");
+				break;
+			}
+			i += packet.packet_size;
+			printf("new i is %d\n", i);
+		}
     }
 }
 
@@ -123,14 +174,31 @@ void ServerGame::sendActionPackets() {
     network->sendToAll(packet_data, packet_size);
 }
 
-void ServerGame::sendGameStatePackets(GameStateUpdateEvent packet) {
+void ServerGame::sendGameStatePackets() {
+
+	gameStateUpdateEvent.numOfPlayers = gameStateData.connectedPlayers;
+
+	for (int i = 0; i < gameStateData.playerDataList.size(); i++){
+		gameStateUpdateEvent.playerList[i].client_id = gameStateData.playerDataList[i].client_id;
+		cout << i << endl;
+		cout << "client id " << gameStateUpdateEvent.playerList[i].client_id << endl;
+		cout << "client id " << gameStateData.playerDataList[i].client_id << endl;
+		gameStateUpdateEvent.playerList[i].x = gameStateData.playerDataList[i].x;
+		gameStateUpdateEvent.playerList[i].y = gameStateData.playerDataList[i].y;
+		gameStateUpdateEvent.playerList[i].z = gameStateData.playerDataList[i].z;
+		cout << "x " << gameStateData.playerDataList[i].x << endl;
+		cout << "y " << gameStateData.playerDataList[i].y << endl;
+		cout << "z " << gameStateData.playerDataList[i].z << endl;
+		cout << "x " << gameStateUpdateEvent.playerList[i].x << endl;
+		cout << "y " << gameStateUpdateEvent.playerList[i].y << endl;
+		cout << "z " << gameStateUpdateEvent.playerList[i].z << endl;
+	}
+
     // send action packet
     const unsigned int packet_size = sizeof(GameStateUpdateEvent);
     char packet_data[packet_size];
 
-    packet.packet_type = GAME_STATE_UPDATE_EVENT;
-
-    packet.serialize(packet_data);
+	gameStateUpdateEvent.serialize(packet_data);
 
     //printf("x1 %x\n", packet.x1);
     //printf("y1 %x\n", packet.y1);

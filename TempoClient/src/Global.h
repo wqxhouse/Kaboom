@@ -4,4 +4,4 @@
 #include "network/NetworkData.h"
 
 extern GameClient *g_client;
-extern GameStateUpdateEvent *g_gameState;
+extern GameStateData *g_gameState;

@@ -13,7 +13,7 @@ public:
 
     char networkData[MAX_PACKET_SIZE];
 
-    GameStateUpdateEvent *receive();
+	GameStateData *receive();
 
     void sendMoveEvent(bool movingForward, bool movingBackward, bool movingLeft, bool movingRight);
 };
