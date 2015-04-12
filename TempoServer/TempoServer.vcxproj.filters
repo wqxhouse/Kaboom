@@ -13,55 +13,46 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Input">
-      <UniqueIdentifier>{46f7542a-1a29-4358-8f99-f7bbaed3fbc6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Input">
-      <UniqueIdentifier>{5a9ffb28-eb97-4a33-ad9e-34e4b8096702}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Network">
-      <UniqueIdentifier>{cfe2242c-225e-4012-a6b9-24b8fb470287}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Network">
-      <UniqueIdentifier>{6ea51890-7afd-4cfc-a4c2-a51a5ed25813}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Util">
-      <UniqueIdentifier>{8402de62-27dd-4a1a-a94b-ecc0566aad9d}</UniqueIdentifier>
+      <UniqueIdentifier>{e7f25756-d517-499e-abd2-4ddc44191973}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Util">
-      <UniqueIdentifier>{2a42afd3-1a72-4137-8fb7-2a05e12952e3}</UniqueIdentifier>
+      <UniqueIdentifier>{6dbbc9f2-3a5f-4c61-9b37-181f7430d580}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{a514288e-2015-4033-b8a9-81be6c6ee91d}</UniqueIdentifier>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{42abbc11-b839-42af-8752-a75f68aeacd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{c5019e3b-b4e1-41e4-a131-dc180bea0ab0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Entity Component System">
-      <UniqueIdentifier>{4b7d1707-0d09-4c94-bef4-96ef5fbb5675}</UniqueIdentifier>
+      <UniqueIdentifier>{6757a7dd-4b7b-4603-8657-c637ee8bb7a5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Entity Component System">
-      <UniqueIdentifier>{21015047-422f-4c01-ba3d-42dd0c311a62}</UniqueIdentifier>
+      <UniqueIdentifier>{41b4b77d-48fd-4343-ac3f-f683d1b5d37f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\util\ConfigSettings.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\KeyboardEventHandler.cpp">
-      <Filter>Source Files\Input</Filter>
+    <ClCompile Include="src\core\Game.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\InputManager.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\ClientNetwork.cpp">
-      <Filter>Source Files\Network</Filter>
+    <ClCompile Include="src\core\Player.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\network\NetworkServices.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\GameClient.cpp">
+    <ClCompile Include="src\network\ServerGame.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\ConfigSettings.cpp">
-      <Filter>Source Files\Util</Filter>
+    <ClCompile Include="src\network\ServerNetwork.cpp">
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="src\core\Entity.cpp">
       <Filter>Source Files\Entity Component System</Filter>
@@ -72,27 +63,12 @@
     <ClCompile Include="src\core\PositionComponent.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\SceneNodeComponent.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\Component.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Global.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input\KeyboardEventHandler.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input\InputManager.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
     <ClInclude Include="src\util\ConfigSettings.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\ClientNetwork.h">
+    <ClInclude Include="src\network\Event.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="src\network\NetworkData.h">
@@ -101,31 +77,35 @@
     <ClInclude Include="src\network\NetworkServices.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\GameClient.h">
+    <ClInclude Include="src\network\ServerGame.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Entity.h">
-      <Filter>Header Files\Entity Component System</Filter>
+    <ClInclude Include="src\network\ServerNetwork.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\GameStateData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\PlayerData.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\Component.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\PositionComponent.h">
+    <ClInclude Include="src\core\Entity.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
     <ClInclude Include="src\core\EntityManager.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\SceneNodeComponent.h">
+    <ClInclude Include="src\core\PositionComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\GameStateData.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Config.ini">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

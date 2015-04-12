@@ -18,9 +18,37 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\Entity.cpp" />
+    <ClCompile Include="src\core\EntityManager.cpp" />
+    <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\Player.cpp" />
+    <ClCompile Include="src\core\PositionComponent.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\network\NetworkServices.cpp" />
+    <ClCompile Include="src\network\ServerGame.cpp" />
+    <ClCompile Include="src\network\ServerNetwork.cpp" />
+    <ClCompile Include="src\util\ConfigSettings.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\core\Component.h" />
+    <ClInclude Include="src\core\Entity.h" />
+    <ClInclude Include="src\core\EntityManager.h" />
+    <ClInclude Include="src\core\Game.h" />
+    <ClInclude Include="src\core\GameStateData.h" />
+    <ClInclude Include="src\core\Player.h" />
+    <ClInclude Include="src\core\PlayerData.h" />
+    <ClInclude Include="src\core\PositionComponent.h" />
+    <ClInclude Include="src\network\Event.h" />
+    <ClInclude Include="src\network\NetworkData.h" />
+    <ClInclude Include="src\network\NetworkServices.h" />
+    <ClInclude Include="src\network\ServerGame.h" />
+    <ClInclude Include="src\network\ServerNetwork.h" />
+    <ClInclude Include="src\util\ConfigSettings.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A743928E-D773-42A3-89C1-A72D1319FAFD}</ProjectGuid>
-    <RootNamespace>TempoClient</RootNamespace>
+    <ProjectGuid>{56B7232B-1CBB-489A-B34A-EDF3151698B6}</ProjectGuid>
+    <RootNamespace>TempoServer</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -65,10 +93,8 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(OSG_ROOT);</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(OSG_INCLUDE_PATH);</LibraryPath>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -110,51 +136,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(OSG_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>osg.lib;osgDB.lib;osgGA.lib;osgViewer.lib;ws2_32.lib;mswsock.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BULLET_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="src\core\Component.cpp" />
-    <ClCompile Include="src\core\Entity.cpp" />
-    <ClCompile Include="src\core\EntityManager.cpp" />
-    <ClCompile Include="src\core\PositionComponent.cpp" />
-    <ClCompile Include="src\core\SceneNodeComponent.cpp" />
-    <ClCompile Include="src\input\InputManager.cpp" />
-    <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\network\GameClient.cpp" />
-    <ClCompile Include="src\network\ClientNetwork.cpp" />
-    <ClCompile Include="src\network\NetworkServices.cpp" />
-    <ClCompile Include="src\util\ConfigSettings.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\core\Component.h" />
-    <ClInclude Include="src\core\Entity.h" />
-    <ClInclude Include="src\core\EntityManager.h" />
-    <ClInclude Include="src\core\PositionComponent.h" />
-    <ClInclude Include="src\core\GameStateData.h" />
-    <ClInclude Include="src\core\SceneNodeComponent.h" />
-    <ClInclude Include="src\Global.h" />
-    <ClInclude Include="src\input\InputManager.h" />
-    <ClInclude Include="src\input\KeyboardEventHandler.h" />
-    <ClInclude Include="src\network\GameClient.h" />
-    <ClInclude Include="src\network\ClientNetwork.h" />
-    <ClInclude Include="src\network\NetworkData.h" />
-    <ClInclude Include="src\network\NetworkServices.h" />
-    <ClInclude Include="src\util\ConfigSettings.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Config.ini" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
