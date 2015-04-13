@@ -12,7 +12,7 @@ public:
     ~Game();
 
     void loadMap();
-	void addPlayer(Player *player);
+    void addEntity(Entity *entity);
     void update(float timestep);
 
 private:
@@ -22,5 +22,5 @@ private:
     btSequentialImpulseConstraintSolver *solver;
     btDiscreteDynamicsWorld *world;
 
-    std::vector<Player *> players;
+    std::vector<Entity *> entites;
 };

@@ -1,22 +1,16 @@
 #pragma once
 
-#include <btBulletDynamicsCommon.h>
-
-#include "PlayerData.h"
+#include "Entity.h"
 
 class Player {
 public:
-    static btCollisionShape *collisionShape;
-    static const btScalar mass;
-
-    btMotionState *motionState;
-    btRigidBody *rigidBody;
-
-    Player(PlayerData *data);
+    Player(Entity *entity);
     ~Player();
 
-    void update(btScalar timeStep);
+    float getX() const;
+    float getY() const;
+    float getZ() const;
 
 private:
-    PlayerData *data;
+    Entity *entity;
 };

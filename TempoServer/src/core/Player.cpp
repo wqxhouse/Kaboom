@@ -1,30 +1,22 @@
 #include "Player.h"
 
-btCollisionShape *Player::collisionShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
-const btScalar Player::mass = 1;
+#include "PositionComponent.h"
 
-Player::Player(PlayerData *data) : data(data) {
-    motionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(data->x, data->y, data->z)));
-
-    btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState, Player::collisionShape, btVector3(0, 0, 0));
-    rigidBody = new btRigidBody(rigidBodyCI);
+Player::Player(Entity *entity)
+    : entity(entity) {
 }
 
 Player::~Player() {
-    delete motionState;
-    delete rigidBody;
 }
 
-void Player::update(btScalar timeStep) {
-    btVector3 position = rigidBody->getWorldTransform().getOrigin();
-    btVector3 velocity = rigidBody->getLinearVelocity();
+float Player::getX() const {
+    return entity->getComponent<PositionComponent>()->getX();
+}
 
-    data->x = position.getX();
-    data->y = position.getY();
-    data->z = position.getZ();
-	/*
-    data->vx = velocity.getX();
-    data->vy = velocity.getY();
-    data->vz = velocity.getZ();
-	*/
+float Player::getY() const {
+    return entity->getComponent<PositionComponent>()->getY();
+}
+
+float Player::getZ() const {
+    return entity->getComponent<PositionComponent>()->getZ();
 }
