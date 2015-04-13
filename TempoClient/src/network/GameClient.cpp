@@ -1,7 +1,6 @@
 #include "GameClient.h" 
 
 #include "NetworkServices.h"
-#include "../core/GameStateData.h"
 
 GameClient::GameClient(ConfigSettings *config) {
     network = new ClientNetwork(config);

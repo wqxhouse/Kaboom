@@ -1,8 +1,9 @@
 #pragma once
 
+#include <core/GameStateData.h>
+
 #include "ClientNetwork.h"
 #include "NetworkData.h"
-#include "../core/GameStateData.h"
 
 class GameClient {
 public:
