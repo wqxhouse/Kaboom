@@ -1,8 +1,8 @@
-#include "ServerGame.h"
+#include "GameServer.h"
 
-unsigned int ServerGame::client_id;
+unsigned int GameServer::client_id;
 
-ServerGame::ServerGame(ConfigSettings * config) {
+GameServer::GameServer(ConfigSettings * config) {
     // id's to assign clients for our table
     client_id = 0;
 
@@ -24,7 +24,10 @@ ServerGame::ServerGame(ConfigSettings * config) {
 
 }
 
-void ServerGame::update() {
+GameServer::~GameServer() {
+}
+
+void GameServer::update() {
     // get new clients
     if (network->acceptNewClient(client_id)) {
         printf("<Server> client %d has been connected to the server\n", client_id);
@@ -61,7 +64,7 @@ void ServerGame::update() {
 	//updateGameLogic 
 }
 
-void ServerGame::receiveFromClients() {
+void GameServer::receiveFromClients() {
     Packet packet;
 
     // go through all clients
@@ -161,7 +164,7 @@ void ServerGame::receiveFromClients() {
     }
 }
 
-void ServerGame::sendActionPackets() {
+void GameServer::sendActionPackets() {
     // send action packet
     const unsigned int packet_size = sizeof(Packet);
     char packet_data[packet_size];
@@ -174,7 +177,7 @@ void ServerGame::sendActionPackets() {
     network->sendToAll(packet_data, packet_size);
 }
 
-void ServerGame::sendGameStatePackets() {
+void GameServer::sendGameStatePackets() {
 
 	gameStateUpdateEvent.numOfPlayers = gameStateData.connectedPlayers;
 
@@ -211,7 +214,7 @@ void ServerGame::sendGameStatePackets() {
 
 }
 
-void ServerGame::sendAssignPackets(int client_id){
+void GameServer::sendAssignPackets(int client_id) {
 	const unsigned int packet_size = sizeof(AssignEvent);
 	char packet_data[packet_size];
 

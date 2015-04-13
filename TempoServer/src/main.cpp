@@ -1,13 +1,12 @@
 #include <ctime>
 
-#include "network/ServerGame.h"
-
-#include "core\Game.h"
+#include "core/Game.h"
+#include "network/GameServer.h"
 
 int main() {
     ConfigSettings* config = ConfigSettings::config;
 
-    ServerGame *server = new ServerGame(config);
+    GameServer server(config);
 
     const clock_t FPS = 25;
     const clock_t TICK = 1000 / FPS;
@@ -15,7 +14,7 @@ int main() {
     while (true) {
         clock_t beginTime = clock();
 
-        server->update();
+        server.update();
 
         clock_t endTime = clock();
         clock_t elapsedTime = endTime - beginTime;
