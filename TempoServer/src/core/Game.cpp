@@ -2,16 +2,23 @@
 
 #include "PhysicsComponent.h"
 
-Game::Game() {
+Game::Game(ConfigSettings *config)
+    : config(config) {
+    server = new GameServer(config);
+
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
     solver = new btSequentialImpulseConstraintSolver;
 
+    world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+
     world->setGravity(btVector3(0, 0, -10)); // TODO: Extract gravity constant
 }
 
 Game::~Game() {
+    delete server;
+
     delete broadphase;
     delete collisionConfiguration;
     delete dispatcher;
@@ -38,6 +45,8 @@ void Game::addEntity(Entity *entity) {
 }
 
 void Game::update(float timeStep) {
+    server->update();
+
     world->stepSimulation(timeStep);
 
     for (auto it : entites) {
