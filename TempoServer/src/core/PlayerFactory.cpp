@@ -29,4 +29,6 @@ Player *PlayerFactory::createPlayer(float x, float y, float z) const {
     entity->attachComponent(new PhysicsComponent(rigidBody));
 
     Player *player = new Player(entity);
+
+    return player;
 }
