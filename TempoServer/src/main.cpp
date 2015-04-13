@@ -1,23 +1,28 @@
+#include <ctime>
+
 #include "network/ServerGame.h"
-// used for multi-threading
-#include <process.h>
 
-void serverLoop();
+#include "core\Game.h"
 
-ServerGame * server;
+int main() {
+    ConfigSettings* config = ConfigSettings::config;
 
-int main()
-{
-	ConfigSettings* config = ConfigSettings::config;
-	// initialize the server
-	server = new ServerGame(config);
+    ServerGame *server = new ServerGame(config);
 
-    serverLoop();
-}
+    const clock_t FPS = 25;
+    const clock_t TICK = 1000 / FPS;
 
-void serverLoop() {
-	while (true)
-	{
-		server->update();
-	}
+    while (true) {
+        clock_t beginTime = clock();
+
+        server->update();
+
+        clock_t endTime = clock();
+        clock_t elapsedTime = endTime - beginTime;
+        clock_t sleepTime = TICK - elapsedTime;
+
+        if (sleepTime > 0) {
+            Sleep(sleepTime);
+        }
+    }
 }
