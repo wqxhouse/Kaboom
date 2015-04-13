@@ -4,11 +4,13 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include "Player.h"
+#include "../core/Entity.h"
+#include "../network/GameServer.h"
+#include "../util/ConfigSettings.h"
 
 class Game {
 public:
-    Game();
+    Game(ConfigSettings *config);
     ~Game();
 
     void loadMap();
@@ -16,6 +18,9 @@ public:
     void update(float timestep);
 
 private:
+    ConfigSettings *config;
+    GameServer *server;
+
     btBroadphaseInterface *broadphase;
     btDefaultCollisionConfiguration *collisionConfiguration;
     btCollisionDispatcher *dispatcher;
