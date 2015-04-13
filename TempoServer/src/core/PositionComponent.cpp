@@ -1,5 +1,9 @@
 #include "PositionComponent.h"
 
+#include <btBulletDynamicsCommon.h>
+
+#include "PhysicsComponent.h"
+
 PositionComponent::PositionComponent()
     : PositionComponent(0, 0, 0) {
 }
@@ -12,7 +16,16 @@ PositionComponent::~PositionComponent() {
 }
 
 void PositionComponent::update(float timeStep) {
-    // TODO update position
+    PhysicsComponent *physicsCom = getEntity()->getComponent<PhysicsComponent>();
+
+    btTransform worldTrans;
+    physicsCom->getRigidBody()->getMotionState()->getWorldTransform(worldTrans);
+
+    btVector3 position = worldTrans.getOrigin();
+
+    setX(position.getX());
+    setY(position.getY());
+    setZ(position.getZ());
 }
 
 float PositionComponent::getX() const {
