@@ -4,13 +4,13 @@
 
 #include "../core/GameStateData.h"
 
-class ServerGame
+class GameServer
 {
 
 public:
 
-	ServerGame(ConfigSettings *);
-	~ServerGame(void);
+    GameServer(ConfigSettings *);
+    ~GameServer();
 
 	void update();
 
