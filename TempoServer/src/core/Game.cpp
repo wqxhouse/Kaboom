@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include "PhysicsComponent.h"
+
 Game::Game() {
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -27,14 +29,18 @@ void Game::loadMap() {
     world->addRigidBody(groundRigidBody);
 }
 
-void Game::addPlayer(Player *player) {
-	world->addRigidBody(player->rigidBody);
+void Game::addEntity(Entity *entity) {
+    PhysicsComponent *physicsCom = entity->getComponent<PhysicsComponent>();
+
+    if (physicsCom != nullptr) {
+        world->addRigidBody(physicsCom->getRigidBody());
+    }
 }
 
 void Game::update(float timeStep) {
     world->stepSimulation(timeStep);
 
-    for (auto it : players) {
+    for (auto it : entites) {
         it->update(timeStep);
     }
 }
