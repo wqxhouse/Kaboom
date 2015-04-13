@@ -4,8 +4,7 @@
 
 #include <osg/Node>
 
-#include "Component.h"
-#include "GameStateData.h"
+#include <core/Component.h>
 
 class SceneNodeComponent : public Component {
 public:

@@ -8,7 +8,7 @@ class Entity;
 class Component {
 public:
     virtual ~Component() {}
-
+    
     virtual void update(const GameStateData &gameState);
 
     Entity *getEntity() const;

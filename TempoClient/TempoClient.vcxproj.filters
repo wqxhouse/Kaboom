@@ -63,19 +63,7 @@
     <ClCompile Include="src\util\ConfigSettings.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Entity.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\EntityManager.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\PositionComponent.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\SceneNodeComponent.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\Component.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,23 +92,8 @@
     <ClInclude Include="src\network\GameClient.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Entity.h">
-      <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\Component.h">
-      <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\PositionComponent.h">
-      <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\EntityManager.h">
-      <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\SceneNodeComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\GameStateData.h">
-      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

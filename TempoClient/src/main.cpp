@@ -8,10 +8,11 @@
 #include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
 
-#include "core/Entity.h"
-#include "core/EntityManager.h"
+#include <core/Entity.h>
+#include <core/EntityManager.h>
+#include <core/PositionComponent.h>
+
 #include "core/SceneNodeComponent.h"
-#include "core/PositionComponent.h"
 #include "input/InputManager.h"
 #include "network/GameClient.h"
 #include "util/ConfigSettings.h"
