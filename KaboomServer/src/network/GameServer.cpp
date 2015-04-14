@@ -15,11 +15,6 @@ GameServer::GameServer(ConfigSettings * config) {
 	int maxPlayers;
 	config->getValue(ConfigSettings::str_max_client, maxPlayers);
 
-	gameStateData.connectedPlayers = 0;
-	gameStateData.maxPlayers = maxPlayers;
-	//gameStateData.playerDataList.resize(maxPlayers);
-
-
 	//gameStateUpdateEvent.packet_type = GAME_STATE_UPDATE_EVENT; TODO
 
 }
@@ -27,10 +22,21 @@ GameServer::GameServer(ConfigSettings * config) {
 GameServer::~GameServer() {
 }
 
+bool GameServer::acceptNewClient() {
+    if (network->acceptNewClient(client_id)) {
+        printf("<Server> Client %d has connected to the server\n", client_id);
+
+        client_id++;
+
+        return true;
+    }
+
+    return false;
+}
+/*
 void GameServer::update() {
     // get new clients
     if (network->acceptNewClient(client_id)) {
-        printf("<Server> client %d has been connected to the server\n", client_id);
 
 		//check if maxPlayer is reached TODO
 		gameStateData.connectedPlayers += 1;
@@ -60,11 +66,10 @@ void GameServer::update() {
 
     receiveFromClients();
 
-
 	//updateGameLogic 
 }
-
-void GameServer::receiveFromClients() {
+*/
+void GameServer::receiveFromClients(Game *game) {
     Packet packet;
 
     // go through all clients
@@ -83,6 +88,7 @@ void GameServer::receiveFromClients() {
 		int i = 0;
 		while (i < (unsigned int)data_length) {
 
+            ServerPlayer *player = nullptr;
 			printf("received len %d\n", data_length);
 			packet.deserialize(&(network_data[i]));
 
@@ -94,63 +100,36 @@ void GameServer::receiveFromClients() {
 			case MOVE_EVENT:
 				moveEvent.deserialize(&(network_data[i]));
 
-				gameStateData.playerDataList[iter->first].setMove(moveEvent);
+				//gameStateData.playerDataList[iter->first].setMove(moveEvent);
 
 				//printf("<Server> data length: %d\n", data_length);
 				//printf("<Server>packet length is %d\n", data_length);
 
-				printf("<Server> data is %x\n", packet);
-
-				cout << iter->first << endl;
-				cout << moveEvent.movingBackward << endl;
-				cout << moveEvent.movingForward << endl;
-				cout << moveEvent.movingLeft << endl;
-				cout << moveEvent.movingRight << endl;
+				printf("<Server> Received move event\n");
 
 				//printf("client_id %d\n", iter->first);
 				//printf("back %d\n", moveEvent.movingBackward);
 				//printf("forward %d\n", moveEvent.movingForward);
 				//printf("left %d\n", moveEvent.movingLeft);
 				//printf("right %d\n", moveEvent.movingRight);
-				cout << "*******enter move event"<< endl;
+
 				if (iter->first == 0) {
-					cout << "*******enter move event part 2" << endl;
-					if (moveEvent.movingForward) {
-						gameStateData.playerDataList[0].y+=1;
-						cout << "*******enter move event part 3" << endl;
-					}
-					else if (moveEvent.movingBackward) {
-						gameStateData.playerDataList[0].y--;
-						cout << "*******enter move event part 3" << endl;
-					}
+                    player = game->players[0];
+                } else if (iter->first == 1) {
+                    player = game->players[1];
+                }
 
-					if (moveEvent.movingRight) {
-						gameStateData.playerDataList[0].x++;
-						cout << "*******enter move event part 3" << endl;
-					}
-					else if (moveEvent.movingLeft) {
-						gameStateData.playerDataList[0].x--;
-						cout << "*******enter move event part 3" << endl;
-					}
-				}
-				else if (iter->first == 1) {
-					if (moveEvent.movingForward) {
-						gameStateData.playerDataList[1].y++;
-					}
-					else if (moveEvent.movingBackward) {
-						gameStateData.playerDataList[1].y--;
-					}
+                if (moveEvent.movingForward) {
+                    player->setVelocityY(1);
+                } else if (moveEvent.movingBackward) {
+                    player->setVelocityY(-1);
+                }
 
-					if (moveEvent.movingRight) {
-						gameStateData.playerDataList[1].x++;
-					}
-					else if (moveEvent.movingLeft) {
-						gameStateData.playerDataList[1].x--;
-					}
-				}
-
-				
-				sendGameStatePackets();
+                if (moveEvent.movingRight) {
+                    player->setVelocityX(1);
+                } else if (moveEvent.movingLeft) {
+                    player->setVelocityX(-1);
+                }
 
 				break;
 
@@ -177,24 +156,14 @@ void GameServer::sendActionPackets() {
     network->sendToAll(packet_data, packet_size);
 }
 
-void GameServer::sendGameStatePackets() {
+void GameServer::sendGameStatePackets(Game *game) {
+    gameStateUpdateEvent.numOfPlayers = game->players.size();
 
-	gameStateUpdateEvent.numOfPlayers = gameStateData.connectedPlayers;
-
-	for (int i = 0; i < gameStateData.playerDataList.size(); i++){
-		gameStateUpdateEvent.playerList[i].client_id = gameStateData.playerDataList[i].client_id;
-		cout << i << endl;
-		cout << "client id " << gameStateUpdateEvent.playerList[i].client_id << endl;
-		cout << "client id " << gameStateData.playerDataList[i].client_id << endl;
-		gameStateUpdateEvent.playerList[i].x = gameStateData.playerDataList[i].x;
-		gameStateUpdateEvent.playerList[i].y = gameStateData.playerDataList[i].y;
-		gameStateUpdateEvent.playerList[i].z = gameStateData.playerDataList[i].z;
-		cout << "x " << gameStateData.playerDataList[i].x << endl;
-		cout << "y " << gameStateData.playerDataList[i].y << endl;
-		cout << "z " << gameStateData.playerDataList[i].z << endl;
-		cout << "x " << gameStateUpdateEvent.playerList[i].x << endl;
-		cout << "y " << gameStateUpdateEvent.playerList[i].y << endl;
-		cout << "z " << gameStateUpdateEvent.playerList[i].z << endl;
+    for (int i = 0; i < game->players.size(); i++) {
+        gameStateUpdateEvent.playerList[i].client_id = game->players[i]->getId();
+        gameStateUpdateEvent.playerList[i].x = game->players[i]->getX();
+        gameStateUpdateEvent.playerList[i].y = game->players[i]->getY();
+        gameStateUpdateEvent.playerList[i].z = game->players[i]->getZ();
 	}
 
     // send action packet
@@ -202,13 +171,6 @@ void GameServer::sendGameStatePackets() {
     char packet_data[packet_size];
 
 	gameStateUpdateEvent.serialize(packet_data);
-
-    //printf("x1 %x\n", packet.x1);
-    //printf("y1 %x\n", packet.y1);
-    //printf("z1 %x\n", packet.z1);
-    //printf("x2 %x\n", packet.x2);
-    //printf("y2 %x\n", packet.y2);
-    //printf("z2 %x\n", packet.z2);
 
     network->sendToAll(packet_data, packet_size);
 

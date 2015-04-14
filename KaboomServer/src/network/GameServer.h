@@ -1,26 +1,28 @@
+#pragma once
+
 #include "ServerNetwork.h"
 #include "NetworkData.h"
 #include "NetworkServices.h"
 
-#include "../core/GameStateData.h"
+#include "../core/Game.h"
 
-class GameServer
-{
+class Game;
 
+class GameServer {
 public:
 
     GameServer(ConfigSettings *);
     ~GameServer();
 
-	void update();
+    bool acceptNewClient();
 
-	void receiveFromClients();
+    void receiveFromClients(Game *game);
 
 	void sendActionPackets();
 
     void sendMovePackets();
 
-    void sendGameStatePackets();
+    void sendGameStatePackets(Game *game);
 
 	void sendAssignPackets(int);
 
@@ -34,10 +36,6 @@ private:
 
 	// data buffer
 	char network_data[MAX_PACKET_SIZE];
-
-	// This is the game state data the server keep tracks of
-	GameStateData gameStateData;
-
 
 	// This is the game state data we send over the network
     GameStateUpdateEvent gameStateUpdateEvent;
