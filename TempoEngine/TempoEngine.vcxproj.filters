@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Entity Component System">
       <UniqueIdentifier>{2c8f1de1-d21e-49ab-b8d9-8fb3b1403c8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{bdfe1f50-92f8-426e-825d-92a671aa02a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Component.h">
@@ -32,6 +35,9 @@
     </ClInclude>
     <ClInclude Include="src\core\PositionComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\Serializable.h">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

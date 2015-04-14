@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\Player.cpp" />
     <ClCompile Include="src\core\PlayerFactory.cpp" />
     <ClCompile Include="src\core\SceneNodeComponent.cpp" />
@@ -135,6 +136,7 @@
     <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\GameStateData.h" />
     <ClInclude Include="src\core\Player.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />
