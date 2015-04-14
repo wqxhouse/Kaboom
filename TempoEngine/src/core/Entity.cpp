@@ -12,12 +12,6 @@ void Entity::attachComponent(Component *component) {
     components[&typeid(*component)] = component;
 }
 
-void Entity::update(const GameStateData &gameState) {
-    for (auto it : components) {
-        it.second->update(gameState);
-    }
-}
-
 unsigned int Entity::getId() const {
     return id;
 }

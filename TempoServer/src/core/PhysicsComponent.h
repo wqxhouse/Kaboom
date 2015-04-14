@@ -2,7 +2,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include "Component.h"
+#include <core/Component.h>
 
 class PhysicsComponent : public Component {
 public:

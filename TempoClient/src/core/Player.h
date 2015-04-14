@@ -2,15 +2,14 @@
 
 #include <core/Entity.h>
 
-class Player {
+class Player : public Entity {
 public:
-    Player(Entity *entity);
+    Player(unsigned int id);
     ~Player();
 
     float getX() const;
     float getY() const;
     float getZ() const;
 
-private:
-    Entity *entity;
+    void setPosition(float x, float y, float z);
 };

@@ -118,7 +118,6 @@
     <ClInclude Include="src\core\Component.h" />
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
-    <ClInclude Include="src\core\GameStateData.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
   </ItemGroup>
   <ItemGroup>

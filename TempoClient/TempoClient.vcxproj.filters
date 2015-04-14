@@ -40,6 +40,9 @@
     <Filter Include="Source Files\Entity Component System">
       <UniqueIdentifier>{21015047-422f-4c01-ba3d-42dd0c311a62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{30bea1d4-743e-4674-9a1e-6612af111809}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -65,6 +68,12 @@
     </ClCompile>
     <ClCompile Include="src\core\SceneNodeComponent.cpp">
       <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Player.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\PlayerFactory.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +103,15 @@
     </ClInclude>
     <ClInclude Include="src\core\SceneNodeComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Player.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\PlayerFactory.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\GameStateData.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

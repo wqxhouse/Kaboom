@@ -4,7 +4,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include "../core/Entity.h"
+#include <core/Entity.h>
+
 #include "../network/GameServer.h"
 #include "../util/ConfigSettings.h"
 

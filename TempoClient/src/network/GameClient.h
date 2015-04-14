@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/GameStateData.h>
+#include "../core/GameStateData.h"
 
 #include "ClientNetwork.h"
 #include "NetworkData.h"

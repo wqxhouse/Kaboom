@@ -3,15 +3,13 @@
 #include <Windows.h>
 
 #include <osg/Camera>
-#include <osg/Shape>
-#include <osg/ShapeDrawable>
-#include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
 
 #include <core/Entity.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 
+#include "core/PlayerFactory.h"
 #include "core/SceneNodeComponent.h"
 #include "input/InputManager.h"
 #include "network/GameClient.h"
@@ -47,33 +45,12 @@ void setupCamera(osgViewer::Viewer &viewer) {
     camera->setProjectionMatrix(projMat);
 }
 
-Entity * createPlayerEntity(EntityManager &entityManager, float x, float y, float z) {
-    Entity *player = entityManager.createEntity();
-
-    osg::Box *box = new osg::Box;
-    osg::ShapeDrawable *drawable = new osg::ShapeDrawable(box);
-    osg::Geode *model = new osg::Geode;
-    model->addDrawable(drawable);
-
-    osg::MatrixTransform *transformation = new osg::MatrixTransform;
-    transformation->addChild(model);
-
-    osg::Group *playerNode = new osg::Group;
-
-    playerNode->addChild(transformation);
-
-    player->attachComponent(new SceneNodeComponent(playerNode));
-    player->attachComponent(new PositionComponent(x, y, z));
-
-    return player;
-}
-
 void update(const EntityManager &entityManager, const GameStateData &gameState) {
-    Entity *player1 = entityManager.getEntity(0);
-    Entity *player2 = entityManager.getEntity(1);
+    Player *player1 = static_cast<Player *>(entityManager.getEntity(0));
+    Player *player2 = static_cast<Player *>(entityManager.getEntity(1));
 
-    player1->update(gameState);
-    player2->update(gameState);
+    player1->setPosition(gameState.x1, gameState.y1, gameState.z1);
+    player2->setPosition(gameState.x2, gameState.y2, gameState.z2);
 }
 
 int main() {
@@ -92,9 +69,10 @@ int main() {
     inputManager.loadConfig();
 
     EntityManager entityManager;
+    PlayerFactory playerFactory(&entityManager);
 
-    Entity *player1 = createPlayerEntity(entityManager, 0, 0, 0);
-    Entity *player2 = createPlayerEntity(entityManager, 2, 2, 0);
+    Player *player1 = playerFactory.createPlayer(0, 0, 0);
+    Player *player2 = playerFactory.createPlayer(0, 0, 0);
 
     osg::Node *player1Node = player1->getComponent<SceneNodeComponent>()->getNode();
     osg::Node *player2Node = player2->getComponent<SceneNodeComponent>()->getNode();
