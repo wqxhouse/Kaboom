@@ -1,6 +1,6 @@
 #include "Player.h"
 
-#include "PositionComponent.h"
+#include <core/PositionComponent.h>
 
 Player::Player(Entity *entity)
     : entity(entity) {

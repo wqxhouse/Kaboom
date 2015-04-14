@@ -1,6 +1,7 @@
 #include "PlayerFactory.h"
 
-#include "PositionComponent.h"
+#include <core/PositionComponent.h>
+
 #include "PhysicsComponent.h"
 
 PlayerFactory::PlayerFactory(EntityManager *entityManager)

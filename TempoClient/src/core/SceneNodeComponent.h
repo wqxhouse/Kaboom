@@ -11,8 +11,6 @@ public:
     SceneNodeComponent(osg::Node *node);
     ~SceneNodeComponent();
 
-    virtual void update(const GameStateData &gameState);
-
     osg::Node *getNode() const;
     void setNode(osg::Node *node);
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <core/EntityManager.h>
-
 #include "Player.h"
 
 class PlayerFactory {

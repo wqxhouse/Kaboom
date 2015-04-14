@@ -110,7 +110,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(OSG_INCLUDE_PATH);$(SolutionDir)\TempoEngine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\TempoEngine\src;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
@@ -123,6 +123,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\Player.cpp" />
+    <ClCompile Include="src\core\PlayerFactory.cpp" />
     <ClCompile Include="src\core\SceneNodeComponent.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
@@ -133,6 +135,9 @@
     <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\GameStateData.h" />
+    <ClInclude Include="src\core\Player.h" />
+    <ClInclude Include="src\core\PlayerFactory.h" />
     <ClInclude Include="src\core\SceneNodeComponent.h" />
     <ClInclude Include="src\Global.h" />
     <ClInclude Include="src\input\InputManager.h" />
