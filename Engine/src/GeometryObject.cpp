@@ -76,6 +76,24 @@ void GeometryObject::setUpMaterialState()
 	if (_material->getUseTexture())
 	{
 		// TODO : implement
+		ss->setAttributeAndModes(getTexturedShader(), osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE);
+		MaterialManager *mm = Core::getWorldRef().getMaterialManager();
+		osg::Texture *albedoTex = mm->getAlbedoTexture(_material);
+		ss->setTextureAttributeAndModes(0, albedoTex);
+		osg::Texture *roughnessTex = mm->getRoughnessTexture(_material);
+		ss->setTextureAttributeAndModes(1, roughnessTex);
+		osg::Texture *specularTex = mm->getSpecularTexture(_material);
+		ss->setTextureAttributeAndModes(2, specularTex);
+		osg::Texture *metallicTex = mm->getMetallicTexture(_material);
+		ss->setTextureAttributeAndModes(3, metallicTex);
+		osg::Texture *normalMapTex = mm->getNormalMapTexture(_material);
+		ss->setTextureAttributeAndModes(4, normalMapTex);
+
+		ss->addUniform(new osg::Uniform("u_albedoTex", 0));
+		ss->addUniform(new osg::Uniform("u_roughnessTex", 1));
+		ss->addUniform(new osg::Uniform("u_specularTex", 2));
+		ss->addUniform(new osg::Uniform("u_metallicTex", 3));
+		ss->addUniform(new osg::Uniform("u_normalMapTex", 4));
 	}
 	else
 	{
@@ -94,7 +112,18 @@ void GeometryObject::updateMaterialState()
 
 	if (_material->getUseTexture())
 	{
-		// to be implemented
+		// TODO: profile to see if this impacts performance
+		MaterialManager *mm = Core::getWorldRef().getMaterialManager();
+		osg::Texture *albedoTex = mm->getAlbedoTexture(_material);
+		ss->setTextureAttributeAndModes(0, albedoTex);
+		osg::Texture *roughnessTex = mm->getRoughnessTexture(_material);
+		ss->setTextureAttributeAndModes(1, roughnessTex);
+		osg::Texture *specularTex = mm->getSpecularTexture(_material);
+		ss->setTextureAttributeAndModes(2, specularTex);
+		osg::Texture *metallicTex = mm->getMetallicTexture(_material);
+		ss->setTextureAttributeAndModes(3, metallicTex);
+		osg::Texture *normalMapTex = mm->getNormalMapTexture(_material);
+		ss->setTextureAttributeAndModes(4, normalMapTex);
 	}
 	else
 	{

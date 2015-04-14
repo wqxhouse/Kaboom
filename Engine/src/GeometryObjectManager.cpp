@@ -30,6 +30,11 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 
 bool GeometryObjectManager::setGeometryMaterial(const std::string &geomName, Material *material)
 {
+	if (material == NULL)
+	{
+		OSG_WARN << "setGeometryMaterial: Material is null" << std::endl;
+	}
+
 	std::unordered_map<std::string, GeometryObject *>::iterator itr = _geomObjMap.find(geomName);
 	if (itr != _geomObjMap.end())
 	{

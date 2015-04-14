@@ -12,11 +12,13 @@
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
 #include <osgDB/FileNameUtils>
+#include <osg/TexGen>
 
 #include "World.h"
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
 #include "LightPrePassCallback.h"
+#include "LightPassCallback.h"
 
 // TODO: log which one called the global functions in Core
 // for debugging
@@ -32,6 +34,7 @@ void Core::init(int winWidth, int winHeight, int resolutionWidth, int resolution
 	_renderResolution = osg::Vec2(resolutionWidth, resolutionHeight);
 	_sceneRoot = new osg::Group;
 	_gui = new TwGUIManager;
+	_skybox = new SkyBox;
 
 	configFilePath();
 
@@ -128,6 +131,19 @@ void Core::configLightPass()
 	{
 		OSG_WARN << "Prepass not defined in the pipeline, check the xml file " << std::endl;
 	}
+
+	osgFX::EffectCompositor::PassData lightPass;
+	_passes->getPassData("LightPass", lightPass);
+
+	if (lightPass.pass != NULL)
+	{
+		lightPass.pass->getOrCreateStateSet()->
+			setUpdateCallback(new LightPassCallback());
+	}
+	else
+	{
+		OSG_WARN << "Light pass not defined in the pipeline, check the xml file " << std::endl;
+	}
 }
 
 void Core::configSceneNode()
@@ -157,10 +173,16 @@ void Core::run()
 	
 	// TODO: add console output : initializing GUI
 	_gui->initializeTwGUI();
+	
+	// skybox
+	if (_hasEnvMap)
+	{
+		configSkyBox();
+	}
 
 	// TODO: add switches using keyboard
 	configureViewerForMode(*_viewer, _passes, NULL, 1);
-	//_viewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
+	// _viewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
 	_viewer->run();
 }
 
@@ -182,6 +204,39 @@ void Core::enableCameraManipulator()
 	_camManipulatorTemp = NULL;
 }
 
+void Core::configSkyBox()
+{
+	osg::ref_ptr<osg::Geode> geode = new osg::Geode;
+	float radius = _geomRoot->getBound().radius();
+	geode->addDrawable(new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(), radius)));
+	geode->setCullingActive(false);
+
+	_skybox->getOrCreateStateSet()->setTextureAttributeAndModes(0, new osg::TexGen);
+	//_skybox->setEnvironmentMap(0,
+	//	osgDB::readImageFile("Cubemap_snow/posx.jpg"), osgDB::readImageFile("Cubemap_snow/negx.jpg"),
+	//	osgDB::readImageFile("Cubemap_snow/posy.jpg"), osgDB::readImageFile("Cubemap_snow/negy.jpg"),
+	//	osgDB::readImageFile("Cubemap_snow/posz.jpg"), osgDB::readImageFile("Cubemap_snow/negz.jpg"));
+	
+	_skybox->addChild(geode.get());
+	_passes->addChild(_skybox);
+}
+
+void Core::setEnvironmentMap(
+	const std::string &posX,
+	const std::string &negX,
+	const std::string &posY,
+	const std::string &negY,
+	const std::string &posZ,
+	const std::string &negZ)
+{
+	_skybox->setEnvironmentMap(0,
+		osgDB::readImageFile(posX), osgDB::readImageFile(negX),
+		osgDB::readImageFile(posY), osgDB::readImageFile(negY),
+		osgDB::readImageFile(posZ), osgDB::readImageFile(negZ));
+
+	_hasEnvMap = true;
+}
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;
@@ -192,6 +247,8 @@ World Core::_world;
 bool Core::_hasInit = false;
 
 osg::ref_ptr<osgGA::CameraManipulator> Core::_camManipulatorTemp = NULL;
+bool Core::_hasEnvMap = false;
 
 Camera Core::_cam;
 osg::ref_ptr<TwGUIManager> Core::_gui;
+osg::ref_ptr<SkyBox> Core::_skybox;

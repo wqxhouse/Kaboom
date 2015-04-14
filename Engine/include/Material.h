@@ -71,28 +71,59 @@ public:
 		_specular = specular;
 	}
 
-	inline void setAlbedoTexturePath(std::string &albedoTexPath)
+	inline void setAlbedoTexturePath(const std::string &albedoTexPath)
 	{
 		_albedoMapPath = albedoTexPath;
 		_onTextureChangeFunc(albedoTexPath);
 	}
 
-	inline void setRoughnessMapPath(std::string &roughnessTexPath)
+	inline void setRoughnessMapPath(const std::string &roughnessTexPath)
 	{
 		_roughnessMapPath = roughnessTexPath;
 		_onTextureChangeFunc(roughnessTexPath);
 	}
 
-	inline void setSpecularMapPath(std::string &specularTexpath)
+	inline void setSpecularMapPath(const std::string &specularTexpath)
 	{
 		_specularMapPath = specularTexpath;
 		_onTextureChangeFunc(specularTexpath);
 	}
 
-	inline void setMetallicMapPath(std::string &metallicTexPath)
+	inline void setMetallicMapPath(const std::string &metallicTexPath)
 	{
 		_metallicMapPath = metallicTexPath;
 		_onTextureChangeFunc(metallicTexPath);
+	}
+
+	inline void setNormalMapPath(const std::string &normalMapTexPath)
+	{
+		_normalMapPath = normalMapTexPath;
+		_onTextureChangeFunc(normalMapTexPath);
+	}
+
+	inline std::string getAlbedoTexturePath()
+	{
+		return _albedoMapPath;
+	}
+
+	inline std::string getRoughnessTexturePath()
+	{
+		return _roughnessMapPath;
+	}
+
+	inline std::string getSpecularTexturePath()
+	{
+		return _specularMapPath;
+	}
+
+	inline std::string getMetallicTexturePath()
+	{
+		return _metallicMapPath;
+	}
+
+	inline std::string getNormalMapTexturePath()
+	{
+		return _normalMapPath;
 	}
 
 private:
@@ -115,5 +146,6 @@ private:
 	std::string _metallicMapPath;
 	std::string _specularMapPath;
 	std::string _albedoMapPath;
+	std::string _normalMapPath;
 };
 

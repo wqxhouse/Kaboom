@@ -5,6 +5,7 @@
 #include "World.h"
 #include "Camera.h"
 #include "TwGUIManager.h"
+#include "SkyBox.h"
 
 class Core
 {
@@ -17,6 +18,14 @@ public:
 
 	static const Camera &getMainCamera();
 
+	static void setEnvironmentMap(
+		const std::string &posX,
+		const std::string &negX,
+		const std::string &posY,
+		const std::string &negY,
+		const std::string &posZ, 
+		const std::string &negZ);
+
 	static void disableCameraManipulator();
 	static void enableCameraManipulator();
 
@@ -26,6 +35,7 @@ private:
 	static void configPasses();
 	static void configSceneNode();
 	static void configViewer();
+	static void configSkyBox();
 
 	static void configGeometryPass();
 	static void configLightPass();
@@ -35,6 +45,7 @@ private:
 	static osg::ref_ptr<osgFX::EffectCompositor> _passes;
 	static osg::ref_ptr<osg::Group> _sceneRoot;
 	static osg::ref_ptr<osg::Group> _geomRoot;
+	static osg::ref_ptr<SkyBox> _skybox;
 
 	static osg::ref_ptr<osgViewer::Viewer> _viewer;
 
@@ -43,6 +54,7 @@ private:
 
 	static World _world;
 	static bool _hasInit;
+	static bool _hasEnvMap;
 
 	// mainCamera
 	friend class osgFX::EffectCompositor;

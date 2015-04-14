@@ -155,7 +155,7 @@ void TwGUIManager::initializeTwGUI()
 		index++;
 	}
 	
-	index = 0;
+	//index = 0;
 
 	// process lights
 	std::string LightGroupStr = "Edit Light";
@@ -192,7 +192,23 @@ void TwGUIManager::initializeTwGUI()
 				},
 					dl, dirToWorldDef.c_str());
 
-				// TODO: color, later.... Too tired
+			// TODO: color, later.... Too tired
+			// TW_TYPE_COLOR3F
+			std::string dirLightColorVarName = "Color" + std::to_string(index);
+			std::string dirLightColorDef = nameGroupDef + " label='Color'";
+			TwAddVarCB(g_twBar, dirLightColorVarName.c_str(), TW_TYPE_COLOR3F, 
+				[](const void *value, void *clientData) {
+				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+				const float *arr = static_cast<const float *>(value);
+				osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
+				dl->setColor(color);
+			}, 
+				[](void *value, void *clientData) {
+				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+				const osg::Vec3 &color = dl->getColor();
+				float *arr = static_cast<float *>(value);
+				arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
+			}, dl, dirLightColorDef.c_str());
 		}
 		else if (l->getLightType() == POINT)
 		{
@@ -287,6 +303,9 @@ void TW_CALL TwGUIManager::loadModelFunc(void* clientData)
 	// TODO: implement
 }
 
+// TODO: bug, scrolling frequently will crash the program
+// TODO: anttweakbar by default uses opengl convention for world coordinates on widgets(arrow)
+// Need to change them to conform to osg convention
 void TwGUIManager::updateEvents() const
 {
 	unsigned int size = _eventsToHandle.size();

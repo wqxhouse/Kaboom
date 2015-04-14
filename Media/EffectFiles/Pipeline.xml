@@ -4,30 +4,24 @@
   <include>EffectFiles/template.xml</include>
   <include>EffectFiles/GeometryPassConfig.xml</include>
   <include>EffectFiles/LightPrePassConfig.xml</include>
+  <include>EffectFiles/LightPassConfig.xml</include>
 
   <shader name="defaultQuad_vs" type="vertex">
     <version>120</version>
     <file>Shaders/defaultQuad.vert</file>
   </shader>
 
-  <!--<uniform name="u_modelViewMat" type="mat4">
-    <inbuilt_value>modelview_matrix</inbuilt_value>
+  <uniform name="u_nearPlane" type="float">
+    <inbuilt_value>near_plane</inbuilt_value>
   </uniform>
-
-  <uniform name="u_projMat">
-    <inbuilt_value>projection_matrix</inbuilt_value>
-  </uniform>
-
-  <uniform name="u_inv_modelViewMat" type="mat4">
-    <inbuilt_value>inv_modelview_matrix</inbuilt_value>
-  </uniform>
-
-  <uniform name="u_inv_projMat" type="mat4">
-    <inbuilt_value>inv_projection_matrix</inbuilt_value>
-  </uniform>-->
   
   <uniform name="u_farPlane" type="float">
     <inbuilt_value>far_plane</inbuilt_value>
+  </uniform>
+
+  <uniform name="u_eyePos" type="vec3">
+    <!--<inbuilt_value>eye_position</inbuilt_value>-->
+    <value>0 0 0</value>
   </uniform>
 
   <technique>
@@ -45,25 +39,42 @@
       <output_buffer target="color">b_computeShaderTrigger</output_buffer>
       
       <uniform_buffer>u_lightsBuffer</uniform_buffer>
-      <!--<uniform>u_viewMat</uniform> --><!-- modelview need to manually resolve --><!--
-      <uniform>u_projMat</uniform>-->
       <uniform>u_countPointLight</uniform>
       <uniform>u_countDirectionalLight</uniform>
       <uniform>u_arrayDirectionalLight</uniform>
       <uniform>u_arrayPointLight</uniform>
-      <uniform>u_destSize</uniform>
 
-      <uniform>u_projMat</uniform>
       <uniform>u_viewMat</uniform>
+      <uniform>u_projMat</uniform>
+      <uniform>u_viewProjMat</uniform>
+
+      <uniform>u_nearPlane</uniform>
+      <uniform>u_farPlane</uniform>
 
       <shader>defaultQuad_vs</shader>
       <shader>computeLightTile_fs</shader>
+    </deferred_pass>
+    
+    <deferred_pass name="LightPass">
+      <input_buffer unit="0" varname="u_lightsBuffer">b_PerTileStorage</input_buffer>
+      <input_buffer unit="1" varname="u_RT0">b_RT0</input_buffer>
+      <input_buffer unit="2" varname="u_RT1">b_RT1</input_buffer>
+      <input_buffer unit="3" varname="u_RT2">b_RT2</input_buffer>
 
+      <output_buffer target="color">b_shading</output_buffer>
+
+      <uniform_buffer>u_lightsBuffer</uniform_buffer>
+      <uniform>u_projInvMat</uniform>
+      <uniform>u_farPlane</uniform>
+      <uniform>u_eyePos</uniform>
+
+      <shader>lightPass_vs</shader>
+      <shader>lightPass_fs</shader>
     </deferred_pass>
 
-    <!--<deferred_pass name="LightPass">
-      
-    </deferred_pass>-->
+    <deferred_pass name="FinalPass">
+      <input_buffer unit="0">b_shading</input_buffer>
+    </deferred_pass>
   </technique>
 
 </compositor>

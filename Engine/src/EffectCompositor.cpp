@@ -506,6 +506,8 @@ void EffectCompositor::traverse( osg::NodeVisitor& nv )
 		Core::_cam._nearPlane = zNear;
 		Core::_cam._farPlane = zFar;
 
+		Core::_cam._clampedViewProjMatrix = Core::_cam._viewMatrix * Core::_cam._clampedProjMatrix;
+
         if ( _inbuiltUniforms.size()>0 )
         {
 			/*double fovy = 0.0, aspectRatio = 0.0, zNear = 0.0, zFar = 0.0;

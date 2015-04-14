@@ -24,19 +24,27 @@ public:
 		float metallic);
 
 	void createTextureMaterial(const std::string &name,
-		const std::string albedoPath,
-		const std::string roughnessPath,
-		const std::string specularPath,
-		const std::string metallicPath);
+		const std::string &albedoPath,
+		const std::string &roughnessPath,
+		const std::string &specularPath,
+		const std::string &metallicPath, 
+		const std::string &normalMapPath);
 
 	Material *getMaterial(const std::string &name);
 	Material *getBuiltInMaterial(enum MaterialBuiltIn type);
+
+	osg::ref_ptr<osg::Texture> getAlbedoTexture(Material *m);
+	osg::ref_ptr<osg::Texture> getSpecularTexture(Material *m);
+	osg::ref_ptr<osg::Texture> getRoughnessTexture(Material *m);
+	osg::ref_ptr<osg::Texture> getMetallicTexture(Material *m);
+	osg::ref_ptr<osg::Texture> getNormalMapTexture(Material *m);
 
 private:
 	void createBuiltInMaterials();
 
 	// update texture cache	and associated geometry object binding
 	static void onTexturePathChange(const std::string &texturePath);
+	static MaterialManager *_weakMaterialManagerPtr;
 
 	// TODO: separate textured material and plain material,
 	// so that uniform iteration does not need to use if statement
@@ -47,7 +55,7 @@ private:
 
 	// cache texture to avoid duplicated loading
 	// since not sure if osgDB already caches textures 
-	std::unordered_map<std::string, osg::Texture *> _textureMap;
+	std::unordered_map<std::string, osg::ref_ptr<osg::Texture> > _textureMap;
 
 	// TODO: confirm if necessary, considering updating uniform every frame as an alternative
 	// binded geometry objects for update 

@@ -397,10 +397,30 @@ osg::Texture* EffectCompositor::createTextureFromXML(osgDB::XmlNode* xmlNode, bo
 		osg::Texture2D* tex2D = new osg::Texture2D;
 		if (isBufferObject)
 		{
-			if (useRelativeSize) w *= atof(xmlNode->properties["width"].c_str());
-			else w = atoi(xmlNode->properties["width"].c_str());
-			if (useRelativeSize) h *= atof(xmlNode->properties["height"].c_str());
-			else h = atoi(xmlNode->properties["height"].c_str());
+			if (useRelativeSize)
+			{
+				// TODO: support floor later
+				float relative_w = atof(xmlNode->properties["width"].c_str());
+				w = ceil(w * relative_w);
+				// w *= atof(xmlNode->properties["width"].c_str());
+
+			}
+			else
+			{
+				w = atoi(xmlNode->properties["width"].c_str());
+			}
+
+			if (useRelativeSize)
+			{
+				float relative_h = atof(xmlNode->properties["height"].c_str());
+				h = ceil(h * relative_h);
+				// h *= atof(xmlNode->properties["height"].c_str());
+			}
+			else
+			{
+				h = atoi(xmlNode->properties["height"].c_str());
+			}
+
 			tex2D->setTextureSize(w > 0 ? w : _renderTargetResolution[0], h > 0 ? h : _renderTargetResolution[1]);
 			if (levels > 0) tex2D->setNumMipmapLevels(levels);
 		}

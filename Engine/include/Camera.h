@@ -24,6 +24,11 @@ public:
 		return _clampedProjMatrix;
 	}
 
+	inline const osg::Matrix &getClampedViewProjectionMatrix() const
+	{
+		return _clampedViewProjMatrix;
+	}
+
 	inline float getNearPlane() const
 	{
 		return _nearPlane;
@@ -54,6 +59,9 @@ private:
 	osg::Matrix _viewMatrix;
 	osg::Matrix _projMatrix;
 	osg::Matrix _clampedProjMatrix;
+
+	osg::Matrix _clampedViewProjMatrix;
+
 	float _nearPlane;
 	float _farPlane;
 

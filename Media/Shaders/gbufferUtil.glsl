@@ -34,3 +34,26 @@ float recoverDepth(vec2 split_depth)
 	return dot(split_depth, unshift);  
 }
  
+vec3 getViewSpacePositionFromLinearZ(float linz, float farPlane, vec3 viewRay)
+{
+	return viewRay * (-linz * farPlane);	
+}
+
+void reconstructTanBin(vec3 position, vec3 normal, vec2 texcoord, out vec3 tangent, out vec3 binormal) 
+{
+    //vec3 Q1 = dFdx(vOutput.positionWorld);
+    //vec3 Q2 = dFdy(vOutput.positionWorld);
+    //vec2 st1 = dFdx(vOutput.texcoord);
+    //vec2 st2 = dFdy(vOutput.texcoord);
+ 
+    //tangent = normalize(Q1*st2.t - Q2*st1.t);
+    //binormal = normalize(cross(tangent, vOutput.normalWorld));
+
+	vec3 Q1 = dFdx(position);
+    vec3 Q2 = dFdy(position);
+    vec2 st1 = dFdx(texcoord);
+    vec2 st2 = dFdy(texcoord);
+ 
+    tangent = normalize(Q1*st2.t - Q2*st1.t);
+    binormal = normalize(cross(tangent, normal));
+}
