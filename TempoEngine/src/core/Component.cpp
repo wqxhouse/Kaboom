@@ -1,9 +1,9 @@
 #include "Component.h"
 
-Entity *Component::getEntity() const {
-    return entity;
+Entity *Component::getParentEntity() const {
+    return parent;
 }
 
-void Component::setEntity(Entity *entity) {
-    this->entity = entity;
+void Component::setParentEntity(Entity *parent) {
+    this->parent = parent;
 }

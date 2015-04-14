@@ -8,9 +8,9 @@ class Component {
 public:
     virtual ~Component() {}
 
-    Entity *getEntity() const;
-    void setEntity(Entity *entity);
+    Entity *getParentEntity() const;
+    void setParentEntity(Entity *parent);
 
 protected:
-    Entity *entity;
+    Entity *parent;
 };

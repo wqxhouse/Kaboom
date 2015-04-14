@@ -11,11 +11,11 @@ PlayerFactory::PlayerFactory(EntityManager *entityManager)
 PlayerFactory::~PlayerFactory() {
 }
 
-Player *PlayerFactory::createPlayer() const {
+ServerPlayer *PlayerFactory::createPlayer() const {
     createPlayer(0.0f, 0.0f, 0.0f);
 }
 
-Player *PlayerFactory::createPlayer(float x, float y, float z) const {
+ServerPlayer *PlayerFactory::createPlayer(float x, float y, float z) const {
     const btScalar mass = 1;
     btMotionState *motionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(x, y, z)));
     btCollisionShape *collisionShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
@@ -29,7 +29,5 @@ Player *PlayerFactory::createPlayer(float x, float y, float z) const {
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new PhysicsComponent(rigidBody));
 
-    Player *player = new Player(entity);
-
-    return player;
+    return static_cast<ServerPlayer *>(entity);
 }

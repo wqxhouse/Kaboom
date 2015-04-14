@@ -50,6 +50,5 @@ void Game::update(float timeStep) {
     world->stepSimulation(timeStep);
 
     for (auto it : entites) {
-        
     }
 }
