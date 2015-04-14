@@ -10,10 +10,6 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-# Exclude Media folder 
-!Media/**
-!3rdParty/**
-
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -198,3 +194,9 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+
+# Exclude Media folder 
+!Media/**
+# Exclude 3rdParty folder
+!3rdParty/**
+
