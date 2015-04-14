@@ -12,6 +12,7 @@
 
 # Exclude Media folder 
 !Media/**
+!3rdParty/**
 
 # Build results
 [Dd]ebug/
