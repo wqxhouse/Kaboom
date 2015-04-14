@@ -19,18 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BC9338C4-75A3-4853-841C-0C8963E2CA58}</ProjectGuid>
-    <RootNamespace>TempoEngine</RootNamespace>
+    <ProjectGuid>{A743928E-D773-42A3-89C1-A72D1319FAFD}</ProjectGuid>
+    <RootNamespace>KaboomClient</RootNamespace>
+    <ProjectName>KaboomClient</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -43,7 +44,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -65,7 +66,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(OSG_ROOT);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(OSG_INCLUDE_PATH);</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -107,26 +111,53 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomEngine\src;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OSG_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>osg.lib;osgDB.lib;osgGA.lib;osgViewer.lib;ws2_32.lib;mswsock.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\Component.h" />
-    <ClInclude Include="src\core\Entity.h" />
-    <ClInclude Include="src\core\EntityManager.h" />
-    <ClInclude Include="src\core\Player.h" />
-    <ClInclude Include="src\core\PositionComponent.h" />
+    <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\ClientPlayer.cpp" />
+    <ClCompile Include="src\core\PlayerFactory.cpp" />
+    <ClCompile Include="src\core\SceneNodeComponent.cpp" />
+    <ClCompile Include="src\input\InputManager.cpp" />
+    <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\network\GameClient.cpp" />
+    <ClCompile Include="src\network\ClientNetwork.cpp" />
+    <ClCompile Include="src\network\NetworkServices.cpp" />
+    <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\Component.cpp" />
-    <ClCompile Include="src\core\Entity.cpp" />
-    <ClCompile Include="src\core\EntityManager.cpp" />
-    <ClCompile Include="src\core\Player.cpp" />
-    <ClCompile Include="src\core\PositionComponent.cpp" />
+    <ClInclude Include="src\core\Game.h" />
+    <ClInclude Include="src\core\GameStateData.h" />
+    <ClInclude Include="src\core\ClientPlayer.h" />
+    <ClInclude Include="src\core\PlayerFactory.h" />
+    <ClInclude Include="src\core\SceneNodeComponent.h" />
+    <ClInclude Include="src\Global.h" />
+    <ClInclude Include="src\input\InputManager.h" />
+    <ClInclude Include="src\input\KeyboardEventHandler.h" />
+    <ClInclude Include="src\network\GameClient.h" />
+    <ClInclude Include="src\network\ClientNetwork.h" />
+    <ClInclude Include="src\network\NetworkData.h" />
+    <ClInclude Include="src\network\NetworkServices.h" />
+    <ClInclude Include="src\util\ConfigSettings.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KaboomEngine\KaboomEngine.vcxproj">
+      <Project>{bc9338c4-75a3-4853-841c-0c8963e2ca58}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
