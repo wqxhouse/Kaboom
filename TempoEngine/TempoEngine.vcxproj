@@ -119,7 +119,6 @@
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
-    <ClInclude Include="src\network\Serializable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Component.cpp" />
