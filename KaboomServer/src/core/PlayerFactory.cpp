@@ -12,7 +12,7 @@ PlayerFactory::~PlayerFactory() {
 }
 
 ServerPlayer *PlayerFactory::createPlayer() const {
-    createPlayer(0.0f, 0.0f, 0.0f);
+    return createPlayer(0.0f, 0.0f, 0.0f);
 }
 
 ServerPlayer *PlayerFactory::createPlayer(float x, float y, float z) const {

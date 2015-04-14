@@ -4,13 +4,19 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <core/Entity.h>
+#include <core/EntityManager.h>
+
+#include "PlayerFactory.h"
 
 #include "../network/GameServer.h"
 #include "../util/ConfigSettings.h"
 
+class GameServer;
+
 class Game {
 public:
+    std::vector<ServerPlayer *> players;
+
     Game(ConfigSettings *config);
     ~Game();
 
@@ -22,11 +28,12 @@ private:
     ConfigSettings *config;
     GameServer *server;
 
+    EntityManager entityManager;
+    PlayerFactory playerFactory;
+
     btBroadphaseInterface *broadphase;
     btDefaultCollisionConfiguration *collisionConfiguration;
     btCollisionDispatcher *dispatcher;
     btSequentialImpulseConstraintSolver *solver;
     btDiscreteDynamicsWorld *world;
-
-    std::vector<Entity *> entites;
 };

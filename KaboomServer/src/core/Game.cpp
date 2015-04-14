@@ -3,7 +3,8 @@
 #include "PhysicsComponent.h"
 
 Game::Game(ConfigSettings *config)
-    : config(config) {
+    : config(config),
+    playerFactory(&entityManager) {
     server = new GameServer(config);
 
     broadphase = new btDbvtBroadphase();
@@ -13,7 +14,7 @@ Game::Game(ConfigSettings *config)
 
     world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
-    world->setGravity(btVector3(0, 0, -10)); // TODO: Extract gravity constant
+    world->setGravity(btVector3(0, 0, -1)); // TODO: Extract gravity constant
 }
 
 Game::~Game() {
@@ -27,8 +28,8 @@ Game::~Game() {
 
 void Game::loadMap() {
     // TODO: Handle memory leak
-    btCollisionShape *groundShape = new btStaticPlaneShape(btVector3(0, 0, 1), 0);
-    btDefaultMotionState *groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
+    btCollisionShape *groundShape = new btStaticPlaneShape(btVector3(0, 0, 1), 1);
+    btDefaultMotionState *groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, -1)));
 
     btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
     btRigidBody *groundRigidBody = new btRigidBody(groundRigidBodyCI);
@@ -45,10 +46,43 @@ void Game::addEntity(Entity *entity) {
 }
 
 void Game::update(float timeStep) {
-    server->update();
+    if (server->acceptNewClient()) {
+        ServerPlayer *player = playerFactory.createPlayer(0, 0, 5);
+        players.push_back(player);  
+        world->addRigidBody(player->getRigidBody());
+    }
+
+    server->receiveFromClients(this);
+
+    if (players.size() > 0) {
+        printf("<Server> Player 1 velocity1: %.2f, %.2f, %.2f\n",
+            players[0]->getVelocityX(),
+            players[0]->getVelocityY(),
+            players[0]->getVelocityZ());
+    }
 
     world->stepSimulation(timeStep);
+    
+    for (auto it : players) {
+        btRigidBody *rigidBody = it->getRigidBody();
 
-    for (auto it : entites) {
+        btTransform transform;
+        rigidBody->getMotionState()->getWorldTransform(transform);
+
+        const btVector3 &position = transform.getOrigin();
+        
+        it->setX(position.getX());
+        it->setY(position.getY());
+        it->setZ(position.getZ());
     }
+
+    if (players.size() > 0) {
+        printf("<Server> Player 1 velocity2: %.2f, %.2f, %.2f, damping: %.2f\n",
+            players[0]->getVelocityX(),
+            players[0]->getVelocityY(),
+            players[0]->getVelocityZ(),
+            players[0]->getRigidBody()->getLinearDamping());
+    }
+
+    server->sendGameStatePackets(this);
 }
