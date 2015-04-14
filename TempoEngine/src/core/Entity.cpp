@@ -8,7 +8,7 @@ Entity::~Entity() {
 }
 
 void Entity::attachComponent(Component *component) {
-    component->setEntity(this);
+    component->setParentEntity(this);
     components[&typeid(*component)] = component;
 }
 

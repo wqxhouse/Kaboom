@@ -18,11 +18,11 @@ PlayerFactory::PlayerFactory(EntityManager *entityManager)
 PlayerFactory::~PlayerFactory() {
 }
 
-Player *PlayerFactory::createPlayer() const {
+ClientPlayer *PlayerFactory::createPlayer() const {
     createPlayer(0.0f, 0.0f, 0.0f);
 }
 
-Player *PlayerFactory::createPlayer(float x, float y, float z) const {
+ClientPlayer *PlayerFactory::createPlayer(float x, float y, float z) const {
     Entity *player = entityManager->createEntity();
 
     osg::Box *box = new osg::Box;
@@ -40,5 +40,5 @@ Player *PlayerFactory::createPlayer(float x, float y, float z) const {
     player->attachComponent(new SceneNodeComponent(playerNode));
     player->attachComponent(new PositionComponent(x, y, z));
 
-    return static_cast<Player *>(player);
+    return static_cast<ClientPlayer *>(player);
 }

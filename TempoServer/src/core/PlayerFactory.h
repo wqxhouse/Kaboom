@@ -2,15 +2,15 @@
 
 #include <core/EntityManager.h>
 
-#include "Player.h"
+#include "ServerPlayer.h"
 
 class PlayerFactory {
 public:
     PlayerFactory(EntityManager *entityManager);
     ~PlayerFactory();
 
-    Player *createPlayer() const;
-    Player *createPlayer(float x, float y, float z) const;
+    ServerPlayer *createPlayer() const;
+    ServerPlayer *createPlayer(float x, float y, float z) const;
 
 private:
     EntityManager *entityManager;

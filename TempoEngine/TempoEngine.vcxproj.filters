@@ -22,6 +22,12 @@
     <Filter Include="Header Files\Network">
       <UniqueIdentifier>{bdfe1f50-92f8-426e-825d-92a671aa02a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{31f68c8a-92b8-418e-9cef-8c3091a57968}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{6b625cdc-a1e3-46c5-91eb-8768dd579566}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Component.h">
@@ -36,6 +42,9 @@
     <ClInclude Include="src\core\PositionComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\Player.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Component.cpp">
@@ -49,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="src\core\PositionComponent.cpp">
       <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Player.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -45,8 +45,8 @@ void Game::run() {
         GameStateData *gameState = g_client->receive();
 
         if (gameState != nullptr) {
-            Player *player1 = static_cast<Player *>(entityManager.getEntity(0));
-            Player *player2 = static_cast<Player *>(entityManager.getEntity(1));
+            ClientPlayer *player1 = static_cast<ClientPlayer *>(entityManager.getEntity(0));
+            ClientPlayer *player2 = static_cast<ClientPlayer *>(entityManager.getEntity(1));
 
             player1->setPosition(gameState->x1, gameState->y1, gameState->z1);
             player2->setPosition(gameState->x2, gameState->y2, gameState->z2);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/Entity.h>
+#include "Entity.h"
 
 class Player : public Entity {
 public:
@@ -11,5 +11,7 @@ public:
     float getY() const;
     float getZ() const;
 
-    void setPosition(float x, float y, float z);
+    void setX(float x);
+    void setY(float y);
+    void setZ(float z);
 };
