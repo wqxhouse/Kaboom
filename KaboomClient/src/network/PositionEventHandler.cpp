@@ -1,6 +1,7 @@
 #include "PositionEventHandler.h"
 
 #include <core/PositionComponent.h>
+#include <network/PositionEvent.h>
 
 PositionEventHandler::PositionEventHandler(Game *game)
     : game(game) {
@@ -9,7 +10,9 @@ PositionEventHandler::PositionEventHandler(Game *game)
 PositionEventHandler::~PositionEventHandler() {
 }
 
-void PositionEventHandler::handle(const PositionEvent &evt) const {
+void PositionEventHandler::handle(const Event &e) const {
+    const PositionEvent &evt = static_cast<const PositionEvent &>(e);
+
     Entity *entity = game->getEntityManager().getEntity(evt.getEntityId());
 
     PositionComponent *positionCom = entity->getComponent<PositionComponent>();

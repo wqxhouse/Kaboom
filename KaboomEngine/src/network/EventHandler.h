@@ -1,9 +1,10 @@
 #pragma once
 
-template <typename T>
+#include "Event.h"
+
 class EventHandler {
 public:
     virtual ~EventHandler() {}
 
-    virtual void handle(const T &evt) = 0;
+    virtual void handle(const Event &e) const = 0;
 };
