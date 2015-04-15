@@ -121,6 +121,11 @@
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\Player.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
+    <ClInclude Include="src\network\Event.h" />
+    <ClInclude Include="src\network\PlayerInputEvent.h" />
+    <ClInclude Include="src\network\PositionEvent.h" />
+    <ClInclude Include="src\network\RotationEvent.h" />
+    <ClInclude Include="src\network\PlayerSpawnEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Component.cpp" />
@@ -128,6 +133,10 @@
     <ClCompile Include="src\core\EntityManager.cpp" />
     <ClCompile Include="src\core\Player.cpp" />
     <ClCompile Include="src\core\PositionComponent.cpp" />
+    <ClCompile Include="src\network\PlayerInputEvent.cpp" />
+    <ClCompile Include="src\network\PositionEvent.cpp" />
+    <ClCompile Include="src\network\RotationEvent.cpp" />
+    <ClCompile Include="src\network\PlayerSpawnEvent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
