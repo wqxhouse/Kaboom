@@ -18,6 +18,7 @@ public:
     void run();
 
     const EntityManager &getEntityManager() const;
+    const PlayerFactory &getPlayerFactory() const;
 
 private:
     InputManager *inputManager;
