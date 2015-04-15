@@ -1,7 +1,11 @@
 #include "PositionEventHandler.h"
 
+#include <osg/MatrixTransform>
+
 #include <core/PositionComponent.h>
 #include <network/PositionEvent.h>
+
+#include "../core/SceneNodeComponent.h"
 
 PositionEventHandler::PositionEventHandler(Game *game)
     : game(game) {
@@ -21,5 +25,17 @@ void PositionEventHandler::handle(const Event &e) const {
         positionCom->setX(evt.getX());
         positionCom->setY(evt.getY());
         positionCom->setZ(evt.getZ());
+    }
+
+    SceneNodeComponent *sceneNodeCom = entity->getComponent<SceneNodeComponent>();
+
+    if (sceneNodeCom != nullptr) {
+        osg::Group *rootNode = static_cast<osg::Group *>(sceneNodeCom->getNode());
+        osg::MatrixTransform *transformNode = static_cast<osg::MatrixTransform *>(rootNode->getChild(0));
+
+        osg::Matrix transformMat;
+        transformMat.makeTranslate(evt.getX(), evt.getY(), evt.getZ());
+
+        transformNode->setMatrix(transformMat);
     }
 }
