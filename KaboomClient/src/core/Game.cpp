@@ -89,3 +89,7 @@ void Game::setupCamera() {
 const EntityManager &Game::getEntityManager() const {
     return entityManager;
 }
+
+const PlayerFactory &Game::getPlayerFactory() const {
+    return playerFactory;
+}

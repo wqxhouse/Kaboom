@@ -87,6 +87,9 @@
     <ClCompile Include="src\network\PositionEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\PlayerSpawnEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Global.h">
@@ -129,6 +132,9 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\network\PositionEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerSpawnEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
