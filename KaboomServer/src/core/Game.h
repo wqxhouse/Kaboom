@@ -24,6 +24,8 @@ public:
     void addEntity(Entity *entity);
     void update(float timestep);
 
+    const EntityManager &getEntityManager() const;
+
 private:
     ConfigSettings *config;
     GameServer *server;
