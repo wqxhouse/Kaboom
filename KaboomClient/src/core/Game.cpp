@@ -85,3 +85,7 @@ void Game::setupCamera() {
     camera->setViewMatrix(viewMat);
     camera->setProjectionMatrix(projMat);
 }
+
+const EntityManager &Game::getEntityManager() const {
+    return entityManager;
+}

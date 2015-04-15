@@ -122,6 +122,7 @@
     <ClInclude Include="src\core\Player.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
     <ClInclude Include="src\network\Event.h" />
+    <ClInclude Include="src\network\EventHandler.h" />
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
     <ClInclude Include="src\network\RotationEvent.h" />
