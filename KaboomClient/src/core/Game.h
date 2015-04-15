@@ -17,6 +17,8 @@ public:
 
     void run();
 
+    const EntityManager &getEntityManager() const;
+
 private:
     InputManager *inputManager;
     EntityManager entityManager;

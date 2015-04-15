@@ -134,6 +134,7 @@
     <ClCompile Include="src\network\GameClient.cpp" />
     <ClCompile Include="src\network\ClientNetwork.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
+    <ClCompile Include="src\network\PositionEventHandler.cpp" />
     <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +150,7 @@
     <ClInclude Include="src\network\ClientNetwork.h" />
     <ClInclude Include="src\network\NetworkData.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
+    <ClInclude Include="src\network\PositionEventHandler.h" />
     <ClInclude Include="src\util\ConfigSettings.h" />
   </ItemGroup>
   <ItemGroup>
