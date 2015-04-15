@@ -4,7 +4,8 @@
 
 class PlayerInputEvent : public Event {
 public:
-    PlayerInputEvent(bool movingForward,
+    PlayerInputEvent(unsigned int playerId,
+        bool movingForward,
         bool movingBackward,
         bool movingLeft,
         bool movingRight,
@@ -13,6 +14,8 @@ public:
         float yaw,
         float pitch);
     ~PlayerInputEvent();
+
+    const unsigned int &getPlayerId() const;
 
     const bool &getMovingForward() const;
     const bool &getMovingBackward() const;
@@ -27,6 +30,8 @@ public:
     const float &getPitch() const;
 
 private:
+    unsigned int playerId;
+
     bool movingForward;
     bool movingBackward;
     bool movingLeft;

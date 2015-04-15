@@ -1,6 +1,7 @@
 #include "PlayerInputEvent.h"
 
-PlayerInputEvent::PlayerInputEvent(bool movingForward,
+PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
+    bool movingForward,
     bool movingBackward,
     bool movingLeft,
     bool movingRight,
@@ -21,6 +22,9 @@ PlayerInputEvent::PlayerInputEvent(bool movingForward,
 PlayerInputEvent::~PlayerInputEvent() {
 }
 
+const unsigned int &PlayerInputEvent::getPlayerId() const {
+    return playerId;
+}
 
 const bool &PlayerInputEvent::getMovingForward() const {
     return movingForward;

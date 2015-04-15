@@ -66,6 +66,9 @@
     <ClCompile Include="src\core\ServerPlayer.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\PlayerInputEventHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\util\ConfigSettings.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="src\core\ServerPlayer.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerInputEventHandler.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

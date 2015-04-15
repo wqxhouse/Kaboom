@@ -86,3 +86,7 @@ void Game::update(float timeStep) {
 
     server->sendGameStatePackets(this);
 }
+
+const EntityManager &Game::getEntityManager() const {
+    return entityManager;
+}
