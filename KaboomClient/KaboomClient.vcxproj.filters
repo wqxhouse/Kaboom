@@ -90,6 +90,9 @@
     <ClCompile Include="src\network\PlayerSpawnEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\ClientEventHandlerLookup.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Global.h">
@@ -136,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="src\network\PlayerSpawnEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ClientEventHandlerLookup.h">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

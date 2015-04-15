@@ -66,6 +66,9 @@
     <ClInclude Include="src\network\EventHandler.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\EventHandlerLookup.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Component.cpp">
@@ -93,6 +96,9 @@
       <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="src\network\PlayerInputEvent.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\EventHandlerLookup.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>

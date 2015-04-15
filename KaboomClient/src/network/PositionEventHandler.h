@@ -1,16 +1,15 @@
 #pragma once
 
 #include <network/EventHandler.h>
-#include <network/PositionEvent.h>
 
 #include "../core/Game.h"
 
-class PositionEventHandler : public EventHandler<PositionEvent> {
+class PositionEventHandler : public EventHandler {
 public:
     PositionEventHandler(Game *game);
     ~PositionEventHandler();
 
-    void handle(const PositionEvent &evt) const;
+    virtual void handle(const Event &e) const;
 
 private:
     Game *game;
