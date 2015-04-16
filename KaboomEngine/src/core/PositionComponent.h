@@ -16,6 +16,8 @@ public:
     void setY(float y);
     void setZ(float z);
 
+    void setPosition(float x, float y, float z);
+
 private:
     float x;
     float y;

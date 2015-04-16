@@ -34,3 +34,9 @@ void PositionComponent::setY(float y) {
 void PositionComponent::setZ(float z) {
     this->z = z;
 }
+
+void PositionComponent::setPosition(float x, float y, float z) {
+    setX(x);
+    setY(y);
+    setZ(z);
+}
