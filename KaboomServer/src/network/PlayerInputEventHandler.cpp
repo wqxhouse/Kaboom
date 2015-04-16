@@ -4,7 +4,8 @@
 
 #include "../core/ServerPlayer.h"
 
-PlayerInputEventHandler::PlayerInputEventHandler(Game *game) {
+PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
+    : game(game) {
 }
 
 PlayerInputEventHandler::~PlayerInputEventHandler() {
