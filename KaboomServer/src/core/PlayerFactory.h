@@ -9,7 +9,6 @@ public:
     PlayerFactory(EntityManager *entityManager);
     ~PlayerFactory();
 
-    ServerPlayer *createPlayer() const;
     ServerPlayer *createPlayer(float x, float y, float z) const;
 
 private:
