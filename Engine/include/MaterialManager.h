@@ -26,7 +26,6 @@ public:
 	void createTextureMaterial(const std::string &name,
 		const std::string &albedoPath,
 		const std::string &roughnessPath,
-		const std::string &specularPath,
 		const std::string &metallicPath, 
 		const std::string &normalMapPath);
 
@@ -34,7 +33,6 @@ public:
 	Material *getBuiltInMaterial(enum MaterialBuiltIn type);
 
 	osg::ref_ptr<osg::Texture> getAlbedoTexture(Material *m);
-	osg::ref_ptr<osg::Texture> getSpecularTexture(Material *m);
 	osg::ref_ptr<osg::Texture> getRoughnessTexture(Material *m);
 	osg::ref_ptr<osg::Texture> getMetallicTexture(Material *m);
 	osg::ref_ptr<osg::Texture> getNormalMapTexture(Material *m);

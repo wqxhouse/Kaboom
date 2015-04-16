@@ -82,18 +82,15 @@ void GeometryObject::setUpMaterialState()
 		ss->setTextureAttributeAndModes(0, albedoTex);
 		osg::Texture *roughnessTex = mm->getRoughnessTexture(_material);
 		ss->setTextureAttributeAndModes(1, roughnessTex);
-		osg::Texture *specularTex = mm->getSpecularTexture(_material);
-		ss->setTextureAttributeAndModes(2, specularTex);
 		osg::Texture *metallicTex = mm->getMetallicTexture(_material);
-		ss->setTextureAttributeAndModes(3, metallicTex);
+		ss->setTextureAttributeAndModes(2, metallicTex);
 		osg::Texture *normalMapTex = mm->getNormalMapTexture(_material);
-		ss->setTextureAttributeAndModes(4, normalMapTex);
+		ss->setTextureAttributeAndModes(3, normalMapTex);
 
 		ss->addUniform(new osg::Uniform("u_albedoTex", 0));
 		ss->addUniform(new osg::Uniform("u_roughnessTex", 1));
-		ss->addUniform(new osg::Uniform("u_specularTex", 2));
-		ss->addUniform(new osg::Uniform("u_metallicTex", 3));
-		ss->addUniform(new osg::Uniform("u_normalMapTex", 4));
+		ss->addUniform(new osg::Uniform("u_metallicTex", 2));
+		ss->addUniform(new osg::Uniform("u_normalMapTex", 3));
 	}
 	else
 	{
@@ -118,12 +115,10 @@ void GeometryObject::updateMaterialState()
 		ss->setTextureAttributeAndModes(0, albedoTex);
 		osg::Texture *roughnessTex = mm->getRoughnessTexture(_material);
 		ss->setTextureAttributeAndModes(1, roughnessTex);
-		osg::Texture *specularTex = mm->getSpecularTexture(_material);
-		ss->setTextureAttributeAndModes(2, specularTex);
 		osg::Texture *metallicTex = mm->getMetallicTexture(_material);
-		ss->setTextureAttributeAndModes(3, metallicTex);
+		ss->setTextureAttributeAndModes(2, metallicTex);
 		osg::Texture *normalMapTex = mm->getNormalMapTexture(_material);
-		ss->setTextureAttributeAndModes(4, normalMapTex);
+		ss->setTextureAttributeAndModes(3, normalMapTex);
 	}
 	else
 	{

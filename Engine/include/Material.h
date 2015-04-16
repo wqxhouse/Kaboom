@@ -83,12 +83,6 @@ public:
 		_onTextureChangeFunc(roughnessTexPath);
 	}
 
-	inline void setSpecularMapPath(const std::string &specularTexpath)
-	{
-		_specularMapPath = specularTexpath;
-		_onTextureChangeFunc(specularTexpath);
-	}
-
 	inline void setMetallicMapPath(const std::string &metallicTexPath)
 	{
 		_metallicMapPath = metallicTexPath;
@@ -109,11 +103,6 @@ public:
 	inline std::string getRoughnessTexturePath()
 	{
 		return _roughnessMapPath;
-	}
-
-	inline std::string getSpecularTexturePath()
-	{
-		return _specularMapPath;
 	}
 
 	inline std::string getMetallicTexturePath()
@@ -144,7 +133,6 @@ private:
 
 	std::string _roughnessMapPath;
 	std::string _metallicMapPath;
-	std::string _specularMapPath;
 	std::string _albedoMapPath;
 	std::string _normalMapPath;
 };

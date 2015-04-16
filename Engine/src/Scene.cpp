@@ -23,7 +23,6 @@ void setupScene()
 	m->createTextureMaterial("gunMaterial",
 		base + "Cerberus_A.tga",
 		base + "Cerberus_R.tga",
-		base + "Cerberus_A.tga",
 		base + "Cerberus_M.tga",
 		base + "Cerberus_N.tga");
 

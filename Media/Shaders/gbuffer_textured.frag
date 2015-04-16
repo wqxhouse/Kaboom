@@ -13,7 +13,6 @@ varying vec3 v_ws_normal;
 
 uniform sampler2D u_albedoTex;
 uniform sampler2D u_roughnessTex;
-uniform sampler2D u_specularTex;
 uniform sampler2D u_metallicTex;
 uniform sampler2D u_normalMapTex;
 // uniform sampler2D u_translucentTex;
@@ -42,7 +41,6 @@ void main()
 
 	vec3 view_normal = gl_NormalMatrix * mixedNormal;
 
-	float specular = texture(u_specularTex, v_geomTexCoord).r;
 	float roughness = texture(u_roughnessTex, v_geomTexCoord).r;
 	float metallic = texture(u_metallicTex, v_geomTexCoord).r;
 

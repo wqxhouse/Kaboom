@@ -65,7 +65,6 @@ void MaterialManager::createPlainMaterial(const std::string &name,
 void MaterialManager::createTextureMaterial(const std::string &name,
 	const std::string &albedoPath,
 	const std::string &roughnessPath,
-	const std::string &specularPath,
 	const std::string &metallicPath,
 	const std::string &normalMapPath)
 {
@@ -101,7 +100,6 @@ void MaterialManager::createTextureMaterial(const std::string &name,
 	mat->setAlbedoTexturePath(albedoPath);
 	mat->setMetallicMapPath(metallicPath);
 	mat->setRoughnessMapPath(roughnessPath);
-	mat->setSpecularMapPath(specularPath);
 	mat->setNormalMapPath(normalMapPath);
 
 	_materialMap.insert(std::make_pair(name, mat));
@@ -146,20 +144,6 @@ void MaterialManager::onTexturePathChange(const std::string &texturePath)
 osg::ref_ptr<osg::Texture> MaterialManager::getAlbedoTexture(Material *m)
 {
 	auto it = _textureMap.find(m->getAlbedoTexturePath());
-	if (it != _textureMap.end())
-	{
-		return it->second;
-	}
-	else
-	{
-		// console output material not found;
-		return NULL;
-	}
-}
-
-osg::ref_ptr<osg::Texture> MaterialManager::getSpecularTexture(Material *m)
-{
-	auto it = _textureMap.find(m->getSpecularTexturePath());
 	if (it != _textureMap.end())
 	{
 		return it->second;
