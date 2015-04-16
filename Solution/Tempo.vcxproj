@@ -33,6 +33,7 @@
     <ClInclude Include="..\Engine\include\SkyBox.h" />
     <ClInclude Include="..\Engine\include\TwGUIManager.h" />
     <ClInclude Include="..\Engine\include\World.h" />
+    <ClInclude Include="ConfigSettings.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +57,7 @@
     <ClCompile Include="..\Engine\src\SkyBox.cpp" />
     <ClCompile Include="..\Engine\src\TwGUIManager.cpp" />
     <ClCompile Include="..\Engine\src\World.cpp" />
+    <ClCompile Include="ConfigSettings.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -69,6 +71,7 @@
     <Xml Include="..\Media\EffectFiles\template.xml" />
     <Xml Include="..\Media\EffectFiles\Test.xml" />
     <Xml Include="..\Media\EffectFiles\TestWorld.xml" />
+    <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\BugList.txt" />

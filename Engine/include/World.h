@@ -22,6 +22,11 @@ public:
 	// TODO: implement it
 	void loadWorldXMLFile(const std::string &worldFilePath);
 
+	void createPlainMaterialFromXML(osgDB::XmlNode* xmlNode);
+	void createTexturedMaterialFromXML(osgDB::XmlNode* xmlNode);
+	void createModelFromXML(osgDB::XmlNode* xmlNode);
+	void createLightFromXML(osgDB::XmlNode* xmlNode);
+
 	inline GeometryObjectManager *getGeometryManager()
 	{
 		return _geomManager;
@@ -38,7 +43,16 @@ public:
 	}
 
 private:
+	bool isXMLNodeType(osgDB::XmlNode* xmlNode);
 	void loadXMLNode(osgDB::XmlNode *xmlRoot);
+	void setDefaultString(std::string &s);
+
+	void loadInt(osgDB::XmlNode* xmlNode, int& i);
+	void loadFloat(osgDB::XmlNode* xmlNode, float& f);
+	void loadBool(osgDB::XmlNode* xmlNode, bool& b);
+	void loadString(osgDB::XmlNode* xmlNode, std::string& s);
+	void loadVec3(osgDB::XmlNode* xmlNode, osg::Vec3& vec);
+	void loadVec4(osgDB::XmlNode* xmlNode, osg::Vec4& vec);
 		
 	GeometryObjectManager *_geomManager;
 	MaterialManager *_materialManager;

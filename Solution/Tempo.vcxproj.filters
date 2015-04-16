@@ -78,6 +78,9 @@
     <ClInclude Include="..\Engine\include\LightPassCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ConfigSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Engine\src\Core.cpp">
@@ -141,6 +144,9 @@
     <ClCompile Include="..\Engine\src\LightPassCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConfigSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">
@@ -165,6 +171,9 @@
       <Filter>Media\EffectFiles</Filter>
     </Xml>
     <Xml Include="..\Media\EffectFiles\TestWorld.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\TestWorld1.xml">
       <Filter>Media\EffectFiles</Filter>
     </Xml>
   </ItemGroup>
