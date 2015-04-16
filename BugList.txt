@@ -1,0 +1,9 @@
+Unresolved:
+1. Point Light Tile culling fails to handle edges of geometry. 
+	- create a point light not entirely covering the geometry. 
+	  tile artifact will show on the edge
+
+2. Press ESC will crash the program. Whereas click to close will not carsh the program.
+
+Fixed:
+1. Scrolling will crash the program (TwGUI)
