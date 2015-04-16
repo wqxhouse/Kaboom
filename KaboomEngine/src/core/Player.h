@@ -16,4 +16,12 @@ public:
     void setZ(float z);
 
     void setPosition(float x, float y, float z);
+
+    float getYaw() const;
+    float getPitch() const;
+
+    void setYaw(float yaw);
+    void setPitch(float pitch);
+
+    void setRotation(float yaw, float pitch);
 };
