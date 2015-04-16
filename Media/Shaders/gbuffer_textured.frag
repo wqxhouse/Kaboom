@@ -9,6 +9,7 @@ varying vec3 v_ws_vertex;
 varying vec3 v_ws_normal;
 //varying vec3 v_tangent;
 //varying vec3 v_binormal;
+//varying vec3 v_normal;
 
 uniform sampler2D u_albedoTex;
 uniform sampler2D u_roughnessTex;
@@ -47,6 +48,6 @@ void main()
 
 	// TODO: make transclucent tex later, as deferred shading is hard to support transparent object
 	gl_FragData[0] = vec4(albedo, 1.0); // albedo + translucent
-	gl_FragData[1] = vec4(roughness, specular, metallic, 1.0); // material buffer
+	gl_FragData[1] = vec4(roughness, 0.5, metallic, 0.0); // material buffer + unshaded bit(for skybox)
 	gl_FragData[2] = vec4(encodeNormal(view_normal), splitDepth2x16(v_depth)); // encoded normal + split linDepth
 }

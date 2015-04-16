@@ -71,6 +71,7 @@
     <Xml Include="..\Media\EffectFiles\TestWorld.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\BugList.txt" />
     <None Include="..\Media\Shaders\constant.glsl" />
     <None Include="..\Media\Shaders\defaultQuad.vert" />
     <None Include="..\Media\Shaders\gbufferUtil.glsl" />

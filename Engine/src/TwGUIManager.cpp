@@ -311,6 +311,7 @@ void TwGUIManager::updateEvents() const
 	unsigned int size = _eventsToHandle.size();
 	for (unsigned int i = 0; i < size; ++i)
 	{
+		if (_eventsToHandle.front() == NULL) return; // attemps to fix crashing; but reason of NULL events unknown
 		const osgGA::GUIEventAdapter& ea = *(_eventsToHandle.front());
 		float x = ea.getX(), y = ea.getWindowHeight() - ea.getY();
 		switch (ea.getEventType())

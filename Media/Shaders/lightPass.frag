@@ -39,8 +39,14 @@ void main()
         vec2(LIGHT_TILE_SIZE_X, LIGHT_TILE_SIZE_Y) ) * 8;
 
     // Extract material data
-    vec4 rt0 = texelFetch(u_RT0, screenCoord, 0);
     vec4 rt1 = texelFetch(u_RT1, screenCoord, 0);
+	
+	// optimization - as well as for skybox hack
+	// mark: for rgba texture, alpha channel is white by default if not written any color
+	// in constrast with rgb channels -- which is confusing!!!
+	if(rt1.a > 0.1 ) discard; // choose 0.1 to deal with precision
+
+    vec4 rt0 = texelFetch(u_RT0, screenCoord, 0);
     vec4 rt2 = texelFetch(u_RT2, screenCoord, 0);
 
 	Material material = getMaterialFromGBuffer(rt0, rt1, rt2, u_farPlane, v_viewRay);
@@ -120,8 +126,8 @@ void main()
 
 
     // SRGB - gamma correction ( TODO: last step or here??? )
-    //result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
+    result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
     //result = 1.0f - exp(-1.0 * result);
 
-    gl_FragColor = vec4(result, 1.0);
+	gl_FragColor = vec4(result, 1.0);
 }

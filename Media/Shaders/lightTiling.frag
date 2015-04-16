@@ -137,7 +137,6 @@ void main()
     //float maxDepthLinear = getLinearZTightFromLinearZ(maxDepth);
 
 	// debugging output
-	// gl_FragColor = vec4(minDepthLinear);
 
     // Init counters
     int processedPointLights = 0;
@@ -259,6 +258,8 @@ void main()
         //    imageStore(destination, baseOffset + currentOffset, ivec4(index));
         //    processedDirectionalShadowLights += 1;
         //}
+
+	gl_FragColor = vec4(minDepth);
 
     imageStore(o_destination, storageCoord + ivec2(0, 0), ivec4(processedPointLights));
 //    imageStore(o_destination, storageCoord + ivec2(1, 0), ivec4(processedShadowPointLights));

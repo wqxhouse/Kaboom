@@ -44,6 +44,7 @@ bool GeometryObjectManager::setGeometryMaterial(const std::string &geomName, Mat
 	else
 	{
 		// TODO: console output, need to implement text hud or something
+		OSG_WARN << "setGeometryMaterial: geometry named " + geomName + " not defined" << std::endl;
 		return false;
 	}
 }

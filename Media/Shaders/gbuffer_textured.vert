@@ -24,6 +24,7 @@ void main()
 {
     v_position = gl_ModelViewMatrix * gl_Vertex;
 	v_geomTexCoord = gl_MultiTexCoord0.st;
+	//v_normal = gl_NormalMatrix * gl_Normal;
 
 	// construct tangent space for normal mapping
 	// TODO: make sure need normalize here - extra operation ? 

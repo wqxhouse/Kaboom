@@ -22,6 +22,6 @@ Material getMaterialFromGBuffer(vec4 RT0, vec4 RT1, vec4 RT2, float farPlane, ve
     m.metallic = RT1.z;
     m.translucency = RT0.w;
     m.baseColor = RT0.rgb;
-    
+
     return m;
 }

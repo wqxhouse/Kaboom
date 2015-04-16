@@ -211,5 +211,6 @@
     <None Include="..\Media\Shaders\lightPassQuad.vert">
       <Filter>Media\Shaders</Filter>
     </None>
+    <None Include="..\BugList.txt" />
   </ItemGroup>
 </Project>

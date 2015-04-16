@@ -112,6 +112,7 @@ void Core::configPasses()
 void Core::configGeometryPass()
 {
 	// Generate GBuffer in the forward pass
+	_geomRoot->setNodeMask(0x1);
 	_passes->addChild(_geomRoot);
 
 	// TODO: link GUI control
@@ -183,7 +184,13 @@ void Core::run()
 	// TODO: add switches using keyboard
 	configureViewerForMode(*_viewer, _passes, NULL, 1);
 	// _viewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
-	_viewer->run();
+//	_viewer->run();
+	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
+	_viewer->realize();
+	while (!_viewer->done())
+	{
+		_viewer->frame();
+	}
 }
 
 const Camera &Core::getMainCamera()
@@ -218,7 +225,21 @@ void Core::configSkyBox()
 	//	osgDB::readImageFile("Cubemap_snow/posz.jpg"), osgDB::readImageFile("Cubemap_snow/negz.jpg"));
 	
 	_skybox->addChild(geode.get());
+	_skybox->setNodeMask(0x2);
 	_passes->addChild(_skybox);
+
+	//osg::ref_ptr<osg::Camera> _skyBoxCam = new osg::Camera;
+	//osgFX::EffectCompositor::PassData passData;
+	//_passes->getPassData("LightPass", passData);
+	//osg::ref_ptr<osg::Camera> lightPassCam = passData.pass;
+	//osg::ref_ptr<osg::Texture> shadingBuffer = lightPassCam->getBufferAttachmentMap().begin()->second._texture.get();
+	//_skyBoxCam->attach(osg::Camera::COLOR_BUFFER, shadingBuffer);
+	//_skyBoxCam->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//_skyBoxCam->setRenderOrder(osg::Camera::PRE_RENDER);
+	//_skyBoxCam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
+	//_skyBoxCam->setReferenceFrame(osg::Transform::RELATIVE_RF);
+	//_skyBoxCam->addChild(_skybox);
+	//_sceneRoot->addChild(_skyBoxCam);
 }
 
 void Core::setEnvironmentMap(
