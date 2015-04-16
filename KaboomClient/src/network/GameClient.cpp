@@ -41,19 +41,19 @@ void GameClient::receive() {
 
         switch (emptyEvent.getOpcode()) {
         case EventOpcode::POSITION:
-            positionEvent.deserialize(&(networkData[i]));
+            positionEvent.deserialize(&networkData[i]);
             eventHandlerLookup->find(emptyEvent.getOpcode())->handle(positionEvent);
             break;
         case EventOpcode::ROTATION:
-            rotationEvent.deserialize(&(networkData[i]));
+            rotationEvent.deserialize(&networkData[i]);
             eventHandlerLookup->find(emptyEvent.getOpcode())->handle(rotationEvent);
             break;
         case EventOpcode::PLAYER_INPUT:
-            playerInputEvent.deserialize(&(networkData[i]));
+            playerInputEvent.deserialize(&networkData[i]);
             eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
             break;
 		case EventOpcode::PLAYER_SPAWN:
-			playerSpawnEvent.deserialize(&(networkData[i]));
+			playerSpawnEvent.deserialize(&networkData[i]);
 			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerSpawnEvent);
 			break;
 		default:
