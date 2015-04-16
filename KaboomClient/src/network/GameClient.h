@@ -11,7 +11,7 @@ public:
     GameClient(ConfigSettings *config, ClientEventHandlerLookup *eventHandlerLookup);
     ~GameClient();
 
-	void *receive();
+	void receive();
 
     void GameClient::sendMessage(const Event &evt);
 

@@ -1,29 +1,24 @@
 #pragma once
 
-#include <network/Event.h>
-#include <network/PlayerSpawnEvent.h>
-#include <network/PlayerInputEvent.h>
-#include <network/PositionEvent.h>
-#include <network/RotationEvent.h>
-
+#include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 #include "NetworkData.h"
 #include "NetworkServices.h"
 
 #include "../core/Game.h"
 
-
 class Game;
+class ServerEventHandlerLookup;
 
 class GameServer {
 public:
 
-    GameServer(ConfigSettings *);
+    GameServer(ConfigSettings *, Game *game);
     ~GameServer();
 
     bool acceptNewClient();
 
-    void receiveFromClients(Game *game);
+    void receive();
 
 	void sendActionPackets();
 
@@ -40,6 +35,7 @@ public:
 	void sendPlayerPositionEvent(ServerPlayer *);
 
 private:
+    ServerEventHandlerLookup *eventHandlerLookup;
 
 	// IDs for the clients connecting for table in ServerNetwork 
 	static unsigned int client_id;
@@ -49,7 +45,6 @@ private:
 
 	// data buffer
 	char network_data[MAX_PACKET_SIZE];
-
 
 	std::map<int, int> playerIndexNum;
 

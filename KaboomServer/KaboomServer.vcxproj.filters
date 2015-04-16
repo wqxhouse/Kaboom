@@ -75,6 +75,9 @@
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\ServerEventHandlerLookup.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\util\ConfigSettings.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="src\network\PlayerInputEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ServerEventHandlerLookup.h">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

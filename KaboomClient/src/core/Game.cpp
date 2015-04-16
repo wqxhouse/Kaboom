@@ -22,12 +22,6 @@ Game::Game(ConfigSettings *config)
     viewer.setUpViewInWindow(100, 100, screen_width, screen_height);
 
     viewer.setSceneData(rootNode);
-
-    Player *player1 = playerFactory.createPlayer(0, 0, 0);
-    Player *player2 = playerFactory.createPlayer(0, 0, 0);
-
-    addSceneNodeEntity(player1);
-    addSceneNodeEntity(player2);
 }
 
 Game::~Game() {

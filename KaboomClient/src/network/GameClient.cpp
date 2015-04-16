@@ -17,11 +17,11 @@ GameClient::~GameClient() {
     delete network;
 }
 
-void *GameClient::receive() {
+void GameClient::receive() {
     int len = network->receivePackets(networkData);
 
     if (len <= 0) {
-        return nullptr;
+        return;
     }
 
     EmptyEvent emptyEvent;
@@ -58,13 +58,11 @@ void *GameClient::receive() {
 			break;
 		default:
 			printf("error in packet event types\n");
-			return nullptr;
+			return;
 		}
 
 		i += emptyEvent.getByteSize();
 	}
-
-	return nullptr;
 }
 
 void GameClient::sendMessage(const Event &evt) {
