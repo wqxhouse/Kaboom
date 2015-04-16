@@ -8,19 +8,13 @@ public:
     RotationEvent(unsigned int entityId, float yaw, float pitch);
     ~RotationEvent();
 
-
     const unsigned int &getEntityId() const;
 
     const float &getYaw() const;
     const float &getPitch() const;
 
-	void serialize(char * buf) {
-		memcpy(buf, this, sizeof(RotationEvent));
-	}
-
-	void deserialize(char * buf) {
-		memcpy(this, buf, sizeof(RotationEvent));
-	}
+    virtual void serialize(char *buf);
+    virtual void deserialize(char *buf);
 
 private:
     unsigned int entityId;

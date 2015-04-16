@@ -1,12 +1,11 @@
 #include "PositionEvent.h"
 
-PositionEvent::PositionEvent() :
-entityId(0),
-x(0.0),
-y(0.0),
-z(0.0) {
-}
+#include <string>
 
+PositionEvent::PositionEvent() {
+    eventOpcode = EventOpcode::POSITION;
+    byteSize = sizeof(PositionEvent);
+}
 
 PositionEvent::PositionEvent(unsigned int entityId, float x, float y, float z)
     : entityId(entityId),
@@ -20,8 +19,6 @@ PositionEvent::PositionEvent(unsigned int entityId, float x, float y, float z)
 
 PositionEvent::~PositionEvent() {
 }
-
-
 
 const unsigned int &PositionEvent::getEntityId() const {
     return entityId;
@@ -37,4 +34,12 @@ const float &PositionEvent::getY() const {
 
 const float &PositionEvent::getZ() const {
     return z;
+}
+
+void PositionEvent::serialize(char *buf) {
+    memcpy(buf, this, sizeof(PositionEvent));
+}
+
+void PositionEvent::deserialize(char *buf) {
+    memcpy(this, buf, sizeof(PositionEvent));
 }

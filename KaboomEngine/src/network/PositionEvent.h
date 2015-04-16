@@ -4,10 +4,9 @@
 
 class PositionEvent : public Event {
 public:
-	PositionEvent();
+    PositionEvent();
     PositionEvent(unsigned int entityId, float x, float y, float z);
     ~PositionEvent();
-
 
     const unsigned int &getEntityId() const;
 
@@ -15,13 +14,8 @@ public:
     const float &getY() const;
     const float &getZ() const;
 
-	void serialize(char * buf) {
-		memcpy(buf, this, sizeof(PositionEvent));
-	}
-
-	void deserialize(char * buf) {
-		memcpy(this, buf, sizeof(PositionEvent));
-	}
+    virtual void serialize(char *buf);
+    virtual void deserialize(char *buf);
 
 private:
     unsigned int entityId;

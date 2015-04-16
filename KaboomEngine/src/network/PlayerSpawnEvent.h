@@ -4,10 +4,9 @@
 
 class PlayerSpawnEvent : public Event {
 public:
-	PlayerSpawnEvent();
+    PlayerSpawnEvent();
     PlayerSpawnEvent(unsigned int playerId, float x, float y, float z);
     ~PlayerSpawnEvent();
-
 
     const unsigned int &getPlayerId() const;
 
@@ -15,14 +14,8 @@ public:
     const float &getY() const;
     const float &getZ() const;
 
-	void serialize(char * buf) {
-		memcpy(buf, this, sizeof(PlayerSpawnEvent));
-	}
-
-	void deserialize(char * buf) {
-		memcpy(this, buf, sizeof(PlayerSpawnEvent));
-	}
-
+    virtual void serialize(char *buf);
+    virtual void deserialize(char *buf);
 
 private:
     unsigned int playerId;
