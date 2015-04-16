@@ -15,7 +15,7 @@ public:
 
     void loadConfig();
 
-protected:
+private:
     static bool movingForward;
     static bool movingBackward;
     static bool movingLeft;
@@ -32,6 +32,8 @@ protected:
     static void moveRightUp();
     static void jumpDown();
     static void jumpUp();
+
+    static void sendPlayerInputEvent();
 
     osg::ref_ptr<KeyboardEventHandler> keyboardHandler;
 };

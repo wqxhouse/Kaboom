@@ -2,19 +2,16 @@
 
 #include <string>
 
-PositionEvent::PositionEvent() {
-    eventOpcode = EventOpcode::POSITION;
-    byteSize = sizeof(PositionEvent);
+PositionEvent::PositionEvent()
+    : Event(EventOpcode::POSITION, sizeof(PositionEvent)) {
 }
 
 PositionEvent::PositionEvent(unsigned int entityId, float x, float y, float z)
-    : entityId(entityId),
+    : Event(EventOpcode::POSITION, sizeof(PositionEvent)),
+    entityId(entityId),
     x(x),
     y(y),
     z(z) {
-
-	eventOpcode = EventOpcode::POSITION;
-	byteSize = sizeof(PositionEvent);
 }
 
 PositionEvent::~PositionEvent() {
@@ -36,7 +33,7 @@ const float &PositionEvent::getZ() const {
     return z;
 }
 
-void PositionEvent::serialize(char *buf) {
+void PositionEvent::serialize(char *buf) const {
     memcpy(buf, this, sizeof(PositionEvent));
 }
 

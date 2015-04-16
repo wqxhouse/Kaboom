@@ -13,7 +13,7 @@ public:
     const float &getYaw() const;
     const float &getPitch() const;
 
-    virtual void serialize(char *buf);
+    virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);
 
 private:

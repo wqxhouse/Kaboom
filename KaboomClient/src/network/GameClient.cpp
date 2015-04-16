@@ -1,4 +1,10 @@
-#include "GameClient.h" 
+#include "GameClient.h"
+
+#include <network/EmptyEvent.h>
+#include <network/PlayerInputEvent.h>
+#include <network/PlayerSpawnEvent.h>
+#include <network/PositionEvent.h>
+#include <network/RotationEvent.h>
 
 #include "NetworkServices.h"
 
@@ -18,17 +24,17 @@ void *GameClient::receive() {
         return nullptr;
     }
 
-    Event emptyEvent;
-    PlayerSpawnEvent playerSpawnEvent;
-    PlayerInputEvent playerInputEvent;
+    EmptyEvent emptyEvent;
     PositionEvent positionEvent;
     RotationEvent rotationEvent;
+    PlayerSpawnEvent playerSpawnEvent;
+    PlayerInputEvent playerInputEvent;
 	
 	printf("received len %d\n", len);
 
 	unsigned int i = 0;
 	while (i < (unsigned int)len) {
-		emptyEvent.deserialize(&(networkData[i]));
+		emptyEvent.deserialize(&networkData[i]);
 
 		printf("eventType is %d\n", emptyEvent.getOpcode());
 		printf("byteSize is %d\n", emptyEvent.getByteSize());
@@ -61,18 +67,13 @@ void *GameClient::receive() {
 	return nullptr;
 }
 
-void GameClient::sendMoveEvent(bool movingForward, bool movingBackward, bool movingLeft, bool movingRight) {
-    const unsigned int size = sizeof(MoveEvent);
-    char data[size];
-	cout << "enter the sendMoveEvent" << endl;
-    MoveEvent packet;
-	packet.packet_type = MOVE_EVENT;
-    packet.movingForward = movingForward;
-    packet.movingBackward = movingBackward;
-    packet.movingLeft = movingLeft;
-    packet.movingRight = movingRight;
+void GameClient::sendMessage(const Event &evt) {
+    const int &size = evt.getByteSize();
+    char *data = new char[size];
 
-    packet.serialize(data);
+    evt.serialize(data);
 
     NetworkServices::sendMessage(network->clientSocket, data, size);
+
+    delete data;
 }

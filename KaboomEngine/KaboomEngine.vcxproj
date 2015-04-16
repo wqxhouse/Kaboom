@@ -122,9 +122,11 @@
     <ClInclude Include="src\core\Player.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
     <ClInclude Include="src\core\RotationComponent.h" />
+    <ClInclude Include="src\network\EmptyEvent.h" />
     <ClInclude Include="src\network\Event.h" />
     <ClInclude Include="src\network\EventHandler.h" />
     <ClInclude Include="src\network\EventHandlerLookup.h" />
+    <ClInclude Include="src\network\NetworkData.h" />
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
     <ClInclude Include="src\network\RotationEvent.h" />
@@ -137,6 +139,7 @@
     <ClCompile Include="src\core\Player.cpp" />
     <ClCompile Include="src\core\PositionComponent.cpp" />
     <ClCompile Include="src\core\RotationComponent.cpp" />
+    <ClCompile Include="src\network\EmptyEvent.cpp" />
     <ClCompile Include="src\network\Event.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />
     <ClCompile Include="src\network\PlayerInputEvent.cpp" />

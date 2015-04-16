@@ -2,9 +2,8 @@
 
 #include <string>
 
-PlayerInputEvent::PlayerInputEvent() {
-    eventOpcode = EventOpcode::PLAYER_INPUT;
-    byteSize = sizeof(PlayerInputEvent);
+PlayerInputEvent::PlayerInputEvent()
+    : Event(EventOpcode::PLAYER_INPUT, sizeof(PlayerInputEvent)) {
 }
 
 PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
@@ -15,8 +14,9 @@ PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
     bool jumping,
     bool firing,
     float yaw,
-    float pitch) :
-	playerId(playerId),
+    float pitch)
+    : Event(EventOpcode::PLAYER_INPUT, sizeof(PlayerInputEvent)), 
+    playerId(playerId),
     movingForward(movingForward),
     movingBackward(movingBackward),
     movingLeft(movingLeft),
@@ -25,9 +25,6 @@ PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
     firing(firing),
     yaw(yaw),
     pitch(pitch) {
-
-	eventOpcode = EventOpcode::PLAYER_INPUT;
-	byteSize = sizeof(PlayerInputEvent);
 }
 
 PlayerInputEvent::~PlayerInputEvent() {
@@ -69,7 +66,7 @@ const float &PlayerInputEvent::getPitch() const {
     return pitch;
 }
 
-void PlayerInputEvent::serialize(char *buf) {
+void PlayerInputEvent::serialize(char *buf) const {
     memcpy(buf, this, sizeof(PlayerInputEvent));
 }
 

@@ -43,8 +43,6 @@ void Game::run() {
     while (!viewer.done()) {
         g_client->receive();
         viewer.frame();
-
-        //delete gameState;
     }
 }
 

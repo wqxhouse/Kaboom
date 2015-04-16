@@ -2,19 +2,16 @@
 
 #include <string>
 
-PlayerSpawnEvent::PlayerSpawnEvent() {
-    eventOpcode = EventOpcode::PLAYER_SPAWN;
-    byteSize = sizeof(PlayerSpawnEvent);
+PlayerSpawnEvent::PlayerSpawnEvent()
+    : Event(EventOpcode::PLAYER_SPAWN, sizeof(PlayerSpawnEvent)) {
 }
 
 PlayerSpawnEvent::PlayerSpawnEvent(unsigned int playerId, float x, float y, float z)
-    : playerId(playerId),
+    : Event(EventOpcode::PLAYER_SPAWN, sizeof(PlayerSpawnEvent)),
+    playerId(playerId),
     x(x),
     y(y),
     z(z) {
-
-	eventOpcode = EventOpcode::PLAYER_SPAWN;
-	byteSize = sizeof(PlayerSpawnEvent);
 }
 
 PlayerSpawnEvent::~PlayerSpawnEvent() {
@@ -36,7 +33,7 @@ const float &PlayerSpawnEvent::getZ() const {
     return z;
 }
 
-void PlayerSpawnEvent::serialize(char * buf) {
+void PlayerSpawnEvent::serialize(char * buf) const {
     memcpy(buf, this, sizeof(PlayerSpawnEvent));
 }
 

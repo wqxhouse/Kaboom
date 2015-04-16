@@ -151,7 +151,6 @@
     <ClInclude Include="src\network\ClientEventHandlerLookup.h" />
     <ClInclude Include="src\network\GameClient.h" />
     <ClInclude Include="src\network\ClientNetwork.h" />
-    <ClInclude Include="src\network\NetworkData.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerSpawnEventHandler.h" />
     <ClInclude Include="src\network\PositionEventHandler.h" />
