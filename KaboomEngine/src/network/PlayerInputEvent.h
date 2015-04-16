@@ -4,6 +4,7 @@
 
 class PlayerInputEvent : public Event {
 public:
+	PlayerInputEvent();
     PlayerInputEvent(unsigned int playerId,
         bool movingForward,
         bool movingBackward,
@@ -14,8 +15,6 @@ public:
         float yaw,
         float pitch);
     ~PlayerInputEvent();
-
-    virtual EventOpcode getOpcode() const;
 
     const unsigned int &getPlayerId() const;
 
@@ -30,6 +29,15 @@ public:
 
     const float &getYaw() const;
     const float &getPitch() const;
+
+	void serialize(char * buf) {
+		memcpy(buf, this, sizeof(PlayerInputEvent));
+	}
+
+	void deserialize(char * buf) {
+		memcpy(this, buf, sizeof(PlayerInputEvent));
+	}
+
 
 private:
     unsigned int playerId;

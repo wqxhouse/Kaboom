@@ -1,7 +1,5 @@
 #include "GameClient.h" 
 
-#include <network/PositionEvent.h>
-
 #include "NetworkServices.h"
 
 GameClient::GameClient(ConfigSettings *config, ClientEventHandlerLookup *eventHandlerLookup) :
@@ -14,7 +12,7 @@ GameClient::~GameClient() {
 }
 
 GameStateData *GameClient::receive() {
-    Packet packet;
+    //Packet packet;
 
     int len = network->receivePackets(networkData);
 
@@ -22,15 +20,61 @@ GameStateData *GameClient::receive() {
         return nullptr;
     }
 
-	GameStateData *gameStateData = new GameStateData();
-	GameStateUpdateEvent gameStateUpdateEvent; 
-	AssignEvent as;
+	Event emptyEvent = Event();
+	PlayerSpawnEvent playerSpawnEvent = PlayerSpawnEvent();
+	PlayerInputEvent playerInputEvent = PlayerInputEvent();
+	PositionEvent positionEvent = PositionEvent();
+	RotationEvent rotationEvent = RotationEvent();
 
-	bool recievedGameStateUpdateEvent = false;
+	
+	//GameStateData *gameStateData = new GameStateData();
+	//GameStateUpdateEvent gameStateUpdateEvent; 
+	//AssignEvent as;
+
+	//bool recievedGameStateUpdateEvent = false;
+	printf("received len %d\n", len);
 
 	unsigned int i = 0;
 	while (i < (unsigned int)len) {
+		emptyEvent.deserialize(&(networkData[i]));
 
+		printf("eventType is %d\n", emptyEvent.getOpcode());
+		printf("byteSize is %d\n", emptyEvent.getByteSize());
+
+
+		switch (emptyEvent.getOpcode()) {
+		case EventOpcode::PLAYER_SPAWN:
+
+			playerSpawnEvent.deserialize(&(networkData[i]));
+			/*
+			printf("getPlayerId is %d\n", playerSpawnEvent.getPlayerId());
+			printf("getX is %f\n", playerSpawnEvent.getX());
+			printf("getY is %f\n", playerSpawnEvent.getY());
+			printf("getZ is %f\n", playerSpawnEvent.getZ());*/
+			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerSpawnEvent);
+			
+			break;
+
+		case EventOpcode::PLAYER_INPUT:
+			playerInputEvent.deserialize(&(networkData[i]));
+			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
+			break;
+		case EventOpcode::POSITION:
+			positionEvent.deserialize(&(networkData[i]));
+			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(positionEvent);
+
+			break;
+		case EventOpcode::ROTATION:
+			rotationEvent.deserialize(&(networkData[i]));
+			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(rotationEvent);
+			break;
+		default:
+			printf("error in packet event types\n");
+			return nullptr;
+		}
+
+
+		/*
 		printf("received len %d\n", len);
 		packet.deserialize(&(networkData[i]));
 
@@ -77,18 +121,20 @@ GameStateData *GameClient::receive() {
 			printf("error in packet types\n");
 			return nullptr;
 		}
-
-		i += packet.packet_size;
-		printf("new i is %d\n", i);
+		*/
+		i += emptyEvent.getByteSize();
+		//printf("new i is %d\n", i);
 	}
-
+	/*
 	if (recievedGameStateUpdateEvent) {
 		return gameStateData;
 	}
 	else {
 		delete gameStateData;
         return nullptr;
-	}
+	}*/
+
+	return nullptr;
 }
 
 void GameClient::sendMoveEvent(bool movingForward, bool movingBackward, bool movingLeft, bool movingRight) {

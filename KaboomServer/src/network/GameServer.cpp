@@ -159,13 +159,10 @@ void GameServer::sendActionPackets() {
 void GameServer::sendGameStatePackets(Game *game) {
     gameStateUpdateEvent.numOfPlayers = game->players.size();
 
-    for (int i = 0; i < game->players.size(); i++) {
-        gameStateUpdateEvent.playerList[i].client_id = game->players[i]->getId();
-        gameStateUpdateEvent.playerList[i].x = game->players[i]->getX();
-        gameStateUpdateEvent.playerList[i].y = game->players[i]->getY();
-        gameStateUpdateEvent.playerList[i].z = game->players[i]->getZ();
+	for (ServerPlayer* player : game->players) {
+		sendPlayerPositionEvent(player);
 	}
-
+	/*
     // send action packet
     const unsigned int packet_size = sizeof(GameStateUpdateEvent);
     char packet_data[packet_size];
@@ -173,7 +170,8 @@ void GameServer::sendGameStatePackets(Game *game) {
 	gameStateUpdateEvent.serialize(packet_data);
 
     network->sendToAll(packet_data, packet_size);
-
+	*/
+	//send position, send input
 }
 
 void GameServer::sendAssignPackets(int client_id) {
@@ -187,3 +185,32 @@ void GameServer::sendAssignPackets(int client_id) {
 
 	network->sendToOneClient(packet_data,packet_size,client_id);
 }
+
+
+void GameServer::sendPlayerSpawnEvent(ServerPlayer* serverPlayer) {
+
+	PlayerSpawnEvent playerSpawnEvent(serverPlayer->getId(), serverPlayer->getX(), serverPlayer->getY(), serverPlayer->getZ());
+
+	const unsigned int packet_size = sizeof(PlayerSpawnEvent);
+	char packet_data[packet_size];
+
+	playerSpawnEvent.serialize(packet_data);
+	network->sendToAll(packet_data, packet_size);
+}
+
+void GameServer::sendPlayerPositionEvent(ServerPlayer* serverPlayer) {
+	PositionEvent positionEvent(serverPlayer->getId(), serverPlayer->getX(), serverPlayer->getY(), serverPlayer->getZ());
+
+	const unsigned int packet_size = sizeof(PositionEvent);
+	char packet_data[packet_size];
+
+	positionEvent.serialize(packet_data);
+	network->sendToAll(packet_data, packet_size);
+
+}
+/*
+void GameServer::sendPlayerInputEvent(ServerPlayer* serverPlayer, MoveEvent * moveEvent) {
+
+	PlayerInputEvent
+
+}*/

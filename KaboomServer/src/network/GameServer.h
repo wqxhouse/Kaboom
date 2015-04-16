@@ -1,10 +1,17 @@
 #pragma once
 
+#include <network/Event.h>
+#include <network/PlayerSpawnEvent.h>
+#include <network/PlayerInputEvent.h>
+#include <network/PositionEvent.h>
+#include <network/RotationEvent.h>
+
 #include "ServerNetwork.h"
 #include "NetworkData.h"
 #include "NetworkServices.h"
 
 #include "../core/Game.h"
+
 
 class Game;
 
@@ -25,6 +32,12 @@ public:
     void sendGameStatePackets(Game *game);
 
 	void sendAssignPackets(int);
+
+	void sendPlayerSpawnEvent(ServerPlayer *);
+
+	void sendPlayerInputEvent(ServerPlayer *, MoveEvent *);
+
+	void sendPlayerPositionEvent(ServerPlayer *);
 
 private:
 

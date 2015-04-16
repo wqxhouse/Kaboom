@@ -46,10 +46,22 @@ void Game::addPhysicsEntity(Entity *entity) {
 }
 
 void Game::update(float timeStep) {
+
+	//HERE is where the client first connect to server, we want to have client load the gameworld first, then create the player, and send the spawn player event to client
     if (server->acceptNewClient()) {
+
+		//now we create a new player
         ServerPlayer *player = playerFactory.createPlayer(0, 0, 5);
         players.push_back(player);
         addPhysicsEntity(player);
+
+
+		//first have the client first preload the information about the world
+		server->sendGameStatePackets(this);
+
+		//notify client, a player spawn occurs
+		//server->sendPlayerSpawnEvent(player);
+		
     }
 
     server->receiveFromClients(this);

@@ -1,15 +1,39 @@
 #pragma once
 
+#include <string.h>
+
 enum EventOpcode {
-    POSITION = 0,
-    ROTATION = 1,
-    PLAYER_INPUT = 2,
-    PLAYER_SPAWN = 3
+	EMPTY = 0,
+    POSITION = 1,
+    ROTATION = 2,
+    PLAYER_INPUT = 3,
+    PLAYER_SPAWN = 4
 };
 
 class Event {
 public:
-    virtual ~Event() {}
+	Event() {
+		eventOpcode = EventOpcode::EMPTY;
+		byteSize = sizeof(Event);
+	}
+    ~Event() {}
 
-    virtual EventOpcode getOpcode() const = 0;
+	EventOpcode eventOpcode;
+	unsigned int byteSize;
+
+	EventOpcode getOpcode() const {
+		return eventOpcode;
+	};
+
+	const unsigned int getByteSize() const {
+		return byteSize;
+	};
+
+	void serialize(char* buf) {
+		memcpy(buf, this, sizeof(Event));
+	};
+
+	void deserialize(char * buf) {
+		memcpy(this, buf, sizeof(Event));
+	}
 };

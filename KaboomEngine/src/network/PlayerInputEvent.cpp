@@ -1,5 +1,17 @@
 #include "PlayerInputEvent.h"
 
+PlayerInputEvent::PlayerInputEvent() :
+	playerId(0),
+	movingForward(false),
+	movingBackward(false),
+	movingLeft(false),
+	movingRight(false),
+	jumping(false),
+	firing(false),
+	yaw(false),
+	pitch(false) {
+}
+
 PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
     bool movingForward,
     bool movingBackward,
@@ -9,6 +21,7 @@ PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
     bool firing,
     float yaw,
     float pitch) :
+	playerId(playerId),
     movingForward(movingForward),
     movingBackward(movingBackward),
     movingLeft(movingLeft),
@@ -17,14 +30,14 @@ PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
     firing(firing),
     yaw(yaw),
     pitch(pitch) {
+
+	eventOpcode = EventOpcode::PLAYER_INPUT;
+	byteSize = sizeof(PlayerInputEvent);
 }
 
 PlayerInputEvent::~PlayerInputEvent() {
 }
 
-EventOpcode PlayerInputEvent::getOpcode() const {
-    return EventOpcode::PLAYER_INPUT;
-}
 
 const unsigned int &PlayerInputEvent::getPlayerId() const {
     return playerId;

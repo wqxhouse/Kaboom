@@ -41,19 +41,19 @@ void Game::run() {
     setupCamera();
 
     while (!viewer.done()) {
-        GameStateData *gameState = g_client->receive();
-
+        g_client->receive();
+		/*
         if (gameState != nullptr) {
             ClientPlayer *player1 = static_cast<ClientPlayer *>(entityManager.getEntity(0));
             ClientPlayer *player2 = static_cast<ClientPlayer *>(entityManager.getEntity(1));
 
             player1->setPosition(gameState->x1, gameState->y1, gameState->z1);
             player2->setPosition(gameState->x2, gameState->y2, gameState->z2);
-        }
+        }*/
 
         viewer.frame();
 
-        delete gameState;
+        //delete gameState;
     }
 }
 
