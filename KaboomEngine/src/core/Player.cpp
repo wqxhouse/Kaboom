@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "PositionComponent.h"
+#include "RotationComponent.h"
 
 Player::Player(unsigned int id)
     : Entity(id) {
@@ -35,4 +36,24 @@ void Player::setZ(float z) {
 
 void Player::setPosition(float x, float y, float z) {
     getComponent<PositionComponent>()->setPosition(x, y, z);
+}
+
+float Player::getYaw() const {
+    return getComponent<RotationComponent>()->getYaw();
+}
+
+float Player::getPitch() const {
+    return getComponent<RotationComponent>()->getPitch();
+}
+
+void Player::setYaw(float yaw) {
+    getComponent<RotationComponent>()->setYaw(yaw);
+}
+
+void Player::setPitch(float pitch) {
+    getComponent<RotationComponent>()->setPitch(pitch);
+}
+
+void Player::setRotation(float yaw, float pitch) {
+    getComponent<RotationComponent>()->setRotation(yaw, pitch);
 }

@@ -121,6 +121,7 @@
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\Player.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
+    <ClInclude Include="src\core\RotationComponent.h" />
     <ClInclude Include="src\network\Event.h" />
     <ClInclude Include="src\network\EventHandler.h" />
     <ClInclude Include="src\network\EventHandlerLookup.h" />
@@ -135,6 +136,7 @@
     <ClCompile Include="src\core\EntityManager.cpp" />
     <ClCompile Include="src\core\Player.cpp" />
     <ClCompile Include="src\core\PositionComponent.cpp" />
+    <ClCompile Include="src\core\RotationComponent.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />
     <ClCompile Include="src\network\PlayerInputEvent.cpp" />
     <ClCompile Include="src\network\PositionEvent.cpp" />
