@@ -9,26 +9,16 @@ EntityManager::EntityManager() {
 EntityManager::~EntityManager() {
 }
 
-Entity *EntityManager::createEntity() {
-    while (isEntityAlive(nextId)) {
-        ++nextId;
-    }
-
-    return createEntity(nextId++);
-}
-
-Entity *EntityManager::createEntity(unsigned int id) {
-    if (isEntityAlive(id)) {
+Entity *EntityManager::addEntity(Entity *entity) {
+    if (isEntityAlive(entity->getId())) {
         std::ostringstream error;
-        error << "Unable to create entity with ID " << id << "." << std::endl;
+        error << "Unable to add entity with ID " << entity->getId() << "." << std::endl;
         error << "Entity with this ID is already alive." << std::endl;
 
         throw std::runtime_error(error.str());
     }
 
-    Entity *entity = new Entity(id);
-
-    entities[id] = entity;
+    entities[entity->getId()] = entity;
 
     return entity;
 }
@@ -54,4 +44,12 @@ Entity *EntityManager::getEntity(unsigned int id) const {
 
 bool EntityManager::isEntityAlive(unsigned int id) const {
     return entities.count(id) > 0;
+}
+
+unsigned int EntityManager::generateId() {
+    while (isEntityAlive(nextId)) {
+        ++nextId;
+    }
+
+    return nextId++;
 }

@@ -9,15 +9,18 @@ public:
     EntityManager();
     ~EntityManager();
 
-    Entity *createEntity();
-    Entity *createEntity(unsigned int id);
+    Entity *addEntity(Entity *entity);
 
     void destroyEntity(unsigned int id);
 
     Entity *getEntity(unsigned int id) const;
+
     bool isEntityAlive(unsigned int id) const;
+
+    unsigned int generateId();
 
 private:
     std::unordered_map<unsigned int, Entity *> entities;
     unsigned int nextId;
+
 };
