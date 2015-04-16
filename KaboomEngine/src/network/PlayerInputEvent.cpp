@@ -30,27 +30,27 @@ const unsigned int &PlayerInputEvent::getPlayerId() const {
     return playerId;
 }
 
-const bool &PlayerInputEvent::getMovingForward() const {
+const bool &PlayerInputEvent::isMovingForward() const {
     return movingForward;
 }
 
-const bool &PlayerInputEvent::getMovingBackward() const {
+const bool &PlayerInputEvent::isMovingBackward() const {
     return movingBackward;
 }
 
-const bool &PlayerInputEvent::getMovingLeft() const {
+const bool &PlayerInputEvent::isMovingLeft() const {
     return movingLeft;
 }
 
-const bool &PlayerInputEvent::getMovingRight() const {
+const bool &PlayerInputEvent::isMovingRight() const {
     return movingRight;
 }
 
-const bool &PlayerInputEvent::getJumping() const {
+const bool &PlayerInputEvent::isJumping() const {
     return jumping;
 }
 
-const bool &PlayerInputEvent::getFiring() const {
+const bool &PlayerInputEvent::isFiring() const {
     return firing;
 }
 

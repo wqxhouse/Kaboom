@@ -19,14 +19,14 @@ public:
 
     const unsigned int &getPlayerId() const;
 
-    const bool &getMovingForward() const;
-    const bool &getMovingBackward() const;
-    const bool &getMovingLeft() const;
-    const bool &getMovingRight() const;
+    const bool &isMovingForward() const;
+    const bool &isMovingBackward() const;
+    const bool &isMovingLeft() const;
+    const bool &isMovingRight() const;
 
-    const bool &getJumping() const;
+    const bool &isJumping() const;
 
-    const bool &getFiring() const;
+    const bool &isFiring() const;
 
     const float &getYaw() const;
     const float &getPitch() const;
