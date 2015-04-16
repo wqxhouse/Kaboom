@@ -50,8 +50,6 @@ private:
 	// data buffer
 	char network_data[MAX_PACKET_SIZE];
 
-	// This is the game state data we send over the network
-    GameStateUpdateEvent gameStateUpdateEvent;
 
 	std::map<int, int> playerIndexNum;
 

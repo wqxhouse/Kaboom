@@ -15,7 +15,6 @@ GameServer::GameServer(ConfigSettings * config) {
 	int maxPlayers;
 	config->getValue(ConfigSettings::str_max_client, maxPlayers);
 
-	//gameStateUpdateEvent.packet_type = GAME_STATE_UPDATE_EVENT; TODO
 
 }
 
@@ -33,42 +32,6 @@ bool GameServer::acceptNewClient() {
 
     return false;
 }
-/*
-void GameServer::update() {
-    // get new clients
-    if (network->acceptNewClient(client_id)) {
-
-		//check if maxPlayer is reached TODO
-		gameStateData.connectedPlayers += 1;
-		PlayerData playerData;
-
-		//spawn point, and initial velocity TODO
-		playerData.client_id = client_id;
-		playerData.x = playerData.y = playerData.z = playerData.vx = playerData.vy = playerData.vz = 1.1;
-
-		gameStateData.playerDataList.push_back(playerData);
-
-		NetworkPlayerData netPlayerData;
-		netPlayerData.client_id = client_id;
-		netPlayerData.x = netPlayerData.y = netPlayerData.z = 1.1;
-		
-		gameStateUpdateEvent.addToPlayerList(netPlayerData);
-
-		//cout << gameStateUpdateEvent.playerList[0].x << endl;
-		//printf("*** x %f\n", gameState.playerList[0].x);
-		//printf("*** y %f\n", gameState.playerList[0].y);
-		//printf("*** z %f\n", gameState.playerList[0].z);
-		
-		sendAssignPackets(client_id);
-
-        client_id++;
-    }
-
-    receiveFromClients();
-
-	//updateGameLogic 
-}
-*/
 void GameServer::receiveFromClients(Game *game) {
     Packet packet;
 
@@ -100,7 +63,6 @@ void GameServer::receiveFromClients(Game *game) {
 			case MOVE_EVENT:
 				moveEvent.deserialize(&(network_data[i]));
 
-				//gameStateData.playerDataList[iter->first].setMove(moveEvent);
 
 				//printf("<Server> data length: %d\n", data_length);
 				//printf("<Server>packet length is %d\n", data_length);
@@ -157,20 +119,10 @@ void GameServer::sendActionPackets() {
 }
 
 void GameServer::sendGameStatePackets(Game *game) {
-    gameStateUpdateEvent.numOfPlayers = game->players.size();
 
 	for (ServerPlayer* player : game->players) {
 		sendPlayerPositionEvent(player);
 	}
-	/*
-    // send action packet
-    const unsigned int packet_size = sizeof(GameStateUpdateEvent);
-    char packet_data[packet_size];
-
-	gameStateUpdateEvent.serialize(packet_data);
-
-    network->sendToAll(packet_data, packet_size);
-	*/
 	//send position, send input
 }
 

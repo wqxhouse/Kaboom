@@ -117,34 +117,3 @@ struct NetworkPlayerData{
 	float y;
 	float z;
 };
-
-struct GameStateUpdateEvent : Packet {
-	//int packetSize = 8;
-
-	int numOfPlayers = 0;
-	NetworkPlayerData playerList[4];
-	//	int numOfBombs;
-	//	std::vector<Bomb> bombList;
-
-	void serialize(char * data) {
-		packet_type = GAME_STATE_UPDATE_EVENT;
-		packet_size = sizeof(GameStateUpdateEvent);
-		//printf("serialize size %d\n", packet_size);
-		//printf("size of playerData%d\n", sizeof(NetworkPlayerData));
-		memcpy(data, this, sizeof(GameStateUpdateEvent));
-	}
-	void deserialize(char * data) {
-		memcpy(this, data, sizeof(GameStateUpdateEvent));
-		/*memcpy(data, &packetSize, 4);
-		memcpy(data + 4, &numOfPlayers, 4);
-		for (int i = 0; i < numOfPlayers; i++){
-		memcpy(data + 8 + i*(sizeof(AlmostPlayerData)), &playerList[i], sizeof(AlmostPlayerData));
-		}*/
-	}
-
-	void addToPlayerList(NetworkPlayerData playerData){
-		playerList[numOfPlayers] = playerData;
-		numOfPlayers++;
-		//packetSize = packetSize + sizeof(NetworkPlayerData);
-	}
-};
