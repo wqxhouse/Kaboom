@@ -22,9 +22,7 @@ void PositionEventHandler::handle(const Event &e) const {
     PositionComponent *positionCom = entity->getComponent<PositionComponent>();
 
     if (positionCom != nullptr) {
-        positionCom->setX(evt.getX());
-        positionCom->setY(evt.getY());
-        positionCom->setZ(evt.getZ());
+        positionCom->setPosition(evt.getX(), evt.getY(), evt.getZ());
     }
 
     SceneNodeComponent *sceneNodeCom = entity->getComponent<SceneNodeComponent>();
