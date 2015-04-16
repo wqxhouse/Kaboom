@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{33533d49-8f29-4bcf-b43f-02e3f3182554}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Network\Event Handlers">
+      <UniqueIdentifier>{6ef4bf98-dff4-4066-8ad1-0d6322443c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network\Event Handlers">
+      <UniqueIdentifier>{ffdfb9c0-917b-4b73-abe7-00699f14f478}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\util\ConfigSettings.cpp">
@@ -67,7 +73,7 @@
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -108,7 +114,7 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\network\PlayerInputEventHandler.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

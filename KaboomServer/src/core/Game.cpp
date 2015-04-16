@@ -55,10 +55,11 @@ void Game::update(float timeStep) {
     server->receiveFromClients(this);
 
     if (players.size() > 0) {
-        printf("<Server> Player 1 velocity1: %.2f, %.2f, %.2f\n",
-            players[0]->getVelocityX(),
-            players[0]->getVelocityY(),
-            players[0]->getVelocityZ());
+        players[0]->getRigidBody()->activate(true);
+    }
+
+    if (players.size() > 1) {
+        players[1]->getRigidBody()->activate(true);
     }
 
     world->stepSimulation(timeStep);
