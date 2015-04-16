@@ -4,7 +4,6 @@
 
 #include "ClientEventHandlerLookup.h"
 #include "ClientNetwork.h"
-#include "../core/GameStateData.h"
 
 class GameClient {
 public:

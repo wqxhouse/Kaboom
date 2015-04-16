@@ -6,7 +6,6 @@
 
 #include "../Global.h"
 #include "SceneNodeComponent.h"
-#include "GameStateData.h"
 
 Game::Game(ConfigSettings *config)
     : playerFactory(&entityManager),

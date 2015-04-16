@@ -141,7 +141,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\core\GameStateData.h" />
     <ClInclude Include="src\core\ClientPlayer.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />
     <ClInclude Include="src\core\SceneNodeComponent.h" />
