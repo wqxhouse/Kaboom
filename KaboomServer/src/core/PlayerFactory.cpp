@@ -17,13 +17,14 @@ ServerPlayer *PlayerFactory::createPlayer() const {
 
 ServerPlayer *PlayerFactory::createPlayer(float x, float y, float z) const {
     const btScalar mass = 1;
-    btMotionState *motionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(x, y, z)));
+
+    btTransform startTrans = btTransform::getIdentity();
+    startTrans.setOrigin(btVector3(x, y, z));
+
+    btMotionState *motionState = new btDefaultMotionState(startTrans);
     btCollisionShape *collisionShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
 
-    btVector3 localInertia;
-    collisionShape->calculateLocalInertia(mass, localInertia);
-
-    btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, localInertia);
+    btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
 
     Entity *entity = entityManager->createEntity();
     entity->attachComponent(new PositionComponent(x, y, z));
