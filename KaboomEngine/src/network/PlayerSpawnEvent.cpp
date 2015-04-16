@@ -10,7 +10,7 @@ PlayerSpawnEvent::PlayerSpawnEvent(unsigned int playerId, float x, float y, floa
 PlayerSpawnEvent::~PlayerSpawnEvent() {
 }
 
-unsigned char PlayerSpawnEvent::getOpcode() const {
+EventOpcode PlayerSpawnEvent::getOpcode() const {
     return EventOpcode::PLAYER_SPAWN;
 }
 

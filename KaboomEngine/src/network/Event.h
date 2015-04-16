@@ -3,12 +3,13 @@
 enum EventOpcode {
     POSITION = 0,
     ROTATION = 1,
-    PLAYER_SPAWN = 2,
+    PLAYER_INPUT = 2,
+    PLAYER_SPAWN = 3
 };
 
 class Event {
 public:
     virtual ~Event() {}
 
-    unsigned char getOpcode() const;
+    virtual EventOpcode getOpcode() const = 0;
 };

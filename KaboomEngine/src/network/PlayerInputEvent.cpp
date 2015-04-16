@@ -22,6 +22,10 @@ PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
 PlayerInputEvent::~PlayerInputEvent() {
 }
 
+EventOpcode PlayerInputEvent::getOpcode() const {
+    return EventOpcode::PLAYER_INPUT;
+}
+
 const unsigned int &PlayerInputEvent::getPlayerId() const {
     return playerId;
 }

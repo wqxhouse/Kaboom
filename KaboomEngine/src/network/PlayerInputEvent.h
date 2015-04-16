@@ -15,6 +15,8 @@ public:
         float pitch);
     ~PlayerInputEvent();
 
+    virtual EventOpcode getOpcode() const;
+
     const unsigned int &getPlayerId() const;
 
     const bool &getMovingForward() const;

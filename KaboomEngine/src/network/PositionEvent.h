@@ -7,7 +7,7 @@ public:
     PositionEvent(unsigned int entityId, float x, float y, float z);
     ~PositionEvent();
 
-    virtual unsigned char getOpcode() const;
+    virtual EventOpcode getOpcode() const;
 
     const unsigned int &getEntityId() const;
 

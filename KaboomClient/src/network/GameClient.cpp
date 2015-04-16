@@ -1,8 +1,11 @@
 #include "GameClient.h" 
 
+#include <network/PositionEvent.h>
+
 #include "NetworkServices.h"
 
-GameClient::GameClient(ConfigSettings *config) {
+GameClient::GameClient(ConfigSettings *config, ClientEventHandlerLookup *eventHandlerLookup) :
+    eventHandlerLookup(eventHandlerLookup) {
     network = new ClientNetwork(config);
 }
 
@@ -25,12 +28,11 @@ GameStateData *GameClient::receive() {
 
 	bool recievedGameStateUpdateEvent = false;
 
-	int i = 0;
+	unsigned int i = 0;
 	while (i < (unsigned int)len) {
 
 		printf("received len %d\n", len);
 		packet.deserialize(&(networkData[i]));
-
 
 		switch (packet.packet_type) {
 		case ASSIGN_EVENT:

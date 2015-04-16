@@ -10,7 +10,7 @@ PositionEvent::PositionEvent(unsigned int entityId, float x, float y, float z)
 PositionEvent::~PositionEvent() {
 }
 
-unsigned char PositionEvent::getOpcode() const {
+EventOpcode PositionEvent::getOpcode() const {
     return EventOpcode::POSITION;
 }
 

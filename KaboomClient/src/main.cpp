@@ -12,9 +12,9 @@ GameClient *g_client;
 int main() {
     ConfigSettings* config = ConfigSettings::config;
 
-    g_client = new GameClient(config);
-
     Game game(config);
+
+    g_client = new GameClient(config, game.getEventHandlerLookup());
 
     try {
         game.run();
