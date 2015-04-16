@@ -12,3 +12,17 @@ ClientPlayer::ClientPlayer(unsigned int id)
 
 ClientPlayer::~ClientPlayer() {
 }
+
+void ClientPlayer::setPosition(float x, float y, float z) {
+	setX(x);
+	setY(y);
+	setZ(z);
+	
+	osg::Group *rootNode = static_cast<osg::Group *>(getComponent<SceneNodeComponent>()->getNode());
+	osg::MatrixTransform *transformNode = static_cast<osg::MatrixTransform *>(rootNode->getChild(0));
+	
+	osg::Matrix transformMat;
+	transformMat.makeTranslate(x, y, z);
+	
+	transformNode->setMatrix(transformMat);
+}
