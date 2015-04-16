@@ -30,14 +30,8 @@ public:
     const float &getYaw() const;
     const float &getPitch() const;
 
-	void serialize(char * buf) {
-		memcpy(buf, this, sizeof(PlayerInputEvent));
-	}
-
-	void deserialize(char * buf) {
-		memcpy(this, buf, sizeof(PlayerInputEvent));
-	}
-
+    virtual void serialize(char *buf);
+    virtual void deserialize(char *buf);
 
 private:
     unsigned int playerId;

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string.h>
-
 enum EventOpcode {
 	EMPTY = 0,
     POSITION = 1,
@@ -12,28 +10,17 @@ enum EventOpcode {
 
 class Event {
 public:
-	Event() {
-		eventOpcode = EventOpcode::EMPTY;
-		byteSize = sizeof(Event);
-	}
-    ~Event() {}
+    Event();
+    ~Event();
 
-	EventOpcode eventOpcode;
-	unsigned int byteSize;
+    EventOpcode getOpcode() const;
 
-	EventOpcode getOpcode() const {
-		return eventOpcode;
-	};
+    const unsigned int getByteSize() const;
 
-	const unsigned int getByteSize() const {
-		return byteSize;
-	};
+    virtual void serialize(char *buf);
+    virtual void deserialize(char *buf);
 
-	void serialize(char* buf) {
-		memcpy(buf, this, sizeof(Event));
-	};
-
-	void deserialize(char * buf) {
-		memcpy(this, buf, sizeof(Event));
-	}
+protected:
+    EventOpcode eventOpcode;
+    unsigned int byteSize;
 };

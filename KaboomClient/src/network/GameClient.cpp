@@ -12,20 +12,17 @@ GameClient::~GameClient() {
 }
 
 void *GameClient::receive() {
-    //Packet packet;
-
     int len = network->receivePackets(networkData);
 
     if (len <= 0) {
         return nullptr;
     }
 
-	Event emptyEvent = Event();
-	PlayerSpawnEvent playerSpawnEvent = PlayerSpawnEvent();
-	PlayerInputEvent playerInputEvent = PlayerInputEvent();
-	PositionEvent positionEvent = PositionEvent();
-	RotationEvent rotationEvent = RotationEvent();
-
+    Event emptyEvent;
+    PlayerSpawnEvent playerSpawnEvent;
+    PlayerInputEvent playerInputEvent;
+    PositionEvent positionEvent;
+    RotationEvent rotationEvent;
 	
 	printf("received len %d\n", len);
 
@@ -36,28 +33,22 @@ void *GameClient::receive() {
 		printf("eventType is %d\n", emptyEvent.getOpcode());
 		printf("byteSize is %d\n", emptyEvent.getByteSize());
 
-
-		switch (emptyEvent.getOpcode()) {
+        switch (emptyEvent.getOpcode()) {
+        case EventOpcode::POSITION:
+            positionEvent.deserialize(&(networkData[i]));
+            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(positionEvent);
+            break;
+        case EventOpcode::ROTATION:
+            rotationEvent.deserialize(&(networkData[i]));
+            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(rotationEvent);
+            break;
+        case EventOpcode::PLAYER_INPUT:
+            playerInputEvent.deserialize(&(networkData[i]));
+            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
+            break;
 		case EventOpcode::PLAYER_SPAWN:
-
 			playerSpawnEvent.deserialize(&(networkData[i]));
-			
 			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerSpawnEvent);
-			
-			break;
-
-		case EventOpcode::PLAYER_INPUT:
-			playerInputEvent.deserialize(&(networkData[i]));
-			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
-			break;
-		case EventOpcode::POSITION:
-			positionEvent.deserialize(&(networkData[i]));
-			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(positionEvent);
-
-			break;
-		case EventOpcode::ROTATION:
-			rotationEvent.deserialize(&(networkData[i]));
-			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(rotationEvent);
 			break;
 		default:
 			printf("error in packet event types\n");
@@ -65,7 +56,6 @@ void *GameClient::receive() {
 		}
 
 		i += emptyEvent.getByteSize();
-		//printf("new i is %d\n", i);
 	}
 
 	return nullptr;

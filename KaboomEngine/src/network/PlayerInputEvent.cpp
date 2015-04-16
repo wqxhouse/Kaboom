@@ -1,15 +1,10 @@
 #include "PlayerInputEvent.h"
 
-PlayerInputEvent::PlayerInputEvent() :
-	playerId(0),
-	movingForward(false),
-	movingBackward(false),
-	movingLeft(false),
-	movingRight(false),
-	jumping(false),
-	firing(false),
-	yaw(false),
-	pitch(false) {
+#include <string>
+
+PlayerInputEvent::PlayerInputEvent() {
+    eventOpcode = EventOpcode::PLAYER_INPUT;
+    byteSize = sizeof(PlayerInputEvent);
 }
 
 PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
@@ -37,7 +32,6 @@ PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
 
 PlayerInputEvent::~PlayerInputEvent() {
 }
-
 
 const unsigned int &PlayerInputEvent::getPlayerId() const {
     return playerId;
@@ -73,4 +67,12 @@ const float &PlayerInputEvent::getYaw() const {
 
 const float &PlayerInputEvent::getPitch() const {
     return pitch;
+}
+
+void PlayerInputEvent::serialize(char *buf) {
+    memcpy(buf, this, sizeof(PlayerInputEvent));
+}
+
+void PlayerInputEvent::deserialize(char *buf) {
+    memcpy(this, buf, sizeof(PlayerInputEvent));
 }

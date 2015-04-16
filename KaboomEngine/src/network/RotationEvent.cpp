@@ -1,9 +1,10 @@
 #include "RotationEvent.h"
 
-RotationEvent::RotationEvent() :
-entityId(0),
-yaw(0.0),
-pitch(0.0) {
+#include <string>
+
+RotationEvent::RotationEvent() {
+    eventOpcode = EventOpcode::ROTATION;
+    byteSize = sizeof(RotationEvent);
 }
 
 RotationEvent::RotationEvent(unsigned int entityId, float yaw, float pitch)
@@ -18,7 +19,6 @@ RotationEvent::RotationEvent(unsigned int entityId, float yaw, float pitch)
 RotationEvent::~RotationEvent() {
 }
 
-
 const unsigned int &RotationEvent::getEntityId() const {
     return entityId;
 }
@@ -29,4 +29,12 @@ const float &RotationEvent::getYaw() const {
 
 const float &RotationEvent::getPitch() const {
     return pitch;
+}
+
+void RotationEvent::serialize(char *buf) {
+    memcpy(buf, this, sizeof(RotationEvent));
+}
+
+void RotationEvent::deserialize(char *buf) {
+    memcpy(this, buf, sizeof(RotationEvent));
 }

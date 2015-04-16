@@ -1,11 +1,12 @@
 #include "PlayerSpawnEvent.h"
 
-PlayerSpawnEvent::PlayerSpawnEvent() 
-	:playerId(0),
-	 x(0.0),
-	 y(0.0),
-	 z(0.0) {
+#include <string>
+
+PlayerSpawnEvent::PlayerSpawnEvent() {
+    eventOpcode = EventOpcode::PLAYER_SPAWN;
+    byteSize = sizeof(PlayerSpawnEvent);
 }
+
 PlayerSpawnEvent::PlayerSpawnEvent(unsigned int playerId, float x, float y, float z)
     : playerId(playerId),
     x(x),
@@ -33,4 +34,12 @@ const float &PlayerSpawnEvent::getY() const {
 
 const float &PlayerSpawnEvent::getZ() const {
     return z;
+}
+
+void PlayerSpawnEvent::serialize(char * buf) {
+    memcpy(buf, this, sizeof(PlayerSpawnEvent));
+}
+
+void PlayerSpawnEvent::deserialize(char * buf) {
+    memcpy(this, buf, sizeof(PlayerSpawnEvent));
 }
