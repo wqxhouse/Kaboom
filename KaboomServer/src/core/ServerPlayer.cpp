@@ -24,7 +24,6 @@ float ServerPlayer::getVelocityY() const {
 float ServerPlayer::getVelocityZ() const {
     return getRigidBody()->getLinearVelocity().getZ();
 }
-
 void ServerPlayer::setVelocityX(float x) {
     btVector3 velocity = getRigidBody()->getLinearVelocity();
     velocity.setX(x);
@@ -42,3 +41,5 @@ void ServerPlayer::setVelocityZ(float z) {
     velocity.setZ(z);
     getRigidBody()->setLinearVelocity(velocity);
 }
+
+

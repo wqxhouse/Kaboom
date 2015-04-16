@@ -1,10 +1,23 @@
 #pragma once
 
+#include <network/Event.h>
+#include <network/PlayerInputEvent.h>
+#include <network/PlayerSpawnEvent.h>
+#include <network/PositionEvent.h>
+#include <network/RotationEvent.h>
+
 #include "../core/GameStateData.h"
 
 #include "ClientEventHandlerLookup.h"
 #include "ClientNetwork.h"
 #include "NetworkData.h"
+
+#include <network/Event.h>
+#include <network/PlayerInputEvent.h>
+#include <network/PlayerSpawnEvent.h>
+#include <network/PositionEvent.h>
+#include <network/RotationEvent.h>
+
 
 class GameClient {
 public:

@@ -69,7 +69,7 @@ ClientNetwork::ClientNetwork(ConfigSettings * _config) {
 
         // Connect to server.
         iResult = connect(clientSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
-        printf("iresult %d\n", iResult);
+
         if (iResult == SOCKET_ERROR) {
             closesocket(clientSocket);
             clientSocket = INVALID_SOCKET;

@@ -1,17 +1,22 @@
 #include "PlayerSpawnEvent.h"
 
+PlayerSpawnEvent::PlayerSpawnEvent() 
+	:playerId(0),
+	 x(0.0),
+	 y(0.0),
+	 z(0.0) {
+}
 PlayerSpawnEvent::PlayerSpawnEvent(unsigned int playerId, float x, float y, float z)
     : playerId(playerId),
     x(x),
     y(y),
     z(z) {
+
+	eventOpcode = EventOpcode::PLAYER_SPAWN;
+	byteSize = sizeof(PlayerSpawnEvent);
 }
 
 PlayerSpawnEvent::~PlayerSpawnEvent() {
-}
-
-EventOpcode PlayerSpawnEvent::getOpcode() const {
-    return EventOpcode::PLAYER_SPAWN;
 }
 
 const unsigned int &PlayerSpawnEvent::getPlayerId() const {

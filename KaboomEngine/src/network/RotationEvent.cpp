@@ -1,17 +1,23 @@
 #include "RotationEvent.h"
 
+RotationEvent::RotationEvent() :
+entityId(0),
+yaw(0.0),
+pitch(0.0) {
+}
+
 RotationEvent::RotationEvent(unsigned int entityId, float yaw, float pitch)
     : entityId(entityId),
     yaw(yaw),
     pitch(pitch) {
+
+	eventOpcode = EventOpcode::ROTATION;
+	byteSize = sizeof(RotationEvent);
 }
 
 RotationEvent::~RotationEvent() {
 }
 
-EventOpcode RotationEvent::getOpcode() const {
-    return EventOpcode::ROTATION;
-}
 
 const unsigned int &RotationEvent::getEntityId() const {
     return entityId;
