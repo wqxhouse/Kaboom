@@ -1,5 +1,7 @@
 #include "InputManager.h"
 
+#include <network/PlayerInputEvent.h>
+
 #include "../Global.h"
 
 bool InputManager::movingForward;
@@ -10,54 +12,70 @@ bool InputManager::jumping;
 
 void InputManager::moveForwardDown() {
     movingForward = true;
-    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    sendPlayerInputEvent();
 }
 
 void InputManager::moveForwardUp() {
     movingForward = false;
-    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    sendPlayerInputEvent();
 }
 
 void InputManager::moveBackwardDown() {
     movingBackward = true;
-    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    sendPlayerInputEvent();
 }
 
 void InputManager::moveBackwardUp() {
     movingBackward = false;
-    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    sendPlayerInputEvent();
 }
 
 void InputManager::moveLeftDown() {
     movingLeft = true;
-    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    sendPlayerInputEvent();
 }
 
 void InputManager::moveLeftUp() {
     movingLeft = false;
-    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    sendPlayerInputEvent();
 }
 
 void InputManager::moveRightDown() {
     movingRight = true;
-    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    sendPlayerInputEvent();
 }
 
 void InputManager::moveRightUp() {
     movingRight = false;
-    g_client->sendMoveEvent(movingForward, movingBackward, movingLeft, movingRight);
+    sendPlayerInputEvent();
 }
 
 void InputManager::jumpDown() {
     jumping = true;
+    sendPlayerInputEvent();
 }
 
 void InputManager::jumpUp() {
     jumping = false;
+    sendPlayerInputEvent();
 }
 
 void InputManager::look(int deltaX, int deltaY) {
 
+}
+
+void InputManager::sendPlayerInputEvent() {
+    PlayerInputEvent evt(0,
+        movingForward,
+        movingBackward,
+        movingLeft,
+        movingRight,
+        jumping,
+        false,
+        0.0f,
+        0.0f);
+
+    g_client->sendMessage(evt);
 }
 
 InputManager::InputManager(osgViewer::Viewer *viewer) {

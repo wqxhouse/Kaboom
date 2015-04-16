@@ -110,9 +110,6 @@
     <ClInclude Include="src\network\ClientNetwork.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\NetworkData.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\NetworkServices.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>

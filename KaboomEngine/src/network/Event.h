@@ -10,17 +10,18 @@ enum EventOpcode {
 
 class Event {
 public:
-    Event();
     ~Event();
 
     EventOpcode getOpcode() const;
 
     const unsigned int getByteSize() const;
 
-    virtual void serialize(char *buf);
-    virtual void deserialize(char *buf);
+    virtual void serialize(char *buf) const = 0;
+    virtual void deserialize(char *buf) = 0;
 
 protected:
+    Event(EventOpcode opcode, unsigned int byteSize);
+
     EventOpcode eventOpcode;
     unsigned int byteSize;
 };

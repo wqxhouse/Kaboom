@@ -1,37 +1,24 @@
 #pragma once
 
-#include <network/Event.h>
-#include <network/PlayerInputEvent.h>
-#include <network/PlayerSpawnEvent.h>
-#include <network/PositionEvent.h>
-#include <network/RotationEvent.h>
-
-#include "../core/GameStateData.h"
+#include <network/NetworkData.h>
 
 #include "ClientEventHandlerLookup.h"
 #include "ClientNetwork.h"
-#include "NetworkData.h"
-
-#include <network/Event.h>
-#include <network/PlayerInputEvent.h>
-#include <network/PlayerSpawnEvent.h>
-#include <network/PositionEvent.h>
-#include <network/RotationEvent.h>
-
+#include "../core/GameStateData.h"
 
 class GameClient {
 public:
-    GameClient(ConfigSettings *, ClientEventHandlerLookup *eventHandlerLookup);
+    GameClient(ConfigSettings *config, ClientEventHandlerLookup *eventHandlerLookup);
     ~GameClient();
+
+	void *receive();
+
+    void GameClient::sendMessage(const Event &evt);
+
+private:
+    ClientEventHandlerLookup *eventHandlerLookup;
 
     ClientNetwork *network;
 
     char networkData[MAX_PACKET_SIZE];
-
-	void *receive();
-
-    void sendMoveEvent(bool movingForward, bool movingBackward, bool movingLeft, bool movingRight);
-
-private:
-    ClientEventHandlerLookup *eventHandlerLookup;
 };

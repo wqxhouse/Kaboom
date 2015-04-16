@@ -4,8 +4,9 @@
 
 #include <WS2tcpip.h>
 
+#include <network/NetworkData.h>
+
 #include "NetworkServices.h"
-#include "NetworkData.h"
 
 ClientNetwork::ClientNetwork(ConfigSettings * _config) {
     config = _config;

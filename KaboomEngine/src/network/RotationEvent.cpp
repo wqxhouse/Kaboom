@@ -2,18 +2,15 @@
 
 #include <string>
 
-RotationEvent::RotationEvent() {
-    eventOpcode = EventOpcode::ROTATION;
-    byteSize = sizeof(RotationEvent);
+RotationEvent::RotationEvent()
+    : Event(EventOpcode::ROTATION, sizeof(RotationEvent)) {
 }
 
 RotationEvent::RotationEvent(unsigned int entityId, float yaw, float pitch)
-    : entityId(entityId),
+    : Event(EventOpcode::ROTATION, sizeof(RotationEvent)),
+    entityId(entityId),
     yaw(yaw),
     pitch(pitch) {
-
-	eventOpcode = EventOpcode::ROTATION;
-	byteSize = sizeof(RotationEvent);
 }
 
 RotationEvent::~RotationEvent() {
@@ -31,7 +28,7 @@ const float &RotationEvent::getPitch() const {
     return pitch;
 }
 
-void RotationEvent::serialize(char *buf) {
+void RotationEvent::serialize(char *buf) const {
     memcpy(buf, this, sizeof(RotationEvent));
 }
 

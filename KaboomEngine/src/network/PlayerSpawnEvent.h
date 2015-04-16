@@ -14,7 +14,7 @@ public:
     const float &getY() const;
     const float &getZ() const;
 
-    virtual void serialize(char *buf);
+    virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);
 
 private:
