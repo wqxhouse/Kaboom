@@ -28,7 +28,7 @@ public:
 
     char networkData[MAX_PACKET_SIZE];
 
-	GameStateData *receive();
+	void *receive();
 
     void sendMoveEvent(bool movingForward, bool movingBackward, bool movingLeft, bool movingRight);
 
