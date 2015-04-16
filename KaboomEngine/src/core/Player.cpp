@@ -32,3 +32,7 @@ void Player::setY(float y) {
 void Player::setZ(float z) {
     getComponent<PositionComponent>()->setZ(z);
 }
+
+void Player::setPosition(float x, float y, float z) {
+    getComponent<PositionComponent>()->setPosition(x, y, z);
+}
