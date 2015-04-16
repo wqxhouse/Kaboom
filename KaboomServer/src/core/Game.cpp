@@ -37,7 +37,7 @@ void Game::loadMap() {
     world->addRigidBody(groundRigidBody);
 }
 
-void Game::addEntity(Entity *entity) {
+void Game::addPhysicsEntity(Entity *entity) {
     PhysicsComponent *physicsCom = entity->getComponent<PhysicsComponent>();
 
     if (physicsCom != nullptr) {
@@ -48,41 +48,21 @@ void Game::addEntity(Entity *entity) {
 void Game::update(float timeStep) {
     if (server->acceptNewClient()) {
         ServerPlayer *player = playerFactory.createPlayer(0, 0, 5);
-        players.push_back(player);  
-        world->addRigidBody(player->getRigidBody());
+        players.push_back(player);
+        addPhysicsEntity(player);
     }
 
     server->receiveFromClients(this);
 
-    if (players.size() > 0) {
-        players[0]->getRigidBody()->activate(true);
-    }
-
-    if (players.size() > 1) {
-        players[1]->getRigidBody()->activate(true);
+    for (ServerPlayer *player : players) {
+        player->getRigidBody()->activate(true);
     }
 
     world->stepSimulation(timeStep);
     
-    for (auto it : players) {
-        btRigidBody *rigidBody = it->getRigidBody();
-
-        btTransform transform;
-        rigidBody->getMotionState()->getWorldTransform(transform);
-
-        const btVector3 &position = transform.getOrigin();
-        
-        it->setX(position.getX());
-        it->setY(position.getY());
-        it->setZ(position.getZ());
-    }
-
-    if (players.size() > 0) {
-        printf("<Server> Player 1 velocity2: %.2f, %.2f, %.2f, damping: %.2f\n",
-            players[0]->getVelocityX(),
-            players[0]->getVelocityY(),
-            players[0]->getVelocityZ(),
-            players[0]->getRigidBody()->getLinearDamping());
+    for (ServerPlayer *player : players) {
+        const btVector3 &position = player->getRigidBody()->getWorldTransform().getOrigin();
+        player->setPosition(position.getX(), position.getY(), position.getZ());
     }
 
     server->sendGameStatePackets(this);
