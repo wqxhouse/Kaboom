@@ -21,8 +21,9 @@ public:
     ~Game();
 
     void loadMap();
-    void addEntity(Entity *entity);
     void update(float timestep);
+
+    void addPhysicsEntity(Entity *entity);
 
     const EntityManager &getEntityManager() const;
 
