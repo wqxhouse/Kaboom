@@ -7,7 +7,7 @@ public:
     PlayerSpawnEvent(unsigned int playerId, float x, float y, float z);
     ~PlayerSpawnEvent();
 
-    virtual unsigned char getOpcode() const;
+    virtual EventOpcode getOpcode() const;
 
     const unsigned int &getPlayerId() const;
 

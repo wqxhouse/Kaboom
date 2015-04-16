@@ -8,7 +8,10 @@
 
 #include "PlayerFactory.h"
 #include "../input/InputManager.h"
+#include "../network/ClientEventHandlerLookup.h"
 #include "../util/ConfigSettings.h"
+
+class ClientEventHandlerLookup;
 
 class Game {
 public:
@@ -17,13 +20,17 @@ public:
 
     void run();
 
+    bool addSceneNodeEntity(Entity *entity);
+
     const EntityManager &getEntityManager() const;
     const PlayerFactory &getPlayerFactory() const;
+    ClientEventHandlerLookup *getEventHandlerLookup() const;
 
 private:
     InputManager *inputManager;
     EntityManager entityManager;
     PlayerFactory playerFactory;
+    ClientEventHandlerLookup *eventHandlerLookup;
 
     osgViewer::Viewer viewer;
 

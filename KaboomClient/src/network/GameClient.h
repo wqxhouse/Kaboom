@@ -2,12 +2,13 @@
 
 #include "../core/GameStateData.h"
 
+#include "ClientEventHandlerLookup.h"
 #include "ClientNetwork.h"
 #include "NetworkData.h"
 
 class GameClient {
 public:
-    GameClient(ConfigSettings *);
+    GameClient(ConfigSettings *, ClientEventHandlerLookup *eventHandlerLookup);
     ~GameClient();
 
     ClientNetwork *network;
@@ -17,4 +18,7 @@ public:
 	GameStateData *receive();
 
     void sendMoveEvent(bool movingForward, bool movingBackward, bool movingLeft, bool movingRight);
+
+private:
+    ClientEventHandlerLookup *eventHandlerLookup;
 };

@@ -9,7 +9,7 @@ RotationEvent::RotationEvent(unsigned int entityId, float yaw, float pitch)
 RotationEvent::~RotationEvent() {
 }
 
-unsigned char RotationEvent::getOpcode() const {
+EventOpcode RotationEvent::getOpcode() const {
     return EventOpcode::ROTATION;
 }
 

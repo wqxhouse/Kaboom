@@ -9,7 +9,9 @@
 #include "GameStateData.h"
 
 Game::Game(ConfigSettings *config)
-    : playerFactory(&entityManager) {
+    : playerFactory(&entityManager),
+    eventHandlerLookup(new ClientEventHandlerLookup(this)),
+    rootNode(new osg::Group) {
     inputManager = new InputManager(&viewer);
     inputManager->loadConfig();
 
@@ -19,21 +21,18 @@ Game::Game(ConfigSettings *config)
 
     viewer.setUpViewInWindow(100, 100, screen_width, screen_height);
 
+    viewer.setSceneData(rootNode);
+
     Player *player1 = playerFactory.createPlayer(0, 0, 0);
     Player *player2 = playerFactory.createPlayer(0, 0, 0);
 
-    osg::Node *player1Node = player1->getComponent<SceneNodeComponent>()->getNode();
-    osg::Node *player2Node = player2->getComponent<SceneNodeComponent>()->getNode();
-
-    rootNode = new osg::Group;
-    rootNode->addChild(player1Node);
-    rootNode->addChild(player2Node);
-
-    viewer.setSceneData(rootNode);
+    addSceneNodeEntity(player1);
+    addSceneNodeEntity(player2);
 }
 
 Game::~Game() {
     delete inputManager;
+    delete eventHandlerLookup;
 }
 
 void Game::run() {
@@ -56,6 +55,18 @@ void Game::run() {
 
         delete gameState;
     }
+}
+
+bool Game::addSceneNodeEntity(Entity *entity) {
+    SceneNodeComponent *sceneNodeCom = entity->getComponent<SceneNodeComponent>();
+
+    if (sceneNodeCom == nullptr) {
+        return false;
+    }
+
+    rootNode->addChild(sceneNodeCom->getNode());
+
+    return true;
 }
 
 void Game::setupCamera() {
@@ -92,4 +103,8 @@ const EntityManager &Game::getEntityManager() const {
 
 const PlayerFactory &Game::getPlayerFactory() const {
     return playerFactory;
+}
+
+ClientEventHandlerLookup *Game::getEventHandlerLookup() const {
+    return eventHandlerLookup;
 }

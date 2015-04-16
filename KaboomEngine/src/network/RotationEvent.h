@@ -7,7 +7,7 @@ public:
     RotationEvent(unsigned int entityId, float yaw, float pitch);
     ~RotationEvent();
 
-    virtual unsigned char getOpcode() const;
+    virtual EventOpcode getOpcode() const;
 
     const unsigned int &getEntityId() const;
 
