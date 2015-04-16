@@ -20,8 +20,8 @@ Entity *EntityManager::createEntity() {
 Entity *EntityManager::createEntity(unsigned int id) {
     if (isEntityAlive(id)) {
         std::ostringstream error;
-        error << "Unable to create entity with ID " << id << ".";
-        error << "Entity with this ID is already alive.";
+        error << "Unable to create entity with ID " << id << "." << std::endl;
+        error << "Entity with this ID is already alive." << std::endl;
 
         throw std::runtime_error(error.str());
     }
@@ -43,8 +43,8 @@ void EntityManager::destroyEntity(unsigned int id) {
 Entity *EntityManager::getEntity(unsigned int id) const {
     if (!isEntityAlive(id)) {
         std::ostringstream error;
-        error << "Unable to retrieve entity with ID " << id << ".";
-        error << "Entity with this ID is not alive.";
+        error << "Unable to retrieve entity with ID " << id << "." << std::endl;
+        error << "Entity with this ID is not alive." << std::endl;
 
         throw std::runtime_error(error.str());
     }

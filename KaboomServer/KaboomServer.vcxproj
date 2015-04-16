@@ -27,6 +27,7 @@
     <ClCompile Include="src\network\GameServer.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp" />
+    <ClCompile Include="src\network\ServerEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ServerNetwork.cpp" />
     <ClCompile Include="src\util\ConfigSettings.cpp" />
   </ItemGroup>
@@ -42,6 +43,7 @@
     <ClInclude Include="src\network\NetworkData.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
+    <ClInclude Include="src\network\ServerEventHandlerLookup.h" />
     <ClInclude Include="src\network\ServerNetwork.h" />
     <ClInclude Include="src\util\ConfigSettings.h" />
   </ItemGroup>

@@ -5,7 +5,7 @@
 Game::Game(ConfigSettings *config)
     : config(config),
     playerFactory(&entityManager) {
-    server = new GameServer(config);
+    server = new GameServer(config, this);
 
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -47,7 +47,9 @@ void Game::addPhysicsEntity(Entity *entity) {
 
 void Game::update(float timeStep) {
 
-	//HERE is where the client first connect to server, we want to have client load the gameworld first, then create the player, and send the spawn player event to client
+	//HERE is where the client first connect to server,
+    //we want to have client load the gameworld first,
+    //then create the player, and send the spawn player event to client
     if (server->acceptNewClient()) {
 
 		//now we create a new player
@@ -55,16 +57,14 @@ void Game::update(float timeStep) {
         players.push_back(player);
         addPhysicsEntity(player);
 
-
-		//first have the client first preload the information about the world
-		server->sendGameStatePackets(this);
-
 		//notify client, a player spawn occurs
-		//server->sendPlayerSpawnEvent(player);
-		
+        server->sendPlayerSpawnEvent(player);
+
+        //first have the client first preload the information about the world
+        server->sendGameStatePackets(this);
     }
 
-    server->receiveFromClients(this);
+    server->receive();
 
     for (ServerPlayer *player : players) {
         player->getRigidBody()->activate(true);
