@@ -80,9 +80,6 @@
     <ClInclude Include="src\util\ConfigSettings.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\Event.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\NetworkServices.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
