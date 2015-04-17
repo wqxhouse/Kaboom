@@ -15,7 +15,7 @@ class GameServer;
 
 class Game {
 public:
-    std::vector<ServerPlayer *> players;
+    std::vector<Entity *> players;
 
     Game(ConfigSettings *config);
     ~Game();

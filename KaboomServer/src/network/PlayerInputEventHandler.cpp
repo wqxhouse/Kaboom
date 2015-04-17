@@ -2,7 +2,7 @@
 
 #include <network/PlayerInputEvent.h>
 
-#include "../core/ServerPlayer.h"
+#include "../core/PhysicsComponent.h"
 
 PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
     : game(game) {
@@ -15,21 +15,24 @@ void PlayerInputEventHandler::handle(const Event &e) const {
     const PlayerInputEvent &evt = static_cast<const PlayerInputEvent &>(e);
 
     Entity *entity = game->getEntityManager().getEntity(evt.getPlayerId());
-    ServerPlayer *player = static_cast<ServerPlayer *>(entity);
+    btRigidBody *rigidBody = entity->getComponent<PhysicsComponent>()->getRigidBody();
+    btVector3 velocity = rigidBody->getLinearVelocity();
 
     if (evt.isMovingForward()) {
-        player->setVelocityY(1);
+        velocity.setY(1);
     } else if (evt.isMovingBackward()) {
-        player->setVelocityY(-1);
+        velocity.setY(-1);
     } else {
-        player->setVelocityY(0);
+        velocity.setY(0);
     }
 
     if (evt.isMovingLeft()) {
-        player->setVelocityX(-1);
+        velocity.setX(-1);
     } else if (evt.isMovingRight()) {
-        player->setVelocityX(1);
+        velocity.setX(1);
     } else {
-        player->setVelocityX(0);
+        velocity.setX(0);
     }
+
+    rigidBody->setLinearVelocity(velocity);
 }
