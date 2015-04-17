@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\PhysicsComponent.cpp" />
-    <ClCompile Include="src\core\ServerPlayer.cpp" />
     <ClCompile Include="src\core\PlayerFactory.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\network\GameServer.cpp" />
@@ -33,14 +32,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\core\GameStateData.h" />
     <ClInclude Include="src\core\PhysicsComponent.h" />
-    <ClInclude Include="src\core\ServerPlayer.h" />
-    <ClInclude Include="src\core\PlayerData.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />
     <ClInclude Include="src\network\Event.h" />
     <ClInclude Include="src\network\GameServer.h" />
-    <ClInclude Include="src\network\NetworkData.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
     <ClInclude Include="src\network\ServerEventHandlerLookup.h" />

@@ -69,9 +69,6 @@
     <ClCompile Include="src\network\GameServer.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ServerPlayer.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
@@ -86,9 +83,6 @@
     <ClInclude Include="src\network\Event.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\NetworkData.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\NetworkServices.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
@@ -96,12 +90,6 @@
       <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="src\core\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\GameStateData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\PlayerData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\PhysicsComponent.h">
@@ -112,9 +100,6 @@
     </ClInclude>
     <ClInclude Include="src\network\GameServer.h">
       <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\ServerPlayer.h">
-      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\network\PlayerInputEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>

@@ -1,5 +1,6 @@
 #include "GameServer.h"
 
+#include <core/PositionComponent.h>
 #include <network/EmptyEvent.h>
 #include <network/PlayerSpawnEvent.h>
 #include <network/PlayerInputEvent.h>
@@ -13,14 +14,13 @@ GameServer::GameServer(ConfigSettings * config, Game *game)
     // id's to assign clients for our table
     client_id = 0;
 
-	printf("<Server> Creating a Network Server\n");
+    printf("<Server> Creating a Network Server\n");
     // set up the server network to listen 
     network = new ServerNetwork(config);
 
-
-	printf("<Sevrer> Initializing a Game\n");
-	int maxPlayers;
-	config->getValue(ConfigSettings::str_max_client, maxPlayers);
+    printf("<Sevrer> Initializing a Game\n");
+    int maxPlayers;
+    config->getValue(ConfigSettings::str_max_client, maxPlayers);
 }
 
 GameServer::~GameServer() {
@@ -68,64 +68,40 @@ void GameServer::receive() {
     }
 }
 
-void GameServer::sendActionPackets() {
-    // send action packet
-    const unsigned int packet_size = sizeof(Packet);
+void GameServer::sendGameStatePackets(Game *game) {
+    for (Entity *player : game->players) {
+        sendPositionEvent(player);
+    }
+}
+
+void GameServer::sendPlayerSpawnEvent(Entity* player) {
+    PositionComponent *positionCom = player->getComponent<PositionComponent>();
+
+    if (positionCom == nullptr) {
+        return;
+    }
+
+    PlayerSpawnEvent playerSpawnEvent(player->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ());
+
+    const unsigned int packet_size = sizeof(PlayerSpawnEvent);
     char packet_data[packet_size];
 
-    Packet packet;
-    packet.packet_type = ASSIGN_EVENT;
-
-    packet.serialize(packet_data);
-
+    playerSpawnEvent.serialize(packet_data);
     network->sendToAll(packet_data, packet_size);
 }
 
-void GameServer::sendGameStatePackets(Game *game) {
+void GameServer::sendPositionEvent(Entity* entity) {
+    PositionComponent *positionCom = entity->getComponent<PositionComponent>();
 
-	for (ServerPlayer* player : game->players) {
-		sendPlayerPositionEvent(player);
-	}
-	//send position, send input
+    if (positionCom == nullptr) {
+        return;
+    }
+
+    PositionEvent positionEvent(entity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ());
+
+    const unsigned int packet_size = sizeof(PositionEvent);
+    char packet_data[packet_size];
+
+    positionEvent.serialize(packet_data);
+    network->sendToAll(packet_data, packet_size);
 }
-
-void GameServer::sendAssignPackets(int client_id) {
-	const unsigned int packet_size = sizeof(AssignEvent);
-	char packet_data[packet_size];
-
-	AssignEvent packet;
-	packet.packet_type = ASSIGN_EVENT;
-	packet.client_id = client_id;
-	packet.serialize(packet_data);
-
-	network->sendToOneClient(packet_data,packet_size,client_id);
-}
-
-
-void GameServer::sendPlayerSpawnEvent(ServerPlayer* serverPlayer) {
-
-	PlayerSpawnEvent playerSpawnEvent(serverPlayer->getId(), serverPlayer->getX(), serverPlayer->getY(), serverPlayer->getZ());
-
-	const unsigned int packet_size = sizeof(PlayerSpawnEvent);
-	char packet_data[packet_size];
-
-	playerSpawnEvent.serialize(packet_data);
-	network->sendToAll(packet_data, packet_size);
-}
-
-void GameServer::sendPlayerPositionEvent(ServerPlayer* serverPlayer) {
-	PositionEvent positionEvent(serverPlayer->getId(), serverPlayer->getX(), serverPlayer->getY(), serverPlayer->getZ());
-
-	const unsigned int packet_size = sizeof(PositionEvent);
-	char packet_data[packet_size];
-
-	positionEvent.serialize(packet_data);
-	network->sendToAll(packet_data, packet_size);
-
-}
-/*
-void GameServer::sendPlayerInputEvent(ServerPlayer* serverPlayer, MoveEvent * moveEvent) {
-
-	PlayerInputEvent
-
-}*/

@@ -1,8 +1,9 @@
 #pragma once
 
+#include <network/NetworkData.h>
+
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
-#include "NetworkData.h"
 #include "NetworkServices.h"
 
 #include "../core/Game.h"
@@ -20,19 +21,11 @@ public:
 
     void receive();
 
-	void sendActionPackets();
-
-    void sendMovePackets();
-
     void sendGameStatePackets(Game *game);
 
-	void sendAssignPackets(int);
+	void sendPlayerSpawnEvent(Entity *entity);
 
-	void sendPlayerSpawnEvent(ServerPlayer *);
-
-	void sendPlayerInputEvent(ServerPlayer *, MoveEvent *);
-
-	void sendPlayerPositionEvent(ServerPlayer *);
+    void sendPositionEvent(Entity *entity);
 
 private:
     ServerEventHandlerLookup *eventHandlerLookup;

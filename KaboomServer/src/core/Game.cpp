@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include <core/PositionComponent.h>
 #include "PhysicsComponent.h"
 
 Game::Game(ConfigSettings *config)
@@ -53,7 +54,7 @@ void Game::update(float timeStep) {
     if (server->acceptNewClient()) {
 
 		//now we create a new player
-        ServerPlayer *player = playerFactory.createPlayer(0, 0, 5);
+        Entity *player = playerFactory.createPlayer(0, 0, 5);
         players.push_back(player);
         addPhysicsEntity(player);
 
@@ -66,15 +67,18 @@ void Game::update(float timeStep) {
 
     server->receive();
 
-    for (ServerPlayer *player : players) {
-        player->getRigidBody()->activate(true);
+    for (Entity *player : players) {
+        player->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
     }
 
     world->stepSimulation(timeStep);
     
-    for (ServerPlayer *player : players) {
-        const btVector3 &position = player->getRigidBody()->getWorldTransform().getOrigin();
-        player->setPosition(position.getX(), position.getY(), position.getZ());
+    for (Entity *player : players) {
+        PositionComponent *positionCom = player->getComponent<PositionComponent>();
+        PhysicsComponent *physicsCom = player->getComponent<PhysicsComponent>();
+
+        const btVector3 &position = physicsCom->getRigidBody()->getWorldTransform().getOrigin();
+        positionCom->setPosition(position.getX(), position.getY(), position.getZ());
     }
 
     server->sendGameStatePackets(this);

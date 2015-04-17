@@ -3,9 +3,10 @@
 #include <ws2tcpip.h>
 #include <map>
 
+#include <network/NetworkData.h>
+
 #include "../util/ConfigSettings.h"
 #include "NetworkServices.h"
-#include "NetworkData.h"
 
 
 using namespace std;
