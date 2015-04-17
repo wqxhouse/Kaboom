@@ -65,6 +65,7 @@ void Core::configFilePath()
 	// TODO: read from config file
 	osgDB::FilePathList& filePaths = osgDB::getDataFilePathList();
 
+	// std::string rootPath = "C:\\Users\\Brian\\Documents\\GitHub\\Tempo\\Media\\";
 	std::string rootPath = "C:\\3DEngine\\Tempo\\Media\\";
 
 	// TODO : currently minimum check, can do comprehensive checks later

@@ -281,7 +281,24 @@ void TwGUIManager::initializeTwGUI()
 					pl, radiusDefStr.c_str());
 
 			// TODO: add color ..
-
+			// TODO: color, later.... Too tired
+			// TW_TYPE_COLOR3F
+			std::string ptLightColorVarName = "Color" + std::to_string(index);
+			std::string ptLightColorDef = nameGroupDef + " label='Color'";
+			TwAddVarCB(g_twBar, ptLightColorVarName.c_str(), TW_TYPE_COLOR3F,
+				[](const void *value, void *clientData) {
+				PointLight *pl = static_cast<PointLight *>(clientData);
+				const float *arr = static_cast<const float *>(value);
+				osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
+				pl->setColor(color);
+			},
+				[](void *value, void *clientData) {
+				PointLight *pl = static_cast<PointLight *>(clientData);
+				const osg::Vec3 &color = pl->getColor();
+				float *arr = static_cast<float *>(value);
+				arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
+			}, pl, ptLightColorDef.c_str());
+		
 		}				
 
 		std::string moveStr = " Tempo_GUI/" + name + " group='" + LightGroupStr + "'";
