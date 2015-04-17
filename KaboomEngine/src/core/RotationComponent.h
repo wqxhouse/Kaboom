@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 #include "Component.h"
 
 class RotationComponent : public Component {
@@ -15,6 +17,15 @@ public:
     void setPitch(float pitch);
 
     void setRotation(float yaw, float pitch);
+
+    friend std::ostream& operator<<(std::ostream &os, const RotationComponent &o) {
+        os << "RotationComponent: {" << std::endl;
+        os << "    yaw: " << o.yaw << std::endl;
+        os << "    pitch: " << o.pitch << std::endl;
+        os << "}";
+
+        return os;
+    }
 
 private:
     float yaw;

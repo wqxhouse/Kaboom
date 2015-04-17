@@ -3,7 +3,7 @@
 #include <string>
 
 PlayerSpawnEvent::PlayerSpawnEvent()
-    : Event(EventOpcode::PLAYER_SPAWN, sizeof(PlayerSpawnEvent)) {
+    : PlayerSpawnEvent(0, 0.0f, 0.0f, 0.0f) {
 }
 
 PlayerSpawnEvent::PlayerSpawnEvent(unsigned int playerId, float x, float y, float z)

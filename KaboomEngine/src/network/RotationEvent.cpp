@@ -3,7 +3,7 @@
 #include <string>
 
 RotationEvent::RotationEvent()
-    : Event(EventOpcode::ROTATION, sizeof(RotationEvent)) {
+    : RotationEvent(0, 0.0f, 0.0f) {
 }
 
 RotationEvent::RotationEvent(unsigned int entityId, float yaw, float pitch)
