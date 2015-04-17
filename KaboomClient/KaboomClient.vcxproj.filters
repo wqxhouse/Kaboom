@@ -81,9 +81,6 @@
     <ClCompile Include="src\core\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ClientPlayer.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\PositionEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
@@ -124,9 +121,6 @@
     </ClInclude>
     <ClInclude Include="src\core\Game.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\ClientPlayer.h">
-      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\network\PositionEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>

@@ -125,7 +125,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Game.cpp" />
-    <ClCompile Include="src\core\ClientPlayer.cpp" />
     <ClCompile Include="src\core\PlayerFactory.cpp" />
     <ClCompile Include="src\core\SceneNodeComponent.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
@@ -141,7 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\core\ClientPlayer.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />
     <ClInclude Include="src\core\SceneNodeComponent.h" />
     <ClInclude Include="src\Global.h" />
