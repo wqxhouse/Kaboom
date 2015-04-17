@@ -34,7 +34,6 @@
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\PhysicsComponent.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />
-    <ClInclude Include="src\network\Event.h" />
     <ClInclude Include="src\network\GameServer.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
