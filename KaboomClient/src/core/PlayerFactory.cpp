@@ -18,10 +18,23 @@ PlayerFactory::PlayerFactory(EntityManager *entityManager)
 PlayerFactory::~PlayerFactory() {
 }
 
-ClientPlayer *PlayerFactory::createPlayer(unsigned int id, float x, float y, float z) const {
-    ClientPlayer *player = new ClientPlayer(id);
-    entityManager->addEntity(player);
+ClientPlayer *PlayerFactory::createPlayer() const {
+    createPlayer(0.0f, 0.0f, 0.0f);
+}
 
+ClientPlayer *PlayerFactory::createPlayer(float x, float y, float z) const {
+    Entity *entity = entityManager->createEntity();
+
+    return createPlayer(entity, x, y, z);
+}
+
+ClientPlayer *PlayerFactory::createPlayer(unsigned int id, float x, float y, float z) const {
+    Entity *entity = entityManager->createEntity(id);
+
+    return createPlayer(entity, x, y, z);
+}
+
+ClientPlayer *PlayerFactory::createPlayer(Entity *entity, float x, float y, float z) const {
     osg::Box *box = new osg::Box;
     osg::ShapeDrawable *drawable = new osg::ShapeDrawable(box);
     osg::Geode *model = new osg::Geode;
@@ -34,8 +47,8 @@ ClientPlayer *PlayerFactory::createPlayer(unsigned int id, float x, float y, flo
 
     playerNode->addChild(transformation);
 
-    player->attachComponent(new SceneNodeComponent(playerNode));
-    player->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new SceneNodeComponent(playerNode));
+    entity->attachComponent(new PositionComponent(x, y, z));
 
-    return player;
+    return static_cast<ClientPlayer *>(entity);
 }

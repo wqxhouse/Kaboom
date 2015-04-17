@@ -11,10 +11,11 @@ PlayerFactory::PlayerFactory(EntityManager *entityManager)
 PlayerFactory::~PlayerFactory() {
 }
 
-ServerPlayer *PlayerFactory::createPlayer(float x, float y, float z) const {
-    ServerPlayer *player = new ServerPlayer(entityManager->generateId());
-    entityManager->addEntity(player);
+ServerPlayer *PlayerFactory::createPlayer() const {
+    return createPlayer(0.0f, 0.0f, 0.0f);
+}
 
+ServerPlayer *PlayerFactory::createPlayer(float x, float y, float z) const {
     const btScalar mass = 1;
 
     btTransform startTrans = btTransform::getIdentity();
@@ -25,8 +26,9 @@ ServerPlayer *PlayerFactory::createPlayer(float x, float y, float z) const {
 
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
 
-    player->attachComponent(new PositionComponent(x, y, z));
-    player->attachComponent(new PhysicsComponent(rigidBody));
+    Entity *entity = entityManager->createEntity();
+    entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new PhysicsComponent(rigidBody));
 
-    return player;
+    return static_cast<ServerPlayer *>(entity);
 }
