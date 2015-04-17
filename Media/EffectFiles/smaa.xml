@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<compositor>
+    <shader name="smaa_edge_vs" type="vertex">
+      <version>120</version>
+        <file>Shaders/smaa/edgedetection.vert</file>
+    </shader>
+    
+    <shader name="smaa_edge_ps" type="fragment">
+      <version>120</version>
+        <file>Shaders/smaa/edgedetection.frag</file>
+    </shader>
+    
+    <shader name="smaa_blend_vs" type="vertex">
+      <version>120</version>
+        <file>Shaders/smaa/blend.vert</file>
+    </shader>
+    
+    <shader name="smaa_blend_ps" type="fragment">
+      <version>120</version>
+        <file>Shaders/smaa/blend.frag</file>
+    </shader>
+    
+    <shader name="smaa_neighborhood_vs" type="vertex">
+      <version>120</version>
+        <file>Shaders/smaa/neighborhood.vert</file>
+    </shader>
+    
+    <shader name="smaa_neighborhood_ps" type="fragment">
+      <version>120</version>
+        <file>Shaders/smaa/neighborhood.frag</file>
+    </shader>
+    
+    <buffer name="smaaEdgeResult" template="buf_rgba32f" />
+    <buffer name="smaaBlendResult" template="buf_rgba32f" />
+    
+    <texture name="smaaAreaTex" type="2d">
+        <rawfile s="160" t="560">Shaders/smaa/smaa_area.raw</rawfile>
+        <internal_format>rg</internal_format>
+        <source_format>rg</source_format>
+        <source_type>ubyte</source_type>
+        <filter param="min_filter">linear</filter>
+        <filter param="mag_filter">linear</filter>
+        <wrap param="s">clamp_to_edge</wrap>
+        <wrap param="t">clamp_to_edge</wrap>
+    </texture>
+    
+    <texture name="smaaSearchTex" type="2d">
+        <rawfile s="66" t="33">Shaders/smaa/smaa_search.raw</rawfile>
+        <internal_format>red</internal_format>
+        <source_format>red</source_format>
+        <source_type>ubyte</source_type>
+        <filter param="min_filter">nearest</filter>
+        <filter param="mag_filter">nearest</filter>
+        <wrap param="s">clamp_to_edge</wrap>
+        <wrap param="t">clamp_to_edge</wrap>
+    </texture>
+
+</compositor>

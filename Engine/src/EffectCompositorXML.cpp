@@ -340,6 +340,14 @@ osg::Camera* EffectCompositor::createPassFromXML(osgDB::XmlNode* xmlNode)
 
 			std::string nearFarRatio = xmlChild->properties["ratio"];
 			if (!nearFarRatio.empty()) camera->setNearFarRatio(atoi(nearFarRatio.c_str()));
+
+			std::string preserveNearFar = xmlChild->properties["preserve"];
+			if (preserveNearFar == "0" || preserveNearFar =="false")
+			{
+				// mainly used for skybox 
+				PassCullCallback *callback = static_cast<PassCullCallback *>(camera->getCullCallback());
+				callback->setPreserveNearFar(false);
+			}
 		}
 		else  // TODO: more state attributes here
 			OSG_NOTICE << "EffectCompositor: <pass> doesn't recognize child element " << xmlChild->name << std::endl;

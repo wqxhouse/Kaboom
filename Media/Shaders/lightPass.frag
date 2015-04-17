@@ -42,8 +42,8 @@ void main()
     vec4 rt1 = texelFetch(u_RT1, screenCoord, 0);
 	
 	// optimization - as well as for skybox hack
-	// mark: for rgba texture, alpha channel is white by default if not written any color
-	// in constrast with rgb channels -- which is confusing!!!
+	// mark: gbuffer clear alpha chennel to 1.0 
+	// thus 0.0 represents gbuffer value
 	if(rt1.a > 0.1 ) discard; // choose 0.1 to deal with precision
 
     vec4 rt0 = texelFetch(u_RT0, screenCoord, 0);

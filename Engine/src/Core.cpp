@@ -13,12 +13,14 @@
 #include <osgDB/FileUtils>
 #include <osgDB/FileNameUtils>
 #include <osg/TexGen>
+#include <osg/Depth>
 
 #include "World.h"
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
 #include "LightPrePassCallback.h"
 #include "LightPassCallback.h"
+#include "CustomFirstPersonManipulator.h"
 
 // TODO: log which one called the global functions in Core
 // for debugging
@@ -26,12 +28,13 @@
 extern void configureViewerForMode(osgViewer::Viewer& viewer, osgFX::EffectCompositor* compositor,
 		osg::Node* model, int displayMode);
 
-void Core::init(int winWidth, int winHeight, int resolutionWidth, int resolutionHeight)
+void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight)
 {
+	// TODO: add reshape callback for winPos, winHeight, bufferSize
 	_screenSize = osg::Vec2(winWidth, winHeight);
-
 	// TODO: test separation of screenSize and the renderResolution
 	_renderResolution = osg::Vec2(resolutionWidth, resolutionHeight);
+	_winPos = osg::Vec2(winPosX, winPosY);
 	_sceneRoot = new osg::Group;
 	_gui = new TwGUIManager;
 	_skybox = new SkyBox;
@@ -162,7 +165,7 @@ void Core::configViewer()
 	_viewer->addEventHandler(_gui.get());
 	_viewer->getCamera()->setFinalDrawCallback(_gui.get());
 
-	_viewer->setUpViewInWindow(0, 0, _screenSize.x(), _screenSize.y());
+	_viewer->setUpViewInWindow(_winPos.x(), _winPos.y(), _screenSize.x(), _screenSize.y());
 }
 
 void Core::run()
@@ -184,13 +187,14 @@ void Core::run()
 	// TODO: add switches using keyboard
 	configureViewerForMode(*_viewer, _passes, NULL, 1);
 	// _viewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
-//	_viewer->run();
-	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
-	_viewer->realize();
-	while (!_viewer->done())
-	{
-		_viewer->frame();
-	}
+
+	_viewer->run();
+	//_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
+	//_viewer->realize();
+	//while (!_viewer->done())
+	//{
+	//	_viewer->frame();
+	//}
 }
 
 const Camera &Core::getMainCamera()
@@ -213,33 +217,9 @@ void Core::enableCameraManipulator()
 
 void Core::configSkyBox()
 {
-	osg::ref_ptr<osg::Geode> geode = new osg::Geode;
-	float radius = _geomRoot->getBound().radius();
-	geode->addDrawable(new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(), radius)));
-	geode->setCullingActive(false);
-
-	_skybox->getOrCreateStateSet()->setTextureAttributeAndModes(0, new osg::TexGen);
-	//_skybox->setEnvironmentMap(0,
-	//	osgDB::readImageFile("Cubemap_snow/posx.jpg"), osgDB::readImageFile("Cubemap_snow/negx.jpg"),
-	//	osgDB::readImageFile("Cubemap_snow/posy.jpg"), osgDB::readImageFile("Cubemap_snow/negy.jpg"),
-	//	osgDB::readImageFile("Cubemap_snow/posz.jpg"), osgDB::readImageFile("Cubemap_snow/negz.jpg"));
-	
-	_skybox->addChild(geode.get());
 	_skybox->setNodeMask(0x2);
+	_skybox->setGeomRoot(_geomRoot);
 	_passes->addChild(_skybox);
-
-	//osg::ref_ptr<osg::Camera> _skyBoxCam = new osg::Camera;
-	//osgFX::EffectCompositor::PassData passData;
-	//_passes->getPassData("LightPass", passData);
-	//osg::ref_ptr<osg::Camera> lightPassCam = passData.pass;
-	//osg::ref_ptr<osg::Texture> shadingBuffer = lightPassCam->getBufferAttachmentMap().begin()->second._texture.get();
-	//_skyBoxCam->attach(osg::Camera::COLOR_BUFFER, shadingBuffer);
-	//_skyBoxCam->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//_skyBoxCam->setRenderOrder(osg::Camera::PRE_RENDER);
-	//_skyBoxCam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
-	//_skyBoxCam->setReferenceFrame(osg::Transform::RELATIVE_RF);
-	//_skyBoxCam->addChild(_skybox);
-	//_sceneRoot->addChild(_skyBoxCam);
 }
 
 void Core::setEnvironmentMap(
@@ -264,6 +244,7 @@ osg::ref_ptr<osg::Group> Core::_geomRoot;
 osg::ref_ptr<osgViewer::Viewer> Core::_viewer;
 osg::Vec2 Core::_screenSize;
 osg::Vec2 Core::_renderResolution;
+osg::Vec2 Core::_winPos;
 World Core::_world;
 bool Core::_hasInit = false;
 

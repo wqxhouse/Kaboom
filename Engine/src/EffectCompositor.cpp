@@ -13,54 +13,44 @@
 using namespace osgFX;
 
 /* PassCullCallback */
-
-class PassCullCallback : public osg::NodeCallback
+void PassCullCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 {
-public:
-    PassCullCallback( EffectCompositor* compositor, EffectCompositor::PassType type )
-    : _compositor(compositor), _type(type) {}
-    
-    virtual void operator()( osg::Node* node, osg::NodeVisitor* nv )
-    {
-        osg::Camera* camera = static_cast<osg::Camera*>( node );
-        if ( !camera || !nv )
-        {
-            traverse( node, nv );
-            return;
-        }
-        
-        if ( nv->getVisitorType()==osg::NodeVisitor::CULL_VISITOR )
-        {
-            osgUtil::CullVisitor* cv = static_cast<osgUtil::CullVisitor*>(nv);
-            if ( _type==EffectCompositor::FORWARD_PASS )
-            {
-                // Forward pass will traverse the scene normally
-                _compositor->osg::Group::traverse( *nv );
-                
-                // We obtain the actual near/far values at the end of forward pass traversing
-                double znear = cv->getCalculatedNearPlane();
-                double zfar = cv->getCalculatedFarPlane();
-                osg::Matrixd projection = *(cv->getProjectionMatrix());
-                cv->clampProjectionMatrix( projection, znear, zfar );
+	osg::Camera* camera = static_cast<osg::Camera*>(node);
+	if (!camera || !nv)
+	{
+		traverse(node, nv);
+		return;
+	}
 
-                
-                const osg::FrameStamp* fs = cv->getFrameStamp();
-                // if ( fs ) _compositor->setPreservedNearAndFar( fs->getFrameNumber(), znear, zfar );
-                if ( fs ) _compositor->setPreservedNearAndFarAndClampMat( fs->getFrameNumber(), znear, zfar, projection );
-            }
-            else if ( camera->getNumChildren()>0 )  // Use camera's own children as display surface
-                camera->osg::Group::traverse( *nv );
-            else                                    // Render to a fullscreen quad
-                _compositor->getOrCreateQuad()->accept( *nv );
-        }
-        else
-            traverse( node, nv );
-    }
-    
-protected:
-    osg::observer_ptr<EffectCompositor> _compositor;
-    EffectCompositor::PassType _type;
-};
+	if (nv->getVisitorType() == osg::NodeVisitor::CULL_VISITOR)
+	{
+		osgUtil::CullVisitor* cv = static_cast<osgUtil::CullVisitor*>(nv);
+		if (_type == EffectCompositor::FORWARD_PASS)
+		{
+			// Forward pass will traverse the scene normally
+			_compositor->osg::Group::traverse(*nv);
+
+			// mainly used for skybox
+			if (!_preserveNearFar) return;
+
+			// We obtain the actual near/far values at the end of forward pass traversing
+			double znear = cv->getCalculatedNearPlane();
+			double zfar = cv->getCalculatedFarPlane();
+			osg::Matrixd projection = *(cv->getProjectionMatrix());
+			cv->clampProjectionMatrix(projection, znear, zfar);
+
+			const osg::FrameStamp* fs = cv->getFrameStamp();
+			// if ( fs ) _compositor->setPreservedNearAndFar( fs->getFrameNumber(), znear, zfar );
+			if (fs) _compositor->setPreservedNearAndFarAndClampMat(fs->getFrameNumber(), znear, zfar, projection);
+		}
+		else if (camera->getNumChildren() > 0)  // Use camera's own children as display surface
+			camera->osg::Group::traverse(*nv);
+		else                                    // Render to a fullscreen quad
+			_compositor->getOrCreateQuad()->accept(*nv);
+	}
+	else
+		traverse(node, nv);
+}
 
 /* EffectCompositor */
 
@@ -515,7 +505,6 @@ void EffectCompositor::traverse( osg::NodeVisitor& nv )
 			if ( _preservedZNear!=FLT_MAX ) zNear = _preservedZNear;
 			if ( _preservedZFar!=-FLT_MAX ) zFar = _preservedZFar;
 			*/
-
 
             for ( InbuiltUniformList::const_iterator itr=_inbuiltUniforms.begin();
                   itr!=_inbuiltUniforms.end(); ++itr )

@@ -13,6 +13,7 @@ namespace osgFX
 {
 
 
+
 /** The compositor class integrates multiple forward and deferred passes to create complex visual effects */
 class EffectCompositor : public osg::Group
 {
@@ -28,6 +29,7 @@ public:
         PassType type;
         std::string name;
         osg::ref_ptr<osg::Camera> pass;
+		bool preserveNearFar;
         
         PassData() : activated(true), type(FORWARD_PASS) {}
         
@@ -35,6 +37,7 @@ public:
         {
             activated = pd.activated; type = pd.type;
             name = pd.name; pass = pd.pass;
+			preserveNearFar = pd.preserveNearFar;
             return *this;
         }
         
@@ -297,10 +300,31 @@ protected:
 	bool _isDirty;
 };
 
+/* PassCullCallback */
+
+class PassCullCallback : public osg::NodeCallback
+{
+public:
+	PassCullCallback(EffectCompositor* compositor, EffectCompositor::PassType type)
+		: _compositor(compositor), _type(type), _preserveNearFar(true) {}
+
+	virtual void operator()(osg::Node* node, osg::NodeVisitor* nv);
+
+	// mainly used for skybox
+	inline void setPreserveNearFar(bool tf)
+	{
+		_preserveNearFar = tf;
+	}
+
+protected:
+	osg::observer_ptr<EffectCompositor> _compositor;
+	EffectCompositor::PassType _type;
+	bool _preserveNearFar;
+};
+
 /** Read effect compositor from the XML file/stream */
 EffectCompositor* readEffectFile( const std::string& filename, const osgDB::Options* options=NULL );
 EffectCompositor* readEffectStream( std::istream& stream, const osgDB::Options* options=NULL );
-
 
 }
 

@@ -10,7 +10,7 @@
 class Core
 {
 public:
-	static void init(int winWidth, int winHeight, int resolutionWidth, int resolutionHeight);
+	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight);
 	static osg::Vec2 getScreenSize();
 
 	static void loadWorldFile(const std::string &worldFilePath);
@@ -51,6 +51,7 @@ private:
 
 	static osg::Vec2 _screenSize;
 	static osg::Vec2 _renderResolution;
+	static osg::Vec2 _winPos;
 
 	static World _world;
 	static bool _hasInit;

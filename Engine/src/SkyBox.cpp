@@ -7,6 +7,7 @@
 
 #include <osg/Depth>
 #include <osgUtil/CullVisitor>
+#include <osg/TexGen>
 #include "SkyBox.h"
 
 SkyBox::SkyBox()
@@ -15,10 +16,24 @@ SkyBox::SkyBox()
     setCullingActive( false );
     
     osg::StateSet* ss = getOrCreateStateSet();
-    ss->setAttributeAndModes( new osg::Depth(osg::Depth::LEQUAL, 1.0f, 1.0f) );
+	osg::ref_ptr<osg::Depth> depthConfig(new osg::Depth);
+	depthConfig->setWriteMask(false);
+    ss->setAttributeAndModes( depthConfig );
+    //ss->setAttributeAndModes( new osg::Depth(osg::Depth::LEQUAL, 1.0f, 1.0f) );
+	ss->setMode(GL_DEPTH_TEST, osg::StateAttribute::OFF);
     ss->setMode( GL_LIGHTING, osg::StateAttribute::OFF );
     ss->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
     ss->setRenderBinDetails( 5, "RenderBin" );
+
+	_skySphere = new osg::Geode;
+	_skySphere->addDrawable(new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(), 0.0)));
+	_skySphere->setCullingActive(false);
+	addChild(_skySphere);
+}
+
+void SkyBox::setGeomRoot(osg::Group *geomRoot)
+{
+	_skySphere->setUpdateCallback(new SkyBoxCallback(geomRoot));
 }
 
 void SkyBox::setEnvironmentMap( unsigned int unit, osg::Image* posX, osg::Image* negX,
@@ -42,6 +57,8 @@ void SkyBox::setEnvironmentMap( unsigned int unit, osg::Image* posX, osg::Image*
         cubemap->setResizeNonPowerOfTwoHint( false );
         getOrCreateStateSet()->setTextureAttributeAndModes( unit, cubemap.get() );
     }
+
+	getOrCreateStateSet()->setTextureAttributeAndModes(0, new osg::TexGen);
 }
 
 bool SkyBox::computeLocalToWorldMatrix( osg::Matrix& matrix, osg::NodeVisitor* nv ) const

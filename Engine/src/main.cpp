@@ -4,9 +4,11 @@
 
 int main()
 {
-	Core::init(800, 600, 800, 600);
-	setupScene();
+	Core::init(160, 80,		// winPosX, winPosY
+			   1280, 720,		// winSizeX, winSizeY
+			   1280, 720);		// renderBufferX, renderBufferY
 
+	setupScene();
 	Core::run();
 
 	return 0;

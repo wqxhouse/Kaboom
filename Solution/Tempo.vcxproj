@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClInclude Include="..\Engine\include\Camera.h" />
     <ClInclude Include="..\Engine\include\Core.h" />
+    <ClInclude Include="..\Engine\include\CustomFirstPersonManipulator.h" />
     <ClInclude Include="..\Engine\include\DirectionalLight.h" />
     <ClInclude Include="..\Engine\include\EffectCompositor.h" />
     <ClInclude Include="..\Engine\include\GeometryObject.h" />
@@ -37,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Engine\src\Core.cpp" />
+    <ClCompile Include="..\Engine\src\CustomFirstPersonManipulator.cpp" />
     <ClCompile Include="..\Engine\src\DirectionalLight.cpp" />
     <ClCompile Include="..\Engine\src\EffectAnalysisHelper.cpp" />
     <ClCompile Include="..\Engine\src\EffectCompositor.cpp" />
@@ -72,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\BugList.txt" />
+    <None Include="..\Media\EffectFiles\smaa.xml" />
     <None Include="..\Media\Shaders\constant.glsl" />
     <None Include="..\Media\Shaders\defaultQuad.vert" />
     <None Include="..\Media\Shaders\gbufferUtil.glsl" />
@@ -86,6 +89,12 @@
     <None Include="..\Media\Shaders\lightTiling.frag" />
     <None Include="..\Media\Shaders\lightUtil.glsl" />
     <None Include="..\Media\Shaders\Material.glsl" />
+    <None Include="..\Media\Shaders\SMAA\blend.frag" />
+    <None Include="..\Media\Shaders\SMAA\blend.vert" />
+    <None Include="..\Media\Shaders\SMAA\edgedetection.frag" />
+    <None Include="..\Media\Shaders\SMAA\edgedetection.vert" />
+    <None Include="..\Media\Shaders\SMAA\neighborhood.frag" />
+    <None Include="..\Media\Shaders\SMAA\neighborhood.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E24D41A4-8D90-45FF-9C55-6466187744AD}</ProjectGuid>

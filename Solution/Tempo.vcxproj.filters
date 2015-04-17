@@ -21,6 +21,9 @@
     <Filter Include="Media\Textures">
       <UniqueIdentifier>{295211c6-3af2-44ae-917f-dbb5ea8092ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Media\Shaders\smaa">
+      <UniqueIdentifier>{66ede5de-5157-4efe-91f3-0d0899a94ed1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Engine\include\Camera.h">
@@ -76,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="..\Engine\include\LightPassCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Engine\include\CustomFirstPersonManipulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -139,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="..\Engine\src\LightPassCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Engine\src\CustomFirstPersonManipulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -212,5 +221,26 @@
       <Filter>Media\Shaders</Filter>
     </None>
     <None Include="..\BugList.txt" />
+    <None Include="..\Media\EffectFiles\smaa.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\blend.frag">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\blend.vert">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\edgedetection.frag">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\edgedetection.vert">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\neighborhood.frag">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\neighborhood.vert">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
   </ItemGroup>
 </Project>
