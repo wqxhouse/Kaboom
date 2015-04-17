@@ -81,10 +81,10 @@
     <ClInclude Include="..\Engine\include\LightPassCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConfigSettings.h">
+    <ClInclude Include="..\Engine\include\CustomFirstPersonManipulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Engine\include\CustomFirstPersonManipulator.h">
+    <ClInclude Include="..\Engine\include\ConfigSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -150,10 +150,10 @@
     <ClCompile Include="..\Engine\src\LightPassCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConfigSettings.cpp">
+    <ClCompile Include="..\Engine\src\CustomFirstPersonManipulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Engine\src\CustomFirstPersonManipulator.cpp">
+    <ClCompile Include="..\Engine\src\ConfigSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -180,9 +180,6 @@
       <Filter>Media\EffectFiles</Filter>
     </Xml>
     <Xml Include="..\Media\EffectFiles\TestWorld.xml">
-      <Filter>Media\EffectFiles</Filter>
-    </Xml>
-    <Xml Include="..\Media\EffectFiles\TestWorld1.xml">
       <Filter>Media\EffectFiles</Filter>
     </Xml>
   </ItemGroup>

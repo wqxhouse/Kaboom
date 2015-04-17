@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Engine\include\Camera.h" />
+    <ClInclude Include="..\Engine\include\ConfigSettings.h" />
     <ClInclude Include="..\Engine\include\Core.h" />
     <ClInclude Include="..\Engine\include\CustomFirstPersonManipulator.h" />
     <ClInclude Include="..\Engine\include\DirectionalLight.h" />
@@ -34,10 +35,10 @@
     <ClInclude Include="..\Engine\include\SkyBox.h" />
     <ClInclude Include="..\Engine\include\TwGUIManager.h" />
     <ClInclude Include="..\Engine\include\World.h" />
-    <ClInclude Include="ConfigSettings.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Engine\src\ConfigSettings.cpp" />
     <ClCompile Include="..\Engine\src\Core.cpp" />
     <ClCompile Include="..\Engine\src\CustomFirstPersonManipulator.cpp" />
     <ClCompile Include="..\Engine\src\DirectionalLight.cpp" />
@@ -59,7 +60,6 @@
     <ClCompile Include="..\Engine\src\SkyBox.cpp" />
     <ClCompile Include="..\Engine\src\TwGUIManager.cpp" />
     <ClCompile Include="..\Engine\src\World.cpp" />
-    <ClCompile Include="ConfigSettings.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -173,6 +173,13 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)..\3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)..\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -195,6 +202,11 @@
       <AdditionalLibraryDirectories>C:/3DEngine/AntTweakBar/include;$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
       <AdditionalDependencies>AntTweakBar64.lib;osg.lib;osgViewer.lib;osgAnimation.lib;osgDB.lib;osgGA.lib;OpenThreads.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)..\3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)..\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">
     <ClCompile>
@@ -226,8 +238,9 @@
       </LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)..\3rdParty\bin\*.dll" "$(TargetDir)" /y</Command>
-      <Message>Copying 3rdParty dlls to the executable's directory</Message>
+      <Command>xcopy "$(SolutionDir)..\3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)..\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
     </PostBuildEvent>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>

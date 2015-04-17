@@ -43,9 +43,6 @@ void setupScene()
 	//g->setGeometryMaterial("cow", m->getMaterial("planeMat"));
 	////l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), osg::Vec3(0.7, 0.3, 0.3), false);
 
-	//osg::Vec3 colorRED = osg::Vec3(0.7, 0.3, 0.3);
-	//l->addPointLight("pt1", osg::Vec3(7, 0, 0), colorRED, 100, false);
-
 	//osg::Vec3 colorGREEN = osg::Vec3(0.3, 0.7, 0.3);
 	//l->addPointLight("pt2", osg::Vec3(-7, 0, 0), colorGREEN, 100, false);
 
