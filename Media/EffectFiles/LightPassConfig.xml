@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<compositor>
+  <buffer name="b_shading" type="2d">
+    <!-- 16bits to support HDR -->
+    <internal_format>rgba16f</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>float</source_type>
+  </buffer>
+
+  <shader name="lightPass_vs" type="vertex">
+    <version>120</version>
+    <file>Shaders/lightPassQuad.vert</file>
+  </shader>
+
+  <shader name="lightPass_fs" type="fragment">
+    <version>400</version>
+    <file>Shaders/lightPass.frag</file>
+  </shader>
+
+  <uniform name="u_projInvMat" type="mat4"></uniform>
+</compositor>
