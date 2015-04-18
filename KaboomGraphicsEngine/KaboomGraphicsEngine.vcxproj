@@ -212,7 +212,7 @@ xcopy "$(SolutionDir)..\Media\Config\config.ini" "$(TargetDir)" /y</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>Create</PrecompiledHeader>
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
