@@ -25,12 +25,6 @@
     <Filter Include="Source Files\Network">
       <UniqueIdentifier>{6ea51890-7afd-4cfc-a4c2-a51a5ed25813}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Util">
-      <UniqueIdentifier>{8402de62-27dd-4a1a-a94b-ecc0566aad9d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Util">
-      <UniqueIdentifier>{2a42afd3-1a72-4137-8fb7-2a05e12952e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{a514288e-2015-4033-b8a9-81be6c6ee91d}</UniqueIdentifier>
     </Filter>
@@ -69,9 +63,6 @@
     <ClCompile Include="src\network\GameClient.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\ConfigSettings.cpp">
-      <Filter>Source Files\Util</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\SceneNodeComponent.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
@@ -90,6 +81,7 @@
     <ClCompile Include="src\network\ClientEventHandlerLookup.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Global.h">
@@ -100,9 +92,6 @@
     </ClInclude>
     <ClInclude Include="src\input\InputManager.h">
       <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\ConfigSettings.h">
-      <Filter>Header Files\Util</Filter>
     </ClInclude>
     <ClInclude Include="src\network\ClientNetwork.h">
       <Filter>Header Files\Network</Filter>
@@ -131,6 +120,7 @@
     <ClInclude Include="src\network\ClientEventHandlerLookup.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.ini">

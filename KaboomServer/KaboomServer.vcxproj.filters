@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Util">
-      <UniqueIdentifier>{e7f25756-d517-499e-abd2-4ddc44191973}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Util">
-      <UniqueIdentifier>{6dbbc9f2-3a5f-4c61-9b37-181f7430d580}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Network">
       <UniqueIdentifier>{42abbc11-b839-42af-8752-a75f68aeacd7}</UniqueIdentifier>
     </Filter>
@@ -45,9 +39,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\util\ConfigSettings.cpp">
-      <Filter>Source Files\Util</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,11 +66,9 @@
     <ClCompile Include="src\network\ServerEventHandlerLookup.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\util\ConfigSettings.h">
-      <Filter>Header Files\Util</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\NetworkServices.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
@@ -104,5 +93,6 @@
     <ClInclude Include="src\network\ServerEventHandlerLookup.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
 </Project>

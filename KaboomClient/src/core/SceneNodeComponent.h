@@ -1,9 +1,5 @@
 #pragma once
-
-#include <Windows.h>
-
 #include <osg/Node>
-
 #include <core/Component.h>
 
 class SceneNodeComponent : public Component {

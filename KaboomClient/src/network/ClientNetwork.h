@@ -1,8 +1,7 @@
 #pragma once
 
 #include <WinSock2.h>
-
-#include "../util/ConfigSettings.h"
+#include <ConfigSettings.h>
 
 class ClientNetwork {
 public:

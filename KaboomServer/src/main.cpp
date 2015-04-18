@@ -1,7 +1,5 @@
 #include <ctime>
 
-#include <Windows.h>
-
 #include "core/Game.h"
 
 int main() {
