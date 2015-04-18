@@ -212,13 +212,13 @@ xcopy "$(SolutionDir)..\Media\Config\config.ini" "$(TargetDir)" /y</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)3rdParty/include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OSG_INCLUDE_PATH);$(ProjectDir);$(ProjectDir)include;$(SolutionDir)3rdParty/include</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -233,7 +233,7 @@ xcopy "$(SolutionDir)..\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       </EnableCOMDATFolding>
       <OptimizeReferences>
       </OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)../3rdParty/lib;$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)/3rdParty/lib;$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
       <AdditionalDependencies>AntTweakBar64.lib;osg.lib;osgViewer.lib;osgAnimation.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;OpenThreads.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>
       </LinkTimeCodeGeneration>
