@@ -4,12 +4,12 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include <ConfigSettings.h>
 #include <core/EntityManager.h>
 
 #include "PlayerFactory.h"
 
 #include "../network/GameServer.h"
-#include "../util/ConfigSettings.h"
 
 class GameServer;
 

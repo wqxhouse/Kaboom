@@ -1,9 +1,6 @@
 #pragma once
 
-#include <Windows.h>
-
 #include <osgViewer/Viewer>
-
 #include "KeyboardEventHandler.h"
 
 class InputManager {

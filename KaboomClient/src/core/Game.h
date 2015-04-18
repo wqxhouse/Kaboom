@@ -1,15 +1,12 @@
 #pragma once
 
-#include <Windows.h>
-
 #include <osgViewer/Viewer>
-
 #include <core/EntityManager.h>
+#include <ConfigSettings.h>
 
 #include "PlayerFactory.h"
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
-#include "../util/ConfigSettings.h"
 
 class ClientEventHandlerLookup;
 

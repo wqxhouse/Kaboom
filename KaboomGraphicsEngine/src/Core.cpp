@@ -28,8 +28,9 @@
 extern void configureViewerForMode(osgViewer::Viewer& viewer, osgFX::EffectCompositor* compositor,
 		osg::Node* model, int displayMode);
 
-void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight)
+void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath)
 {
+	_mediaPath = mediaPath;
 	// TODO: add reshape callback for winPos, winHeight, bufferSize
 	_screenSize = osg::Vec2(winWidth, winHeight);
 	// TODO: test separation of screenSize and the renderResolution
@@ -65,8 +66,12 @@ void Core::configFilePath()
 	// TODO: read from config file
 	osgDB::FilePathList& filePaths = osgDB::getDataFilePathList();
 
-	// std::string rootPath = "C:\\Users\\Brian\\Documents\\GitHub\\Tempo\\Media\\";
-	std::string rootPath = "C:\\3DEngine\\Tempo\\Media\\";
+	if (_mediaPath.empty())
+	{
+		OSG_WARN << "Core:: Media path for graphics engine not set" << std::endl;
+	}
+
+	std::string rootPath = _mediaPath;
 
 	// TODO : currently minimum check, can do comprehensive checks later
 	std::string pipelineRelative = "EffectFiles\\Pipeline.xml";
@@ -255,3 +260,4 @@ bool Core::_hasEnvMap = false;
 Camera Core::_cam;
 osg::ref_ptr<TwGUIManager> Core::_gui;
 osg::ref_ptr<SkyBox> Core::_skybox;
+std::string Core::_mediaPath;

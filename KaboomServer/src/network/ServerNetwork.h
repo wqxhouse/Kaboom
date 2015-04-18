@@ -1,11 +1,11 @@
-#include <winsock2.h>
-#include <Windows.h>
+#include <Winsock2.h>
+//#include <Windows.h>
 #include <ws2tcpip.h>
 #include <map>
 
+#include <ConfigSettings.h>
 #include <network/NetworkData.h>
 
-#include "../util/ConfigSettings.h"
 #include "NetworkServices.h"
 
 

@@ -10,7 +10,7 @@
 
 ClientNetwork::ClientNetwork(ConfigSettings * _config) {
     config = _config;
-    string serverAddress;
+    std::string serverAddress;
     int serverPort;
     config->getValue(ConfigSettings::str_server_address, serverAddress);
     config->getValue(ConfigSettings::str_server_port, serverPort);
@@ -75,7 +75,7 @@ ClientNetwork::ClientNetwork(ConfigSettings * _config) {
             closesocket(clientSocket);
             clientSocket = INVALID_SOCKET;
 
-            printf("<Client> The server is down... did not connect %x\n", ptr->ai_addr);
+            printf("<Client> The server is down... did not connect %p\n", ptr->ai_addr);
         }
     }
 

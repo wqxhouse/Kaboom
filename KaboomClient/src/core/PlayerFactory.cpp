@@ -1,6 +1,5 @@
 #include "PlayerFactory.h"
 
-#include <Windows.h>
 
 #include <osg/Geode>
 #include <osg/MatrixTransform>
