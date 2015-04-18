@@ -17,13 +17,13 @@ public:
     GameServer(ConfigSettings *, Game *game);
     ~GameServer();
 
-    bool acceptNewClient();
+    bool acceptNewClient(unsigned int);
 
     void receive();
 
     void sendGameStatePackets(Game *game);
 
-	void sendPlayerSpawnEvent(Entity *entity);
+	void sendPlayerSpawnEvent(Entity *entity, std::vector<Entity *> players);
 
     void sendPositionEvent(Entity *entity);
 

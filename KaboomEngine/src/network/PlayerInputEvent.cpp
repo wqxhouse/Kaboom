@@ -66,6 +66,9 @@ const float &PlayerInputEvent::getPitch() const {
     return pitch;
 }
 
+void PlayerInputEvent::setPlayerId(unsigned int _playerId){
+	playerId = _playerId;
+}
 void PlayerInputEvent::serialize(char *buf) const {
     memcpy(buf, this, sizeof(PlayerInputEvent));
 }
