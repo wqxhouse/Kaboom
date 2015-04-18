@@ -10,6 +10,9 @@
 #include <osg/Transform>
 #include <osg/NodeCallback>
 
+#include <osg/Geode>
+#include <osg/ShapeDrawable>
+
 class SkyBoxCallback : public osg::NodeCallback
 {
 public:
