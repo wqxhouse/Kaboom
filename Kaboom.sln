@@ -86,8 +86,8 @@ Global
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|Mixed Platforms.ActiveCfg = Release|x64
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|Mixed Platforms.Build.0 = Release|x64
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|Win32.ActiveCfg = Release|x64
-		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|x64.ActiveCfg = Release|x64
-		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|x64.Build.0 = Release|x64
+		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|x64.ActiveCfg = SemiDebug|x64
+		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|x64.Build.0 = SemiDebug|x64
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.SemiDebug|Mixed Platforms.ActiveCfg = SemiDebug|x64
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.SemiDebug|Mixed Platforms.Build.0 = SemiDebug|x64
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.SemiDebug|Win32.ActiveCfg = SemiDebug|x64
