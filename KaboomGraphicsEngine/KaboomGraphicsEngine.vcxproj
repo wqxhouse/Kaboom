@@ -15,51 +15,51 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Engine\include\Camera.h" />
-    <ClInclude Include="..\Engine\include\ConfigSettings.h" />
-    <ClInclude Include="..\Engine\include\Core.h" />
-    <ClInclude Include="..\Engine\include\CustomFirstPersonManipulator.h" />
-    <ClInclude Include="..\Engine\include\DirectionalLight.h" />
-    <ClInclude Include="..\Engine\include\EffectCompositor.h" />
-    <ClInclude Include="..\Engine\include\GeometryObject.h" />
-    <ClInclude Include="..\Engine\include\GeometryObjectManager.h" />
-    <ClInclude Include="..\Engine\include\Light.h" />
-    <ClInclude Include="..\Engine\include\LightBound.h" />
-    <ClInclude Include="..\Engine\include\LightManager.h" />
-    <ClInclude Include="..\Engine\include\LightPassCallback.h" />
-    <ClInclude Include="..\Engine\include\LightPrePassCallback.h" />
-    <ClInclude Include="..\Engine\include\Material.h" />
-    <ClInclude Include="..\Engine\include\MaterialManager.h" />
-    <ClInclude Include="..\Engine\include\PointLight.h" />
-    <ClInclude Include="..\Engine\include\Scene.h" />
-    <ClInclude Include="..\Engine\include\SkyBox.h" />
-    <ClInclude Include="..\Engine\include\TwGUIManager.h" />
-    <ClInclude Include="..\Engine\include\World.h" />
+    <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\ConfigSettings.h" />
+    <ClInclude Include="include\Core.h" />
+    <ClInclude Include="include\CustomFirstPersonManipulator.h" />
+    <ClInclude Include="include\DirectionalLight.h" />
+    <ClInclude Include="include\EffectCompositor.h" />
+    <ClInclude Include="include\GeometryObject.h" />
+    <ClInclude Include="include\GeometryObjectManager.h" />
+    <ClInclude Include="include\Light.h" />
+    <ClInclude Include="include\LightBound.h" />
+    <ClInclude Include="include\LightManager.h" />
+    <ClInclude Include="include\LightPassCallback.h" />
+    <ClInclude Include="include\LightPrePassCallback.h" />
+    <ClInclude Include="include\Material.h" />
+    <ClInclude Include="include\MaterialManager.h" />
+    <ClInclude Include="include\PointLight.h" />
+    <ClInclude Include="include\Scene.h" />
+    <ClInclude Include="include\SkyBox.h" />
+    <ClInclude Include="include\TwGUIManager.h" />
+    <ClInclude Include="include\World.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Engine\src\ConfigSettings.cpp" />
-    <ClCompile Include="..\Engine\src\Core.cpp" />
-    <ClCompile Include="..\Engine\src\CustomFirstPersonManipulator.cpp" />
-    <ClCompile Include="..\Engine\src\DirectionalLight.cpp" />
-    <ClCompile Include="..\Engine\src\EffectAnalysisHelper.cpp" />
-    <ClCompile Include="..\Engine\src\EffectCompositor.cpp" />
-    <ClCompile Include="..\Engine\src\EffectCompositorXML.cpp" />
-    <ClCompile Include="..\Engine\src\GeometryObject.cpp" />
-    <ClCompile Include="..\Engine\src\GeometryObjectManager.cpp" />
-    <ClCompile Include="..\Engine\src\Light.cpp" />
-    <ClCompile Include="..\Engine\src\LightBound.cpp" />
-    <ClCompile Include="..\Engine\src\LightManager.cpp" />
-    <ClCompile Include="..\Engine\src\LightPassCallback.cpp" />
-    <ClCompile Include="..\Engine\src\LightPrePassCallback.cpp" />
-    <ClCompile Include="..\Engine\src\main.cpp" />
-    <ClCompile Include="..\Engine\src\Material.cpp" />
-    <ClCompile Include="..\Engine\src\MaterialManager.cpp" />
-    <ClCompile Include="..\Engine\src\PointLight.cpp" />
-    <ClCompile Include="..\Engine\src\Scene.cpp" />
-    <ClCompile Include="..\Engine\src\SkyBox.cpp" />
-    <ClCompile Include="..\Engine\src\TwGUIManager.cpp" />
-    <ClCompile Include="..\Engine\src\World.cpp" />
+    <ClCompile Include="src\ConfigSettings.cpp" />
+    <ClCompile Include="src\Core.cpp" />
+    <ClCompile Include="src\CustomFirstPersonManipulator.cpp" />
+    <ClCompile Include="src\DirectionalLight.cpp" />
+    <ClCompile Include="src\EffectAnalysisHelper.cpp" />
+    <ClCompile Include="src\EffectCompositor.cpp" />
+    <ClCompile Include="src\EffectCompositorXML.cpp" />
+    <ClCompile Include="src\GeometryObject.cpp" />
+    <ClCompile Include="src\GeometryObjectManager.cpp" />
+    <ClCompile Include="src\Light.cpp" />
+    <ClCompile Include="src\LightBound.cpp" />
+    <ClCompile Include="src\LightManager.cpp" />
+    <ClCompile Include="src\LightPassCallback.cpp" />
+    <ClCompile Include="src\LightPrePassCallback.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\MaterialManager.cpp" />
+    <ClCompile Include="src\PointLight.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\SkyBox.cpp" />
+    <ClCompile Include="src\TwGUIManager.cpp" />
+    <ClCompile Include="src\World.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -103,10 +103,11 @@
     <ProjectGuid>{E24D41A4-8D90-45FF-9C55-6466187744AD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Tempo</RootNamespace>
+    <ProjectName>KaboomGraphicsEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -119,7 +120,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -155,7 +156,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)../Engine/include;C:/3DEngine/AntTweakBar/include;$(OSG_INCLUDE_PATH);$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OSG_INCLUDE_PATH);$(ProjectDir);$(ProjectDir)include;$(SolutionDir)3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <BrowseInformation>true</BrowseInformation>
@@ -217,7 +218,7 @@ xcopy "$(SolutionDir)..\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)../Engine/include;$(SolutionDir)../3rdParty/include;$(OSG_INCLUDE_PATH);$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)3rdParty/include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -238,8 +239,8 @@ xcopy "$(SolutionDir)..\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       </LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)..\3rdParty\bin\*.dll" "$(TargetDir)" /y
-xcopy "$(SolutionDir)..\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+      <Command>xcopy "$(SolutionDir)3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
     </PostBuildEvent>
     <Bscmake>
