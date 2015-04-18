@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(OSG_INCLUDE_PATH);$(SolutionDir)\KaboomEngine\src;$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4005;4006;4088;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -120,6 +120,11 @@
       <AdditionalDependencies>osg.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;osgViewer.lib;ws2_32.lib;mswsock.lib;advapi32.lib;AntTweakBar64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/FORCE:multiple %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)Media\Config\config.ini" "$(TargetDir)" /y</Command>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Game.cpp" />
