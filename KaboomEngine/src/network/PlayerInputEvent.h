@@ -35,6 +35,8 @@ public:
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);
 
+	virtual void setPlayerId(unsigned int);
+
     friend std::ostream& operator<<(std::ostream &os, const PlayerInputEvent &o) {
         os << "PlayerInputEvent: {" << std::endl;
         os << "    playerId: " << o.playerId << std::endl;

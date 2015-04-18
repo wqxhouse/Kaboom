@@ -14,10 +14,15 @@ public:
 
     void GameClient::sendMessage(const Event &evt);
 
+	
 private:
     ClientEventHandlerLookup *eventHandlerLookup;
 
     ClientNetwork *network;
 
     char networkData[MAX_PACKET_SIZE];
+
+	unsigned int currentPlayerEntityId;
+
+	bool initialized = false;
 };

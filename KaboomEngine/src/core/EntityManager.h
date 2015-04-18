@@ -17,6 +17,7 @@ public:
     Entity *getEntity(unsigned int id) const;
     bool isEntityAlive(unsigned int id) const;
 
+	unsigned int getNextId() const;
 private:
     std::unordered_map<unsigned int, Entity *> entities;
     unsigned int nextId;

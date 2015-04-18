@@ -55,3 +55,7 @@ Entity *EntityManager::getEntity(unsigned int id) const {
 bool EntityManager::isEntityAlive(unsigned int id) const {
     return entities.count(id) > 0;
 }
+
+unsigned int EntityManager::getNextId() const{
+	return nextId;
+}

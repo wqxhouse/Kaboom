@@ -26,11 +26,11 @@ GameServer::GameServer(ConfigSettings * config, Game *game)
 GameServer::~GameServer() {
 }
 
-bool GameServer::acceptNewClient() {
-    if (network->acceptNewClient(client_id)) {
-        printf("<Server> Client %d has connected to the server\n", client_id);
+bool GameServer::acceptNewClient(unsigned int entity_id) {
+    if (network->acceptNewClient(entity_id)) {
+        printf("<Server> Client %d has connected to the server\n", entity_id);
 
-        client_id++;
+        //client_id++;
 
         return true;
     }
@@ -47,7 +47,7 @@ void GameServer::receive() {
         }
 
         EmptyEvent emptyEvent;
-        PlayerInputEvent playerInputEvent;
+		PlayerInputEvent playerInputEvent;
 
         unsigned int i = 0;
         while (i < (unsigned int)len) {
@@ -56,6 +56,9 @@ void GameServer::receive() {
             switch (emptyEvent.getOpcode()) {
             case EventOpcode::PLAYER_INPUT:
                 playerInputEvent.deserialize(&network_data[i]);
+
+				playerInputEvent.setPlayerId(it.first); //Important prevent hacking from client impersonating as other clients
+
                 eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
                 break;
             default:
@@ -74,20 +77,35 @@ void GameServer::sendGameStatePackets(Game *game) {
     }
 }
 
-void GameServer::sendPlayerSpawnEvent(Entity* player) {
-    PositionComponent *positionCom = player->getComponent<PositionComponent>();
+void GameServer::sendPlayerSpawnEvent(Entity* newEntity, std::vector<Entity *> existingEnities) {
+
+	//send the spawn entity event to all the clients
+	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
 
     if (positionCom == nullptr) {
         return;
     }
 
-    PlayerSpawnEvent playerSpawnEvent(player->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ());
+	PlayerSpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ());
 
     const unsigned int packet_size = sizeof(PlayerSpawnEvent);
     char packet_data[packet_size];
 
     playerSpawnEvent.serialize(packet_data);
     network->sendToAll(packet_data, packet_size);
+
+	//Send to the client who just joined with the existing entity we already have
+
+	for (int i = 0; i < existingEnities.size(); i++){
+		if (existingEnities[i]->getId() == newEntity->getId()){
+			continue;
+		}
+		positionCom = existingEnities[i]->getComponent<PositionComponent>();
+
+		PlayerSpawnEvent extraPlayers(existingEnities[i]->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ());
+		extraPlayers.serialize(packet_data);
+		network->sendToOneClient(packet_data, packet_size, newEntity->getId());
+	}
 }
 
 void GameServer::sendPositionEvent(Entity* entity) {

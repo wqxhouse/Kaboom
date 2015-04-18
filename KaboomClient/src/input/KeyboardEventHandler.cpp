@@ -80,7 +80,7 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIAc
 
             prevX = x;
             prevY = y;
-            aa.requestWarpPointer(centerx, centery);
+            //aa.requestWarpPointer(centerx, centery);
         }
         return false;
     default:

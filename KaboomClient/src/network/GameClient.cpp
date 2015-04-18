@@ -55,6 +55,11 @@ void GameClient::receive() {
 		case EventOpcode::PLAYER_SPAWN:
 			playerSpawnEvent.deserialize(&networkData[i]);
 			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerSpawnEvent);
+
+			if (!initialized) {
+				currentPlayerEntityId = playerSpawnEvent.getPlayerId(); //set entityId the client needs to keep track of
+			}
+
 			break;
 		default:
 			printf("error in packet event types\n");
