@@ -1,0 +1,14 @@
+Unresolved:
+1. Point Light Tile culling fails to handle edges of geometry. 
+	- create a point light not entirely covering the geometry. 
+	  tile artifact will show on the edge
+
+2. Press ESC will crash the program. Whereas click to close will not carsh the program.
+
+Fixed:
+1. Scrolling will crash the program (TwGUI)
+2. Skybox overriding preserved near far plane of gbuffer projection matrix, 
+   causing gbuffer linear depth wrong, making shading buffer light culling wrong, 
+   thus causing shading wrong. 
+   Fixed by add an option in EffectCompositor to not presering near and far plane
+   for skybox.
