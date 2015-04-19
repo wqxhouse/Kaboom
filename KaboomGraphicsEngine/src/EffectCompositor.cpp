@@ -59,7 +59,7 @@ EffectCompositor::EffectCompositor()
     _renderTargetImpl(osg::Camera::FRAME_BUFFER_OBJECT),
     _preservedZNear(FLT_MAX), _preservedZFar(-FLT_MAX),
     _preservingNearFarFrameNumber(0),
-	_isDirty(false)
+	_isDirty(false) 
 {
     getOrCreateQuad();
     setCurrentTechnique( "default" );
@@ -77,7 +77,9 @@ EffectCompositor::EffectCompositor( const EffectCompositor& copy, const osg::Cop
     _renderTargetImpl(copy._renderTargetImpl),
     _preservedZNear(copy._preservedZNear),
     _preservedZFar(copy._preservedZFar),
-    _preservingNearFarFrameNumber(copy._preservingNearFarFrameNumber)
+    _preservingNearFarFrameNumber(copy._preservingNearFarFrameNumber), 
+	_preservedClampedProjectionMatrix(copy._preservedClampedProjectionMatrix),
+	_isDirty(copy._isDirty) 
 {
 }
 

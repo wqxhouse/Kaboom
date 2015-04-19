@@ -247,6 +247,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CompositorAnalysis.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Core.h" />
     <ClInclude Include="include\CustomFirstPersonManipulator.h" />
@@ -262,7 +263,6 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\Material.h" />
     <ClInclude Include="include\MaterialManager.h" />
     <ClInclude Include="include\PointLight.h" />
-    <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\TwGUIManager.h" />
     <ClInclude Include="include\World.h" />
@@ -285,7 +285,6 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
-    <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\TwGUIManager.cpp" />
     <ClCompile Include="src\World.cpp" />

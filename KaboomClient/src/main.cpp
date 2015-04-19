@@ -1,8 +1,10 @@
 #include <iostream>
 #include <ConfigSettings.h>
 #include <Core.h>
+#include "Scene.h"
 
 #include "network/GameClient.h"
+#include "input/InputManager.h"
 
 GameClient *g_client;
 int main() 
@@ -24,7 +26,14 @@ int main()
 	int screenW = atoi(screenWStr.c_str());
 	int screenH = atoi(screenHStr.c_str());
 
+
 	Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
+
+	// hack, refactor after having access to the lab computers
+	InputManager *inputManager = new InputManager(NULL);
+	inputManager->loadConfig();
+
+	setupScene();
 	Core::run();
 }
 

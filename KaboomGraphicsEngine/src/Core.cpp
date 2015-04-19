@@ -25,7 +25,7 @@
 // TODO: log which one called the global functions in Core
 // for debugging
 
-extern void configureViewerForMode(osgViewer::Viewer& viewer, osgFX::EffectCompositor* compositor,
+extern osg::ref_ptr<CompositorAnalysis> configureViewerForMode(osgViewer::Viewer& viewer, osgFX::EffectCompositor* compositor,
 		osg::Node* model, int displayMode);
 
 void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath)
@@ -39,6 +39,11 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	_sceneRoot = new osg::Group;
 	_gui = new TwGUIManager;
 	_skybox = new SkyBox;
+
+	_analysisHUD = NULL;
+	_passDataDisplay = false;
+	_gameMode = false;
+	_guiEnabled = true;
 
 	configFilePath();
 
@@ -156,6 +161,10 @@ void Core::configLightPass()
 	}
 }
 
+void Core::configCubemapPrefilterPass()
+{
+}
+
 void Core::configSceneNode()
 {
 	_geomRoot = new osg::Group;
@@ -172,6 +181,7 @@ void Core::configViewer()
 	_viewer->getCamera()->setFinalDrawCallback(_gui.get());
 
 	_viewer->setUpViewInWindow(_winPos.x(), _winPos.y(), _screenSize.x(), _screenSize.y());
+	_viewer->setKeyEventSetsDone(0);
 }
 
 void Core::run()
@@ -190,17 +200,29 @@ void Core::run()
 		configSkyBox();
 	}
 
-	// TODO: add switches using keyboard
-	configureViewerForMode(*_viewer, _passes, NULL, 1);
-	// _viewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
+	_analysisHUD = configureViewerForMode(*_viewer, _passes, NULL, 1);
+	_analysisHUD->toggleHelper(); // disabled by default
 
-	_viewer->run();
-	//_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
-	//_viewer->realize();
-	//while (!_viewer->done())
-	//{
-	//	_viewer->frame();
-	//}
+	//_viewer->run();
+	if (_camCallback == NULL)
+	{ 
+		_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
+	}
+	else
+	{
+		_viewer->getCamera()->setUpdateCallback(new MainCameraCallback);
+	}
+
+	_viewer->realize();
+	while (!_viewer->done())
+	{
+		if (_camCallback != NULL)
+		{
+			_camCallback(&_cam);
+		}
+
+		_viewer->frame();
+	}
 }
 
 const Camera &Core::getMainCamera()
@@ -212,12 +234,19 @@ const Camera &Core::getMainCamera()
 void Core::disableCameraManipulator()
 {
 	_camManipulatorTemp = _viewer->getCameraManipulator();
+	_savedManipulatorCam = _cam;
+	std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
 	_viewer->setCameraManipulator(NULL);
 }
 
 void Core::enableCameraManipulator()
 {
+	std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
+	_camManipulatorTemp->setHomePosition(_savedManipulatorCam.getEyePosition(), 
+		_savedManipulatorCam.getLookAt(), _savedManipulatorCam.getUp());
 	_viewer->setCameraManipulator(_camManipulatorTemp);
+
+	_savedManipulatorCam = Camera();
 	_camManipulatorTemp = NULL;
 }
 
@@ -244,6 +273,76 @@ void Core::setEnvironmentMap(
 	_hasEnvMap = true;
 }
 
+void Core::disablePassDataDisplay()
+{
+	if (_passDataDisplay)
+	{
+		_analysisHUD->toggleHelper();
+		_passDataDisplay = false;
+	}
+}
+
+void Core::enablePassDataDisplay()
+{
+	if (!_passDataDisplay && !_gameMode)
+	{
+		_analysisHUD->toggleHelper();
+		_passDataDisplay = true;
+	}
+}
+
+void Core::enableGUI()
+{
+	if (!_guiEnabled && !_gameMode)
+	{
+		_viewer->addEventHandler(_gui.get());
+		_viewer->getCamera()->setFinalDrawCallback(_gui.get());
+		_guiEnabled = true;
+	}
+}
+
+void Core::disableGUI()
+{
+	if (_guiEnabled)
+	{
+		_viewer->removeEventHandler(_gui.get());
+		_viewer->getCamera()->setFinalDrawCallback(NULL);
+		_guiEnabled = false;
+	}
+}
+
+void Core::enableGameMode()
+{
+	if (!_gameMode)
+	{
+		_gameMode = true;
+		disablePassDataDisplay();
+		disableCameraManipulator();
+		disableGUI();
+		_gameMode = true;
+	}
+}
+
+void Core::disableGameMode()
+{
+	if (_gameMode)
+	{
+		_gameMode = false;
+		enableGUI();
+		enableCameraManipulator();
+
+		// TODO: change back to editor key bindings
+
+		_gameMode = false;
+	}
+}
+
+void Core::addEventHandler(osgGA::GUIEventHandler *handler)
+{
+	_viewer->addEventHandler(handler);
+}
+
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;
@@ -258,6 +357,14 @@ osg::ref_ptr<osgGA::CameraManipulator> Core::_camManipulatorTemp = NULL;
 bool Core::_hasEnvMap = false;
 
 Camera Core::_cam;
+Camera Core::_savedManipulatorCam;
+
 osg::ref_ptr<TwGUIManager> Core::_gui;
 osg::ref_ptr<SkyBox> Core::_skybox;
 std::string Core::_mediaPath;
+CameraCallback Core::_camCallback;
+osg::ref_ptr<CompositorAnalysis> Core::_analysisHUD;
+
+bool Core::_gameMode;
+bool Core::_passDataDisplay;
+bool Core::_guiEnabled;

@@ -30,6 +30,10 @@ private:
     static void jumpDown();
     static void jumpUp();
 
+	static void quitGameMode();
+	static void showDebugAnalysis();
+	static void hideDebugAnalysis();
+
     static void sendPlayerInputEvent();
 
     osg::ref_ptr<KeyboardEventHandler> keyboardHandler;
