@@ -1,6 +1,7 @@
 #include "InputManager.h"
 
 #include <network/PlayerInputEvent.h>
+#include <Core.h>
 
 #include "../Global.h"
 
@@ -60,6 +61,21 @@ void InputManager::jumpUp() {
     sendPlayerInputEvent();
 }
 
+void InputManager::quitGameMode()
+{
+	Core::disableGameMode();
+}
+
+void InputManager::showDebugAnalysis()
+{
+	Core::enablePassDataDisplay();
+}
+
+void InputManager::hideDebugAnalysis()
+{
+	Core::disablePassDataDisplay();
+}
+
 void InputManager::look(int deltaX, int deltaY) {
 
 }
@@ -79,7 +95,12 @@ void InputManager::sendPlayerInputEvent() {
 }
 
 InputManager::InputManager(osgViewer::Viewer *viewer) {
+
+	// hack, refactor it when we have access to the demo computers
     keyboardHandler = new KeyboardEventHandler();
+	Core::addEventHandler(keyboardHandler);
+
+	if (!viewer) return;
     viewer->addEventHandler(keyboardHandler);
 }
 
@@ -97,4 +118,9 @@ void InputManager::loadConfig() {
     keyboardHandler->bindKey('d', KeyboardEventHandler::KEY_UP, InputManager::moveRightUp);
     keyboardHandler->bindKey(' ', KeyboardEventHandler::KEY_DOWN, InputManager::jumpDown);
     keyboardHandler->bindKey(' ', KeyboardEventHandler::KEY_UP, InputManager::jumpUp);
+
+	// editor related
+	keyboardHandler->bindKey(osgGA::GUIEventAdapter::KEY_Escape, KeyboardEventHandler::KEY_UP, InputManager::quitGameMode);
+	keyboardHandler->bindKey(osgGA::GUIEventAdapter::KEY_F9, KeyboardEventHandler::KEY_UP, InputManager::showDebugAnalysis);
+	keyboardHandler->bindKey(osgGA::GUIEventAdapter::KEY_F10, KeyboardEventHandler::KEY_UP, InputManager::hideDebugAnalysis);
 }

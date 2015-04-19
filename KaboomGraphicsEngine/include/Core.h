@@ -2,11 +2,13 @@
 
 #include <osgViewer/Viewer>
 #include "EffectCompositor.h"
+#include "CompositorAnalysis.h"
 #include "World.h"
 #include "Camera.h"
 #include "TwGUIManager.h"
 #include "SkyBox.h"
 
+typedef void(*CameraCallback)(Camera *);
 class Core
 {
 public:
@@ -18,6 +20,7 @@ public:
 	static World &getWorldRef();
 
 	static const Camera &getMainCamera();
+	static void setCameraCallback(CameraCallback callback);
 
 	static void setEnvironmentMap(
 		const std::string &posX,
@@ -30,6 +33,17 @@ public:
 	static void disableCameraManipulator();
 	static void enableCameraManipulator();
 
+	static void disablePassDataDisplay();
+	static void enablePassDataDisplay();
+
+	static void disableGUI();
+	static void enableGUI();
+
+	static void enableGameMode();
+	static void disableGameMode();
+
+	static void addEventHandler(osgGA::GUIEventHandler *handler);
+
 	static void run();
 
 private:
@@ -38,6 +52,7 @@ private:
 	static void configViewer();
 	static void configSkyBox();
 
+	static void configCubemapPrefilterPass();
 	static void configGeometryPass();
 	static void configLightPass();
 
@@ -69,5 +84,24 @@ private:
 	// use as a temp for temporarily remove the manipulator when out of focus
 	// CAUTIOUS: when enabled, this variable is NULL
 	static osg::ref_ptr<osgGA::CameraManipulator> _camManipulatorTemp;
+	static Camera _savedManipulatorCam;
+
+	static osg::ref_ptr<CompositorAnalysis> _analysisHUD;
+	static CameraCallback _camCallback;
+
+	// on screen flags
+	static bool _gameMode;
+	static bool _passDataDisplay;
+	static bool _guiEnabled;
 };
 
+class MainCameraCallback : public osg::NodeCallback
+{
+public:
+	void operator()(osg::Node* node, osg::NodeVisitor* nv)
+	{
+		osg::Camera *mainCam = static_cast<osg::Camera *>(node);
+		mainCam->setViewMatrix(Core::getMainCamera().getViewMatrix());
+		mainCam->setProjectionMatrix(Core::getMainCamera().getProjectionMatrix());
+	}
+};

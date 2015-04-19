@@ -68,4 +68,7 @@ private:
 	osg::Vec3 _eye;
 	osg::Vec3 _lookat;
 	osg::Vec3 _up;
+
+	float _fov;
+
 };

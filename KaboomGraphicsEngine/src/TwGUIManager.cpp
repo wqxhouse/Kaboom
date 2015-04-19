@@ -24,7 +24,14 @@ TwGUIManager::TwGUIManager()
 
 void TwGUIManager::initializeTwGUI()
 {
-	TwDefine(" Tempo_GUI size='240 400' color='96 216 224' ");
+	TwDefine(" Tempo_GUI size='300 700' color='96 216 224' ");
+
+	TwAddButton(g_twBar, "Run Game", 
+		[](void *clientData) {
+		Core::enableGameMode();
+		}, NULL, " label='--> Run Game :)' ");
+
+	TwAddSeparator(g_twBar, NULL, NULL);
 
 	// Add option to disable/enable camera manipulator
 	// I did not find a way to intercept the hover event to make
@@ -50,6 +57,8 @@ void TwGUIManager::initializeTwGUI()
 			*(bool *)value = *(bool *)clientData;
 		},
 		&this->_cameraManipulatorActive, NULL);
+
+	TwAddSeparator(g_twBar, NULL, NULL);
 
 	// Process geometries
 	std::string GeomGroupName = "Edit GeometryObject";
