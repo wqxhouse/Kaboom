@@ -2,6 +2,7 @@
 
 #include "GeometryObject.h"
 #include <osgDB/ReadFile>
+#include <osg/CullFace>
 
 #include "Material.h"
 #include "MaterialManager.h"
@@ -12,12 +13,21 @@ GeometryObject::GeometryObject(const std::string &name, osg::Node *geomNode)
 	getPlainShader();
 	getTexturedShader();
 
+	_name = name;
 	_objRoot = new osg::MatrixTransform;
 	_materialNode = new osg::Group;
+	_materialNode->setName("MaterialNode_" + name);
 	_objRoot->addChild(_materialNode);
+
+	osg::ref_ptr<osg::CullFace> cullSettings(new osg::CullFace);
+	
+	// TODO: figure out how to deal with reflection for back faces
+	cullSettings->setMode(osg::CullFace::BACK);
+	geomNode->getOrCreateStateSet()->setAttributeAndModes(cullSettings, osg::StateAttribute::ON);
 	_materialNode->addChild(geomNode);
 
 	_objRoot->setUpdateCallback(new GeometryObjectNodeUpadateCallback(this));
+	_objRoot->setName("Transform_" + name);
 
 	setMaterial(Core::getWorldRef().getMaterialManager()->getBuiltInMaterial(DEFAULT));
 }

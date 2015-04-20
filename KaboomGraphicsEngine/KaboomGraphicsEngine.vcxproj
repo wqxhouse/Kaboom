@@ -247,14 +247,16 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CompositorAnalysis.h" />
     <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\CompositorAnalysis.h" />
     <ClInclude Include="include\Core.h" />
     <ClInclude Include="include\CustomFirstPersonManipulator.h" />
     <ClInclude Include="include\DirectionalLight.h" />
     <ClInclude Include="include\EffectCompositor.h" />
     <ClInclude Include="include\GeometryObject.h" />
     <ClInclude Include="include\GeometryObjectManager.h" />
+    <ClInclude Include="include\GeometryObjectManipulator.h" />
+    <ClInclude Include="include\GeometryPicker.h" />
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\LightBound.h" />
     <ClInclude Include="include\LightManager.h" />
@@ -277,6 +279,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\EffectCompositorXML.cpp" />
     <ClCompile Include="src\GeometryObject.cpp" />
     <ClCompile Include="src\GeometryObjectManager.cpp" />
+    <ClCompile Include="src\GeometryObjectManipulator.cpp" />
+    <ClCompile Include="src\GeometryPicker.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\LightBound.cpp" />
     <ClCompile Include="src\LightManager.cpp" />

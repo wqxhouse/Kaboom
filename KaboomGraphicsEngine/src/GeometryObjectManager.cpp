@@ -18,9 +18,10 @@ GeometryObjectManager::~GeometryObjectManager()
 	_geomObjMap.clear();
 }
 
-bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode)
+bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, osg::Vec3 pos)
 {
 	GeometryObject *geomObj = new GeometryObject(name, geomNode);
+	geomObj->setTranslate(pos);
 
 	// TODO: process duplicated (name) geoms
 	_geomObjMap.insert(std::make_pair(name, geomObj));

@@ -8,6 +8,7 @@
 #include <osg/Depth>
 #include <osgUtil/CullVisitor>
 #include <osg/TexGen>
+#include <osg/CullFace>
 #include "SkyBox.h"
 
 SkyBox::SkyBox()
@@ -18,22 +19,29 @@ SkyBox::SkyBox()
     osg::StateSet* ss = getOrCreateStateSet();
 	osg::ref_ptr<osg::Depth> depthConfig(new osg::Depth);
 	depthConfig->setWriteMask(false);
-    ss->setAttributeAndModes( depthConfig );
-    //ss->setAttributeAndModes( new osg::Depth(osg::Depth::LEQUAL, 1.0f, 1.0f) );
+    //ss->setAttributeAndModes( depthConfig );
+    ss->setAttributeAndModes( new osg::Depth(osg::Depth::LEQUAL, 1.0f, 1.0f) );
 	ss->setMode(GL_DEPTH_TEST, osg::StateAttribute::OFF);
     ss->setMode( GL_LIGHTING, osg::StateAttribute::OFF );
-    ss->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
-    ss->setRenderBinDetails( 5, "RenderBin" );
+
+	osg::ref_ptr<osg::CullFace> cullSettings = new osg::CullFace;
+	cullSettings->setMode(osg::CullFace::FRONT);
+    // ss->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
+    // ss->setRenderBinDetails( 5, "RenderBin" );
+	ss->setAttributeAndModes(cullSettings, osg::StateAttribute::ON);
 
 	_skySphere = new osg::Geode;
-	_skySphere->addDrawable(new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(), 0.0)));
+	_skySphere->setName("Skybox");
+
+	// TODO: currently set it as 20000; put it in config later
+	_skySphere->addDrawable(new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(), 20000.0f)));
 	_skySphere->setCullingActive(false);
 	addChild(_skySphere);
 }
 
 void SkyBox::setGeomRoot(osg::Group *geomRoot)
 {
-	_skySphere->setUpdateCallback(new SkyBoxCallback(geomRoot));
+	//_skySphere->setUpdateCallback(new SkyBoxCallback(geomRoot));
 }
 
 void SkyBox::setEnvironmentMap( unsigned int unit, osg::Image* posX, osg::Image* negX,

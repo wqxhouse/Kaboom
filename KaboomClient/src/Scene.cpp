@@ -56,9 +56,12 @@ void setupScene()
 
 	osg::Node *loadedCow = osgDB::readNodeFile("Mesh/sphere.dae");
 
-	g->addGeometry("cow", loadedCow);
-	m->createPlainMaterial("planeMat", osg::Vec3(1.0, 1.0, 1.0), 0.5, 0.7, 0.3);
+	g->addGeometry("cow", loadedCow, osg::Vec3(-1, 0, 0));
+	g->addGeometry("second", loadedCow, osg::Vec3(1, 0, 0));
+	m->createPlainMaterial("planeMat", osg::Vec3(1.0, 1.0, 1.0), 0.8, 0.5, 0.5);
 	g->setGeometryMaterial("cow", m->getMaterial("planeMat"));
+	g->setGeometryMaterial("second", m->getMaterial("planeMat"));
+
 	//l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), osg::Vec3(0.7, 0.3, 0.3), false);
 
 	osg::Vec3 colorGREEN = osg::Vec3(0.3, 0.7, 0.3);
