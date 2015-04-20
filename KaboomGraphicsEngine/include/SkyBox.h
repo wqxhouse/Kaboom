@@ -13,23 +13,24 @@
 #include <osg/Geode>
 #include <osg/ShapeDrawable>
 
-class SkyBoxCallback : public osg::NodeCallback
-{
-public:
-	SkyBoxCallback(osg::Group *geomRoot)
-		: _geomRoot(geomRoot) {}
-
-	virtual void operator()(osg::Node* node, osg::NodeVisitor* nv)
-	{
-		osg::Geode *skySphere = static_cast<osg::Geode *>(node);
-		osg::ShapeDrawable *sd = static_cast<osg::ShapeDrawable *>(skySphere->getDrawable(0));
-		osg::Sphere *sphere = static_cast<osg::Sphere *>(sd->getShape());
-		sphere->setRadius(_geomRoot->getBound().radius());
-	}
-
-private:
-	osg::ref_ptr<osg::Group> _geomRoot;
-};
+//class SkyBoxCallback : public osg::NodeCallback
+//{
+//public:
+//	SkyBoxCallback(osg::Group *geomRoot)
+//		: _geomRoot(geomRoot) {}
+//
+//	virtual void operator()(osg::Node* node, osg::NodeVisitor* nv)
+//	{
+//		osg::Geode *skySphere = static_cast<osg::Geode *>(node);
+//		osg::ShapeDrawable *sd = static_cast<osg::ShapeDrawable *>(skySphere->getDrawable(0));
+//		osg::Sphere *sphere = static_cast<osg::Sphere *>(sd->getShape());
+//		// sphere->setRadius(_geomRoot->getBound().radius());
+//		sphere->setRadius(10000);
+//	}
+//
+//private:
+//	osg::ref_ptr<osg::Group> _geomRoot;
+//};
 
 class SkyBox : public osg::Transform
 {

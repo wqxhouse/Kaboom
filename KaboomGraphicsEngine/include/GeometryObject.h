@@ -3,6 +3,8 @@
 #include <osg/MatrixTransform>
 #include <osg/NodeCallback>
 #include <osg/Program>
+#include <osgManipulator/Dragger>
+#include <osgManipulator/Selection>
 #include "EffectCompositor.h"
 
 class Material;

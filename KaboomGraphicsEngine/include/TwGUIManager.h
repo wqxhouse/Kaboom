@@ -32,6 +32,11 @@ public:
 
 	void updateEvents() const;
 
+	inline void setCameraManipulatorActive(bool tf)
+	{
+		_cameraManipulatorActive = tf;
+	}
+
 	virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 	virtual void operator()(osg::RenderInfo& renderInfo) const;
 
@@ -66,4 +71,5 @@ protected:
 	MaterialManager *_mm;
 
 	bool _cameraManipulatorActive;
+
 };

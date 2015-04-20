@@ -21,6 +21,8 @@
 #include "LightPrePassCallback.h"
 #include "LightPassCallback.h"
 #include "CustomFirstPersonManipulator.h"
+#include "GeometryPicker.h"
+#include "GeometryObjectManipulator.h"
 
 // TODO: log which one called the global functions in Core
 // for debugging
@@ -161,6 +163,11 @@ void Core::configLightPass()
 	}
 }
 
+void Core::configGeometryObjectManipulator()
+{
+	GeometryObjectManipulator::initWithRootNode(_passes);
+}
+
 void Core::configCubemapPrefilterPass()
 {
 }
@@ -182,6 +189,8 @@ void Core::configViewer()
 
 	_viewer->setUpViewInWindow(_winPos.x(), _winPos.y(), _screenSize.x(), _screenSize.y());
 	_viewer->setKeyEventSetsDone(0);
+
+	_viewer->addEventHandler(new GeometryPicker);
 }
 
 void Core::run()
@@ -199,6 +208,8 @@ void Core::run()
 	{
 		configSkyBox();
 	}
+
+	configGeometryObjectManipulator();
 
 	_analysisHUD = configureViewerForMode(*_viewer, _passes, NULL, 1);
 	_analysisHUD->toggleHelper(); // disabled by default
@@ -233,10 +244,15 @@ const Camera &Core::getMainCamera()
 // Used in GUI focus
 void Core::disableCameraManipulator()
 {
-	_camManipulatorTemp = _viewer->getCameraManipulator();
-	_savedManipulatorCam = _cam;
-	std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
-	_viewer->setCameraManipulator(NULL);
+	if (_viewer->getCameraManipulator() != NULL)
+	{
+		_camManipulatorTemp = _viewer->getCameraManipulator();
+		_savedManipulatorCam = _cam;
+		std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
+		_viewer->setCameraManipulator(NULL);
+
+		_gui->setCameraManipulatorActive(false);
+	}
 }
 
 void Core::enableCameraManipulator()
@@ -248,12 +264,20 @@ void Core::enableCameraManipulator()
 
 	_savedManipulatorCam = Camera();
 	_camManipulatorTemp = NULL;
+
+	_gui->setCameraManipulatorActive(true);
 }
 
 void Core::configSkyBox()
 {
 	_skybox->setNodeMask(0x2);
 	_skybox->setGeomRoot(_geomRoot);
+	//osg::Box *box = new osg::Box;
+	//osg::ShapeDrawable *sd = new osg::ShapeDrawable;
+	//sd->setShape(box);
+	//osg::Geode *geode = new osg::Geode;
+	//geode->addDrawable(sd);
+	//_skybox->addChild(geode);
 	_passes->addChild(_skybox);
 }
 

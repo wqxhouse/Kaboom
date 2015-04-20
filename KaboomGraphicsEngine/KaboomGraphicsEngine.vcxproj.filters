@@ -81,7 +81,13 @@
     <ClInclude Include="include\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CompositorAnalysis.h">
+    <ClInclude Include="include\CompositorAnalysis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryPicker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryObjectManipulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -144,6 +150,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryPicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryObjectManipulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -51,6 +51,7 @@ private:
 	static void configSceneNode();
 	static void configViewer();
 	static void configSkyBox();
+	static void configGeometryObjectManipulator();
 
 	static void configCubemapPrefilterPass();
 	static void configGeometryPass();
