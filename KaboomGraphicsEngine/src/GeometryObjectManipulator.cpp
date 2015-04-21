@@ -1,4 +1,5 @@
 #include "GeometryObjectManipulator.h"
+#include <osg/ComputeBoundsVisitor>
 
 void GeometryObjectManipulator::initWithRootNode(osg::Group *root)
 {
@@ -70,6 +71,7 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 
 		break;
 	case TabBoxDragger:
+	{
 		if (_tabBoxDragger == NULL)
 		{
 			_tabBoxDragger = new osgManipulator::TabBoxDragger;
@@ -78,8 +80,22 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 
 		_tabBoxDragger->setNodeMask(0x4);
 		_tabBoxDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
+
+		osg::ComputeBoundsVisitor bound;
+		_currNode->accept(bound);
+
+		osg::BoundingBox bbox = bound.getBoundingBox();
+		float xscale = (bbox.xMax() - bbox.xMin());
+		float yscale = (bbox.yMax() - bbox.yMin());
+		float zscale = (bbox.zMax() - bbox.zMin());
+
+		osg::Vec3f center = bbox.center();
+		_tabBoxDragger->setMatrix(osg::Matrix::scale(xscale, yscale, zscale) *
+			osg::Matrix::translate(center));
+
 		_dragger = _tabBoxDragger.get();
 		break;
+	}
 	default:
 		OSG_WARN << "GeometryObjectManipulator: Dragger not implemented" << std::endl;
 	}
@@ -87,8 +103,11 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 	if (_dragger != NULL)
 	{
 		float scale = _currNode->getBound().radius();
-		_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
-			osg::Matrix::translate(_currNode->getBound().center()));
+		if (type != TabBoxDragger)
+		{
+			_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
+				osg::Matrix::translate(_currNode->getBound().center()));
+		}
 
 		_dragger->addTransformUpdating(_currNode.get());
 		_dragger->setHandleEvents(true);
