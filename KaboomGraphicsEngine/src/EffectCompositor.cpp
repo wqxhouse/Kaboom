@@ -489,6 +489,8 @@ void EffectCompositor::traverse( osg::NodeVisitor& nv )
 		Core::_cam._lookat = cv->getLookVectorLocal();
 		Core::_cam._up = cv->getUpLocal();
 
+		std::cout << "After 2 " << Core::_cam._viewMatrix << std::endl;
+
 		double fovy = 0.0, aspectRatio = 0.0, zNear = 0.0, zFar = 0.0;
 		if (projectionMatrix) projectionMatrix->getPerspective(fovy, aspectRatio, zNear, zFar);
 		if (_preservedZNear != FLT_MAX) zNear = _preservedZNear;
