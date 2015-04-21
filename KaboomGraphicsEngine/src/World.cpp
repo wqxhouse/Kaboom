@@ -181,7 +181,7 @@ void World::createModelFromXML(osgDB::XmlNode* xmlNode)
 			loadString(xmlChild, file);
 
 			model = osgDB::readNodeFile(file);
-			_geomManager->addGeometry(name, model);
+			_geomManager->addGeometry(name, model, file);
 		}
 		else if (childName == "material") {
 			std::string mat = xmlChild->properties["name"];

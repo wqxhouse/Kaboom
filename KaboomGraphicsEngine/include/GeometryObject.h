@@ -13,11 +13,22 @@ class GeometryObject
 {
 public:
 	GeometryObject(const std::string &name, osg::Node *geomNode);
+	GeometryObject(const std::string &name, osg::Node *geomNode, std::string fileName);
 	~GeometryObject();
 
 	std::string getName()
 	{
 		return _name;
+	}
+
+	std::string getFileName()
+	{
+		return _fileName;
+	}
+
+	Material* getMaterial()
+	{
+		return _material;
 	}
 
 	void setMaterial(Material *material);
@@ -45,6 +56,7 @@ private:
 	void updateMaterialState();
 		
 	std::string _name;
+	std::string _fileName;
 	Material *_material;
 
 	osg::ref_ptr<osg::Group> _materialNode;
