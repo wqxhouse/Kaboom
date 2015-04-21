@@ -77,7 +77,13 @@ void InputManager::hideDebugAnalysis()
 }
 
 void InputManager::look(int deltaX, int deltaY) {
-
+	Camera& cam = Core::getMainCamera();
+    osg::Vec3 lookAt = cam.getLookAt();
+	printf("before: %f, %f, %f\n", lookAt[0], lookAt[1], lookAt[2]);
+	lookAt = lookAt + osg::Vec3(deltaX / 100.0, 0, deltaY / 100.0);
+	printf("after: %f, %f, %f\n", lookAt[0], lookAt[1], lookAt[2]);
+	cam.setLookAtAndUpdate(lookAt);
+	//cam.setLookAtAndUpdate(lookAt + osg::Vec3(1, 1, 1));
 }
 
 void InputManager::sendPlayerInputEvent() {
