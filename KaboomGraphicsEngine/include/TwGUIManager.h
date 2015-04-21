@@ -37,6 +37,11 @@ public:
 		_cameraManipulatorActive = tf;
 	}
 
+	inline int getManipulatorBits()
+	{
+		return _manipulatorBits;
+	}
+
 	virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 	virtual void operator()(osg::RenderInfo& renderInfo) const;
 
@@ -56,14 +61,19 @@ protected:
 		TwDeleteAllBars();
 		TwTerminate();
 		g_twBar = NULL;
+		g_manipulatorSelectorBar = NULL;
 	}
 
 	TwMouseButtonID getTwButton(int button) const;
 	int getTwKey(int key, bool useCtrl) const;
 	int getTwModKeyMask(int modkey) const;
+
+	void initMainBar();
+	void initManipuatorSelectorBar();
 	
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;
 	TwBar *g_twBar;
+	TwBar *g_manipulatorSelectorBar;
 	char g_fileName[256]; // TODO: this is a hack, fix it
 
 	LightManager *_lm;
@@ -71,5 +81,6 @@ protected:
 	MaterialManager *_mm;
 
 	bool _cameraManipulatorActive;
+	int _manipulatorBits;
 
 };
