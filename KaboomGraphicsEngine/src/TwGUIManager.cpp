@@ -31,7 +31,7 @@ void TwGUIManager::initializeTwGUI()
 void TwGUIManager::initMainBar()
 {
 	g_twBar = TwNewBar("Main");
-	TwDefine(" Main label='Kaboom Game Editor' size='300 600' color='96 216 224' position='16 110' ");
+	TwDefine(" Main label='Kaboom Game Editor' size='300 600' color='96 216 224' position='16 110' valueswidth=140");
 
 	TwAddButton(g_twBar, "Run Game",
 		[](void *clientData) {
@@ -43,7 +43,7 @@ void TwGUIManager::initMainBar()
 	// Add option to disable/enable camera manipulator
 	// I did not find a way to intercept the hover event to make
 	// this automatic
-	TwAddVarCB(g_twBar, "Enable Camera Manipulator", TW_TYPE_BOOL8,
+	TwAddVarCB(g_twBar, "Cam Control", TW_TYPE_BOOL8,
 		[](const void *value, void *clientData) {
 		bool active = *static_cast<const bool *>(value);
 		*(bool *)(clientData) = active;

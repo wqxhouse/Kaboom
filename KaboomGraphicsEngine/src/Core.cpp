@@ -2,18 +2,16 @@
 
 #include "Core.h"
 
-#ifdef _WIN32
-#include <windows.h>
-#else
-#incldue <unistd.h>
-#endif
-
 #include <osg/Vec3>
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
 #include <osgDB/FileNameUtils>
 #include <osg/TexGen>
 #include <osg/Depth>
+//
+//#include "../osgLibRocket/FileInterface.h"
+//#include "../osgLibRocket/RenderInterface.h"
+//#include "../osgLibRocket/SystemInterface.h"
 
 #include "World.h"
 #include "GeometryObjectManager.h"
@@ -51,7 +49,7 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 
 	configSceneNode();
 	configPasses();
-	configViewer();
+	configViewer(); 
 
 	_sceneRoot->addChild(_passes);
 
@@ -209,6 +207,7 @@ void Core::run()
 		configSkyBox();
 	}
 
+	configInGameGUI();
 	configGeometryObjectManipulator();
 
 	_analysisHUD = configureViewerForMode(*_viewer, _passes, NULL, 1);
@@ -232,11 +231,17 @@ void Core::run()
 			_camCallback(&_cam);
 		}
 
+		Camera &c = getMainCamera();
+		//std::cout << "Before: " << c.getLookAt() << std::endl;
+		const osg::Vec3 &cc = osg::Vec3(100, 100, 100);
+		//c.setLookAtAndUpdate(cc);
+		//std::cout << "After1 : " << c.getLookAt() << std::endl;
+		
 		_viewer->frame();
 	}
 }
 
-const Camera &Core::getMainCamera()
+Camera &Core::getMainCamera()
 {
 	return _cam;
 }
@@ -272,15 +277,24 @@ void Core::configSkyBox()
 {
 	_skybox->setNodeMask(0x2);
 	_skybox->setGeomRoot(_geomRoot);
-	//osg::Box *box = new osg::Box;
-	//osg::ShapeDrawable *sd = new osg::ShapeDrawable;
-	//sd->setShape(box);
-	//osg::Geode *geode = new osg::Geode;
-	//geode->addDrawable(sd);
-	//_skybox->addChild(geode);
 	_passes->addChild(_skybox);
 }
 
+void Core::configInGameGUI()
+{
+	//	osgLibRocket::FileInterface* file_interface = new osgLibRocket::FileInterface();
+	//	Rocket::Core::SetFileInterface(file_interface);
+	//
+	//	// create and set libRocket to OSG interfaces
+	//	osgLibRocket::RenderInterface* renderer = new osgLibRocket::RenderInterface();
+	//	Rocket::Core::SetRenderInterface(renderer);
+	//
+	//	osgLibRocket::SystemInterface* system_interface = new osgLibRocket::SystemInterface();
+	//	Rocket::Core::SetSystemInterface(system_interface);
+	//
+	//	Rocket::Core::Initialise();
+	//}
+}
 void Core::setEnvironmentMap(
 	const std::string &posX,
 	const std::string &negX,

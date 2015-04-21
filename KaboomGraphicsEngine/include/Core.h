@@ -1,6 +1,9 @@
 #pragma once
 
 #include <osgViewer/Viewer>
+
+//#include "../osgLibRocket/GuiNode.h"
+
 #include "EffectCompositor.h"
 #include "CompositorAnalysis.h"
 #include "World.h"
@@ -19,7 +22,7 @@ public:
 	static void loadWorldFile(const std::string &worldFilePath);
 	static World &getWorldRef();
 
-	static const Camera &getMainCamera();
+	static Camera &getMainCamera();
 	static void setCameraCallback(CameraCallback callback);
 
 	static void setEnvironmentMap(
@@ -58,6 +61,7 @@ private:
 	static void configLightPass();
 
 	static void configFilePath();
+	static void configInGameGUI();
 
 	static std::string _mediaPath;
 		
@@ -67,10 +71,13 @@ private:
 	static osg::ref_ptr<SkyBox> _skybox;
 
 	static osg::ref_ptr<osgViewer::Viewer> _viewer;
+	//static osgLibRocket::GuiNode *_gameGUI;
 
 	static osg::Vec2 _screenSize;
 	static osg::Vec2 _renderResolution;
 	static osg::Vec2 _winPos;
+
+	//static osgLibRocket::GuiNode *_gameGUI;
 
 	static World _world;
 	static bool _hasInit;
