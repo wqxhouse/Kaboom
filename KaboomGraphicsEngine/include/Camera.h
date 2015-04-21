@@ -53,6 +53,13 @@ public:
 	{
 		return _up;
 	}
+		
+	// Setters : should only be called from the input manager of the client
+	void setEyePositionAndUpdate(const osg::Vec3 &eye);
+	void setLookAtAndUpdate(const osg::Vec3 &lookAt);
+	void setUpAndUpdate(const osg::Vec3 &up);
+
+	// void setFovAndUpdate(float fov);
 
 private:
 	friend class osgFX::EffectCompositor;
