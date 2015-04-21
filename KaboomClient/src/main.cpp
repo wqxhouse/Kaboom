@@ -49,6 +49,7 @@ int main()
 #include "core/Game.h"
 
 GameClient *g_client;
+osgViewer::Viewer viewer;
 
 int main() {
 	ConfigSettings* config = ConfigSettings::config;
