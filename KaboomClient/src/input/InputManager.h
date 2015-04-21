@@ -18,6 +18,7 @@ private:
     static bool movingLeft;
     static bool movingRight;
     static bool jumping;
+	static bool firing;
 
     static void moveForwardDown();
     static void moveForwardUp();
@@ -29,6 +30,8 @@ private:
     static void moveRightUp();
     static void jumpDown();
     static void jumpUp();
+	static void firingDown();
+	static void firingUp();
 
 	static void quitGameMode();
 	static void showDebugAnalysis();

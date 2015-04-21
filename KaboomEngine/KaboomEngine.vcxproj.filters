@@ -66,9 +66,6 @@
     <ClInclude Include="src\network\PlayerInputEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\PlayerSpawnEvent.h">
-      <Filter>Header Files\Network\Events</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\PositionEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
@@ -76,6 +73,12 @@
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="src\core\CharacteristicComponent.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\EntitySpawnEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Component.cpp">
@@ -105,9 +108,6 @@
     <ClCompile Include="src\network\PlayerInputEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\PlayerSpawnEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\PositionEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
@@ -115,5 +115,11 @@
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="src\network\EntitySpawnEvent.cpp">
+      <Filter>Source Files\Network\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\CharacteristicComponent.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

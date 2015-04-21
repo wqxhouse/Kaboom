@@ -75,15 +75,18 @@
     <ClCompile Include="src\network\PositionEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\PlayerSpawnEventHandler.cpp">
-      <Filter>Source Files\Network\Event Handlers</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\ClientEventHandlerLookup.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="src\Scene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\EntitySpawnEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\BombFactory.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,13 +120,16 @@
     <ClInclude Include="src\network\PositionEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\PlayerSpawnEventHandler.h">
-      <Filter>Header Files\Network\Event Handlers</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\ClientEventHandlerLookup.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="src\network\EntitySpawnEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\BombFactory.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.ini">

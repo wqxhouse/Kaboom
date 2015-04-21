@@ -10,6 +10,7 @@ bool InputManager::movingBackward;
 bool InputManager::movingLeft;
 bool InputManager::movingRight;
 bool InputManager::jumping;
+bool InputManager::firing;
 
 void InputManager::moveForwardDown() {
     movingForward = true;
@@ -61,19 +62,29 @@ void InputManager::jumpUp() {
     sendPlayerInputEvent();
 }
 
+void InputManager::firingDown() {
+	firing = true;
+	sendPlayerInputEvent();
+}
+
+void InputManager::firingUp() {
+	firing = false;
+	sendPlayerInputEvent();
+}
+
 void InputManager::quitGameMode()
 {
-	Core::disableGameMode();
+	//Core::disableGameMode();
 }
 
 void InputManager::showDebugAnalysis()
 {
-	Core::enablePassDataDisplay();
+	//Core::enablePassDataDisplay();
 }
 
 void InputManager::hideDebugAnalysis()
 {
-	Core::disablePassDataDisplay();
+	//Core::disablePassDataDisplay();
 }
 
 void InputManager::look(int deltaX, int deltaY) {
@@ -87,7 +98,7 @@ void InputManager::sendPlayerInputEvent() {
         movingLeft,
         movingRight,
         jumping,
-        false,
+        firing,
         0.0f,
         0.0f);
 
@@ -98,7 +109,7 @@ InputManager::InputManager(osgViewer::Viewer *viewer) {
 
 	// hack, refactor it when we have access to the demo computers
     keyboardHandler = new KeyboardEventHandler();
-	Core::addEventHandler(keyboardHandler);
+	//Core::addEventHandler(keyboardHandler);
 
 	if (!viewer) return;
     viewer->addEventHandler(keyboardHandler);
@@ -118,6 +129,8 @@ void InputManager::loadConfig() {
     keyboardHandler->bindKey('d', KeyboardEventHandler::KEY_UP, InputManager::moveRightUp);
     keyboardHandler->bindKey(' ', KeyboardEventHandler::KEY_DOWN, InputManager::jumpDown);
     keyboardHandler->bindKey(' ', KeyboardEventHandler::KEY_UP, InputManager::jumpUp);
+	keyboardHandler->bindKey('f', KeyboardEventHandler::KEY_DOWN, InputManager::firingDown);
+	keyboardHandler->bindKey('f', KeyboardEventHandler::KEY_UP, InputManager::firingUp);
 
 	// editor related
 	keyboardHandler->bindKey(osgGA::GUIEventAdapter::KEY_Escape, KeyboardEventHandler::KEY_UP, InputManager::quitGameMode);
