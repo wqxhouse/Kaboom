@@ -28,9 +28,9 @@ void setupScene()
 
 	//g->setGeometryMaterial("gun", m->getMaterial("gunMaterial"));
 
-	//osg::Vec3 skyColor = osg::Vec3(0.196078, 0.6, 0.8);
-	//osg::Vec3 sunsetColor = osg::Vec3(0.9, 0.8, 0.5);
-	//l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), sunsetColor, false);
+	osg::Vec3 skyColor = osg::Vec3(0.196078, 0.6, 0.8);
+	osg::Vec3 sunsetColor = osg::Vec3(0.9, 0.8, 0.5);
+	l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), sunsetColor, false);
 
 	//Core::setEnvironmentMap(
 	//	"Cubemap_snow/posx.jpg", "Cubemap_snow/negx.jpg",
@@ -58,7 +58,7 @@ void setupScene()
 
 	g->addGeometry("cow", loadedCow, osg::Vec3(-1, 0, 0));
 	g->addGeometry("second", loadedCow, osg::Vec3(1, 0, 0));
-	m->createPlainMaterial("planeMat", osg::Vec3(1.0, 1.0, 1.0), 0.8, 0.5, 0.5);
+	m->createPlainMaterial("planeMat", osg::Vec3(0.8, 0.3, 0.3), 0.5, 0.5, 0.5);
 	g->setGeometryMaterial("cow", m->getMaterial("planeMat"));
 	g->setGeometryMaterial("second", m->getMaterial("planeMat"));
 
