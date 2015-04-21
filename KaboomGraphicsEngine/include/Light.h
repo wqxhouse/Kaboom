@@ -7,7 +7,7 @@ enum LightType
 {
 	BASE,
 	DIRECTIONAL,
-	POINT,
+	POINTLIGHT,
 	SPOT,
 	AREA,
 };

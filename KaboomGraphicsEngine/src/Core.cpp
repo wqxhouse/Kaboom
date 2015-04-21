@@ -236,7 +236,7 @@ void Core::run()
 	}
 }
 
-const Camera &Core::getMainCamera()
+Camera &Core::getMainCamera()
 {
 	return _cam;
 }

@@ -13,7 +13,7 @@ PointLight::~PointLight()
 
 enum LightType PointLight::getLightType()
 {
-	return POINT;
+	return POINTLIGHT;
 }
 
 PointLight *PointLight::asPointLight()

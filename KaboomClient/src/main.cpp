@@ -33,8 +33,13 @@ int main()
 	InputManager *inputManager = new InputManager(NULL);
 	inputManager->loadConfig();
 
-	setupScene();
+	std::string str_world_xml = "";
+	config->getValue(ConfigSettings::str_world_xml, str_world_xml);
+
+	Core::loadWorldFile(str_world_xml);
+	//setupScene();
 	Core::run();
+
 }*/
 
 #include <iostream>

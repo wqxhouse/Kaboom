@@ -37,8 +37,8 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIAc
     int centery = (ea.getWindowY() + ea.getWindowHeight()) / 2;
     int x = ea.getX();
     int y = ea.getY();
-    int deltaX = x - prevX;
-    int deltaY = y - prevY;
+	int deltaX = x - centerx;
+	int deltaY = y - centery;
 
     switch (ea.getEventType()) {
     case osgGA::GUIEventAdapter::KEYDOWN:
@@ -78,9 +78,9 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIAc
         if (deltaX != 0 || deltaY != 0) {
             InputManager::look(deltaX, deltaY);
 
-            prevX = x;
-            prevY = y;
-            //aa.requestWarpPointer(centerx, centery);
+            //prevX = x;
+            //prevY = y;
+            aa.requestWarpPointer(centerx, centery);
         }
         return false;
 	
