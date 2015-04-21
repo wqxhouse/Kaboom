@@ -2,7 +2,7 @@
 
 #include <network/EmptyEvent.h>
 #include <network/PlayerInputEvent.h>
-#include <network/PlayerSpawnEvent.h>
+#include <network/EntitySpawnEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 
@@ -27,7 +27,7 @@ void GameClient::receive() {
     EmptyEvent emptyEvent;
     PositionEvent positionEvent;
     RotationEvent rotationEvent;
-    PlayerSpawnEvent playerSpawnEvent;
+	EntitySpawnEvent entitySpawnEvent;
     PlayerInputEvent playerInputEvent;
 	
 	printf("received len %d\n", len);
@@ -52,12 +52,14 @@ void GameClient::receive() {
             playerInputEvent.deserialize(&networkData[i]);
             eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
             break;
-		case EventOpcode::PLAYER_SPAWN:
-			playerSpawnEvent.deserialize(&networkData[i]);
-			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerSpawnEvent);
+		case EventOpcode::ENTITY_SPAWN:
+			printf("debug\n");
+			entitySpawnEvent.deserialize(&networkData[i]);
+			printf("debug2\n");
+			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(entitySpawnEvent);
 
 			if (!initialized) {
-				currentPlayerEntityId = playerSpawnEvent.getPlayerId(); //set entityId the client needs to keep track of
+				currentPlayerEntityId = entitySpawnEvent.getPlayerId(); //set entityId the client needs to keep track of
 			}
 
 			break;

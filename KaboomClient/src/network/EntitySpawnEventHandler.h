@@ -4,10 +4,10 @@
 
 #include "../core/Game.h"
 
-class PlayerSpawnEventHandler : public EventHandler {
+class EntitySpawnEventHandler : public EventHandler {
 public:
-    PlayerSpawnEventHandler(Game *game);
-    ~PlayerSpawnEventHandler();
+	EntitySpawnEventHandler(Game *game);
+	~EntitySpawnEventHandler();
 
     virtual void handle(const Event &evt) const;
 

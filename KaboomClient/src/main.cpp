@@ -1,4 +1,4 @@
-#include <iostream>
+/*#include <iostream>
 #include <ConfigSettings.h>
 #include <Core.h>
 #include "Scene.h"
@@ -35,28 +35,28 @@ int main()
 
 	setupScene();
 	Core::run();
-}
+}*/
 
 #include <iostream>
 #include <ConfigSettings.h>
-//
-//#include "network/GameClient.h"
-//#include "core/Game.h"
-//
-//GameClient *g_client;
-//
-//int main() {
-//	ConfigSettings* config = ConfigSettings::config;
-//	Game game(config);
-//
-//	g_client = new GameClient(config, game.getEventHandlerLookup());
-//
-//	try {
-//		game.run();
-//	}
-//	catch (std::exception &e) {
-//		std::cerr << "ERROR: " << e.what() << std::endl;
-//	}
-//
-//	delete g_client;
-//}
+
+#include "network/GameClient.h"
+#include "core/Game.h"
+
+GameClient *g_client;
+
+int main() {
+	ConfigSettings* config = ConfigSettings::config;
+	Game game(config);
+
+	g_client = new GameClient(config, game.getEventHandlerLookup());
+
+	try {
+		game.run();
+	}
+	catch (std::exception &e) {
+		std::cerr << "ERROR: " << e.what() << std::endl;
+	}
+
+	delete g_client;
+}
