@@ -37,8 +37,15 @@ public:
 		_cameraManipulatorActive = tf;
 	}
 
+	inline int getManipulatorBits()
+	{
+		return _manipulatorBits;
+	}
+
 	virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 	virtual void operator()(osg::RenderInfo& renderInfo) const;
+
+	static void exportXML();
 
 protected:
 	struct Position
@@ -56,20 +63,35 @@ protected:
 		TwDeleteAllBars();
 		TwTerminate();
 		g_twBar = NULL;
+		g_manipulatorSelectorBar = NULL;
 	}
 
 	TwMouseButtonID getTwButton(int button) const;
 	int getTwKey(int key, bool useCtrl) const;
 	int getTwModKeyMask(int modkey) const;
+
+	void initMainBar();
+	void initManipuatorSelectorBar();
 	
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;
 	TwBar *g_twBar;
+	TwBar *g_manipulatorSelectorBar;
 	char g_fileName[256]; // TODO: this is a hack, fix it
+
+	static void write(std::ofstream &f, int tabs, std::string s);
+
+	static std::string addTags(std::string tag, std::string s);
+	static std::string tagify(std::string tag, std::string s);
+	static std::string tagify(std::string tag, float f);
+	static std::string tagify(std::string tag, bool b);
+	static std::string tagify(std::string tag, osg::Vec3 &v);
+	static std::string tagify(std::string tag, osg::Vec4 &v);
 
 	LightManager *_lm;
 	GeometryObjectManager *_gm;
 	MaterialManager *_mm;
 
 	bool _cameraManipulatorActive;
+	int _manipulatorBits;
 
 };

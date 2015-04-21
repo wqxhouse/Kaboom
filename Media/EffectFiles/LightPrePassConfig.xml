@@ -45,7 +45,7 @@
   </buffer>-->
 
   <shader name="computeLightTile_fs" type="fragment">
-    <version>400</version>
+    <version>420</version>
     <file>Shaders/lightTiling.frag</file>
   </shader>
 
@@ -62,10 +62,11 @@
   <uniform name="u_viewProjMat" type="mat4"></uniform>
   
   <uniform name="u_arrayDirectionalLight" type="int" size="1" isArray="1"/>
-  <uniform name="u_arrayPointLight" type="int" size="512" isArray="1" />
+  <!--<uniform name="u_arrayPointLight" type="int" size="512" isArray="1" />-->
+  <uniform name="u_arrayPointLight" type="int" size="256" isArray="1" />
   
   <!-- Currently set visible light maximum to 256 -->
-  <uniform_buffer name="u_lightsBuffer" data_variance="dynamic" size="256">
+  <uniform_buffer name="u_lightsBuffer" data_variance="dynamic" size="128">
     <!--position-->
     <value type="vec3">1.0 1.0 1.0</value>
     <!--padding-->

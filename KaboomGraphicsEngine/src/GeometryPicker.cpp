@@ -101,7 +101,7 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 			{ 
 				std::cout << "Picking object : " << objectName << std::endl;
 				GeometryObjectManipulator::
-					assignManipulatorToGeometryTransformNode(objectNode, TabBoxDragger);
+					changeCurrentNode(objectNode);
 			}
 		}
 	}
