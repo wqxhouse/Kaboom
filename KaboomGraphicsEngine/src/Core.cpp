@@ -54,7 +54,7 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	configViewer();
 
 	_sceneRoot->addChild(_passes);
-
+	//disableCameraManipulator();
 	_hasInit = true;
 }
 

@@ -31,7 +31,7 @@ private:
 	BombFactory bombFactory;
     ClientEventHandlerLookup *eventHandlerLookup;
 
-    osgViewer::Viewer viewer;
+    //osgViewer::Viewer viewer;
 
     osg::Group *rootNode;
 

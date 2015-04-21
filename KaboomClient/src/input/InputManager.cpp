@@ -88,13 +88,23 @@ void InputManager::hideDebugAnalysis()
 }
 
 void InputManager::look(int deltaX, int deltaY) {
-	Camera& cam = Core::getMainCamera();
-    osg::Vec3 lookAt = cam.getLookAt();
+	Camera* cam_ptr = &Core::getMainCamera();
+    osg::Vec3 lookAt = cam_ptr->getLookAt();
 	printf("before: %f, %f, %f\n", lookAt[0], lookAt[1], lookAt[2]);
 	lookAt = lookAt + osg::Vec3(deltaX / 100.0, 0, deltaY / 100.0);
 	printf("after: %f, %f, %f\n", lookAt[0], lookAt[1], lookAt[2]);
-	cam.setLookAtAndUpdate(lookAt);
-	//cam.setLookAtAndUpdate(lookAt + osg::Vec3(1, 1, 1));
+	cam_ptr->setLookAtAndUpdate(lookAt);
+	viewer.getCamera()->setViewMatrix(cam_ptr->getViewMatrix());
+}
+
+void InputManager::resetCamera()
+{
+	const osg::Vec3 eye(0, -10, 0);
+	const osg::Vec3 center(0, 1, 0);
+	Core::getMainCamera().setEyePositionAndUpdate(eye);
+	Core::getMainCamera().setLookAtAndUpdate(center);
+	Core::getMainCamera().setUpAndUpdate(osg::Vec3(0, 0, 1));
+	viewer.getCamera()->setViewMatrix(Core::getMainCamera().getViewMatrix());
 }
 
 void InputManager::sendPlayerInputEvent() {
@@ -142,4 +152,7 @@ void InputManager::loadConfig() {
 	keyboardHandler->bindKey(osgGA::GUIEventAdapter::KEY_Escape, KeyboardEventHandler::KEY_UP, InputManager::quitGameMode);
 	keyboardHandler->bindKey(osgGA::GUIEventAdapter::KEY_F9, KeyboardEventHandler::KEY_UP, InputManager::showDebugAnalysis);
 	keyboardHandler->bindKey(osgGA::GUIEventAdapter::KEY_F10, KeyboardEventHandler::KEY_UP, InputManager::hideDebugAnalysis);
+
+	// reset camera
+	keyboardHandler->bindKey('r', KeyboardEventHandler::KEY_DOWN, InputManager::resetCamera);
 }

@@ -39,5 +39,7 @@ private:
 
     static void sendPlayerInputEvent();
 
+	static void resetCamera();
+
     osg::ref_ptr<KeyboardEventHandler> keyboardHandler;
 };

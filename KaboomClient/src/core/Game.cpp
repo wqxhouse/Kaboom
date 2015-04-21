@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include <Core.h>
 #include <iostream>
 
 #include <osg/Group>
@@ -69,14 +70,18 @@ void Game::setupCamera() {
     float screenHeight = traits->height;
     float screenWidth = traits->width;
 
-    osg::Matrixf viewMat;
-    viewMat.makeLookAt(eye, center, osg::Vec3(0, 0, 1));
+    //osg::Matrixf viewMat;
+    //viewMat.makeLookAt(eye, center, osg::Vec3(0, 0, 1));
+	Core::getMainCamera().setEyePositionAndUpdate(eye);
+	Core::getMainCamera().setLookAtAndUpdate(center);
+	Core::getMainCamera().setUpAndUpdate(osg::Vec3(0, 0, 1));
 
     osg::Matrixf projMat;
     projMat.makePerspective(30, screenWidth / screenHeight, 1, 1000);
 
     osg::Camera *camera = viewer.getCamera();
-    camera->setViewMatrix(viewMat);
+
+	camera->setViewMatrix(Core::getMainCamera().getViewMatrix());//viewMat);
     camera->setProjectionMatrix(projMat);
 }
 
