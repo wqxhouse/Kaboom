@@ -19,7 +19,7 @@ public:
 	static void loadWorldFile(const std::string &worldFilePath);
 	static World &getWorldRef();
 
-	static const Camera &getMainCamera();
+	static Camera &getMainCamera();
 	static void setCameraCallback(CameraCallback callback);
 
 	static void setEnvironmentMap(
