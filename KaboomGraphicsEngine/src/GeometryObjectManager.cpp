@@ -29,6 +29,16 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 	return true;
 }
 
+bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName)
+{
+	GeometryObject *geomObj = new GeometryObject(name, geomNode, fileName);
+
+	// TODO: process duplicated (name) geoms
+	_geomObjMap.insert(std::make_pair(name, geomObj));
+	_geomRoot->addChild(geomObj->getRoot());
+	return true;
+}
+
 bool GeometryObjectManager::setGeometryMaterial(const std::string &geomName, Material *material)
 {
 	if (material == NULL)

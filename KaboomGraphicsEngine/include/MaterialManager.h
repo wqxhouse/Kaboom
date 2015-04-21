@@ -17,6 +17,12 @@ public:
 	MaterialManager();
 	~MaterialManager();
 
+
+	inline const std::unordered_map<std::string, Material *> getMaterialMapRef() const
+	{
+		return _materialMap;
+	}
+
 	void createPlainMaterial(const std::string &name,
 		const osg::Vec3 albedoColor,
 		float roughness,

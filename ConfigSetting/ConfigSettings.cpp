@@ -23,6 +23,9 @@ std::string ConfigSettings::str_mediaFilePath = "MediaPath";
 std::string ConfigSettings::str_screenPosX = "ScreenPosX";
 std::string ConfigSettings::str_screenPosY = "ScreenPosY";
 
+std::string ConfigSettings::str_world_xml = "WorldXML";
+std::string ConfigSettings::str_export_xml = "ExportXML";
+
 // server and client shared vars
 std::string ConfigSettings::str_server_port = "ServerPort";
 std::string ConfigSettings::str_server_address = "ServerAddress";
