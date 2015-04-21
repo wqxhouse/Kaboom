@@ -8,54 +8,61 @@
 #include "Light.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "GeometryObjectManipulator.h"
 
 TwGUIManager::TwGUIManager()
-	  // Note, this flag assumes that you do not touch viewer manipulator settings
-	: _cameraManipulatorActive(true) 
+// Note, this flag assumes that you do not touch viewer manipulator settings
+	: _cameraManipulatorActive(true), _manipulatorBits(0x1)
 {
 	_gm = Core::getWorldRef().getGeometryManager();
 	_lm = Core::getWorldRef().getLightManager();
 	_mm = Core::getWorldRef().getMaterialManager();
 
 	TwInit(TW_OPENGL, NULL);
-	g_twBar = TwNewBar("Tempo_GUI");
 }
 
 
 void TwGUIManager::initializeTwGUI()
 {
-	TwDefine(" Tempo_GUI size='300 700' color='96 216 224' ");
+	initMainBar();
+	initManipuatorSelectorBar();
+}
 
-	TwAddButton(g_twBar, "Run Game", 
+void TwGUIManager::initMainBar()
+{
+	g_twBar = TwNewBar("Main");
+	TwDefine(" Main label='Kaboom Game Editor' size='300 600' color='96 216 224' position='16 110' ");
+
+	TwAddButton(g_twBar, "Run Game",
 		[](void *clientData) {
 		Core::enableGameMode();
-		}, NULL, " label='--> Run Game :)' ");
+	}, NULL, " label='--> Run Game :)' ");
 
 	TwAddSeparator(g_twBar, NULL, NULL);
 
 	// Add option to disable/enable camera manipulator
 	// I did not find a way to intercept the hover event to make
 	// this automatic
-	TwAddVarCB(g_twBar, "Enable Camera Manipulator", TW_TYPE_BOOL8, 
+	TwAddVarCB(g_twBar, "Enable Camera Manipulator", TW_TYPE_BOOL8,
 		[](const void *value, void *clientData) {
-			bool active = *static_cast<const bool *>(value);
-			*(bool *)(clientData) = active;
-		
-			// FIXME: actually this is quite hacky, 
-			// since only use a _cameraManipulatorActive as a 
-			// trigger for this shared function
-			if (active)
-			{
-				Core::enableCameraManipulator();
-			}
-			else
-			{
-				Core::disableCameraManipulator();
-			}
-		}, 
+		bool active = *static_cast<const bool *>(value);
+		*(bool *)(clientData) = active;
+
+		// FIXME: actually this is quite hacky, 
+		// since only use a _cameraManipulatorActive as a 
+		// trigger for this shared function
+		if (active)
+		{
+			Core::enableCameraManipulator();
+		}
+		else
+		{
+			Core::disableCameraManipulator();
+		}
+	},
 		[](void *value, void *clientData) {
-			*(bool *)value = *(bool *)clientData;
-		},
+		*(bool *)value = *(bool *)clientData;
+	},
 		&this->_cameraManipulatorActive, NULL);
 
 	TwAddSeparator(g_twBar, NULL, NULL);
@@ -138,32 +145,32 @@ void TwGUIManager::initializeTwGUI()
 		std::string rotationDef = nameGroupDef + " label='rotation'";
 		TwAddVarCB(g_twBar, rotationVarName.c_str(), TW_TYPE_QUAT4F,
 			[](const void *value, void *clientData) {
-				GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-				const float *rotArr = static_cast<const float *>(value);
+			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+			const float *rotArr = static_cast<const float *>(value);
 
-				// seems like ant tweak bar is nice enough to provide temp buffer for load/write
-				// so that the following is safe
-				osg::Quat newRot = osg::Quat(rotArr[0], rotArr[1], rotArr[2], rotArr[3]);
-				obj->setRotation(newRot);
-			}, 
+			// seems like ant tweak bar is nice enough to provide temp buffer for load/write
+			// so that the following is safe
+			osg::Quat newRot = osg::Quat(rotArr[0], rotArr[1], rotArr[2], rotArr[3]);
+			obj->setRotation(newRot);
+		},
 			[](void *value, void *clientData) {
-				GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-				float *rotArr = static_cast<float *>(value);
+			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+			float *rotArr = static_cast<float *>(value);
 
-				osg::Quat rot = obj->getRotation();
-				rotArr[0] = rot.x();
-				rotArr[1] = rot.y();
-				rotArr[2] = rot.z();
-				rotArr[3] = rot.w();
-			}, 
-				geom, rotationDef.c_str());
+			osg::Quat rot = obj->getRotation();
+			rotArr[0] = rot.x();
+			rotArr[1] = rot.y();
+			rotArr[2] = rot.z();
+			rotArr[3] = rot.w();
+		},
+			geom, rotationDef.c_str());
 
-		std::string moveStr = " Tempo_GUI/" + name + " group='" + GeomGroupName + "'";
-		TwDefine(moveStr.c_str()); 
+		std::string moveStr = " Main/" + name + " group='" + GeomGroupName + "'";
+		TwDefine(moveStr.c_str());
 
 		index++;
 	}
-	
+
 	//index = 0;
 
 	// process lights
@@ -172,7 +179,7 @@ void TwGUIManager::initializeTwGUI()
 	{
 		Light *l = _lm->getLight(i);
 		std::string name = l->getName();
-		std::string nameGroupDef = " group='" + name +"' "; 
+		std::string nameGroupDef = " group='" + name + "' ";
 
 		std::string indexStr = std::to_string(index);
 		std::string posXVarName = posXLabel + indexStr;
@@ -186,32 +193,32 @@ void TwGUIManager::initializeTwGUI()
 			// lightDir ( to light, not from light ) 
 			std::string dirToWorldVarName = "dirToWorld" + std::to_string(index);
 			std::string dirToWorldDef = nameGroupDef + " label='dirToWorld'";
-			TwAddVarCB(g_twBar, dirToWorldVarName.c_str(), TW_TYPE_DIR3F, 
+			TwAddVarCB(g_twBar, dirToWorldVarName.c_str(), TW_TYPE_DIR3F,
 				[](const void *value, void *clientData) {
-					DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
-					const float *arr = static_cast<const float *>(value);
-					osg::Vec3 dir = osg::Vec3(arr[0], arr[1], arr[2]);
-					dl->setLightToWorldDirection(dir);
-				}, 
+				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+				const float *arr = static_cast<const float *>(value);
+				osg::Vec3 dir = osg::Vec3(arr[0], arr[1], arr[2]);
+				dl->setLightToWorldDirection(dir);
+			},
 				[](void *value, void *clientData) {
-					DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
-					const osg::Vec3 &dir = dl->getLightToWorldDirection();
-					float *arr = static_cast<float *>(value);
-					arr[0] = dir.x(); arr[1] = dir.y(); arr[2] = dir.z();
-				},
-					dl, dirToWorldDef.c_str());
+				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+				const osg::Vec3 &dir = dl->getLightToWorldDirection();
+				float *arr = static_cast<float *>(value);
+				arr[0] = dir.x(); arr[1] = dir.y(); arr[2] = dir.z();
+			},
+				dl, dirToWorldDef.c_str());
 
 			// TODO: color, later.... Too tired
 			// TW_TYPE_COLOR3F
 			std::string dirLightColorVarName = "Color" + std::to_string(index);
 			std::string dirLightColorDef = nameGroupDef + " label='Color'";
-			TwAddVarCB(g_twBar, dirLightColorVarName.c_str(), TW_TYPE_COLOR3F, 
+			TwAddVarCB(g_twBar, dirLightColorVarName.c_str(), TW_TYPE_COLOR3F,
 				[](const void *value, void *clientData) {
 				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
 				const float *arr = static_cast<const float *>(value);
 				osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
 				dl->setColor(color);
-			}, 
+			},
 				[](void *value, void *clientData) {
 				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
 				const osg::Vec3 &color = dl->getColor();
@@ -280,14 +287,14 @@ void TwGUIManager::initializeTwGUI()
 				float rad = *static_cast<const float *>(value);
 				PointLight *pl = static_cast<PointLight *>(clientData);
 				pl->setRadius(rad);
-				}, 
+			},
 				[](void *value, void *clientData)
-				{
-					float *val = static_cast<float *>(value);
-					PointLight *pl = static_cast<PointLight *>(clientData);
-					*val = pl->getRadius();
-				},
-					pl, radiusDefStr.c_str());
+			{
+				float *val = static_cast<float *>(value);
+				PointLight *pl = static_cast<PointLight *>(clientData);
+				*val = pl->getRadius();
+			},
+				pl, radiusDefStr.c_str());
 
 			// TODO: add color ..
 			// TODO: color, later.... Too tired
@@ -307,14 +314,73 @@ void TwGUIManager::initializeTwGUI()
 				float *arr = static_cast<float *>(value);
 				arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
 			}, pl, ptLightColorDef.c_str());
-		
-		}				
+		}
 
-		std::string moveStr = " Tempo_GUI/" + name + " group='" + LightGroupStr + "'";
+		std::string moveStr = " Main/" + name + " group='" + LightGroupStr + "'";
 		TwDefine(moveStr.c_str());
 
 		index++;
 	}
+}
+
+void TwGUIManager::initManipuatorSelectorBar()
+{
+	g_manipulatorSelectorBar = TwNewBar("Manipulators");
+	TwDefine(" Manipulators label='Manipulators' size='300 90' color='96 96 96' position='16 16'");
+	TwAddVarCB(g_manipulatorSelectorBar, "TabboxM", TW_TYPE_BOOL8, 
+		[](const void *value, void *clientData)	{
+		bool tf = *(bool *)value;
+		bool res = GeometryObjectManipulator::setVisible(tf);
+		if (!res) return;
+		int &bits = *(int *)clientData;
+		bits &= 0x1;
+		tf ? bits |= 0x1 : bits ^= 0x1;
+		tf ? GeometryObjectManipulator::changeCurrentManipulatorType(TabBoxDragger) : "";
+		},
+		[](void *value, void *clientData)
+		{
+			int bits = *(int *)clientData;
+			bool &v = *(bool *)value;
+			(bits & 0x1) != 0 ? v = true : v = false;
+		},
+		&_manipulatorBits, " label=TabBox");
+
+		TwAddVarCB(g_manipulatorSelectorBar, "RotateM", TW_TYPE_BOOL8,
+			[](const void *value, void *clientData)	{
+			bool tf = *(bool *)value;
+			bool res = GeometryObjectManipulator::setVisible(tf);
+			if (!res) return;
+			int &bits = *(int *)clientData;
+			bits &= 0x2;
+			tf ? bits |= 0x2 : bits ^= 0x2;
+			tf ? GeometryObjectManipulator::changeCurrentManipulatorType(TrackballDragger) : "";
+		},
+			[](void *value, void *clientData)
+		{
+			int bits = *(int *)clientData;
+			bool &v = *(bool *)value;
+			(bits & 0x2) != 0 ? v = true : v = false;
+		},
+			&_manipulatorBits, " label=Rotate");
+
+		TwAddVarCB(g_manipulatorSelectorBar, "AxisM", TW_TYPE_BOOL8,
+			[](const void *value, void *clientData)	{
+			bool tf = *(bool *)value;
+			bool res = GeometryObjectManipulator::setVisible(tf);
+			if (!res) return;
+			int &bits = *(int *)clientData;
+			bits &= 0x4;
+			tf ? bits |= 0x4 : bits ^= 0x4;
+			tf ? GeometryObjectManipulator::changeCurrentManipulatorType(TranslateAxisDragger) : "";
+		},
+			[](void *value, void *clientData)
+		{
+			int bits = *(int *)clientData;
+			bool &v = *(bool *)value;
+			(bits & 0x4) != 0 ? v = true : v = false;
+		},
+			&_manipulatorBits, " label=Axis");
+
 }
 
 void TW_CALL TwGUIManager::loadModelFunc(void* clientData)
@@ -357,7 +423,28 @@ void TwGUIManager::updateEvents() const
 		case osgGA::GUIEventAdapter::KEYDOWN:
 		{
 			bool useCtrl = false;
-			if (ea.getModKeyMask()&osgGA::GUIEventAdapter::MODKEY_CTRL) useCtrl = true;
+			if (ea.getModKeyMask()&osgGA::GUIEventAdapter::MODKEY_CTRL)
+			{
+				useCtrl = true;
+			}
+			else if (ea.getKey() == 'g')
+			{
+				// hack decrease constness
+				*(int *)&_manipulatorBits = 0x4;
+				GeometryObjectManipulator::changeCurrentManipulatorType(TranslateAxisDragger);
+				
+			}
+			else if (ea.getKey() == 'r')
+			{
+				*(int *)&_manipulatorBits = 0x2;
+				GeometryObjectManipulator::changeCurrentManipulatorType(TrackballDragger);
+			}
+			else if (ea.getKey() == 's')
+			{
+				*(int *)&_manipulatorBits = 0x1;
+				GeometryObjectManipulator::changeCurrentManipulatorType(TabBoxDragger);
+
+			}
 			TwKeyPressed(getTwKey(ea.getKey(), useCtrl), getTwModKeyMask(ea.getModKeyMask()));
 		}
 			break;
