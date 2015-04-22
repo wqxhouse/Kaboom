@@ -53,12 +53,7 @@ Game::~Game() {
     delete client;
 }
 
-enum GameStateMachine {
-	EDITOR_MODE,
-	CONNECT_TO_SERVER,
-	GAME_MODE,
-	DISCONNECT_TO_SERVER
-};
+
 void Game::run() {
     //static bool connected = false;
 	
