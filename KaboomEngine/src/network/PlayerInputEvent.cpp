@@ -3,6 +3,7 @@
 #include <string>
 
 PlayerInputEvent::PlayerInputEvent()
+        : PlayerInputEvent(0, false, false, false, false, false, false, 0.0f, 0.0f) {
 }
 
 PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
