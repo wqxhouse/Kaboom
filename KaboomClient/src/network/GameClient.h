@@ -9,11 +9,11 @@ class ClientEventHandlerLookup;
 
 class GameClient {
 public:
-    GameClient(ConfigSettings *config, ClientEventHandlerLookup *eventHandlerLookup);
+    GameClient(ClientEventHandlerLookup *eventHandlerLookup);
     ~GameClient();
 
 	void receive();
-	void connectToServer();
+    void connectToServer(const std::string &serverAddress, const int serverPort);
 	void disconnectFromServer();
 
     void sendMessage(const Event &evt);
@@ -21,11 +21,9 @@ public:
 private:
     ClientEventHandlerLookup *eventHandlerLookup;
 
-    ClientNetwork *network;
+    ClientNetwork network;
 
-    char networkData[MAX_PACKET_SIZE];
+    bool initialized;
 
 	unsigned int currentPlayerEntityId;
-
-	bool initialized = false;
 };

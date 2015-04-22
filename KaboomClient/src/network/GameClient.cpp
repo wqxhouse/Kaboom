@@ -9,25 +9,25 @@
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
 
-GameClient::GameClient(ConfigSettings *config, ClientEventHandlerLookup *eventHandlerLookup)
+GameClient::GameClient(ClientEventHandlerLookup *eventHandlerLookup)
     : eventHandlerLookup(eventHandlerLookup) {
-    network = new ClientNetwork(config);
 }
 
 GameClient::~GameClient() {
-    delete network;
 }
 
-void GameClient::connectToServer() {
-    network->connectToServer();
+void GameClient::connectToServer(const std::string &serverAddress, const int serverPort) {
+    network.connectToServer(serverAddress, serverPort);
 }
 
 void GameClient::disconnectFromServer() {
-    network->disconnectFromServer();
+    network.disconnectFromServer();
 }
 
 void GameClient::receive() {
-    int len = network->receivePackets(networkData);
+    char networkData[MAX_PACKET_SIZE];
+
+    int len = network.receivePackets(networkData);
 
     if (len <= 0) {
         return;
@@ -85,7 +85,7 @@ void GameClient::sendMessage(const Event &evt) {
 
     evt.serialize(data);
 
-    NetworkServices::sendMessage(network->clientSocket, data, size);
+    network.sendMessage(data, size);
 
     delete data;
 }

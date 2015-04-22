@@ -15,10 +15,11 @@
 #include "../network/GameClient.h"
 
 Game::Game(ConfigSettings *config)
-    : playerFactory(&entityManager),
-      bombFactory(&entityManager),
+    : config(config),
+      playerFactory(entityManager),
+      bombFactory(entityManager),
       eventHandlerLookup(new ClientEventHandlerLookup(this)) {
-    client = new GameClient(config, eventHandlerLookup);
+    client = new GameClient(eventHandlerLookup);
 
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
@@ -58,7 +59,13 @@ void Game::run() {
     Core::finalize();
     while (true) {
         if (Core::isInGameMode() && !connected) {
-            client->connectToServer();
+            std::string serverAddress;
+            int serverPort;
+
+            config->getValue(ConfigSettings::str_server_address, serverAddress);
+            config->getValue(ConfigSettings::str_server_port, serverPort);
+
+            client->connectToServer(serverAddress, serverPort);
             connected = true;
         }
 

@@ -1,28 +1,19 @@
 #pragma once
 
 #include <WinSock2.h>
-#include <ConfigSettings.h>
 
 class ClientNetwork {
 public:
-
-    // for error checking function calls in Winsock library
-    int iResult;
-
-    // socket for client to connect to server
-    SOCKET clientSocket;
-
-    // ctor/dtor
-    ClientNetwork(ConfigSettings *);
+    ClientNetwork();
     ~ClientNetwork();
 
-	void connectToServer();
+    void connectToServer(const std::string &serverAddress, const int &serverPort);
 	void disconnectFromServer();
 
     int receivePackets(char *);
+    void sendMessage(char *message, int size);
 
 private:
-    ConfigSettings *_config;
-
+    SOCKET clientSocket;
 	bool _connected;
 };

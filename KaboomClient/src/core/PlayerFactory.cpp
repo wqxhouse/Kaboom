@@ -10,7 +10,7 @@
 
 #include "SceneNodeComponent.h"
 
-PlayerFactory::PlayerFactory(EntityManager *entityManager)
+PlayerFactory::PlayerFactory(EntityManager &entityManager)
     : entityManager(entityManager) {
 }
 
@@ -18,7 +18,7 @@ PlayerFactory::~PlayerFactory() {
 }
 
 Entity *PlayerFactory::createPlayer(unsigned int id, float x, float y, float z) const {
-    Entity *entity = entityManager->createEntity(id);
+    Entity *entity = entityManager.createEntity(id);
 
     osg::Box *box = new osg::Box;
     osg::ShapeDrawable *drawable = new osg::ShapeDrawable(box);
