@@ -12,7 +12,8 @@
 Game::Game(ConfigSettings *config)
     : playerFactory(&entityManager),
 	  bombFactory(&entityManager),
-      eventHandlerLookup(new ClientEventHandlerLookup(this))
+      eventHandlerLookup(new ClientEventHandlerLookup(this)),
+      client(new GameClient(config, eventHandlerLookup))
 //    rootNode(new osg::Group) 
 {
     //inputManager = new InputManager(&viewer);
@@ -42,7 +43,7 @@ Game::Game(ConfigSettings *config)
 	Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
 	setupScene();
 
-	inputManager = new InputManager(*g_client);
+	inputManager = new InputManager(*client);
 	inputManager->loadConfig();
 }
 
@@ -66,18 +67,18 @@ void Game::run() {
 	{
 		if (Core::isInGameMode() && !connected)
 		{
-			g_client->connectToServer();
+            client->connectToServer();
 			connected = true;
 		}
 
 		if (connected)
 		{
-			g_client->receive();
+            client->receive();
 		}
 	
 		if (!Core::isInGameMode() && connected)
 		{
-			g_client->disconnectFromServer();
+            client->disconnectFromServer();
 			connected = false;
 		}
 
