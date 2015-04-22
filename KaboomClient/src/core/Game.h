@@ -26,6 +26,7 @@ public:
     ClientEventHandlerLookup *getEventHandlerLookup() const;
 
 private:
+    ConfigSettings *config;
     InputManager *inputManager;
 
     EntityManager entityManager;

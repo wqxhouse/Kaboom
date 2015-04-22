@@ -8,10 +8,7 @@
 
 #include "NetworkServices.h"
 
-ClientNetwork::ClientNetwork(ConfigSettings * config) 
-	: _config(NULL)
-{
-	_config = config;
+ClientNetwork::ClientNetwork() {
 }
 
 ClientNetwork::~ClientNetwork() {
@@ -20,15 +17,9 @@ ClientNetwork::~ClientNetwork() {
 	WSACleanup();
 }
 
-void ClientNetwork::connectToServer()
-{
-	if (!_config) return;
+void ClientNetwork::connectToServer(const std::string &serverAddress, const int &serverPort) {
 	if (_connected) return;
 
-	std::string serverAddress;
-	int serverPort;
-	_config->getValue(ConfigSettings::str_server_address, serverAddress);
-	_config->getValue(ConfigSettings::str_server_port, serverPort);
 
 	printf("<Client> port %d\n", serverPort);
 	printf("<Client> addrees %s\n", serverAddress);
@@ -45,7 +36,7 @@ void ClientNetwork::connectToServer()
 		hints;
 
 	// Initialize Winsock
-	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 
 	if (iResult != 0) {
 		printf("<Client> WSAStartup failed with error: %d\n", iResult);
@@ -124,7 +115,7 @@ void ClientNetwork::disconnectFromServer()
 }
 
 int ClientNetwork::receivePackets(char * recvbuf) {
-    iResult = NetworkServices::receiveMessage(clientSocket, recvbuf, MAX_PACKET_SIZE);
+    int iResult = NetworkServices::receiveMessage(clientSocket, recvbuf, MAX_PACKET_SIZE);
 
     if (iResult == 0) {
         printf("<Client> Server is disconnected, terminating connecting\n");
@@ -134,4 +125,8 @@ int ClientNetwork::receivePackets(char * recvbuf) {
     }
 
     return iResult;
+}
+
+void ClientNetwork::sendMessage(char *message, int size) {
+    NetworkServices::sendMessage(clientSocket, message, size);
 }

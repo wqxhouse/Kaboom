@@ -10,7 +10,7 @@
 
 #include "SceneNodeComponent.h"
 
-BombFactory::BombFactory(EntityManager *entityManager)
+BombFactory::BombFactory(EntityManager &entityManager)
     : entityManager(entityManager) {
 }
 
@@ -18,7 +18,7 @@ BombFactory::~BombFactory() {
 }
 
 Entity *BombFactory::createBomb(unsigned int id, float x, float y, float z) const {
-    Entity *entity = entityManager->createEntity(id);
+    Entity *entity = entityManager.createEntity(id);
 
     osg::Sphere *sphere = new osg::Sphere();
 	sphere->setRadius(0.5); //make this dynamic
