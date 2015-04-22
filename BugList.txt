@@ -4,10 +4,8 @@ Unresolved:
 	  tile artifact will show on the edge
 
 2. Press ESC will crash the program. Whereas click to close will not carsh the program.
-
 3. Currently mouse over gui cannot be detected. Thus, control on gui will disable the manipulator.
 4. setting position from GUI doesn't update the manipulator;
-5. After pressing playgame, the object is still draggable and resizable;
 
 Fixed:
 1. Scrolling will crash the program (TwGUI)
@@ -16,5 +14,4 @@ Fixed:
    thus causing shading wrong. 
    Fixed by add an option in EffectCompositor to not presering near and far plane
    for skybox.
-
-TODO: wire up GUI with manipulator (add select button with modes)
+3. After pressing playgame, the object is still draggable and resizable;

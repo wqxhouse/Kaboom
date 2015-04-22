@@ -35,6 +35,7 @@ public:
 	static void detachManipulator();
 
 	static bool setVisible(bool tf);
+	static bool isVisible();
 
 private:
 	static osg::ref_ptr<osgManipulator::TrackballDragger> _trackBallDragger;

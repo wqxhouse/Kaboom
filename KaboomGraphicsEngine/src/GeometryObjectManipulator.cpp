@@ -1,5 +1,6 @@
 #include "GeometryObjectManipulator.h"
 #include <osg/ComputeBoundsVisitor>
+#include "Core.h"
 
 void GeometryObjectManipulator::initWithRootNode(osg::Group *root)
 {
@@ -47,6 +48,8 @@ void GeometryObjectManipulator::changeCurrentNode(osg::MatrixTransform *node)
 void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 	(osg::MatrixTransform *node, enum ManipulatorType type)
 {
+	if (Core::isInGameMode()) return;
+
 	if (node == NULL || _rootNode == NULL)
 	{
 		return;
@@ -153,6 +156,12 @@ bool GeometryObjectManipulator::setVisible(bool tf)
 		}
 	}
 	return false;
+}
+
+bool GeometryObjectManipulator::isVisible()
+{
+	if (_dragger == NULL) return false;
+	_dragger->getNodeMask() == 0x4 ? true : false;
 }
 
 osg::ref_ptr<osgManipulator::TrackballDragger> GeometryObjectManipulator::_trackBallDragger = NULL;

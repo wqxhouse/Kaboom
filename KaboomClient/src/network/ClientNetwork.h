@@ -13,6 +13,11 @@ public:
     int receivePackets(char *);
     void sendMessage(char *message, int size);
 
+	inline bool isConnected()
+	{
+		return _connected;
+	}
+
 private:
     SOCKET clientSocket;
 	bool _connected;

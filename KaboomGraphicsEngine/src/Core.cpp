@@ -222,14 +222,8 @@ void Core::finalize()
 	_analysisHUD->toggleHelper(); // disabled by default
 
 	//_viewer->run();
-	if (_camCallback == NULL)
-	{ 
-		_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
-	}
-	else
-	{
-		_viewer->getCamera()->setUpdateCallback(new MainCameraCallback);
-	}
+	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
+	_viewer->getCamera()->setUpdateCallback(new MainCameraCallback);
 
 	_viewer->realize();
 	//while (!_viewer->done())
@@ -279,6 +273,22 @@ void Core::enableCameraManipulator()
 	_camManipulatorTemp = NULL;
 
 	_gui->setCameraManipulatorActive(true);
+}
+
+
+void Core::enableGeometryObjectManipulator()
+{
+	GeometryObjectManipulator::setVisible(_manipulatorEnabled);
+}
+
+void Core::disableGeometryObjectManipulator()
+{
+	// TODO: refactor bad pattern, since Manipuator is global
+	// thus this variable may not be up to date
+	// thus needs to be very careful
+	// Actually can make it an instance.
+	_manipulatorEnabled = GeometryObjectManipulator::isVisible();
+	GeometryObjectManipulator::setVisible(false);
 }
 
 void Core::configSkyBox()
@@ -365,6 +375,7 @@ void Core::enableGameMode()
 		disablePassDataDisplay();
 		disableCameraManipulator();
 		disableGUI();
+		disableGeometryObjectManipulator();
 		_gameMode = true;
 	}
 }
@@ -376,6 +387,7 @@ void Core::disableGameMode()
 		_gameMode = false;
 		enableGUI();
 		enableCameraManipulator();
+		enableGeometryObjectManipulator();
 
 		// TODO: change back to editor key bindings
 
@@ -414,9 +426,9 @@ Camera Core::_savedManipulatorCam;
 osg::ref_ptr<TwGUIManager> Core::_gui;
 osg::ref_ptr<SkyBox> Core::_skybox;
 std::string Core::_mediaPath;
-CameraCallback Core::_camCallback;
 osg::ref_ptr<CompositorAnalysis> Core::_analysisHUD;
 
 bool Core::_gameMode;
 bool Core::_passDataDisplay;
 bool Core::_guiEnabled;
+bool Core::_manipulatorEnabled;
