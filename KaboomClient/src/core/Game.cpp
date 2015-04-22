@@ -2,8 +2,10 @@
 #include <iostream>
 #include <osg/Group>
 #include <Core.h>
+#include <core/PositionComponent.h>
+
 #include "../Global.h"
-//#include "SceneNodeComponent.h"
+#include "SceneNodeComponent.h"
 #include "../Scene.h"
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
@@ -68,12 +70,25 @@ void Game::run() {
 }
 
 bool Game::addSceneNodeEntity(Entity *entity) {
-    //   SceneNodeComponent *sceneNodeCom = entity->getComponent<SceneNodeComponent>();
-    //   if (sceneNodeCom == nullptr) 
-    //{
-    //       return false;
-    //   }
-    // rootNode->addChild(sceneNodeCom->getNode());
+    SceneNodeComponent *sceneNodeCom = entity->getComponent<SceneNodeComponent>();
+    if (sceneNodeCom == nullptr) {
+       return false;
+    }
+
+	PositionComponent *posCom = entity->getComponent<PositionComponent>();
+	if (posCom == nullptr) {
+		return false;
+	}
+	
+	Core::getWorldRef().getGeometryManager()->addGeometry(std::to_string(static_cast<int>(entity->getId())),
+														  sceneNodeCom->getNode(), 
+														  osg::Vec3(posCom->getX(), posCom->getY(), posCom->getZ()));
+
+    //rootNode->addChild(sceneNodeCom->getNode());
+
+
+
+
 
 
     return true;

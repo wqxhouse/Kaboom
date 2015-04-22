@@ -64,9 +64,7 @@ void GameClient::receive() {
             eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
             break;
 		case EventOpcode::ENTITY_SPAWN:
-			printf("debug\n");
 			entitySpawnEvent.deserialize(&networkData[i]);
-			printf("debug2\n");
 			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(entitySpawnEvent);
 
 			if (!initialized) {
