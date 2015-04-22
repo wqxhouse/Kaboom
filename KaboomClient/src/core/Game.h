@@ -7,6 +7,7 @@
 
 #include "BombFactory.h"
 #include "PlayerFactory.h"
+#include "../network/GameClient.h"
 
 class ClientEventHandlerLookup;
 class InputManager;
@@ -27,9 +28,12 @@ public:
 
 private:
     InputManager *inputManager;
+
     EntityManager entityManager;
     PlayerFactory playerFactory;
 	BombFactory bombFactory;
+
+    GameClient *client;
     ClientEventHandlerLookup *eventHandlerLookup;
 
     // osgViewer::Viewer viewer;
