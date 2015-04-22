@@ -119,6 +119,7 @@ int ServerNetwork::receiveData(unsigned int client_id, char * recvbuf)
 		if (iResult == 0)
 		{
 			printf("<Server> Client Disconncect, closing connection\n");
+			//remove all entities from this player
 			closesocket(currentSocket);
 			sessions.erase(sessions.find(client_id));
 		}

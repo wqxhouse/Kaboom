@@ -1,13 +1,15 @@
 #include "CharacteristicComponent.h"
 
-CharacteristicComponent::CharacteristicComponent(EntityType type, int feature):
+CharacteristicComponent::CharacteristicComponent(EntityType type, int feature,int owner):
 type(type),
-feature(feature)
+feature(feature),
+owner(owner)
 {
 }
 CharacteristicComponent::CharacteristicComponent() :
 type(UNINITIATED),
-feature(0)
+feature(0),
+owner(0)
 {
 }
 CharacteristicComponent::~CharacteristicComponent()
@@ -24,4 +26,10 @@ void CharacteristicComponent::setFeature(int i){
 }
 int CharacteristicComponent::getFeature(){
 	return feature;
+}
+void CharacteristicComponent::setOwner(int o){
+	owner = o;
+}
+int CharacteristicComponent::getOwner(){
+	return owner;
 }

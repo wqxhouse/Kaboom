@@ -42,6 +42,9 @@ void GameServer::receive() {
     for (auto it : network->sessions) {
         int len = network->receiveData(it.first, network_data);
 
+		if (len == 0){
+			//handle player disconnect by sending delete messages to all clients about the deleted users entities
+		}
         if (len <= 0) {
             continue;
         }

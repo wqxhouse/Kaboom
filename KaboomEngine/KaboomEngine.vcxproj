@@ -180,12 +180,14 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\BombContainerComponent.h" />
     <ClInclude Include="src\core\CharacteristicComponent.h" />
     <ClInclude Include="src\core\Component.h" />
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
     <ClInclude Include="src\core\RotationComponent.h" />
+    <ClInclude Include="src\network\DeleteEvent.h" />
     <ClInclude Include="src\network\EmptyEvent.h" />
     <ClInclude Include="src\network\Event.h" />
     <ClInclude Include="src\network\EventHandler.h" />
@@ -198,12 +200,14 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\BombContainerComponent.cpp" />
     <ClCompile Include="src\core\CharacteristicComponent.cpp" />
     <ClCompile Include="src\core\Component.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
     <ClCompile Include="src\core\PositionComponent.cpp" />
     <ClCompile Include="src\core\RotationComponent.cpp" />
+    <ClCompile Include="src\network\DeleteEvent.cpp" />
     <ClCompile Include="src\network\EmptyEvent.cpp" />
     <ClCompile Include="src\network\Event.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />
