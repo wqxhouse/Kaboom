@@ -18,7 +18,6 @@ public:
 
     void sendMessage(const Event &evt);
 
-	
 private:
     ClientEventHandlerLookup *eventHandlerLookup;
 

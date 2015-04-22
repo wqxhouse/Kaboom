@@ -2,6 +2,7 @@
 
 #include <osg/MatrixTransform>
 
+#include <core/Entity.h>
 #include <core/PositionComponent.h>
 #include <network/PositionEvent.h>
 

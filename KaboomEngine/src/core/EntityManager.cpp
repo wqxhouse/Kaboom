@@ -3,6 +3,9 @@
 #include <stdexcept>
 #include <sstream>
 
+#include "Entity.h"
+#include "CharacteristicComponent.h"
+
 EntityManager::EntityManager() {
 }
 
@@ -67,6 +70,7 @@ std::vector<Entity *> EntityManager::getEntityList() {
 	}
 	return list;
 };
+
 std::vector<Entity *> EntityManager::getPlayerList() {
 	std::vector<Entity *> list;
 	for (auto kv : entities){
@@ -77,6 +81,7 @@ std::vector<Entity *> EntityManager::getPlayerList() {
 	}
 	return list;
 };
+
 std::vector<Entity *> EntityManager::getBombList() {
 	std::vector<Entity *> list;
 	for (auto kv : entities){
@@ -87,4 +92,3 @@ std::vector<Entity *> EntityManager::getBombList() {
 	}
 	return list;
 };
-

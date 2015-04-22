@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Entity.h"
-
 class Entity;
 
 class Component {
@@ -11,6 +9,6 @@ public:
     Entity *getParentEntity() const;
     void setParentEntity(Entity *parent);
 
-protected:
+private:
     Entity *parent;
 };

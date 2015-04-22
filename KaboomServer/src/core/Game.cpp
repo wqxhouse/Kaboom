@@ -1,6 +1,8 @@
 #include "Game.h"
 
+#include <core/Entity.h>
 #include <core/PositionComponent.h>
+
 #include "PhysicsComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"

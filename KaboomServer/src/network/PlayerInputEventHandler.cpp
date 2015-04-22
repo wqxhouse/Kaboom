@@ -2,8 +2,9 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <network/PlayerInputEvent.h>
+#include <core/Entity.h>
 #include <core/PositionComponent.h>
+#include <network/PlayerInputEvent.h>
 
 #include "../core/Game.h"
 #include "../core/PhysicsComponent.h"

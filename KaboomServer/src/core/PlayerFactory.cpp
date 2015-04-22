@@ -3,6 +3,7 @@
 #include <btBulletDynamicsCommon.h>
 
 #include <core/BombContainerComponent.h>
+#include <core/CharacteristicComponent.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 

@@ -1,11 +1,13 @@
 #include "GameServer.h"
 
+#include <core/Entity.h>
+#include <core/CharacteristicComponent.h>
 #include <core/PositionComponent.h>
 #include <network/EmptyEvent.h>
-#include <network/EntitySpawnEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
+#include <network/SpawnEvent.h>
 
 #include "../core/Game.h"
 
@@ -99,9 +101,9 @@ void GameServer::sendEntitySpawnEvent(Entity* newEntity){
 		return;
 	}
 
-	EntitySpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(),PLAYER, 0);
+    SpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(), PLAYER, 0);
 
-	const unsigned int packet_size = sizeof(EntitySpawnEvent);
+    const unsigned int packet_size = sizeof(SpawnEvent);
 	char packet_data[packet_size];
 
 	playerSpawnEvent.serialize(packet_data);
@@ -112,7 +114,7 @@ void GameServer::sendEntitySpawnEvent(Entity* newEntity){
 void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity *> existingEnities){
 	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
 	
-	const unsigned int packet_size = sizeof(EntitySpawnEvent);
+	const unsigned int packet_size = sizeof(SpawnEvent);
 	char packet_data[packet_size];
 	for (int i = 0; i < existingEnities.size(); i++){
 		if (existingEnities[i]->getId() == newEntity->getId()){
@@ -123,7 +125,7 @@ void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity 
 		if (existingEnities[i]->getComponent<CharacteristicComponent>() != nullptr){
 			type = existingEnities[i]->getComponent<CharacteristicComponent>()->getType();
 		}
-		EntitySpawnEvent extraEntity(existingEnities[i]->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(), type, 0);
+        SpawnEvent extraEntity(existingEnities[i]->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(), type, 0);
 		extraEntity.serialize(packet_data);
 		network->sendToOneClient(packet_data, packet_size, newEntity->getId());
 	}

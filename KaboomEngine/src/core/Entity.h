@@ -3,8 +3,6 @@
 #include <typeinfo>
 #include <unordered_map>
 
-#include "Component.h"
-
 class Component;
 
 class Entity {

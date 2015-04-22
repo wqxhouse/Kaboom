@@ -3,7 +3,6 @@
 #include <unordered_map>
 
 #include "Entity.h"
-#include "CharacteristicComponent.h"
 
 class EntityManager {
 public:
@@ -23,6 +22,7 @@ public:
 	std::vector<Entity *> getEntityList();
 	std::vector<Entity *> getPlayerList();
 	std::vector<Entity *> getBombList();
+
 private:
     std::unordered_map<unsigned int, Entity *> entities;
     unsigned int nextId;
