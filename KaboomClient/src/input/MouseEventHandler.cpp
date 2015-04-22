@@ -84,8 +84,8 @@ bool MouseEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActio
         return false;
     case osgGA::GUIEventAdapter::MOVE:
         if (dx != 0 || dy != 0) {
-            inputEventHandler.onLook(yaw, pitch);
-            aa.requestWarpPointer(centerX, centerY);
+            //inputEventHandler.onLook(yaw, pitch);
+            //aa.requestWarpPointer(centerX, centerY);
 
             return true;
         }
