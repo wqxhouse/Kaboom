@@ -1,7 +1,5 @@
 #include "MouseEventHandler.h"
 
-#include "InputEventHandler.h"
-
 MouseEventHandler::MouseEventHandler(InputEventHandler &inputEventHandler)
     : inputEventHandler(inputEventHandler) {
 }
