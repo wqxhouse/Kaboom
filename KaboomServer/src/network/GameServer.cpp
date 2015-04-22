@@ -55,7 +55,6 @@ void GameServer::receive() {
 
         EmptyEvent emptyEvent;
 		PlayerInputEvent playerInputEvent;
-		PlayerInputEvent finalPlayerInputEvent;
 		bool receivedPlayerInputEvent = false;
 
         unsigned int i = 0;
@@ -67,8 +66,6 @@ void GameServer::receive() {
                 playerInputEvent.deserialize(&network_data[i]);
 
 				playerInputEvent.setPlayerId(it.first); //Important prevent hacking from client impersonating as other clients
-
-				finalPlayerInputEvent.updateValues(playerInputEvent); //we don't want to handle it here yet
 				receivedPlayerInputEvent = true;
 
                 break;
@@ -81,9 +78,8 @@ void GameServer::receive() {
         }
 
 		if (receivedPlayerInputEvent) { 
-			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(finalPlayerInputEvent); 
+			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
 		}
-
     }
 }
 
