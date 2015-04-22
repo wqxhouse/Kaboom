@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+#include "Component.h"
+
 Entity::Entity(unsigned int id)
     : id(id) {
 }

@@ -4,10 +4,10 @@
 
 class Game;
 
-class EntitySpawnEventHandler : public EventHandler {
+class SpawnEventHandler : public EventHandler {
 public:
-	EntitySpawnEventHandler(Game *game);
-	~EntitySpawnEventHandler();
+    SpawnEventHandler(Game *game);
+    ~SpawnEventHandler();
 
     virtual void handle(const Event &evt) const;
 

@@ -1,35 +1,38 @@
 #include "CharacteristicComponent.h"
 
-CharacteristicComponent::CharacteristicComponent(EntityType type, int feature,int owner):
-type(type),
-feature(feature),
-owner(owner)
-{
+CharacteristicComponent::CharacteristicComponent()
+    : CharacteristicComponent(UNINITIATED, 0, 0) {
 }
-CharacteristicComponent::CharacteristicComponent() :
-type(UNINITIATED),
-feature(0),
-owner(0)
-{
+
+CharacteristicComponent::CharacteristicComponent(EntityType type, int feature, int owner)
+    : type(type),
+    feature(feature),
+    owner(owner) {
 }
-CharacteristicComponent::~CharacteristicComponent()
-{
+
+CharacteristicComponent::~CharacteristicComponent() {
 }
-void CharacteristicComponent::setType(EntityType lype){
-	type = lype;
+
+EntityType CharacteristicComponent::getType() const {
+    return type;
 }
-EntityType CharacteristicComponent::getType(){
-	return type;
+
+void CharacteristicComponent::setType(EntityType lype) {
+    type = lype;
 }
-void CharacteristicComponent::setFeature(int i){
-	feature = i;
+
+int CharacteristicComponent::getFeature() const {
+    return feature;
 }
-int CharacteristicComponent::getFeature(){
-	return feature;
+
+void CharacteristicComponent::setFeature(int i) {
+    feature = i;
 }
-void CharacteristicComponent::setOwner(int o){
-	owner = o;
+
+int CharacteristicComponent::getOwner() const {
+    return owner;
 }
-int CharacteristicComponent::getOwner(){
-	return owner;
+
+void CharacteristicComponent::setOwner(int o) {
+    owner = o;
 }

@@ -2,8 +2,8 @@
 
 #include <unordered_map>
 
-#include "Event.h"
 #include "EventHandler.h"
+#include "EventOpcode.h"
 
 class EventHandlerLookup {
 public:

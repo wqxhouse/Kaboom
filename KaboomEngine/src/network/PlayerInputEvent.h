@@ -54,6 +54,7 @@ public:
     }
 
 	virtual void updateValues(const PlayerInputEvent &e);
+
 private:
     unsigned int playerId;
 

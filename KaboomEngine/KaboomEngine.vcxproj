@@ -185,6 +185,7 @@
     <ClInclude Include="src\core\Component.h" />
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
+    <ClInclude Include="src\core\EntityType.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
     <ClInclude Include="src\core\RotationComponent.h" />
     <ClInclude Include="src\network\DeleteEvent.h" />
@@ -192,11 +193,12 @@
     <ClInclude Include="src\network\Event.h" />
     <ClInclude Include="src\network\EventHandler.h" />
     <ClInclude Include="src\network\EventHandlerLookup.h" />
+    <ClInclude Include="src\network\EventOpcode.h" />
     <ClInclude Include="src\network\NetworkData.h" />
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
     <ClInclude Include="src\network\RotationEvent.h" />
-    <ClInclude Include="src\network\EntitySpawnEvent.h" />
+    <ClInclude Include="src\network\SpawnEvent.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +216,7 @@
     <ClCompile Include="src\network\PlayerInputEvent.cpp" />
     <ClCompile Include="src\network\PositionEvent.cpp" />
     <ClCompile Include="src\network\RotationEvent.cpp" />
-    <ClCompile Include="src\network\EntitySpawnEvent.cpp" />
+    <ClCompile Include="src\network\SpawnEvent.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>

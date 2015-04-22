@@ -69,6 +69,7 @@ const float &PlayerInputEvent::getPitch() const {
 void PlayerInputEvent::setPlayerId(unsigned int _playerId){
 	playerId = _playerId;
 }
+
 void PlayerInputEvent::serialize(char *buf) const {
     memcpy(buf, this, sizeof(PlayerInputEvent));
 }
@@ -88,5 +89,4 @@ void PlayerInputEvent::updateValues(const PlayerInputEvent &e) {
 	firing = e.isFiring() ? e.isFiring() : false;
 	yaw = e.getYaw() ? e.getYaw() : false;
 	pitch = e.getPitch() ? e.getPitch() : false;
-
 }

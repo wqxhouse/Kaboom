@@ -1,7 +1,10 @@
 #include "Game.h"
+
 #include <iostream>
 #include <osg/Group>
+
 #include <Core.h>
+#include <core/Entity.h>
 #include <core/PositionComponent.h>
 
 #include "../Global.h"
