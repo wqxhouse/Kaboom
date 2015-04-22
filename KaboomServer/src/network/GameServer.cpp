@@ -7,10 +7,12 @@
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 
+#include "../core/Game.h"
+
 unsigned int GameServer::client_id;
 
-GameServer::GameServer(ConfigSettings * config, Game *game)
-    : eventHandlerLookup(new ServerEventHandlerLookup(game)) {
+GameServer::GameServer(ConfigSettings * config, ServerEventHandlerLookup *eventHandlerLookup)
+    : eventHandlerLookup(eventHandlerLookup) {
     // id's to assign clients for our table
     client_id = 0;
 
@@ -89,36 +91,6 @@ void GameServer::sendGameStatePackets(Game *game) {
     }
 }
 
-void GameServer::sendPlayerSpawnEvent(Entity* newEntity, std::vector<Entity *> existingEnities) {
-
-	//send the spawn entity event to all the clients
-	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
-
-    if (positionCom == nullptr) {
-        return;
-    }
-
-	EntitySpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(),PLAYER,0);
-
-	const unsigned int packet_size = sizeof(EntitySpawnEvent);
-    char packet_data[packet_size];
-
-    playerSpawnEvent.serialize(packet_data);
-    network->sendToAll(packet_data, packet_size);
-
-	//Send to the client who just joined with the existing entity we already have
-
-	for (int i = 0; i < existingEnities.size(); i++){
-		if (existingEnities[i]->getId() == newEntity->getId()){
-			continue;
-		}
-		positionCom = existingEnities[i]->getComponent<PositionComponent>();
-
-		EntitySpawnEvent extraPlayers(existingEnities[i]->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(),PLAYER, 0);
-		extraPlayers.serialize(packet_data);
-		network->sendToOneClient(packet_data, packet_size, newEntity->getId());
-	}
-}
 void GameServer::sendEntitySpawnEvent(Entity* newEntity){
 	//send the spawn entity event to all the clients
 	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
@@ -136,6 +108,7 @@ void GameServer::sendEntitySpawnEvent(Entity* newEntity){
 	network->sendToAll(packet_data, packet_size);
 
 }
+
 void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity *> existingEnities){
 	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
 	
@@ -155,8 +128,6 @@ void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity 
 		network->sendToOneClient(packet_data, packet_size, newEntity->getId());
 	}
 }
-
-
 
 void GameServer::sendPositionEvent(Entity* entity) {
     PositionComponent *positionCom = entity->getComponent<PositionComponent>();

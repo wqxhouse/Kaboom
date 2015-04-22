@@ -1,8 +1,8 @@
 #pragma once
 
-#include <btBulletDynamicsCommon.h>
-
 #include <core/Component.h>
+
+class btRigidBody;
 
 class PhysicsComponent : public Component {
 public:

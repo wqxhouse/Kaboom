@@ -2,12 +2,15 @@
 
 #include <core/PositionComponent.h>
 #include "PhysicsComponent.h"
+#include "../network/GameServer.h"
+#include "../network/ServerEventHandlerLookup.h"
 
 Game::Game(ConfigSettings *config)
     : config(config),
     playerFactory(&entityManager),
-	bombFactory(&entityManager) {
-    server = new GameServer(config, this);
+	bombFactory(&entityManager),
+    eventHandlerLookup(new ServerEventHandlerLookup(this)) {
+    server = new GameServer(config, eventHandlerLookup);
 
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -88,4 +91,12 @@ void Game::update(float timeStep) {
 
 const EntityManager &Game::getEntityManager() const {
     return entityManager;
+}
+
+const PlayerFactory &Game::getPlayerFactory() const {
+    return playerFactory;
+}
+
+const BombFactory &Game::getBombFactory() const {
+    return bombFactory;
 }

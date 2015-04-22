@@ -1,7 +1,11 @@
 #include "PlayerInputEventHandler.h"
 
+#include <btBulletDynamicsCommon.h>
+
 #include <network/PlayerInputEvent.h>
 #include <core/PositionComponent.h>
+
+#include "../core/Game.h"
 #include "../core/PhysicsComponent.h"
 
 PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
@@ -14,8 +18,8 @@ PlayerInputEventHandler::~PlayerInputEventHandler() {
 void PlayerInputEventHandler::handle(const Event &e) const {
     const PlayerInputEvent &evt = static_cast<const PlayerInputEvent &>(e);
 
-    Entity *entity = game->getEntityManager().getEntity(evt.getPlayerId());
-    btRigidBody *rigidBody = entity->getComponent<PhysicsComponent>()->getRigidBody();
+    Entity *player = game->getEntityManager().getEntity(evt.getPlayerId());
+    btRigidBody *rigidBody = player->getComponent<PhysicsComponent>()->getRigidBody();
     btVector3 velocity = rigidBody->getLinearVelocity();
 
     if (evt.isMovingForward()) {
@@ -36,14 +40,10 @@ void PlayerInputEventHandler::handle(const Event &e) const {
 
     rigidBody->setLinearVelocity(velocity);
 
-	
-	if (evt.isFiring()){
-		PositionComponent * posComp = entity->getComponent<PositionComponent>();
 
-		Entity *bombEntity=game->bombFactory.createBomb(posComp->getX(), posComp->getY(), posComp->getZ()+1);
+    if (evt.isFiring()) {
+        PositionComponent *posComp = player->getComponent<PositionComponent>();
 
-		//game->server->sendSpawnBombEvent(bombEntity->getComponent<Ph);
-	}
-
-
+        game->getBombFactory().createBomb(posComp->getX(), posComp->getY(), posComp->getZ() + 1);
+    }
 }

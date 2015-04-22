@@ -1,5 +1,8 @@
 #include "BombFactory.h"
 
+#include <btBulletDynamicsCommon.h>
+
+#include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 
 #include "PhysicsComponent.h"

@@ -18,7 +18,6 @@
 #include <string>
 #include <hash_map>
 #include <iterator>
-#include <osgDB/fstream>
 
 
 // TODO: reference additional headers your program requires here
