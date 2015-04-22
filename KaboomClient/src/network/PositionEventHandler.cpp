@@ -21,6 +21,9 @@ void PositionEventHandler::handle(const Event &e) const {
 
     Entity *entity = game->getEntityManager().getEntity(evt.getEntityId());
 
+	// TODO: a hack for not crashing currently . change this to intended behavior.
+	if (!entity) return;
+
     PositionComponent *positionCom = entity->getComponent<PositionComponent>();
 
     if (positionCom != nullptr) {

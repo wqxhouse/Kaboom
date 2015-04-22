@@ -62,7 +62,6 @@ void Game::run() {
 	std::string serverAddress;
 	int serverPort;
 
-
     Core::finalize();
 
     while (true) {
@@ -73,13 +72,28 @@ void Game::run() {
 			}
 			break;
 		case CONNECT_TO_SERVER:
+		{
 			config->getValue(ConfigSettings::str_server_address, serverAddress);
 			config->getValue(ConfigSettings::str_server_port, serverPort);
 
-			client->connectToServer(serverAddress, serverPort);
-			gsm = GAME_MODE;
+			bool res = client->connectToServer(serverAddress, serverPort);
+			if (res)
+			{
+				gsm = GAME_MODE;
+			}
+			else
+			{
+				gsm = EDITOR_MODE;
+				Core::disableGameMode();
+			}
 			break;
+		}
 		case GAME_MODE:
+			// TODO: Robin: need to check this.
+			// Since receive fails when the packet received is zero (from the source code, not sure if it is the intended behavior)
+			// and the client will be disconnected from the server 
+			// Thus, we want to check if receive fails. If fails, since we are disconnected, should fall back to editor state.
+			// E.g: close the server whlie running the game 
 			client->receive();
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
 				gsm = DISCONNECT_TO_SERVER;
@@ -110,8 +124,6 @@ bool Game::addSceneNodeEntity(Entity *entity) {
 														  osg::Vec3(posCom->getX(), posCom->getY(), posCom->getZ()));
 
     //rootNode->addChild(sceneNodeCom->getNode());
-
-
 
 
 
