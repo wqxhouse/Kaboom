@@ -51,9 +51,6 @@
     <ClCompile Include="src\input\KeyboardEventHandler.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\InputManager.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\ClientNetwork.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
@@ -88,15 +85,21 @@
     <ClCompile Include="src\core\BombFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\input\InputEventHandler.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\InputManager.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\MouseEventHandler.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input\InputManager.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\network\ClientNetwork.h">
@@ -132,6 +135,15 @@
     </ClInclude>
     <ClInclude Include="src\core\BombFactory.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\InputEventHandler.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\InputManager.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\MouseEventHandler.h">
+      <Filter>Header Files\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

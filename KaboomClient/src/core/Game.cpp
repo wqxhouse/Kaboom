@@ -39,7 +39,7 @@ Game::Game(ConfigSettings *config)
 	Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
 	setupScene();
 
-	inputManager = new InputManager();
+	inputManager = new InputManager(*g_client);
 	inputManager->loadConfig();
 }
 

@@ -7,6 +7,7 @@
 #include <network/RotationEvent.h>
 
 #include "NetworkServices.h"
+#include "ClientEventHandlerLookup.h"
 
 GameClient::GameClient(ConfigSettings *config, ClientEventHandlerLookup *eventHandlerLookup) :
     eventHandlerLookup(eventHandlerLookup) {

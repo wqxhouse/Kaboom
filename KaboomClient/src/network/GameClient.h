@@ -1,9 +1,11 @@
 #pragma once
 
+#include <network/Event.h>
 #include <network/NetworkData.h>
 
-#include "ClientEventHandlerLookup.h"
 #include "ClientNetwork.h"
+
+class ClientEventHandlerLookup;
 
 class GameClient {
 public:
@@ -14,7 +16,7 @@ public:
 	void connectToServer();
 	void disconnectFromServer();
 
-    void GameClient::sendMessage(const Event &evt);
+    void sendMessage(const Event &evt);
 
 	
 private:
