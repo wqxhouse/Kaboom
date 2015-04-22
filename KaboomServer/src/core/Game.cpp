@@ -5,7 +5,8 @@
 
 Game::Game(ConfigSettings *config)
     : config(config),
-    playerFactory(&entityManager) {
+    playerFactory(&entityManager),
+	bombFactory(&entityManager) {
     server = new GameServer(config, this);
 
     broadphase = new btDbvtBroadphase();
@@ -55,27 +56,28 @@ void Game::update(float timeStep) {
 
 		//now we create a new player
         Entity *player = playerFactory.createPlayer(0, 0, 5);
-        players.push_back(player);
+        //players.push_back(player);
         addPhysicsEntity(player);
 
 		//notify client, a player spawn occurs
-		server->sendPlayerSpawnEvent(player, players);
-
+		//server->sendPlayerSpawnEvent(player, players);
+		server->sendEntitySpawnEvent(player);
+		server->sendAllEntitiesSpawnEvent(player,entityManager.getEntityList());
         //first have the client first preload the information about the world
         server->sendGameStatePackets(this);
     }
 
     server->receive();
 
-    for (Entity *player : players) {
-        player->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
+	for (Entity *entity : entityManager.getEntityList()) {
+		entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
     }
 
     world->stepSimulation(timeStep);
     
-    for (Entity *player : players) {
-        PositionComponent *positionCom = player->getComponent<PositionComponent>();
-        PhysicsComponent *physicsCom = player->getComponent<PhysicsComponent>();
+	for (Entity *entity : entityManager.getEntityList()) {
+		PositionComponent *positionCom = entity->getComponent<PositionComponent>();
+		PhysicsComponent *physicsCom = entity->getComponent<PhysicsComponent>();
 
         const btVector3 &position = physicsCom->getRigidBody()->getWorldTransform().getOrigin();
         positionCom->setPosition(position.getX(), position.getY(), position.getZ());

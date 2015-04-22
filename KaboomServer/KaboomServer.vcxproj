@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\PhysicsComponent.cpp" />
     <ClCompile Include="src\core\PlayerFactory.cpp" />
@@ -41,6 +42,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\PhysicsComponent.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />

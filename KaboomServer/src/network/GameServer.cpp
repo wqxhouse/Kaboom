@@ -2,7 +2,7 @@
 
 #include <core/PositionComponent.h>
 #include <network/EmptyEvent.h>
-#include <network/PlayerSpawnEvent.h>
+#include <network/EntitySpawnEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
@@ -48,6 +48,8 @@ void GameServer::receive() {
 
         EmptyEvent emptyEvent;
 		PlayerInputEvent playerInputEvent;
+		PlayerInputEvent finalPlayerInputEvent;
+		bool receivedPlayerInputEvent = false;
 
         unsigned int i = 0;
         while (i < (unsigned int)len) {
@@ -59,7 +61,9 @@ void GameServer::receive() {
 
 				playerInputEvent.setPlayerId(it.first); //Important prevent hacking from client impersonating as other clients
 
-                eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
+				finalPlayerInputEvent.updateValues(playerInputEvent); //we don't want to handle it here yet
+				receivedPlayerInputEvent = true;
+
                 break;
             default:
                 printf("<Server> error in packet types\n");
@@ -68,6 +72,11 @@ void GameServer::receive() {
 
             i += emptyEvent.getByteSize();
         }
+
+		if (receivedPlayerInputEvent) { 
+			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(finalPlayerInputEvent); 
+		}
+
     }
 }
 
@@ -86,9 +95,9 @@ void GameServer::sendPlayerSpawnEvent(Entity* newEntity, std::vector<Entity *> e
         return;
     }
 
-	PlayerSpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ());
+	EntitySpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(),PLAYER,0);
 
-    const unsigned int packet_size = sizeof(PlayerSpawnEvent);
+	const unsigned int packet_size = sizeof(EntitySpawnEvent);
     char packet_data[packet_size];
 
     playerSpawnEvent.serialize(packet_data);
@@ -102,11 +111,49 @@ void GameServer::sendPlayerSpawnEvent(Entity* newEntity, std::vector<Entity *> e
 		}
 		positionCom = existingEnities[i]->getComponent<PositionComponent>();
 
-		PlayerSpawnEvent extraPlayers(existingEnities[i]->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ());
+		EntitySpawnEvent extraPlayers(existingEnities[i]->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(),PLAYER, 0);
 		extraPlayers.serialize(packet_data);
 		network->sendToOneClient(packet_data, packet_size, newEntity->getId());
 	}
 }
+void GameServer::sendEntitySpawnEvent(Entity* newEntity){
+	//send the spawn entity event to all the clients
+	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
+
+	if (positionCom == nullptr) {
+		return;
+	}
+
+	EntitySpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(),PLAYER, 0);
+
+	const unsigned int packet_size = sizeof(EntitySpawnEvent);
+	char packet_data[packet_size];
+
+	playerSpawnEvent.serialize(packet_data);
+	network->sendToAll(packet_data, packet_size);
+
+}
+void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity *> existingEnities){
+	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
+	
+	const unsigned int packet_size = sizeof(EntitySpawnEvent);
+	char packet_data[packet_size];
+	for (int i = 0; i < existingEnities.size(); i++){
+		if (existingEnities[i]->getId() == newEntity->getId()){
+			continue;
+		}
+		positionCom = existingEnities[i]->getComponent<PositionComponent>();
+		EntityType type = EntityType::UNINITIATED;
+		if (existingEnities[i]->getComponent<CharacteristicComponent>() != nullptr){
+			type = existingEnities[i]->getComponent<CharacteristicComponent>()->getType();
+		}
+		EntitySpawnEvent extraEntity(existingEnities[i]->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(), type, 0);
+		extraEntity.serialize(packet_data);
+		network->sendToOneClient(packet_data, packet_size, newEntity->getId());
+	}
+}
+
+
 
 void GameServer::sendPositionEvent(Entity* entity) {
     PositionComponent *positionCom = entity->getComponent<PositionComponent>();

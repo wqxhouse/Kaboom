@@ -5,7 +5,7 @@ enum EventOpcode {
     POSITION = 1,
     ROTATION = 2,
     PLAYER_INPUT = 3,
-    PLAYER_SPAWN = 4
+    ENTITY_SPAWN = 4
 };
 
 class Event {

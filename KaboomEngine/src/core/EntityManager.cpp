@@ -59,3 +59,32 @@ bool EntityManager::isEntityAlive(unsigned int id) const {
 unsigned int EntityManager::getNextId() const{
 	return nextId;
 }
+
+std::vector<Entity *> EntityManager::getEntityList() {
+	std::vector<Entity *> list;
+	for (auto kv : entities){
+		list.push_back(kv.second);
+	}
+	return list;
+};
+std::vector<Entity *> EntityManager::getPlayerList() {
+	std::vector<Entity *> list;
+	for (auto kv : entities){
+		CharacteristicComponent * comp = kv.second->getComponent<CharacteristicComponent>();
+		if ( comp->getType() == PLAYER){
+			list.push_back(kv.second);
+		}
+	}
+	return list;
+};
+std::vector<Entity *> EntityManager::getBombList() {
+	std::vector<Entity *> list;
+	for (auto kv : entities){
+		CharacteristicComponent * comp = kv.second->getComponent<CharacteristicComponent>();
+		if (comp->getType() == BOMB){
+			list.push_back(kv.second);
+		}
+	}
+	return list;
+};
+
