@@ -32,6 +32,13 @@ GeometryObject::GeometryObject(const std::string &name, osg::Node *geomNode)
 	setMaterial(Core::getWorldRef().getMaterialManager()->getBuiltInMaterial(DEFAULT));
 }
 
+
+GeometryObject::GeometryObject(const std::string &name, osg::Node *geomNode, std::string fileName)
+: GeometryObject(name, geomNode)
+{
+	_fileName = fileName;
+}
+
 GeometryObject::~GeometryObject()
 {
 }

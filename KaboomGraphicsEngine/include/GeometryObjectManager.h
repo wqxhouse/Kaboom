@@ -16,7 +16,8 @@ public:
 	GeometryObjectManager();
 	~GeometryObjectManager();
 
-	bool addGeometry(const std::string &name, osg::Node *geomNode, osg::Vec3 pos=osg::Vec3(0, 0, 0));
+	bool addGeometry(const std::string &name, osg::Node *geomNode, osg::Vec3 pos = osg::Vec3(0, 0, 0));
+	bool addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName);
 	bool setGeometryMaterial(const std::string &geomName, Material *material);
 
 	inline const std::unordered_map<std::string, GeometryObject *> getGeometryObjectMapRef() const

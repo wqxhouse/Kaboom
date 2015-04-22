@@ -21,6 +21,12 @@ public:
 		float radius, 
 		bool castShadow);
 
+
+	inline const std::unordered_map<std::string, Light *> getLightMapRef() const
+	{
+		return _lightsMap;
+	}
+
 	inline int getNumLights()
 	{
 		return _numLights;

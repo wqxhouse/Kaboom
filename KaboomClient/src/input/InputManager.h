@@ -7,7 +7,8 @@ class InputManager {
 public:
     static void look(int deltaX, int deltaY);
 
-    InputManager(osgViewer::Viewer *viewer);
+    //InputManager(osgViewer::Viewer *viewer);
+	InputManager();
     ~InputManager();
 
     void loadConfig();

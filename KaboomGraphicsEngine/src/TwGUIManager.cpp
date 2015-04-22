@@ -1,14 +1,17 @@
 #include "stdafx.h" 
+#include <ConfigSettings.h>
 
 #include "TwGUIManager.h"
 #include <unordered_map>
 
 #include "Core.h"
 #include "GeometryObject.h"
+#include "Material.h"
 #include "Light.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "GeometryObjectManipulator.h"
+
 
 TwGUIManager::TwGUIManager()
 // Note, this flag assumes that you do not touch viewer manipulator settings
@@ -64,6 +67,13 @@ void TwGUIManager::initMainBar()
 		*(bool *)value = *(bool *)clientData;
 	},
 		&this->_cameraManipulatorActive, NULL);
+
+	// 'Export to XML' button
+	TwAddButton(g_twBar, "Export to XML",
+		[](void *clientData) {
+		exportXML();
+	},
+		NULL, NULL);
 
 	TwAddSeparator(g_twBar, NULL, NULL);
 
@@ -226,7 +236,7 @@ void TwGUIManager::initMainBar()
 				arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
 			}, dl, dirLightColorDef.c_str());
 		}
-		else if (l->getLightType() == POINT)
+		else if (l->getLightType() == POINTLIGHT)
 		{
 			PointLight *pl = l->asPointLight();
 
@@ -536,4 +546,216 @@ int TwGUIManager::getTwModKeyMask(int modkey) const
 	if (modkey&osgGA::GUIEventAdapter::MODKEY_ALT) twModkey |= TW_KMOD_ALT;
 	if (modkey&osgGA::GUIEventAdapter::MODKEY_CTRL) twModkey |= TW_KMOD_CTRL;
 	return twModkey;
+}
+
+
+void TwGUIManager::write(std::ofstream &f, int tabs, std::string s)
+{
+	for (int i = 0; i < tabs; i++) {
+		f << "\t";
+	}
+
+	f << s << "\n";
+}
+
+std::string TwGUIManager::addTags(std::string tag, std::string s)
+{
+	return "<" + tag + ">" + s + "</" + tag + ">";
+}
+
+std::string TwGUIManager::tagify(std::string tag, std::string s)
+{
+	return addTags(tag, s);
+}
+
+std::string TwGUIManager::tagify(std::string tag, float f)
+{
+	return addTags(tag, std::to_string(f));
+}
+
+std::string TwGUIManager::tagify(std::string tag, bool b)
+{
+	int i = b ? 1 : 0;
+	return addTags(tag, std::to_string(i));
+}
+
+std::string TwGUIManager::tagify(std::string tag, osg::Vec3 &v)
+{
+	std::string ret = "";
+
+	for (int i = 0; i < v.num_components; i++) {
+		ret = ret + std::to_string(v[i]);
+
+		if (i < v.num_components - 1) {
+			ret = ret + " ";
+		}
+	}
+
+	return addTags(tag, ret);
+}
+
+std::string TwGUIManager::tagify(std::string tag, osg::Vec4 &v)
+{
+	std::string ret = "";
+
+	for (int i = 0; i < v.num_components; i++) {
+		ret = ret + std::to_string(v[i]);
+
+		if (i < v.num_components - 1) {
+			ret = ret + " ";
+		}
+	}
+
+	return addTags(tag, ret);
+}
+
+void TwGUIManager::exportXML()
+{
+	// Might wanna move this code somewhere else
+	ConfigSettings* config = ConfigSettings::config;
+	std::string str_export_xml = "";
+	config->getValue(ConfigSettings::str_export_xml, str_export_xml);
+
+	// Open file to write
+	int tabs = 0;
+	std::ofstream f;
+	f.open(str_export_xml);
+
+	// Headers
+	write(f, tabs, "<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
+	write(f, tabs, "<world>");
+	tabs++;
+
+	MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+	GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+	LightManager* lm = Core::getWorldRef().getLightManager();
+
+	// FOR MATERIALS
+	const std::unordered_map<std::string, Material *> &mmMatMap = mm->getMaterialMapRef();
+	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMatMap.begin();
+		it != mmMatMap.end(); ++it)
+	{
+		const std::string &name = it->first;
+		Material *mat = it->second;			// Get Material object
+
+		std::string type = (mat->getUseTexture()) ? "textured" : "plain";
+		std::string matHeader = "<material name=\"" + name + "\" type=\"" + type + "\">";
+
+		write(f, tabs, matHeader);
+		tabs++;
+
+		// For plain materials
+		if (type == "plain") {
+			osg::Vec3 alb = mat->getAlbedo();
+			float rough = mat->getRoughness();
+			float specular = mat->getSpecular();
+			float metallic = mat->getMetallic();
+
+			write(f, tabs, tagify("albedo", alb));
+			write(f, tabs, tagify("roughness", rough));
+			write(f, tabs, tagify("specular", specular));
+			write(f, tabs, tagify("metallic", metallic));
+		}
+		// For textured materials
+		else if (type == "textured") {
+			std::string albPath = mat->getAlbedoTexturePath();
+			std::string roughPath = mat->getRoughnessTexturePath();
+			std::string metallicPath = mat->getMetallicTexturePath();
+			std::string normalPath = mat->getNormalMapTexturePath();
+
+			write(f, tabs, tagify("albedoTex", albPath));
+			write(f, tabs, tagify("roughnessTex", roughPath));
+			write(f, tabs, tagify("metallicTex", metallicPath));
+			write(f, tabs, tagify("normalPath", normalPath));
+		}
+
+		tabs--;
+		write(f, tabs, "</material>\n");
+	}
+
+	// FOR GEOMETRY OBJECTS
+	const std::unordered_map<std::string, GeometryObject *> &gmMap = gm->getGeometryObjectMapRef();
+	for (std::unordered_map<std::string, GeometryObject *>::const_iterator it = gmMap.begin();
+		it != gmMap.end(); ++it)
+	{
+		const std::string &name = it->first;
+		GeometryObject *geom = it->second;			// Get GeometryObject
+
+		std::string matHeader = "<model name=\"" + name + "\">";
+
+		write(f, tabs, matHeader);
+		tabs++;
+
+		// Geometry properties
+		std::string file = geom->getFileName();
+		std::string mat = geom->getMaterial()->getName();
+		osg::Vec3 pos = geom->getTranslate();
+		osg::Vec4 rot = geom->getRotation().asVec4();
+		// TODO: collider
+
+		std::string matTag = "<material name=\"" + mat + "\" />";
+
+		write(f, tabs, tagify("file", file));
+		write(f, tabs, matTag);
+		write(f, tabs, tagify("position", pos));
+		write(f, tabs, tagify("orientation", rot));
+		//write(f, tabs, tagify("collider", ));
+
+		tabs--;
+		write(f, tabs, "</model>\n");
+	}
+
+	// FOR LIGHT OBJECTS
+	const std::unordered_map<std::string, Light *> &lmMap = lm->getLightMapRef();
+	for (std::unordered_map<std::string, Light *>::const_iterator it = lmMap.begin();
+		it != lmMap.end(); ++it)
+	{
+		const std::string &name = it->first;
+		Light *light = it->second;			// Get Light object
+
+		std::string type = "";
+
+		switch (light->getLightType()) {
+		case POINTLIGHT:
+			type = "point";
+			break;
+		case DIRECTIONAL:
+			type = "directional";
+			break;
+		}
+
+		std::string ltHeader = "<light name=\"" + name + "\" type=\"" + type + "\">";
+
+		write(f, tabs, ltHeader);
+		tabs++;
+
+		osg::Vec3 color = light->getColor();
+		bool shadow = light->getCastShadow();
+
+		write(f, tabs, tagify("color", color));
+		write(f, tabs, tagify("castShadow", shadow));
+
+		// Light properties
+		if (type == "point") {
+			osg::Vec3 pos = light->getPosition();
+			float radius = ((PointLight *)light)->getRadius();
+
+			write(f, tabs, tagify("position", pos));
+			write(f, tabs, tagify("radius", radius));
+		}
+		// For textured materials
+		else if (type == "directional") {
+			osg::Vec3 dir = ((DirectionalLight *)light)->getLightToWorldDirection();
+
+			write(f, tabs, tagify("direction", dir));
+		}
+
+		tabs--;
+		write(f, tabs, "</light>\n");
+	}
+
+	// Footers
+	tabs--;
+	write(f, tabs, "</world>");
+	f.close();			// Close file
 }
