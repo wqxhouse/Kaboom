@@ -38,6 +38,9 @@ Game::Game(ConfigSettings *config)
 
     inputManager = new InputManager(*client);
     inputManager->loadConfig();
+
+    Core::addEventHandler(&inputManager->getKeyboardEventHandler());
+    Core::addEventHandler(&inputManager->getMouseEventHandler());
 }
 
 Game::~Game() {

@@ -13,6 +13,9 @@ public:
 
     void loadConfig();
 
+    KeyboardEventHandler &getKeyboardEventHandler();
+    MouseEventHandler &getMouseEventHandler();
+
 private:
     InputEventHandler inputEventHandler;
     KeyboardEventHandler keyboardEventHandler;

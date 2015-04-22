@@ -25,3 +25,11 @@ void InputManager::loadConfig() {
     keyboardEventHandler.bindKey('f', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onFireDown);
     keyboardEventHandler.bindKey('f', KeyboardEventHandler::KEY_UP, &InputEventHandler::onFireUp);
 }
+
+KeyboardEventHandler &InputManager::getKeyboardEventHandler() {
+    return keyboardEventHandler;
+}
+
+MouseEventHandler &InputManager::getMouseEventHandler() {
+    return mouseEventHandler;
+}
