@@ -2,7 +2,12 @@
 
 #include <iostream>
 
-#include "InputManager.h"
+KeyboardEventHandler::KeyboardEventHandler(InputEventHandler &inputEventHandler)
+    : inputEventHandler(inputEventHandler) {
+}
+
+KeyboardEventHandler::~KeyboardEventHandler() {
+}
 
 bool KeyboardEventHandler::bindKey(int key, Function func) {
     if (keyDownFuncMap.end() != keyDownFuncMap.find(key)) {
@@ -33,17 +38,10 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIAc
     bool newKeyDownEvent = false;
     bool newKeyUpEvent = false;
 
-    int centerx = (ea.getWindowX() + ea.getWindowWidth()) / 2;
-    int centery = (ea.getWindowY() + ea.getWindowHeight()) / 2;
-    int x = ea.getX();
-    int y = ea.getY();
-	int deltaX = x - centerx;
-	int deltaY = y - centery;
-
     switch (ea.getEventType()) {
     case osgGA::GUIEventAdapter::KEYDOWN:
         itr = keyDownFuncMap.find(ea.getKey());
-
+        
         if (itr != keyDownFuncMap.end()) {
             if (itr->second.keyState == KEY_UP) {
                 itr->second.keyState = KEY_DOWN;
@@ -51,7 +49,7 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIAc
             }
 
             if (newKeyDownEvent) {
-                itr->second.keyFunction();
+                (inputEventHandler.*(itr->second.keyFunction))();
                 newKeyDownEvent = false;
             }
 
@@ -69,21 +67,11 @@ bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIAc
         itr = keyUpFuncMap.find(ea.getKey());
 
         if (itr != keyUpFuncMap.end()) {
-            itr->second.keyFunction();
+            (inputEventHandler.*(itr->second.keyFunction))();
             return true;
         }
 
         return false;
-    case osgGA::GUIEventAdapter::MOVE:
-        if (deltaX != 0 || deltaY != 0) {
-            InputManager::look(deltaX, deltaY);
-
-            //prevX = x;
-            //prevY = y;
-            //aa.requestWarpPointer(centerx, centery);
-        }
-        return false;
-	
     default:
         return false;
     }

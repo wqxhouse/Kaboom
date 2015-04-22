@@ -3,6 +3,8 @@
 #include <Core.h>
 #include "Scene.h"
 
+#include "core/Game.h"
+
 #include "network/GameClient.h"
 #include "input/InputManager.h"
 
