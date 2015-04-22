@@ -53,31 +53,48 @@ Game::~Game() {
     delete client;
 }
 
+enum GameStateMachine {
+	EDITOR_MODE,
+	CONNECT_TO_SERVER,
+	GAME_MODE,
+	DISCONNECT_TO_SERVER
+};
 void Game::run() {
-    static bool connected = false;
+    //static bool connected = false;
+	
+	GameStateMachine gsm = EDITOR_MODE; //start with EDITOR_MODE
+
+	std::string serverAddress;
+	int serverPort;
+
 
     Core::finalize();
+
     while (true) {
-        if (Core::isInGameMode() && !connected) {
-            std::string serverAddress;
-            int serverPort;
+		switch (gsm) {
+		case EDITOR_MODE:
+			if (Core::isInGameMode()) { //pressed the PlayGame Button
+				gsm = CONNECT_TO_SERVER;
+			}
+			break;
+		case CONNECT_TO_SERVER:
+			config->getValue(ConfigSettings::str_server_address, serverAddress);
+			config->getValue(ConfigSettings::str_server_port, serverPort);
 
-            config->getValue(ConfigSettings::str_server_address, serverAddress);
-            config->getValue(ConfigSettings::str_server_port, serverPort);
-
-            client->connectToServer(serverAddress, serverPort);
-            connected = true;
-        }
-
-        if (connected) {
-            client->receive();
-        }
-
-        if (!Core::isInGameMode() && connected) {
-            client->disconnectFromServer();
-            connected = false;
-        }
-
+			client->connectToServer(serverAddress, serverPort);
+			gsm = GAME_MODE;
+			break;
+		case GAME_MODE:
+			client->receive();
+			if (!Core::isInGameMode()) { //have a way to switch back to the editor
+				gsm = DISCONNECT_TO_SERVER;
+			}
+			break;
+		case DISCONNECT_TO_SERVER:
+			client->disconnectFromServer();
+			gsm = EDITOR_MODE;
+			break;
+		}
         Core::AdvanceFrame();
     }
 }
