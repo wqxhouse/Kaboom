@@ -25,6 +25,9 @@ public:
 	static Camera &getMainCamera();
 	static void setCameraCallback(CameraCallback callback);
 
+	static void AdvanceFrame();
+	static void finalize();
+
 	static void setEnvironmentMap(
 		const std::string &posX,
 		const std::string &negX,
@@ -45,9 +48,11 @@ public:
 	static void enableGameMode();
 	static void disableGameMode();
 
+	static bool isInGameMode();
+
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 
-	static void run();
+	// static void run();
 
 private:
 	static void configPasses();

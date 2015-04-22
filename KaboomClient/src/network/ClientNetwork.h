@@ -5,7 +5,6 @@
 
 class ClientNetwork {
 public:
-    ConfigSettings *config;
 
     // for error checking function calls in Winsock library
     int iResult;
@@ -17,5 +16,13 @@ public:
     ClientNetwork(ConfigSettings *);
     ~ClientNetwork();
 
+	void connectToServer();
+	void disconnectFromServer();
+
     int receivePackets(char *);
+
+private:
+    ConfigSettings *_config;
+
+	bool _connected;
 };

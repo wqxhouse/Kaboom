@@ -191,7 +191,15 @@ void Core::configViewer()
 	_viewer->addEventHandler(new GeometryPicker);
 }
 
-void Core::run()
+void Core::AdvanceFrame()
+{
+	if (_hasInit)
+	{
+		_viewer->frame();
+	}
+}
+
+void Core::finalize()
 {
 	if (!_hasInit)
 	{
@@ -224,21 +232,21 @@ void Core::run()
 	}
 
 	_viewer->realize();
-	while (!_viewer->done())
-	{
-		if (_camCallback != NULL)
-		{
-			_camCallback(&_cam);
-		}
+	//while (!_viewer->done())
+	//{
+	//	if (_camCallback != NULL)
+	//	{
+	//		_camCallback(&_cam);
+	//	}
 
-		Camera &c = getMainCamera();
-		//std::cout << "Before: " << c.getLookAt() << std::endl;
-		const osg::Vec3 &cc = osg::Vec3(100, 100, 100);
-		//c.setLookAtAndUpdate(cc);
-		//std::cout << "After1 : " << c.getLookAt() << std::endl;
-		
-		_viewer->frame();
-	}
+	//	Camera &c = getMainCamera();
+	//	//std::cout << "Before: " << c.getLookAt() << std::endl;
+	//	const osg::Vec3 &cc = osg::Vec3(100, 100, 100);
+	//	//c.setLookAtAndUpdate(cc);
+	//	//std::cout << "After1 : " << c.getLookAt() << std::endl;
+	//	
+	//	_viewer->frame();
+	//}
 }
 
 Camera &Core::getMainCamera()
@@ -377,7 +385,13 @@ void Core::disableGameMode()
 
 void Core::addEventHandler(osgGA::GUIEventHandler *handler)
 {
+	if (_viewer == NULL) return;
 	_viewer->addEventHandler(handler);
+}
+
+bool Core::isInGameMode()
+{
+	return _gameMode ? true : false;
 }
 
 

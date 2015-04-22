@@ -16,7 +16,7 @@ void LightBound::setLight(Light *light, enum LightBoundType boundType)
 	_light = light;
 	_boundType = boundType;
 
-	if (_light->getLightType() == POINT)
+	if (_light->getLightType() == POINTLIGHT)
 	{
 		PointLight *pl = light->asPointLight();
 		if (_boundType == BOX)
@@ -46,7 +46,7 @@ void LightBound::setLight(Light *light, enum LightBoundType boundType)
 bool LightBound::intersectBound(const osg::Polytope &polyTope) const
 {
 	osg::Polytope cloned = polyTope;
-	if (_light->getLightType() == POINT)
+	if (_light->getLightType() == POINTLIGHT)
 	{
 		bool result;
 		if (_boundType == SPHERE)

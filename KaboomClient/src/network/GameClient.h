@@ -11,6 +11,8 @@ public:
     ~GameClient();
 
 	void receive();
+	void connectToServer();
+	void disconnectFromServer();
 
     void GameClient::sendMessage(const Event &evt);
 

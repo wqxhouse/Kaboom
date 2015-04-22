@@ -94,14 +94,15 @@ void InputManager::sendPlayerInputEvent() {
     g_client->sendMessage(evt);
 }
 
-InputManager::InputManager(osgViewer::Viewer *viewer) {
-
+//InputManager::InputManager(osgViewer::Viewer *viewer) {
+InputManager::InputManager()
+{
 	// hack, refactor it when we have access to the demo computers
     keyboardHandler = new KeyboardEventHandler();
 	Core::addEventHandler(keyboardHandler);
 
-	if (!viewer) return;
-    viewer->addEventHandler(keyboardHandler);
+	//if (!viewer) return;
+	//viewer->addEventHandler(keyboardHandler);
 }
 
 InputManager::~InputManager() {

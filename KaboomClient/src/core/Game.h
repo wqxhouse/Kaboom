@@ -1,5 +1,4 @@
 #pragma once
-
 #include <osgViewer/Viewer>
 #include <core/EntityManager.h>
 #include <ConfigSettings.h>
@@ -29,9 +28,7 @@ private:
     PlayerFactory playerFactory;
     ClientEventHandlerLookup *eventHandlerLookup;
 
-    osgViewer::Viewer viewer;
-
-    osg::Group *rootNode;
-
-    void setupCamera();
+    // osgViewer::Viewer viewer;
+    // osg::Group *rootNode;
+    // void setupCamera();
 };

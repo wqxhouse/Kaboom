@@ -277,6 +277,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerSpawnEventHandler.h" />
     <ClInclude Include="src\network\PositionEventHandler.h" />
+    <ClInclude Include="src\Scene.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

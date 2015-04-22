@@ -77,7 +77,7 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 
 			dirLightIds.push_back(i);
 		}
-		else if (l->getLightType() == POINT)
+		else if (l->getLightType() == POINTLIGHT)
 		{
 			PointLight *ptLight = l->asPointLight();
 			radius = ptLight->getRadius();

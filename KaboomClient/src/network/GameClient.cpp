@@ -17,6 +17,16 @@ GameClient::~GameClient() {
     delete network;
 }
 
+void GameClient::connectToServer()
+{
+	network->connectToServer();
+}
+
+void GameClient::disconnectFromServer()
+{
+	network->disconnectFromServer();
+}
+
 void GameClient::receive() {
     int len = network->receivePackets(networkData);
 
