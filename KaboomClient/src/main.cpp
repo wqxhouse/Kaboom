@@ -9,10 +9,10 @@ int main()
 	ConfigSettings *config = ConfigSettings::config;
 	Game game(config);
 
-	try {
+	//try {
 		game.run();
-	}
-	catch (std::exception &e) {
-		std::cerr << "ERROR: " << e.what() << std::endl;
-	}
+	//}
+	//catch (std::exception &e) {
+	//	std::cerr << "ERROR: " << e.what() << std::endl;
+	//}
 }

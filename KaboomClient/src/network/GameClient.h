@@ -13,8 +13,8 @@ public:
     ~GameClient();
 
 	void receive();
-    void connectToServer(const std::string &serverAddress, const int serverPort);
-	void disconnectFromServer();
+    bool connectToServer(const std::string &serverAddress, const int serverPort);
+	bool disconnectFromServer();
 
     void sendMessage(const Event &evt);
 

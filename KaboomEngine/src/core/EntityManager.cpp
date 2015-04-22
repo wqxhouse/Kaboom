@@ -16,7 +16,7 @@ Entity *EntityManager::createEntity() {
     while (isEntityAlive(nextId)) {
         ++nextId;
     }
-
+	// TODO: figure out the logic here if createEntity() returns NULL
     return createEntity(nextId++);
 }
 
@@ -26,7 +26,8 @@ Entity *EntityManager::createEntity(unsigned int id) {
         error << "Unable to create entity with ID " << id << "." << std::endl;
         error << "Entity with this ID is already alive." << std::endl;
 
-        throw std::runtime_error(error.str());
+        // throw std::runtime_error(error.str());
+		return NULL;
     }
 
     Entity *entity = new Entity(id);
@@ -49,7 +50,8 @@ Entity *EntityManager::getEntity(unsigned int id) const {
         error << "Unable to retrieve entity with ID " << id << "." << std::endl;
         error << "Entity with this ID is not alive." << std::endl;
 
-        throw std::runtime_error(error.str());
+        // throw std::runtime_error(error.str());
+		return NULL;
     }
 
     return entities.at(id);

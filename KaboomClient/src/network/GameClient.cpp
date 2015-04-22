@@ -16,12 +16,15 @@ GameClient::GameClient(ClientEventHandlerLookup *eventHandlerLookup)
 GameClient::~GameClient() {
 }
 
-void GameClient::connectToServer(const std::string &serverAddress, const int serverPort) {
+bool GameClient::connectToServer(const std::string &serverAddress, const int serverPort) {
     network.connectToServer(serverAddress, serverPort);
+	return network.isConnected();
+	
 }
 
-void GameClient::disconnectFromServer() {
+bool GameClient::disconnectFromServer() {
     network.disconnectFromServer();
+	return !network.isConnected();
 }
 
 void GameClient::receive() {
