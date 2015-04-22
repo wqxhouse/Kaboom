@@ -1,7 +1,5 @@
 #include "SceneNodeComponent.h"
 
-#include <osg/MatrixTransform>
-
 SceneNodeComponent::SceneNodeComponent(osg::Node *node)
     : node(node) {
 }

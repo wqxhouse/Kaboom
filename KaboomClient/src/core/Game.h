@@ -1,7 +1,5 @@
 #pragma once
 
-#include <osgViewer/Viewer>
-
 #include <ConfigSettings.h>
 #include <core/EntityManager.h>
 
@@ -24,6 +22,7 @@ public:
     const EntityManager &getEntityManager() const;
     const PlayerFactory &getPlayerFactory() const;
 	const BombFactory &getBombFactory() const;
+
     ClientEventHandlerLookup *getEventHandlerLookup() const;
 
 private:
