@@ -1,6 +1,7 @@
 #pragma once
 
-#include <core/EntityManager.h>
+class Entity;
+class EntityManager;
 
 class BombFactory {
 public:

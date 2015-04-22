@@ -6,15 +6,13 @@
 #include "ServerNetwork.h"
 #include "NetworkServices.h"
 
-#include "../core/Game.h"
-
+class Entity;
 class Game;
-class ServerEventHandlerLookup;
 
 class GameServer {
 public:
 
-    GameServer(ConfigSettings *, Game *game);
+    GameServer(ConfigSettings *, ServerEventHandlerLookup *eventHandlerLookup);
     ~GameServer();
 
     bool acceptNewClient(unsigned int);
@@ -22,8 +20,6 @@ public:
     void receive();
 
     void sendGameStatePackets(Game *game);
-
-	void sendPlayerSpawnEvent(Entity *entity, std::vector<Entity *> players);
 
     void sendPositionEvent(Entity *entity);
 	void sendEntitySpawnEvent(Entity* newEntity);
@@ -40,6 +36,4 @@ private:
 
 	// data buffer
 	char network_data[MAX_PACKET_SIZE];
-
-
 };

@@ -1,7 +1,10 @@
 #include "PlayerFactory.h"
 
-#include <core/PositionComponent.h>
+#include <btBulletDynamicsCommon.h>
+
 #include <core/BombContainerComponent.h>
+#include <core/EntityManager.h>
+#include <core/PositionComponent.h>
 
 #include "PhysicsComponent.h"
 
@@ -29,9 +32,9 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
 
     Entity *entity = entityManager->createEntity();
     entity->attachComponent(new PositionComponent(x, y, z));
-	entity->attachComponent(new CharacteristicComponent(PLAYER,0,0));
+    entity->attachComponent(new CharacteristicComponent(PLAYER, 0, 0));
     entity->attachComponent(new PhysicsComponent(rigidBody));
-	entity->attachComponent(new BombContainerComponent());
+    entity->attachComponent(new BombContainerComponent());
 
     return entity;
 }

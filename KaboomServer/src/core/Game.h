@@ -10,9 +10,8 @@
 #include "PlayerFactory.h"
 #include "BombFactory.h"
 
-#include "../network/GameServer.h"
-
 class GameServer;
+class ServerEventHandlerLookup;
 
 class Game {
 public:
@@ -27,17 +26,18 @@ public:
     void addPhysicsEntity(Entity *entity);
 
     const EntityManager &getEntityManager() const;
-
-	PlayerFactory playerFactory;
-	BombFactory bombFactory;
-	GameServer *server;
+    const PlayerFactory &getPlayerFactory() const;
+    const BombFactory &getBombFactory() const;
 
 private:
     ConfigSettings *config;
-    
 
     EntityManager entityManager;
-    
+    PlayerFactory playerFactory;
+    BombFactory bombFactory;
+
+    GameServer *server;
+    ServerEventHandlerLookup *eventHandlerLookup;
 
     btBroadphaseInterface *broadphase;
     btDefaultCollisionConfiguration *collisionConfiguration;
