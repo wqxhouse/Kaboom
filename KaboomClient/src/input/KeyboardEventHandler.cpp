@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "InputEventHandler.h"
+
 KeyboardEventHandler::KeyboardEventHandler(InputEventHandler &inputEventHandler)
     : inputEventHandler(inputEventHandler) {
 }

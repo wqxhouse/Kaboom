@@ -1,11 +1,11 @@
 #include "PlayerFactory.h"
 
-
 #include <osg/Geode>
 #include <osg/MatrixTransform>
 #include <osg/Shape>
 #include <osg/ShapeDrawable>
 
+#include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 
 #include "SceneNodeComponent.h"

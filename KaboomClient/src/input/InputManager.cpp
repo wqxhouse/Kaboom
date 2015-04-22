@@ -1,5 +1,7 @@
 #include "InputManager.h"
 
+#include "../network/GameClient.h"
+
 InputManager::InputManager(GameClient &client)
     : inputEventHandler(client),
     keyboardEventHandler(inputEventHandler),

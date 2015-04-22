@@ -1,12 +1,9 @@
 #include <iostream>
+
 #include <ConfigSettings.h>
-#include <Core.h>
-#include "Scene.h"
 
 #include "core/Game.h"
-
 #include "network/GameClient.h"
-#include "input/InputManager.h"
 
 GameClient *g_client;
 

@@ -1,14 +1,15 @@
 #pragma once
+
 #include <osgViewer/Viewer>
-#include <core/EntityManager.h>
+
 #include <ConfigSettings.h>
+#include <core/EntityManager.h>
 
 #include "BombFactory.h"
 #include "PlayerFactory.h"
-#include "../input/InputManager.h"
-#include "../network/ClientEventHandlerLookup.h"
 
 class ClientEventHandlerLookup;
+class InputManager;
 
 class Game {
 public:

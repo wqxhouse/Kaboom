@@ -2,7 +2,7 @@
 
 #include <osgGA/GUIEventHandler>
 
-#include "InputEventHandler.h"
+class InputEventHandler;
 
 class KeyboardEventHandler : public osgGA::GUIEventHandler {
 public:
