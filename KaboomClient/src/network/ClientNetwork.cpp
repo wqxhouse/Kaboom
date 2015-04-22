@@ -20,6 +20,7 @@ ClientNetwork::~ClientNetwork() {
 void ClientNetwork::connectToServer(const std::string &serverAddress, const int &serverPort) {
 	if (_connected) return;
 
+	bool hasError = false;
 
 	printf("<Client> port %d\n", serverPort);
 	printf("<Client> addrees %s\n", serverAddress);
@@ -39,8 +40,9 @@ void ClientNetwork::connectToServer(const std::string &serverAddress, const int 
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 
 	if (iResult != 0) {
-		printf("<Client> WSAStartup failed with error: %d\n", iResult);
-		exit(1);
+		fprintf(stderr, "<Client> WSAStartup failed with error: %d\n", iResult);
+		// exit(1);
+		hasError = true;
 	}
 
 	// set address info
@@ -54,9 +56,10 @@ void ClientNetwork::connectToServer(const std::string &serverAddress, const int 
 	iResult = getaddrinfo(serverAddress.c_str(), "2350", &hints, &result);
 
 	if (iResult != 0) {
-		printf("<Client> getaddrinfo failed with error: %d\n", iResult);
+		fprintf(stderr, "<Client> getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
-		exit(1);
+		// exit(1);
+		hasError = true;
 	}
 
 	// Attempt to connect to an address until one succeeds
@@ -67,9 +70,10 @@ void ClientNetwork::connectToServer(const std::string &serverAddress, const int 
 			ptr->ai_protocol);
 
 		if (clientSocket == INVALID_SOCKET) {
-			printf("<Client> socket failed with error: %ld\n", WSAGetLastError());
+			fprintf(stderr, "<Client> socket failed with error: %ld\n", WSAGetLastError());
 			WSACleanup();
-			exit(1);
+			// exit(1);
+			hasError = true;
 		}
 
 		// Connect to server.
@@ -88,9 +92,10 @@ void ClientNetwork::connectToServer(const std::string &serverAddress, const int 
 
 	// if connection failed
 	if (clientSocket == INVALID_SOCKET) {
-		printf("<Client> Unable to connect to server!\n");
+		fprintf(stderr, "<Client> Unable to connect to server!\n");
 		WSACleanup();
-		exit(1);
+		// exit(1);
+		hasError = true;
 	}
 
 
@@ -99,29 +104,37 @@ void ClientNetwork::connectToServer(const std::string &serverAddress, const int 
 
 	iResult = ioctlsocket(clientSocket, FIONBIO, &iMode);
 	if (iResult == SOCKET_ERROR) {
-		printf("<Client> ioctlsocket failed with error: %d\n", WSAGetLastError());
+		fprintf(stderr, "<Client> ioctlsocket failed with error: %d\n", WSAGetLastError());
 		closesocket(clientSocket);
 		WSACleanup();
-		exit(1);
+		// exit(1);
+		hasError = true;
 	}
-
-	_connected = true;
+	if (hasError)
+	{
+		_connected = false;
+		fprintf(stderr, "Connection failed...\n");
+	}
+	else
+	{
+		_connected = true;
+		printf("Connected to server...\n");
+	}
 }
 
 void ClientNetwork::disconnectFromServer()
 {
 	if (!_connected) return;
-	// TODO: 
 }
 
 int ClientNetwork::receivePackets(char * recvbuf) {
     int iResult = NetworkServices::receiveMessage(clientSocket, recvbuf, MAX_PACKET_SIZE);
 
     if (iResult == 0) {
-        printf("<Client> Server is disconnected, terminating connecting\n");
+        fprintf(stderr, "<Client> Server is disconnected, terminating connecting\n");
         closesocket(clientSocket);
         WSACleanup();
-        exit(1);
+        // exit(1);
     }
 
     return iResult;

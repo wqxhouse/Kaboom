@@ -1,6 +1,6 @@
 #include "InputEventHandler.h"
 
-//#include <Core.h>
+#include <Core.h>
 #include <network/PlayerInputEvent.h>
 
 #include "../network/GameClient.h"
@@ -92,22 +92,22 @@ void InputEventHandler::sendPlayerInputEvent() {
     client.sendMessage(evt);
 }
 
+
+void InputEventHandler::quitGameMode()
+{
+	Core::disableGameMode();
+}
+
+void InputEventHandler::showDebugAnalysis()
+{
+	Core::enablePassDataDisplay();
+}
+
+void InputEventHandler::hideDebugAnalysis()
+{
+	Core::disablePassDataDisplay();
+}
 /*
-void InputManager::quitGameMode()
-{
-	//Core::disableGameMode();
-}
-
-void InputManager::showDebugAnalysis()
-{
-	//Core::enablePassDataDisplay();
-}
-
-void InputManager::hideDebugAnalysis()
-{
-	//Core::disablePassDataDisplay();
-}
-
 void InputManager::look(int deltaX, int deltaY) {
 	Camera* cam_ptr = &Core::getMainCamera();
     osg::Vec3 lookAt = cam_ptr->getLookAt();

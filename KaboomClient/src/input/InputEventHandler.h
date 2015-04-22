@@ -21,6 +21,10 @@ public:
     void onFireUp();
     void onLook(float yaw, float pitch);
 
+	void quitGameMode();
+	void showDebugAnalysis();
+	void hideDebugAnalysis();
+
 private:
     GameClient &client;
 
@@ -34,10 +38,6 @@ private:
     float pitch;
 
     void sendPlayerInputEvent();
-
-    //static void quitGameMode();
-    //static void showDebugAnalysis();
-    //static void hideDebugAnalysis();
 
     //static void resetCamera();
 };

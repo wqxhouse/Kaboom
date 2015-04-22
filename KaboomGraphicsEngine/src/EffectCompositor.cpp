@@ -491,7 +491,7 @@ void EffectCompositor::traverse( osg::NodeVisitor& nv )
 
 		auto aaa = Core::_viewer->getCameraManipulator();
 
-		std::cout << "After 2 " << Core::_cam._eye<< std::endl;
+		// std::cout << "After 2 " << Core::_cam._eye<< std::endl;
 
 		double fovy = 0.0, aspectRatio = 0.0, zNear = 0.0, zFar = 0.0;
 		if (projectionMatrix) projectionMatrix->getPerspective(fovy, aspectRatio, zNear, zFar);
