@@ -78,6 +78,12 @@ void InputEventHandler::onLook(float yaw, float pitch) {
     sendPlayerInputEvent();
 }
 
+void InputEventHandler::computeCamera(int dx, int dy)
+{
+	osg::Quat q;
+	
+}
+
 void InputEventHandler::sendPlayerInputEvent() {
     PlayerInputEvent evt(0,
         movingForward,

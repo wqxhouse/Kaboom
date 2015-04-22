@@ -62,9 +62,8 @@ void Game::run() {
 	std::string serverAddress;
 	int serverPort;
 
-    Core::finalize();
-
     while (true) {
+		printf("duration: %lf\n", Core::getLastFrameDuration());
 		switch (gsm) {
 		case EDITOR_MODE:
 			if (Core::isInGameMode()) { //pressed the PlayGame Button

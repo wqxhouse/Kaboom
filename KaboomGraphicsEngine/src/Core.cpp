@@ -44,6 +44,7 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	_passDataDisplay = false;
 	_gameMode = false;
 	_guiEnabled = true;
+	_isFirstFrame = true;
 
 	configFilePath();
 
@@ -183,6 +184,7 @@ void Core::configViewer()
 
 	// add gui
 	_viewer->addEventHandler(_gui.get());
+	// _viewer->addEventHandler(new osgViewer::StatsHandler);
 	_viewer->getCamera()->setFinalDrawCallback(_gui.get());
 
 	_viewer->setUpViewInWindow(_winPos.x(), _winPos.y(), _screenSize.x(), _screenSize.y());
@@ -195,8 +197,24 @@ void Core::AdvanceFrame()
 {
 	if (_hasInit)
 	{
+		if (_isFirstFrame)
+		{
+			finalize();
+			_lastFrameStartTime = _frameStartTime 
+				= osg::Timer::instance()->getStartTick();
+			
+			_isFirstFrame = false;
+		}
+
 		_viewer->frame();
+		_lastFrameStartTime = _frameStartTime;
+		_frameStartTime = osg::Timer::instance()->tick();
 	}
+}
+
+double Core::getLastFrameDuration()
+{
+	return osg::Timer::instance()->delta_s(_lastFrameStartTime, _frameStartTime);
 }
 
 void Core::finalize()
@@ -406,7 +424,6 @@ bool Core::isInGameMode()
 	return _gameMode ? true : false;
 }
 
-
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;
@@ -432,3 +449,8 @@ bool Core::_gameMode;
 bool Core::_passDataDisplay;
 bool Core::_guiEnabled;
 bool Core::_manipulatorEnabled;
+
+bool Core::_isFirstFrame;
+
+osg::Timer_t Core::_lastFrameStartTime; 
+osg::Timer_t Core::_frameStartTime; 
