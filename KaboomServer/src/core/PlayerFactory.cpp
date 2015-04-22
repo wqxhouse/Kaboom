@@ -28,6 +28,7 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
 
     Entity *entity = entityManager->createEntity();
     entity->attachComponent(new PositionComponent(x, y, z));
+	entity->attachComponent(new CharacteristicComponent(PLAYER,0));
     entity->attachComponent(new PhysicsComponent(rigidBody));
 
     return entity;

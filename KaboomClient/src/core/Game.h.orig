@@ -2,7 +2,6 @@
 #include <osgViewer/Viewer>
 #include <core/EntityManager.h>
 #include <ConfigSettings.h>
-
 #include "BombFactory.h"
 #include "PlayerFactory.h"
 #include "../input/InputManager.h"
@@ -31,7 +30,15 @@ private:
 	BombFactory bombFactory;
     ClientEventHandlerLookup *eventHandlerLookup;
 
+<<<<<<< HEAD
     // osgViewer::Viewer viewer;
     // osg::Group *rootNode;
     // void setupCamera();
+=======
+    //osgViewer::Viewer viewer;
+
+    osg::Group *rootNode;
+
+    void setupCamera();
+>>>>>>> 08baca99a65d86d982574651c0cee08d5d186249
 };

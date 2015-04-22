@@ -76,3 +76,17 @@ void PlayerInputEvent::serialize(char *buf) const {
 void PlayerInputEvent::deserialize(char *buf) {
     memcpy(this, buf, sizeof(PlayerInputEvent));
 }
+
+void PlayerInputEvent::updateValues(const PlayerInputEvent &e) {
+	playerId = e.getPlayerId();
+
+	movingForward = e.isMovingForward() ? e.isMovingForward() : false;
+	movingBackward = e.isMovingBackward() ? e.isMovingBackward() : false;
+	movingRight = e.isMovingRight() ? e.isMovingRight() : false;
+	movingLeft = e.isMovingLeft() ? e.isMovingLeft() : false;
+	jumping = e.isJumping() ? e.isJumping() : false;
+	firing = e.isFiring() ? e.isFiring() : false;
+	yaw = e.getYaw() ? e.getYaw() : false;
+	pitch = e.getPitch() ? e.getPitch() : false;
+
+}

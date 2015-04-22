@@ -8,6 +8,7 @@
 #include <core/EntityManager.h>
 
 #include "PlayerFactory.h"
+#include "BombFactory.h"
 
 #include "../network/GameServer.h"
 
@@ -16,7 +17,7 @@ class GameServer;
 class Game {
 public:
     std::vector<Entity *> players;
-
+	std::vector<Entity *> bombs;
     Game(ConfigSettings *config);
     ~Game();
 
@@ -27,12 +28,16 @@ public:
 
     const EntityManager &getEntityManager() const;
 
+	PlayerFactory playerFactory;
+	BombFactory bombFactory;
+	GameServer *server;
+
 private:
     ConfigSettings *config;
-    GameServer *server;
+    
 
     EntityManager entityManager;
-    PlayerFactory playerFactory;
+    
 
     btBroadphaseInterface *broadphase;
     btDefaultCollisionConfiguration *collisionConfiguration;

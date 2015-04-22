@@ -1,7 +1,7 @@
 #include "PlayerInputEventHandler.h"
 
 #include <network/PlayerInputEvent.h>
-
+#include <core/PositionComponent.h>
 #include "../core/PhysicsComponent.h"
 
 PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
@@ -35,4 +35,15 @@ void PlayerInputEventHandler::handle(const Event &e) const {
     }
 
     rigidBody->setLinearVelocity(velocity);
+
+	
+	if (evt.isFiring()){
+		PositionComponent * posComp = entity->getComponent<PositionComponent>();
+
+		Entity *bombEntity=game->bombFactory.createBomb(posComp->getX(), posComp->getY(), posComp->getZ()+1);
+
+		//game->server->sendSpawnBombEvent(bombEntity->getComponent<Ph);
+	}
+
+
 }

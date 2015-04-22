@@ -26,6 +26,8 @@ public:
 	void sendPlayerSpawnEvent(Entity *entity, std::vector<Entity *> players);
 
     void sendPositionEvent(Entity *entity);
+	void sendEntitySpawnEvent(Entity* newEntity);
+	void sendAllEntitiesSpawnEvent(Entity* newEntity, std::vector<Entity *> players);
 
 private:
     ServerEventHandlerLookup *eventHandlerLookup;
@@ -39,6 +41,5 @@ private:
 	// data buffer
 	char network_data[MAX_PACKET_SIZE];
 
-	std::map<int, int> playerIndexNum;
 
 };

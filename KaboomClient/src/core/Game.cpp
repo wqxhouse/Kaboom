@@ -8,7 +8,8 @@
 
 Game::Game(ConfigSettings *config)
     : playerFactory(&entityManager),
-    eventHandlerLookup(new ClientEventHandlerLookup(this))
+	  bombFactory(&entityManager),
+      eventHandlerLookup(new ClientEventHandlerLookup(this))
 //    rootNode(new osg::Group) 
 {
     //inputManager = new InputManager(&viewer);
@@ -127,6 +128,10 @@ const EntityManager &Game::getEntityManager() const {
 
 const PlayerFactory &Game::getPlayerFactory() const {
     return playerFactory;
+}
+
+const BombFactory &Game::getBombFactory() const {
+	return bombFactory;
 }
 
 ClientEventHandlerLookup *Game::getEventHandlerLookup() const {
