@@ -1,6 +1,6 @@
 #pragma once
 
-#include "network/GameClient.h"
+class GameClient;
 
 extern GameClient *g_client;
 extern osgViewer::Viewer viewer;

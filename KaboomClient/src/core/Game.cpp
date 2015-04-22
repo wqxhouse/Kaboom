@@ -5,6 +5,9 @@
 #include "../Global.h"
 //#include "SceneNodeComponent.h"
 #include "../Scene.h"
+#include "../input/InputManager.h"
+#include "../network/ClientEventHandlerLookup.h"
+#include "../network/GameClient.h"
 
 Game::Game(ConfigSettings *config)
     : playerFactory(&entityManager),

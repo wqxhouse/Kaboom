@@ -2,6 +2,8 @@
 
 #include <network/EntitySpawnEvent.h>
 
+#include "../core/Game.h"
+
 EntitySpawnEventHandler::EntitySpawnEventHandler(Game *game)
     : game(game) {
 }

@@ -3,7 +3,8 @@
 #include "InputEventHandler.h"
 #include "KeyboardEventHandler.h"
 #include "MouseEventHandler.h"
-#include "../network/GameClient.h"
+
+class GameClient;
 
 class InputManager {
 public:
