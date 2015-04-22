@@ -12,8 +12,9 @@
 Game::Game(ConfigSettings *config)
     : playerFactory(&entityManager),
       bombFactory(&entityManager),
-      eventHandlerLookup(new ClientEventHandlerLookup(this)),
-      client(new GameClient(config, eventHandlerLookup)) {
+      eventHandlerLookup(new ClientEventHandlerLookup(this)) {
+    client = new GameClient(config, eventHandlerLookup);
+
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
     config->getValue(ConfigSettings::str_screenPosX, screenPosXStr);
@@ -40,6 +41,7 @@ Game::Game(ConfigSettings *config)
 Game::~Game() {
     delete inputManager;
     delete eventHandlerLookup;
+    delete client;
 }
 
 void Game::run() {
