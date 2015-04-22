@@ -38,6 +38,7 @@ private:
     float pitch;
 
     void sendPlayerInputEvent();
+	void computeCamera(int dx, int dy);
 
     //static void resetCamera();
 };

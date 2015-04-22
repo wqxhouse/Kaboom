@@ -50,6 +50,7 @@ public:
 	static void disableGeometryObjectManipulator();
 
 	static bool isInGameMode();
+	static double getLastFrameDuration();
 
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 
@@ -106,6 +107,11 @@ private:
 	static bool _passDataDisplay;
 	static bool _guiEnabled;
 	static bool _manipulatorEnabled;
+
+	static bool _isFirstFrame;
+
+	static osg::Timer_t _lastFrameStartTime; 
+	static osg::Timer_t _frameStartTime; 
 };
 
 class MainCameraCallback : public osg::NodeCallback
