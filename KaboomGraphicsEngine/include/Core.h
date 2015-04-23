@@ -55,6 +55,9 @@ public:
 
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 
+	static void setAllowChangeEditorProjection(bool tf);
+	static bool allowChangeEditorProjection();
+
 	// static void run();
 
 private:
@@ -111,6 +114,8 @@ private:
 
 	static bool _isFirstFrame;
 
+	static bool _allowEditorChangeProjection;
+
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 
 };
@@ -120,7 +125,7 @@ class MainCameraCallback : public osg::NodeCallback
 public:
 	void operator()(osg::Node* node, osg::NodeVisitor* nv)
 	{
-		if (!Core::isInGameMode()) return;
+		if (!Core::isInGameMode() && !Core::allowChangeEditorProjection()) return;
 		osg::Camera *mainCam = static_cast<osg::Camera *>(node);
 		mainCam->setViewMatrix(Core::getMainCamera().getViewMatrix());
 		mainCam->setProjectionMatrix(Core::getMainCamera().getProjectionMatrix());

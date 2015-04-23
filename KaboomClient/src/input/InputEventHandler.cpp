@@ -137,7 +137,7 @@ void InputEventHandler::updateLocalCamera()
 	// but need to set as soon as the game mode is on
 	// TODO: put this two as initial values in the config file
 	Core::getMainCamera().setFovYAndUpdate(89);
-	Core::getMainCamera().setNearAndFar(1, 500); // TODO: check if this will work with computer_near_far in osg
+	Core::getMainCamera().setNearAndFarAndUpdate(1, 500); // TODO: check if this will work with computer_near_far in osg
 }
 
 void InputEventHandler::sendPlayerInputEvent() {

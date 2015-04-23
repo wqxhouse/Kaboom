@@ -10,6 +10,11 @@ Unresolved:
 	- reproduce: pick an object, click on a different manipulator type. 
 	- ! Question is: change mode by key press 'g' 'r' 's' does not crash the program!!!!!!! (wtf!)
 
+6. Linked to 1) due to osgCameraManipulator, managing projection matrix is very tricky. I added
+   allow modify camera project mode in the gui editor. When enabled, the compute_near_far is disabled 
+   But even though the near far value did not change, the light culling artifact will appear, meaning that
+   1) in inheritedly linked to project matrices and near far plane. 
+
 Fixed:
 1. Scrolling will crash the program (TwGUI)
 2. Skybox overriding preserved near far plane of gbuffer projection matrix, 

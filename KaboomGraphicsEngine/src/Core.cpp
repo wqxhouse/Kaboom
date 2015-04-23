@@ -46,6 +46,7 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	_gameMode = false;
 	_guiEnabled = true;
 	_isFirstFrame = true;
+	_allowEditorChangeProjection = false;
 
 	configFilePath();
 
@@ -427,6 +428,24 @@ void Core::disableGameMode()
 	}
 }
 
+void Core::setAllowChangeEditorProjection(bool tf)
+{
+	_allowEditorChangeProjection = tf;
+	if (tf)
+	{
+		_viewer->getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
+	}
+	else
+	{
+		_viewer->getCamera()->setComputeNearFarMode(osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES);
+	}
+}
+
+bool Core::allowChangeEditorProjection()
+{
+	return _allowEditorChangeProjection;
+}
+
 void Core::addEventHandler(osgGA::GUIEventHandler *handler)
 {
 	if (_viewer == NULL) return;
@@ -465,6 +484,7 @@ bool Core::_guiEnabled;
 bool Core::_manipulatorEnabled;
 
 bool Core::_isFirstFrame;
+bool Core::_allowEditorChangeProjection;
 
 osg::Timer_t Core::_lastFrameStartTime; 
 osg::Timer_t Core::_frameStartTime; 

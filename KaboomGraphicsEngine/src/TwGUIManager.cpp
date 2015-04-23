@@ -68,6 +68,44 @@ void TwGUIManager::initMainBar()
 	},
 		&this->_cameraManipulatorActive, NULL);
 
+	TwAddVarCB(g_twBar, "Change Projection", TW_TYPE_BOOL8, 
+		[](const void *data, void *clientData) {
+		bool b = *static_cast<const bool *>(data);
+		Core::setAllowChangeEditorProjection(b);
+	}, [](void *data, void *clientData) {
+		bool b = Core::allowChangeEditorProjection();
+		*(bool *)data = b;
+	}, NULL, NULL);
+
+	TwAddVarCB(g_twBar, "Camera Fovy", TW_TYPE_FLOAT, 
+		[](const void *data, void *clientData) {
+		const float *fov = static_cast<const float *>(data);
+		Core::getMainCamera().setFovYAndUpdate(*fov);
+	}, [](void *data, void *clientData) {
+		float fov = Core::getMainCamera().getFovY();
+		*(float *)data = fov;
+	}, NULL, " min=20 max=140 ");
+
+	TwAddVarCB(g_twBar, "Camera Near Plane", TW_TYPE_FLOAT,
+		[](const void *data, void *clientData) {
+		const float *near = static_cast<const float *>(data);
+		Core::getMainCamera().setNearAndUpdate(*near);
+	}, [](void *data, void *clientData) {
+		float fov = Core::getMainCamera().getNearPlane();
+		*(float *)data = fov;
+	}, NULL, " min=0.1 max=10000");
+
+	TwAddVarCB(g_twBar, "Camera Far Plane", TW_TYPE_FLOAT,
+		[](const void *data, void *clientData) {
+		const float *far = static_cast<const float *>(data);
+		Core::getMainCamera().setFarAndUpdate(*far);
+	}, [](void *data, void *clientData) {
+		float fov = Core::getMainCamera().getFarPlane();
+		*(float *)data = fov;
+	}, NULL, " min=0.1 max=10000");
+
+	TwAddSeparator(g_twBar, NULL, NULL);
+
 	// 'Export to XML' button
 	TwAddButton(g_twBar, "Export to XML",
 		[](void *clientData) {
