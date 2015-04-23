@@ -61,7 +61,7 @@ void Game::update(float timeStep) {
 
 		//now we create a new player
         Entity *player = playerFactory.createPlayer(0, 0, 5);
-        //players.push_back(player);
+        players.push_back(player);
         addPhysicsEntity(player);
 
 		//notify client, a player spawn occurs
