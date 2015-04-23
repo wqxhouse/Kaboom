@@ -3,6 +3,7 @@
 #include <core/Entity.h>
 #include <core/PositionComponent.h>
 
+#include "InputComponent.h"
 #include "PhysicsComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
@@ -73,6 +74,39 @@ void Game::update(float timeStep) {
     }
 
     server->receive();
+
+    // Handle game logic here
+
+    // TODO: Extract this into MovementSystem class.
+    for (Entity *entity : entityManager.getEntityList()) {
+        InputComponent *inputCom = entity->getComponent<InputComponent>();
+        PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
+
+        if (inputCom == nullptr || physCom == nullptr) {
+            continue;
+        }
+
+        btRigidBody *rigidBody = physCom->getRigidBody();
+        btVector3 velocity = rigidBody->getLinearVelocity();
+
+        if (inputCom->isMovingForward()) {
+            velocity.setY(1);
+        } else if (inputCom->isMovingBackward()) {
+            velocity.setY(-1);
+        } else {
+            velocity.setY(0);
+        }
+
+        if (inputCom->isMovingLeft()) {
+            velocity.setX(-1);
+        } else if (inputCom->isMovingRight()) {
+            velocity.setX(1);
+        } else {
+            velocity.setX(0);
+        }
+
+        rigidBody->setLinearVelocity(velocity);
+    }
 
 	for (Entity *entity : entityManager.getEntityList()) {
 		entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
