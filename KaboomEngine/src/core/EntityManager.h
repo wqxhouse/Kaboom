@@ -19,9 +19,9 @@ public:
 
 	unsigned int getNextId() const;
 
-	std::vector<Entity *> getEntityList();
-	std::vector<Entity *> getPlayerList();
-	std::vector<Entity *> getBombList();
+    std::vector<Entity *> getEntityList() const;
+    std::vector<Entity *> getPlayerList() const;
+    std::vector<Entity *> getBombList() const;
 
 private:
     std::unordered_map<unsigned int, Entity *> entities;

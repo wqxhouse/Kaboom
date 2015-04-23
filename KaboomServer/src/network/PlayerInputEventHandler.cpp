@@ -8,6 +8,7 @@
 
 #include "../core/Game.h"
 #include "../core/PhysicsComponent.h"
+#include "../network/GameServer.h"
 
 PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
     : game(game) {
@@ -45,6 +46,8 @@ void PlayerInputEventHandler::handle(const Event &e) const {
     if (evt.isFiring()) {
         PositionComponent *posComp = player->getComponent<PositionComponent>();
 
-        game->getBombFactory().createBomb(posComp->getX(), posComp->getY(), posComp->getZ() + 1);
+        Entity *bomb = game->getBombFactory().createBomb(posComp->getX(), posComp->getY(), posComp->getZ() + 1);
+        game->addPhysicsEntity(bomb);
+        game->getGameServer()->sendEntitySpawnEvent(bomb);
     }
 }

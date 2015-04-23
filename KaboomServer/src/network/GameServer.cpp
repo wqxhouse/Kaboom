@@ -84,8 +84,8 @@ void GameServer::receive() {
 }
 
 void GameServer::sendGameStatePackets(Game *game) {
-    for (Entity *player : game->players) {
-        sendPositionEvent(player);
+    for (Entity *entity : game->getEntityManager().getPlayerList()) {
+        sendPositionEvent(entity);
     }
 }
 

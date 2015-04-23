@@ -65,7 +65,7 @@ unsigned int EntityManager::getNextId() const{
 	return nextId;
 }
 
-std::vector<Entity *> EntityManager::getEntityList() {
+std::vector<Entity *> EntityManager::getEntityList() const {
 	std::vector<Entity *> list;
 	for (auto kv : entities){
 		list.push_back(kv.second);
@@ -73,24 +73,30 @@ std::vector<Entity *> EntityManager::getEntityList() {
 	return list;
 };
 
-std::vector<Entity *> EntityManager::getPlayerList() {
+std::vector<Entity *> EntityManager::getPlayerList() const {
 	std::vector<Entity *> list;
-	for (auto kv : entities){
-		CharacteristicComponent * comp = kv.second->getComponent<CharacteristicComponent>();
-		if ( comp->getType() == PLAYER){
+
+	for (auto kv : entities) {
+		CharacteristicComponent *charCom = kv.second->getComponent<CharacteristicComponent>();
+
+        if (charCom->getType() == PLAYER) {
 			list.push_back(kv.second);
 		}
 	}
+
 	return list;
 };
 
-std::vector<Entity *> EntityManager::getBombList() {
+std::vector<Entity *> EntityManager::getBombList() const {
 	std::vector<Entity *> list;
-	for (auto kv : entities){
-		CharacteristicComponent * comp = kv.second->getComponent<CharacteristicComponent>();
-		if (comp->getType() == BOMB){
+
+	for (auto kv : entities) {
+        CharacteristicComponent *charCom = kv.second->getComponent<CharacteristicComponent>();
+
+        if (charCom->getType() == BOMB) {
 			list.push_back(kv.second);
 		}
 	}
+
 	return list;
 };
