@@ -64,7 +64,7 @@ void Game::run() {
 
     //while (!Core::isViewerClosed()) { // TODO: buggy right now
     while (true) {
-		printf("duration: %lf\n", Core::getLastFrameDuration());
+		// printf("duration: %lf\n", Core::getLastFrameDuration());
 		switch (gsm) {
 		case EDITOR_MODE:
 			if (Core::isInGameMode()) { //pressed the PlayGame Button

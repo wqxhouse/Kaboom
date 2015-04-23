@@ -482,31 +482,38 @@ void EffectCompositor::traverse( osg::NodeVisitor& nv )
 
 		// FIXME: make it not so hacky and coupling
 		// mainCamera
-		Core::_cam._projMatrix = *cv->getProjectionMatrix();
-		// note that here model view matrix *under this cullvisitor* is actually view matrix
-		Core::_cam._viewMatrix = *cv->getModelViewMatrix();
-		Core::_cam._eye = cv->getEyeLocal();
-		Core::_cam._lookat = cv->getLookVectorLocal();
-		Core::_cam._up = cv->getUpLocal();
-
-		auto aaa = Core::_viewer->getCameraManipulator();
-
-		// std::cout << "After 2 " << Core::_cam._eye<< std::endl;
+		// FIXME: currently, I have not figure out why in the 
+		// game mode, even though I disabled the camera manipulator
+		// and update the viewer->getCamera() using external value
+		// the cullvisitor still gives back the old one, overriding the update
+		// figure out later
+		if (!Core::isInGameMode())
+		{
+			Core::_cam._projMatrix = *cv->getProjectionMatrix();
+			// note that here model view matrix *under this cullvisitor* is actually view matrix
+			Core::_cam._viewMatrix = *cv->getModelViewMatrix();
+			Core::_cam._eye = cv->getEyeLocal();
+			Core::_cam._lookat = cv->getLookVectorLocal();
+			Core::_cam._up = cv->getUpLocal();
+		}
 
 		double fovy = 0.0, aspectRatio = 0.0, zNear = 0.0, zFar = 0.0;
 		if (projectionMatrix) projectionMatrix->getPerspective(fovy, aspectRatio, zNear, zFar);
 		if (_preservedZNear != FLT_MAX) zNear = _preservedZNear;
 		if (_preservedZFar != -FLT_MAX) zFar = _preservedZFar;
 
-		Core::_cam._clampedProjMatrix = _preservedClampedProjectionMatrix;
-		Core::_cam._nearPlane = zNear;
-		Core::_cam._farPlane = zFar;
-		Core::_cam._fovy = fovy;
+		Core::_cam._screenSize = Core::getScreenSize();
 
-	/*	double near1, far1;
-		Core::_cam._projMatrix.getPerspective(fovy, aspectRatio, near1, far1);*/
+		if (!Core::isInGameMode())
+		{
+			Core::_cam._clampedProjMatrix = _preservedClampedProjectionMatrix;
+		
+			Core::_cam._fovy = fovy;
+			Core::_cam._nearPlane = zNear;
+			Core::_cam._farPlane = zFar;
 
-		Core::_cam._clampedViewProjMatrix = Core::_cam._viewMatrix * Core::_cam._clampedProjMatrix;
+			Core::_cam._clampedViewProjMatrix = Core::_cam._viewMatrix * Core::_cam._clampedProjMatrix;
+		}
 
         if ( _inbuiltUniforms.size()>0 )
         {

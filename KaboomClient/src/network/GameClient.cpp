@@ -42,14 +42,14 @@ void GameClient::receive() {
     SpawnEvent spawnEvent;
     PlayerInputEvent playerInputEvent;
 
-    printf("received len %d\n", len);
+    // printf("received len %d\n", len);
 
     unsigned int i = 0;
     while (i < (unsigned int)len) {
         emptyEvent.deserialize(&networkData[i]);
 
-        printf("eventType is %d\n", emptyEvent.getOpcode());
-        printf("byteSize is %d\n", emptyEvent.getByteSize());
+		/*printf("eventType is %d\n", emptyEvent.getOpcode());
+		printf("byteSize is %d\n", emptyEvent.getByteSize());*/
 
         switch (emptyEvent.getOpcode()) {
         case EventOpcode::POSITION:

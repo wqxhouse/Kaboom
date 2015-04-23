@@ -45,14 +45,14 @@ void setupScene()
 		"cubemaps/uffizi0002.tif",
 		"cubemaps/uffizi0003.tif"
 		);
-	//Core::setEnvironmentMap(
-	//	"cubemaps/right.png", 
-	//	"cubemaps/left.png", 
-	//	"cubemaps/front.png", 
-	//	"cubemaps/back.png", 
-	//	"cubemaps/top.png", 
-	//	"cubemaps/bottom.png"
-	//	);
+	Core::setEnvironmentMap(
+		"cubemaps/right.png", 
+		"cubemaps/left.png", 
+		"cubemaps/front.png", 
+		"cubemaps/back.png", 
+		"cubemaps/top.png", 
+		"cubemaps/bottom.png"
+		);
 
 	osg::Node *loadedCow = osgDB::readNodeFile("Mesh/sphere.dae");
 

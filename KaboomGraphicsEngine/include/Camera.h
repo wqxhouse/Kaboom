@@ -63,8 +63,9 @@ public:
 	void setEyePositionAndUpdate(const osg::Vec3 &eye);
 	void setLookAtAndUpdate(const osg::Vec3 &lookAt);
 	void setUpAndUpdate(const osg::Vec3 &up);
-
+	void setViewAndUpdate(const osg::Vec3 &eye, const osg::Vec3 &lookAt, const osg::Vec3 &up);
 	void setFovYAndUpdate(float fov);
+	void setNearAndFar(float near, float far);
 
 private:
 	friend class osgFX::EffectCompositor;
@@ -82,4 +83,5 @@ private:
 	osg::Vec3 _up;
 
 	float _fovy;
+	osg::Vec2 _screenSize;
 };

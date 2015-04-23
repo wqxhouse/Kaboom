@@ -1,9 +1,12 @@
 #include "GeometryPicker.h"
 #include "EffectCompositor.h"
 #include "GeometryObjectManipulator.h"
+#include <Core.h>
 
 bool GeometryPicker::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
 {
+	if (Core::isInGameMode()) return false;
+
 	osgViewer::View* view = dynamic_cast<osgViewer::View*> (&aa);
 	if (NULL == view)
 	{
