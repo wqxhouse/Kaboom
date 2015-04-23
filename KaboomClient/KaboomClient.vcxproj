@@ -241,7 +241,10 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <SubSystem>Console</SubSystem>
       <LinkTimeCodeGeneration />
     </Link>
-    <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)\KaboomClient\config.ini" "$(TargetDir)" /y</Command>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\BombFactory.cpp" />
@@ -284,6 +287,9 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ConfigSetting\ConfigSetting.vcxproj">
       <Project>{1608d432-d1e3-4cac-ab94-4cf307a6d9aa}</Project>
     </ProjectReference>
@@ -293,14 +299,6 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ProjectReference Include="..\KaboomGraphicsEngine\KaboomGraphicsEngine.vcxproj">
       <Project>{e24d41a4-8d90-45ff-9c55-6466187744ad}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Config.ini" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Config.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
