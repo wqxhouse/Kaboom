@@ -501,6 +501,10 @@ void EffectCompositor::traverse( osg::NodeVisitor& nv )
 		Core::_cam._clampedProjMatrix = _preservedClampedProjectionMatrix;
 		Core::_cam._nearPlane = zNear;
 		Core::_cam._farPlane = zFar;
+		Core::_cam._fovy = fovy;
+
+	/*	double near1, far1;
+		Core::_cam._projMatrix.getPerspective(fovy, aspectRatio, near1, far1);*/
 
 		Core::_cam._clampedViewProjMatrix = Core::_cam._viewMatrix * Core::_cam._clampedProjMatrix;
 

@@ -62,6 +62,7 @@ void Game::run() {
 	std::string serverAddress;
 	int serverPort;
 
+    //while (!Core::isViewerClosed()) { // TODO: buggy right now
     while (true) {
 		printf("duration: %lf\n", Core::getLastFrameDuration());
 		switch (gsm) {

@@ -6,6 +6,9 @@ Unresolved:
 2. Press ESC will crash the program. Whereas click to close will not carsh the program.
 3. Currently mouse over gui cannot be detected. Thus, control on gui will disable the manipulator.
 4. setting position from GUI doesn't update the manipulator;
+5. Geometry picker bug, crash the program: (randomly, wtf!) 
+	- reproduce: pick an object, click on a different manipulator type. 
+	- ! Question is: change mode by key press 'g' 'r' 's' does not crash the program!!!!!!! (wtf!)
 
 Fixed:
 1. Scrolling will crash the program (TwGUI)
@@ -15,3 +18,5 @@ Fixed:
    Fixed by add an option in EffectCompositor to not presering near and far plane
    for skybox.
 3. After pressing playgame, the object is still draggable and resizable;
+
+TODO: click close renderer needs to close the game entirely.

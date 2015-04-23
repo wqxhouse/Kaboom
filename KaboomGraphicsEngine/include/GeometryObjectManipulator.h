@@ -33,6 +33,7 @@ public:
 	static void changeCurrentManipulatorType(enum ManipulatorType type);
 	static void changeCurrentNode(osg::MatrixTransform *node);
 	static void detachManipulator();
+	static enum ManipulatorType getCurrentManipulatorType();
 
 	static bool setVisible(bool tf);
 	static bool isVisible();
