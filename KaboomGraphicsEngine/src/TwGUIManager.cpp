@@ -15,7 +15,7 @@
 
 TwGUIManager::TwGUIManager()
 // Note, this flag assumes that you do not touch viewer manipulator settings
-	: _cameraManipulatorActive(true), _manipulatorBits(0x1)
+	: _cameraManipulatorActive(true), _manipulatorBits(0x0)
 {
 	_gm = Core::getWorldRef().getGeometryManager();
 	_lm = Core::getWorldRef().getLightManager();
@@ -410,6 +410,23 @@ void TW_CALL TwGUIManager::loadModelFunc(void* clientData)
 // Need to change them to conform to osg convention
 void TwGUIManager::updateEvents() const
 {
+	// update manipulatorBits from GeometryManipulator
+	if (GeometryObjectManipulator::isVisible())
+	{
+		switch (GeometryObjectManipulator::getCurrentManipulatorType())
+		{
+		case TabBoxDragger:
+			*(int *)&_manipulatorBits = 0x1;
+			break;
+		case TrackballDragger:
+			*(int *)&_manipulatorBits = 0x2;
+			break;
+		case TranslateAxisDragger:
+			*(int *)&_manipulatorBits = 0x4;
+			break;
+		}
+	}
+
 	unsigned int size = _eventsToHandle.size();
 	for (unsigned int i = 0; i < size; ++i)
 	{
@@ -439,19 +456,14 @@ void TwGUIManager::updateEvents() const
 			}
 			else if (ea.getKey() == 'g')
 			{
-				// hack decrease constness
-				*(int *)&_manipulatorBits = 0x4;
 				GeometryObjectManipulator::changeCurrentManipulatorType(TranslateAxisDragger);
-				
 			}
 			else if (ea.getKey() == 'r')
 			{
-				*(int *)&_manipulatorBits = 0x2;
 				GeometryObjectManipulator::changeCurrentManipulatorType(TrackballDragger);
 			}
 			else if (ea.getKey() == 's')
 			{
-				*(int *)&_manipulatorBits = 0x1;
 				GeometryObjectManipulator::changeCurrentManipulatorType(TabBoxDragger);
 
 			}

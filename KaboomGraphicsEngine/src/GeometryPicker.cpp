@@ -99,9 +99,9 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 			}
 			else
 			{ 
-				std::cout << "Picking object : " << objectName << std::endl;
-				GeometryObjectManipulator::
-					changeCurrentNode(objectNode);
+					std::cout << "Picking object : " << objectName << std::endl;
+					GeometryObjectManipulator::
+						changeCurrentNode(objectNode);
 			}
 		}
 	}

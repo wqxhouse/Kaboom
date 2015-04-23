@@ -51,6 +51,7 @@ public:
 
 	static bool isInGameMode();
 	static double getLastFrameDuration();
+	static bool isViewerClosed();
 
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 

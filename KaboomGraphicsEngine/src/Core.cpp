@@ -217,6 +217,11 @@ double Core::getLastFrameDuration()
 	return osg::Timer::instance()->delta_s(_lastFrameStartTime, _frameStartTime);
 }
 
+bool Core::isViewerClosed()
+{
+	return _viewer->done();
+}
+
 void Core::finalize()
 {
 	if (!_hasInit)

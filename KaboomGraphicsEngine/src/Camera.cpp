@@ -17,3 +17,9 @@ void Camera::setUpAndUpdate(const osg::Vec3 &up)
 	_up = up;
 	_viewMatrix.makeLookAt(_eye, _lookat, up);
 }
+
+void Camera::setFovYAndUpdate(float fovy)
+{
+	_fovy = fovy;
+
+}
