@@ -295,6 +295,7 @@ void Core::enableCameraManipulator()
 	std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
 	_camManipulatorTemp->setHomePosition(_savedManipulatorCam.getEyePosition(), 
 		_savedManipulatorCam.getLookAt(), _savedManipulatorCam.getUp());
+	_viewer->getCamera()->setProjectionMatrix(_savedManipulatorCam.getProjectionMatrix());
 	_viewer->setCameraManipulator(_camManipulatorTemp);
 
 	_savedManipulatorCam = Camera();
