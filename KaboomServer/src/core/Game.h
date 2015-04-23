@@ -28,6 +28,7 @@ public:
     const EntityManager &getEntityManager() const;
     const PlayerFactory &getPlayerFactory() const;
     const BombFactory &getBombFactory() const;
+    GameServer *getGameServer() const;
 
 private:
     ConfigSettings *config;
