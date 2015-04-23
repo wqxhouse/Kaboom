@@ -102,3 +102,7 @@ const PlayerFactory &Game::getPlayerFactory() const {
 const BombFactory &Game::getBombFactory() const {
     return bombFactory;
 }
+
+GameServer *Game::getGameServer() const {
+    return server;
+}
