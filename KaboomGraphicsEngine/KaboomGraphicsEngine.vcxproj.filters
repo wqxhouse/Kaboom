@@ -188,6 +188,9 @@
       <Filter>Media\EffectFiles</Filter>
     </Xml>
     <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
+    <Xml Include="..\Media\EffectFiles\smaa.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Media\Shaders\constant.glsl">
@@ -233,9 +236,6 @@
       <Filter>Media\Shaders</Filter>
     </None>
     <None Include="..\BugList.txt" />
-    <None Include="..\Media\EffectFiles\smaa.xml">
-      <Filter>Media\EffectFiles</Filter>
-    </None>
     <None Include="..\Media\Shaders\SMAA\blend.frag">
       <Filter>Media\Shaders\smaa</Filter>
     </None>
