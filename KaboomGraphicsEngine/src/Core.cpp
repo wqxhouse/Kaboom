@@ -8,6 +8,7 @@
 #include <osgDB/FileNameUtils>
 #include <osg/TexGen>
 #include <osg/Depth>
+#include <osgViewer/GraphicsWindow>
 //
 //#include "../osgLibRocket/FileInterface.h"
 //#include "../osgLibRocket/RenderInterface.h"
@@ -53,7 +54,6 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	configViewer(); 
 
 	_sceneRoot->addChild(_passes);
-	//disableCameraManipulator();
 	_hasInit = true;
 }
 
@@ -65,6 +65,11 @@ void Core::loadWorldFile(const std::string &worldFilePath)
 World &Core::getWorldRef()
 {
 	return _world;
+}
+
+osg::Vec2 Core::getScreenSize()
+{
+	return _screenSize;
 }
 
 void Core::configFilePath()
@@ -395,11 +400,13 @@ void Core::enableGameMode()
 	if (!_gameMode)
 	{
 		_gameMode = true;
+
 		disablePassDataDisplay();
 		disableCameraManipulator();
 		disableGUI();
 		disableGeometryObjectManipulator();
-		_gameMode = true;
+		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
+		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
 	}
 }
 
@@ -408,13 +415,14 @@ void Core::disableGameMode()
 	if (_gameMode)
 	{
 		_gameMode = false;
+
 		enableGUI();
 		enableCameraManipulator();
 		enableGeometryObjectManipulator();
 
-		// TODO: change back to editor key bindings
-
-		_gameMode = false;
+		//// TODO: change back to editor key bindings
+		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
+		a->setCursor(osgViewer::GraphicsWindow::LeftArrowCursor);
 	}
 }
 
