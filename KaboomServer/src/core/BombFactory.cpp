@@ -2,6 +2,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include <core/CharacteristicComponent.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 
@@ -29,7 +30,8 @@ Entity *BombFactory::createBomb(float x, float y, float z) const {
 
 	btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
 
-	Entity *entity = entityManager->createEntity();
+    Entity *entity = entityManager->createEntity();
+    entity->attachComponent(new CharacteristicComponent(BOMB, 0, 0));
 	entity->attachComponent(new PositionComponent(x, y, z));
 	entity->attachComponent(new PhysicsComponent(rigidBody));
 
