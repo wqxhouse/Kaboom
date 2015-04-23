@@ -22,8 +22,7 @@ void ClientNetwork::connectToServer(const std::string &serverAddress, const int 
 
 	bool hasError = false;
 
-	printf("<Client> port %d\n", serverPort);
-	printf("<Client> addrees %s\n", serverAddress);
+    printf("<Client> Connecting to %s:%d\n", serverAddress.c_str(), serverPort);
 
 	//create WSADATA object
 	WSADATA wsaData;
