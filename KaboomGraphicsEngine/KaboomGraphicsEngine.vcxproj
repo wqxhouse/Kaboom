@@ -238,8 +238,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)\3rdParty\bin\*.dll" "$(TargetDir)" /y
-xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+      <Command>xcopy "$(SolutionDir)\3rdParty\bin\*.dll" "$(TargetDir)" /y</Command>
       <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
     </PostBuildEvent>
     <Lib>
@@ -307,10 +306,10 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <Xml Include="..\Media\EffectFiles\Test.xml" />
     <Xml Include="..\Media\EffectFiles\TestWorld.xml" />
     <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
+    <Xml Include="..\Media\EffectFiles\smaa.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\BugList.txt" />
-    <None Include="..\Media\EffectFiles\smaa.xml" />
     <None Include="..\Media\Shaders\constant.glsl" />
     <None Include="..\Media\Shaders\defaultQuad.vert" />
     <None Include="..\Media\Shaders\gbufferUtil.glsl" />
@@ -331,6 +330,12 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\SMAA\edgedetection.vert" />
     <None Include="..\Media\Shaders\SMAA\neighborhood.frag" />
     <None Include="..\Media\Shaders\SMAA\neighborhood.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Media\**">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
