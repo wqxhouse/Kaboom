@@ -506,13 +506,16 @@ void EffectCompositor::traverse( osg::NodeVisitor& nv )
 
 		if (!Core::isInGameMode())
 		{
-			Core::_cam._clampedProjMatrix = _preservedClampedProjectionMatrix;
-		
-			Core::_cam._fovy = fovy;
-			Core::_cam._nearPlane = zNear;
-			Core::_cam._farPlane = zFar;
+			// a complete hack
+			if (!Core::allowChangeEditorProjection())
+			{
+				Core::_cam._clampedProjMatrix = _preservedClampedProjectionMatrix;
+				Core::_cam._fovy = fovy;
+				Core::_cam._nearPlane = zNear;
+				Core::_cam._farPlane = zFar;
 
-			Core::_cam._clampedViewProjMatrix = Core::_cam._viewMatrix * Core::_cam._clampedProjMatrix;
+				Core::_cam._clampedViewProjMatrix = Core::_cam._viewMatrix * Core::_cam._clampedProjMatrix;
+			}
 		}
 
         if ( _inbuiltUniforms.size()>0 )

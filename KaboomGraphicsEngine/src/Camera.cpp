@@ -35,10 +35,22 @@ void Camera::setFovYAndUpdate(float fovy)
 	_projMatrix.makePerspective(fovy, _screenSize.x() / _screenSize.y(), _nearPlane, _farPlane);
 }
 
-void Camera::setNearAndFar(float near, float far)
+void Camera::setNearAndFarAndUpdate(float near, float far)
 {
 	_nearPlane = near;
 	_farPlane = far;
 
 	_projMatrix.makePerspective(_fovy, _screenSize.x() / _screenSize.y(), _nearPlane, _farPlane);
+}
+
+void Camera::setNearAndUpdate(float near)
+{
+	_nearPlane = near;
+	_projMatrix.makePerspective(_fovy, _screenSize.x() / _screenSize.y(), near, _farPlane);
+}
+
+void Camera::setFarAndUpdate(float far)
+{
+	_farPlane = far;
+	_projMatrix.makePerspective(_fovy, _screenSize.x() / _screenSize.y(), _nearPlane, far);
 }

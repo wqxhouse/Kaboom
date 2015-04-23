@@ -72,5 +72,4 @@ void setupScene()
 
 	osg::Vec3 colorBLUE = osg::Vec3(0.3, 0.3, 0.7);
 	l->addPointLight("pt4", osg::Vec3(0, -7, 0), colorBLUE, 100, false);
-
 }
