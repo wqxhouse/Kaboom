@@ -90,5 +90,5 @@ void GameClient::sendMessage(const Event &evt) {
 
     network.sendMessage(data, size);
 
-    delete data;
+    delete[] data;
 }
