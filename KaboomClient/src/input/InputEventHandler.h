@@ -21,6 +21,7 @@ public:
     void onFireUp();
     void onLook(float yaw, float pitch);
 
+	void enterGameMode();
 	void quitGameMode();
 	void showDebugAnalysis();
 	void hideDebugAnalysis();
@@ -37,7 +38,11 @@ private:
     float yaw;
     float pitch;
 
+	osg::Vec3 _velocity;
+	const float _kSpeed = 100;
+
     void sendPlayerInputEvent();
+	void updateLocalCamera();
 
     //static void resetCamera();
 };

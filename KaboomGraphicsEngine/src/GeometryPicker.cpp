@@ -1,9 +1,12 @@
 #include "GeometryPicker.h"
 #include "EffectCompositor.h"
 #include "GeometryObjectManipulator.h"
+#include <Core.h>
 
 bool GeometryPicker::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
 {
+	if (Core::isInGameMode()) return false;
+
 	osgViewer::View* view = dynamic_cast<osgViewer::View*> (&aa);
 	if (NULL == view)
 	{
@@ -99,9 +102,9 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 			}
 			else
 			{ 
-				std::cout << "Picking object : " << objectName << std::endl;
-				GeometryObjectManipulator::
-					changeCurrentNode(objectNode);
+					std::cout << "Picking object : " << objectName << std::endl;
+					GeometryObjectManipulator::
+						changeCurrentNode(objectNode);
 			}
 		}
 	}

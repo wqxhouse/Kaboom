@@ -15,6 +15,11 @@ void GeometryObjectManipulator::initWithRootNode(osg::Group *root)
 	}
 }
 
+enum ManipulatorType GeometryObjectManipulator::getCurrentManipulatorType()
+{
+	return _currType;
+}
+
 void GeometryObjectManipulator::detachManipulator()
 {
 	if (_rootNode != NULL && _currNode != NULL && _dragger != NULL)
@@ -66,7 +71,7 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 	}
 
 	_currNode = node;
-
+	
 	switch (type)
 	{
 	case TrackballDragger:
@@ -74,9 +79,9 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		{
 			_trackBallDragger = new osgManipulator::TrackballDragger;
 			_trackBallDragger->setupDefaultGeometry();
+			_trackBallDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
 		}
 		_trackBallDragger->setNodeMask(0x4);
-		_trackBallDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
 
 		_dragger = _trackBallDragger.get();
 
@@ -86,10 +91,10 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		{
 			_translateAxisDragger = new osgManipulator::TranslateAxisDragger;
 			_translateAxisDragger->setupDefaultGeometry();
+			_translateAxisDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
 		}
 
 		_translateAxisDragger->setNodeMask(0x4);
-		_translateAxisDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
 		_dragger = _translateAxisDragger.get();
 
 		break;
@@ -99,10 +104,10 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		{
 			_tabBoxDragger = new osgManipulator::TabBoxDragger;
 			_tabBoxDragger->setupDefaultGeometry();
+			_tabBoxDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
 		}
 
 		_tabBoxDragger->setNodeMask(0x4);
-		_tabBoxDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
 
 		osg::ComputeBoundsVisitor bound;
 		_currNode->accept(bound);
@@ -135,6 +140,7 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		}
 
 		_dragger->addTransformUpdating(_currNode.get());
+
 		_dragger->setHandleEvents(true);
 		_rootNode->addChild(_dragger.get());
 	}
@@ -161,7 +167,7 @@ bool GeometryObjectManipulator::setVisible(bool tf)
 bool GeometryObjectManipulator::isVisible()
 {
 	if (_dragger == NULL) return false;
-	_dragger->getNodeMask() == 0x4 ? true : false;
+	return _dragger->getNodeMask() == 0x4 ? true : false;
 }
 
 osg::ref_ptr<osgManipulator::TrackballDragger> GeometryObjectManipulator::_trackBallDragger = NULL;

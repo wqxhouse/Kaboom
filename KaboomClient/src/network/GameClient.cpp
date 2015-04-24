@@ -9,8 +9,9 @@
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
 
-GameClient::GameClient(ClientEventHandlerLookup *eventHandlerLookup)
-    : eventHandlerLookup(eventHandlerLookup) {
+GameClient::GameClient(const ClientEventHandlerLookup &eventHandlerLookup)
+        : eventHandlerLookup(eventHandlerLookup),
+		  currentPlayerEntityId(0){
 }
 
 GameClient::~GameClient() {
@@ -19,7 +20,6 @@ GameClient::~GameClient() {
 bool GameClient::connectToServer(const std::string &serverAddress, const int serverPort) {
     network.connectToServer(serverAddress, serverPort);
 	return network.isConnected();
-	
 }
 
 bool GameClient::disconnectFromServer() {
@@ -43,31 +43,31 @@ void GameClient::receive() {
     PlayerInputEvent playerInputEvent;
 	DeleteEvent deleteEvent;
 
-    printf("received len %d\n", len);
+    // printf("received len %d\n", len);
 
     unsigned int i = 0;
     while (i < (unsigned int)len) {
         emptyEvent.deserialize(&networkData[i]);
 
-        printf("eventType is %d\n", emptyEvent.getOpcode());
-        printf("byteSize is %d\n", emptyEvent.getByteSize());
+		/*printf("eventType is %d\n", emptyEvent.getOpcode());
+		printf("byteSize is %d\n", emptyEvent.getByteSize());*/
 
         switch (emptyEvent.getOpcode()) {
         case EventOpcode::POSITION:
             positionEvent.deserialize(&networkData[i]);
-            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(positionEvent);
+            eventHandlerLookup.find(emptyEvent.getOpcode())->handle(positionEvent);
             break;
         case EventOpcode::ROTATION:
             rotationEvent.deserialize(&networkData[i]);
-            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(rotationEvent);
+            eventHandlerLookup.find(emptyEvent.getOpcode())->handle(rotationEvent);
             break;
         case EventOpcode::PLAYER_INPUT:
             playerInputEvent.deserialize(&networkData[i]);
-            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
+            eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
             break;
         case EventOpcode::ENTITY_SPAWN:
             spawnEvent.deserialize(&networkData[i]);
-            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(spawnEvent);
+            eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
 
             if (!initialized) {
                 currentPlayerEntityId = spawnEvent.getEntityId(); //set entityId the client needs to keep track of
@@ -77,7 +77,7 @@ void GameClient::receive() {
 		case EventOpcode::DELETE_ENTITY:
 			deleteEvent.deserialize(&networkData[i]);
 			//create handler
-			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(deleteEvent);
+			eventHandlerLookup.find(emptyEvent.getOpcode())->handle(deleteEvent);
 				break;
         default:
             printf("error in packet event types\n");
@@ -88,6 +88,10 @@ void GameClient::receive() {
     }
 }
 
+unsigned int GameClient::getCurrentPlayerEntityId() const{
+	return currentPlayerEntityId;
+}
+
 void GameClient::sendMessage(const Event &evt) {
     const int &size = evt.getByteSize();
     char *data = new char[size];
@@ -96,5 +100,6 @@ void GameClient::sendMessage(const Event &evt) {
 
     network.sendMessage(data, size);
 
-    delete data;
+    delete[] data;
 }
+

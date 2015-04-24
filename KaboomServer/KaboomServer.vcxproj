@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\InputComponent.cpp" />
     <ClCompile Include="src\core\PhysicsComponent.cpp" />
     <ClCompile Include="src\core\PlayerFactory.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -44,6 +45,7 @@
   <ItemGroup>
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\Game.h" />
+    <ClInclude Include="src\core\InputComponent.h" />
     <ClInclude Include="src\core\PhysicsComponent.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />
     <ClInclude Include="src\network\GameServer.h" />

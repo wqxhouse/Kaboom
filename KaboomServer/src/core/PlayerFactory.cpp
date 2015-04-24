@@ -6,7 +6,9 @@
 #include <core/CharacteristicComponent.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
+#include <core/RotationComponent.h>
 
+#include "InputComponent.h"
 #include "PhysicsComponent.h"
 
 PlayerFactory::PlayerFactory(EntityManager *entityManager)
@@ -32,8 +34,10 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
 
     Entity *entity = entityManager->createEntity();
-    entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new CharacteristicComponent(PLAYER, 0, 0));
+    entity->attachComponent(new InputComponent());
+    entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new BombContainerComponent());
 

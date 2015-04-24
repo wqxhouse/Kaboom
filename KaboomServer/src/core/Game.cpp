@@ -3,6 +3,7 @@
 #include <core/Entity.h>
 #include <core/PositionComponent.h>
 
+#include "InputComponent.h"
 #include "PhysicsComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
@@ -11,8 +12,8 @@ Game::Game(ConfigSettings *config)
     : config(config),
     playerFactory(&entityManager),
 	bombFactory(&entityManager),
-    eventHandlerLookup(new ServerEventHandlerLookup(this)) {
-    server = new GameServer(config, eventHandlerLookup);
+    eventHandlerLookup(this),
+    server(config, eventHandlerLookup) {
 
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -25,8 +26,6 @@ Game::Game(ConfigSettings *config)
 }
 
 Game::~Game() {
-    delete server;
-
     delete broadphase;
     delete collisionConfiguration;
     delete dispatcher;
@@ -57,22 +56,55 @@ void Game::update(float timeStep) {
 	//HERE is where the client first connect to server,
     //we want to have client load the gameworld first,
     //then create the player, and send the spawn player event to client
-	if (server->acceptNewClient(entityManager.getNextId())) {
+	if (server.acceptNewClient(entityManager.getNextId())) {
 
 		//now we create a new player
         Entity *player = playerFactory.createPlayer(0, 0, 5);
-        //players.push_back(player);
+        players.push_back(player);
         addPhysicsEntity(player);
 
 		//notify client, a player spawn occurs
 		//server->sendPlayerSpawnEvent(player, players);
-		server->sendEntitySpawnEvent(player);
-		server->sendAllEntitiesSpawnEvent(player,entityManager.getEntityList());
+		server.sendEntitySpawnEvent(player);
+		server.sendAllEntitiesSpawnEvent(player,entityManager.getEntityList());
         //first have the client first preload the information about the world
-        server->sendGameStatePackets(this);
+        server.sendGameStatePackets(this);
     }
 
-    server->receive(this);
+    server.receive(this);
+
+    // Handle game logic here
+
+    // TODO: Extract this into MovementSystem class.
+    for (Entity *entity : entityManager.getEntityList()) {
+        InputComponent *inputCom = entity->getComponent<InputComponent>();
+        PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
+
+        if (inputCom == nullptr || physCom == nullptr) {
+            continue;
+        }
+
+        btRigidBody *rigidBody = physCom->getRigidBody();
+        btVector3 velocity = rigidBody->getLinearVelocity();
+
+        if (inputCom->isMovingForward()) {
+            velocity.setY(1);
+        } else if (inputCom->isMovingBackward()) {
+            velocity.setY(-1);
+        } else {
+            velocity.setY(0);
+        }
+
+        if (inputCom->isMovingLeft()) {
+            velocity.setX(-1);
+        } else if (inputCom->isMovingRight()) {
+            velocity.setX(1);
+        } else {
+            velocity.setX(0);
+        }
+
+        rigidBody->setLinearVelocity(velocity);
+    }
 
 	for (Entity *entity : entityManager.getEntityList()) {
 		entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
@@ -88,7 +120,7 @@ void Game::update(float timeStep) {
         positionCom->setPosition(position.getX(), position.getY(), position.getZ());
     }
 
-    server->sendGameStatePackets(this);
+    server.sendGameStatePackets(this);
 }
 
 EntityManager &Game::getEntityManager() {
@@ -101,4 +133,8 @@ const PlayerFactory &Game::getPlayerFactory() const {
 
 const BombFactory &Game::getBombFactory() const {
     return bombFactory;
+}
+
+const GameServer &Game::getGameServer() const {
+    return server;
 }
