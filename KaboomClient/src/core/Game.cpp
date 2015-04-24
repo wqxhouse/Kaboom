@@ -130,8 +130,11 @@ bool Game::addSceneNodeEntity(Entity *entity) {
 
     return true;
 }
+void Game::deleteSceneNodeEntity(unsigned int id){
+	Core::getWorldRef().getGeometryManager()->deleteGeometry(std::to_string(id));
+}
 
-const EntityManager &Game::getEntityManager() const {
+ EntityManager &Game::getEntityManager() {
     return entityManager;
 }
 

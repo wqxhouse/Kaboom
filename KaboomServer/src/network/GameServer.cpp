@@ -42,12 +42,26 @@ bool GameServer::acceptNewClient(unsigned int entity_id) {
     return false;
 }
 
-void GameServer::receive() {
+void GameServer::receive(Game *game) {
     for (auto it : network->sessions) {
+		int id = it.first;
         int len = network->receiveData(it.first, network_data);
 
 		if (len == 0){
+			
 			//handle player disconnect by sending delete messages to all clients about the deleted users entities
+			Entity *entity = game->getEntityManager().getEntity(id);
+			if (entity->getComponent<BombContainerComponent>() == nullptr) {
+				printf("\nsomething wrong with look up method\n");
+				continue;
+			}
+			game->getEntityManager().destroyEntity(id);
+			DeleteEvent deleteEvent(id);
+			char del[sizeof(DeleteEvent)];
+			deleteEvent.serialize(del);
+			network->sendToAll(del,sizeof(DeleteEvent));
+
+
 		}
         if (len <= 0) {
             continue;
