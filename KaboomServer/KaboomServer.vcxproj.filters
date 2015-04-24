@@ -73,6 +73,12 @@
     <ClCompile Include="src\core\InputComponent.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\EntitySystem.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\InputSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -105,6 +111,12 @@
     </ClInclude>
     <ClInclude Include="src\core\InputComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\EntitySystem.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\InputSystem.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,12 +9,12 @@
 #include "../network/ServerEventHandlerLookup.h"
 
 Game::Game(ConfigSettings *config)
-    : config(config),
-    playerFactory(&entityManager),
-	bombFactory(&entityManager),
-    eventHandlerLookup(this),
-    server(config, eventHandlerLookup) {
-
+        : config(config),
+          playerFactory(&entityManager),
+          bombFactory(&entityManager),
+          inputSystem(this),
+          eventHandlerLookup(this),
+          server(config, eventHandlerLookup) {
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
@@ -53,73 +53,43 @@ void Game::addPhysicsEntity(Entity *entity) {
 
 void Game::update(float timeStep) {
 
-	//HERE is where the client first connect to server,
+    //HERE is where the client first connect to server,
     //we want to have client load the gameworld first,
     //then create the player, and send the spawn player event to client
-	if (server.acceptNewClient(entityManager.getNextId())) {
+    if (server.acceptNewClient(entityManager.getNextId())) {
 
-		//now we create a new player
+        //now we create a new player
         Entity *player = playerFactory.createPlayer(0, 0, 5);
         players.push_back(player);
         addPhysicsEntity(player);
 
-		//first notify the new client what entityId it should keep track of
-		server.sendAssignPlayerEntity(player->getId());
+        //first notify the new client what entityId it should keep track of
+        server.sendAssignPlayerEntity(player->getId());
 
-		//second send the new client about all the exisiting entities
-		server.sendAllEntitiesSpawnEvent(player, entityManager.getEntityList());
+        //second send the new client about all the exisiting entities
+        server.sendAllEntitiesSpawnEvent(player, entityManager.getEntityList());
 
-		//then send the new spawn player entity to all the clients
-		server.sendEntitySpawnEvent(player);
-		
-		//lastly send the game state for each entity
+        //then send the new spawn player entity to all the clients
+        server.sendEntitySpawnEvent(player);
+
+        //lastly send the game state for each entity
         server.sendGameStatePackets(this);
     }
 
     server.receive(this);
 
     // Handle game logic here
+    inputSystem.update(timeStep);
 
-    // TODO: Extract this into MovementSystem class.
     for (Entity *entity : entityManager.getEntityList()) {
-        InputComponent *inputCom = entity->getComponent<InputComponent>();
-        PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
-
-        if (inputCom == nullptr || physCom == nullptr) {
-            continue;
-        }
-
-        btRigidBody *rigidBody = physCom->getRigidBody();
-        btVector3 velocity = rigidBody->getLinearVelocity();
-
-        if (inputCom->isMovingForward()) {
-            velocity.setY(1);
-        } else if (inputCom->isMovingBackward()) {
-            velocity.setY(-1);
-        } else {
-            velocity.setY(0);
-        }
-
-        if (inputCom->isMovingLeft()) {
-            velocity.setX(-1);
-        } else if (inputCom->isMovingRight()) {
-            velocity.setX(1);
-        } else {
-            velocity.setX(0);
-        }
-
-        rigidBody->setLinearVelocity(velocity);
-    }
-
-	for (Entity *entity : entityManager.getEntityList()) {
-		entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
+        entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
     }
 
     world->stepSimulation(timeStep);
-    
-	for (Entity *entity : entityManager.getEntityList()) {
-		PositionComponent *positionCom = entity->getComponent<PositionComponent>();
-		PhysicsComponent *physicsCom = entity->getComponent<PhysicsComponent>();
+
+    for (Entity *entity : entityManager.getEntityList()) {
+        PositionComponent *positionCom = entity->getComponent<PositionComponent>();
+        PhysicsComponent *physicsCom = entity->getComponent<PhysicsComponent>();
 
         const btVector3 &position = physicsCom->getRigidBody()->getWorldTransform().getOrigin();
         positionCom->setPosition(position.getX(), position.getY(), position.getZ());
