@@ -104,41 +104,42 @@ void InputEventHandler::onLook(float delta_yaw, float delta_pitch) {
 	if (this->pitch < -89) this->pitch = -89;
 	if (this->pitch > 89) this->pitch = 89;
     sendPlayerInputEvent();
-	updateLocalCamera();
+
+	Core::getMainCamera().setYawAndPitchAndUpdate(yaw, pitch);
 }
 
-void InputEventHandler::updateLocalCamera()
-{
-	// compute local camera
-	osg::Quat q0;
-	osg::Quat q1;
-
-	q0.makeRotate(osg::DegreesToRadians(-yaw), 0, 0, 1);
-	q1.makeRotate(osg::DegreesToRadians(pitch), 1, 0, 0);
-
-	osg::Matrix orientation;
-	(q1 * q0).get(orientation);
-	osg::Vec3 dir = orientation.preMult(osg::Vec3(0, 1, 0));
-
-	osg::Vec3 x, y, z;
-	x = dir;
-	y = dir ^ osg::Vec3(0, 0, 1);
-	y.normalize();
-	z = y ^ x;
-
-	osg::Vec3 eye = Core::getMainCamera().getEyePosition();
-	//eye = eye + (x * _velocity.x() + y * _velocity.y() + z * _velocity.z()) * Core::getLastFrameDuration();
-	osg::Vec3 lookAt = eye + dir;
-	osg::Vec3 up(0, 0, 1);
-	
-	Core::getMainCamera().setViewAndUpdate(eye, lookAt, up);
-
-	// TODO: the following doesn't need to be updated for every event
-	// but need to set as soon as the game mode is on
-	// TODO: put this two as initial values in the config file
-	Core::getMainCamera().setFovYAndUpdate(89);
-	Core::getMainCamera().setNearAndFarAndUpdate(1, 500); // TODO: check if this will work with computer_near_far in osg
-}
+//void InputEventHandler::updateLocalCamera()
+//{
+//	// compute local camera
+//	osg::Quat q0;
+//	osg::Quat q1;
+//
+//	q0.makeRotate(osg::DegreesToRadians(-yaw), 0, 0, 1);
+//	q1.makeRotate(osg::DegreesToRadians(pitch), 1, 0, 0);
+//
+//	osg::Matrix orientation;
+//	(q1 * q0).get(orientation);
+//	osg::Vec3 dir = orientation.preMult(osg::Vec3(0, 1, 0));
+//
+//	osg::Vec3 x, y, z;
+//	x = dir;
+//	y = dir ^ osg::Vec3(0, 0, 1);
+//	y.normalize();
+//	z = y ^ x;
+//
+//	osg::Vec3 eye = Core::getMainCamera().getEyePosition();
+//	//eye = eye + (x * _velocity.x() + y * _velocity.y() + z * _velocity.z()) * Core::getLastFrameDuration();
+//	osg::Vec3 lookAt = eye + dir;
+//	osg::Vec3 up(0, 0, 1);
+//	
+//	Core::getMainCamera().setViewAndUpdate(eye, lookAt, up);
+//
+//	// TODO: the following doesn't need to be updated for every event
+//	// but need to set as soon as the game mode is on
+//	// TODO: put this two as initial values in the config file
+//	Core::getMainCamera().setFovYAndUpdate(89);
+//	Core::getMainCamera().setNearAndFarAndUpdate(1, 500); // TODO: check if this will work with computer_near_far in osg
+//}
 
 void InputEventHandler::sendPlayerInputEvent() {
     PlayerInputEvent evt(0,

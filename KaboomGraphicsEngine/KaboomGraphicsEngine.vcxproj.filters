@@ -24,6 +24,12 @@
     <Filter Include="Media\Shaders\smaa">
       <UniqueIdentifier>{66ede5de-5157-4efe-91f3-0d0899a94ed1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Visualizer">
+      <UniqueIdentifier>{315ad0ad-c350-4b3b-8ebb-69d6b9906616}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Visualizer">
+      <UniqueIdentifier>{59d2a9d9-1861-4f1a-b444-6f95b6e4c0a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -89,6 +95,12 @@
     </ClInclude>
     <ClInclude Include="include\GeometryObjectManipulator.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Visualizer.h">
+      <Filter>Header Files\Visualizer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AxisVisualizer.h">
+      <Filter>Header Files\Visualizer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +172,12 @@
     </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Visualizer.cpp">
+      <Filter>Source Files\Visualizer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AxisVisualizer.cpp">
+      <Filter>Source Files\Visualizer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

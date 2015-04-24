@@ -32,10 +32,17 @@ void setupScene()
 	osg::Vec3 sunsetColor = osg::Vec3(0.9, 0.8, 0.5);
 	l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), sunsetColor, false);
 
+	//Core::setEnvironmentMap(
+	//	"Cubemap_snow/posx.jpg", "Cubemap_snow/negx.jpg",
+	//	"Cubemap_snow/posy.jpg", "Cubemap_snow/negy.jpg",
+	//	"Cubemap_snow/posz.jpg", "Cubemap_snow/negz.jpg");
 	Core::setEnvironmentMap(
-		"Cubemap_snow/posx.jpg", "Cubemap_snow/negx.jpg",
-		"Cubemap_snow/posy.jpg", "Cubemap_snow/negy.jpg",
-		"Cubemap_snow/posz.jpg", "Cubemap_snow/negz.jpg");
+		"cubemaps/ice/posx.jpg",
+		"cubemaps/ice/negx.jpg",
+		"cubemaps/ice/posy.jpg",
+		"cubemaps/ice/negy.jpg",
+		"cubemaps/ice/posz.jpg",
+		"cubemaps/ice/negz.jpg");
 
 	//Core::setEnvironmentMap(
 	//	"cubemaps/uffizi0000.tif",

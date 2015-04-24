@@ -247,6 +247,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\AxisVisualizer.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\CompositorAnalysis.h" />
     <ClInclude Include="include\Core.h" />
@@ -267,10 +268,12 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\PointLight.h" />
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\TwGUIManager.h" />
+    <ClInclude Include="include\Visualizer.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AxisVisualizer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Core.cpp" />
     <ClCompile Include="src\CustomFirstPersonManipulator.cpp" />
@@ -292,6 +295,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\TwGUIManager.cpp" />
+    <ClCompile Include="src\Visualizer.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
