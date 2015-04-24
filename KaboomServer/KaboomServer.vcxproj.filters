@@ -77,7 +77,7 @@
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
     <ClCompile Include="src\core\InputSystem.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +116,7 @@
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
     <ClInclude Include="src\core\InputSystem.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
