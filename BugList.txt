@@ -15,6 +15,10 @@ Unresolved:
    But even though the near far value did not change, the light culling artifact will appear, meaning that
    1) in inheritedly linked to project matrices and near far plane. 
 
+7. BUG: need to remove all the dynamically genereated objects from the client when it disconnect, 
+   otherwise we still see them the next time we reconnect!
+8. BUG: need to delete bullet collision shape after client disconnect from server
+
 Fixed:
 1. Scrolling will crash the program (TwGUI)
 2. Skybox overriding preserved near far plane of gbuffer projection matrix, 

@@ -63,11 +63,16 @@ void Game::update(float timeStep) {
         players.push_back(player);
         addPhysicsEntity(player);
 
-		//notify client, a player spawn occurs
-		//server->sendPlayerSpawnEvent(player, players);
+		//first notify the new client what entityId it should keep track of
+		server.sendAssignPlayerEntity(player->getId());
+
+		//second send the new client about all the exisiting entities
+		server.sendAllEntitiesSpawnEvent(player, entityManager.getEntityList());
+
+		//then send the new spawn player entity to all the clients
 		server.sendEntitySpawnEvent(player);
-		server.sendAllEntitiesSpawnEvent(player,entityManager.getEntityList());
-        //first have the client first preload the information about the world
+		
+		//lastly send the game state for each entity
         server.sendGameStatePackets(this);
     }
 
