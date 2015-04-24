@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "TwGUIManager.h"
 #include "SkyBox.h"
+#include "AxisVisualizer.h"
 
 class Core
 {
@@ -73,6 +74,7 @@ private:
 
 	static void configFilePath();
 	static void configInGameGUI();
+	static void configAxisVisualizer();
 
 	static std::string _mediaPath;
 		
@@ -118,6 +120,8 @@ private:
 
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 
+
+	static AxisVisualizer _axisVisualizer;
 };
 
 class MainCameraCallback : public osg::NodeCallback
