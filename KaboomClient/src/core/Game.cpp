@@ -22,7 +22,8 @@ Game::Game(ConfigSettings *config)
       playerFactory(entityManager),
       bombFactory(entityManager),
       eventHandlerLookup(this),
-      client(eventHandlerLookup) {
+      client(eventHandlerLookup), 
+	  _camera(Core::getMainCamera()) {
 
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
@@ -51,7 +52,6 @@ Game::Game(ConfigSettings *config)
 
 	_geometryManager = Core::getWorldRef().getGeometryManager();
 	_materialManager = Core::getWorldRef().getMaterialManager();
-	_camera = Core::getMainCamera();
 }
 
 Game::~Game() {
@@ -93,6 +93,12 @@ void Game::run() {
 			break;
 		}
 		case GAME_MODE:
+			// TODO: the following doesn't need to be updated for every event
+			// but need to set as soon as the game mode is on
+			// TODO: put this two as initial values in the config file
+			Core::getMainCamera().setFovYAndUpdate(89);
+			Core::getMainCamera().setNearAndFarAndUpdate(1, 500);
+
 			// TODO: Robin: need to check this.
 			// Since receive fails when the packet received is zero (from the source code, not sure if it is the intended behavior)
 			// and the client will be disconnected from the server 
@@ -159,6 +165,6 @@ MaterialManager * Game::getMaterialManager() {
 	return _materialManager;
 }
 
-Camera Game::getCamera(){
+Camera &Game::getCamera(){
 	return _camera;
 }

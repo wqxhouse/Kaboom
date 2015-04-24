@@ -38,11 +38,11 @@ private:
     float yaw;
     float pitch;
 
-	osg::Vec3 _velocity;
-	const float _kSpeed = 100;
+	//osg::Vec3 _velocity;
+	//const float _kSpeed = 100;
 
     void sendPlayerInputEvent();
-	void updateLocalCamera();
+	// void updateLocalCamera();
 
     //static void resetCamera();
 };
