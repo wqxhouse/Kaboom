@@ -9,7 +9,7 @@ class ClientEventHandlerLookup;
 
 class GameClient {
 public:
-    GameClient(ClientEventHandlerLookup *eventHandlerLookup);
+    GameClient(const ClientEventHandlerLookup &eventHandlerLookup);
     ~GameClient();
 
 	void receive();
@@ -19,7 +19,7 @@ public:
     void sendMessage(const Event &evt);
 
 private:
-    ClientEventHandlerLookup *eventHandlerLookup;
+    const ClientEventHandlerLookup &eventHandlerLookup;
 
     ClientNetwork network;
 

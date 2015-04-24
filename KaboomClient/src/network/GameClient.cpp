@@ -9,8 +9,8 @@
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
 
-GameClient::GameClient(ClientEventHandlerLookup *eventHandlerLookup)
-    : eventHandlerLookup(eventHandlerLookup) {
+GameClient::GameClient(const ClientEventHandlerLookup &eventHandlerLookup)
+        : eventHandlerLookup(eventHandlerLookup) {
 }
 
 GameClient::~GameClient() {
@@ -19,7 +19,6 @@ GameClient::~GameClient() {
 bool GameClient::connectToServer(const std::string &serverAddress, const int serverPort) {
     network.connectToServer(serverAddress, serverPort);
 	return network.isConnected();
-	
 }
 
 bool GameClient::disconnectFromServer() {
@@ -54,19 +53,19 @@ void GameClient::receive() {
         switch (emptyEvent.getOpcode()) {
         case EventOpcode::POSITION:
             positionEvent.deserialize(&networkData[i]);
-            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(positionEvent);
+            eventHandlerLookup.find(emptyEvent.getOpcode())->handle(positionEvent);
             break;
         case EventOpcode::ROTATION:
             rotationEvent.deserialize(&networkData[i]);
-            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(rotationEvent);
+            eventHandlerLookup.find(emptyEvent.getOpcode())->handle(rotationEvent);
             break;
         case EventOpcode::PLAYER_INPUT:
             playerInputEvent.deserialize(&networkData[i]);
-            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
+            eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
             break;
         case EventOpcode::ENTITY_SPAWN:
             spawnEvent.deserialize(&networkData[i]);
-            eventHandlerLookup->find(emptyEvent.getOpcode())->handle(spawnEvent);
+            eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
 
             if (!initialized) {
                 currentPlayerEntityId = spawnEvent.getEntityId(); //set entityId the client needs to keep track of

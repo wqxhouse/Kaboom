@@ -11,8 +11,7 @@ class Game;
 
 class GameServer {
 public:
-
-    GameServer(ConfigSettings *, ServerEventHandlerLookup *eventHandlerLookup);
+    GameServer(ConfigSettings *, const ServerEventHandlerLookup &eventHandlerLookup);
     ~GameServer();
 
     bool acceptNewClient(unsigned int);
@@ -26,7 +25,7 @@ public:
 	void sendAllEntitiesSpawnEvent(Entity* newEntity, std::vector<Entity *> players);
 
 private:
-    ServerEventHandlerLookup *eventHandlerLookup;
+    const ServerEventHandlerLookup &eventHandlerLookup;
 
 	// IDs for the clients connecting for table in ServerNetwork 
 	static unsigned int client_id;

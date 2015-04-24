@@ -18,8 +18,8 @@ Game::Game(ConfigSettings *config)
     : config(config),
       playerFactory(entityManager),
       bombFactory(entityManager),
-      eventHandlerLookup(new ClientEventHandlerLookup(this)) {
-    client = new GameClient(eventHandlerLookup);
+      eventHandlerLookup(this),
+      client(eventHandlerLookup) {
 
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
@@ -40,7 +40,7 @@ Game::Game(ConfigSettings *config)
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
     setupScene();
 
-    inputManager = new InputManager(*client);
+    inputManager = new InputManager(client);
     inputManager->loadConfig();
 
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
@@ -49,10 +49,7 @@ Game::Game(ConfigSettings *config)
 
 Game::~Game() {
     delete inputManager;
-    delete eventHandlerLookup;
-    delete client;
 }
-
 
 void Game::run() {
     //static bool connected = false;
@@ -76,7 +73,7 @@ void Game::run() {
 			config->getValue(ConfigSettings::str_server_address, serverAddress);
 			config->getValue(ConfigSettings::str_server_port, serverPort);
 
-			bool res = client->connectToServer(serverAddress, serverPort);
+            bool res = client.connectToServer(serverAddress, serverPort);
 			if (res)
 			{
 				gsm = GAME_MODE;
@@ -94,13 +91,13 @@ void Game::run() {
 			// and the client will be disconnected from the server 
 			// Thus, we want to check if receive fails. If fails, since we are disconnected, should fall back to editor state.
 			// E.g: close the server whlie running the game 
-			client->receive();
+            client.receive();
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
 				gsm = DISCONNECT_TO_SERVER;
 			}
 			break;
 		case DISCONNECT_TO_SERVER:
-			client->disconnectFromServer();
+			client.disconnectFromServer();
 			gsm = EDITOR_MODE;
 			break;
 		}
@@ -141,8 +138,4 @@ const PlayerFactory &Game::getPlayerFactory() const {
 
 const BombFactory &Game::getBombFactory() const {
     return bombFactory;
-}
-
-ClientEventHandlerLookup *Game::getEventHandlerLookup() const {
-    return eventHandlerLookup;
 }

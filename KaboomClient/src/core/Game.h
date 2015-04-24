@@ -5,9 +5,9 @@
 
 #include "BombFactory.h"
 #include "PlayerFactory.h"
+#include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 
-class ClientEventHandlerLookup;
 class InputManager;
 
 enum GameStateMachine {
@@ -30,8 +30,6 @@ public:
     const PlayerFactory &getPlayerFactory() const;
 	const BombFactory &getBombFactory() const;
 
-    ClientEventHandlerLookup *getEventHandlerLookup() const;
-
 private:
     ConfigSettings *config;
     InputManager *inputManager;
@@ -40,8 +38,8 @@ private:
     PlayerFactory playerFactory;
 	BombFactory bombFactory;
 
-    GameClient *client;
-    ClientEventHandlerLookup *eventHandlerLookup;
+    ClientEventHandlerLookup eventHandlerLookup;
+    GameClient client;
 
     // osgViewer::Viewer viewer;
     // osg::Group *rootNode;
