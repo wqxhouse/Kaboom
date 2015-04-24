@@ -246,6 +246,7 @@ void Core::finalize()
 
 	configInGameGUI();
 	configGeometryObjectManipulator();
+	configAxisVisualizer();
 
 	_analysisHUD = configureViewerForMode(*_viewer, _passes, NULL, 1);
 	_analysisHUD->toggleHelper(); // disabled by default
@@ -457,6 +458,12 @@ bool Core::isInGameMode()
 	return _gameMode ? true : false;
 }
 
+void Core::configAxisVisualizer()
+{
+	_axisVisualizer.setPosition(osg::Vec3());
+	_passes->addChild(_axisVisualizer.getRoot());
+}
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;
@@ -488,3 +495,5 @@ bool Core::_allowEditorChangeProjection;
 
 osg::Timer_t Core::_lastFrameStartTime; 
 osg::Timer_t Core::_frameStartTime; 
+
+AxisVisualizer Core::_axisVisualizer;
