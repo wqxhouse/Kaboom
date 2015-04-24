@@ -6,7 +6,7 @@
 class Camera
 {
 public:
-	Camera() {};
+	Camera();
 	~Camera() {};
 
 	inline const osg::Matrix &getViewMatrix() const
@@ -69,6 +69,7 @@ public:
 	void setNearAndUpdate(float near);
 	void setFarAndUpdate(float far);
 	void setYawAndPitchAndUpdate(float yaw, float pitch);
+	void setFpsEyePositionAndUpdate(const osg::Vec3 &eye);
 
 private:
 	friend class osgFX::EffectCompositor;
@@ -85,8 +86,8 @@ private:
 	osg::Vec3 _eye;
 	osg::Vec3 _lookat;
 	osg::Vec3 _up;
+	osg::Vec3 _front;
 
 	osg::Vec2 _screenSize;
-	
 	osg::Vec2 _euler;
 };
