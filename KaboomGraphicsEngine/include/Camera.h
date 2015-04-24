@@ -68,6 +68,7 @@ public:
 	void setNearAndFarAndUpdate(float near, float far);
 	void setNearAndUpdate(float near);
 	void setFarAndUpdate(float far);
+	void setYawAndPitchAndUpdate(float yaw, float pitch);
 
 private:
 	friend class osgFX::EffectCompositor;
@@ -86,4 +87,6 @@ private:
 	osg::Vec3 _up;
 
 	osg::Vec2 _screenSize;
+	
+	osg::Vec2 _euler;
 };

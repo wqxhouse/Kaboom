@@ -17,64 +17,64 @@ void InputEventHandler::onMoveForwardDown() {
     movingForward = true;
     sendPlayerInputEvent();
 
-	_velocity.x() += _kSpeed * Core::getLastFrameDuration();
-	updateLocalCamera();
+	//_velocity.x() += _kSpeed * Core::getLastFrameDuration();
+	//updateLocalCamera();
 }
 
 void InputEventHandler::onMoveForwardUp() {
     movingForward = false;
     sendPlayerInputEvent();
 
-	_velocity.x() = 0;
-	updateLocalCamera();
+	//_velocity.x() = 0;
+	//updateLocalCamera();
 }
 
 void InputEventHandler::onMoveBackwardDown() {
     movingBackward = true;
     sendPlayerInputEvent();
 
-	_velocity.x() -= _kSpeed * Core::getLastFrameDuration();
-	updateLocalCamera();
+	//_velocity.x() -= _kSpeed * Core::getLastFrameDuration();
+	//updateLocalCamera();
 }
 
 void InputEventHandler::onMoveBackwardUp() {
     movingBackward = false;
     sendPlayerInputEvent();
 
-	_velocity.x() = 0;
-	updateLocalCamera();
+	//_velocity.x() = 0;
+	//updateLocalCamera();
 }
 
 void InputEventHandler::onMoveLeftDown() {
     movingLeft = true;
     sendPlayerInputEvent();
 
-	_velocity.y() += _kSpeed * Core::getLastFrameDuration();
-	updateLocalCamera();
+	//_velocity.y() += _kSpeed * Core::getLastFrameDuration();
+	//updateLocalCamera();
 }
 
 void InputEventHandler::onMoveLeftUp() {
     movingLeft = false;
     sendPlayerInputEvent();
 
-	_velocity.y() = 0;
-	updateLocalCamera();
+	//_velocity.y() = 0;
+	//updateLocalCamera();
 }
 
 void InputEventHandler::onMoveRightDown() {
     movingRight = true;
     sendPlayerInputEvent();
 
-	_velocity.y() -= _kSpeed * Core::getLastFrameDuration();
-	updateLocalCamera();
+	//_velocity.y() -= _kSpeed * Core::getLastFrameDuration();
+	//updateLocalCamera();
 }
 
 void InputEventHandler::onMoveRightUp() {
     movingRight = false;
     sendPlayerInputEvent();
 
-	_velocity.y() = 0;
-	updateLocalCamera();
+	//_velocity.y() = 0;
+	//updateLocalCamera();
 }
 
 void InputEventHandler::onJumpDown() {
@@ -127,7 +127,7 @@ void InputEventHandler::updateLocalCamera()
 	z = y ^ x;
 
 	osg::Vec3 eye = Core::getMainCamera().getEyePosition();
-	eye = eye + (x * _velocity.x() + y * _velocity.y() + z * _velocity.z()) * Core::getLastFrameDuration();
+	//eye = eye + (x * _velocity.x() + y * _velocity.y() + z * _velocity.z()) * Core::getLastFrameDuration();
 	osg::Vec3 lookAt = eye + dir;
 	osg::Vec3 up(0, 0, 1);
 	
