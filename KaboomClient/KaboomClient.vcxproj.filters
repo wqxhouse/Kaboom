@@ -94,6 +94,9 @@
     <ClCompile Include="src\network\SpawnEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\DeleteEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Global.h">
@@ -143,6 +146,9 @@
       <Filter>Header Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\network\SpawnEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\DeleteEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>

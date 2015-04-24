@@ -8,6 +8,7 @@
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/SpawnEvent.h>
+#include <network/AssignEvent.h>
 
 #include "../core/Game.h"
 
@@ -42,12 +43,33 @@ bool GameServer::acceptNewClient(unsigned int entity_id) {
     return false;
 }
 
-void GameServer::receive() {
+void GameServer::receive(Game *game) {
+    char network_data[MAX_PACKET_SIZE];
+
     for (auto it : network->sessions) {
+		int id = it.first;
         int len = network->receiveData(it.first, network_data);
 
 		if (len == 0){
+			
 			//handle player disconnect by sending delete messages to all clients about the deleted users entities
+			Entity *entity = game->getEntityManager().getEntity(id);
+			if (entity->getComponent<BombContainerComponent>() == nullptr) {
+				printf("\nsomething wrong with look up method\n");
+				continue;
+			}
+			DeleteEvent deleteEvent(id);
+			char del[sizeof(DeleteEvent)];
+			deleteEvent.serialize(del);
+			network->sendToAll(del,sizeof(DeleteEvent));
+
+			
+			//TODO: Need to delete our rigid body and it's collision shape
+			
+			game->getEntityManager().destroyEntity(id);
+
+
+
 		}
         if (len <= 0) {
             continue;
@@ -83,13 +105,13 @@ void GameServer::receive() {
     }
 }
 
-void GameServer::sendGameStatePackets(Game *game) {
+void GameServer::sendGameStatePackets(Game *game) const {
     for (Entity *entity : game->getEntityManager().getPlayerList()) {
         sendPositionEvent(entity);
     }
 }
 
-void GameServer::sendEntitySpawnEvent(Entity* newEntity){
+void GameServer::sendEntitySpawnEvent(Entity* newEntity) const {
 	//send the spawn entity event to all the clients
 	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
 
@@ -107,7 +129,7 @@ void GameServer::sendEntitySpawnEvent(Entity* newEntity){
 
 }
 
-void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity *> existingEnities){
+void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity *> existingEnities) const {
 	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
 	
 	const unsigned int packet_size = sizeof(SpawnEvent);
@@ -127,7 +149,7 @@ void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity 
 	}
 }
 
-void GameServer::sendPositionEvent(Entity* entity) {
+void GameServer::sendPositionEvent(Entity* entity) const {
     PositionComponent *positionCom = entity->getComponent<PositionComponent>();
 
     if (positionCom == nullptr) {
@@ -141,4 +163,16 @@ void GameServer::sendPositionEvent(Entity* entity) {
 
     positionEvent.serialize(packet_data);
     network->sendToAll(packet_data, packet_size);
+}
+
+
+void GameServer::sendAssignPlayerEntity(unsigned int entityId) {
+
+	AssignEvent assignEvent(entityId);
+	const unsigned int packet_size = sizeof(AssignEvent);
+	char packet_data[packet_size];
+
+	assignEvent.serialize(packet_data);
+	network->sendToOneClient(packet_data, packet_size, entityId);
+
 }
