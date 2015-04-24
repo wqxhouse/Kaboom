@@ -37,7 +37,7 @@ public:
 	GeometryObjectManager* getGeometryManager();
 	MaterialManager* getMaterialManager();
 	
-	Camera getCamera();
+	Camera &getCamera();
 
 private:
     ConfigSettings *config;
@@ -53,7 +53,7 @@ private:
 	GeometryObjectManager * _geometryManager;
 	MaterialManager * _materialManager;
 
-	Camera _camera;
+	Camera &_camera;
     // osgViewer::Viewer viewer;
     // osg::Group *rootNode;
     // void setupCamera();

@@ -9,4 +9,6 @@ public:
 
 private:
 	void makeAxisGeode();
+	void configCamera();
+	osg::ref_ptr<osg::Camera> _cam;
 };

@@ -3,6 +3,9 @@
 
 AxisVisualizer::AxisVisualizer()
 {
+	_cam = new osg::Camera;
+	_matTrans->addChild(_cam); // matTrans should not change cam
+
 	makeAxisGeode();
 }
 
@@ -52,7 +55,12 @@ void AxisVisualizer::makeAxisGeode()
 	_y->addChild(_ygeo);
 	_z->addChild(_zgeo);
 
-	_matTrans->addChild(_x);
-	_matTrans->addChild(_y);
-	_matTrans->addChild(_z);
+	_cam->addChild(_x);
+	_cam->addChild(_y);
+	_cam->addChild(_z);
+}
+
+void AxisVisualizer::configCamera()
+{
+	_cam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
 }
