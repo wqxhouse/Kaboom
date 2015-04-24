@@ -112,18 +112,30 @@ void ClientNetwork::connectToServer(const std::string &serverAddress, const int 
 	if (hasError)
 	{
 		_connected = false;
-		fprintf(stderr, "Connection failed...\n");
+		fprintf(stderr, "<Client> Connection failed...\n");
 	}
 	else
 	{
 		_connected = true;
-		printf("Connected to server...\n");
+		printf("<Client> Connected to server...\n");
 	}
 }
 
 void ClientNetwork::disconnectFromServer()
 {
 	if (!_connected) return;
+	
+	printf("<Client> Manually Disconnecting from server\n");
+
+	// shutdown the send half of the connection since no more data will be sent
+	int iResult = shutdown(clientSocket, SD_SEND);
+	if (iResult == SOCKET_ERROR) {
+		printf("shutdown failed: %d\n", WSAGetLastError());
+	}
+	closesocket(clientSocket);
+	WSACleanup();
+
+	_connected = false;
 }
 
 int ClientNetwork::receivePackets(char * recvbuf) {

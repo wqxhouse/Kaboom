@@ -106,10 +106,12 @@ void Game::run() {
 			// E.g: close the server whlie running the game 
             client.receive();
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
+				removeAllDynamicEntity(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;
 			}
 			break;
 		case DISCONNECT_TO_SERVER:
+			//TODO: need to remove all the dynamically genereated objects! otherwise we still see them the next time we reconnect
 			client.disconnectFromServer();
 			gsm = EDITOR_MODE;
 			break;
@@ -117,35 +119,20 @@ void Game::run() {
         Core::AdvanceFrame();
     }
 }
-/*
-bool Game::addSceneNodeEntity(Entity *entity) {
-    SceneNodeComponent *sceneNodeCom = entity->getComponent<SceneNodeComponent>();
-    if (sceneNodeCom == nullptr) {
-       return false;
-    }
+void Game::removeAllDynamicEntity() {
+	for (auto it : entityManager.getEntityList()) {
+		//remove from graphics
+		getGeometryManager()->deleteGeometry(std::to_string(static_cast<int>(it->getId())));
 
-	PositionComponent *posCom = entity->getComponent<PositionComponent>();
-	if (posCom == nullptr) {
-		return false;
+		//remove from entity system
+		entityManager.destroyEntity(it->getId());
 	}
-	
-	Core::getWorldRef().getGeometryManager()->addGeometry(std::to_string(static_cast<int>(entity->getId())),
-														  sceneNodeCom->getNode(), 
-														  osg::Vec3(posCom->getX(), posCom->getY(), posCom->getZ()));
-
-    //rootNode->addChild(sceneNodeCom->getNode());
-
-
-
-
-    return true;
-}*/
-
+}
 const GameClient &Game::getGameClient() const{
 	return client;
 }
 
-const EntityManager &Game::getEntityManager() const {
+EntityManager &Game::getEntityManager() {
     return entityManager;
 }
 

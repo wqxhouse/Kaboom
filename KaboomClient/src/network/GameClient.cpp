@@ -5,13 +5,15 @@
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/SpawnEvent.h>
+#include <network/AssignEvent.h>
 
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
 
 GameClient::GameClient(const ClientEventHandlerLookup &eventHandlerLookup)
         : eventHandlerLookup(eventHandlerLookup),
-		  currentPlayerEntityId(0){
+		  currentPlayerEntityId(0),
+		  assignedEntity(false){
 }
 
 GameClient::~GameClient() {
@@ -23,6 +25,7 @@ bool GameClient::connectToServer(const std::string &serverAddress, const int ser
 }
 
 bool GameClient::disconnectFromServer() {
+	assignedEntity = false;//next time we connect, we need to obtain a new entity
     network.disconnectFromServer();
 	return !network.isConnected();
 }
@@ -37,10 +40,13 @@ void GameClient::receive() {
     }
 
     EmptyEvent emptyEvent;
+	AssignEvent assignEvent;
     PositionEvent positionEvent;
     RotationEvent rotationEvent;
     SpawnEvent spawnEvent;
     PlayerInputEvent playerInputEvent;
+	DeleteEvent deleteEvent;
+	
 
     // printf("received len %d\n", len);
 
@@ -52,6 +58,13 @@ void GameClient::receive() {
 		printf("byteSize is %d\n", emptyEvent.getByteSize());*/
 
         switch (emptyEvent.getOpcode()) {
+		case EventOpcode::ASSIGN_ENTITY:
+			assignEvent.deserialize(&networkData[i]);
+			if (!assignedEntity) {
+				printf("<Client> Got Assigned a new EntityId %d\n", assignEvent.getEntityId());
+				currentPlayerEntityId = assignEvent.getEntityId(); //set entityId the client needs to keep track of
+			}
+			break;
         case EventOpcode::POSITION:
             positionEvent.deserialize(&networkData[i]);
             eventHandlerLookup.find(emptyEvent.getOpcode())->handle(positionEvent);
@@ -68,11 +81,12 @@ void GameClient::receive() {
             spawnEvent.deserialize(&networkData[i]);
             eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
 
-            if (!initialized) {
-                currentPlayerEntityId = spawnEvent.getEntityId(); //set entityId the client needs to keep track of
-            }
-
             break;
+		case EventOpcode::DELETE_ENTITY:
+			deleteEvent.deserialize(&networkData[i]);
+			//create handler
+			eventHandlerLookup.find(emptyEvent.getOpcode())->handle(deleteEvent);
+			break;
         default:
             printf("error in packet event types\n");
             return;
@@ -86,6 +100,9 @@ unsigned int GameClient::getCurrentPlayerEntityId() const{
 	return currentPlayerEntityId;
 }
 
+bool GameClient::getAssignedEntity() const {
+	return assignedEntity;
+}
 void GameClient::sendMessage(const Event &evt) {
     const int &size = evt.getByteSize();
     char *data = new char[size];

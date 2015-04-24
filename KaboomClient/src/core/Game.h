@@ -30,7 +30,8 @@ public:
 	const GameClient &getGameClient() const;
     //bool addSceneNodeEntity(Entity *entity);
 
-    const EntityManager &getEntityManager() const;
+    EntityManager &getEntityManager();
+
     const PlayerFactory &getPlayerFactory() const;
 	const BombFactory &getBombFactory() const;
 
@@ -38,6 +39,8 @@ public:
 	MaterialManager* getMaterialManager();
 	
 	Camera &getCamera();
+
+	void removeAllDynamicEntity();
 
 private:
     ConfigSettings *config;

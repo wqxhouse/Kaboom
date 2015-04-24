@@ -7,8 +7,9 @@
 #include <ConfigSettings.h>
 #include <core/EntityManager.h>
 
-#include "PlayerFactory.h"
 #include "BombFactory.h"
+#include "InputSystem.h"
+#include "PlayerFactory.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
 
@@ -24,7 +25,7 @@ public:
 
     void addPhysicsEntity(Entity *entity);
 
-    const EntityManager &getEntityManager() const;
+    EntityManager &getEntityManager();
     const PlayerFactory &getPlayerFactory() const;
     const BombFactory &getBombFactory() const;
     const GameServer &getGameServer() const;
@@ -35,6 +36,8 @@ private:
     EntityManager entityManager;
     PlayerFactory playerFactory;
     BombFactory bombFactory;
+
+    InputSystem inputSystem;
 
     ServerEventHandlerLookup eventHandlerLookup;
     GameServer server;
