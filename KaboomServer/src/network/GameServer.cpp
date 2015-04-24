@@ -44,6 +44,8 @@ bool GameServer::acceptNewClient(unsigned int entity_id) {
 }
 
 void GameServer::receive(Game *game) {
+    char network_data[MAX_PACKET_SIZE];
+
     for (auto it : network->sessions) {
 		int id = it.first;
         int len = network->receiveData(it.first, network_data);
@@ -103,13 +105,13 @@ void GameServer::receive(Game *game) {
     }
 }
 
-void GameServer::sendGameStatePackets(Game *game) {
+void GameServer::sendGameStatePackets(Game *game) const {
     for (Entity *entity : game->getEntityManager().getPlayerList()) {
         sendPositionEvent(entity);
     }
 }
 
-void GameServer::sendEntitySpawnEvent(Entity* newEntity){
+void GameServer::sendEntitySpawnEvent(Entity* newEntity) const {
 	//send the spawn entity event to all the clients
 	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
 
@@ -127,7 +129,7 @@ void GameServer::sendEntitySpawnEvent(Entity* newEntity){
 
 }
 
-void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity *> existingEnities){
+void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity *> existingEnities) const {
 	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
 	
 	const unsigned int packet_size = sizeof(SpawnEvent);
@@ -147,7 +149,7 @@ void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity 
 	}
 }
 
-void GameServer::sendPositionEvent(Entity* entity) {
+void GameServer::sendPositionEvent(Entity* entity) const {
     PositionComponent *positionCom = entity->getComponent<PositionComponent>();
 
     if (positionCom == nullptr) {
