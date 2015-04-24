@@ -4,6 +4,9 @@
 #include <osg/Group>
 
 #include <Core.h>
+#include <GeometryObjectManager.h>
+#include <MaterialManager.h>
+
 #include <core/Entity.h>
 #include <core/PositionComponent.h>
 
@@ -45,6 +48,9 @@ Game::Game(ConfigSettings *config)
 
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
     Core::addEventHandler(&inputManager->getMouseEventHandler());
+
+	_geometryManager = Core::getWorldRef().getGeometryManager();
+	_materialManager = Core::getWorldRef().getMaterialManager();
 }
 
 Game::~Game() {
@@ -104,7 +110,7 @@ void Game::run() {
         Core::AdvanceFrame();
     }
 }
-
+/*
 bool Game::addSceneNodeEntity(Entity *entity) {
     SceneNodeComponent *sceneNodeCom = entity->getComponent<SceneNodeComponent>();
     if (sceneNodeCom == nullptr) {
@@ -126,7 +132,7 @@ bool Game::addSceneNodeEntity(Entity *entity) {
 
 
     return true;
-}
+}*/
 
 const EntityManager &Game::getEntityManager() const {
     return entityManager;
@@ -138,4 +144,12 @@ const PlayerFactory &Game::getPlayerFactory() const {
 
 const BombFactory &Game::getBombFactory() const {
     return bombFactory;
+}
+
+GeometryObjectManager * Game::getGeometryManager() {
+	return _geometryManager;
+}
+
+MaterialManager * Game::getMaterialManager() {
+	return _materialManager;
 }

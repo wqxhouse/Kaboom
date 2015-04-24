@@ -1,7 +1,8 @@
 #include "PositionEventHandler.h"
 
 #include <osg/MatrixTransform>
-
+#include <Core.h>
+#include <GeometryObject.h>
 #include <core/Entity.h>
 #include <core/PositionComponent.h>
 #include <network/PositionEvent.h>
@@ -30,6 +31,9 @@ void PositionEventHandler::handle(const Event &e) const {
         positionCom->setPosition(evt.getX(), evt.getY(), evt.getZ());
     }
 
+	game->getGeometryManager()->getGeometryObject(std::to_string(static_cast<int>(entity->getId())))->setTranslate(osg::Vec3(positionCom->getX(), positionCom->getY(), positionCom->getZ()));
+
+	/*
     SceneNodeComponent *sceneNodeCom = entity->getComponent<SceneNodeComponent>();
 
     if (sceneNodeCom != nullptr) {
@@ -41,4 +45,6 @@ void PositionEventHandler::handle(const Event &e) const {
 
         transformNode->setMatrix(transformMat);
     }
+	*/
+	
 }
