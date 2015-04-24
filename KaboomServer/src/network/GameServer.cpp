@@ -3,7 +3,6 @@
 #include <core/Entity.h>
 #include <core/CharacteristicComponent.h>
 #include <core/PositionComponent.h>
-#include <core/PhysicsComponent.h>
 #include <network/EmptyEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
