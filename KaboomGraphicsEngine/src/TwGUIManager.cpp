@@ -15,7 +15,7 @@
 
 TwGUIManager::TwGUIManager()
 // Note, this flag assumes that you do not touch viewer manipulator settings
-	: _cameraManipulatorActive(true), _manipulatorBits(0x1)
+	: _cameraManipulatorActive(true), _manipulatorBits(0x0)
 {
 	_gm = Core::getWorldRef().getGeometryManager();
 	_lm = Core::getWorldRef().getLightManager();
@@ -67,6 +67,44 @@ void TwGUIManager::initMainBar()
 		*(bool *)value = *(bool *)clientData;
 	},
 		&this->_cameraManipulatorActive, NULL);
+
+	TwAddVarCB(g_twBar, "Change Projection", TW_TYPE_BOOL8, 
+		[](const void *data, void *clientData) {
+		bool b = *static_cast<const bool *>(data);
+		Core::setAllowChangeEditorProjection(b);
+	}, [](void *data, void *clientData) {
+		bool b = Core::allowChangeEditorProjection();
+		*(bool *)data = b;
+	}, NULL, NULL);
+
+	TwAddVarCB(g_twBar, "Camera Fovy", TW_TYPE_FLOAT, 
+		[](const void *data, void *clientData) {
+		const float *fov = static_cast<const float *>(data);
+		Core::getMainCamera().setFovYAndUpdate(*fov);
+	}, [](void *data, void *clientData) {
+		float fov = Core::getMainCamera().getFovY();
+		*(float *)data = fov;
+	}, NULL, " min=20 max=140 ");
+
+	TwAddVarCB(g_twBar, "Camera Near Plane", TW_TYPE_FLOAT,
+		[](const void *data, void *clientData) {
+		const float *near = static_cast<const float *>(data);
+		Core::getMainCamera().setNearAndUpdate(*near);
+	}, [](void *data, void *clientData) {
+		float fov = Core::getMainCamera().getNearPlane();
+		*(float *)data = fov;
+	}, NULL, " min=0.1 max=10000");
+
+	TwAddVarCB(g_twBar, "Camera Far Plane", TW_TYPE_FLOAT,
+		[](const void *data, void *clientData) {
+		const float *far = static_cast<const float *>(data);
+		Core::getMainCamera().setFarAndUpdate(*far);
+	}, [](void *data, void *clientData) {
+		float fov = Core::getMainCamera().getFarPlane();
+		*(float *)data = fov;
+	}, NULL, " min=0.1 max=10000");
+
+	TwAddSeparator(g_twBar, NULL, NULL);
 
 	// 'Export to XML' button
 	TwAddButton(g_twBar, "Export to XML",
@@ -410,6 +448,23 @@ void TW_CALL TwGUIManager::loadModelFunc(void* clientData)
 // Need to change them to conform to osg convention
 void TwGUIManager::updateEvents() const
 {
+	// update manipulatorBits from GeometryManipulator
+	if (GeometryObjectManipulator::isVisible())
+	{
+		switch (GeometryObjectManipulator::getCurrentManipulatorType())
+		{
+		case TabBoxDragger:
+			*(int *)&_manipulatorBits = 0x1;
+			break;
+		case TrackballDragger:
+			*(int *)&_manipulatorBits = 0x2;
+			break;
+		case TranslateAxisDragger:
+			*(int *)&_manipulatorBits = 0x4;
+			break;
+		}
+	}
+
 	unsigned int size = _eventsToHandle.size();
 	for (unsigned int i = 0; i < size; ++i)
 	{
@@ -439,19 +494,14 @@ void TwGUIManager::updateEvents() const
 			}
 			else if (ea.getKey() == 'g')
 			{
-				// hack decrease constness
-				*(int *)&_manipulatorBits = 0x4;
 				GeometryObjectManipulator::changeCurrentManipulatorType(TranslateAxisDragger);
-				
 			}
 			else if (ea.getKey() == 'r')
 			{
-				*(int *)&_manipulatorBits = 0x2;
 				GeometryObjectManipulator::changeCurrentManipulatorType(TrackballDragger);
 			}
 			else if (ea.getKey() == 's')
 			{
-				*(int *)&_manipulatorBits = 0x1;
 				GeometryObjectManipulator::changeCurrentManipulatorType(TabBoxDragger);
 
 			}

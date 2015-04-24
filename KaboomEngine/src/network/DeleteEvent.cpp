@@ -21,3 +21,7 @@ void DeleteEvent::serialize(char *buf) const {
 void DeleteEvent::deserialize(char *buf) {
 	memcpy(this, buf, sizeof(DeleteEvent));
 }
+
+const unsigned int &DeleteEvent::getEntityId() const {
+	return entityId;
+}

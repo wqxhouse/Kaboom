@@ -1,4 +1,6 @@
 #include "MouseEventHandler.h"
+#include <Core.h>
+#include <osgViewer/GraphicsWindow>
 
 MouseEventHandler::MouseEventHandler(InputEventHandler &inputEventHandler)
     : inputEventHandler(inputEventHandler) {
@@ -32,6 +34,8 @@ bool MouseEventHandler::bindKey(int key, KeyState state, Function func) {
 }
 
 bool MouseEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &aa) {
+	if (!Core::isInGameMode()) return false;
+
     KeyFunctionMap::iterator itr;
     bool newKeyDownEvent = false;
     bool newKeyUpEvent = false;
@@ -43,8 +47,8 @@ bool MouseEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActio
     int dx = x - centerX;
     int dy = y - centerY;
 
-    float yaw = 0;
-    float pitch = 0;
+    float dyaw = 0;
+    float dpitch = 0;
 
     switch (ea.getEventType()) {
     case osgGA::GUIEventAdapter::KEYDOWN:
@@ -80,15 +84,20 @@ bool MouseEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActio
         }
 
         return false;
-    case osgGA::GUIEventAdapter::MOVE:
-        if (dx != 0 || dy != 0) {
-            //inputEventHandler.onLook(yaw, pitch);
-            //aa.requestWarpPointer(centerX, centerY);
+	case osgGA::GUIEventAdapter::MOVE:
+	{
+		static int x = 0;
+		if (dx != 0 || dy != 0) {
+			dyaw = dx * Core::getLastFrameDuration() * 3; // TODO: add mouse sensitivity
+			dpitch = dy * Core::getLastFrameDuration() * 3;
 
-            return true;
-        }
+			inputEventHandler.onLook(dyaw, dpitch);
+			aa.requestWarpPointer(centerX, centerY);
+			return true;
+		}
 
-        return false;
+		return true;
+	}
     default:
         return false;
     }

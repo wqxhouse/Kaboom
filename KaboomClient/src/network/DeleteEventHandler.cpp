@@ -15,5 +15,5 @@ DeleteEventHandler::~DeleteEventHandler() {
 void DeleteEventHandler::handle(const Event &e) const {
 	const DeleteEvent &evt = static_cast<const DeleteEvent &>(e);
 	game->getEntityManager().destroyEntity(evt.getEntityId());
-	game->deleteSceneNodeEntity(evt.getEntityId());
+	game->getGeometryManager()->deleteGeometry(std::to_string(static_cast<int>(evt.getEntityId())));
 }

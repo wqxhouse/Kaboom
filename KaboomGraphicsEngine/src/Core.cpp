@@ -8,6 +8,7 @@
 #include <osgDB/FileNameUtils>
 #include <osg/TexGen>
 #include <osg/Depth>
+#include <osgViewer/GraphicsWindow>
 //
 //#include "../osgLibRocket/FileInterface.h"
 //#include "../osgLibRocket/RenderInterface.h"
@@ -44,6 +45,8 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	_passDataDisplay = false;
 	_gameMode = false;
 	_guiEnabled = true;
+	_isFirstFrame = true;
+	_allowEditorChangeProjection = false;
 
 	configFilePath();
 
@@ -52,7 +55,6 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	configViewer(); 
 
 	_sceneRoot->addChild(_passes);
-	//disableCameraManipulator();
 	_hasInit = true;
 }
 
@@ -64,6 +66,11 @@ void Core::loadWorldFile(const std::string &worldFilePath)
 World &Core::getWorldRef()
 {
 	return _world;
+}
+
+osg::Vec2 Core::getScreenSize()
+{
+	return _screenSize;
 }
 
 void Core::configFilePath()
@@ -183,6 +190,7 @@ void Core::configViewer()
 
 	// add gui
 	_viewer->addEventHandler(_gui.get());
+	// _viewer->addEventHandler(new osgViewer::StatsHandler);
 	_viewer->getCamera()->setFinalDrawCallback(_gui.get());
 
 	_viewer->setUpViewInWindow(_winPos.x(), _winPos.y(), _screenSize.x(), _screenSize.y());
@@ -195,8 +203,29 @@ void Core::AdvanceFrame()
 {
 	if (_hasInit)
 	{
+		if (_isFirstFrame)
+		{
+			finalize();
+			_lastFrameStartTime = _frameStartTime 
+				= osg::Timer::instance()->getStartTick();
+			
+			_isFirstFrame = false;
+		}
+
 		_viewer->frame();
+		_lastFrameStartTime = _frameStartTime;
+		_frameStartTime = osg::Timer::instance()->tick();
 	}
+}
+
+double Core::getLastFrameDuration()
+{
+	return osg::Timer::instance()->delta_s(_lastFrameStartTime, _frameStartTime);
+}
+
+bool Core::isViewerClosed()
+{
+	return _viewer->done();
 }
 
 void Core::finalize()
@@ -267,6 +296,7 @@ void Core::enableCameraManipulator()
 	std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
 	_camManipulatorTemp->setHomePosition(_savedManipulatorCam.getEyePosition(), 
 		_savedManipulatorCam.getLookAt(), _savedManipulatorCam.getUp());
+	_viewer->getCamera()->setProjectionMatrix(_savedManipulatorCam.getProjectionMatrix());
 	_viewer->setCameraManipulator(_camManipulatorTemp);
 
 	_savedManipulatorCam = Camera();
@@ -372,11 +402,13 @@ void Core::enableGameMode()
 	if (!_gameMode)
 	{
 		_gameMode = true;
+
 		disablePassDataDisplay();
 		disableCameraManipulator();
 		disableGUI();
 		disableGeometryObjectManipulator();
-		_gameMode = true;
+		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
+		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
 	}
 }
 
@@ -385,14 +417,33 @@ void Core::disableGameMode()
 	if (_gameMode)
 	{
 		_gameMode = false;
+
 		enableGUI();
 		enableCameraManipulator();
 		enableGeometryObjectManipulator();
 
-		// TODO: change back to editor key bindings
-
-		_gameMode = false;
+		//// TODO: change back to editor key bindings
+		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
+		a->setCursor(osgViewer::GraphicsWindow::LeftArrowCursor);
 	}
+}
+
+void Core::setAllowChangeEditorProjection(bool tf)
+{
+	_allowEditorChangeProjection = tf;
+	if (tf)
+	{
+		_viewer->getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
+	}
+	else
+	{
+		_viewer->getCamera()->setComputeNearFarMode(osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES);
+	}
+}
+
+bool Core::allowChangeEditorProjection()
+{
+	return _allowEditorChangeProjection;
 }
 
 void Core::addEventHandler(osgGA::GUIEventHandler *handler)
@@ -405,7 +456,6 @@ bool Core::isInGameMode()
 {
 	return _gameMode ? true : false;
 }
-
 
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
@@ -432,3 +482,9 @@ bool Core::_gameMode;
 bool Core::_passDataDisplay;
 bool Core::_guiEnabled;
 bool Core::_manipulatorEnabled;
+
+bool Core::_isFirstFrame;
+bool Core::_allowEditorChangeProjection;
+
+osg::Timer_t Core::_lastFrameStartTime; 
+osg::Timer_t Core::_frameStartTime; 

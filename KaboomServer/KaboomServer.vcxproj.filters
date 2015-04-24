@@ -70,6 +70,9 @@
     <ClCompile Include="src\core\BombFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\InputComponent.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -99,6 +102,9 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="src\core\BombFactory.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\InputComponent.h">
+      <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
