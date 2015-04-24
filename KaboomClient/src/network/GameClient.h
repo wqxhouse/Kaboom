@@ -18,6 +18,8 @@ public:
 
     void sendMessage(const Event &evt);
 
+	unsigned int getCurrentPlayerEntityId() const;
+
 private:
     const ClientEventHandlerLookup &eventHandlerLookup;
 

@@ -51,6 +51,7 @@ Game::Game(ConfigSettings *config)
 
 	_geometryManager = Core::getWorldRef().getGeometryManager();
 	_materialManager = Core::getWorldRef().getMaterialManager();
+	_camera = Core::getMainCamera();
 }
 
 Game::~Game() {
@@ -134,6 +135,10 @@ bool Game::addSceneNodeEntity(Entity *entity) {
     return true;
 }*/
 
+const GameClient &Game::getGameClient() const{
+	return client;
+}
+
 const EntityManager &Game::getEntityManager() const {
     return entityManager;
 }
@@ -152,4 +157,8 @@ GeometryObjectManager * Game::getGeometryManager() {
 
 MaterialManager * Game::getMaterialManager() {
 	return _materialManager;
+}
+
+Camera Game::getCamera(){
+	return _camera;
 }

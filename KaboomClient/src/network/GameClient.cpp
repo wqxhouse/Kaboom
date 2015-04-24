@@ -10,7 +10,8 @@
 #include "ClientEventHandlerLookup.h"
 
 GameClient::GameClient(const ClientEventHandlerLookup &eventHandlerLookup)
-        : eventHandlerLookup(eventHandlerLookup) {
+        : eventHandlerLookup(eventHandlerLookup),
+		  currentPlayerEntityId(0){
 }
 
 GameClient::~GameClient() {
@@ -81,6 +82,10 @@ void GameClient::receive() {
     }
 }
 
+unsigned int GameClient::getCurrentPlayerEntityId() const{
+	return currentPlayerEntityId;
+}
+
 void GameClient::sendMessage(const Event &evt) {
     const int &size = evt.getByteSize();
     char *data = new char[size];
@@ -91,3 +96,4 @@ void GameClient::sendMessage(const Event &evt) {
 
     delete[] data;
 }
+
