@@ -72,7 +72,7 @@ void Game::update(float timeStep) {
         server->sendGameStatePackets(this);
     }
 
-    server->receive();
+    server->receive(this);
 
 	for (Entity *entity : entityManager.getEntityList()) {
 		entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
@@ -91,7 +91,7 @@ void Game::update(float timeStep) {
     server->sendGameStatePackets(this);
 }
 
-const EntityManager &Game::getEntityManager() const {
+EntityManager &Game::getEntityManager() {
     return entityManager;
 }
 

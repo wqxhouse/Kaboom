@@ -257,6 +257,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\input\MouseEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\network\ClientEventHandlerLookup.cpp" />
+    <ClCompile Include="src\network\DeleteEventHandler.cpp" />
     <ClCompile Include="src\network\SpawnEventHandler.cpp" />
     <ClCompile Include="src\network\GameClient.cpp" />
     <ClCompile Include="src\network\ClientNetwork.cpp" />
@@ -278,6 +279,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
     <ClInclude Include="src\input\MouseEventHandler.h" />
     <ClInclude Include="src\network\ClientEventHandlerLookup.h" />
+    <ClInclude Include="src\network\DeleteEventHandler.h" />
     <ClInclude Include="src\network\SpawnEventHandler.h" />
     <ClInclude Include="src\network\GameClient.h" />
     <ClInclude Include="src\network\ClientNetwork.h" />

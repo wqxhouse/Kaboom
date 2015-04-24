@@ -41,6 +41,7 @@ void GameClient::receive() {
     RotationEvent rotationEvent;
     SpawnEvent spawnEvent;
     PlayerInputEvent playerInputEvent;
+	DeleteEvent deleteEvent;
 
     printf("received len %d\n", len);
 
@@ -73,6 +74,11 @@ void GameClient::receive() {
             }
 
             break;
+		case EventOpcode::DELETE_ENTITY:
+			deleteEvent.deserialize(&networkData[i]);
+			//create handler
+			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(deleteEvent);
+				break;
         default:
             printf("error in packet event types\n");
             return;

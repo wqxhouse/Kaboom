@@ -1,7 +1,8 @@
 #pragma once
 
 #include <network/NetworkData.h>
-
+#include <network/DeleteEvent.h>
+#include <core/BombContainerComponent.h>
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 #include "NetworkServices.h"
@@ -17,7 +18,7 @@ public:
 
     bool acceptNewClient(unsigned int);
 
-    void receive();
+    void receive(Game *game);
 
     void sendGameStatePackets(Game *game);
 

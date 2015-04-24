@@ -25,7 +25,7 @@ public:
 
     void addPhysicsEntity(Entity *entity);
 
-    const EntityManager &getEntityManager() const;
+    EntityManager &getEntityManager();
     const PlayerFactory &getPlayerFactory() const;
     const BombFactory &getBombFactory() const;
 

@@ -2,7 +2,7 @@
 
 #include <network/Event.h>
 #include <network/NetworkData.h>
-
+#include <network/DeleteEvent.h>
 #include "ClientNetwork.h"
 
 class ClientEventHandlerLookup;

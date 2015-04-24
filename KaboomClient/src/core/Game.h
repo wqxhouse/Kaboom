@@ -25,8 +25,8 @@ public:
     void run();
 
     bool addSceneNodeEntity(Entity *entity);
-
-    const EntityManager &getEntityManager() const;
+	void deleteSceneNodeEntity(unsigned int id);
+    EntityManager &getEntityManager();
     const PlayerFactory &getPlayerFactory() const;
 	const BombFactory &getBombFactory() const;
 
