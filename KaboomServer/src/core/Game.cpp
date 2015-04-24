@@ -116,3 +116,6 @@ const BombFactory &Game::getBombFactory() const {
 const GameServer &Game::getGameServer() const {
     return server;
 }
+btDiscreteDynamicsWorld *Game::getBtDiscreteDynamicsWorld(){
+	return world;
+}

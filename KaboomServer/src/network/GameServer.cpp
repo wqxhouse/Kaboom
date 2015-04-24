@@ -65,7 +65,11 @@ void GameServer::receive(Game *game) {
 
 			
 			//TODO: Need to delete our rigid body and it's collision shape
-			
+			PhysicsComponent *phys=game->getEntityManager().getEntity(id)->getComponent<PhysicsComponent>();
+			game->getBtDiscreteDynamicsWorld()->removeRigidBody(phys->getRigidBody());
+			delete phys->getRigidBody()->getMotionState();
+			delete phys->getRigidBody();
+
 			game->getEntityManager().destroyEntity(id);
 
 
