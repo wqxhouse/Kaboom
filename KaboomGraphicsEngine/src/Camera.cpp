@@ -54,3 +54,11 @@ void Camera::setFarAndUpdate(float far)
 	_farPlane = far;
 	_projMatrix.makePerspective(_fovy, _screenSize.x() / _screenSize.y(), _nearPlane, far);
 }
+
+void Camera::setYawAndPitchAndUpdate(float yaw, float pitch)
+{
+	_euler.x() = yaw;
+	_euler.y() = pitch;
+
+
+}

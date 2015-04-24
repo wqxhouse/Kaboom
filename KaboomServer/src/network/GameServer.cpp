@@ -13,7 +13,7 @@
 
 unsigned int GameServer::client_id;
 
-GameServer::GameServer(ConfigSettings * config, ServerEventHandlerLookup *eventHandlerLookup)
+GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &eventHandlerLookup)
     : eventHandlerLookup(eventHandlerLookup) {
     // id's to assign clients for our table
     client_id = 0;
@@ -78,7 +78,7 @@ void GameServer::receive() {
         }
 
 		if (receivedPlayerInputEvent) { 
-			eventHandlerLookup->find(emptyEvent.getOpcode())->handle(playerInputEvent);
+			eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
 		}
     }
 }

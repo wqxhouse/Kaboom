@@ -2,12 +2,15 @@
 
 #include <ConfigSettings.h>
 #include <core/EntityManager.h>
+#include <Camera.h>
+#include <GeometryObjectManager.h>
+#include <MaterialManager.h>
 
 #include "BombFactory.h"
 #include "PlayerFactory.h"
+#include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 
-class ClientEventHandlerLookup;
 class InputManager;
 
 enum GameStateMachine {
@@ -24,13 +27,17 @@ public:
 
     void run();
 
-    bool addSceneNodeEntity(Entity *entity);
+	const GameClient &getGameClient() const;
+    //bool addSceneNodeEntity(Entity *entity);
 
     const EntityManager &getEntityManager() const;
     const PlayerFactory &getPlayerFactory() const;
 	const BombFactory &getBombFactory() const;
 
-    ClientEventHandlerLookup *getEventHandlerLookup() const;
+	GeometryObjectManager* getGeometryManager();
+	MaterialManager* getMaterialManager();
+	
+	Camera getCamera();
 
 private:
     ConfigSettings *config;
@@ -40,9 +47,13 @@ private:
     PlayerFactory playerFactory;
 	BombFactory bombFactory;
 
-    GameClient *client;
-    ClientEventHandlerLookup *eventHandlerLookup;
+    ClientEventHandlerLookup eventHandlerLookup;
+    GameClient client;
 
+	GeometryObjectManager * _geometryManager;
+	MaterialManager * _materialManager;
+
+	Camera _camera;
     // osgViewer::Viewer viewer;
     // osg::Group *rootNode;
     // void setupCamera();
