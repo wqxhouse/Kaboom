@@ -2,6 +2,8 @@
 
 #include <ConfigSettings.h>
 #include <core/EntityManager.h>
+#include <GeometryObjectManager.h>
+#include <MaterialManager.h>
 
 #include "BombFactory.h"
 #include "PlayerFactory.h"
@@ -30,6 +32,9 @@ public:
     const PlayerFactory &getPlayerFactory() const;
 	const BombFactory &getBombFactory() const;
 
+	GeometryObjectManager* getGeometryManager();
+	MaterialManager* getMaterialManager();
+
 private:
     ConfigSettings *config;
     InputManager *inputManager;
@@ -41,6 +46,8 @@ private:
     ClientEventHandlerLookup eventHandlerLookup;
     GameClient client;
 
+	GeometryObjectManager * _geometryManager;
+	MaterialManager * _materialManager;
     // osgViewer::Viewer viewer;
     // osg::Group *rootNode;
     // void setupCamera();
