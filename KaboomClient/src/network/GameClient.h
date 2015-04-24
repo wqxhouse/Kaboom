@@ -20,12 +20,13 @@ public:
 
 	unsigned int getCurrentPlayerEntityId() const;
 
+	bool getAssignedEntity() const;
 private:
     const ClientEventHandlerLookup &eventHandlerLookup;
 
     ClientNetwork network;
 
-    bool initialized;
+    bool assignedEntity;
 
 	unsigned int currentPlayerEntityId;
 };

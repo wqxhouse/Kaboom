@@ -3,11 +3,13 @@
 #include <core/Entity.h>
 #include <core/CharacteristicComponent.h>
 #include <core/PositionComponent.h>
+#include <core/PhysicsComponent.h>
 #include <network/EmptyEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/SpawnEvent.h>
+#include <network/AssignEvent.h>
 
 #include "../core/Game.h"
 
@@ -55,11 +57,16 @@ void GameServer::receive(Game *game) {
 				printf("\nsomething wrong with look up method\n");
 				continue;
 			}
-			game->getEntityManager().destroyEntity(id);
 			DeleteEvent deleteEvent(id);
 			char del[sizeof(DeleteEvent)];
 			deleteEvent.serialize(del);
 			network->sendToAll(del,sizeof(DeleteEvent));
+
+			
+			//TODO: Need to delete our rigid body and it's collision shape
+			
+			game->getEntityManager().destroyEntity(id);
+
 
 
 		}
@@ -155,4 +162,16 @@ void GameServer::sendPositionEvent(Entity* entity) {
 
     positionEvent.serialize(packet_data);
     network->sendToAll(packet_data, packet_size);
+}
+
+
+void GameServer::sendAssignPlayerEntity(unsigned int entityId) {
+
+	AssignEvent assignEvent(entityId);
+	const unsigned int packet_size = sizeof(AssignEvent);
+	char packet_data[packet_size];
+
+	assignEvent.serialize(packet_data);
+	network->sendToOneClient(packet_data, packet_size, entityId);
+
 }

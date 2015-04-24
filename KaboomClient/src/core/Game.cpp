@@ -104,6 +104,7 @@ void Game::run() {
 			}
 			break;
 		case DISCONNECT_TO_SERVER:
+			//TODO: need to remove all the dynamically genereated objects! otherwise we still see them the next time we reconnect
 			client.disconnectFromServer();
 			gsm = EDITOR_MODE;
 			break;

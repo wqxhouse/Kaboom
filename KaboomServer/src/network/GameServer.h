@@ -25,6 +25,8 @@ public:
 	void sendEntitySpawnEvent(Entity* newEntity);
 	void sendAllEntitiesSpawnEvent(Entity* newEntity, std::vector<Entity *> players);
 
+	void sendAssignPlayerEntity(unsigned int);
+
 private:
     const ServerEventHandlerLookup &eventHandlerLookup;
 
