@@ -40,6 +40,8 @@ public:
 	
 	Camera &getCamera();
 
+	void removeAllDynamicEntity();
+
 private:
     ConfigSettings *config;
     InputManager *inputManager;
