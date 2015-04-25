@@ -22,6 +22,7 @@
 #include "CustomFirstPersonManipulator.h"
 #include "GeometryPicker.h"
 #include "GeometryObjectManipulator.h"
+#include "CubemapUtil.h"
 
 // TODO: log which one called the global functions in Core
 // for debugging
@@ -358,6 +359,28 @@ void Core::setEnvironmentMap(
 		osgDB::readImageFile(posZ), osgDB::readImageFile(negZ));
 
 	_hasEnvMap = true;
+}
+
+void Core::setEnvironmentMapVerticalCross(const std::string &cubemap)
+{
+	CubemapUtil ut;
+	bool res = ut.loadVerticalCross(cubemap);
+	if (res)
+	{
+		_skybox->setEnvironmentMap(0,
+			ut.getImage(osg::TextureCubeMap::POSITIVE_X),
+			ut.getImage(osg::TextureCubeMap::NEGATIVE_X),
+			ut.getImage(osg::TextureCubeMap::POSITIVE_Y),
+			ut.getImage(osg::TextureCubeMap::NEGATIVE_Y),
+			ut.getImage(osg::TextureCubeMap::POSITIVE_Z),
+			ut.getImage(osg::TextureCubeMap::NEGATIVE_Z));
+
+		_hasEnvMap = true;
+	}
+	else
+	{
+		OSG_WARN << "Environment map set failed" << std::endl;
+	}
 }
 
 void Core::disablePassDataDisplay()
