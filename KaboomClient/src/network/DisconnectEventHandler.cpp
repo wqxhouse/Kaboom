@@ -14,5 +14,10 @@ DisconnectEventHandler::~DisconnectEventHandler() {
 void DisconnectEventHandler::handle(const Event &e) const {
     const DisconnectEvent &evt = static_cast<const DisconnectEvent &>(e);
 
-    // TODO: Handle player disconnect event.
+    EntityManager &entityManager = game->getEntityManager();
+    Entity *player = entityManager.getEntity(evt.getPlayerId());
+
+    game->getGeometryManager()->deleteGeometry(std::to_string(evt.getPlayerId()));
+
+    entityManager.destroyEntity(player->getId());
 }
