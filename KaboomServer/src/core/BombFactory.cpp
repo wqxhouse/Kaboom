@@ -61,7 +61,7 @@ Entity *BombFactory::createBomb(BombType type, float x, float y, float z) const 
 }
 
 Entity *BombFactory::createBomb(BombType type, float x, float y, float z, float vx, float vy, float vz) const {
-    BombData data = bombs[type];
+    const BombData &data = bombs[type];
 
     btTransform startTrans = btTransform::getIdentity();
     startTrans.setOrigin(btVector3(x, y, z));
