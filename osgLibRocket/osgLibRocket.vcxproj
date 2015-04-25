@@ -213,7 +213,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomEngine\src;$(SolutionDir)ConfigSetting;$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomEngine\src;$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm140</AdditionalOptions>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <MinimalRebuild>true</MinimalRebuild>
