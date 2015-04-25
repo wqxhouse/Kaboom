@@ -3,6 +3,7 @@
 #include <core/Entity.h>
 #include <core/CharacteristicComponent.h>
 #include <core/PositionComponent.h>
+#include <core/RotationComponent.h>
 #include <network/EmptyEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
@@ -12,13 +13,8 @@
 
 #include "../core/Game.h"
 
-unsigned int GameServer::client_id;
-
 GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &eventHandlerLookup)
-    : eventHandlerLookup(eventHandlerLookup) {
-    // id's to assign clients for our table
-    client_id = 0;
-
+        : eventHandlerLookup(eventHandlerLookup) {
     printf("<Server> Creating a Network Server\n");
     // set up the server network to listen 
     network = new ServerNetwork(config);
@@ -34,8 +30,6 @@ GameServer::~GameServer() {
 bool GameServer::acceptNewClient(unsigned int entity_id) {
     if (network->acceptNewClient(entity_id)) {
         printf("<Server> Client %d has connected to the server\n", entity_id);
-
-        //client_id++;
 
         return true;
     }
@@ -117,75 +111,92 @@ void GameServer::receive(Game *game) {
     }
 }
 
-void GameServer::sendGameStatePackets(Game *game) const {
-    for (Entity *entity : game->getEntityManager().getEntityList()) {
-        sendPositionEvent(entity);
+void GameServer::sendEvent(const Event &evt) const {
+    const int size = evt.getByteSize();
+    char *data = new char[size];
+
+    evt.serialize(data);
+    network->sendToAll(data, size);
+
+    delete[] data;
+}
+
+void GameServer::sendEvent(const Event &evt, const unsigned int &clientId) const {
+    const int size = evt.getByteSize();
+    char *data = new char[size];
+
+    evt.serialize(data);
+    network->sendToOneClient(data, size, clientId);
+
+    delete[] data;
+}
+
+void GameServer::sendAssignEvent(const unsigned int &entityId) const {
+    AssignEvent assignEvent(entityId);
+    sendEvent(assignEvent, entityId);
+}
+
+void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *> &entities) const {
+    for (auto entity : entities) {
+        if (entity->getId() == player->getId()) {
+            continue;
+        }
+
+        PositionComponent *posComp = entity->getComponent<PositionComponent>();
+        CharacteristicComponent *charComp = entity->getComponent<CharacteristicComponent>();
+
+        if (posComp == nullptr || charComp == nullptr) {
+            return;
+        }
+
+        SpawnEvent spawnEvent(
+            entity->getId(),
+            posComp->getX(),
+            posComp->getY(),
+            posComp->getZ(),
+            charComp->getType(),
+            0);
+        sendEvent(spawnEvent, player->getId());
     }
 }
 
-void GameServer::sendEntitySpawnEvent(Entity* newEntity) const {
-	//send the spawn entity event to all the clients
-	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
-    CharacteristicComponent *charCom = newEntity->getComponent<CharacteristicComponent>();
-
-    if (positionCom == nullptr || charCom == nullptr) {
-		return;
-	}
-
-    SpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(), charCom->getType(), 0);
-
-    const unsigned int packet_size = sizeof(SpawnEvent);
-	char packet_data[packet_size];
-
-	playerSpawnEvent.serialize(packet_data);
-	network->sendToAll(packet_data, packet_size);
-
+void GameServer::sendGameStatePackets(const std::vector<Entity *> &entities) const {
+    for (Entity *entity : entities) {
+        sendPositionEvent(entity);
+        sendRotationEvent(entity);
+    }
 }
 
-void GameServer::sendAllEntitiesSpawnEvent(Entity* newEntity,std::vector<Entity *> existingEnities) const {
-	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
-	
-	const unsigned int packet_size = sizeof(SpawnEvent);
-	char packet_data[packet_size];
-	for (int i = 0; i < existingEnities.size(); i++){
-		if (existingEnities[i]->getId() == newEntity->getId()){
-			continue;
-		}
-		positionCom = existingEnities[i]->getComponent<PositionComponent>();
-		EntityType type = EntityType::UNINITIATED;
-		if (existingEnities[i]->getComponent<CharacteristicComponent>() != nullptr){
-			type = existingEnities[i]->getComponent<CharacteristicComponent>()->getType();
-		}
-        SpawnEvent extraEntity(existingEnities[i]->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(), type, 0);
-		extraEntity.serialize(packet_data);
-		network->sendToOneClient(packet_data, packet_size, newEntity->getId());
-	}
-}
+void GameServer::sendPositionEvent(Entity *entity) const {
+    PositionComponent *posComp = entity->getComponent<PositionComponent>();
 
-void GameServer::sendPositionEvent(Entity* entity) const {
-    PositionComponent *positionCom = entity->getComponent<PositionComponent>();
-
-    if (positionCom == nullptr) {
+    if (posComp == nullptr) {
         return;
     }
 
-    PositionEvent positionEvent(entity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ());
-
-    const unsigned int packet_size = sizeof(PositionEvent);
-    char packet_data[packet_size];
-
-    positionEvent.serialize(packet_data);
-    network->sendToAll(packet_data, packet_size);
+    PositionEvent posEvent(entity->getId(), posComp->getX(), posComp->getY(), posComp->getZ());
+    sendEvent(posEvent);
 }
 
+void GameServer::sendRotationEvent(Entity *entity) const {
+    RotationComponent *rotComp = entity->getComponent<RotationComponent>();
 
-void GameServer::sendAssignPlayerEntity(unsigned int entityId) {
+    if (rotComp == nullptr) {
+        return;
+    }
 
-	AssignEvent assignEvent(entityId);
-	const unsigned int packet_size = sizeof(AssignEvent);
-	char packet_data[packet_size];
+    RotationEvent rotEvent(entity->getId(), rotComp->getYaw(), rotComp->getPitch());
+    sendEvent(rotEvent);
+}
 
-	assignEvent.serialize(packet_data);
-	network->sendToOneClient(packet_data, packet_size, entityId);
+void GameServer::sendSpawnEvent(Entity *entity) const {
+    PositionComponent *posComp = entity->getComponent<PositionComponent>();
+    CharacteristicComponent *charComp = entity->getComponent<CharacteristicComponent>();
 
+    if (posComp == nullptr || charComp == nullptr) {
+        return;
+    }
+
+    SpawnEvent spawnEvent(entity->getId(), posComp->getX(), posComp->getY(), posComp->getZ(), charComp->getType(), 0);
+    sendEvent(spawnEvent);
 }

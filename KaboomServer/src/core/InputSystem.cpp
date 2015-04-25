@@ -93,7 +93,7 @@ void InputSystem::update(float timeStep)
                 viewDir.getY() * 5,
                 viewDir.getZ() * 5);
 			game->addPhysicsEntity(bomb);
-			game->getGameServer().sendEntitySpawnEvent(bomb);
+			game->getGameServer().sendSpawnEvent(bomb);
 		}
 	}
 }

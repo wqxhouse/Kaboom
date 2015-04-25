@@ -75,8 +75,9 @@ void GameClient::receive() {
             eventHandlerLookup.find(emptyEvent.getOpcode())->handle(positionEvent);
             break;
         case EventOpcode::ROTATION:
-            rotationEvent.deserialize(&networkData[i]);
-            eventHandlerLookup.find(emptyEvent.getOpcode())->handle(rotationEvent);
+            // TODO: Handle rotation event
+            //rotationEvent.deserialize(&networkData[i]);
+            //eventHandlerLookup.find(emptyEvent.getOpcode())->handle(rotationEvent);
             break;
         case EventOpcode::PLAYER_INPUT:
             playerInputEvent.deserialize(&networkData[i]);

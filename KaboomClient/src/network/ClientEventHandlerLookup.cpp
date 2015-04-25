@@ -1,8 +1,8 @@
 #include "ClientEventHandlerLookup.h"
 
+#include "DeleteEventHandler.h"
 #include "PositionEventHandler.h"
 #include "SpawnEventHandler.h"
-#include "DeleteEventHandler.h"
 
 ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
     addHandler(EventOpcode::POSITION, new PositionEventHandler(game));

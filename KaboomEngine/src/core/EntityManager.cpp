@@ -6,18 +6,24 @@
 #include "Entity.h"
 #include "CharacteristicComponent.h"
 
-EntityManager::EntityManager() {
+EntityManager::EntityManager()
+        : nextId(0) {
 }
 
 EntityManager::~EntityManager() {
 }
 
-Entity *EntityManager::createEntity() {
+unsigned int EntityManager::generateId() {
     while (isEntityAlive(nextId)) {
         ++nextId;
     }
+
+    return nextId;
+}
+
+Entity *EntityManager::createEntity() {
 	// TODO: figure out the logic here if createEntity() returns NULL
-    return createEntity(nextId++);
+    return createEntity(generateId());
 }
 
 Entity *EntityManager::createEntity(unsigned int id) {
@@ -59,10 +65,6 @@ Entity *EntityManager::getEntity(unsigned int id) const {
 
 bool EntityManager::isEntityAlive(unsigned int id) const {
     return entities.count(id) > 0;
-}
-
-unsigned int EntityManager::getNextId() const{
-	return nextId;
 }
 
 std::vector<Entity *> EntityManager::getEntityList() const {

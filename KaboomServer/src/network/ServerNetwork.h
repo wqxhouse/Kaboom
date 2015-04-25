@@ -33,7 +33,7 @@ public:
 	std::map<unsigned int, SOCKET> sessions;
 
 	// accept new connections
-	bool acceptNewClient(unsigned int & id);
+	bool acceptNewClient(unsigned int id);
 
 	// receive incoming data
 	int receiveData(unsigned int client_id, char * recvbuf);
