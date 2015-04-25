@@ -36,6 +36,7 @@
     <ClCompile Include="src\core\PlayerFactory.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
     <ClCompile Include="src\network\GameServer.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp" />
@@ -54,6 +55,7 @@
     <ClInclude Include="src\core\PhysicsComponent.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />
     <ClInclude Include="src\core\World.h" />
+    <ClInclude Include="src\network\DisconnectEventHandler.h" />
     <ClInclude Include="src\network\GameServer.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />

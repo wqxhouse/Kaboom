@@ -1,46 +1,42 @@
+#pragma once
+
+#include <unordered_map>
+#include <unordered_set>
+
 #include <Winsock2.h>
-//#include <Windows.h>
 #include <ws2tcpip.h>
-#include <map>
 
 #include <ConfigSettings.h>
 #include <network/NetworkData.h>
 
 #include "NetworkServices.h"
 
-
 using namespace std;
 
-class ServerNetwork
-{
-
+class ServerNetwork {
 public:
-	ConfigSettings * config;
+    ConfigSettings * config;
 
-	ServerNetwork(ConfigSettings *);
-	~ServerNetwork(void);
+    ServerNetwork(ConfigSettings *);
+    ~ServerNetwork(void);
 
-	// Socket to listen for new connections
-	SOCKET ListenSocket;
+    // Socket to listen for new connections
+    SOCKET ListenSocket;
 
-	// Socket to give to the clients
-	SOCKET ClientSocket;
+    // table to keep track of each client's socket
+    std::unordered_map<unsigned int, SOCKET> sessions;
 
-	// for error checking return values
-	int iResult;
+    // accept new connections
+    bool acceptNewClient(unsigned int id);
 
-	// table to keep track of each client's socket
-	std::map<unsigned int, SOCKET> sessions;
+    // receive incoming data
+    int receive(unsigned int clientId, char *recvbuf);
 
-	// accept new connections
-	bool acceptNewClient(unsigned int id);
+    void send(char *packet, int size);
+    void send(char *packet, int size, int clientId);
 
-	// receive incoming data
-	int receiveData(unsigned int client_id, char * recvbuf);
+    void removeDisconnectedClients();
 
-	// send data to all clients
-	void sendToAll(char * packets, int totalSize);
-
-	//send data to one client
-	void ServerNetwork::sendToOneClient(char * packets, int totalSize,int client_id);
+private:
+    std::unordered_set<unsigned int> disconnectedClients;
 };

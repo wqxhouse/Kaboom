@@ -1,5 +1,6 @@
 #include "GameClient.h"
 
+#include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
@@ -65,6 +66,12 @@ void GameClient::receive() {
 
                 break;
             }
+            case EventOpcode::DISCONNECT: {
+                DisconnectEvent disconnectEvent;
+                disconnectEvent.deserialize(&networkData[i]);
+                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
+                break;
+            }
             case EventOpcode::POSITION: {
                 PositionEvent positionEvent;
                 positionEvent.deserialize(&networkData[i]);
@@ -81,12 +88,6 @@ void GameClient::receive() {
                 SpawnEvent spawnEvent;
                 spawnEvent.deserialize(&networkData[i]);
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
-                break;
-            }
-            case EventOpcode::DELETE_ENTITY: {
-                DeleteEvent deleteEvent;
-                deleteEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(deleteEvent);
                 break;
             }
             default:

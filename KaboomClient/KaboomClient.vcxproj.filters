@@ -94,10 +94,10 @@
     <ClCompile Include="src\network\SpawnEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\DeleteEventHandler.cpp">
+    <ClCompile Include="src\network\RotationEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\RotationEventHandler.cpp">
+    <ClCompile Include="src\network\DisconnectEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -151,10 +151,10 @@
     <ClInclude Include="src\network\SpawnEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\DeleteEventHandler.h">
+    <ClInclude Include="src\network\RotationEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\RotationEventHandler.h">
+    <ClInclude Include="src\network\DisconnectEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
