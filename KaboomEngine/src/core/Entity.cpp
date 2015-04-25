@@ -1,10 +1,15 @@
 #include "Entity.h"
 
-Entity::Entity(unsigned int id)
-    : id(id) {
+#include "Component.h"
+
+Entity::Entity(const unsigned int &id)
+        : id(id) {
 }
 
 Entity::~Entity() {
+    for (auto it : components) {
+        delete it.second;
+    }
 }
 
 void Entity::attachComponent(Component *component) {
@@ -12,6 +17,6 @@ void Entity::attachComponent(Component *component) {
     components[&typeid(*component)] = component;
 }
 
-unsigned int Entity::getId() const {
+const unsigned int &Entity::getId() const {
     return id;
 }

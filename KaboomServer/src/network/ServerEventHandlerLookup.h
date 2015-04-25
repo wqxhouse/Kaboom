@@ -2,8 +2,6 @@
 
 #include <network/EventHandlerLookup.h>
 
-#include "../core/Game.h"
-
 class Game;
 
 class ServerEventHandlerLookup : public EventHandlerLookup {

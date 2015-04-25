@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<compositor>
+  <buffer_template name="buf_rgba8u" type="2d">
+    <internal_format>rgba</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>ubyte</source_type>
+  </buffer_template>
+  
+  <buffer_template name="buf_rgba16f" type="2d">
+    <internal_format>rgba16f</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>float</source_type>
+  </buffer_template>
+  
+  <buffer_template name="buf_rgba32f" type="2d">
+    <internal_format>rgba32f</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>float</source_type>
+  </buffer_template>
+  
+</compositor>
+

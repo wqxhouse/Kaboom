@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<bombs>
+    <bomb>
+        <id>0</id>
+        <name>Bom-Bom</name>
+        <size>0.1</size>
+        <mass>1.0</mass>
+    </bomb>
+</bombs>

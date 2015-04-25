@@ -2,7 +2,7 @@
 
 #include <network/EventHandler.h>
 
-#include "../core/Game.h"
+class Game;
 
 class PositionEventHandler : public EventHandler {
 public:

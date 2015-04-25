@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<compositor>
+  
+  <!--<shader name="gbuffer_plain_vs" type="vertex">
+    <version>120</version>
+    <file>Shaders/gbuffer_plain.vert</file>
+  </shader>
+
+  <shader name="gbuffer_plain_fs" type="fragment">
+    <version>120</version>
+    <file>Shaders/gbuffer_plain.frag</file>
+  </shader>
+
+  <uniform name="u_albedo" type="vec3">1.0 1.0 1.0</uniform>
+  <uniform name="u_roughness" type="float">1.0</uniform>
+  <uniform name="u_metallic" type="float">1.0</uniform>
+  <uniform name="u_translucent" type="float">1.0</uniform>
+  <uniform name="u_specular" type="float">1.0</uniform>-->
+  
+  <!--<shader name="gbuffer_material_vs" type="vertex">
+    <version>120</version>
+    <file>Shaders/gbuffer_material.vert</file>
+  </shader>
+
+  <shader name="gbuffer_material_fs" type="fragment">
+    <version>120</version>
+    <file>Shaders/gbuffer_material.frag</file>
+  </shader>-->
+  
+  <!-- RT0 = albedo + trans; RT1 = materials; RT2 = packed normal + linDepth;-->
+  <buffer name="b_RT0" template="buf_rgba8u" /> <!--32bit-->
+  <buffer name="b_RT1" template="buf_rgba8u" /> <!--32bit-->
+  <buffer name="b_RT2" template="buf_rgba16f" /> <!--64bit-->
+  
+</compositor>

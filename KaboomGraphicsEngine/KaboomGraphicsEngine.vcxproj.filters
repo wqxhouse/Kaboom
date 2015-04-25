@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Media">
+      <UniqueIdentifier>{00b62005-5a66-4877-8132-2b8a009b04a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Media\EffectFiles">
+      <UniqueIdentifier>{de0ff1da-2ec3-4980-92f3-cabaf6880997}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Media\Shaders">
+      <UniqueIdentifier>{e7156967-cfaf-4e07-bd88-d01139a8e2c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Media\Textures">
+      <UniqueIdentifier>{295211c6-3af2-44ae-917f-dbb5ea8092ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Media\Shaders\smaa">
+      <UniqueIdentifier>{66ede5de-5157-4efe-91f3-0d0899a94ed1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Visualizer">
+      <UniqueIdentifier>{315ad0ad-c350-4b3b-8ebb-69d6b9906616}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Visualizer">
+      <UniqueIdentifier>{59d2a9d9-1861-4f1a-b444-6f95b6e4c0a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CubemapUtil">
+      <UniqueIdentifier>{e57d99fb-643e-4148-b3d1-74436d0cca6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CubemapUtil">
+      <UniqueIdentifier>{04ab4550-9c88-456b-ac43-7f3d4a68e834}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="include\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomFirstPersonManipulator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DirectionalLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EffectCompositor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LightBound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LightManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LightPassCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LightPrePassCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MaterialManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SkyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TwGUIManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CompositorAnalysis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryPicker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryObjectManipulator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Visualizer.h">
+      <Filter>Header Files\Visualizer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AxisVisualizer.h">
+      <Filter>Header Files\Visualizer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CubemapUtil.h">
+      <Filter>Header Files\CubemapUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Core.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CustomFirstPersonManipulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DirectionalLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EffectAnalysisHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EffectCompositor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EffectCompositorXML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightBound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightPassCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightPrePassCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MaterialManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TwGUIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryPicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryObjectManipulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Visualizer.cpp">
+      <Filter>Source Files\Visualizer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AxisVisualizer.cpp">
+      <Filter>Source Files\Visualizer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CubemapUtil.cpp">
+      <Filter>Source Files\CubemapUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\GeometryPassPlain.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\LightPassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\LightPrePassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\Pipeline.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\template.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\Test.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\TestWorld.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Media\Shaders\constant.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\defaultQuad.vert">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\gbuffer_plain.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\gbuffer_plain.vert">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\gbuffer_textured.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\gbuffer_textured.vert">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\gbufferUtil.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\lightPass.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\lightPBRModel.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\lightTiling.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\lightUtil.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\lightCulling.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\Material.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\lightPassQuad.vert">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\BugList.txt" />
+    <None Include="..\Media\EffectFiles\smaa.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\blend.frag">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\blend.vert">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\edgedetection.frag">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\edgedetection.vert">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\neighborhood.frag">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\SMAA\neighborhood.vert">
+      <Filter>Media\Shaders\smaa</Filter>
+    </None>
+  </ItemGroup>
+</Project>

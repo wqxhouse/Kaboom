@@ -3,13 +3,11 @@
 #include <typeinfo>
 #include <unordered_map>
 
-#include "Component.h"
-
 class Component;
 
 class Entity {
 public:
-    Entity(unsigned int id);
+    Entity(const unsigned int &id);
     ~Entity();
 
     void attachComponent(Component *component);
@@ -28,7 +26,7 @@ public:
         }
     }
 
-    unsigned int getId() const;
+    const unsigned int &getId() const;
 
 private:
     unsigned int id;

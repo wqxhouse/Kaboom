@@ -1,18 +1,16 @@
 #include "SceneNodeComponent.h"
 
-#include <osg/MatrixTransform>
-
-SceneNodeComponent::SceneNodeComponent(osg::Node *node)
-    : node(node) {
+SceneNodeComponent::SceneNodeComponent(osg::ref_ptr<osg::Node> node)
+        : node(node) {
 }
 
 SceneNodeComponent::~SceneNodeComponent() {
 }
 
-osg::Node *SceneNodeComponent::getNode() const {
+osg::ref_ptr<osg::Node> SceneNodeComponent::getNode() const {
     return node;
 }
 
-void SceneNodeComponent::setNode(osg::Node *node) {
+void SceneNodeComponent::setNode(osg::ref_ptr<osg::Node> node) {
     this->node = node;
 }

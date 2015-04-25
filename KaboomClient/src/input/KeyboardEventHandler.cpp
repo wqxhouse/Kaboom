@@ -2,89 +2,85 @@
 
 #include <iostream>
 
-#include "InputManager.h"
+KeyboardEventHandler::KeyboardEventHandler(InputEventHandler &inputEventHandler)
+    : inputEventHandler(inputEventHandler) {
+}
+
+KeyboardEventHandler::~KeyboardEventHandler() {
+}
 
 bool KeyboardEventHandler::bindKey(int key, Function func) {
-    if (keyDownFuncMap.end() != keyDownFuncMap.find(key)) {
-        std::cout << "Duplicate key '" << key << "' ignored." << std::endl;
+    int lowerKey = tolower(key);
+
+    if (keyDownFuncMap.end() != keyDownFuncMap.find(lowerKey)) {
+        std::cout << "Duplicate key '" << lowerKey << "' ignored." << std::endl;
         return false;
     } else {
-        keyDownFuncMap[key].keyFunction = func;
+        keyDownFuncMap[lowerKey].keyFunction = func;
         return true;
     }
 }
 
 bool KeyboardEventHandler::bindKey(int key, KeyState state, Function func) {
+    int lowerKey = tolower(key);
+
     if (state == KEY_DOWN) {
-        return bindKey(key, func);
+        return bindKey(lowerKey, func);
     } else {
-        if (keyUpFuncMap.end() != keyUpFuncMap.find(key)) {
-            std::cout << "Duplicate key '" << key << "' ignored." << std::endl;
+        if (keyUpFuncMap.end() != keyUpFuncMap.find(lowerKey)) {
+            std::cout << "Duplicate key '" << lowerKey << "' ignored." << std::endl;
             return false;
         } else {
-            keyUpFuncMap[key].keyFunction = func;
+            keyUpFuncMap[lowerKey].keyFunction = func;
             return true;
         }
     }
 }
 
 bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &aa) {
-    KeyFunctionMap::iterator itr;
-    bool newKeyDownEvent = false;
-    bool newKeyUpEvent = false;
-
-    int centerx = (ea.getWindowX() + ea.getWindowWidth()) / 2;
-    int centery = (ea.getWindowY() + ea.getWindowHeight()) / 2;
-    int x = ea.getX();
-    int y = ea.getY();
-    int deltaX = x - prevX;
-    int deltaY = y - prevY;
+    int key = tolower(ea.getKey());
 
     switch (ea.getEventType()) {
-    case osgGA::GUIEventAdapter::KEYDOWN:
-        itr = keyDownFuncMap.find(ea.getKey());
+        case osgGA::GUIEventAdapter::KEYDOWN: {
+            bool newKeyDownEvent = false;
+            auto itr = keyDownFuncMap.find(key);
 
-        if (itr != keyDownFuncMap.end()) {
-            if (itr->second.keyState == KEY_UP) {
-                itr->second.keyState = KEY_DOWN;
-                newKeyDownEvent = true;
+            if (itr != keyDownFuncMap.end()) {
+                if (itr->second.keyState == KEY_UP) {
+                    itr->second.keyState = KEY_DOWN;
+                    newKeyDownEvent = true;
+                }
+
+                if (newKeyDownEvent) {
+                    (inputEventHandler.*(itr->second.keyFunction))();
+                    newKeyDownEvent = false;
+                }
+
+                return true;
             }
 
-            if (newKeyDownEvent) {
-                itr->second.keyFunction();
-                newKeyDownEvent = false;
+            return false;
+        }
+        case osgGA::GUIEventAdapter::KEYUP: {
+            bool newKeyUpEvent = false;
+            auto itr = keyDownFuncMap.find(key);
+
+            if (itr != keyDownFuncMap.end()) {
+                itr->second.keyState = KEY_UP;
             }
 
-            return true;
+            itr = keyUpFuncMap.find(key);
+
+            if (itr != keyUpFuncMap.end()) {
+                (inputEventHandler.*(itr->second.keyFunction))();
+                return true;
+            }
+
+            return false;
         }
-
-        return false;
-    case osgGA::GUIEventAdapter::KEYUP:
-        itr = keyDownFuncMap.find(ea.getKey());
-
-        if (itr != keyDownFuncMap.end()) {
-            itr->second.keyState = KEY_UP;
+        default: {
+            return false;
         }
-
-        itr = keyUpFuncMap.find(ea.getKey());
-
-        if (itr != keyUpFuncMap.end()) {
-            itr->second.keyFunction();
-            return true;
-        }
-
-        return false;
-    case osgGA::GUIEventAdapter::MOVE:
-        if (deltaX != 0 || deltaY != 0) {
-            InputManager::look(deltaX, deltaY);
-
-            prevX = x;
-            prevY = y;
-            //aa.requestWarpPointer(centerx, centery);
-        }
-        return false;
-    default:
-        return false;
     }
 }
 

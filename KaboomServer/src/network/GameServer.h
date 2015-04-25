@@ -1,44 +1,38 @@
 #pragma once
 
 #include <network/NetworkData.h>
-
+#include <core/BombContainerComponent.h>
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 #include "NetworkServices.h"
+#include "../core/PhysicsComponent.h"
 
-#include "../core/Game.h"
-
+class Entity;
 class Game;
-class ServerEventHandlerLookup;
 
 class GameServer {
 public:
-
-    GameServer(ConfigSettings *, Game *game);
+    GameServer(ConfigSettings *, const ServerEventHandlerLookup &eventHandlerLookup);
     ~GameServer();
 
     bool acceptNewClient(unsigned int);
 
-    void receive();
+    void receive(Game *game);
 
-    void sendGameStatePackets(Game *game);
+    void sendEvent(const Event &evt) const;
+    void sendEvent(const Event &evt, const unsigned int &clientId) const;
 
-	void sendPlayerSpawnEvent(Entity *entity, std::vector<Entity *> players);
+    void sendAssignEvent(const unsigned int &entityId) const;
+    void sendInitializeEvent(Entity* player, const std::vector<Entity *> &entities) const;
+    void sendDisconnectEvent(Entity *entity) const;
 
-    void sendPositionEvent(Entity *entity);
+    void sendGameStatePackets(const std::vector<Entity *> &entities) const;
+    void sendPositionEvent(Entity *entity) const;
+    void sendRotationEvent(Entity *entity) const;
+    void sendSpawnEvent(Entity *entity) const;
 
 private:
-    ServerEventHandlerLookup *eventHandlerLookup;
+    const ServerEventHandlerLookup &eventHandlerLookup;
 
-	// IDs for the clients connecting for table in ServerNetwork 
-	static unsigned int client_id;
-
-	// The ServerNetwork object 
-	ServerNetwork* network;
-
-	// data buffer
-	char network_data[MAX_PACKET_SIZE];
-
-	std::map<int, int> playerIndexNum;
-
+    ServerNetwork* network;
 };

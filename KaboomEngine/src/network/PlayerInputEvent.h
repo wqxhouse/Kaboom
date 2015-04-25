@@ -8,17 +8,18 @@ class PlayerInputEvent : public Event {
 public:
     PlayerInputEvent();
     PlayerInputEvent(unsigned int playerId,
-        bool movingForward,
-        bool movingBackward,
-        bool movingLeft,
-        bool movingRight,
-        bool jumping,
-        bool firing,
-        float yaw,
-        float pitch);
+            bool movingForward,
+            bool movingBackward,
+            bool movingLeft,
+            bool movingRight,
+            bool jumping,
+            bool firing,
+            float yaw,
+            float pitch);
     ~PlayerInputEvent();
 
     const unsigned int &getPlayerId() const;
+    void setPlayerId(const unsigned int &playerId);
 
     const bool &isMovingForward() const;
     const bool &isMovingBackward() const;
@@ -34,8 +35,6 @@ public:
 
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);
-
-	virtual void setPlayerId(unsigned int);
 
     friend std::ostream& operator<<(std::ostream &os, const PlayerInputEvent &o) {
         os << "PlayerInputEvent: {" << std::endl;

@@ -25,12 +25,6 @@
     <Filter Include="Source Files\Network">
       <UniqueIdentifier>{6ea51890-7afd-4cfc-a4c2-a51a5ed25813}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Util">
-      <UniqueIdentifier>{8402de62-27dd-4a1a-a94b-ecc0566aad9d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Util">
-      <UniqueIdentifier>{2a42afd3-1a72-4137-8fb7-2a05e12952e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{a514288e-2015-4033-b8a9-81be6c6ee91d}</UniqueIdentifier>
     </Filter>
@@ -57,9 +51,6 @@
     <ClCompile Include="src\input\KeyboardEventHandler.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\InputManager.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\ClientNetwork.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
@@ -68,9 +59,6 @@
     </ClCompile>
     <ClCompile Include="src\network\GameClient.cpp">
       <Filter>Source Files\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\ConfigSettings.cpp">
-      <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="src\core\SceneNodeComponent.cpp">
       <Filter>Source Files\Entity Component System</Filter>
@@ -84,11 +72,33 @@
     <ClCompile Include="src\network\PositionEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\PlayerSpawnEventHandler.cpp">
-      <Filter>Source Files\Network\Event Handlers</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\ClientEventHandlerLookup.cpp">
       <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\BombFactory.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\InputEventHandler.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\InputManager.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\MouseEventHandler.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\SpawnEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\RotationEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\DisconnectEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,12 +107,6 @@
     </ClInclude>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
       <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input\InputManager.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\ConfigSettings.h">
-      <Filter>Header Files\Util</Filter>
     </ClInclude>
     <ClInclude Include="src\network\ClientNetwork.h">
       <Filter>Header Files\Network</Filter>
@@ -125,11 +129,33 @@
     <ClInclude Include="src\network\PositionEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\PlayerSpawnEventHandler.h">
-      <Filter>Header Files\Network\Event Handlers</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\ClientEventHandlerLookup.h">
       <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="src\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\BombFactory.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\InputEventHandler.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\InputManager.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\MouseEventHandler.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\SpawnEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\RotationEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\DisconnectEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

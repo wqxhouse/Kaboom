@@ -2,21 +2,23 @@
 
 #include <WinSock2.h>
 
-#include "../util/ConfigSettings.h"
-
 class ClientNetwork {
 public:
-    ConfigSettings *config;
-
-    // for error checking function calls in Winsock library
-    int iResult;
-
-    // socket for client to connect to server
-    SOCKET clientSocket;
-
-    // ctor/dtor
-    ClientNetwork(ConfigSettings *);
+    ClientNetwork();
     ~ClientNetwork();
 
+    void connectToServer(const std::string &serverAddress, const int &serverPort);
+	void disconnectFromServer();
+
     int receivePackets(char *);
+    void sendMessage(char *message, int size) const;
+
+	inline bool isConnected() const
+	{
+		return _connected;
+	}
+
+private:
+    SOCKET clientSocket;
+	bool _connected;
 };

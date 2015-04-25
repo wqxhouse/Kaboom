@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="SemiDebug|Win32">
+      <Configuration>SemiDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="SemiDebug|x64">
+      <Configuration>SemiDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E24D41A4-8D90-45FF-9C55-6466187744AD}</ProjectGuid>
+    <RootNamespace>KaboomGraphicsEngine</RootNamespace>
+    <ProjectName>KaboomGraphicsEngine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)\3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)\3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)\3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)\3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)\3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)\3rdParty\bin\*.dll" "$(TargetDir)" /y
+xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
+      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+    </PostBuildEvent>
+    <Lib>
+      <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
+      <AdditionalDependencies>Comdlg32.lib</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\AxisVisualizer.h" />
+    <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\CompositorAnalysis.h" />
+    <ClInclude Include="include\Core.h" />
+    <ClInclude Include="include\CubemapUtil.h" />
+    <ClInclude Include="include\CustomFirstPersonManipulator.h" />
+    <ClInclude Include="include\DirectionalLight.h" />
+    <ClInclude Include="include\EffectCompositor.h" />
+    <ClInclude Include="include\GeometryObject.h" />
+    <ClInclude Include="include\GeometryObjectManager.h" />
+    <ClInclude Include="include\GeometryObjectManipulator.h" />
+    <ClInclude Include="include\GeometryPicker.h" />
+    <ClInclude Include="include\Light.h" />
+    <ClInclude Include="include\LightBound.h" />
+    <ClInclude Include="include\LightManager.h" />
+    <ClInclude Include="include\LightPassCallback.h" />
+    <ClInclude Include="include\LightPrePassCallback.h" />
+    <ClInclude Include="include\Material.h" />
+    <ClInclude Include="include\MaterialManager.h" />
+    <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\PointLight.h" />
+    <ClInclude Include="include\SkyBox.h" />
+    <ClInclude Include="include\TwGUIManager.h" />
+    <ClInclude Include="include\Visualizer.h" />
+    <ClInclude Include="include\World.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AxisVisualizer.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Core.cpp" />
+    <ClCompile Include="src\CubemapUtil.cpp" />
+    <ClCompile Include="src\CustomFirstPersonManipulator.cpp" />
+    <ClCompile Include="src\DirectionalLight.cpp" />
+    <ClCompile Include="src\EffectAnalysisHelper.cpp" />
+    <ClCompile Include="src\EffectCompositor.cpp" />
+    <ClCompile Include="src\EffectCompositorXML.cpp" />
+    <ClCompile Include="src\GeometryObject.cpp" />
+    <ClCompile Include="src\GeometryObjectManager.cpp" />
+    <ClCompile Include="src\GeometryObjectManipulator.cpp" />
+    <ClCompile Include="src\GeometryPicker.cpp" />
+    <ClCompile Include="src\Light.cpp" />
+    <ClCompile Include="src\LightBound.cpp" />
+    <ClCompile Include="src\LightManager.cpp" />
+    <ClCompile Include="src\LightPassCallback.cpp" />
+    <ClCompile Include="src\LightPrePassCallback.cpp" />
+    <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\MaterialManager.cpp" />
+    <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\PointLight.cpp" />
+    <ClCompile Include="src\SkyBox.cpp" />
+    <ClCompile Include="src\TwGUIManager.cpp" />
+    <ClCompile Include="src\Visualizer.cpp" />
+    <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\GeometryPassPlain.xml" />
+    <Xml Include="..\Media\EffectFiles\LightPassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\LightPrePassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\Pipeline.xml" />
+    <Xml Include="..\Media\EffectFiles\template.xml" />
+    <Xml Include="..\Media\EffectFiles\Test.xml" />
+    <Xml Include="..\Media\EffectFiles\TestWorld.xml" />
+    <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\BugList.txt" />
+    <None Include="..\Media\EffectFiles\smaa.xml" />
+    <None Include="..\Media\Shaders\constant.glsl" />
+    <None Include="..\Media\Shaders\defaultQuad.vert" />
+    <None Include="..\Media\Shaders\gbufferUtil.glsl" />
+    <None Include="..\Media\Shaders\gbuffer_plain.frag" />
+    <None Include="..\Media\Shaders\gbuffer_plain.vert" />
+    <None Include="..\Media\Shaders\gbuffer_textured.frag" />
+    <None Include="..\Media\Shaders\gbuffer_textured.vert" />
+    <None Include="..\Media\Shaders\lightCulling.glsl" />
+    <None Include="..\Media\Shaders\lightPass.frag" />
+    <None Include="..\Media\Shaders\lightPassQuad.vert" />
+    <None Include="..\Media\Shaders\lightPBRModel.glsl" />
+    <None Include="..\Media\Shaders\lightTiling.frag" />
+    <None Include="..\Media\Shaders\lightUtil.glsl" />
+    <None Include="..\Media\Shaders\Material.glsl" />
+    <None Include="..\Media\Shaders\SMAA\blend.frag" />
+    <None Include="..\Media\Shaders\SMAA\blend.vert" />
+    <None Include="..\Media\Shaders\SMAA\edgedetection.frag" />
+    <None Include="..\Media\Shaders\SMAA\edgedetection.vert" />
+    <None Include="..\Media\Shaders\SMAA\neighborhood.frag" />
+    <None Include="..\Media\Shaders\SMAA\neighborhood.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KaboomCommon\KaboomCommon.vcxproj">
+      <Project>{1608d432-d1e3-4cac-ab94-4cf307a6d9aa}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
