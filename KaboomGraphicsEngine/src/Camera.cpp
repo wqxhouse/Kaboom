@@ -96,3 +96,14 @@ void Camera::setFpsEyePositionAndUpdate(const osg::Vec3 &eye)
 {
 	setViewAndUpdate(eye, eye + _front, osg::Vec3(0, 0, 1));
 }
+
+osg::Quat Camera::eulerToQuat(float yaw, float pitch)
+{
+	osg::Quat q0;
+	osg::Quat q1;
+
+	q0.makeRotate(osg::DegreesToRadians(-yaw), 0, 0, 1);
+	q1.makeRotate(osg::DegreesToRadians(pitch), 1, 0, 0);
+
+	return q1 * q0;
+}
