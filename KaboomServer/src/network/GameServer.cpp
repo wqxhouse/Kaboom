@@ -1,20 +1,21 @@
 #include "GameServer.h"
 
-#include <core/Entity.h>
 #include <core/CharacteristicComponent.h>
+#include <core/Entity.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
+#include <network/AssignEvent.h>
+#include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/SpawnEvent.h>
-#include <network/AssignEvent.h>
 
 #include "../core/Game.h"
 
 GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &eventHandlerLookup)
-        : eventHandlerLookup(eventHandlerLookup) {
+    : eventHandlerLookup(eventHandlerLookup) {
     printf("<Server> Creating a Network Server\n");
     // set up the server network to listen 
     network = new ServerNetwork(config);
@@ -45,70 +46,56 @@ void GameServer::receive(Game *game) {
             break;
         }
 
-		int id = it.first;
-        int len = network->receiveData(it.first, network_data);
+        int id = it.first;
+        int len = network->receive(it.first, network_data);
 
-		if (len == 0){
-			
-			//handle player disconnect by sending delete messages to all clients about the deleted users entities
-			Entity *entity = game->getEntityManager().getEntity(id);
-
-            // HACK
-            if (entity == nullptr) {
-                continue;
-            }
-
-			if (entity->getComponent<BombContainerComponent>() == nullptr) {
-				printf("\nsomething wrong with look up method\n");
-				continue;
-			}
-			DeleteEvent deleteEvent(id);
-			char del[sizeof(DeleteEvent)];
-			deleteEvent.serialize(del);
-			network->sendToAll(del,sizeof(DeleteEvent));
-
-			
-			//TODO: Need to delete our rigid body and it's collision shape
-			PhysicsComponent *phys=game->getEntityManager().getEntity(id)->getComponent<PhysicsComponent>();
-			game->getWorld().removeRigidBody(phys->getRigidBody());
-			delete phys->getRigidBody()->getMotionState();
-			delete phys->getRigidBody();
-
-			game->getEntityManager().destroyEntity(id);
-		}
+        if (len == 0) {
+            DisconnectEvent disconnectEvent(id);
+            eventHandlerLookup.find(disconnectEvent.getOpcode())->handle(disconnectEvent);
+        }
 
         if (len <= 0) {
             continue;
         }
 
-        EmptyEvent emptyEvent;
-		PlayerInputEvent playerInputEvent;
-		bool receivedPlayerInputEvent = false;
+        bool receivedPlayerInputEvent = false;
 
         unsigned int i = 0;
         while (i < (unsigned int)len) {
+            EmptyEvent emptyEvent;
             emptyEvent.deserialize(&network_data[i]);
 
             switch (emptyEvent.getOpcode()) {
-            case EventOpcode::PLAYER_INPUT:
-                playerInputEvent.deserialize(&network_data[i]);
+                case EventOpcode::DISCONNECT: {
+                    DisconnectEvent disconnectEvent;
+                    disconnectEvent.deserialize(&network_data[i]);
+                    disconnectEvent.setPlayerId(id); // Prevent hacking from client impersonating as other clients
 
-				playerInputEvent.setPlayerId(it.first); //Important prevent hacking from client impersonating as other clients
-				receivedPlayerInputEvent = true;
+                    eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
+                }
+                case EventOpcode::PLAYER_INPUT: {
+                    PlayerInputEvent playerInputEvent;
+                    playerInputEvent.deserialize(&network_data[i]);
+                    playerInputEvent.setPlayerId(it.first); // Prevent hacking from client impersonating as other clients
 
-                break;
-            default:
-                printf("<Server> error in packet types\n");
-                break;
+                    if (!receivedPlayerInputEvent) {
+                        eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
+                        receivedPlayerInputEvent = true;
+                    }
+
+                    break;
+                }
+                default: {
+                    printf("<Server> error in packet types\n");
+                    break;
+                }
             }
 
             i += emptyEvent.getByteSize();
         }
-
-		if (receivedPlayerInputEvent) { 
-			eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
-		}
     }
+
+    network->removeDisconnectedClients();
 }
 
 void GameServer::sendEvent(const Event &evt) const {
@@ -116,7 +103,7 @@ void GameServer::sendEvent(const Event &evt) const {
     char *data = new char[size];
 
     evt.serialize(data);
-    network->sendToAll(data, size);
+    network->send(data, size);
 
     delete[] data;
 }
@@ -126,7 +113,7 @@ void GameServer::sendEvent(const Event &evt, const unsigned int &clientId) const
     char *data = new char[size];
 
     evt.serialize(data);
-    network->sendToOneClient(data, size, clientId);
+    network->send(data, size, clientId);
 
     delete[] data;
 }
@@ -158,6 +145,11 @@ void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *>
             0);
         sendEvent(spawnEvent, player->getId());
     }
+}
+
+void GameServer::sendDisconnectEvent(Entity *entity) const {
+    DisconnectEvent disconnectEvent(entity->getId());
+    sendEvent(disconnectEvent);
 }
 
 void GameServer::sendGameStatePackets(const std::vector<Entity *> &entities) const {
