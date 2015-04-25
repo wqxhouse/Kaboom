@@ -23,7 +23,8 @@ void RotationEventHandler::handle(const Event &e) const {
     rotComp->setYaw(evt.getYaw());
     rotComp->setPitch(evt.getPitch());
 
-    GeometryObject *geometryObj = game->getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
+    osg::Quat quat = game->getCamera().eulerToQuat(evt.getYaw(), 0.0f);
 
-    // TODO: Finish handling rotation
+    GeometryObject *geometryObj = game->getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
+    geometryObj->setRotation(quat);
 }
