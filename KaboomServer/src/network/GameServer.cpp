@@ -58,6 +58,12 @@ void GameServer::receive(Game *game) {
 			
 			//handle player disconnect by sending delete messages to all clients about the deleted users entities
 			Entity *entity = game->getEntityManager().getEntity(id);
+
+            // HACK
+            if (entity == nullptr) {
+                continue;
+            }
+
 			if (entity->getComponent<BombContainerComponent>() == nullptr) {
 				printf("\nsomething wrong with look up method\n");
 				continue;
@@ -75,9 +81,6 @@ void GameServer::receive(Game *game) {
 			delete phys->getRigidBody();
 
 			game->getEntityManager().destroyEntity(id);
-
-
-
 		}
 
         if (len <= 0) {
@@ -115,7 +118,7 @@ void GameServer::receive(Game *game) {
 }
 
 void GameServer::sendGameStatePackets(Game *game) const {
-    for (Entity *entity : game->getEntityManager().getPlayerList()) {
+    for (Entity *entity : game->getEntityManager().getEntityList()) {
         sendPositionEvent(entity);
     }
 }
@@ -123,12 +126,13 @@ void GameServer::sendGameStatePackets(Game *game) const {
 void GameServer::sendEntitySpawnEvent(Entity* newEntity) const {
 	//send the spawn entity event to all the clients
 	PositionComponent *positionCom = newEntity->getComponent<PositionComponent>();
+    CharacteristicComponent *charCom = newEntity->getComponent<CharacteristicComponent>();
 
-	if (positionCom == nullptr) {
+    if (positionCom == nullptr || charCom == nullptr) {
 		return;
 	}
 
-    SpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(), PLAYER, 0);
+    SpawnEvent playerSpawnEvent(newEntity->getId(), positionCom->getX(), positionCom->getY(), positionCom->getZ(), charCom->getType(), 0);
 
     const unsigned int packet_size = sizeof(SpawnEvent);
 	char packet_data[packet_size];
