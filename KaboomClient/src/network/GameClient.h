@@ -16,7 +16,7 @@ public:
     bool connectToServer(const std::string &serverAddress, const int serverPort);
 	bool disconnectFromServer();
 
-    void sendMessage(const Event &evt);
+    void sendMessage(const Event &evt) const;
 
 	unsigned int getCurrentPlayerEntityId() const;
 
