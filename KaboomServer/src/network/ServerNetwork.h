@@ -6,8 +6,8 @@
 #include <Winsock2.h>
 #include <ws2tcpip.h>
 
-#include <ConfigSettings.h>
 #include <network/NetworkData.h>
+#include <util/ConfigSettings.h>
 
 #include "NetworkServices.h"
 

@@ -64,7 +64,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConfigSetting\ConfigSetting.vcxproj">
+    <ProjectReference Include="..\KaboomCommon\KaboomCommon.vcxproj">
       <Project>{1608d432-d1e3-4cac-ab94-4cf307a6d9aa}</Project>
     </ProjectReference>
     <ProjectReference Include="..\KaboomEngine\KaboomEngine.vcxproj">
@@ -238,7 +238,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)ConfigSetting;$(SolutionDir)\KaboomEngine\src;$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>

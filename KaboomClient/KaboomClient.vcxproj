@@ -218,7 +218,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomEngine\src;$(SolutionDir)ConfigSetting;$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -294,7 +294,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="Config.ini" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConfigSetting\ConfigSetting.vcxproj">
+    <ProjectReference Include="..\KaboomCommon\KaboomCommon.vcxproj">
       <Project>{1608d432-d1e3-4cac-ab94-4cf307a6d9aa}</Project>
     </ProjectReference>
     <ProjectReference Include="..\KaboomEngine\KaboomEngine.vcxproj">

@@ -4,8 +4,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <ConfigSettings.h>
 #include <core/EntityManager.h>
+#include <util/ConfigSettings.h>
 
 #include "BombFactory.h"
 #include "InputSystem.h"

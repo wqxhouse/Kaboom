@@ -1,7 +1,8 @@
 #pragma once
 
-#include <ConfigSettings.h>
 #include <core/EntityManager.h>
+#include <util/ConfigSettings.h>
+
 #include <Camera.h>
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
