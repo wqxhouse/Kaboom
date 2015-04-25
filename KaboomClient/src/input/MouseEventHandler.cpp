@@ -3,7 +3,7 @@
 #include <osgViewer/GraphicsWindow>
 
 MouseEventHandler::MouseEventHandler(InputEventHandler &inputEventHandler)
-    : inputEventHandler(inputEventHandler) {
+        : inputEventHandler(inputEventHandler) {
 }
 
 MouseEventHandler::~MouseEventHandler() {
@@ -34,72 +34,69 @@ bool MouseEventHandler::bindKey(int key, KeyState state, Function func) {
 }
 
 bool MouseEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &aa) {
-	if (!Core::isInGameMode()) return false;
-
-    KeyFunctionMap::iterator itr;
-    bool newKeyDownEvent = false;
-    bool newKeyUpEvent = false;
-
-    int centerX = (ea.getWindowX() + ea.getWindowWidth()) / 2;
-    int centerY = (ea.getWindowY() + ea.getWindowHeight()) / 2;
-    int x = ea.getX();
-    int y = ea.getY();
-    int dx = x - centerX;
-    int dy = y - centerY;
-
-    float dyaw = 0;
-    float dpitch = 0;
+    if (!Core::isInGameMode()) {
+        return false;
+    }
 
     switch (ea.getEventType()) {
-    case osgGA::GUIEventAdapter::KEYDOWN:
-        itr = keyDownFuncMap.find(ea.getKey());
+        case osgGA::GUIEventAdapter::PUSH: {
+            bool newMouseDownEvent = false;
+            auto itr = keyDownFuncMap.find(ea.getButton());
 
-        if (itr != keyDownFuncMap.end()) {
-            if (itr->second.keyState == KEY_UP) {
-                itr->second.keyState = KEY_DOWN;
-                newKeyDownEvent = true;
+            if (itr != keyDownFuncMap.end()) {
+                if (itr->second.keyState == KEY_UP) {
+                    itr->second.keyState = KEY_DOWN;
+                    newMouseDownEvent = true;
+                }
+
+                if (newMouseDownEvent) {
+                    (inputEventHandler.*(itr->second.keyFunction))();
+                    newMouseDownEvent = false;
+                }
+
+                return true;
             }
 
-            if (newKeyDownEvent) {
+            return false;
+        }
+        case osgGA::GUIEventAdapter::RELEASE: {
+            bool newMouseUpEvent = false;
+            auto itr = keyDownFuncMap.find(ea.getButton());
+
+            if (itr != keyDownFuncMap.end()) {
+                itr->second.keyState = KEY_UP;
+            }
+
+            itr = keyUpFuncMap.find(ea.getButton());
+
+            if (itr != keyUpFuncMap.end()) {
                 (inputEventHandler.*(itr->second.keyFunction))();
-                newKeyDownEvent = false;
+                return true;
+            }
+
+            return false;
+        }
+        case osgGA::GUIEventAdapter::DRAG:
+        case osgGA::GUIEventAdapter::MOVE: {
+            int centerX = (ea.getWindowX() + ea.getWindowWidth()) / 2;
+            int centerY = (ea.getWindowY() + ea.getWindowHeight()) / 2;
+            int dx = ea.getX() - centerX;
+            int dy = ea.getY() - centerY;
+
+            if (dx != 0 || dy != 0) {
+                float dyaw = dx * Core::getLastFrameDuration() * 3; // TODO: add mouse sensitivity
+                float dpitch = dy * Core::getLastFrameDuration() * 3;
+
+                inputEventHandler.onLook(dyaw, dpitch);
+                aa.requestWarpPointer(centerX, centerY);
+                return true;
             }
 
             return true;
         }
-
-        return false;
-    case osgGA::GUIEventAdapter::KEYUP:
-        itr = keyDownFuncMap.find(ea.getKey());
-
-        if (itr != keyDownFuncMap.end()) {
-            itr->second.keyState = KEY_UP;
+        default: {
+            return false;
         }
-
-        itr = keyUpFuncMap.find(ea.getKey());
-
-        if (itr != keyUpFuncMap.end()) {
-            (inputEventHandler.*(itr->second.keyFunction))();
-            return true;
-        }
-
-        return false;
-	case osgGA::GUIEventAdapter::MOVE:
-	{
-		static int x = 0;
-		if (dx != 0 || dy != 0) {
-			dyaw = dx * Core::getLastFrameDuration() * 3; // TODO: add mouse sensitivity
-			dpitch = dy * Core::getLastFrameDuration() * 3;
-
-			inputEventHandler.onLook(dyaw, dpitch);
-			aa.requestWarpPointer(centerX, centerY);
-			return true;
-		}
-
-		return true;
-	}
-    default:
-        return false;
     }
 
 }

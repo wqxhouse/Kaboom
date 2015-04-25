@@ -22,8 +22,8 @@ void InputManager::loadConfig() {
     keyboardEventHandler.bindKey('d', KeyboardEventHandler::KEY_UP, &InputEventHandler::onMoveRightUp);
     keyboardEventHandler.bindKey(' ', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onJumpDown);
     keyboardEventHandler.bindKey(' ', KeyboardEventHandler::KEY_UP, &InputEventHandler::onJumpUp);
-    keyboardEventHandler.bindKey('f', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onFireDown);
-    keyboardEventHandler.bindKey('f', KeyboardEventHandler::KEY_UP, &InputEventHandler::onFireUp);
+    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_DOWN, &InputEventHandler::onFireDown);
+    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_UP, &InputEventHandler::onFireUp);
 
 	// editor related
 	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F8, KeyboardEventHandler::KEY_UP, &InputEventHandler::enterGameMode);
