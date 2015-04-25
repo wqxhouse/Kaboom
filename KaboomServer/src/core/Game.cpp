@@ -58,7 +58,7 @@ void Game::update(float timeStep) {
 	//HERE is where the client first connect to server,
     //we want to have client load the gameworld first,
     //then create the player, and send the spawn player event to client
-	if (server.acceptNewClient(entityManager.getNextId())) {
+	if (server.acceptNewClient(entityManager.generateId())) {
 
 		//now we create a new player
         Entity *player = playerFactory.createPlayer(0, -5, 5);
@@ -66,16 +66,16 @@ void Game::update(float timeStep) {
         addPhysicsEntity(player);
 
         //first notify the new client what entityId it should keep track of
-        server.sendAssignPlayerEntity(player->getId());
+        server.sendAssignEvent(player->getId());
 
         //second send the new client about all the exisiting entities
-        server.sendAllEntitiesSpawnEvent(player, entityManager.getEntityList());
+        server.sendInitializeEvent(player, entityManager.getEntityList());
 
         //then send the new spawn player entity to all the clients
-        server.sendEntitySpawnEvent(player);
+        server.sendSpawnEvent(player);
 
         //lastly send the game state for each entity
-        server.sendGameStatePackets(this);
+        server.sendGameStatePackets(getEntityManager().getEntityList());
     }
 
     server.receive(this);
@@ -93,16 +93,14 @@ void Game::update(float timeStep) {
     for (Entity *entity : entityManager.getEntityList()) {
         PositionComponent *posCom = entity->getComponent<PositionComponent>();
         PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
-        RotationComponent *rotCom = entity->getComponent<RotationComponent>();
 
         const btTransform &worldTrans = physCom->getRigidBody()->getWorldTransform();
         const btVector3 &pos = worldTrans.getOrigin();
         
         posCom->setPosition(pos.getX(), pos.getY(), pos.getZ());
-        // TODO: set rotation
     }
 
-    server.sendGameStatePackets(this);
+    server.sendGameStatePackets(getEntityManager().getEntityList());
 }
 
 EntityManager &Game::getEntityManager() {

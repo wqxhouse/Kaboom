@@ -95,7 +95,7 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config)
 		printf("<Server> Begin listening on port %d\n", ntohs(sin.sin_port));
 }
 
-bool ServerNetwork::acceptNewClient(unsigned int & id){
+bool ServerNetwork::acceptNewClient(unsigned int id){
 	// if client waiting, accept the connection and save the socket
 	ClientSocket = accept(ListenSocket, NULL, NULL);
 

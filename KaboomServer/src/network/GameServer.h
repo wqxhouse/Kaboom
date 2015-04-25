@@ -20,20 +20,19 @@ public:
 
     void receive(Game *game);
 
-    void sendGameStatePackets(Game *game) const;
+    void sendEvent(const Event &evt) const;
+    void sendEvent(const Event &evt, const unsigned int &clientId) const;
 
+    void sendAssignEvent(const unsigned int &entityId) const;
+    void sendInitializeEvent(Entity* player, const std::vector<Entity *> &entities) const;
+
+    void sendGameStatePackets(const std::vector<Entity *> &entities) const;
     void sendPositionEvent(Entity *entity) const;
-	void sendEntitySpawnEvent(Entity* newEntity) const;
-    void sendAllEntitiesSpawnEvent(Entity* newEntity, std::vector<Entity *> players) const;
-
-	void sendAssignPlayerEntity(unsigned int);
+    void sendRotationEvent(Entity *entity) const;
+    void sendSpawnEvent(Entity *entity) const;
 
 private:
     const ServerEventHandlerLookup &eventHandlerLookup;
 
-	// IDs for the clients connecting for table in ServerNetwork 
-	static unsigned int client_id;
-
-	// The ServerNetwork object 
-	ServerNetwork* network;
+    ServerNetwork* network;
 };
