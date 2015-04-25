@@ -14,6 +14,13 @@
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
 #include "MaterialManager.h"
+#include <fstream>
+
+const std::string GEOM_GROUP_NAME = "Edit GeometryObject";
+const std::string LIGHT_GROUP_NAME = "Edit Light";
+const std::string POS_X_LABEL = "posX";
+const std::string POS_Y_LABEL = "posY";
+const std::string POS_Z_LABEL = "posZ";
 
 class Core;
 class TwGUIManager : public osgGA::GUIEventHandler, public osg::Camera::DrawCallback
@@ -46,8 +53,12 @@ public:
 	virtual void operator()(osg::RenderInfo& renderInfo) const;
 
 	static void exportXML();
+	static void addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index);
+	static void addLightToGUI(TwBar* bar, Light* geom, std::string group, int& index);
 
 protected:
+	static int _index;
+
 	struct Position
 	{
 		float x;
@@ -64,6 +75,7 @@ protected:
 		TwTerminate();
 		g_twBar = NULL;
 		g_manipulatorSelectorBar = NULL;
+		g_addBar = NULL;
 	}
 
 	TwMouseButtonID getTwButton(int button) const;
@@ -72,11 +84,17 @@ protected:
 
 	void initMainBar();
 	void initManipuatorSelectorBar();
+	void initAddBar();
 	
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;
 	TwBar *g_twBar;
 	TwBar *g_manipulatorSelectorBar;
+	TwBar *g_addBar;
 	char g_fileName[256]; // TODO: this is a hack, fix it
+
+	static std::string openFile();
+	static std::string getFileName(std::string s);
+	static void strToWCchar(wchar_t* w, std::string s);
 
 	static void write(std::ofstream &f, int tabs, std::string s);
 

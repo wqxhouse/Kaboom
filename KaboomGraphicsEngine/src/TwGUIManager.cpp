@@ -1,3 +1,4 @@
+#include <Windows.h>	// For "Open File" dialog
 #include "stdafx.h" 
 #include <ConfigSettings.h>
 
@@ -12,6 +13,7 @@
 #include "PointLight.h"
 #include "GeometryObjectManipulator.h"
 
+int TwGUIManager::_index = 0;
 
 TwGUIManager::TwGUIManager()
 // Note, this flag assumes that you do not touch viewer manipulator settings
@@ -27,8 +29,11 @@ TwGUIManager::TwGUIManager()
 
 void TwGUIManager::initializeTwGUI()
 {
+	_index = 0;
+
 	initMainBar();
 	initManipuatorSelectorBar();
+	initAddBar();
 }
 
 void TwGUIManager::initMainBar()
@@ -88,8 +93,8 @@ void TwGUIManager::initMainBar()
 
 	TwAddVarCB(g_twBar, "Camera Near Plane", TW_TYPE_FLOAT,
 		[](const void *data, void *clientData) {
-		const float *near = static_cast<const float *>(data);
-		Core::getMainCamera().setNearAndUpdate(*near);
+		const float *cam_near = static_cast<const float *>(data);
+		Core::getMainCamera().setNearAndUpdate(*cam_near);
 	}, [](void *data, void *clientData) {
 		float fov = Core::getMainCamera().getNearPlane();
 		*(float *)data = fov;
@@ -97,8 +102,8 @@ void TwGUIManager::initMainBar()
 
 	TwAddVarCB(g_twBar, "Camera Far Plane", TW_TYPE_FLOAT,
 		[](const void *data, void *clientData) {
-		const float *far = static_cast<const float *>(data);
-		Core::getMainCamera().setFarAndUpdate(*far);
+		const float *cam_far = static_cast<const float *>(data);
+		Core::getMainCamera().setFarAndUpdate(*cam_far);
 	}, [](void *data, void *clientData) {
 		float fov = Core::getMainCamera().getFarPlane();
 		*(float *)data = fov;
@@ -116,11 +121,6 @@ void TwGUIManager::initMainBar()
 	TwAddSeparator(g_twBar, NULL, NULL);
 
 	// Process geometries
-	std::string GeomGroupName = "Edit GeometryObject";
-	int index = 0;
-	std::string posXLabel = "posX";
-	std::string posYLabel = "posY";
-	std::string posZLabel = "posZ";
 	const std::unordered_map<std::string, GeometryObject *> &gmMap = _gm->getGeometryObjectMapRef();
 	for (std::unordered_map<std::string, GeometryObject *>::const_iterator it = gmMap.begin();
 		it != gmMap.end(); ++it)
@@ -128,246 +128,19 @@ void TwGUIManager::initMainBar()
 		const std::string &name = it->first;
 		GeometryObject *geom = it->second;
 
-		std::string nameGroupDef = " group='" + name + "' ";
-
-		std::string indexStr = std::to_string(index);
-		std::string posXVarName = posXLabel + indexStr;
-		std::string posYVarName = posYLabel + indexStr;
-		std::string posZVarName = posZLabel + indexStr;
-
-		std::string posXDef = nameGroupDef + " label='" + posXLabel + "'";
-		TwAddVarCB(g_twBar, posXVarName.c_str(), TW_TYPE_FLOAT,
-			[](const void *value, void *clientData) {
-			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-			float posX = *(const float *)value;
-			osg::Vec3 oldPos = obj->getTranslate();
-			osg::Vec3 newPos = osg::Vec3(posX, oldPos.y(), oldPos.z());
-			obj->setTranslate(newPos);
-		},
-			[](void *value, void *clientData) {
-			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-			float *posX = static_cast<float *>(value);
-
-			osg::Vec3 pos = obj->getTranslate();
-			*posX = pos.x();
-		},
-			geom, posXDef.c_str());
-
-		std::string posYDef = nameGroupDef + " label='" + posYLabel + "'";
-		TwAddVarCB(g_twBar, posYVarName.c_str(), TW_TYPE_FLOAT,
-			[](const void *value, void *clientData) {
-			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-			float posY = *(const float *)value;
-			osg::Vec3 oldPos = obj->getTranslate();
-			osg::Vec3 newPos = osg::Vec3(oldPos.x(), posY, oldPos.z());
-			obj->setTranslate(newPos);
-		},
-			[](void *value, void *clientData) {
-			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-			float *posY = static_cast<float *>(value);
-
-			osg::Vec3 pos = obj->getTranslate();
-			*posY = pos.y();
-		},
-			geom, posYDef.c_str());
-
-		std::string posZDef = nameGroupDef + " label='" + posZLabel + "'";
-		TwAddVarCB(g_twBar, posZVarName.c_str(), TW_TYPE_FLOAT,
-			[](const void *value, void *clientData) {
-			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-			float posZ = *(const float *)value;
-			osg::Vec3 oldPos = obj->getTranslate();
-			osg::Vec3 newPos = osg::Vec3(oldPos.x(), oldPos.y(), posZ);
-			obj->setTranslate(newPos);
-		},
-			[](void *value, void *clientData) {
-			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-			float *posZ = static_cast<float *>(value);
-
-			osg::Vec3 pos = obj->getTranslate();
-			*posZ = pos.z();
-		},
-			geom, posZDef.c_str());
-
-		std::string rotationVarName = "rotation" + std::to_string(index);
-		std::string rotationDef = nameGroupDef + " label='rotation'";
-		TwAddVarCB(g_twBar, rotationVarName.c_str(), TW_TYPE_QUAT4F,
-			[](const void *value, void *clientData) {
-			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-			const float *rotArr = static_cast<const float *>(value);
-
-			// seems like ant tweak bar is nice enough to provide temp buffer for load/write
-			// so that the following is safe
-			osg::Quat newRot = osg::Quat(rotArr[0], rotArr[1], rotArr[2], rotArr[3]);
-			obj->setRotation(newRot);
-		},
-			[](void *value, void *clientData) {
-			GeometryObject *obj = static_cast<GeometryObject *>(clientData);
-			float *rotArr = static_cast<float *>(value);
-
-			osg::Quat rot = obj->getRotation();
-			rotArr[0] = rot.x();
-			rotArr[1] = rot.y();
-			rotArr[2] = rot.z();
-			rotArr[3] = rot.w();
-		},
-			geom, rotationDef.c_str());
-
-		std::string moveStr = " Main/" + name + " group='" + GeomGroupName + "'";
-		TwDefine(moveStr.c_str());
-
-		index++;
+		// Moved code to a function
+		addModelToGUI(g_twBar, geom, GEOM_GROUP_NAME, _index);
 	}
 
 	//index = 0;
 
 	// process lights
-	std::string LightGroupStr = "Edit Light";
 	for (int i = 0; i < _lm->getNumLights(); i++)
 	{
 		Light *l = _lm->getLight(i);
-		std::string name = l->getName();
-		std::string nameGroupDef = " group='" + name + "' ";
 
-		std::string indexStr = std::to_string(index);
-		std::string posXVarName = posXLabel + indexStr;
-		std::string posYVarName = posYLabel + indexStr;
-		std::string posZVarName = posZLabel + indexStr;
-
-		if (l->getLightType() == DIRECTIONAL)
-		{
-			DirectionalLight *dl = l->asDirectionalLight();
-
-			// lightDir ( to light, not from light ) 
-			std::string dirToWorldVarName = "dirToWorld" + std::to_string(index);
-			std::string dirToWorldDef = nameGroupDef + " label='dirToWorld'";
-			TwAddVarCB(g_twBar, dirToWorldVarName.c_str(), TW_TYPE_DIR3F,
-				[](const void *value, void *clientData) {
-				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
-				const float *arr = static_cast<const float *>(value);
-				osg::Vec3 dir = osg::Vec3(arr[0], arr[1], arr[2]);
-				dl->setLightToWorldDirection(dir);
-			},
-				[](void *value, void *clientData) {
-				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
-				const osg::Vec3 &dir = dl->getLightToWorldDirection();
-				float *arr = static_cast<float *>(value);
-				arr[0] = dir.x(); arr[1] = dir.y(); arr[2] = dir.z();
-			},
-				dl, dirToWorldDef.c_str());
-
-			// TODO: color, later.... Too tired
-			// TW_TYPE_COLOR3F
-			std::string dirLightColorVarName = "Color" + std::to_string(index);
-			std::string dirLightColorDef = nameGroupDef + " label='Color'";
-			TwAddVarCB(g_twBar, dirLightColorVarName.c_str(), TW_TYPE_COLOR3F,
-				[](const void *value, void *clientData) {
-				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
-				const float *arr = static_cast<const float *>(value);
-				osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
-				dl->setColor(color);
-			},
-				[](void *value, void *clientData) {
-				DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
-				const osg::Vec3 &color = dl->getColor();
-				float *arr = static_cast<float *>(value);
-				arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
-			}, dl, dirLightColorDef.c_str());
-		}
-		else if (l->getLightType() == POINTLIGHT)
-		{
-			PointLight *pl = l->asPointLight();
-
-			std::string posXDef = nameGroupDef + " label='" + posXLabel + "'";
-			TwAddVarCB(g_twBar, posXVarName.c_str(), TW_TYPE_FLOAT,
-				[](const void *value, void *clientData) {
-				float posX = *(const float *)value;
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				const osg::Vec3 &oldPos = pl->getPosition();
-				pl->setPosition(osg::Vec3(posX, oldPos.y(), oldPos.z()));
-			},
-				[](void *value, void *clientData) {
-				float *posX = static_cast<float *>(value);
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				const osg::Vec3 &pos = pl->getPosition();
-				*posX = pos.x();
-
-			}, pl, posXDef.c_str());
-
-			std::string posYDef = nameGroupDef + " label='" + posYLabel + "'";
-			TwAddVarCB(g_twBar, posYVarName.c_str(), TW_TYPE_FLOAT,
-				[](const void *value, void *clientData) {
-				float posY = *(const float *)value;
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				const osg::Vec3 &oldPos = pl->getPosition();
-
-				pl->setPosition(osg::Vec3(oldPos.x(), posY, oldPos.z()));
-			},
-				[](void *value, void *clientData) {
-				float *posY = static_cast<float *>(value);
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				const osg::Vec3 &pos = pl->getPosition();
-				*posY = pos.y();
-
-			}, pl, posYDef.c_str());
-
-			std::string posZDef = nameGroupDef + " label='" + posZLabel + "'";
-			TwAddVarCB(g_twBar, posZVarName.c_str(), TW_TYPE_FLOAT,
-				[](const void *value, void *clientData) {
-				float posZ = *(const float *)value;
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				const osg::Vec3 &oldPos = pl->getPosition();
-				pl->setPosition(osg::Vec3(oldPos.x(), oldPos.y(), posZ));
-			},
-				[](void *value, void *clientData) {
-				float *posZ = static_cast<float *>(value);
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				const osg::Vec3 &pos = pl->getPosition();
-				*posZ = pos.z();
-
-			}, pl, posZDef.c_str());
-
-			// radius
-			std::string radiusDefStr = nameGroupDef + " label='radius' min=0";
-			std::string radiusVarStr = "radius" + indexStr;
-			TwAddVarCB(g_twBar, radiusVarStr.c_str(), TW_TYPE_FLOAT,
-				[](const void *value, void *clientData) {
-				float rad = *static_cast<const float *>(value);
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				pl->setRadius(rad);
-			},
-				[](void *value, void *clientData)
-			{
-				float *val = static_cast<float *>(value);
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				*val = pl->getRadius();
-			},
-				pl, radiusDefStr.c_str());
-
-			// TODO: add color ..
-			// TODO: color, later.... Too tired
-			// TW_TYPE_COLOR3F
-			std::string ptLightColorVarName = "Color" + std::to_string(index);
-			std::string ptLightColorDef = nameGroupDef + " label='Color'";
-			TwAddVarCB(g_twBar, ptLightColorVarName.c_str(), TW_TYPE_COLOR3F,
-				[](const void *value, void *clientData) {
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				const float *arr = static_cast<const float *>(value);
-				osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
-				pl->setColor(color);
-			},
-				[](void *value, void *clientData) {
-				PointLight *pl = static_cast<PointLight *>(clientData);
-				const osg::Vec3 &color = pl->getColor();
-				float *arr = static_cast<float *>(value);
-				arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
-			}, pl, ptLightColorDef.c_str());
-		}
-
-		std::string moveStr = " Main/" + name + " group='" + LightGroupStr + "'";
-		TwDefine(moveStr.c_str());
-
-		index++;
+		// Moved code to a function
+		addLightToGUI(g_twBar, l, LIGHT_GROUP_NAME, _index);
 	}
 }
 
@@ -429,6 +202,321 @@ void TwGUIManager::initManipuatorSelectorBar()
 		},
 			&_manipulatorBits, " label=Axis");
 
+}
+
+void TwGUIManager::initAddBar()
+{
+	g_addBar = TwNewBar("Add");
+	TwDefine(" Add size='150 10' color='216 96 224' position='1000 40'");
+
+	// 'Add model' button
+	TwAddButton(g_addBar, "Add model",
+		[](void *clientData) {
+
+		// For Windows functions
+		const size_t newsize = 4096;
+		wchar_t fromPath[newsize];
+		wchar_t toPath[newsize];
+		wchar_t newFile[newsize];
+
+		std::string filePath = openFile();
+		std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+		strToWCchar(fromPath, filePath);
+
+		// Get the destination path
+		ConfigSettings* config = ConfigSettings::config;
+		std::string str_mediaPath = "";
+		config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+
+		// Append the file name to the destination path -> new file location
+		strToWCchar(toPath, str_mediaPath);
+		strToWCchar(newFile, fileName);
+		wcscat_s(toPath, newFile);
+
+		bool didCopy = CopyFile(fromPath, toPath, FALSE);
+		DWORD dw = GetLastError();							// [Debug] Should be 0
+
+		// Add model to geometry manager
+		osg::Node *model = osgDB::readNodeFile(fileName);
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+
+		// Get the input name
+		std::string modelName;
+		std::cout << "Enter model name: ";
+		std::cin >> modelName;
+
+		gm->addGeometry(modelName, model, fileName);
+
+		// [Note: Does not handle duplicate names]
+		GeometryObject* geom = gm->getGeometryObject(modelName);
+
+		addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
+	},
+		g_twBar, NULL);
+
+	//// 'Add point light' button
+	//TwAddButton(g_addBar, "Add point light",
+	//	[](void *clientData) {
+
+	//	
+	//	// Add model to geometry manager
+	//	osg::Node *model = osgDB::readNodeFile(fileName);
+	//	GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+
+	//	// Get the input name
+	//	std::string modelName;
+	//	std::cout << "Enter model name: ";
+	//	std::cin >> modelName;
+
+	//	gm->addGeometry(modelName, model, fileName);
+
+	//	// [Note: Does not handle duplicate names]
+	//	GeometryObject* geom = gm->getGeometryObject(modelName);
+
+	//	addLightToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
+	//},
+	//	g_twBar, NULL);
+}
+
+void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index) {
+	std::string name = geom->getName();
+
+	std::string nameGroupDef = " group='" + name + "' ";
+
+	std::string indexStr = std::to_string(index);
+	std::string posXVarName = POS_X_LABEL + indexStr;
+	std::string posYVarName = POS_Y_LABEL + indexStr;
+	std::string posZVarName = POS_Z_LABEL + indexStr;
+
+	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
+	TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float posX = *(const float *)value;
+		osg::Vec3 oldPos = obj->getTranslate();
+		osg::Vec3 newPos = osg::Vec3(posX, oldPos.y(), oldPos.z());
+		obj->setTranslate(newPos);
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *posX = static_cast<float *>(value);
+
+		osg::Vec3 pos = obj->getTranslate();
+		*posX = pos.x();
+	},
+		geom, posXDef.c_str());
+
+	std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'";
+	TwAddVarCB(bar, posYVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float posY = *(const float *)value;
+		osg::Vec3 oldPos = obj->getTranslate();
+		osg::Vec3 newPos = osg::Vec3(oldPos.x(), posY, oldPos.z());
+		obj->setTranslate(newPos);
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *posY = static_cast<float *>(value);
+
+		osg::Vec3 pos = obj->getTranslate();
+		*posY = pos.y();
+	},
+		geom, posYDef.c_str());
+
+	std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'";
+	TwAddVarCB(bar, posZVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float posZ = *(const float *)value;
+		osg::Vec3 oldPos = obj->getTranslate();
+		osg::Vec3 newPos = osg::Vec3(oldPos.x(), oldPos.y(), posZ);
+		obj->setTranslate(newPos);
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *posZ = static_cast<float *>(value);
+
+		osg::Vec3 pos = obj->getTranslate();
+		*posZ = pos.z();
+	},
+		geom, posZDef.c_str());
+
+	std::string rotationVarName = "rotation" + std::to_string(index);
+	std::string rotationDef = nameGroupDef + " label='rotation'";
+	TwAddVarCB(bar, rotationVarName.c_str(), TW_TYPE_QUAT4F,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		const float *rotArr = static_cast<const float *>(value);
+
+		// seems like ant tweak bar is nice enough to provide temp buffer for load/write
+		// so that the following is safe
+		osg::Quat newRot = osg::Quat(rotArr[0], rotArr[1], rotArr[2], rotArr[3]);
+		obj->setRotation(newRot);
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *rotArr = static_cast<float *>(value);
+
+		osg::Quat rot = obj->getRotation();
+		rotArr[0] = rot.x();
+		rotArr[1] = rot.y();
+		rotArr[2] = rot.z();
+		rotArr[3] = rot.w();
+	},
+		geom, rotationDef.c_str());
+
+	std::string moveStr = " Main/" + name + " group='" + group + "'";
+	TwDefine(moveStr.c_str());
+
+	index++;
+}
+
+void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& index)
+{
+	std::string name = l->getName();
+
+	std::string nameGroupDef = " group='" + name + "' ";
+
+	std::string indexStr = std::to_string(_index);
+	std::string posXVarName = POS_X_LABEL + indexStr;
+	std::string posYVarName = POS_Y_LABEL + indexStr;
+	std::string posZVarName = POS_Z_LABEL + indexStr;
+
+	if (l->getLightType() == DIRECTIONAL)
+	{
+		DirectionalLight *dl = l->asDirectionalLight();
+
+		// lightDir ( to light, not from light ) 
+		std::string dirToWorldVarName = "dirToWorld" + std::to_string(index);
+		std::string dirToWorldDef = nameGroupDef + " label='dirToWorld'";
+		TwAddVarCB(bar, dirToWorldVarName.c_str(), TW_TYPE_DIR3F,
+			[](const void *value, void *clientData) {
+			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+			const float *arr = static_cast<const float *>(value);
+			osg::Vec3 dir = osg::Vec3(arr[0], arr[1], arr[2]);
+			dl->setLightToWorldDirection(dir);
+		},
+			[](void *value, void *clientData) {
+			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+			const osg::Vec3 &dir = dl->getLightToWorldDirection();
+			float *arr = static_cast<float *>(value);
+			arr[0] = dir.x(); arr[1] = dir.y(); arr[2] = dir.z();
+		},
+			dl, dirToWorldDef.c_str());
+
+		// TODO: color, later.... Too tired
+		// TW_TYPE_COLOR3F
+		std::string dirLightColorVarName = "Color" + std::to_string(index);
+		std::string dirLightColorDef = nameGroupDef + " label='Color'";
+		TwAddVarCB(bar, dirLightColorVarName.c_str(), TW_TYPE_COLOR3F,
+			[](const void *value, void *clientData) {
+			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+			const float *arr = static_cast<const float *>(value);
+			osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
+			dl->setColor(color);
+		},
+			[](void *value, void *clientData) {
+			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+			const osg::Vec3 &color = dl->getColor();
+			float *arr = static_cast<float *>(value);
+			arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
+		}, dl, dirLightColorDef.c_str());
+	}
+	else if (l->getLightType() == POINTLIGHT)
+	{
+		PointLight *pl = l->asPointLight();
+
+		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
+		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
+			[](const void *value, void *clientData) {
+			float posX = *(const float *)value;
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			const osg::Vec3 &oldPos = pl->getPosition();
+			pl->setPosition(osg::Vec3(posX, oldPos.y(), oldPos.z()));
+		},
+			[](void *value, void *clientData) {
+			float *posX = static_cast<float *>(value);
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			const osg::Vec3 &pos = pl->getPosition();
+			*posX = pos.x();
+
+		}, pl, posXDef.c_str());
+
+		std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'";
+		TwAddVarCB(bar, posYVarName.c_str(), TW_TYPE_FLOAT,
+			[](const void *value, void *clientData) {
+			float posY = *(const float *)value;
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			const osg::Vec3 &oldPos = pl->getPosition();
+
+			pl->setPosition(osg::Vec3(oldPos.x(), posY, oldPos.z()));
+		},
+			[](void *value, void *clientData) {
+			float *posY = static_cast<float *>(value);
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			const osg::Vec3 &pos = pl->getPosition();
+			*posY = pos.y();
+
+		}, pl, posYDef.c_str());
+
+		std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'";
+		TwAddVarCB(bar, posZVarName.c_str(), TW_TYPE_FLOAT,
+			[](const void *value, void *clientData) {
+			float posZ = *(const float *)value;
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			const osg::Vec3 &oldPos = pl->getPosition();
+			pl->setPosition(osg::Vec3(oldPos.x(), oldPos.y(), posZ));
+		},
+			[](void *value, void *clientData) {
+			float *posZ = static_cast<float *>(value);
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			const osg::Vec3 &pos = pl->getPosition();
+			*posZ = pos.z();
+
+		}, pl, posZDef.c_str());
+
+		// radius
+		std::string radiusDefStr = nameGroupDef + " label='radius' min=0";
+		std::string radiusVarStr = "radius" + indexStr;
+		TwAddVarCB(bar, radiusVarStr.c_str(), TW_TYPE_FLOAT,
+			[](const void *value, void *clientData) {
+			float rad = *static_cast<const float *>(value);
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			pl->setRadius(rad);
+		},
+			[](void *value, void *clientData)
+		{
+			float *val = static_cast<float *>(value);
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			*val = pl->getRadius();
+		},
+			pl, radiusDefStr.c_str());
+
+		// TODO: add color ..
+		// TODO: color, later.... Too tired
+		// TW_TYPE_COLOR3F
+		std::string ptLightColorVarName = "Color" + std::to_string(index);
+		std::string ptLightColorDef = nameGroupDef + " label='Color'";
+		TwAddVarCB(bar, ptLightColorVarName.c_str(), TW_TYPE_COLOR3F,
+			[](const void *value, void *clientData) {
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			const float *arr = static_cast<const float *>(value);
+			osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
+			pl->setColor(color);
+		},
+			[](void *value, void *clientData) {
+			PointLight *pl = static_cast<PointLight *>(clientData);
+			const osg::Vec3 &color = pl->getColor();
+			float *arr = static_cast<float *>(value);
+			arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
+		}, pl, ptLightColorDef.c_str());
+	}
+
+	std::string moveStr = " Main/" + name + " group='" + group + "'";
+	TwDefine(moveStr.c_str());
+
+	index++;
 }
 
 void TW_CALL TwGUIManager::loadModelFunc(void* clientData)
@@ -598,6 +686,58 @@ int TwGUIManager::getTwModKeyMask(int modkey) const
 	return twModkey;
 }
 
+std::string TwGUIManager::openFile()
+{
+	OPENFILENAME ofn = { sizeof ofn };
+	wchar_t file[1024];
+	file[0] = '\0';
+	ofn.lpstrFile = file;
+	ofn.nMaxFile = 1024;
+	ofn.Flags = OFN_ALLOWMULTISELECT | OFN_EXPLORER;
+
+	GetOpenFileName(&ofn);
+
+	std::wstring wtmp(ofn.lpstrFile);
+	std::string wstr(wtmp.begin(), wtmp.end());
+
+	return wstr;
+}
+
+std::string TwGUIManager::getFileName(std::string s)
+{
+	int pathSize = s.length();
+	int index = 0;
+	for (int i = 0; i < pathSize; i++) {
+		char c = s.at(i);
+		if (c == '\\') {
+			index = i;
+		}
+	}
+
+	index++;
+
+	char fileName[4096];
+	for (int i = index; i < pathSize; i++) {
+		fileName[i - index] = s.at(i);
+	}
+	fileName[pathSize - index] = '\0';
+
+	std::string str(fileName);
+	return str;
+}
+
+void TwGUIManager::strToWCchar(wchar_t* w, std::string s)
+{
+	const char* tmp = s.c_str();
+
+	size_t origsize = strlen(tmp) + 1;
+	size_t convertedChars = 0;
+	//const size_t newsize = 4096;
+	//wchar_t wcstring[newsize];
+	mbstowcs_s(&convertedChars, w, origsize, tmp, _TRUNCATE);
+
+}
+
 
 void TwGUIManager::write(std::ofstream &f, int tabs, std::string s)
 {
@@ -664,7 +804,11 @@ void TwGUIManager::exportXML()
 	// Might wanna move this code somewhere else
 	ConfigSettings* config = ConfigSettings::config;
 	std::string str_export_xml = "";
+	std::string str_mediaPath = "";
+	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
 	config->getValue(ConfigSettings::str_export_xml, str_export_xml);
+
+	std::string exportPath = str_mediaPath + str_export_xml;
 
 	// Open file to write
 	int tabs = 0;

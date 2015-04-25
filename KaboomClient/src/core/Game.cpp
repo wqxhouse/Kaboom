@@ -44,6 +44,17 @@ Game::Game(ConfigSettings *config)
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
     setupScene();
 
+	/* For testing in-game editor *
+	std::string str_mediaPath = "";
+	std::string str_world_xml = "";
+	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+	config->getValue(ConfigSettings::str_world_xml, str_world_xml);
+
+	str_world_xml = str_mediaPath + str_world_xml;
+
+	Core::loadWorldFile(str_world_xml);
+	* End testing code */
+
     inputManager = new InputManager(client);
     inputManager->loadConfig();
 
