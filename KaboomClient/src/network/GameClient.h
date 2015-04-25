@@ -21,6 +21,7 @@ public:
 	unsigned int getCurrentPlayerEntityId() const;
 
 	bool getAssignedEntity() const;
+	bool getIsConnectedToServer() const;
 private:
     const ClientEventHandlerLookup &eventHandlerLookup;
 
@@ -29,4 +30,5 @@ private:
     bool assignedEntity;
 
 	unsigned int currentPlayerEntityId;
+
 };

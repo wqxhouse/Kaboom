@@ -38,6 +38,30 @@ void setupScene()
 	//	"Cubemap_snow/posx.jpg", "Cubemap_snow/negx.jpg",
 	//	"Cubemap_snow/posy.jpg", "Cubemap_snow/negy.jpg",
 	//	"Cubemap_snow/posz.jpg", "Cubemap_snow/negz.jpg");
+	Core::setEnvironmentMap(
+		"cubemaps/ice/posx.jpg",
+		"cubemaps/ice/negx.jpg",
+		"cubemaps/ice/posy.jpg",
+		"cubemaps/ice/negy.jpg",
+		"cubemaps/ice/posz.jpg",
+		"cubemaps/ice/negz.jpg");
+
+	//Core::setEnvironmentMap(
+	//	"cubemaps/uffizi0000.tif",
+	//	"cubemaps/uffizi0001.tif",
+	//	"cubemaps/uffizi0005.tif",
+	//	"cubemaps/uffizi0004.tif",
+	//	"cubemaps/uffizi0002.tif",
+	//	"cubemaps/uffizi0003.tif"
+	//	);
+	//Core::setEnvironmentMap(
+	//	"cubemaps/right.png", 
+	//	"cubemaps/left.png", 
+	//	"cubemaps/front.png", 
+	//	"cubemaps/back.png", 
+	//	"cubemaps/top.png", 
+	//	"cubemaps/bottom.png"
+	//	);
 	
 	osg::Node *loadedCow = osgDB::readNodeFile("Mesh/sphere.dae");
 
