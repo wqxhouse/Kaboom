@@ -47,6 +47,10 @@ void GameServer::receive(Game *game) {
     char network_data[MAX_PACKET_SIZE];
 
     for (auto it : network->sessions) {
+        if (network->sessions.empty()) {
+            break;
+        }
+
 		int id = it.first;
         int len = network->receiveData(it.first, network_data);
 
@@ -75,6 +79,7 @@ void GameServer::receive(Game *game) {
 
 
 		}
+
         if (len <= 0) {
             continue;
         }

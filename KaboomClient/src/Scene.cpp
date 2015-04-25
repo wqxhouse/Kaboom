@@ -32,6 +32,8 @@ void setupScene()
 	osg::Vec3 sunsetColor = osg::Vec3(0.9, 0.8, 0.5);
 	l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), sunsetColor, false);
 
+	Core::setEnvironmentMapVerticalCross("C:/3DEngine/cubemaps/output/haha.png");
+
 	//Core::setEnvironmentMap(
 	//	"Cubemap_snow/posx.jpg", "Cubemap_snow/negx.jpg",
 	//	"Cubemap_snow/posy.jpg", "Cubemap_snow/negy.jpg",
@@ -60,8 +62,8 @@ void setupScene()
 	//	"cubemaps/top.png", 
 	//	"cubemaps/bottom.png"
 	//	);
-
-	osg::Node *loadedCow = osgDB::readNodeFile("Mesh/pokeball.dae");
+	
+	osg::Node *loadedCow = osgDB::readNodeFile("Mesh/sphere.dae");
 
 	g->addGeometry("cow", loadedCow, osg::Vec3(-1, 0, 0));
 	g->addGeometry("second", loadedCow, osg::Vec3(1, 0, 0));
