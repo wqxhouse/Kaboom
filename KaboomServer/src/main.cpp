@@ -6,7 +6,6 @@ int main() {
     ConfigSettings* config = ConfigSettings::config;
 
     Game game(config);
-    game.loadMap();
 
     const clock_t FPS = 60;
     const clock_t TICK = 1000 / FPS;

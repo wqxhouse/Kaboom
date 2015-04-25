@@ -92,7 +92,7 @@ void InputSystem::update(float timeStep)
                 viewDir.getX() * 5, // TODO: Change launch speed
                 viewDir.getY() * 5,
                 viewDir.getZ() * 5);
-			game->addPhysicsEntity(bomb);
+			game->addEntityToWorld(bomb);
 			game->getGameServer().sendSpawnEvent(bomb);
 		}
 	}
