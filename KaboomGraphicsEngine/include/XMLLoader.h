@@ -4,6 +4,7 @@
 
 /*
  * To use this, make a subclass loader
+ *    and define the function loadXMLNode()
  * See World.h and World.cpp (in GraphisEngine) for reference
  */
 class XMLLoader
