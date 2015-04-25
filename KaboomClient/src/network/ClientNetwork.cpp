@@ -151,6 +151,6 @@ int ClientNetwork::receivePackets(char * recvbuf) {
     return iResult;
 }
 
-void ClientNetwork::sendMessage(char *message, int size) {
+void ClientNetwork::sendMessage(char *message, int size) const {
     NetworkServices::sendMessage(clientSocket, message, size);
 }

@@ -11,7 +11,7 @@ public:
 	void disconnectFromServer();
 
     int receivePackets(char *);
-    void sendMessage(char *message, int size);
+    void sendMessage(char *message, int size) const;
 
 	inline bool isConnected() const
 	{
