@@ -86,6 +86,7 @@ void InputSystem::update(float timeStep)
 
 		if (inputCom->isFiring()) {
 			Entity *bomb = game->getBombFactory().createBomb(
+                BombType::BOM_BOM,
                 posCom->getX() + viewDir.getX(),
                 posCom->getY() + viewDir.getY(),
                 posCom->getZ() + viewDir.getZ(),

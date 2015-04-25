@@ -130,5 +130,13 @@
     <ClInclude Include="src\network\DisconnectEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\BombType.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="data\bombs.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
