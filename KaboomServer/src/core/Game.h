@@ -26,6 +26,7 @@ public:
     void addPhysicsEntity(Entity *entity);
 
     EntityManager &getEntityManager();
+	btDiscreteDynamicsWorld *getBtDiscreteDynamicsWorld();
     const PlayerFactory &getPlayerFactory() const;
     const BombFactory &getBombFactory() const;
     const GameServer &getGameServer() const;
