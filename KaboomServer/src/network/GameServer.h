@@ -1,7 +1,6 @@
 #pragma once
 
 #include <network/NetworkData.h>
-#include <network/DeleteEvent.h>
 #include <core/BombContainerComponent.h>
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
@@ -25,6 +24,7 @@ public:
 
     void sendAssignEvent(const unsigned int &entityId) const;
     void sendInitializeEvent(Entity* player, const std::vector<Entity *> &entities) const;
+    void sendDisconnectEvent(Entity *entity) const;
 
     void sendGameStatePackets(const std::vector<Entity *> &entities) const;
     void sendPositionEvent(Entity *entity) const;

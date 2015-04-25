@@ -189,7 +189,7 @@
     <ClInclude Include="src\core\PositionComponent.h" />
     <ClInclude Include="src\core\RotationComponent.h" />
     <ClInclude Include="src\network\AssignEvent.h" />
-    <ClInclude Include="src\network\DeleteEvent.h" />
+    <ClInclude Include="src\network\DisconnectEvent.h" />
     <ClInclude Include="src\network\EmptyEvent.h" />
     <ClInclude Include="src\network\Event.h" />
     <ClInclude Include="src\network\EventHandler.h" />
@@ -211,7 +211,7 @@
     <ClCompile Include="src\core\PositionComponent.cpp" />
     <ClCompile Include="src\core\RotationComponent.cpp" />
     <ClCompile Include="src\network\AssignEvent.cpp" />
-    <ClCompile Include="src\network\DeleteEvent.cpp" />
+    <ClCompile Include="src\network\DisconnectEvent.cpp" />
     <ClCompile Include="src\network\EmptyEvent.cpp" />
     <ClCompile Include="src\network\Event.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />

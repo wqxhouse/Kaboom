@@ -4,10 +4,10 @@
 
 class Game;
 
-class DeleteEventHandler : public EventHandler {
+class DisconnectEventHandler : public EventHandler {
 public:
-	DeleteEventHandler(Game *game);
-	~DeleteEventHandler();
+    DisconnectEventHandler(Game *game);
+    ~DisconnectEventHandler();
 
     virtual void handle(const Event &evt) const;
 
