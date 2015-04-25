@@ -10,46 +10,23 @@
 #include "../network/ServerEventHandlerLookup.h"
 
 Game::Game(ConfigSettings *config)
-	: config(config),
-	playerFactory(&entityManager),
-	bombFactory(&entityManager),
-	inputSystem(this),
-	eventHandlerLookup(this),
-	server(config, eventHandlerLookup) 
-{
-    broadphase = new btDbvtBroadphase();
-    collisionConfiguration = new btDefaultCollisionConfiguration();
-    dispatcher = new btCollisionDispatcher(collisionConfiguration);
-    solver = new btSequentialImpulseConstraintSolver;
-
-    world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-
-    world->setGravity(btVector3(0, 0, -4.0)); // TODO: Extract gravity constant
+	    : config(config),
+	      playerFactory(&entityManager),
+	      bombFactory(&entityManager),
+	      inputSystem(this),
+	      eventHandlerLookup(this),
+	      server(config, eventHandlerLookup) {
+    world.loadMap();
 }
 
 Game::~Game() {
-    delete broadphase;
-    delete collisionConfiguration;
-    delete dispatcher;
-    delete solver;
 }
 
-void Game::loadMap() {
-    // TODO: Handle memory leak
-    btCollisionShape *groundShape = new btStaticPlaneShape(btVector3(0, 0, 1), 1);
-    btDefaultMotionState *groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, -1)));
-
-    btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
-    btRigidBody *groundRigidBody = new btRigidBody(groundRigidBodyCI);
-
-    world->addRigidBody(groundRigidBody);
-}
-
-void Game::addPhysicsEntity(Entity *entity) {
+void Game::addEntityToWorld(Entity *entity) {
     PhysicsComponent *physicsCom = entity->getComponent<PhysicsComponent>();
 
     if (physicsCom != nullptr) {
-        world->addRigidBody(physicsCom->getRigidBody());
+        world.addRigidBody(physicsCom->getRigidBody());
     }
 }
 
@@ -63,7 +40,7 @@ void Game::update(float timeStep) {
 		//now we create a new player
         Entity *player = playerFactory.createPlayer(0, -5, 5);
         players.push_back(player);
-        addPhysicsEntity(player);
+        addEntityToWorld(player);
 
         //first notify the new client what entityId it should keep track of
         server.sendAssignEvent(player->getId());
@@ -88,7 +65,7 @@ void Game::update(float timeStep) {
 		entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
 	}
 
-    world->stepSimulation(timeStep);
+    world.stepSimulation(timeStep);
 
     for (Entity *entity : entityManager.getEntityList()) {
         PositionComponent *posCom = entity->getComponent<PositionComponent>();
@@ -118,6 +95,7 @@ const BombFactory &Game::getBombFactory() const {
 const GameServer &Game::getGameServer() const {
     return server;
 }
-btDiscreteDynamicsWorld *Game::getBtDiscreteDynamicsWorld(){
-	return world;
+
+World &Game::getWorld() {
+    return world;
 }
