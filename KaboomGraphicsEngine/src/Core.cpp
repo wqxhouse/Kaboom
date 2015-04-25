@@ -61,7 +61,7 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 
 void Core::loadWorldFile(const std::string &worldFilePath)
 {
-	_world.loadWorldXMLFile(worldFilePath);
+	_world.loadXMLFile(worldFilePath);
 }
 
 World &Core::getWorldRef()

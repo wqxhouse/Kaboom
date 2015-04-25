@@ -27,34 +27,6 @@ World::~World()
 	delete _lightManager;
 }
 
-bool World::isXMLNodeType(osgDB::XmlNode* xmlNode)
-{
-	switch (xmlNode->type)
-	{
-	case osgDB::XmlNode::ATOM:
-	case osgDB::XmlNode::NODE:
-	case osgDB::XmlNode::GROUP:
-		return true;
-	default:
-		return false;
-	}
-}
-
-void World::loadWorldXMLFile(const std::string &worldFilePath)
-{
-	osg::ref_ptr<osgDB::XmlNode> xmlRoot = osgDB::readXmlFile(worldFilePath);
-	if (xmlRoot.valid())
-	{
-		osgDB::FilePathList& filePaths = osgDB::getDataFilePathList();
-		filePaths.push_back(osgDB::getFilePath(worldFilePath));
-		loadXMLNode(xmlRoot.get());
-		filePaths.pop_back();
-	}
-	else
-	{
-		// TODO : output to console bad xml
-	}
-}
 void World::loadXMLNode(osgDB::XmlNode *xmlRoot)
 {
 	// Ignore the most outer tag ("world")
@@ -254,51 +226,5 @@ void World::createLightFromXML(osgDB::XmlNode* xmlNode)
 	}
 	else if (type == "directional") {
 		_lightManager->addDirectionalLight(name, direction, color, doShadow);
-	}
-}
-
-void World::setDefaultString(std::string &s) {
-	s = s.empty() ? "default" : s;
-}
-
-void World::loadInt(osgDB::XmlNode* xmlNode, int& i) {
-	std::stringstream ss; ss << xmlNode->getTrimmedContents();
-	ss >> i;
-}
-
-void World::loadFloat(osgDB::XmlNode* xmlNode, float& f) {
-	std::stringstream ss; ss << xmlNode->getTrimmedContents();
-	ss >> f;
-}
-
-void World::loadBool(osgDB::XmlNode* xmlNode, bool& b) {
-	std::stringstream ss; ss << xmlNode->getTrimmedContents();
-	ss >> b;
-}
-
-void World::loadString(osgDB::XmlNode* xmlNode, std::string& s) {
-	std::stringstream ss; ss << xmlNode->getTrimmedContents();
-	ss >> s;
-}
-
-void World::loadVec3(osgDB::XmlNode* xmlNode, osg::Vec3& vec) {
-	std::stringstream ss; ss << xmlNode->getTrimmedContents();
-
-	// Read in a vector of floats
-	for (int n = 0; n < vec.num_components; ++n)
-	{
-		float v = 0.0f; ss >> v;
-		vec[n] = v;
-	}
-}
-
-void World::loadVec4(osgDB::XmlNode* xmlNode, osg::Vec4& vec) {
-	std::stringstream ss; ss << xmlNode->getTrimmedContents();
-
-	// Read in a vector of floats
-	for (int n = 0; n < vec.num_components; ++n)
-	{
-		float v = 0.0f; ss >> v;
-		vec[n] = v;
 	}
 }
