@@ -32,7 +32,7 @@ void setupScene()
 	osg::Vec3 sunsetColor = osg::Vec3(0.9, 0.8, 0.5);
 	l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), sunsetColor, false);
 
-	Core::setEnvironmentMapVerticalCross("C:/3DEngine/cubemaps/output/haha.png");
+	Core::setEnvironmentMapVerticalCross("C:/Users/Brian/Documents/GitHub/Kaboom/Media/haha.png");
 
 	//Core::setEnvironmentMap(
 	//	"Cubemap_snow/posx.jpg", "Cubemap_snow/negx.jpg",
