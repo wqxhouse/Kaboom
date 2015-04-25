@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <osg/Node>
 #include <osgDB/XmlParser>
-#include "XMLLoader.h"
+#include <util/XMLLoader.h>
 
 class LightManager;
 class MaterialManager;

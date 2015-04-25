@@ -273,7 +273,6 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\TwGUIManager.h" />
     <ClInclude Include="include\Visualizer.h" />
     <ClInclude Include="include\World.h" />
-    <ClInclude Include="include\XMLLoader.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -303,7 +302,6 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\TwGUIManager.cpp" />
     <ClCompile Include="src\Visualizer.cpp" />
     <ClCompile Include="src\World.cpp" />
-    <ClCompile Include="src\XMLLoader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -342,6 +340,11 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\SMAA\edgedetection.vert" />
     <None Include="..\Media\Shaders\SMAA\neighborhood.frag" />
     <None Include="..\Media\Shaders\SMAA\neighborhood.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KaboomCommon\KaboomCommon.vcxproj">
+      <Project>{1608d432-d1e3-4cac-ab94-4cf307a6d9aa}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
