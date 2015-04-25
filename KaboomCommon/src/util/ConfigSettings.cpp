@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "../../stdafx.h"
 #include "ConfigSettings.h"
 
 #ifdef _WIN32 

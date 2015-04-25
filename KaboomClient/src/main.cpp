@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <ConfigSettings.h>
+#include <util/ConfigSettings.h>
 
 #include "core/Game.h"
 

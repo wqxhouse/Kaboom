@@ -20,7 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KaboomEngine", "KaboomEngin
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KaboomGraphicsEngine", "KaboomGraphicsEngine\KaboomGraphicsEngine.vcxproj", "{E24D41A4-8D90-45FF-9C55-6466187744AD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfigSetting", "ConfigSetting\ConfigSetting.vcxproj", "{1608D432-D1E3-4CAC-AB94-4CF307A6D9AA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KaboomCommon", "KaboomCommon\KaboomCommon.vcxproj", "{1608D432-D1E3-4CAC-AB94-4CF307A6D9AA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osgLibRocket", "osgLibRocket\osgLibRocket.vcxproj", "{A1FF5FD6-D463-4B85-899B-278229C4AA04}"
 EndProject

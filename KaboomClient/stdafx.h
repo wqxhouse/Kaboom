@@ -20,4 +20,4 @@
 #include <osg/ShapeDrawable>
 #include <osgGA/GUIEventHandler>
 
-#include <ConfigSettings.h>
+#include <util/ConfigSettings.h>

@@ -1,6 +1,7 @@
 #include <Windows.h>	// For "Open File" dialog
 #include "stdafx.h" 
-#include <ConfigSettings.h>
+
+#include <util/ConfigSettings.h>
 
 #include "TwGUIManager.h"
 #include <unordered_map>
