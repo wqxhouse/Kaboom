@@ -91,11 +91,15 @@ void Game::update(float timeStep) {
     world->stepSimulation(timeStep);
 
     for (Entity *entity : entityManager.getEntityList()) {
-        PositionComponent *positionCom = entity->getComponent<PositionComponent>();
-        PhysicsComponent *physicsCom = entity->getComponent<PhysicsComponent>();
+        PositionComponent *posCom = entity->getComponent<PositionComponent>();
+        PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
+        RotationComponent *rotCom = entity->getComponent<RotationComponent>();
 
-        const btVector3 &position = physicsCom->getRigidBody()->getWorldTransform().getOrigin();
-        positionCom->setPosition(position.getX(), position.getY(), position.getZ());
+        const btTransform &worldTrans = physCom->getRigidBody()->getWorldTransform();
+        const btVector3 &pos = worldTrans.getOrigin();
+        
+        posCom->setPosition(pos.getX(), pos.getY(), pos.getZ());
+        // TODO: set rotation
     }
 
     server.sendGameStatePackets(this);
