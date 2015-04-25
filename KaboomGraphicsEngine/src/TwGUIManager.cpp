@@ -219,38 +219,42 @@ void TwGUIManager::initAddBar()
 		wchar_t toPath[newsize];
 		wchar_t newFile[newsize];
 
-		std::string filePath = openFile();
-		std::string fileName = getFileName(filePath);		// Get the file name (without the path)
-		strToWCchar(fromPath, filePath);
+		std::string filePath = "";
+		bool validFile = openFile(filePath);
 
-		// Get the destination path
-		ConfigSettings* config = ConfigSettings::config;
-		std::string str_mediaPath = "";
-		config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+		if (validFile) {
+			std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+			strToWCchar(fromPath, filePath);
 
-		// Append the file name to the destination path -> new file location
-		strToWCchar(toPath, str_mediaPath);
-		strToWCchar(newFile, fileName);
-		wcscat_s(toPath, newFile);
+			// Get the destination path
+			ConfigSettings* config = ConfigSettings::config;
+			std::string str_mediaPath = "";
+			config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
 
-		bool didCopy = CopyFile(fromPath, toPath, FALSE);
-		DWORD dw = GetLastError();							// [Debug] Should be 0
+			// Append the file name to the destination path -> new file location
+			strToWCchar(toPath, str_mediaPath);
+			strToWCchar(newFile, fileName);
+			wcscat_s(toPath, newFile);
 
-		// Add model to geometry manager
-		osg::Node *model = osgDB::readNodeFile(fileName);
-		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+			bool didCopy = CopyFile(fromPath, toPath, FALSE);
+			DWORD dw = GetLastError();							// [Debug] Should be 0
 
-		// Get the input name
-		std::string modelName;
-		std::cout << "Enter model name: ";
-		std::cin >> modelName;
+			// Add model to geometry manager
+			osg::Node *model = osgDB::readNodeFile(fileName);
+			GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
 
-		gm->addGeometry(modelName, model, fileName);
+			// Get the input name
+			std::string modelName;
+			std::cout << "Enter model name: ";
+			std::cin >> modelName;
 
-		// [Note: Does not handle duplicate names]
-		GeometryObject* geom = gm->getGeometryObject(modelName);
+			gm->addGeometry(modelName, model, fileName);
 
-		addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
+			// [Note: Does not handle duplicate names]
+			GeometryObject* geom = gm->getGeometryObject(modelName);
+
+			addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
+		}
 	},
 		g_twBar, NULL);
 
@@ -686,7 +690,7 @@ int TwGUIManager::getTwModKeyMask(int modkey) const
 	return twModkey;
 }
 
-std::string TwGUIManager::openFile()
+bool TwGUIManager::openFile(std::string &s)
 {
 	OPENFILENAME ofn = { sizeof ofn };
 	wchar_t file[1024];
@@ -695,12 +699,16 @@ std::string TwGUIManager::openFile()
 	ofn.nMaxFile = 1024;
 	ofn.Flags = OFN_ALLOWMULTISELECT | OFN_EXPLORER;
 
-	GetOpenFileName(&ofn);
+	if (GetOpenFileName(&ofn)) {
 
-	std::wstring wtmp(ofn.lpstrFile);
-	std::string wstr(wtmp.begin(), wtmp.end());
+		std::wstring wtmp(ofn.lpstrFile);
+		std::string wstr(wtmp.begin(), wtmp.end());
 
-	return wstr;
+		s = wstr;
+		return true;
+	}
+
+	return false;
 }
 
 std::string TwGUIManager::getFileName(std::string s)

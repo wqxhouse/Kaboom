@@ -92,7 +92,7 @@ protected:
 	TwBar *g_addBar;
 	char g_fileName[256]; // TODO: this is a hack, fix it
 
-	static std::string openFile();
+	static bool openFile(std::string &s);
 	static std::string getFileName(std::string s);
 	static void strToWCchar(wchar_t* w, std::string s);
 
