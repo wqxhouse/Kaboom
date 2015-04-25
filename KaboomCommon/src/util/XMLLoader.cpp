@@ -1,7 +1,8 @@
 #include "XMLLoader.h"
 
+#include <osgDB/FileNameUtils>
+#include <osgDB/FileUtils>
 #include <osgDB/ReadFile>
-#include <osg/Node>
 #include <osgDB/XmlParser>
 
 void XMLLoader::loadXMLFile(const std::string &filePath)
@@ -40,6 +41,11 @@ void XMLLoader::setDefaultString(std::string &s) {
 void XMLLoader::loadInt(osgDB::XmlNode* xmlNode, int& i) {
 	std::stringstream ss; ss << xmlNode->getTrimmedContents();
 	ss >> i;
+}
+
+void XMLLoader::loadUint(osgDB::XmlNode* xmlNode, unsigned int& i) {
+    std::stringstream ss; ss << xmlNode->getTrimmedContents();
+    ss >> i;
 }
 
 void XMLLoader::loadFloat(osgDB::XmlNode* xmlNode, float& f) {

@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include <osgDB/XmlParser>
+
 /*
  * To use this, make a subclass loader
  *    and define the function loadXMLNode()
@@ -19,6 +21,7 @@ protected:
 	void setDefaultString(std::string &s);
 
 	void loadInt(osgDB::XmlNode* xmlNode, int& i);
+    void loadUint(osgDB::XmlNode* xmlNode, unsigned int &i);
 	void loadFloat(osgDB::XmlNode* xmlNode, float& f);
 	void loadBool(osgDB::XmlNode* xmlNode, bool& b);
 	void loadString(osgDB::XmlNode* xmlNode, std::string& s);

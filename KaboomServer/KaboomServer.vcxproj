@@ -71,9 +71,6 @@
     <ProjectReference Include="..\KaboomEngine\KaboomEngine.vcxproj">
       <Project>{bc9338c4-75a3-4853-841c-0c8963e2ca58}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\pugixml\pugixml.vcxproj">
-      <Project>{0124e4e8-3535-494b-bb67-6ee707c6a31e}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data\bombs.xml" />
@@ -245,7 +242,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(SolutionDir)\pugixml\src;$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(OSG_INCLUDE_PATH);$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -254,13 +251,14 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OSG_LIB_PATH);$(BULLET_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;osgDB.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;osg.lib;osgDB.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
