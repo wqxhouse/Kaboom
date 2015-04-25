@@ -21,7 +21,7 @@ Entity *BombFactory::createBomb(unsigned int id, float x, float y, float z) cons
     Entity *entity = entityManager.createEntity(id);
 
     osg::Sphere *sphere = new osg::Sphere();
-	sphere->setRadius(0.5); //make this dynamic
+	sphere->setRadius(0.1); //make this dynamic
     osg::ShapeDrawable *drawable = new osg::ShapeDrawable(sphere);
     osg::Geode *model = new osg::Geode;
     model->addDrawable(drawable);

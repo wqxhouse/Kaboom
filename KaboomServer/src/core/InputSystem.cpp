@@ -85,7 +85,13 @@ void InputSystem::update(float timeStep)
 		rigidBody->setLinearVelocity(worldVelocity);
 
 		if (inputCom->isFiring()) {
-			Entity *bomb = game->getBombFactory().createBomb(posCom->getX(), posCom->getY(), posCom->getZ() + 5);
+			Entity *bomb = game->getBombFactory().createBomb(
+                posCom->getX() + viewDir.getX(),
+                posCom->getY() + viewDir.getY(),
+                posCom->getZ() + viewDir.getZ(),
+                viewDir.getX() * 5, // TODO: Change launch speed
+                viewDir.getY() * 5,
+                viewDir.getZ() * 5);
 			game->addPhysicsEntity(bomb);
 			game->getGameServer().sendEntitySpawnEvent(bomb);
 		}
