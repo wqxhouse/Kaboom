@@ -1,19 +1,18 @@
 #pragma once
 
-#include <core/Component.h>
+#include <osg/ref_ptr>
+#include <osg/Node>
 
-namespace osg {
-    class Node;
-}
+#include <core/Component.h>
 
 class SceneNodeComponent : public Component {
 public:
-    SceneNodeComponent(osg::Node *node);
+    SceneNodeComponent(osg::ref_ptr<osg::Node> node);
     ~SceneNodeComponent();
 
-    osg::Node *getNode() const;
-    void setNode(osg::Node *node);
+    osg::ref_ptr<osg::Node> getNode() const;
+    void setNode(osg::ref_ptr<osg::Node> node);
 
 private:
-    osg::Node *node;
+    osg::ref_ptr<osg::Node> node;
 };

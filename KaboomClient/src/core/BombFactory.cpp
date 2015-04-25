@@ -12,7 +12,7 @@
 #include "SceneNodeComponent.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
-    : entityManager(entityManager) {
+        : entityManager(entityManager) {
 }
 
 BombFactory::~BombFactory() {
@@ -21,16 +21,16 @@ BombFactory::~BombFactory() {
 Entity *BombFactory::createBomb(unsigned int id, float x, float y, float z) const {
     Entity *entity = entityManager.createEntity(id);
 
-    osg::Sphere *sphere = new osg::Sphere();
+    osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere();
 	sphere->setRadius(0.1); //make this dynamic
-    osg::ShapeDrawable *drawable = new osg::ShapeDrawable(sphere);
-    osg::Geode *model = new osg::Geode;
+    osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(sphere);
+    osg::ref_ptr<osg::Geode> model = new osg::Geode;
     model->addDrawable(drawable);
 
-    osg::MatrixTransform *transformation = new osg::MatrixTransform;
+    osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
     transformation->addChild(model);
 
-    osg::Group *bombNode = new osg::Group;
+    osg::ref_ptr<osg::Group> bombNode = new osg::Group;
 
 	bombNode->addChild(transformation);
 

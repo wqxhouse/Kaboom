@@ -12,7 +12,7 @@
 #include "SceneNodeComponent.h"
 
 PlayerFactory::PlayerFactory(EntityManager &entityManager)
-    : entityManager(entityManager) {
+        : entityManager(entityManager) {
 }
 
 PlayerFactory::~PlayerFactory() {
@@ -21,15 +21,15 @@ PlayerFactory::~PlayerFactory() {
 Entity *PlayerFactory::createPlayer(unsigned int id, float x, float y, float z) const {
     Entity *entity = entityManager.createEntity(id);
 
-    osg::Box *box = new osg::Box;
-    osg::ShapeDrawable *drawable = new osg::ShapeDrawable(box);
-    osg::Geode *model = new osg::Geode;
+    osg::ref_ptr<osg::Box> box = new osg::Box;
+    osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(box);
+    osg::ref_ptr<osg::Geode> model = new osg::Geode;
     model->addDrawable(drawable);
 
-    osg::MatrixTransform *transformation = new osg::MatrixTransform;
+    osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
     transformation->addChild(model);
 
-    osg::Group *playerNode = new osg::Group;
+    osg::ref_ptr<osg::Group> playerNode = new osg::Group;
 
     playerNode->addChild(transformation);
 
