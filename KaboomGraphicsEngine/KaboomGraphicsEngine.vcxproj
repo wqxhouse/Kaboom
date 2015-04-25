@@ -267,6 +267,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\LightPrePassCallback.h" />
     <ClInclude Include="include\Material.h" />
     <ClInclude Include="include\MaterialManager.h" />
+    <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\PointLight.h" />
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\TwGUIManager.h" />
@@ -295,6 +296,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\LightPrePassCallback.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
+    <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\TwGUIManager.cpp" />

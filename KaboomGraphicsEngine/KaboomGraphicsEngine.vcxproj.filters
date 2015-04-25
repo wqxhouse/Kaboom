@@ -111,6 +111,9 @@
     <ClInclude Include="include\CubemapUtil.h">
       <Filter>Header Files\CubemapUtil</Filter>
     </ClInclude>
+    <ClInclude Include="include\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -190,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="src\CubemapUtil.cpp">
       <Filter>Source Files\CubemapUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
