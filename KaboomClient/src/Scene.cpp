@@ -61,7 +61,7 @@ void setupScene()
 	//	"cubemaps/bottom.png"
 	//	);
 
-	osg::Node *loadedCow = osgDB::readNodeFile("Mesh/sphere.dae");
+	osg::Node *loadedCow = osgDB::readNodeFile("Mesh/pokeball.dae");
 
 	g->addGeometry("cow", loadedCow, osg::Vec3(-1, 0, 0));
 	g->addGeometry("second", loadedCow, osg::Vec3(1, 0, 0));
