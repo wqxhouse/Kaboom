@@ -7,6 +7,7 @@
 
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
+#include <core/RotationComponent.h>
 
 #include "SceneNodeComponent.h"
 
@@ -35,6 +36,7 @@ Entity *BombFactory::createBomb(unsigned int id, float x, float y, float z) cons
 
 	entity->attachComponent(new SceneNodeComponent(bombNode));
     entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new RotationComponent());
 
     return entity;
 }
