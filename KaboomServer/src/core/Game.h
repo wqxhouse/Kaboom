@@ -5,38 +5,46 @@
 #include <btBulletDynamicsCommon.h>
 
 #include <core/EntityManager.h>
+#include <util/ConfigSettings.h>
 
+#include "BombFactory.h"
+#include "InputSystem.h"
 #include "PlayerFactory.h"
-
+#include "World.h"
 #include "../network/GameServer.h"
-#include "../util/ConfigSettings.h"
-
-class GameServer;
+#include "../network/ServerEventHandlerLookup.h"
 
 class Game {
 public:
     std::vector<Entity *> players;
+	std::vector<Entity *> bombs;
 
     Game(ConfigSettings *config);
     ~Game();
 
-    void loadMap();
     void update(float timestep);
 
-    void addPhysicsEntity(Entity *entity);
+    void addEntityToWorld(Entity *entity);
 
-    const EntityManager &getEntityManager() const;
+    EntityManager &getEntityManager();
+    const PlayerFactory &getPlayerFactory() const;
+    const BombFactory &getBombFactory() const;
+
+    const GameServer &getGameServer() const;
+
+    World &getWorld();
 
 private:
     ConfigSettings *config;
-    GameServer *server;
 
     EntityManager entityManager;
     PlayerFactory playerFactory;
+    BombFactory bombFactory;
 
-    btBroadphaseInterface *broadphase;
-    btDefaultCollisionConfiguration *collisionConfiguration;
-    btCollisionDispatcher *dispatcher;
-    btSequentialImpulseConstraintSolver *solver;
-    btDiscreteDynamicsWorld *world;
+    InputSystem inputSystem;
+
+    ServerEventHandlerLookup eventHandlerLookup;
+    GameServer server;
+
+    World world;
 };

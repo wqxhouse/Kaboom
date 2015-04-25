@@ -1,11 +1,15 @@
 #include "ClientEventHandlerLookup.h"
 
+#include "DisconnectEventHandler.h"
 #include "PositionEventHandler.h"
-#include "PlayerSpawnEventHandler.h"
+#include "RotationEventHandler.h"
+#include "SpawnEventHandler.h"
 
 ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
+    addHandler(EventOpcode::DISCONNECT, new DisconnectEventHandler(game));
     addHandler(EventOpcode::POSITION, new PositionEventHandler(game));
-    addHandler(EventOpcode::PLAYER_SPAWN, new PlayerSpawnEventHandler(game));
+    addHandler(EventOpcode::ROTATION, new RotationEventHandler(game));
+    addHandler(EventOpcode::ENTITY_SPAWN, new SpawnEventHandler(game));
 }
 
 ClientEventHandlerLookup::~ClientEventHandlerLookup() {

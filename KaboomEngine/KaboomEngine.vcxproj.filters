@@ -31,6 +31,12 @@
     <Filter Include="Header Files\Network\Events">
       <UniqueIdentifier>{4b97dc79-1fa6-495f-9552-820f7008f19e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity Component System\Components">
+      <UniqueIdentifier>{551451fc-a9fb-4c26-9b1e-294e27143b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity Component System\Components">
+      <UniqueIdentifier>{9e933be9-d712-41e0-92fc-60720b99dc61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Component.h">
@@ -42,9 +48,6 @@
     <ClInclude Include="src\core\EntityManager.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\PositionComponent.h">
-      <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\Event.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
@@ -53,9 +56,6 @@
     </ClInclude>
     <ClInclude Include="src\network\EventHandlerLookup.h">
       <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\RotationComponent.h">
-      <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
     <ClInclude Include="src\network\NetworkData.h">
       <Filter>Header Files\Network</Filter>
@@ -66,13 +66,38 @@
     <ClInclude Include="src\network\PlayerInputEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\PlayerSpawnEvent.h">
-      <Filter>Header Files\Network\Events</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\PositionEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\network\RotationEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="src\core\EntityType.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\EventOpcode.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\SpawnEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\BombContainerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\CharacteristicComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\PositionComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\RotationComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\AssignEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\DisconnectEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,14 +111,8 @@
     <ClCompile Include="src\core\EntityManager.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\PositionComponent.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\EventHandlerLookup.cpp">
       <Filter>Source Files\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\RotationComponent.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
     <ClCompile Include="src\network\Event.cpp">
       <Filter>Source Files\Network</Filter>
@@ -104,13 +123,32 @@
     <ClCompile Include="src\network\PlayerInputEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\PlayerSpawnEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\PositionEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
     <ClCompile Include="src\network\RotationEvent.cpp">
+      <Filter>Source Files\Network\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="src\network\SpawnEvent.cpp">
+      <Filter>Source Files\Network\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\BombContainerComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\CharacteristicComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\PositionComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\RotationComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\AssignEvent.cpp">
+      <Filter>Source Files\Network\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\DisconnectEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
   </ItemGroup>

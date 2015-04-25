@@ -1,12 +1,6 @@
 #pragma once
 
-enum EventOpcode {
-	EMPTY = 0,
-    POSITION = 1,
-    ROTATION = 2,
-    PLAYER_INPUT = 3,
-    PLAYER_SPAWN = 4
-};
+#include "EventOpcode.h"
 
 class Event {
 public:

@@ -9,6 +9,8 @@ public:
     EntityManager();
     ~EntityManager();
 
+    unsigned int generateId();
+
     Entity *createEntity();
     Entity *createEntity(unsigned int id);
 
@@ -17,7 +19,10 @@ public:
     Entity *getEntity(unsigned int id) const;
     bool isEntityAlive(unsigned int id) const;
 
-	unsigned int getNextId() const;
+    std::vector<Entity *> getEntityList() const;
+    std::vector<Entity *> getPlayerList() const;
+    std::vector<Entity *> getBombList() const;
+
 private:
     std::unordered_map<unsigned int, Entity *> entities;
     unsigned int nextId;

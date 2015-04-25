@@ -1,17 +1,25 @@
 #pragma once
 
-#include <Windows.h>
-
-#include <osgViewer/Viewer>
-
 #include <core/EntityManager.h>
+#include <util/ConfigSettings.h>
 
+#include <Camera.h>
+#include <GeometryObjectManager.h>
+#include <MaterialManager.h>
+
+#include "BombFactory.h"
 #include "PlayerFactory.h"
-#include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
-#include "../util/ConfigSettings.h"
+#include "../network/GameClient.h"
 
-class ClientEventHandlerLookup;
+class InputManager;
+
+enum GameStateMachine {
+	EDITOR_MODE,
+	CONNECT_TO_SERVER,
+	GAME_MODE,
+	DISCONNECT_TO_SERVER
+};
 
 class Game {
 public:
@@ -20,21 +28,37 @@ public:
 
     void run();
 
-    bool addSceneNodeEntity(Entity *entity);
+	const GameClient &getGameClient() const;
+    //bool addSceneNodeEntity(Entity *entity);
 
-    const EntityManager &getEntityManager() const;
+    EntityManager &getEntityManager();
+
     const PlayerFactory &getPlayerFactory() const;
-    ClientEventHandlerLookup *getEventHandlerLookup() const;
+	const BombFactory &getBombFactory() const;
+
+	GeometryObjectManager* getGeometryManager();
+	MaterialManager* getMaterialManager();
+	
+	Camera &getCamera();
+
+	void removeAllDynamicEntity();
 
 private:
+    ConfigSettings *config;
     InputManager *inputManager;
+
     EntityManager entityManager;
     PlayerFactory playerFactory;
-    ClientEventHandlerLookup *eventHandlerLookup;
+	BombFactory bombFactory;
 
-    osgViewer::Viewer viewer;
+    ClientEventHandlerLookup eventHandlerLookup;
+    GameClient client;
 
-    osg::Group *rootNode;
+	GeometryObjectManager * _geometryManager;
+	MaterialManager * _materialManager;
 
-    void setupCamera();
+	Camera &_camera;
+    // osgViewer::Viewer viewer;
+    // osg::Group *rootNode;
+    // void setupCamera();
 };

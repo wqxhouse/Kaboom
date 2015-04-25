@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Event.h"
+class Event;
 
 class EventHandler {
 public:

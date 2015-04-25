@@ -1,28 +1,33 @@
 #pragma once
 
+#include <network/Event.h>
 #include <network/NetworkData.h>
-
-#include "ClientEventHandlerLookup.h"
 #include "ClientNetwork.h"
+
+class ClientEventHandlerLookup;
 
 class GameClient {
 public:
-    GameClient(ConfigSettings *config, ClientEventHandlerLookup *eventHandlerLookup);
+    GameClient(const ClientEventHandlerLookup &eventHandlerLookup);
     ~GameClient();
 
 	void receive();
+    bool connectToServer(const std::string &serverAddress, const int serverPort);
+	bool disconnectFromServer();
 
-    void GameClient::sendMessage(const Event &evt);
+    void sendMessage(const Event &evt) const;
 
-	
+	unsigned int getCurrentPlayerEntityId() const;
+
+	bool getAssignedEntity() const;
+	bool getIsConnectedToServer() const;
 private:
-    ClientEventHandlerLookup *eventHandlerLookup;
+    const ClientEventHandlerLookup &eventHandlerLookup;
 
-    ClientNetwork *network;
+    ClientNetwork network;
 
-    char networkData[MAX_PACKET_SIZE];
+    bool assignedEntity;
 
 	unsigned int currentPlayerEntityId;
 
-	bool initialized = false;
 };

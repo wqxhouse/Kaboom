@@ -1,100 +1,41 @@
 #include "InputManager.h"
 
-#include <network/PlayerInputEvent.h>
+#include "../network/GameClient.h"
 
-#include "../Global.h"
-
-bool InputManager::movingForward;
-bool InputManager::movingBackward;
-bool InputManager::movingLeft;
-bool InputManager::movingRight;
-bool InputManager::jumping;
-
-void InputManager::moveForwardDown() {
-    movingForward = true;
-    sendPlayerInputEvent();
-}
-
-void InputManager::moveForwardUp() {
-    movingForward = false;
-    sendPlayerInputEvent();
-}
-
-void InputManager::moveBackwardDown() {
-    movingBackward = true;
-    sendPlayerInputEvent();
-}
-
-void InputManager::moveBackwardUp() {
-    movingBackward = false;
-    sendPlayerInputEvent();
-}
-
-void InputManager::moveLeftDown() {
-    movingLeft = true;
-    sendPlayerInputEvent();
-}
-
-void InputManager::moveLeftUp() {
-    movingLeft = false;
-    sendPlayerInputEvent();
-}
-
-void InputManager::moveRightDown() {
-    movingRight = true;
-    sendPlayerInputEvent();
-}
-
-void InputManager::moveRightUp() {
-    movingRight = false;
-    sendPlayerInputEvent();
-}
-
-void InputManager::jumpDown() {
-    jumping = true;
-    sendPlayerInputEvent();
-}
-
-void InputManager::jumpUp() {
-    jumping = false;
-    sendPlayerInputEvent();
-}
-
-void InputManager::look(int deltaX, int deltaY) {
-
-}
-
-void InputManager::sendPlayerInputEvent() {
-    PlayerInputEvent evt(0,
-        movingForward,
-        movingBackward,
-        movingLeft,
-        movingRight,
-        jumping,
-        false,
-        0.0f,
-        0.0f);
-
-    g_client->sendMessage(evt);
-}
-
-InputManager::InputManager(osgViewer::Viewer *viewer) {
-    keyboardHandler = new KeyboardEventHandler();
-    viewer->addEventHandler(keyboardHandler);
+InputManager::InputManager(GameClient &client)
+    : inputEventHandler(client),
+    keyboardEventHandler(inputEventHandler),
+    mouseEventHandler(inputEventHandler) {
 }
 
 InputManager::~InputManager() {
 }
 
 void InputManager::loadConfig() {
-    keyboardHandler->bindKey('w', KeyboardEventHandler::KEY_DOWN, InputManager::moveForwardDown);
-    keyboardHandler->bindKey('w', KeyboardEventHandler::KEY_UP, InputManager::moveForwardUp);
-    keyboardHandler->bindKey('s', KeyboardEventHandler::KEY_DOWN, InputManager::moveBackwardDown);
-    keyboardHandler->bindKey('s', KeyboardEventHandler::KEY_UP, InputManager::moveBackwardUp);
-    keyboardHandler->bindKey('a', KeyboardEventHandler::KEY_DOWN, InputManager::moveLeftDown);
-    keyboardHandler->bindKey('a', KeyboardEventHandler::KEY_UP, InputManager::moveLeftUp);
-    keyboardHandler->bindKey('d', KeyboardEventHandler::KEY_DOWN, InputManager::moveRightDown);
-    keyboardHandler->bindKey('d', KeyboardEventHandler::KEY_UP, InputManager::moveRightUp);
-    keyboardHandler->bindKey(' ', KeyboardEventHandler::KEY_DOWN, InputManager::jumpDown);
-    keyboardHandler->bindKey(' ', KeyboardEventHandler::KEY_UP, InputManager::jumpUp);
+    keyboardEventHandler.bindKey('w', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onMoveForwardDown);
+    keyboardEventHandler.bindKey('w', KeyboardEventHandler::KEY_UP, &InputEventHandler::onMoveForwardUp);
+    keyboardEventHandler.bindKey('s', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onMoveBackwardDown);
+    keyboardEventHandler.bindKey('s', KeyboardEventHandler::KEY_UP, &InputEventHandler::onMoveBackwardUp);
+    keyboardEventHandler.bindKey('a', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onMoveLeftDown);
+    keyboardEventHandler.bindKey('a', KeyboardEventHandler::KEY_UP, &InputEventHandler::onMoveLeftUp);
+    keyboardEventHandler.bindKey('d', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onMoveRightDown);
+    keyboardEventHandler.bindKey('d', KeyboardEventHandler::KEY_UP, &InputEventHandler::onMoveRightUp);
+    keyboardEventHandler.bindKey(' ', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onJumpDown);
+    keyboardEventHandler.bindKey(' ', KeyboardEventHandler::KEY_UP, &InputEventHandler::onJumpUp);
+    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_DOWN, &InputEventHandler::onFireDown);
+    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_UP, &InputEventHandler::onFireUp);
+
+	// editor related
+	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F8, KeyboardEventHandler::KEY_UP, &InputEventHandler::enterGameMode);
+	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_Escape, KeyboardEventHandler::KEY_UP, &InputEventHandler::quitGameMode);
+	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F9, KeyboardEventHandler::KEY_UP, &InputEventHandler::showDebugAnalysis);
+	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F10, KeyboardEventHandler::KEY_UP, &InputEventHandler::hideDebugAnalysis);
+}
+
+KeyboardEventHandler &InputManager::getKeyboardEventHandler() {
+    return keyboardEventHandler;
+}
+
+MouseEventHandler &InputManager::getMouseEventHandler() {
+    return mouseEventHandler;
 }
