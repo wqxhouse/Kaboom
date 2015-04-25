@@ -71,6 +71,8 @@ public:
 	void setYawAndPitchAndUpdate(float yaw, float pitch);
 	void setFpsEyePositionAndUpdate(const osg::Vec3 &eye);
 
+	static osg::Quat eulerToQuat(float yaw, float pitch);
+
 private:
 	friend class osgFX::EffectCompositor;
 	osg::Matrix _viewMatrix;
