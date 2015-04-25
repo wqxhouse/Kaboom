@@ -13,7 +13,7 @@ public:
     int receivePackets(char *);
     void sendMessage(char *message, int size);
 
-	inline bool isConnected()
+	inline bool isConnected() const
 	{
 		return _connected;
 	}

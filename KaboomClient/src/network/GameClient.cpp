@@ -35,9 +35,14 @@ void GameClient::receive() {
 
     int len = network.receivePackets(networkData);
 
-    if (len <= 0) {
+    if (len == 0) {
+		printf("<Client> Server is not responding switch back to editor");
+		network.disconnectFromServer();
         return;
-    }
+	}
+	if (len < 0){
+		return;
+	}
 
     EmptyEvent emptyEvent;
 	AssignEvent assignEvent;
@@ -114,3 +119,6 @@ void GameClient::sendMessage(const Event &evt) {
     delete[] data;
 }
 
+bool GameClient::getIsConnectedToServer() const{
+	return network.isConnected();
+}

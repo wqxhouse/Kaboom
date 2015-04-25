@@ -116,7 +116,7 @@ void Game::run() {
 			// Thus, we want to check if receive fails. If fails, since we are disconnected, should fall back to editor state.
 			// E.g: close the server whlie running the game 
             client.receive();
-			if (!Core::isInGameMode()) { //have a way to switch back to the editor
+			if (!Core::isInGameMode() || !client.getIsConnectedToServer()) { //have a way to switch back to the editor
 				removeAllDynamicEntity(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;
 			}
