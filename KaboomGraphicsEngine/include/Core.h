@@ -35,6 +35,8 @@ public:
 		const std::string &posZ, 
 		const std::string &negZ);
 
+	static void setEnvironmentMapVerticalCross(const std::string &cubemap);
+
 	static void enableCameraManipulator();
 	static void disableCameraManipulator();
 

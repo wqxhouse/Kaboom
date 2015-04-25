@@ -251,6 +251,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\CompositorAnalysis.h" />
     <ClInclude Include="include\Core.h" />
+    <ClInclude Include="include\CubemapUtil.h" />
     <ClInclude Include="include\CustomFirstPersonManipulator.h" />
     <ClInclude Include="include\DirectionalLight.h" />
     <ClInclude Include="include\EffectCompositor.h" />
@@ -276,6 +277,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\AxisVisualizer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Core.cpp" />
+    <ClCompile Include="src\CubemapUtil.cpp" />
     <ClCompile Include="src\CustomFirstPersonManipulator.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
     <ClCompile Include="src\EffectAnalysisHelper.cpp" />

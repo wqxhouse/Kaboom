@@ -30,6 +30,12 @@
     <Filter Include="Source Files\Visualizer">
       <UniqueIdentifier>{59d2a9d9-1861-4f1a-b444-6f95b6e4c0a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\CubemapUtil">
+      <UniqueIdentifier>{e57d99fb-643e-4148-b3d1-74436d0cca6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CubemapUtil">
+      <UniqueIdentifier>{04ab4550-9c88-456b-ac43-7f3d4a68e834}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -101,6 +107,9 @@
     </ClInclude>
     <ClInclude Include="include\AxisVisualizer.h">
       <Filter>Header Files\Visualizer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CubemapUtil.h">
+      <Filter>Header Files\CubemapUtil</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="src\AxisVisualizer.cpp">
       <Filter>Source Files\Visualizer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CubemapUtil.cpp">
+      <Filter>Source Files\CubemapUtil</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
