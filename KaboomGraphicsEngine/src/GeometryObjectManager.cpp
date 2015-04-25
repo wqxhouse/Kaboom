@@ -43,7 +43,7 @@ void GeometryObjectManager::deleteGeometry(const std::string &name){
 	
 	_geomObjMap.erase(name);
 	_geomRoot->removeChild(geomObj->getRoot());
-
+	delete geomObj;
 }
 
 bool GeometryObjectManager::setGeometryMaterial(const std::string &geomName, Material *material)
