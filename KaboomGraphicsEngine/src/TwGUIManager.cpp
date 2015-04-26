@@ -237,7 +237,7 @@ void TwGUIManager::initAddBar()
 			strToWCchar(newFile, fileName);
 			wcscat_s(toPath, newFile);
 
-			bool didCopy = CopyFile(fromPath, toPath, FALSE);
+			CopyFile(fromPath, toPath, FALSE);
 			DWORD dw = GetLastError();							// [Debug] Should be 0
 
 			// Add model to geometry manager
@@ -822,7 +822,7 @@ void TwGUIManager::exportXML()
 	// Open file to write
 	int tabs = 0;
 	std::ofstream f;
-	f.open(str_export_xml);
+	f.open(exportPath);
 
 	// Headers
 	write(f, tabs, "<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
