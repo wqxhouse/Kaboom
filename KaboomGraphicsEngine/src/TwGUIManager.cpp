@@ -307,6 +307,7 @@ void TwGUIManager::initAddBar()
 			ConfigSettings* config = ConfigSettings::config;
 			std::string str_mediaPath = "";
 			config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+			str_mediaPath += "Cubemaps/";
 
 			// Append the file name to the destination path -> new file location
 			strToWCchar(toPath, str_mediaPath);
