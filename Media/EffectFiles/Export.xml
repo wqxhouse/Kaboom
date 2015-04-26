@@ -24,8 +24,15 @@
 	<model name="testModel">
 		<file>cow.osg</file>
 		<material name="testMat" />
-		<position>5.000000 5.000000 5.000000</position>
+		<position>5.000000 5.000000 0.000000</position>
 		<orientation>0.059815 -0.049846 0.009969 0.996914</orientation>
+	</model>
+
+	<model name="cow1">
+		<file>cow.osg</file>
+		<material name="____builtInDefault" />
+		<position>2.361832 11.159278 -0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
 	</model>
 
 	<light name="Sun" type="directional">
