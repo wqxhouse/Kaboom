@@ -208,7 +208,7 @@ void TwGUIManager::initManipuatorSelectorBar()
 void TwGUIManager::initAddBar()
 {
 	g_addBar = TwNewBar("Add");
-	TwDefine(" Add size='150 10' color='216 96 224' position='1000 40'");
+	TwDefine(" Add size='150 20' color='216 96 224' position='1000 40'");
 
 	// 'Add model' button
 	TwAddButton(g_addBar, "Add model",
@@ -259,28 +259,33 @@ void TwGUIManager::initAddBar()
 	},
 		g_twBar, NULL);
 
-	//// 'Add point light' button
-	//TwAddButton(g_addBar, "Add point light",
-	//	[](void *clientData) {
+	// 'Add point light' button
+	TwAddButton(g_addBar, "Add point light",
+		[](void *clientData) {
 
-	//	
-	//	// Add model to geometry manager
-	//	osg::Node *model = osgDB::readNodeFile(fileName);
-	//	GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		// Light default properties
+		osg::Vec3 color;
+		osg::Vec3 position;
+		float radius = 100.0f;		// Not sure if this is a good value
+		bool doShadow = false;
 
-	//	// Get the input name
-	//	std::string modelName;
-	//	std::cout << "Enter model name: ";
-	//	std::cin >> modelName;
+		// Add light to light manager
+		LightManager* lm = Core::getWorldRef().getLightManager();
 
-	//	gm->addGeometry(modelName, model, fileName);
+		// Get the input name
+		std::string lightName;
+		std::cout << "Enter point light name: ";
+		std::cin >> lightName;
 
-	//	// [Note: Does not handle duplicate names]
-	//	GeometryObject* geom = gm->getGeometryObject(modelName);
+		lm->addPointLight(lightName, position, color, radius, doShadow);
 
-	//	addLightToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
-	//},
-	//	g_twBar, NULL);
+		// [Note: Does not handle duplicate names]
+		Light* lt = lm->getLight(lightName);
+
+		addLightToGUI((TwBar*)clientData, lt, LIGHT_GROUP_NAME, _index);
+	},
+		g_twBar, NULL);
+
 }
 
 void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index) {
