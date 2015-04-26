@@ -9,9 +9,12 @@
 #include "Game.h"
 #include "InputComponent.h"
 #include "PhysicsComponent.h"
+#include "JetpackComponent.h"
 
 #define PI 3.14159265359
 #define deg2rad(d) (PI / 180.0 * d)
+#define VELOCITYCAP 2
+#define VELOCTIYACCELERATION .1
 
 
 InputSystem::InputSystem(Game *game)
@@ -28,6 +31,7 @@ void InputSystem::update(float timeStep)
 		RotationComponent *rotCom = entity->getComponent<RotationComponent>();
 		PositionComponent *posCom = entity->getComponent<PositionComponent>();
 		PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
+		JetpackComponent *jetCom = entity->getComponent<JetpackComponent>();
 
 		if (inputCom == nullptr || physCom == nullptr) {
 			continue;
@@ -77,6 +81,24 @@ void InputSystem::update(float timeStep)
 		}
 		else {
 			localVelocity.setX(0);
+		}
+		if (inputCom->isJumping()){
+
+			if (!jetCom->activateJetpack()){
+				jetCom->refillJetpack();
+			}
+			else{
+				btVector3 s=rigidBody->getLinearVelocity();
+				if (s.getZ() + 1 > VELOCITYCAP){
+					velocity.setZ(2);
+				}
+				else{
+					velocity.setZ(s.getZ() + VELOCTIYACCELERATION);
+				}
+			}
+		}
+		else{
+			jetCom->refillJetpack();
 		}
 
 		btVector3 worldVelocity(right * localVelocity.getX() + front * localVelocity.getY());
