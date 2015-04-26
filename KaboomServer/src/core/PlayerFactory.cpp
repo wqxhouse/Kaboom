@@ -10,6 +10,7 @@
 
 #include "InputComponent.h"
 #include "PhysicsComponent.h"
+#include "JetpackComponent.h"
 
 PlayerFactory::PlayerFactory(EntityManager *entityManager)
     : entityManager(entityManager) {
@@ -39,6 +40,7 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new BombContainerComponent());
+	entity->attachComponent(new JetpackComponent());
 
     return entity;
 }
