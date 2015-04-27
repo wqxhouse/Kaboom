@@ -16,6 +16,8 @@ public:
 
     void setGravity(float gravity);
 
+	void addStaticPlane(btVector3 origin, btVector3 normal);
+	void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
 private:
     btDbvtBroadphase broadphase;
     btDefaultCollisionConfiguration collisionConfiguration;
