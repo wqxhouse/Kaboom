@@ -83,7 +83,8 @@ vec3 applyDirectionalLight(Light light, Material material, vec3 eyePosition)
     // no att for dir light
 
     vec3  l = -light.dirFromLight;
-    vec3  v = normalize(eyePosition - material.position);
+    //vec3  v = normalize(eyePosition - material.position);
+    vec3  v = normalize(-material.position);
     vec3  n = normalize(material.normal);
     vec3  h = normalize(l + v);
     return computeLightModel(light, material, l, v, n, h, attenuation, 1.0);
@@ -94,10 +95,53 @@ vec3 applyPointLight(Light light, Material material, vec3 eyePosition)
     float distanceToLight = distance(material.position, light.position);
     float attenuation = computePointLightAttenuation(light, distanceToLight);
     vec3  l = normalize(light.position - material.position);
-    vec3  v = normalize(eyePosition - material.position);
+    // vec3  v = normalize(eyePosition - material.position);
+    vec3  v = normalize(-material.position);
     vec3  n = normalize(material.normal);
     vec3  h = normalize(l + v);
     return computeLightModel(light, material, l ,v, n, h, attenuation, 1.0);
 	//return vec3(attenuation);
 }
+
+
+//// https://www.unrealengine.com/blog/physically-based-shading-on-mobile
+//vec3 EnvBRDFApprox( vec3 SpecularColor, float Roughness, float NoV )
+//{
+//	const vec4 c0 = vec4( -1, -0.0275, -0.572, 0.022 );
+//	const vec4 c1 = vec4( 1, 0.0425, 1.04, -0.04 );
+//	vec4 r = Roughness * c0 + c1;
+//	float a004 = min( r.x * r.x, exp2( -9.28 * NoV ) ) * r.x + r.y;
+//	vec2 AB = vec2( -1.04, 1.04 ) * a004 + r.zw;
+//	return SpecularColor * AB.x + AB.y;
+//}
+
+//// http://the-witness.net/news/2012/02/seamless-cube-map-filtering/
+//vec3 fix_cube_lookup( vec3 v, float cube_size, float lod ) 
+//{
+//	float M = max(max(abs(v.x), abs(v.y)), abs(v.z));
+//	float scale = 1 - exp2(lod) / cube_size;
+//	if (abs(v.x) != M) v.x *= scale;
+//	if (abs(v.y) != M) v.y *= scale;
+//	if (abs(v.z) != M) v.z *= scale;
+//	return v;
+//}
+
+//vec3 calcEnvContribution(vec3 sampleCubeMapColor, float roughness)
+//{
+//	// get the approximate reflectance
+//	float wsNoV				= saturate( dot( wsN, wsV ) );
+//	vec3 reflectance		= EnvBRDFApprox( specularColor, roughness4, wsNoV );
+		
+//	// cheat by tweaking the reflectance
+//	//reflectance				= pow( reflectance, vec3( 1.5 ) );
+		
+//	// combine the specular IBL and the BRDF
+//	vec3 specularIBL		= sampledColor * reflectance * uSpecular;
+		
+//	// still have to figure out how to do env. irradiance
+//	vec3 diffuseIBL			= textureLod( uCubeMapTex, vWsNormal, 5 ).rgb * ( 1 - 1 * metallic ) * diffuseColor;
+		
+//	// not sure how to combine this with the rest
+//	color					+= diffuseIBL + specularIBL;
+//}
 
