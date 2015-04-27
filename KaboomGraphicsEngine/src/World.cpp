@@ -181,7 +181,7 @@ void World::createModelFromXML(osgDB::XmlNode* xmlNode)
 
 			GeometryObject* tmp;
 			tmp = _geomManager->getGeometryObject(name);
-			tmp->setRotation(orientation);
+			tmp->setRotation(quat);
 		}
 		//else if (childName == "collider") {
 		//	std::stringstream ss; ss << xmlChild->getTrimmedContents();
