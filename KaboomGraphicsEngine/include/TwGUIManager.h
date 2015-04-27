@@ -21,6 +21,12 @@ const std::string LIGHT_GROUP_NAME = "Edit Light";
 const std::string POS_X_LABEL = "posX";
 const std::string POS_Y_LABEL = "posY";
 const std::string POS_Z_LABEL = "posZ";
+const std::string REMOVE_LABEL = "remove";
+
+struct RemoveInfoFromBar {
+	TwBar* bar;
+	std::string name;
+};
 
 class Core;
 class TwGUIManager : public osgGA::GUIEventHandler, public osg::Camera::DrawCallback

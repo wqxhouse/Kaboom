@@ -336,7 +336,7 @@ void TwGUIManager::initAddBar()
 			//addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
 		}
 	},
-		g_twBar, NULL);
+		NULL, NULL);
 }
 
 void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index) {
@@ -348,6 +348,22 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string posXVarName = POS_X_LABEL + indexStr;
 	std::string posYVarName = POS_Y_LABEL + indexStr;
 	std::string posZVarName = POS_Z_LABEL + indexStr;
+	std::string removeVarName = REMOVE_LABEL + indexStr;
+
+	RemoveInfoFromBar* rm = new RemoveInfoFromBar();
+	rm->bar = bar;
+	rm->name = name;
+
+	std::string removeDef = nameGroupDef + " label='" + REMOVE_LABEL + "'";
+	TwAddButton(bar, removeDef.c_str(),
+		[](void *clientData) {
+		RemoveInfoFromBar* rm = (RemoveInfoFromBar*)clientData;
+		std::string name = rm->name;
+		Core::getWorldRef().getGeometryManager()->deleteGeometry(name);
+
+		TwRemoveVar(rm->bar, name.c_str());
+	},
+		rm, removeDef.c_str());
 
 	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 	TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
