@@ -504,6 +504,21 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 	{
 		PointLight *pl = l->asPointLight();
 
+		RemoveInfoFromBar* rm = new RemoveInfoFromBar();
+		rm->bar = bar;
+		rm->name = name;
+
+		std::string removeDef = nameGroupDef + " label='" + REMOVE_LABEL + "'";
+		TwAddButton(bar, removeDef.c_str(),
+			[](void *clientData) {
+			RemoveInfoFromBar* rm = (RemoveInfoFromBar*)clientData;
+			std::string name = rm->name;
+			Core::getWorldRef().getLightManager()->deleteLight(name);
+
+			TwRemoveVar(rm->bar, name.c_str());
+		},
+			rm, removeDef.c_str());
+
 		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
 			[](const void *value, void *clientData) {

@@ -21,6 +21,7 @@ public:
 		float radius, 
 		bool castShadow);
 
+	void deleteLight(const std::string &name);
 
 	inline const std::unordered_map<std::string, Light *> getLightMapRef() const
 	{
