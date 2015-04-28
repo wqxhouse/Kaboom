@@ -1,12 +1,13 @@
 #include "GameClient.h"
 
+#include <network/AssignEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
+#include <network/ExplosionEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/SpawnEvent.h>
-#include <network/AssignEvent.h>
 
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
@@ -90,9 +91,16 @@ void GameClient::receive() {
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
                 break;
             }
-            default:
+            case EventOpcode::EXPLOSION: {
+                ExplosionEvent explosionEvent;
+                explosionEvent.deserialize(&networkData[i]);
+                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(explosionEvent);
+                break;
+            }
+            default: {
                 printf("error in packet event types\n");
                 return;
+            }
         }
 
         i += emptyEvent.getByteSize();
