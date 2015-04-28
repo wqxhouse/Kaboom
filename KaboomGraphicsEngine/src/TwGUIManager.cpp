@@ -35,6 +35,7 @@ void TwGUIManager::initializeTwGUI()
 	initMainBar();
 	initManipuatorSelectorBar();
 	initAddBar();
+	initPlainMatBar();
 }
 
 void TwGUIManager::initMainBar()
@@ -339,6 +340,28 @@ void TwGUIManager::initAddBar()
 		NULL, NULL);
 }
 
+void TwGUIManager::initPlainMatBar()
+{
+
+	g_plainMatBar = TwNewBar("PlainMaterials");
+	TwDefine(" PlainMaterials label='Materials'size='250 400' color='96 216 96' position='1000 110' ");
+
+	// Process plain materials
+	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
+	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMap.begin();
+		it != mmMap.end(); ++it)
+	{
+		const std::string &name = it->first;
+		Material *mat = it->second;
+
+		if (mat->getUseTexture()) continue;
+		
+		// Moved code to a function
+		addPlainMatToGUI(g_plainMatBar, mat, PLAIN_MATERIAL_GROUP_NAME, _index);
+	}
+
+}
+
 void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index) {
 	std::string name = geom->getName();
 
@@ -441,7 +464,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, posZDef.c_str());
 
-	std::string rotationVarName = "rotation" + std::to_string(index);
+	std::string rotationVarName = "rotation" + indexStr;
 	std::string rotationDef = nameGroupDef + " label='rotation'";
 	TwAddVarCB(bar, rotationVarName.c_str(), TW_TYPE_QUAT4F,
 		[](const void *value, void *clientData) {
@@ -487,7 +510,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		DirectionalLight *dl = l->asDirectionalLight();
 
 		// lightDir ( to light, not from light ) 
-		std::string dirToWorldVarName = "dirToWorld" + std::to_string(index);
+		std::string dirToWorldVarName = "dirToWorld" + indexStr;
 		std::string dirToWorldDef = nameGroupDef + " label='dirToWorld'";
 		TwAddVarCB(bar, dirToWorldVarName.c_str(), TW_TYPE_DIR3F,
 			[](const void *value, void *clientData) {
@@ -506,9 +529,9 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 
 		// TODO: color, later.... Too tired
 		// TW_TYPE_COLOR3F
-		std::string dirLightColorVarName = "Color" + std::to_string(index);
-		std::string dirLightColorDef = nameGroupDef + " label='Color'";
-		TwAddVarCB(bar, dirLightColorVarName.c_str(), TW_TYPE_COLOR3F,
+		std::string colorVarName = COLOR_LABEL + indexStr;
+		std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+		TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
 			[](const void *value, void *clientData) {
 			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
 			const float *arr = static_cast<const float *>(value);
@@ -520,7 +543,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			const osg::Vec3 &color = dl->getColor();
 			float *arr = static_cast<float *>(value);
 			arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
-		}, dl, dirLightColorDef.c_str());
+		}, dl, colorDef.c_str());
 	}
 	else if (l->getLightType() == POINTLIGHT)
 	{
@@ -631,9 +654,9 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		// TODO: add color ..
 		// TODO: color, later.... Too tired
 		// TW_TYPE_COLOR3F
-		std::string ptLightColorVarName = "Color" + std::to_string(index);
-		std::string ptLightColorDef = nameGroupDef + " label='Color'";
-		TwAddVarCB(bar, ptLightColorVarName.c_str(), TW_TYPE_COLOR3F,
+		std::string colorVarName = COLOR_LABEL + indexStr;
+		std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+		TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
 			[](const void *value, void *clientData) {
 			PointLight *pl = static_cast<PointLight *>(clientData);
 			const float *arr = static_cast<const float *>(value);
@@ -645,10 +668,90 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			const osg::Vec3 &color = pl->getColor();
 			float *arr = static_cast<float *>(value);
 			arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
-		}, pl, ptLightColorDef.c_str());
+		}, pl, colorDef.c_str());
 	}
 
 	std::string moveStr = " Main/" + name + " group='" + group + "'";
+	TwDefine(moveStr.c_str());
+
+	index++;
+}
+
+void TwGUIManager::addPlainMatToGUI(TwBar* bar, Material* mat, std::string group, int& index)
+{
+	std::string name = mat->getName();
+	std::string nameGroupDef = " group='" + name + "' ";
+
+	std::string indexStr = std::to_string(index);
+
+	std::string colorVarName = COLOR_LABEL + indexStr;
+	std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+	TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const float *arr = static_cast<const float *>(value);
+		osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
+		mat->setAlbedo(color);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const osg::Vec3 &color = mat->getAlbedo();
+		float *arr = static_cast<float *>(value);
+		arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
+	}, mat, colorDef.c_str());
+
+	std::string roughnessVarName = ROUGHNESS_LABEL + indexStr;
+	std::string roughnessDef = nameGroupDef + " label='" + ROUGHNESS_LABEL + "'";
+	TwAddVarCB(bar, roughnessVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setRoughness(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getRoughness();
+		*showVal = val;
+	},
+		mat, roughnessDef.c_str());
+
+	std::string specularVarName = SPECULAR_LABEL + indexStr;
+	std::string specularDef = nameGroupDef + " label='" + SPECULAR_LABEL + "'";
+	TwAddVarCB(bar, specularVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setSpecular(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getSpecular();
+		*showVal = val;
+	},
+		mat, specularDef.c_str());
+
+	std::string metallicVarName = METALLIC_LABEL + indexStr;
+	std::string metallicDef = nameGroupDef + " label='" + METALLIC_LABEL + "'";
+	TwAddVarCB(bar, metallicVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setMetallic(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getMetallic();
+		*showVal = val;
+	},
+		mat, metallicDef.c_str());
+
+	std::string moveStr = " PlainMaterials/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
 
 	index++;
