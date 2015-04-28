@@ -41,7 +41,8 @@ public:
 	
 	Camera &getCamera();
 
-	void removeAllDynamicEntity();
+    void removeEntity(Entity *entity);
+    void removeAllEntities();
 
 private:
     ConfigSettings *config;
