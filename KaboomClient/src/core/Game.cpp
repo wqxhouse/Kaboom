@@ -18,13 +18,12 @@
 #include "../network/GameClient.h"
 
 Game::Game(ConfigSettings *config)
-    : config(config),
-      playerFactory(entityManager),
-      bombFactory(entityManager),
-      eventHandlerLookup(this),
-      client(eventHandlerLookup), 
-	  _camera(Core::getMainCamera()) {
-
+        : config(config),
+          playerFactory(entityManager),
+          bombFactory(entityManager),
+          eventHandlerLookup(this),
+          client(eventHandlerLookup), 
+	      _camera(Core::getMainCamera()) {
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
     config->getValue(ConfigSettings::str_screenPosX, screenPosXStr);
@@ -119,7 +118,7 @@ void Game::run() {
 			// E.g: close the server whlie running the game 
             client.receive();
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
-				removeAllDynamicEntity(); //remove all entity created dynamically when connected to the client
+				removeAllEntities(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;
 			}
 			break;
@@ -132,15 +131,18 @@ void Game::run() {
         Core::AdvanceFrame();
     }
 }
-void Game::removeAllDynamicEntity() {
-	for (auto it : entityManager.getEntityList()) {
-		//remove from graphics
-		getGeometryManager()->deleteGeometry(std::to_string(static_cast<int>(it->getId())));
 
-		//remove from entity system
-		entityManager.destroyEntity(it->getId());
+void Game::removeEntity(Entity *entity) {
+    getGeometryManager()->deleteGeometry(std::to_string(entity->getId()));
+    entityManager.destroyEntity(entity->getId());
+}
+
+void Game::removeAllEntities() {
+	for (auto it : entityManager.getEntityList()) {
+        removeEntity(it);
 	}
 }
+
 const GameClient &Game::getGameClient() const{
 	return client;
 }

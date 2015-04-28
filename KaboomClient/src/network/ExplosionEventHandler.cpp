@@ -19,7 +19,5 @@ void ExplosionEventHandler::handle(const Event &e) const {
 
     // TODO: Handle explosion effect.
 
-    game->getGeometryManager()->deleteGeometry(std::to_string(evt.getBombId()));
-
-    entityManager.destroyEntity(bomb->getId());
+    game->removeEntity(bomb);
 }
