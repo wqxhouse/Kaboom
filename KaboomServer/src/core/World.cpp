@@ -35,3 +35,7 @@ void World::removeRigidBody(btRigidBody *rigidBody) {
 void World::setGravity(float gravity) {
     world.setGravity(btVector3(0, 0, -gravity));
 }
+
+const btCollisionDispatcher &World::getDispatcher() const {
+    return dispatcher;
+}

@@ -16,6 +16,7 @@
 #define VELOCITYCAP 2
 #define VELOCTIYACCELERATION .1
 
+int g_count = 0; // HACK: for lowering fire rate
 
 InputSystem::InputSystem(Game *game)
         : EntitySystem(game) {
@@ -107,16 +108,22 @@ void InputSystem::update(float timeStep)
 		rigidBody->setLinearVelocity(worldVelocity);
 
 		if (inputCom->isFiring()) {
-			Entity *bomb = game->getBombFactory().createBomb(
-                BombType::BOM_BOM,
-                posCom->getX() + viewDir.getX(),
-                posCom->getY() + viewDir.getY(),
-                posCom->getZ() + viewDir.getZ(),
-                viewDir.getX() * 5, // TODO: Change launch speed
-                viewDir.getY() * 5,
-                viewDir.getZ() * 5);
-			game->addEntityToWorld(bomb);
-			game->getGameServer().sendSpawnEvent(bomb);
+            // HACK: for lowering fire rate
+            if (g_count > 10) {
+                Entity *bomb = game->getBombFactory().createBomb(
+                    BombType::BOM_BOM,
+                    posCom->getX() + viewDir.getX(),
+                    posCom->getY() + viewDir.getY(),
+                    posCom->getZ() + viewDir.getZ(),
+                    viewDir.getX() * 5, // TODO: Change launch speed
+                    viewDir.getY() * 5,
+                    viewDir.getZ() * 5);
+                game->addEntityToWorld(bomb);
+                game->getGameServer().sendSpawnEvent(bomb);
+                g_count = 0;
+            } else {
+                g_count++;
+            }
 		}
 	}
 }

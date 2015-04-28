@@ -34,16 +34,18 @@ Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z)
 Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z, float vx, float vy, float vz) const {
     const BombData &data = lookup[type];
 
+    Entity *entity = entityManager.createEntity();
+
     btTransform startTrans = btTransform::getIdentity();
     startTrans.setOrigin(btVector3(x, y, z));
 
     btMotionState *motionState = new btDefaultMotionState(startTrans);
     btCollisionShape *collisionShape = new btSphereShape(data.size);
+    collisionShape->setUserPointer(entity);
 
     btRigidBody *rigidBody = new btRigidBody(data.mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setLinearVelocity(btVector3(vx, vy, vz));
 
-    Entity *entity = entityManager.createEntity();
     entity->attachComponent(new CharacteristicComponent(BOMB, 0, 0));
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());

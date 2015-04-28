@@ -24,6 +24,8 @@ Entity *PlayerFactory::createPlayer() const {
 }
 
 Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
+    Entity *entity = entityManager.createEntity();
+
     const btScalar mass = 1;
 
     btTransform startTrans = btTransform::getIdentity();
@@ -31,9 +33,10 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
 
     btMotionState *motionState = new btDefaultMotionState(startTrans);
     btCollisionShape *collisionShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
+    collisionShape->setUserPointer(entity);
 
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
-    Entity *entity = entityManager.createEntity();
+
     entity->attachComponent(new CharacteristicComponent(PLAYER, 0, 0));
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));

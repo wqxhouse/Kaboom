@@ -10,10 +10,11 @@
 #include "../network/ServerEventHandlerLookup.h"
 
 Game::Game(ConfigSettings *config)
-	    : config(config),
-	      playerFactory(entityManager),
-	      bombFactory(entityManager),
-	      inputSystem(this),
+        : config(config),
+          playerFactory(entityManager),
+          bombFactory(entityManager),
+          inputSystem(this),
+          collisionSystem(this),
 	      eventHandlerLookup(this),
 	      server(config, eventHandlerLookup) {
     world.loadMap();
@@ -28,6 +29,16 @@ void Game::addEntityToWorld(Entity *entity) {
     if (physicsCom != nullptr) {
         world.addRigidBody(physicsCom->getRigidBody());
     }
+}
+
+void Game::addBombExplosion(Entity *bomb, float x, float y, float z) {
+    BombExplosion explosion;
+    explosion.bomb = bomb;
+    explosion.x = x;
+    explosion.y = y;
+    explosion.z = z;
+
+    bombExplosions.push_back(explosion);
 }
 
 void Game::update(float timeStep) {
@@ -66,6 +77,14 @@ void Game::update(float timeStep) {
 	}
 
     world.stepSimulation(timeStep);
+
+    collisionSystem.update(timeStep);
+
+    for (auto it : bombExplosions) {
+        std::cout << it.x << "," << it.y << "," << it.z << std::endl;
+    }
+
+    bombExplosions.clear();
 
     for (Entity *entity : entityManager.getEntityList()) {
         PositionComponent *posCom = entity->getComponent<PositionComponent>();

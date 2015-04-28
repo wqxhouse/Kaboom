@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\BombFactory.cpp" />
+    <ClCompile Include="src\core\CollisionSystem.cpp" />
     <ClCompile Include="src\core\EntitySystem.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\InputComponent.cpp" />
@@ -50,6 +51,7 @@
   <ItemGroup>
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\BombType.h" />
+    <ClInclude Include="src\core\CollisionSystem.h" />
     <ClInclude Include="src\core\EntitySystem.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\InputComponent.h" />
