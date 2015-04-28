@@ -7,6 +7,7 @@
 #include <network/AssignEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
+#include <network/ExplosionEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
@@ -191,4 +192,9 @@ void GameServer::sendSpawnEvent(Entity *entity) const {
 
     SpawnEvent spawnEvent(entity->getId(), posComp->getX(), posComp->getY(), posComp->getZ(), charComp->getType(), 0);
     sendEvent(spawnEvent);
+}
+
+void GameServer::sendExplosionEvent(Entity *bomb) const {
+    ExplosionEvent expEvent(bomb->getId());
+    sendEvent(expEvent);
 }

@@ -103,6 +103,9 @@
     <ClInclude Include="CountDown.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\ExplosionEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Component.cpp">
@@ -155,6 +158,9 @@
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
     <ClCompile Include="CountDown.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\ExplosionEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -16,6 +16,7 @@ Game::Game(ConfigSettings *config)
           inputSystem(this),
           physicsSystem(this),
           collisionSystem(this),
+          explosionSystem(this),
 	      eventHandlerLookup(this),
 	      server(config, eventHandlerLookup) {
     world.loadMap();
@@ -24,22 +25,22 @@ Game::Game(ConfigSettings *config)
 Game::~Game() {
 }
 
-void Game::addEntityToWorld(Entity *entity) {
-    PhysicsComponent *physicsCom = entity->getComponent<PhysicsComponent>();
+void Game::addEntity(Entity *entity) {
+    PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
-    if (physicsCom != nullptr) {
-        world.addRigidBody(physicsCom->getRigidBody());
+    if (physicsComp != nullptr) {
+        world.addRigidBody(physicsComp->getRigidBody());
     }
 }
 
-void Game::addBombExplosion(Entity *bomb, float x, float y, float z) {
-    BombExplosion explosion;
-    explosion.bomb = bomb;
-    explosion.x = x;
-    explosion.y = y;
-    explosion.z = z;
+void Game::removeEntity(Entity *entity) {
+    PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
-    bombExplosions.push_back(explosion);
+    if (physicsComp != nullptr) {
+        world.removeRigidBody(physicsComp->getRigidBody());
+    }
+
+    entityManager.destroyEntity(entity->getId());
 }
 
 void Game::update(float timeStep) {
@@ -52,7 +53,7 @@ void Game::update(float timeStep) {
 		//now we create a new player
         Entity *player = playerFactory.createPlayer(0, -5, 5);
         players.push_back(player);
-        addEntityToWorld(player);
+        addEntity(player);
 
         //first notify the new client what entityId it should keep track of
         server.sendAssignEvent(player->getId());
@@ -73,12 +74,7 @@ void Game::update(float timeStep) {
     inputSystem.update(timeStep);
     physicsSystem.update(timeStep);
     collisionSystem.update(timeStep);
-
-    for (auto it : bombExplosions) {
-        std::cout << it.x << "," << it.y << "," << it.z << std::endl;
-    }
-
-    bombExplosions.clear();
+    explosionSystem.update(timeStep);
 
     for (Entity *entity : entityManager.getEntityList()) {
         PositionComponent *posCom = entity->getComponent<PositionComponent>();

@@ -30,6 +30,7 @@ public:
     void sendPositionEvent(Entity *entity) const;
     void sendRotationEvent(Entity *entity) const;
     void sendSpawnEvent(Entity *entity) const;
+    void sendExplosionEvent(Entity *bomb) const;
 
 private:
     const ServerEventHandlerLookup &eventHandlerLookup;
