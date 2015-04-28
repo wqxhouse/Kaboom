@@ -46,13 +46,11 @@ void World::loadMap() {
 	addStaticPlane(btVector3(-10, 0, 0), btVector3(1, 0, 0));//left wall
 	addStaticPlane(btVector3(10, 0, 0), btVector3(-1, 0, 0));//right wall
 
-
 	//add a ramp
-	/*
+	
 	btQuaternion quat;
-	quat.setRotation(btVector3(1, 0, 0), btDegrees(30));
-	addStaticPlane(btVector3(0, 0, 0), btVector3(0, 0, 1), quat);
-	*/
+	quat.setRotation(btVector3(0, 1, 0), btDegrees(30));
+	addStaticPlane(btVector3(-5, 0, 0), btVector3(0, 0, -1), quat);
 
 }
 

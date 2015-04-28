@@ -42,9 +42,10 @@ Game::Game(ConfigSettings *config)
     int screenH = atoi(screenHStr.c_str());
 
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
-    //setupScene();
+    setupScene();
 
 	// For testing in-game editor *
+	/*
 	std::string str_mediaPath = "";
 	std::string str_world_xml = "";
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
@@ -53,6 +54,7 @@ Game::Game(ConfigSettings *config)
 	str_world_xml = str_mediaPath + str_world_xml;
 
 	Core::loadWorldFile(str_world_xml);
+	*/
 	/* End testing code */
 
     inputManager = new InputManager(client);
