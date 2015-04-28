@@ -11,8 +11,8 @@
 
 Game::Game(ConfigSettings *config)
 	    : config(config),
-	      playerFactory(&entityManager),
-	      bombFactory(&entityManager),
+	      playerFactory(entityManager),
+	      bombFactory(entityManager),
 	      inputSystem(this),
 	      eventHandlerLookup(this),
 	      server(config, eventHandlerLookup) {

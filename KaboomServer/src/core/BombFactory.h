@@ -11,7 +11,7 @@ class EntityManager;
 
 class BombFactory {
 public:
-	BombFactory(EntityManager *entityManager);
+	BombFactory(EntityManager &entityManager);
 	~BombFactory();
 
     Entity *createBomb(const BombType &type) const;
@@ -38,5 +38,5 @@ private:
 
     static BombDataLookup lookup;
 
-	EntityManager *entityManager;
+	EntityManager &entityManager;
 };
