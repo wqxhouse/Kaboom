@@ -91,6 +91,9 @@
     <ClCompile Include="src\core\CollisionSystem.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\PhysicsSystem.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -143,6 +146,9 @@
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
     <ClInclude Include="src\core\CollisionSystem.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\PhysicsSystem.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
   </ItemGroup>

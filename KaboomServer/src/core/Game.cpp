@@ -14,6 +14,7 @@ Game::Game(ConfigSettings *config)
           playerFactory(entityManager),
           bombFactory(entityManager),
           inputSystem(this),
+          physicsSystem(this),
           collisionSystem(this),
 	      eventHandlerLookup(this),
 	      server(config, eventHandlerLookup) {
@@ -70,14 +71,7 @@ void Game::update(float timeStep) {
 
     // Handle game logic here
     inputSystem.update(timeStep);
-
-	for (Entity *entity : entityManager.getEntityList())
-	{
-		entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
-	}
-
-    world.stepSimulation(timeStep);
-
+    physicsSystem.update(timeStep);
     collisionSystem.update(timeStep);
 
     for (auto it : bombExplosions) {
