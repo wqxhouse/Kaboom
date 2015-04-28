@@ -18,7 +18,7 @@
 
 const std::string GEOM_GROUP_NAME = "Edit GeometryObject";
 const std::string LIGHT_GROUP_NAME = "Edit Light";
-const std::string PLAIN_MATERIAL_GROUP_NAME = "Edit Plain Material";
+const std::string MATERIAL_GROUP_NAME = "Edit Material";
 
 const std::string POS_X_LABEL = "posX";
 const std::string POS_Y_LABEL = "posY";
@@ -70,7 +70,7 @@ public:
 	static void exportXML();
 	static void addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index);
 	static void addLightToGUI(TwBar* bar, Light* geom, std::string group, int& index);
-	static void addPlainMatToGUI(TwBar* bar, Material* mat, std::string group, int& index);
+	static void addMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
 
 protected:
 	static int _index;
@@ -92,7 +92,7 @@ protected:
 		g_twBar = NULL;
 		g_manipulatorSelectorBar = NULL;
 		g_addBar = NULL;
-		g_plainMatBar = NULL;
+		g_materialBar = NULL;
 	}
 
 	TwMouseButtonID getTwButton(int button) const;
@@ -102,13 +102,13 @@ protected:
 	void initMainBar();
 	void initManipuatorSelectorBar();
 	void initAddBar();
-	void initPlainMatBar();
+	void initMaterialBar();
 	
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;
 	TwBar *g_twBar;
 	TwBar *g_manipulatorSelectorBar;
 	TwBar *g_addBar;
-	TwBar *g_plainMatBar;
+	TwBar *g_materialBar;
 	char g_fileName[256]; // TODO: this is a hack, fix it
 
 	static bool openFile(std::string &s);
