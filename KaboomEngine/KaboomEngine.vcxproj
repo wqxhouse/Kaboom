@@ -180,6 +180,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CountDown.h" />
     <ClInclude Include="src\core\BombContainerComponent.h" />
     <ClInclude Include="src\core\CharacteristicComponent.h" />
     <ClInclude Include="src\core\Component.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CountDown.cpp" />
     <ClCompile Include="src\core\BombContainerComponent.cpp" />
     <ClCompile Include="src\core\CharacteristicComponent.cpp" />
     <ClCompile Include="src\core\Component.cpp" />

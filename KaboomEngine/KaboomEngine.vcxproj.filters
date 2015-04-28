@@ -100,6 +100,9 @@
     <ClInclude Include="src\network\DisconnectEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
+    <ClInclude Include="CountDown.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Component.cpp">
@@ -150,6 +153,9 @@
     </ClCompile>
     <ClCompile Include="src\network\DisconnectEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="CountDown.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

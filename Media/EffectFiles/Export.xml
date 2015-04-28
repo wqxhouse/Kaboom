@@ -1,31 +1,52 @@
 <?xml version="1.0" encoding="utf - 8"?>
 <world>
-	<material name="testMat" type="plain">
-		<albedo>1.000000 1.000000 1.000000</albedo>
+	<material name="planeMat" type="plain">
+		<albedo>0.800000 0.300000 0.300000</albedo>
 		<roughness>0.500000</roughness>
-		<specular>0.700000</specular>
-		<metallic>0.300000</metallic>
+		<specular>0.500000</specular>
+		<metallic>0.500000</metallic>
 	</material>
 
-	<material name="testMat2" type="plain">
-		<albedo>0.700000 0.300000 0.300000</albedo>
-		<roughness>0.600000</roughness>
-		<specular>0.800000</specular>
-		<metallic>1.000000</metallic>
-	</material>
+	<model name="cow">
+		<file></file>
+		<material name="planeMat" />
+		<position>0.000000 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+	</model>
 
-	<material name="testMatTextured" type="textured">
-		<albedoTex>test_albedoTex</albedoTex>
-		<roughnessTex>test_roughnessTex</roughnessTex>
-		<metallicTex>test_metallicTex</metallicTex>
-		<normalPath>test_normalPath</normalPath>
-	</material>
+	<model name="wallRight">
+		<file></file>
+		<material name="____builtInDefault" />
+		<position>10.000000 0.000000 10.000000</position>
+		<orientation>0.000000 -0.707107 0.000000 0.707107</orientation>
+	</model>
 
-	<model name="testModel">
-		<file>cow.osg</file>
-		<material name="testMat" />
-		<position>5.000000 5.000000 5.000000</position>
-		<orientation>0.059815 -0.049846 0.009969 0.996914</orientation>
+	<model name="floor">
+		<file></file>
+		<material name="planeMat" />
+		<position>0.000000 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+	</model>
+
+	<model name="wallBack">
+		<file></file>
+		<material name="planeMat" />
+		<position>0.000000 -10.000000 10.000000</position>
+		<orientation>-0.707107 0.000000 0.000000 0.707107</orientation>
+	</model>
+
+	<model name="wallLeft">
+		<file></file>
+		<material name="____builtInDefault" />
+		<position>-10.000000 0.000000 10.000000</position>
+		<orientation>0.000000 0.707107 0.000000 0.707107</orientation>
+	</model>
+
+	<model name="wallFront">
+		<file></file>
+		<material name="planeMat" />
+		<position>0.000000 10.000000 10.000000</position>
+		<orientation>0.707107 0.000000 0.000000 0.707107</orientation>
 	</model>
 
 	<light name="Sun" type="directional">
@@ -38,13 +59,6 @@
 		<color>0.300000 0.700000 0.300000</color>
 		<castShadow>0</castShadow>
 		<position>-7.000000 0.000000 0.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="pt1" type="point">
-		<color>0.700000 0.300000 0.300000</color>
-		<castShadow>0</castShadow>
-		<position>7.000000 0.000000 0.000000</position>
 		<radius>100.000000</radius>
 	</light>
 
