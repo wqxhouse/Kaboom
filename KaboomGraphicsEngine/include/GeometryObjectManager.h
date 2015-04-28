@@ -20,6 +20,7 @@ public:
 	bool addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName);
 	bool setGeometryMaterial(const std::string &geomName, Material *material);
 	void deleteGeometry(const std::string &name);
+	void renameGeometry(const std::string &oldName, const std::string newName);
 	inline const std::unordered_map<std::string, GeometryObject *> getGeometryObjectMapRef() const
 	{
 		return _geomObjMap;
