@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Entity Component System\Components">
       <UniqueIdentifier>{9e933be9-d712-41e0-92fc-60720b99dc61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{be66f7ba-63cd-4573-8dda-abf5f0a603da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Component.h">
@@ -105,6 +108,9 @@
     </ClInclude>
     <ClInclude Include="src\network\ExplosionEvent.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\BombType.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

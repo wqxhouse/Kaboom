@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\BombFactory.h" />
-    <ClInclude Include="src\core\BombType.h" />
     <ClInclude Include="src\core\CollisionSystem.h" />
     <ClInclude Include="src\core\EntitySystem.h" />
     <ClInclude Include="src\core\ExplosionComponent.h" />
