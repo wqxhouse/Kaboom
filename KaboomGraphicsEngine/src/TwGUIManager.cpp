@@ -350,20 +350,42 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string posZVarName = POS_Z_LABEL + indexStr;
 	std::string removeVarName = REMOVE_LABEL + indexStr;
 
-	RemoveInfoFromBar* rm = new RemoveInfoFromBar();
-	rm->bar = bar;
-	rm->name = name;
+	BarItem* item = new BarItem();
+	item->bar = bar;
+	item->name = name;
 
+	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
+	TwAddButton(bar, editNameDef.c_str(),
+		[](void *clientData) {
+		BarItem* item = (BarItem*)clientData;
+		std::string oldName = item->name;
+
+		// Get the new name
+		std::string newName;
+		std::cout << "Enter new model name: ";
+		std::cin >> newName;
+
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		gm->renameGeometry(oldName, newName);
+
+		GeometryObject* geom = gm->getGeometryObject(newName);
+
+		TwRemoveVar(item->bar, oldName.c_str());
+		addModelToGUI(item->bar, geom, GEOM_GROUP_NAME, _index);
+	},
+		item, editNameDef.c_str());
+
+	//std::string removeVarName = "remove" + std::to_string(index);
 	std::string removeDef = nameGroupDef + " label='" + REMOVE_LABEL + "'";
 	TwAddButton(bar, removeDef.c_str(),
 		[](void *clientData) {
-		RemoveInfoFromBar* rm = (RemoveInfoFromBar*)clientData;
-		std::string name = rm->name;
+		BarItem* item = (BarItem*)clientData;
+		std::string name = item->name;
 		Core::getWorldRef().getGeometryManager()->deleteGeometry(name);
 
-		TwRemoveVar(rm->bar, name.c_str());
+		TwRemoveVar(item->bar, name.c_str());
 	},
-		rm, removeDef.c_str());
+		item, removeDef.c_str());
 
 	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 	TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
@@ -504,20 +526,41 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 	{
 		PointLight *pl = l->asPointLight();
 
-		RemoveInfoFromBar* rm = new RemoveInfoFromBar();
-		rm->bar = bar;
-		rm->name = name;
+		BarItem* item = new BarItem();
+		item->bar = bar;
+		item->name = name;
+
+		std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
+		TwAddButton(bar, editNameDef.c_str(),
+			[](void *clientData) {
+			BarItem* item = (BarItem*)clientData;
+			std::string oldName = item->name;
+
+			// Get the new name
+			std::string newName;
+			std::cout << "Enter new light name: ";
+			std::cin >> newName;
+
+			LightManager* lm = Core::getWorldRef().getLightManager();
+			lm->renameLight(oldName, newName);
+
+			Light* light = lm->getLight(newName);
+
+			TwRemoveVar(item->bar, oldName.c_str());
+			addLightToGUI(item->bar, light, LIGHT_GROUP_NAME, _index);
+		},
+			item, editNameDef.c_str());
 
 		std::string removeDef = nameGroupDef + " label='" + REMOVE_LABEL + "'";
 		TwAddButton(bar, removeDef.c_str(),
 			[](void *clientData) {
-			RemoveInfoFromBar* rm = (RemoveInfoFromBar*)clientData;
-			std::string name = rm->name;
+			BarItem* item = (BarItem*)clientData;
+			std::string name = item->name;
 			Core::getWorldRef().getLightManager()->deleteLight(name);
 
-			TwRemoveVar(rm->bar, name.c_str());
+			TwRemoveVar(item->bar, name.c_str());
 		},
-			rm, removeDef.c_str());
+			item, removeDef.c_str());
 
 		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
