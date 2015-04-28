@@ -28,12 +28,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\BombFactory.cpp" />
+    <ClCompile Include="src\core\CollisionSystem.cpp" />
     <ClCompile Include="src\core\EntitySystem.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\InputComponent.cpp" />
     <ClCompile Include="src\core\InputSystem.cpp" />
     <ClCompile Include="src\core\JetpackComponent.cpp" />
     <ClCompile Include="src\core\PhysicsComponent.cpp" />
+    <ClCompile Include="src\core\PhysicsSystem.cpp" />
     <ClCompile Include="src\core\PlayerFactory.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -50,12 +52,14 @@
   <ItemGroup>
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\BombType.h" />
+    <ClInclude Include="src\core\CollisionSystem.h" />
     <ClInclude Include="src\core\EntitySystem.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\InputComponent.h" />
     <ClInclude Include="src\core\InputSystem.h" />
     <ClInclude Include="src\core\JetpackComponent.h" />
     <ClInclude Include="src\core\PhysicsComponent.h" />
+    <ClInclude Include="src\core\PhysicsSystem.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />
     <ClInclude Include="src\core\World.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />

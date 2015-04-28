@@ -51,6 +51,27 @@ void LightManager::addPointLight(const std::string &name,
 	++_numLights;
 }
 
+void LightManager::deleteLight(const std::string &name)
+{
+	Light *light = _lightsMap[name];
+
+	_lightsMap.erase(name);
+	_lights.erase(std::remove(_lights.begin(), _lights.end(), light), _lights.end());
+
+	delete light;
+
+	--_numLights;
+}
+
+void LightManager::renameLight(const std::string &oldName, const std::string &newName)
+{
+	Light *light = _lightsMap[oldName];
+	_lightsMap.erase(oldName);
+
+	light->setName(newName);
+	_lightsMap.insert(std::make_pair(newName, light));
+}
+
 Light *LightManager::getLight(const std::string &name)
 {
 	std::unordered_map<std::string, Light *>::iterator it = _lightsMap.find(name);
