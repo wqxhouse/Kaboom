@@ -100,6 +100,9 @@
     <ClCompile Include="src\network\DisconnectEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\ExplosionEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Global.h">
@@ -155,6 +158,9 @@
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\network\DisconnectEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ExplosionEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
