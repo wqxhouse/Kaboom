@@ -106,11 +106,11 @@
     <ClInclude Include="CountDown.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\ExplosionEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\BombType.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ExplosionEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -167,7 +167,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\network\ExplosionEvent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
