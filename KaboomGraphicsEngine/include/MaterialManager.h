@@ -35,6 +35,8 @@ public:
 		const std::string &metallicPath, 
 		const std::string &normalMapPath);
 
+	void renameMaterial(const std::string &oldName, const std::string &newName);
+
 	Material *getMaterial(const std::string &name);
 	Material *getBuiltInMaterial(enum MaterialBuiltIn type);
 

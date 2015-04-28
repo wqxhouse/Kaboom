@@ -105,6 +105,15 @@ void MaterialManager::createTextureMaterial(const std::string &name,
 	_materialMap.insert(std::make_pair(name, mat));
 }
 
+void MaterialManager::renameMaterial(const std::string &oldName, const std::string &newName)
+{
+	Material *mat = _materialMap[oldName];
+	_materialMap.erase(oldName);
+
+	mat->setName(newName);
+	_materialMap.insert(std::make_pair(newName, mat));
+}
+
 
 Material *MaterialManager::getMaterial(const std::string &name)
 {
