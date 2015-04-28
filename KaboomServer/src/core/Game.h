@@ -10,6 +10,7 @@
 #include "BombFactory.h"
 #include "CollisionSystem.h"
 #include "InputSystem.h"
+#include "PhysicsSystem.h"
 #include "PlayerFactory.h"
 #include "World.h"
 #include "../network/GameServer.h"
@@ -44,6 +45,7 @@ private:
     BombFactory bombFactory;
 
     InputSystem inputSystem;
+    PhysicsSystem physicsSystem;
     CollisionSystem collisionSystem;
 
     ServerEventHandlerLookup eventHandlerLookup;

@@ -35,6 +35,7 @@
     <ClCompile Include="src\core\InputSystem.cpp" />
     <ClCompile Include="src\core\JetpackComponent.cpp" />
     <ClCompile Include="src\core\PhysicsComponent.cpp" />
+    <ClCompile Include="src\core\PhysicsSystem.cpp" />
     <ClCompile Include="src\core\PlayerFactory.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="src\core\InputSystem.h" />
     <ClInclude Include="src\core\JetpackComponent.h" />
     <ClInclude Include="src\core\PhysicsComponent.h" />
+    <ClInclude Include="src\core\PhysicsSystem.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />
     <ClInclude Include="src\core\World.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
