@@ -4,6 +4,7 @@
 
 #include <core/CharacteristicComponent.h>
 
+#include "ExplosionComponent.h"
 #include "Game.h"
 
 CollisionSystem::CollisionSystem(Game *game)
@@ -44,21 +45,12 @@ void CollisionSystem::update(float timeStep) {
             entityBType = entityB->getComponent<CharacteristicComponent>()->getType();
         }
 
-        // Getting one contact point should be enough. If not we can change this later.
-        const btManifoldPoint &contactPoint = contactManifold->getContactPoint(0);
-        const btScalar &contactPointAX = contactPoint.m_positionWorldOnA.getX();
-        const btScalar &contactPointAY = contactPoint.m_positionWorldOnA.getY();
-        const btScalar &contactPointAZ = contactPoint.m_positionWorldOnA.getZ();
-        const btScalar &contactPointBX = contactPoint.m_positionWorldOnB.getX();
-        const btScalar &contactPointBY = contactPoint.m_positionWorldOnB.getY();
-        const btScalar &contactPointBZ = contactPoint.m_positionWorldOnB.getZ();
-
         if (entityAType == EntityType::BOMB) {
-            game->addBombExplosion(entityA, contactPointAX, contactPointAY, contactPointAZ);
+            entityA->attachComponent(new ExplosionComponent());
         }
 
         if (entityBType == EntityType::BOMB) {
-            game->addBombExplosion(entityB, contactPointBX, contactPointBY, contactPointBZ);
+            entityB->attachComponent(new ExplosionComponent());
         }
     }
 }
