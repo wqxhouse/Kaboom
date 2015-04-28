@@ -2,9 +2,8 @@
 
 #include <unordered_map>
 
+#include <core/BombType.h>
 #include <util/XMLLoader.h>
-
-#include "BombType.h"
 
 class Entity;
 class EntityManager;

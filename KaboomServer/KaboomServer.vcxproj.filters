@@ -145,9 +145,6 @@
     <ClInclude Include="src\network\DisconnectEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\BombType.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\InputComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
