@@ -16,7 +16,7 @@
 
 BombFactory::BombDataLookup BombFactory::lookup("data/bombs.xml");
 
-BombFactory::BombFactory(EntityManager *entityManager)
+BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
@@ -43,7 +43,7 @@ Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z,
     btRigidBody *rigidBody = new btRigidBody(data.mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setLinearVelocity(btVector3(vx, vy, vz));
 
-    Entity *entity = entityManager->createEntity();
+    Entity *entity = entityManager.createEntity();
     entity->attachComponent(new CharacteristicComponent(BOMB, 0, 0));
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
