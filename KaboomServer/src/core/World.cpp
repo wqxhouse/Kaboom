@@ -49,9 +49,9 @@ void World::loadMap() {
 	//add a ramp
 	
 	btQuaternion quat;
-	quat.setRotation(btVector3(0, 1, 0), btDegrees(30));
-	addStaticPlane(btVector3(-5, 0, 0), btVector3(0, 0, -1), quat);
-
+	quat.setRotation(btVector3(0, 1, 0), btRadians(btScalar(30)));
+	addStaticPlane(btVector3(-5, 0, 0), btVector3(0, 0, 1), quat);
+	
 }
 
 void World::stepSimulation(float timeStep) {
