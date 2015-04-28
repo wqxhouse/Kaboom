@@ -146,6 +146,14 @@ void setupScene()
 	q3.makeRotate(osg::DegreesToRadians(90.0), 0, -1, 0);
 	g->getGeometryObject("wallRight")->setRotation(q3);
 
+	osg::ref_ptr<osg::Geode> ramp = new osg::Geode(*floorGeo, osg::CopyOp::DEEP_COPY_ALL);
+	g->setGeometryMaterial("ramp", m->getMaterial("planeMat"));
+	g->addGeometry("ramp", ramp, osg::Vec3(-5, 0, 0));
+	g->setGeometryMaterial("ramp", m->getMaterial("planeMat"));
+	osg::Quat q4;
+	q4.makeRotate(osg::DegreesToRadians(30.0), 0, 1, 0);
+	g->getGeometryObject("ramp")->setRotation(q4);
+
 	//g->getGeometryObject("floor2")->setTranslate(q0);
 
 }
