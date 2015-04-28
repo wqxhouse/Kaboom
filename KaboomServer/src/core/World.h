@@ -16,6 +16,8 @@ public:
 
     void setGravity(float gravity);
 
+    const btCollisionDispatcher &getDispatcher() const;
+
 private:
     btDbvtBroadphase broadphase;
     btDefaultCollisionConfiguration collisionConfiguration;
