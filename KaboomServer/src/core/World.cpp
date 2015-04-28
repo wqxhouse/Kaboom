@@ -72,6 +72,7 @@ void World::setGravity(float gravity) {
     world.setGravity(btVector3(0, 0, -gravity));
 }
 
+
 void World::addStaticPlane(btVector3 origin, btVector3 normal) {
 	btTransform startTrans;
 	startTrans.setIdentity();
@@ -96,9 +97,13 @@ void World::addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rota
 
 	btCollisionShape *groundShape = new btStaticPlaneShape(normal, 0);
 	btDefaultMotionState *groundMotionState = new btDefaultMotionState(startTrans);
-														  //mass, motionshape,		collisionShape, localInertia
+	//mass, motionshape,		collisionShape, localInertia
 	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));//mass = 0, means static objects!
 	btRigidBody *groundRigidBody = new btRigidBody(groundRigidBodyCI);
 
 	addRigidBody(groundRigidBody);
+}
+const btCollisionDispatcher &World::getDispatcher() const {
+    return dispatcher;
+
 }

@@ -37,6 +37,18 @@
     <Filter Include="Source Files\Network\Event Handlers">
       <UniqueIdentifier>{ffdfb9c0-917b-4b73-abe7-00699f14f478}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entity Component System\Components">
+      <UniqueIdentifier>{0e6b8dba-50df-4f76-a3bb-c5ab0926e30c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity Component System\Systems">
+      <UniqueIdentifier>{7b03626b-4581-4cfe-ba7f-99df1fbd57e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity Component System\Components">
+      <UniqueIdentifier>{2d1758e6-c48b-423d-b63f-cc19be986d41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity Component System\Systems">
+      <UniqueIdentifier>{a04e5e1e-5fa3-46e3-b1a9-ecd3e2061942}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -50,9 +62,6 @@
     </ClCompile>
     <ClCompile Include="src\network\ServerNetwork.cpp">
       <Filter>Source Files\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\PhysicsComponent.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
     <ClCompile Include="src\core\PlayerFactory.cpp">
       <Filter>Source Files\Core</Filter>
@@ -70,13 +79,7 @@
     <ClCompile Include="src\core\BombFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\InputComponent.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\EntitySystem.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\InputSystem.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
     <ClCompile Include="src\core\World.cpp">
@@ -85,8 +88,23 @@
     <ClCompile Include="src\network\DisconnectEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\InputComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
     <ClCompile Include="src\core\JetpackComponent.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\PhysicsComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\CollisionSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\InputSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\PhysicsSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,9 +116,6 @@
     </ClInclude>
     <ClInclude Include="src\core\Game.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\PhysicsComponent.h">
-      <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
     <ClInclude Include="src\core\PlayerFactory.h">
       <Filter>Header Files\Core</Filter>
@@ -118,13 +133,7 @@
     <ClInclude Include="src\core\BombFactory.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\InputComponent.h">
-      <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\EntitySystem.h">
-      <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\InputSystem.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
     <ClInclude Include="src\core\World.h">
@@ -136,8 +145,23 @@
     <ClInclude Include="src\core\BombType.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\InputComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\core\JetpackComponent.h">
-      <Filter>Header Files\Entity Component System</Filter>
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\PhysicsComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\CollisionSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\InputSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\PhysicsSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -10,10 +10,12 @@
 #include "../network/ServerEventHandlerLookup.h"
 
 Game::Game(ConfigSettings *config)
-	    : config(config),
-	      playerFactory(&entityManager),
-	      bombFactory(&entityManager),
-	      inputSystem(this),
+        : config(config),
+          playerFactory(entityManager),
+          bombFactory(entityManager),
+          inputSystem(this),
+          physicsSystem(this),
+          collisionSystem(this),
 	      eventHandlerLookup(this),
 	      server(config, eventHandlerLookup) {
     world.loadMap();
@@ -28,6 +30,16 @@ void Game::addEntityToWorld(Entity *entity) {
     if (physicsCom != nullptr) {
         world.addRigidBody(physicsCom->getRigidBody());
     }
+}
+
+void Game::addBombExplosion(Entity *bomb, float x, float y, float z) {
+    BombExplosion explosion;
+    explosion.bomb = bomb;
+    explosion.x = x;
+    explosion.y = y;
+    explosion.z = z;
+
+    bombExplosions.push_back(explosion);
 }
 
 void Game::update(float timeStep) {
@@ -59,13 +71,14 @@ void Game::update(float timeStep) {
 
     // Handle game logic here
     inputSystem.update(timeStep);
+    physicsSystem.update(timeStep);
+    collisionSystem.update(timeStep);
 
-	for (Entity *entity : entityManager.getEntityList())
-	{
-		entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
-	}
+    for (auto it : bombExplosions) {
+        std::cout << it.x << "," << it.y << "," << it.z << std::endl;
+    }
 
-    world.stepSimulation(timeStep);
+    bombExplosions.clear();
 
     for (Entity *entity : entityManager.getEntityList()) {
         PositionComponent *posCom = entity->getComponent<PositionComponent>();
