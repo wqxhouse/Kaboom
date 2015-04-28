@@ -114,9 +114,6 @@
     <ClInclude Include="include\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\XMLLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -198,9 +195,6 @@
       <Filter>Source Files\CubemapUtil</Filter>
     </ClCompile>
     <ClCompile Include="src\Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\XMLLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

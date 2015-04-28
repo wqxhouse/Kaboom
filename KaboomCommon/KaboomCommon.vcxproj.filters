@@ -20,10 +20,16 @@
     <ClInclude Include="src\util\ConfigSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\util\XMLLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="src\util\ConfigSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\XMLLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -159,7 +159,9 @@ void World::createModelFromXML(osgDB::XmlNode* xmlNode)
 			std::string mat = xmlChild->properties["name"];
 			Material *m = _materialManager->getMaterial(mat);
 
-			_geomManager->setGeometryMaterial(name, m);
+			if (m != nullptr) {
+				_geomManager->setGeometryMaterial(name, m);
+			}
 		}
 		else if (childName == "position") {
 			loadVec3(xmlChild, position);

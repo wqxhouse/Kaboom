@@ -208,7 +208,7 @@ void TwGUIManager::initManipuatorSelectorBar()
 void TwGUIManager::initAddBar()
 {
 	g_addBar = TwNewBar("Add");
-	TwDefine(" Add size='150 10' color='216 96 224' position='1000 40'");
+	TwDefine(" Add size='200 90' color='216 96 224' position='1000 16'");
 
 	// 'Add model' button
 	TwAddButton(g_addBar, "Add model",
@@ -237,7 +237,7 @@ void TwGUIManager::initAddBar()
 			strToWCchar(newFile, fileName);
 			wcscat_s(toPath, newFile);
 
-			bool didCopy = CopyFile(fromPath, toPath, FALSE);
+			CopyFile(fromPath, toPath, FALSE);
 			DWORD dw = GetLastError();							// [Debug] Should be 0
 
 			// Add model to geometry manager
@@ -259,28 +259,84 @@ void TwGUIManager::initAddBar()
 	},
 		g_twBar, NULL);
 
-	//// 'Add point light' button
-	//TwAddButton(g_addBar, "Add point light",
-	//	[](void *clientData) {
+	// 'Add point light' button
+	TwAddButton(g_addBar, "Add point light",
+		[](void *clientData) {
 
-	//	
-	//	// Add model to geometry manager
-	//	osg::Node *model = osgDB::readNodeFile(fileName);
-	//	GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		// Light default properties
+		osg::Vec3 color;
+		osg::Vec3 position;
+		float radius = 100.0f;		// Not sure if this is a good value
+		bool doShadow = false;
 
-	//	// Get the input name
-	//	std::string modelName;
-	//	std::cout << "Enter model name: ";
-	//	std::cin >> modelName;
+		// Add light to light manager
+		LightManager* lm = Core::getWorldRef().getLightManager();
 
-	//	gm->addGeometry(modelName, model, fileName);
+		// Get the input name
+		std::string lightName;
+		std::cout << "Enter point light name: ";
+		std::cin >> lightName;
 
-	//	// [Note: Does not handle duplicate names]
-	//	GeometryObject* geom = gm->getGeometryObject(modelName);
+		lm->addPointLight(lightName, position, color, radius, doShadow);
 
-	//	addLightToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
-	//},
-	//	g_twBar, NULL);
+		// [Note: Does not handle duplicate names]
+		Light* lt = lm->getLight(lightName);
+
+		addLightToGUI((TwBar*)clientData, lt, LIGHT_GROUP_NAME, _index);
+	},
+		g_twBar, NULL);
+
+	// 'Change cubemap' button
+	TwAddButton(g_addBar, "Change cubemap",
+		[](void *clientData) {
+
+		// For Windows functions
+		const size_t newsize = 4096;
+		wchar_t fromPath[newsize];
+		wchar_t toPath[newsize];
+		wchar_t newFile[newsize];
+
+		std::string filePath = "";
+		bool validFile = openFile(filePath);
+
+		if (validFile) {
+			std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+			strToWCchar(fromPath, filePath);
+
+			// Get the destination path
+			ConfigSettings* config = ConfigSettings::config;
+			std::string str_mediaPath = "";
+			config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+			str_mediaPath += "Cubemaps/";
+
+			// Append the file name to the destination path -> new file location
+			strToWCchar(toPath, str_mediaPath);
+			strToWCchar(newFile, fileName);
+			wcscat_s(toPath, newFile);
+
+			CopyFile(fromPath, toPath, FALSE);
+			DWORD dw = GetLastError();							// [Debug] Should be 0
+
+			Core::setEnvironmentMapVerticalCross(fileName);
+
+			// Add model to geometry manager
+			//osg::Node *model = osgDB::readNodeFile(fileName);
+			//GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+
+			//// Get the input name
+			//std::string modelName;
+			//std::cout << "Enter model name: ";
+			//std::cin >> modelName;
+
+			//gm->addGeometry(modelName, model, fileName);
+
+			//// [Note: Does not handle duplicate names]
+			//GeometryObject* geom = gm->getGeometryObject(modelName);
+
+			//addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
+		}
+	},
+		g_twBar, NULL);
 }
 
 void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index) {
@@ -822,7 +878,7 @@ void TwGUIManager::exportXML()
 	// Open file to write
 	int tabs = 0;
 	std::ofstream f;
-	f.open(str_export_xml);
+	f.open(exportPath);
 
 	// Headers
 	write(f, tabs, "<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
