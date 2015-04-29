@@ -34,6 +34,9 @@ public:
 
 private:
     const ServerEventHandlerLookup &eventHandlerLookup;
+	unsigned int nextClientId;
+	unsigned int currClientId;
+	std::unordered_map<unsigned int, unsigned int> clientIdToEntityId;
 
     ServerNetwork* network;
 };
