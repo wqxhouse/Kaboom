@@ -28,29 +28,31 @@ void CollisionSystem::update(float timeStep) {
             continue;
         }
 
-        auto *collisionObjA = static_cast<const btCollisionObject *>(contactManifold->getBody0());
-        auto *collisionObjB = static_cast<const btCollisionObject *>(contactManifold->getBody1());
+        const btCollisionObject *collisionObjA = static_cast<const btCollisionObject *>(contactManifold->getBody0());
+        const btCollisionObject *collisionObjB = static_cast<const btCollisionObject *>(contactManifold->getBody1());
 
-        auto *entityA = static_cast<Entity *>(collisionObjA->getCollisionShape()->getUserPointer());
-        auto *entityB = static_cast<Entity *>(collisionObjB->getCollisionShape()->getUserPointer());
+        // Ignore ghost objects.
+        if (!collisionObjA->hasContactResponse() || !collisionObjB->hasContactResponse()) {
+            continue;
+        }
 
+        Entity *entityA = static_cast<Entity *>(collisionObjA->getUserPointer());
+        Entity *entityB = static_cast<Entity *>(collisionObjB->getUserPointer());
+        
         EntityType entityAType = EntityType::UNINITIATED;
         EntityType entityBType = EntityType::UNINITIATED;
 
-        if (entityA != nullptr) {
-            entityAType = entityA->getComponent<CharacteristicComponent>()->getType();
-        }
-
-        if (entityB != nullptr) {
-            entityBType = entityB->getComponent<CharacteristicComponent>()->getType();
-        }
+        if (entityA != nullptr) entityAType = entityA->getComponent<CharacteristicComponent>()->getType();
+        if (entityB != nullptr) entityBType = entityB->getComponent<CharacteristicComponent>()->getType();
 
         if (entityAType == EntityType::BOMB) {
-            entityA->attachComponent(new ExplosionComponent());
+            ExplosionComponent *expComp = entityA->getComponent<ExplosionComponent>();
+            expComp->setExploded(true);
         }
 
         if (entityBType == EntityType::BOMB) {
-            entityB->attachComponent(new ExplosionComponent());
+            ExplosionComponent *expComp = entityB->getComponent<ExplosionComponent>();
+            expComp->setExploded(true);
         }
     }
 }

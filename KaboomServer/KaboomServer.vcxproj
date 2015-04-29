@@ -30,6 +30,7 @@
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\CollisionSystem.cpp" />
     <ClCompile Include="src\core\EntitySystem.cpp" />
+    <ClCompile Include="src\core\ExplosionComponent.cpp" />
     <ClCompile Include="src\core\ExplosionSystem.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\InputComponent.cpp" />
