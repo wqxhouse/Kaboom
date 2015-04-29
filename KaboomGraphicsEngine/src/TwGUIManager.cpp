@@ -209,7 +209,7 @@ void TwGUIManager::initManipuatorSelectorBar()
 void TwGUIManager::initAddBar()
 {
 	g_addBar = TwNewBar("Add");
-	TwDefine(" Add size='250 90' color='216 96 224' position='1025 16'");
+	TwDefine(" Add size='250 100' color='216 96 224' position='1025 16'");
 
 	// 'Add model' button
 	TwAddButton(g_addBar, "Add model",
@@ -291,7 +291,8 @@ void TwGUIManager::initAddBar()
 	TwAddButton(g_addBar, "Add material",
 		[](void *clientData) {
 
-		// Light default properties
+		// TODO: Find out which default values to use
+		// Material default properties
 		osg::Vec3 albedoColor;
 		float roughness = 0.0f;
 		float specular = 0.0f;
@@ -355,7 +356,7 @@ void TwGUIManager::initMaterialBar()
 {
 
 	g_materialBar = TwNewBar("Materials");
-	TwDefine(" Materials label='Materials' size='250 600' color='96 216 96' position='1025 110' valueswidth=100");
+	TwDefine(" Materials label='Materials' size='250 540' color='96 216 96' position='1025 120' valueswidth=100");
 
 	// Process materials
 	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
@@ -382,7 +383,6 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string posXVarName = POS_X_LABEL + indexStr;
 	std::string posYVarName = POS_Y_LABEL + indexStr;
 	std::string posZVarName = POS_Z_LABEL + indexStr;
-	std::string removeVarName = REMOVE_LABEL + indexStr;
 
 	BarItem* item = new BarItem();
 	item->bar = bar;
@@ -421,6 +421,33 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		TwCopyStdStringToLibrary(*showName, item->name);
 	},
 		item, editNameDef.c_str());
+
+	//std::string materialVarName = "material" + indexStr;
+	std::string materialDef = nameGroupDef + " label='Set Material'";
+	TwAddButton(bar, materialDef.c_str(),
+		[](void *clientData) {
+		BarItem* item = (BarItem*)clientData;
+		std::string name = item->name;
+
+		// Get the material name
+		std::string matName;
+		std::cout << "Set material name: ";
+		std::cin >> matName;
+
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+		Material* mat = mm->getMaterial(matName);
+		if (!mat) {
+			std::cout << "Material not found" << std::endl;
+		}
+		else {
+			GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+
+			gm->getGeometryObject(name)->setMaterial(mat);
+		}
+	},
+		item, materialDef.c_str());
+
+
 
 	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 	TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
