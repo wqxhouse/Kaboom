@@ -14,13 +14,6 @@
 
 class InputManager;
 
-enum GameStateMachine {
-	EDITOR_MODE,
-	CONNECT_TO_SERVER,
-	GAME_MODE,
-	DISCONNECT_TO_SERVER
-};
-
 class Game {
 public:
     Game(ConfigSettings *config);
@@ -28,23 +21,29 @@ public:
 
     void run();
 
-	const GameClient &getGameClient() const;
-    //bool addSceneNodeEntity(Entity *entity);
-
-    EntityManager &getEntityManager();
-
-    const PlayerFactory &getPlayerFactory() const;
-	const BombFactory &getBombFactory() const;
-
-	GeometryObjectManager* getGeometryManager();
-	MaterialManager* getMaterialManager();
-	
-	Camera &getCamera();
-
+    void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
     void removeAllEntities();
 
+    EntityManager &getEntityManager();
+    const PlayerFactory &getPlayerFactory() const;
+    const BombFactory &getBombFactory() const;
+
+    const GameClient &getGameClient() const;
+
+    GeometryObjectManager* getGeometryManager();
+    MaterialManager* getMaterialManager();
+
+    Camera &getCamera();
+
 private:
+    enum GameStateMachine {
+        EDITOR_MODE,
+        CONNECT_TO_SERVER,
+        GAME_MODE,
+        DISCONNECT_TO_SERVER
+    };
+
     ConfigSettings *config;
     InputManager *inputManager;
 
@@ -59,7 +58,4 @@ private:
 	MaterialManager * _materialManager;
 
 	Camera &_camera;
-    // osgViewer::Viewer viewer;
-    // osg::Group *rootNode;
-    // void setupCamera();
 };

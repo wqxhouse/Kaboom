@@ -18,9 +18,6 @@ GameClient::GameClient(const ClientEventHandlerLookup &eventHandlerLookup)
           assignedEntity(false) {
 }
 
-GameClient::~GameClient() {
-}
-
 bool GameClient::connectToServer(const std::string &serverAddress, const int serverPort) {
     network.connectToServer(serverAddress, serverPort);
     return network.isConnected();

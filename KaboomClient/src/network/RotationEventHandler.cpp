@@ -11,9 +11,6 @@ RotationEventHandler::RotationEventHandler(Game *game)
         : game(game) {
 }
 
-RotationEventHandler::~RotationEventHandler() {
-}
-
 void RotationEventHandler::handle(const Event &e) const {
     const RotationEvent &evt = static_cast<const RotationEvent &>(e);
 

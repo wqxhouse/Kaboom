@@ -105,9 +105,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Global.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>

@@ -5,7 +5,6 @@ class GameClient;
 class InputEventHandler {
 public:
     InputEventHandler(GameClient &client);
-    ~InputEventHandler();
 
     void onMoveForwardDown();
     void onMoveForwardUp();
@@ -38,11 +37,5 @@ private:
     float yaw;
     float pitch;
 
-	//osg::Vec3 _velocity;
-	//const float _kSpeed = 100;
-
     void sendPlayerInputEvent();
-	// void updateLocalCamera();
-
-    //static void resetCamera();
 };

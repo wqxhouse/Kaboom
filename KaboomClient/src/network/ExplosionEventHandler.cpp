@@ -8,9 +8,6 @@ ExplosionEventHandler::ExplosionEventHandler(Game *game)
         : game(game) {
 }
 
-ExplosionEventHandler::~ExplosionEventHandler() {
-}
-
 void ExplosionEventHandler::handle(const Event &e) const {
     const ExplosionEvent &evt = static_cast<const ExplosionEvent &>(e);
 

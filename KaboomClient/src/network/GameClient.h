@@ -9,7 +9,6 @@ class ClientEventHandlerLookup;
 class GameClient {
 public:
     GameClient(const ClientEventHandlerLookup &eventHandlerLookup);
-    ~GameClient();
 
 	void receive();
     bool connectToServer(const std::string &serverAddress, const int serverPort);
@@ -21,6 +20,7 @@ public:
 
 	bool getAssignedEntity() const;
 	bool getIsConnectedToServer() const;
+
 private:
     const ClientEventHandlerLookup &eventHandlerLookup;
 

@@ -6,9 +6,6 @@ MouseEventHandler::MouseEventHandler(InputEventHandler &inputEventHandler)
         : inputEventHandler(inputEventHandler) {
 }
 
-MouseEventHandler::~MouseEventHandler() {
-}
-
 bool MouseEventHandler::bindKey(int key, Function func) {
     if (keyDownFuncMap.end() != keyDownFuncMap.find(key)) {
         std::cout << "Duplicate key '" << key << "' ignored." << std::endl;
