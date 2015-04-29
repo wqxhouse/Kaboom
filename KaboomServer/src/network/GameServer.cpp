@@ -50,11 +50,6 @@ void GameServer::receive(Game *game) {
         int id = it.first;
         int len = network->receive(it.first, network_data);
 
-        if (len == 0) {
-            DisconnectEvent disconnectEvent(id);
-            eventHandlerLookup.find(disconnectEvent.getOpcode())->handle(disconnectEvent);
-        }
-
         if (len <= 0) {
             continue;
         }
@@ -95,7 +90,10 @@ void GameServer::receive(Game *game) {
             i += emptyEvent.getByteSize();
         }
     }
-
+	for (auto id : network->disconnectedClients){
+		DisconnectEvent disconnectEvent(id);
+		eventHandlerLookup.find(disconnectEvent.getOpcode())->handle(disconnectEvent);
+	}
     network->removeDisconnectedClients();
 }
 
