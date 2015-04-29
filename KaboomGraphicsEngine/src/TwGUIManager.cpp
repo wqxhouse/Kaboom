@@ -34,8 +34,8 @@ void TwGUIManager::initializeTwGUI()
 
 	initMainBar();
 	initManipuatorSelectorBar();
-	initAddBar();
 	initMaterialBar();
+	initAddBar();				// should be done last
 }
 
 void TwGUIManager::initMainBar()
@@ -287,6 +287,33 @@ void TwGUIManager::initAddBar()
 	},
 		g_twBar, NULL);
 
+	// 'Add material' button
+	TwAddButton(g_addBar, "Add material",
+		[](void *clientData) {
+
+		// Light default properties
+		osg::Vec3 albedoColor;
+		float roughness = 0.0f;
+		float specular = 0.0f;
+		float metallic = 0.0f;
+
+		// Add material to material manager
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+		// Get the input name
+		std::string matName;
+		std::cout << "Enter material name: ";
+		std::cin >> matName;
+
+		mm->createPlainMaterial(matName, albedoColor, roughness, specular, metallic);
+
+		// [Note: Does not handle duplicate names]
+		Material* mat = mm->getMaterial(matName);
+
+		addMaterialToGUI((TwBar*)clientData, mat, MATERIAL_GROUP_NAME, _index);
+	},
+		g_materialBar, NULL);
+
 	// 'Change cubemap' button
 	TwAddButton(g_addBar, "Change cubemap",
 		[](void *clientData) {
@@ -319,22 +346,6 @@ void TwGUIManager::initAddBar()
 			DWORD dw = GetLastError();							// [Debug] Should be 0
 
 			Core::setEnvironmentMapVerticalCross(fileName);
-
-			// Add model to geometry manager
-			//osg::Node *model = osgDB::readNodeFile(fileName);
-			//GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
-
-			//// Get the input name
-			//std::string modelName;
-			//std::cout << "Enter model name: ";
-			//std::cin >> modelName;
-
-			//gm->addGeometry(modelName, model, fileName);
-
-			//// [Note: Does not handle duplicate names]
-			//GeometryObject* geom = gm->getGeometryObject(modelName);
-
-			//addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
 		}
 	},
 		NULL, NULL);
