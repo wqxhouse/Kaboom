@@ -16,7 +16,9 @@
 #include "../core/Game.h"
 
 GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &eventHandlerLookup)
-    : eventHandlerLookup(eventHandlerLookup) {
+    : eventHandlerLookup(eventHandlerLookup),
+	  nextClientId(0),
+	  currClientId(0){
     printf("<Server> Creating a Network Server\n");
     // set up the server network to listen 
     network = new ServerNetwork(config);
@@ -30,9 +32,10 @@ GameServer::~GameServer() {
 }
 
 bool GameServer::acceptNewClient(unsigned int entity_id) {
-    if (network->acceptNewClient(entity_id)) {
-        printf("<Server> Client %d has connected to the server\n", entity_id);
-
+	if (network->acceptNewClient(nextClientId)) {
+		printf("<Server> Client %d has connected to the server, with entitiy id %d\n", nextClientId, entity_id);
+		clientIdToEntityId[nextClientId] = entity_id;
+		currClientId = nextClientId++;
         return true;
     }
 
@@ -47,7 +50,7 @@ void GameServer::receive(Game *game) {
             break;
         }
 
-        int id = it.first;
+        int client_id = it.first;
         int len = network->receive(it.first, network_data);
 
         if (len <= 0) {
@@ -65,14 +68,14 @@ void GameServer::receive(Game *game) {
                 case EventOpcode::DISCONNECT: {
                     DisconnectEvent disconnectEvent;
                     disconnectEvent.deserialize(&network_data[i]);
-                    disconnectEvent.setPlayerId(id); // Prevent hacking from client impersonating as other clients
+					disconnectEvent.setPlayerId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
 
                     eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
                 }
                 case EventOpcode::PLAYER_INPUT: {
                     PlayerInputEvent playerInputEvent;
                     playerInputEvent.deserialize(&network_data[i]);
-                    playerInputEvent.setPlayerId(it.first); // Prevent hacking from client impersonating as other clients
+                    playerInputEvent.setPlayerId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
 
                     if (!receivedPlayerInputEvent) {
                         eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
@@ -90,9 +93,11 @@ void GameServer::receive(Game *game) {
             i += emptyEvent.getByteSize();
         }
     }
+
 	for (auto id : network->disconnectedClients){
-		DisconnectEvent disconnectEvent(id);
+		DisconnectEvent disconnectEvent(clientIdToEntityId[id]);
 		eventHandlerLookup.find(disconnectEvent.getOpcode())->handle(disconnectEvent);
+		clientIdToEntityId.erase(id);
 	}
     network->removeDisconnectedClients();
 }
@@ -119,7 +124,7 @@ void GameServer::sendEvent(const Event &evt, const unsigned int &clientId) const
 
 void GameServer::sendAssignEvent(const unsigned int &entityId) const {
     AssignEvent assignEvent(entityId);
-    sendEvent(assignEvent, entityId);
+	sendEvent(assignEvent, currClientId);
 }
 
 void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *> &entities) const {
@@ -142,7 +147,7 @@ void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *>
             posComp->getZ(),
             charComp->getType(),
             0);
-        sendEvent(spawnEvent, player->getId());
+        sendEvent(spawnEvent, currClientId);
     }
 }
 
