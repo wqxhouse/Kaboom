@@ -33,9 +33,9 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
 
     btMotionState *motionState = new btDefaultMotionState(startTrans);
     btCollisionShape *collisionShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
-    collisionShape->setUserPointer(entity);
 
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
+    rigidBody->setUserPointer(entity);
 
     entity->attachComponent(new CharacteristicComponent(PLAYER, 0, 0));
     entity->attachComponent(new InputComponent());

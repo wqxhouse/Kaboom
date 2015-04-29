@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <osgDB/XmlParser>
 
@@ -12,6 +13,7 @@
 #include <core/RotationComponent.h>
 #include <util/XMLLoader.h>
 
+#include "ExplosionComponent.h"
 #include "PhysicsComponent.h"
 
 BombFactory::BombDataLookup BombFactory::lookup("data/bombs.xml");
@@ -36,20 +38,27 @@ Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z,
 
     Entity *entity = entityManager.createEntity();
 
-    btTransform startTrans = btTransform::getIdentity();
-    startTrans.setOrigin(btVector3(x, y, z));
+    btTransform posTrans = btTransform::getIdentity();
+    posTrans.setOrigin(btVector3(x, y, z));
 
-    btMotionState *motionState = new btDefaultMotionState(startTrans);
+    btMotionState *motionState = new btDefaultMotionState(posTrans);
     btCollisionShape *collisionShape = new btSphereShape(data.size);
-    collisionShape->setUserPointer(entity);
 
     btRigidBody *rigidBody = new btRigidBody(data.mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setLinearVelocity(btVector3(vx, vy, vz));
+    rigidBody->setUserPointer(entity);
+
+    btGhostObject *ghostObject = new btGhostObject();
+    ghostObject->setCollisionShape(new btSphereShape(data.explosionRadius));
+    ghostObject->setCollisionFlags(ghostObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+    ghostObject->setWorldTransform(posTrans);
+    ghostObject->setUserPointer(entity);
 
     entity->attachComponent(new CharacteristicComponent(BOMB, 0, 0));
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
+    entity->attachComponent(new ExplosionComponent(ghostObject, false));
 
     return entity;
 }
@@ -90,6 +99,8 @@ void BombFactory::BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
                 loadFloat(dataNode, data.size);
             } else if (dataNode->name == "mass") {
                 loadFloat(dataNode, data.mass);
+            } else if (dataNode->name == "explosion-radius") {
+                loadFloat(dataNode, data.explosionRadius);
             }
         }
 

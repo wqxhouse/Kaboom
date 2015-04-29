@@ -23,6 +23,7 @@ private:
         std::string name;
         float size;
         float mass;
+        float explosionRadius;
     };
 
     class BombDataLookup : public XMLLoader {

@@ -4,6 +4,7 @@
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 
+#include "ExplosionComponent.h"
 #include "InputComponent.h"
 #include "PhysicsComponent.h"
 #include "../network/GameServer.h"
@@ -31,6 +32,12 @@ void Game::addEntity(Entity *entity) {
     if (physicsComp != nullptr) {
         world.addRigidBody(physicsComp->getRigidBody());
     }
+
+    ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
+
+    if (expComp != nullptr) {
+        world.addCollisionObject(expComp->getGhostObject());
+    }
 }
 
 void Game::removeEntity(Entity *entity) {
@@ -38,6 +45,12 @@ void Game::removeEntity(Entity *entity) {
 
     if (physicsComp != nullptr) {
         world.removeRigidBody(physicsComp->getRigidBody());
+    }
+
+    ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
+
+    if (expComp != nullptr) {
+        world.removeCollisionObject(expComp->getGhostObject());
     }
 
     entityManager.destroyEntity(entity->getId());
@@ -84,6 +97,12 @@ void Game::update(float timeStep) {
         const btVector3 &pos = worldTrans.getOrigin();
         
         posCom->setPosition(pos.getX(), pos.getY(), pos.getZ());
+
+        auto *expComp = entity->getComponent<ExplosionComponent>();
+
+        if (expComp != nullptr) {
+            expComp->getGhostObject()->setWorldTransform(worldTrans);
+        }
     }
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
