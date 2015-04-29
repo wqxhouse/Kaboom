@@ -7,9 +7,8 @@ class Game;
 class ExplosionEventHandler : public EventHandler {
 public:
     ExplosionEventHandler(Game *game);
-    ~ExplosionEventHandler();
 
-    virtual void handle(const Event &evt) const;
+    virtual void handle(const Event &e) const;
 
 private:
     Game *game;

@@ -15,9 +15,6 @@ PlayerFactory::PlayerFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-PlayerFactory::~PlayerFactory() {
-}
-
 Entity *PlayerFactory::createPlayer(unsigned int id, float x, float y, float z) const {
     Entity *entity = entityManager.createEntity(id);
 

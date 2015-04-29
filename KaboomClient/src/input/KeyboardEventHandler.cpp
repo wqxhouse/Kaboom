@@ -3,10 +3,7 @@
 #include <iostream>
 
 KeyboardEventHandler::KeyboardEventHandler(InputEventHandler &inputEventHandler)
-    : inputEventHandler(inputEventHandler) {
-}
-
-KeyboardEventHandler::~KeyboardEventHandler() {
+        : inputEventHandler(inputEventHandler) {
 }
 
 bool KeyboardEventHandler::bindKey(int key, Function func) {

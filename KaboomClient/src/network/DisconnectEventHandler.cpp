@@ -8,9 +8,6 @@ DisconnectEventHandler::DisconnectEventHandler(Game *game)
         : game(game) {
 }
 
-DisconnectEventHandler::~DisconnectEventHandler() {
-}
-
 void DisconnectEventHandler::handle(const Event &e) const {
     const DisconnectEvent &evt = static_cast<const DisconnectEvent &>(e);
 

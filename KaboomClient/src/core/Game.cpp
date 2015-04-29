@@ -10,7 +10,6 @@
 #include <core/Entity.h>
 #include <core/PositionComponent.h>
 
-#include "../Global.h"
 #include "SceneNodeComponent.h"
 #include "../Scene.h"
 #include "../input/InputManager.h"
@@ -132,6 +131,22 @@ void Game::run() {
     }
 }
 
+void Game::addEntity(Entity *entity) {
+    auto *posComp = entity->getComponent<PositionComponent>();
+    auto *sceneNodeComp = entity->getComponent<SceneNodeComponent>();
+
+    if (posComp == nullptr || sceneNodeComp == nullptr) {
+        return;
+    }
+
+    if (sceneNodeComp != nullptr) {
+        const auto name = std::to_string(entity->getId());
+        const auto pos = osg::Vec3(posComp->getX(), posComp->getY(), posComp->getZ());
+
+        getGeometryManager()->addGeometry(name, sceneNodeComp->getNode(), pos);
+    }
+}
+
 void Game::removeEntity(Entity *entity) {
     getGeometryManager()->deleteGeometry(std::to_string(entity->getId()));
     entityManager.destroyEntity(entity->getId());
@@ -141,10 +156,6 @@ void Game::removeAllEntities() {
 	for (auto it : entityManager.getEntityList()) {
         removeEntity(it);
 	}
-}
-
-const GameClient &Game::getGameClient() const{
-	return client;
 }
 
 EntityManager &Game::getEntityManager() {
@@ -159,14 +170,18 @@ const BombFactory &Game::getBombFactory() const {
     return bombFactory;
 }
 
+const GameClient &Game::getGameClient() const {
+    return client;
+}
+
 GeometryObjectManager * Game::getGeometryManager() {
 	return _geometryManager;
 }
 
-MaterialManager * Game::getMaterialManager() {
+MaterialManager *Game::getMaterialManager() {
 	return _materialManager;
 }
 
-Camera &Game::getCamera(){
+Camera &Game::getCamera() {
 	return _camera;
 }
