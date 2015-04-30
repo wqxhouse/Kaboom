@@ -115,29 +115,8 @@ void World::onTick(btScalar timeStep) {
         Entity *entityA = static_cast<Entity *>(collisionObjA->getUserPointer());
         Entity *entityB = static_cast<Entity *>(collisionObjB->getUserPointer());
 
-        if (entityA != nullptr) {
-            CollisionComponent *colComp = entityA->getComponent<CollisionComponent>();
-
-            if (colComp != nullptr) {
-                colComp->setCollided(true);
-
-                if (entityB != nullptr) {
-                    colComp->addContactEntity(entityB);
-                }
-            }
-        }
-
-        if (entityB != nullptr) {
-            CollisionComponent *colComp = entityB->getComponent<CollisionComponent>();
-
-            if (colComp != nullptr) {
-                colComp->setCollided(true);
-
-                if (entityA != nullptr) {
-                    colComp->addContactEntity(entityA);
-                }
-            }
-        }
+        handleCollision(entityA, entityB);
+        handleCollision(entityB, entityA);
     }
 }
 
@@ -164,4 +143,18 @@ void World::addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rota
     btRigidBody *groundRigidBody = new btRigidBody(groundRigidBodyCI);
 
     addRigidBody(groundRigidBody);
+}
+
+void World::handleCollision(Entity *entityA, Entity *entityB) {
+    if (entityA != nullptr) {
+        CollisionComponent *colComp = entityA->getComponent<CollisionComponent>();
+
+        if (colComp != nullptr) {
+            colComp->setCollided(true);
+
+            if (entityB != nullptr) {
+                colComp->addContactEntity(entityB);
+            }
+        }
+    }
 }

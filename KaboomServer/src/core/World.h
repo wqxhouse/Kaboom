@@ -35,4 +35,6 @@ private:
 
     void addStaticPlane(btVector3 origin, btVector3 normal);
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
+
+    void handleCollision(Entity *entityA, Entity *entityB);
 };
