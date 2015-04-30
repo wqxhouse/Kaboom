@@ -49,15 +49,15 @@ void setupScene()
 	//m->createPlainMaterial("planeMat2", osg::Vec3(0.1, 0.1, 0.1), 0.6, 0.5, 0.0);
 	//m->createPlainMaterial("planeMat3", osg::Vec3(0.8, 0.3, 0.4), 0.0, 0.5, 0.1);
 
-	m->createPlainMaterial("planeMat", osg::Vec3(1.0, 1.0, 1.0), 1.0, 0.5, 1.0);
-	m->createPlainMaterial("planeMat2", osg::Vec3(0.1, 0.8, 0.1), 0.7, 0.5, 1.0);
-	m->createPlainMaterial("planeMat3", osg::Vec3(0.8, 0.3, 0.4), 1.0, 0.5, 1.0);
+	//m->createPlainMaterial("planeMat", osg::Vec3(1.0, 1.0, 1.0), 0.5, 0.5, 0.1);
+	//m->createPlainMaterial("planeMat2", osg::Vec3(0.1, 0.8, 0.1), 0.7, 0.5, 1.0);
+	//m->createPlainMaterial("planeMat3", osg::Vec3(0.8, 0.3, 0.4), 1.0, 0.5, 1.0);
 
-	g->setGeometryMaterial("cow", m->getMaterial("planeMat"));
-	g->setGeometryMaterial("second", m->getMaterial("planeMat2"));
-	g->setGeometryMaterial("third", m->getMaterial("planeMat3"));
+	//g->setGeometryMaterial("cow", m->getMaterial("planeMat"));
+	//g->setGeometryMaterial("second", m->getMaterial("planeMat2"));
+	//g->setGeometryMaterial("third", m->getMaterial("planeMat3"));
 
-	l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), osg::Vec3(0.7, 0.3, 0.3), false);
+	//// l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), osg::Vec3(0.7, 0.3, 0.3), false);
 
 	//osg::Vec3 colorGREEN = osg::Vec3(0.3, 0.7, 0.3);
 	//l->addPointLight("pt2", osg::Vec3(-7, 0, 0), colorGREEN, 100, false);
@@ -67,6 +67,23 @@ void setupScene()
 
 	//osg::Vec3 colorBLUE = osg::Vec3(0.3, 0.3, 0.7);
 	//l->addPointLight("pt4", osg::Vec3(0, -7, 0), colorBLUE, 100, false);
+
+	g->addGeometry("cow", loadedCow, osg::Vec3(-1, 0, 0));
+	g->addGeometry("second", loadedCow, osg::Vec3(1, 0, 0));
+	m->createPlainMaterial("planeMat", osg::Vec3(0.8, 0.3, 0.3), 0.5, 0.5, 0.5);
+	g->setGeometryMaterial("cow", m->getMaterial("planeMat"));
+	g->setGeometryMaterial("second", m->getMaterial("planeMat"));
+
+	//l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), osg::Vec3(0.7, 0.3, 0.3), false);
+
+	osg::Vec3 colorGREEN = osg::Vec3(0.3, 0.7, 0.3);
+	l->addPointLight("pt2", osg::Vec3(-7, 0, 0), colorGREEN, 100, false);
+
+	osg::Vec3 colorYELLO = osg::Vec3(0.7, 0.7, 0.3);
+	l->addPointLight("pt3", osg::Vec3(0, 7, 0), colorYELLO, 100, false);
+
+	osg::Vec3 colorBLUE = osg::Vec3(0.3, 0.3, 0.7);
+	l->addPointLight("pt4", osg::Vec3(0, -7, 0), colorBLUE, 100, false);
 
 
 	//osg::ref_ptr<osg::Geode> floorGeo = new osg::Geode;

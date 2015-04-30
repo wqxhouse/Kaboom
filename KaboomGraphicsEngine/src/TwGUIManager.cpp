@@ -725,7 +725,7 @@ void TwGUIManager::addMaterialToGUI(TwBar* bar, Material* mat, std::string group
 	std::string nameGroupDef = " group='" + name + "' ";
 
 	std::string indexStr = std::to_string(index);
-	std::string limitVal = " min=0 max=1 step=0.05";
+	std::string limitVal = " min=0 max=1 step=0.01";
 
 	BarItem* item = new BarItem();
 	item->bar = bar;
