@@ -200,7 +200,9 @@
     <ClCompile Include="src\CubemapPreFilter.cpp">
       <Filter>Source Files\CubemapUtil</Filter>
     </ClCompile>
-    <ClCompile Include="src\TwGUIManager.cpp" />
+    <ClCompile Include="src\TwGUIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">

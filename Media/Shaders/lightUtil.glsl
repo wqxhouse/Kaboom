@@ -87,10 +87,10 @@ vec3 computeLightModel(Light light, Material material,
     lightingResult += specularContribution;
 
     // Evaluate diffuse
-	// Lambertian
+	// Lambertian, fast; but currently have seams between two point lights ocurring on the edge of attenuation radius
     vec3 diffuseContribution = diffuseColor / M_PI;
 	// This is better, but I guess too costly
-	// vec3 diffuseContribution = DiffuseBRDF(diffuseColor, roughness, NoV, NoL, VoH);
+	//vec3 diffuseContribution = DiffuseBRDF(diffuseColor, roughness, NoV, NoL, VoH);
     lightingResult += diffuseContribution;
 
 	vec3 commonTerm = NoL * light.color * shadowFactor * attenuation; // TODO: implement shadow later 
