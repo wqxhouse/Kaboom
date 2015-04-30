@@ -8,4 +8,5 @@ enum EventOpcode {
     ENTITY_SPAWN = 4,
     DISCONNECT = 5,
 	ASSIGN_ENTITY = 6,
+    EXPLOSION = 7,
 };

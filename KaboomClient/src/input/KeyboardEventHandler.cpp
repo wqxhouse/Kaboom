@@ -1,12 +1,10 @@
 #include "KeyboardEventHandler.h"
 
 #include <iostream>
+#include <Core.h>
 
 KeyboardEventHandler::KeyboardEventHandler(InputEventHandler &inputEventHandler)
-    : inputEventHandler(inputEventHandler) {
-}
-
-KeyboardEventHandler::~KeyboardEventHandler() {
+        : inputEventHandler(inputEventHandler) {
 }
 
 bool KeyboardEventHandler::bindKey(int key, Function func) {
@@ -38,6 +36,10 @@ bool KeyboardEventHandler::bindKey(int key, KeyState state, Function func) {
 }
 
 bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &aa) {
+	if (!Core::isInGameMode()) {
+		return false;
+	}
+
     int key = tolower(ea.getKey());
 
     switch (ea.getEventType()) {

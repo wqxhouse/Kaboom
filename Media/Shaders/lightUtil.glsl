@@ -70,10 +70,10 @@ vec3 computeLightModel(Light light, Material material,
 	vec3 specularColor = material.specularColor;
 	vec3 diffuseColor = material.diffuseColor;
 
-    float roughness = clamp(material.roughness, 0.005, 1.0);
+    float roughness = clamp(material.roughness, 0.001, 1.0);
 
     float NoL = clamp(dot(n, l), 0.0, 1.0);
-       float LoH = clamp(dot(l, h), 0.0, 1.0);
+    // float LoH = clamp(dot(l, h), 0.0, 1.0);
     float NoV = abs(dot(n, v)) + 1e-5;
     float NoH = clamp(dot(n, h), 0.0, 1.0);
 	float VoH = clamp(dot(v, h), 0.0, 1.0);
@@ -89,11 +89,15 @@ vec3 computeLightModel(Light light, Material material,
     // Evaluate diffuse
 	// Lambertian
     vec3 diffuseContribution = diffuseColor / M_PI;
+	// This is better, but I guess too costly
 	// vec3 diffuseContribution = DiffuseBRDF(diffuseColor, roughness, NoV, NoL, VoH);
-    //lightingResult += diffuseContribution;
+    lightingResult += diffuseContribution;
 
 	vec3 commonTerm = NoL * light.color * shadowFactor * attenuation; // TODO: implement shadow later 
 	lightingResult *= commonTerm;
+
+	// debug
+	// lightingResult = pow(lightingResult, vec3(1/2.2));
     return lightingResult;
 }
 

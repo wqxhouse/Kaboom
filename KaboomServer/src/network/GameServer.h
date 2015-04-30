@@ -30,9 +30,13 @@ public:
     void sendPositionEvent(Entity *entity) const;
     void sendRotationEvent(Entity *entity) const;
     void sendSpawnEvent(Entity *entity) const;
+    void sendExplosionEvent(Entity *bomb) const;
 
 private:
     const ServerEventHandlerLookup &eventHandlerLookup;
+	unsigned int nextClientId;
+	unsigned int currClientId;
+	std::unordered_map<unsigned int, unsigned int> clientIdToEntityId;
 
     ServerNetwork* network;
 };

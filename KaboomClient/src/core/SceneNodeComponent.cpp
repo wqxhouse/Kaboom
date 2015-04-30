@@ -4,9 +4,6 @@ SceneNodeComponent::SceneNodeComponent(osg::ref_ptr<osg::Node> node)
         : node(node) {
 }
 
-SceneNodeComponent::~SceneNodeComponent() {
-}
-
 osg::ref_ptr<osg::Node> SceneNodeComponent::getNode() const {
     return node;
 }

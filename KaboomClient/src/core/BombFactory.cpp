@@ -15,9 +15,6 @@ BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-BombFactory::~BombFactory() {
-}
-
 Entity *BombFactory::createBomb(unsigned int id, float x, float y, float z) const {
     Entity *entity = entityManager.createEntity(id);
 

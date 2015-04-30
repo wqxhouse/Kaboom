@@ -38,12 +38,21 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 	_geomRoot->addChild(geomObj->getRoot());
 	return true;
 }
+
 void GeometryObjectManager::deleteGeometry(const std::string &name){
 	GeometryObject *geomObj = _geomObjMap[name];
 	
 	_geomObjMap.erase(name);
 	_geomRoot->removeChild(geomObj->getRoot());
 	delete geomObj;
+}
+
+void GeometryObjectManager::renameGeometry(const std::string &oldName, const std::string newName){
+	GeometryObject *geomObj = _geomObjMap[oldName];
+	_geomObjMap.erase(oldName);
+
+	geomObj->setName(newName);
+	_geomObjMap.insert(std::make_pair(newName, geomObj));
 }
 
 bool GeometryObjectManager::setGeometryMaterial(const std::string &geomName, Material *material)

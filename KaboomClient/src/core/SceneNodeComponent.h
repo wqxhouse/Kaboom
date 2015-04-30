@@ -8,7 +8,6 @@
 class SceneNodeComponent : public Component {
 public:
     SceneNodeComponent(osg::ref_ptr<osg::Node> node);
-    ~SceneNodeComponent();
 
     osg::ref_ptr<osg::Node> getNode() const;
     void setNode(osg::ref_ptr<osg::Node> node);

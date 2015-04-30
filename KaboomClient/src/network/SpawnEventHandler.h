@@ -7,9 +7,8 @@ class Game;
 class SpawnEventHandler : public EventHandler {
 public:
     SpawnEventHandler(Game *game);
-    ~SpawnEventHandler();
 
-    virtual void handle(const Event &evt) const;
+    virtual void handle(const Event &e) const;
 
 private:
     Game *game;

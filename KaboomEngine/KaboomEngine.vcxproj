@@ -180,7 +180,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CountDown.h" />
     <ClInclude Include="src\core\BombContainerComponent.h" />
+    <ClInclude Include="src\core\BombType.h" />
     <ClInclude Include="src\core\CharacteristicComponent.h" />
     <ClInclude Include="src\core\Component.h" />
     <ClInclude Include="src\core\Entity.h" />
@@ -195,6 +197,7 @@
     <ClInclude Include="src\network\EventHandler.h" />
     <ClInclude Include="src\network\EventHandlerLookup.h" />
     <ClInclude Include="src\network\EventOpcode.h" />
+    <ClInclude Include="src\network\ExplosionEvent.h" />
     <ClInclude Include="src\network\NetworkData.h" />
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
@@ -203,6 +206,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CountDown.cpp" />
     <ClCompile Include="src\core\BombContainerComponent.cpp" />
     <ClCompile Include="src\core\CharacteristicComponent.cpp" />
     <ClCompile Include="src\core\Component.cpp" />
@@ -215,6 +219,7 @@
     <ClCompile Include="src\network\EmptyEvent.cpp" />
     <ClCompile Include="src\network\Event.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />
+    <ClCompile Include="src\network\ExplosionEvent.cpp" />
     <ClCompile Include="src\network\PlayerInputEvent.cpp" />
     <ClCompile Include="src\network\PositionEvent.cpp" />
     <ClCompile Include="src\network\RotationEvent.cpp" />

@@ -13,9 +13,14 @@ public:
 	Material(const std::string &name, TextureChangeCallback onTextureChange);
 	~Material();
 
-	std::string getName()
+	inline std::string getName()
 	{
 		return _name;
+	}
+
+	inline void setName(std::string name)
+	{
+		_name = name;
 	}
 
 	inline bool getUseTexture()
