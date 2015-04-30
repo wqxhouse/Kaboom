@@ -35,6 +35,9 @@ public:
 	static void detachManipulator();
 	static enum ManipulatorType getCurrentManipulatorType();
 
+	static osg::ref_ptr<osg::MatrixTransform> getCurrNode();
+	static void updateBoundingBox();
+
 	static bool setVisible(bool tf);
 	static bool isVisible();
 

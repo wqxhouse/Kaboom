@@ -146,6 +146,38 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 	}
 }
 
+osg::ref_ptr<osg::MatrixTransform> GeometryObjectManipulator::getCurrNode()
+{
+	return _currNode;
+}
+
+void GeometryObjectManipulator::updateBoundingBox() 
+{
+	if (_currNode == nullptr) return;
+	if (_dragger == nullptr) return;
+
+	float scale = _currNode->getBound().radius();
+	if (_currType != TabBoxDragger)
+	{
+		if (_currType == TranslateAxisDragger) scale *= 1.6;
+		_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
+			osg::Matrix::translate(_currNode->getBound().center()));
+	}
+	else {
+		osg::ComputeBoundsVisitor bound;
+		_currNode->accept(bound);
+
+		osg::BoundingBox bbox = bound.getBoundingBox();
+		float xscale = (bbox.xMax() - bbox.xMin());
+		float yscale = (bbox.yMax() - bbox.yMin());
+		float zscale = (bbox.zMax() - bbox.zMin());
+
+		osg::Vec3f center = bbox.center();
+		_dragger->setMatrix(osg::Matrix::scale(xscale, yscale, zscale) *
+			osg::Matrix::translate(center));
+	}
+}
+
 bool GeometryObjectManipulator::setVisible(bool tf)
 {
 	if (_dragger != NULL)
