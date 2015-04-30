@@ -1,11 +1,6 @@
 #pragma once
 
-#include <vector>
-
-#include <btBulletDynamicsCommon.h>
-
 #include <core/EntityManager.h>
-#include <util/ConfigSettings.h>
 
 #include "BombFactory.h"
 #include "CollisionSystem.h"
@@ -17,11 +12,10 @@
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
 
+class ConfigSettings;
+
 class Game {
 public:
-    std::vector<Entity *> players;
-	std::vector<Entity *> bombs;
-
     Game(ConfigSettings *config);
     ~Game();
 
@@ -39,8 +33,6 @@ public:
     World &getWorld();
 
 private:
-    ConfigSettings *config;
-
     EntityManager entityManager;
     PlayerFactory playerFactory;
     BombFactory bombFactory;

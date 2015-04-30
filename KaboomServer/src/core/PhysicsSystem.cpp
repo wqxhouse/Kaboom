@@ -15,6 +15,4 @@ void PhysicsSystem::update(float timeStep) {
     for (Entity *entity : entities) {
         entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
     }
-
-    game->getWorld().stepSimulation(timeStep);
 }
