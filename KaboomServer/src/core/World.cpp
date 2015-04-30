@@ -2,11 +2,22 @@
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
+#include <core/Entity.h>
+#include <core/EntityType.h>
+
+#include "CollisionComponent.h"
+
+void onTickCallback(btDynamicsWorld *world, btScalar timeStep) {
+    World *w = static_cast<World *>(world->getWorldUserInfo());
+    w->onTick(timeStep);
+}
+
 World::World()
         : dispatcher(&collisionConfiguration),
           world(&dispatcher, &broadphase, &solver, &collisionConfiguration) {
     setGravity(4.0f);
     broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+    world.setInternalTickCallback(onTickCallback, this);
 }
 
 World::~World() {
@@ -81,6 +92,59 @@ void World::setGravity(float gravity) {
     world.setGravity(btVector3(0, 0, -gravity));
 }
 
+void World::onTick(btScalar timeStep) {
+    int numManifolds = dispatcher.getNumManifolds();
+
+    for (int i = 0; i < numManifolds; ++i) {
+        const btPersistentManifold *manifold = dispatcher.getManifoldByIndexInternal(i);
+
+        int numContacts = manifold->getNumContacts();
+
+        if (numContacts == 0) {
+            continue;
+        }
+
+        const btCollisionObject *collisionObjA = static_cast<const btCollisionObject *>(manifold->getBody0());
+        const btCollisionObject *collisionObjB = static_cast<const btCollisionObject *>(manifold->getBody1());
+
+        // Ignore ghost objects.
+        if (!collisionObjA->hasContactResponse() || !collisionObjB->hasContactResponse()) {
+            continue;
+        }
+
+        Entity *entityA = static_cast<Entity *>(collisionObjA->getUserPointer());
+        Entity *entityB = static_cast<Entity *>(collisionObjB->getUserPointer());
+
+        if (entityA != nullptr) {
+            CollisionComponent *colComp = entityA->getComponent<CollisionComponent>();
+
+            if (colComp != nullptr) {
+                colComp->setCollided(true);
+
+                if (entityB != nullptr) {
+                    colComp->addContactEntity(entityB);
+                }
+            }
+        }
+
+        if (entityB != nullptr) {
+            CollisionComponent *colComp = entityB->getComponent<CollisionComponent>();
+
+            if (colComp != nullptr) {
+                colComp->setCollided(true);
+
+                if (entityA != nullptr) {
+                    colComp->addContactEntity(entityA);
+                }
+            }
+        }
+    }
+}
+
+const btCollisionDispatcher &World::getDispatcher() const {
+    return dispatcher;
+}
+
 void World::addStaticPlane(btVector3 origin, btVector3 normal) {
     addStaticPlane(origin, normal, btQuaternion::getIdentity());
 }
@@ -100,8 +164,4 @@ void World::addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rota
     btRigidBody *groundRigidBody = new btRigidBody(groundRigidBodyCI);
 
     addRigidBody(groundRigidBody);
-}
-
-const btCollisionDispatcher &World::getDispatcher() const {
-    return dispatcher;
 }

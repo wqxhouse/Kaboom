@@ -112,6 +112,9 @@
     <ClCompile Include="src\core\TriggerComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\CollisionComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -173,6 +176,9 @@
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
     <ClInclude Include="src\core\TriggerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\CollisionComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
   </ItemGroup>

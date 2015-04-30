@@ -21,6 +21,8 @@ public:
 
     void setGravity(float gravity);
 
+    void onTick(btScalar timeStep);
+
     const btCollisionDispatcher &getDispatcher() const;
 
 private:

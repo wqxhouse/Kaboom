@@ -30,8 +30,6 @@ public:
 
     const GameServer &getGameServer() const;
 
-    World &getWorld();
-
 private:
     EntityManager entityManager;
     PlayerFactory playerFactory;
