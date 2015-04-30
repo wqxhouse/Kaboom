@@ -10,14 +10,16 @@ class EntityManager;
 
 class BombFactory {
 public:
-	BombFactory(EntityManager &entityManager);
-	~BombFactory();
+    BombFactory(EntityManager &entityManager);
+    ~BombFactory();
 
     Entity *createBomb(const BombType &type) const;
     Entity *createBomb(const BombType &type, float x, float y, float z) const;
     Entity *createBomb(const BombType &type, float x, float y, float z, float vx, float vy, float vz) const;
 
 private:
+    class BombDataLookup;
+
     struct BombData {
         unsigned int id;
         std::string name;
@@ -26,17 +28,19 @@ private:
         float explosionRadius;
     };
 
-    class BombDataLookup : public XMLLoader {
-    public:
-        BombDataLookup(const std::string &filename);
-        const BombData &operator[](const BombType &type) const;
-    protected:
-        virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
-    private:
-        std::unordered_map<BombType, BombData> bombs;
-    };
-
     static BombDataLookup lookup;
 
-	EntityManager &entityManager;
+    EntityManager &entityManager;
+};
+
+class BombFactory::BombDataLookup : public XMLLoader {
+public:
+    BombDataLookup(const std::string &filename);
+
+    const BombData &operator[](const BombType &type) const;
+
+private:
+    std::unordered_map<BombType, BombData> bombs;
+
+    virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 };
