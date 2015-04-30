@@ -4,6 +4,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
+class Entity;
+
 class World {
 public:
     World();

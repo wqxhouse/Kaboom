@@ -5,8 +5,8 @@
 #include "BombFactory.h"
 #include "CollisionSystem.h"
 #include "ExplosionSystem.h"
+#include "InitializationSystem.h"
 #include "InputSystem.h"
-#include "PhysicsSystem.h"
 #include "PlayerFactory.h"
 #include "World.h"
 #include "../network/GameServer.h"
@@ -35,8 +35,8 @@ private:
     PlayerFactory playerFactory;
     BombFactory bombFactory;
 
+    InitializationSystem initSystem;
     InputSystem inputSystem;
-    PhysicsSystem physicsSystem;
     CollisionSystem collisionSystem;
     ExplosionSystem explosionSystem;
 

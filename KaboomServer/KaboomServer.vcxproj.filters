@@ -103,9 +103,6 @@
     <ClCompile Include="src\core\InputSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\PhysicsSystem.cpp">
-      <Filter>Source Files\Entity Component System\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\ExplosionSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
@@ -114,6 +111,9 @@
     </ClCompile>
     <ClCompile Include="src\core\CollisionComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\InitializationSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -166,9 +166,6 @@
     <ClInclude Include="src\core\InputSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\PhysicsSystem.h">
-      <Filter>Header Files\Entity Component System\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\ExplosionComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
@@ -180,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="src\core\CollisionComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\InitializationSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
