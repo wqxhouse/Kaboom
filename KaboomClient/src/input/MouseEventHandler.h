@@ -26,7 +26,6 @@ public:
     typedef std::map<int, FunctionState> KeyFunctionMap;
 
     MouseEventHandler(InputEventHandler &inputEventHandler);
-    ~MouseEventHandler();
 
     bool bindKey(int key, Function func);
     bool bindKey(int key, KeyState state, Function func);

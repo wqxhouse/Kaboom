@@ -228,9 +228,6 @@
       <Filter>Media\EffectFiles</Filter>
     </Xml>
     <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
-    <Xml Include="..\Media\EffectFiles\CubemapPreFilterPassConfig.xml">
-      <Filter>Media\EffectFiles</Filter>
-    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Media\Shaders\constant.glsl">

@@ -309,7 +309,6 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Media\EffectFiles\CubemapPreFilterPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\GeometryPassPlain.xml" />
     <Xml Include="..\Media\EffectFiles\LightPassConfig.xml" />

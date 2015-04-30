@@ -10,7 +10,6 @@
 #include <core/Entity.h>
 #include <core/PositionComponent.h>
 
-#include "../Global.h"
 #include "SceneNodeComponent.h"
 #include "../Scene.h"
 #include "../input/InputManager.h"
@@ -18,13 +17,12 @@
 #include "../network/GameClient.h"
 
 Game::Game(ConfigSettings *config)
-    : config(config),
-      playerFactory(entityManager),
-      bombFactory(entityManager),
-      eventHandlerLookup(this),
-      client(eventHandlerLookup), 
-	  _camera(Core::getMainCamera()) {
-
+        : config(config),
+          playerFactory(entityManager),
+          bombFactory(entityManager),
+          eventHandlerLookup(this),
+          client(eventHandlerLookup), 
+	      _camera(Core::getMainCamera()) {
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
     config->getValue(ConfigSettings::str_screenPosX, screenPosXStr);
@@ -44,7 +42,8 @@ Game::Game(ConfigSettings *config)
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
     setupScene();
 
-	/* For testing in-game editor *
+	// For testing in-game editor *
+	/*
 	std::string str_mediaPath = "";
 	std::string str_world_xml = "";
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
@@ -53,7 +52,8 @@ Game::Game(ConfigSettings *config)
 	str_world_xml = str_mediaPath + str_world_xml;
 
 	Core::loadWorldFile(str_world_xml);
-	* End testing code */
+	*/
+	/* End testing code */
 
     inputManager = new InputManager(client);
     inputManager->loadConfig();
@@ -117,7 +117,7 @@ void Game::run() {
 			// E.g: close the server whlie running the game 
             client.receive();
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
-				removeAllDynamicEntity(); //remove all entity created dynamically when connected to the client
+				removeAllEntities(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;
 			}
 			break;
@@ -130,17 +130,32 @@ void Game::run() {
         Core::AdvanceFrame();
     }
 }
-void Game::removeAllDynamicEntity() {
-	for (auto it : entityManager.getEntityList()) {
-		//remove from graphics
-		getGeometryManager()->deleteGeometry(std::to_string(static_cast<int>(it->getId())));
 
-		//remove from entity system
-		entityManager.destroyEntity(it->getId());
-	}
+void Game::addEntity(Entity *entity) {
+    auto *posComp = entity->getComponent<PositionComponent>();
+    auto *sceneNodeComp = entity->getComponent<SceneNodeComponent>();
+
+    if (posComp == nullptr || sceneNodeComp == nullptr) {
+        return;
+    }
+
+    if (sceneNodeComp != nullptr) {
+        const auto name = std::to_string(entity->getId());
+        const auto pos = osg::Vec3(posComp->getX(), posComp->getY(), posComp->getZ());
+
+        getGeometryManager()->addGeometry(name, sceneNodeComp->getNode(), pos);
+    }
 }
-const GameClient &Game::getGameClient() const{
-	return client;
+
+void Game::removeEntity(Entity *entity) {
+    getGeometryManager()->deleteGeometry(std::to_string(entity->getId()));
+    entityManager.destroyEntity(entity->getId());
+}
+
+void Game::removeAllEntities() {
+	for (auto it : entityManager.getEntityList()) {
+        removeEntity(it);
+	}
 }
 
 EntityManager &Game::getEntityManager() {
@@ -155,14 +170,18 @@ const BombFactory &Game::getBombFactory() const {
     return bombFactory;
 }
 
+const GameClient &Game::getGameClient() const {
+    return client;
+}
+
 GeometryObjectManager * Game::getGeometryManager() {
 	return _geometryManager;
 }
 
-MaterialManager * Game::getMaterialManager() {
+MaterialManager *Game::getMaterialManager() {
 	return _materialManager;
 }
 
-Camera &Game::getCamera(){
+Camera &Game::getCamera() {
 	return _camera;
 }

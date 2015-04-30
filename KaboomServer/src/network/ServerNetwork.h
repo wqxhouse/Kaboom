@@ -36,7 +36,7 @@ public:
     void send(char *packet, int size, int clientId);
 
     void removeDisconnectedClients();
-
+	std::unordered_set<unsigned int> disconnectedClients;
 private:
-    std::unordered_set<unsigned int> disconnectedClients;
+    
 };

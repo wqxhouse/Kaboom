@@ -9,7 +9,6 @@ class GameClient;
 class InputManager {
 public:
     InputManager(GameClient &client);
-    ~InputManager();
 
     void loadConfig();
 

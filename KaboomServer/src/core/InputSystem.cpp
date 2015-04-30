@@ -9,10 +9,14 @@
 #include "Game.h"
 #include "InputComponent.h"
 #include "PhysicsComponent.h"
+#include "JetpackComponent.h"
 
 #define PI 3.14159265359
 #define deg2rad(d) (PI / 180.0 * d)
+#define VELOCITYCAP 2
+#define VELOCTIYACCELERATION .1
 
+int g_count = 0; // HACK: for lowering fire rate
 
 InputSystem::InputSystem(Game *game)
         : EntitySystem(game) {
@@ -28,6 +32,7 @@ void InputSystem::update(float timeStep)
 		RotationComponent *rotCom = entity->getComponent<RotationComponent>();
 		PositionComponent *posCom = entity->getComponent<PositionComponent>();
 		PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
+		JetpackComponent *jetCom = entity->getComponent<JetpackComponent>();
 
 		if (inputCom == nullptr || physCom == nullptr) {
 			continue;
@@ -78,6 +83,24 @@ void InputSystem::update(float timeStep)
 		else {
 			localVelocity.setX(0);
 		}
+		if (inputCom->isJumping()){
+
+			if (!jetCom->activateJetpack()){
+				jetCom->refillJetpack();
+			}
+			else{
+				btVector3 s=rigidBody->getLinearVelocity();
+				if (s.getZ() + 1 > VELOCITYCAP){
+					velocity.setZ(2);
+				}
+				else{
+					velocity.setZ(s.getZ() + VELOCTIYACCELERATION);
+				}
+			}
+		}
+		else{
+			jetCom->refillJetpack();
+		}
 
 		btVector3 worldVelocity(right * localVelocity.getX() + front * localVelocity.getY());
 		worldVelocity.setZ(velocity.getZ());
@@ -85,16 +108,22 @@ void InputSystem::update(float timeStep)
 		rigidBody->setLinearVelocity(worldVelocity);
 
 		if (inputCom->isFiring()) {
-			Entity *bomb = game->getBombFactory().createBomb(
-                BombType::BOM_BOM,
-                posCom->getX() + viewDir.getX(),
-                posCom->getY() + viewDir.getY(),
-                posCom->getZ() + viewDir.getZ(),
-                viewDir.getX() * 5, // TODO: Change launch speed
-                viewDir.getY() * 5,
-                viewDir.getZ() * 5);
-			game->addEntityToWorld(bomb);
-			game->getGameServer().sendSpawnEvent(bomb);
+            // HACK: for lowering fire rate
+            if (g_count > 10) {
+                Entity *bomb = game->getBombFactory().createBomb(
+                    BombType::BOM_BOM,
+                    posCom->getX() + viewDir.getX(),
+                    posCom->getY() + viewDir.getY(),
+                    posCom->getZ() + viewDir.getZ(),
+                    viewDir.getX() * 5, // TODO: Change launch speed
+                    viewDir.getY() * 5,
+                    viewDir.getZ() * 5);
+                game->addEntity(bomb);
+                game->getGameServer().sendSpawnEvent(bomb);
+                g_count = 0;
+            } else {
+                g_count++;
+            }
 		}
 	}
 }

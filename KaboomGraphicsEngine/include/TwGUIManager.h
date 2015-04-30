@@ -18,9 +18,24 @@
 
 const std::string GEOM_GROUP_NAME = "Edit GeometryObject";
 const std::string LIGHT_GROUP_NAME = "Edit Light";
+const std::string MATERIAL_GROUP_NAME = "Edit Material";
+
 const std::string POS_X_LABEL = "posX";
 const std::string POS_Y_LABEL = "posY";
 const std::string POS_Z_LABEL = "posZ";
+
+const std::string COLOR_LABEL = "color";
+const std::string ROUGHNESS_LABEL = "roughness";
+const std::string SPECULAR_LABEL = "specular";
+const std::string METALLIC_LABEL = "metallic";
+
+const std::string REMOVE_LABEL = "Remove";
+const std::string EDIT_NAME_LABEL = "Edit name";
+
+struct BarItem {
+	TwBar* bar;
+	std::string name;
+};
 
 class Core;
 class TwGUIManager : public osgGA::GUIEventHandler, public osg::Camera::DrawCallback
@@ -55,6 +70,7 @@ public:
 	static void exportXML();
 	static void addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index);
 	static void addLightToGUI(TwBar* bar, Light* geom, std::string group, int& index);
+	static void addMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
 
 protected:
 	static int _index;
@@ -76,6 +92,7 @@ protected:
 		g_twBar = NULL;
 		g_manipulatorSelectorBar = NULL;
 		g_addBar = NULL;
+		g_materialBar = NULL;
 	}
 
 	TwMouseButtonID getTwButton(int button) const;
@@ -85,11 +102,13 @@ protected:
 	void initMainBar();
 	void initManipuatorSelectorBar();
 	void initAddBar();
-	
+	void initMaterialBar();
+
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;
 	TwBar *g_twBar;
 	TwBar *g_manipulatorSelectorBar;
 	TwBar *g_addBar;
+	TwBar *g_materialBar;
 	char g_fileName[256]; // TODO: this is a hack, fix it
 
 	static bool openFile(std::string &s);

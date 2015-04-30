@@ -2,16 +2,15 @@
 
 #include <unordered_map>
 
+#include <core/BombType.h>
 #include <util/XMLLoader.h>
-
-#include "BombType.h"
 
 class Entity;
 class EntityManager;
 
 class BombFactory {
 public:
-	BombFactory(EntityManager *entityManager);
+	BombFactory(EntityManager &entityManager);
 	~BombFactory();
 
     Entity *createBomb(const BombType &type) const;
@@ -24,6 +23,7 @@ private:
         std::string name;
         float size;
         float mass;
+        float explosionRadius;
     };
 
     class BombDataLookup : public XMLLoader {
@@ -38,5 +38,5 @@ private:
 
     static BombDataLookup lookup;
 
-	EntityManager *entityManager;
+	EntityManager &entityManager;
 };

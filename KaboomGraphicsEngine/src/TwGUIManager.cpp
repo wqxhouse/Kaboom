@@ -34,7 +34,8 @@ void TwGUIManager::initializeTwGUI()
 
 	initMainBar();
 	initManipuatorSelectorBar();
-	initAddBar();
+	initMaterialBar();
+	initAddBar();				// should be done last
 }
 
 void TwGUIManager::initMainBar()
@@ -208,7 +209,7 @@ void TwGUIManager::initManipuatorSelectorBar()
 void TwGUIManager::initAddBar()
 {
 	g_addBar = TwNewBar("Add");
-	TwDefine(" Add size='200 90' color='216 96 224' position='1000 16'");
+	TwDefine(" Add size='250 100' color='216 96 224' position='1025 16'");
 
 	// 'Add model' button
 	TwAddButton(g_addBar, "Add model",
@@ -286,6 +287,34 @@ void TwGUIManager::initAddBar()
 	},
 		g_twBar, NULL);
 
+	// 'Add material' button
+	TwAddButton(g_addBar, "Add material",
+		[](void *clientData) {
+
+		// TODO: Find out which default values to use
+		// Material default properties
+		osg::Vec3 albedoColor;
+		float roughness = 0.0f;
+		float specular = 0.0f;
+		float metallic = 0.0f;
+
+		// Add material to material manager
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+		// Get the input name
+		std::string matName;
+		std::cout << "Enter material name: ";
+		std::cin >> matName;
+
+		mm->createPlainMaterial(matName, albedoColor, roughness, specular, metallic);
+
+		// [Note: Does not handle duplicate names]
+		Material* mat = mm->getMaterial(matName);
+
+		addMaterialToGUI((TwBar*)clientData, mat, MATERIAL_GROUP_NAME, _index);
+	},
+		g_materialBar, NULL);
+
 	// 'Change cubemap' button
 	TwAddButton(g_addBar, "Change cubemap",
 		[](void *clientData) {
@@ -319,25 +348,31 @@ void TwGUIManager::initAddBar()
 
 			Core::setEnvironmentMapVerticalCross(fileName);
 			Core::requestPrefilterCubeMap();
-
-			// Add model to geometry manager
-			//osg::Node *model = osgDB::readNodeFile(fileName);
-			//GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
-
-			//// Get the input name
-			//std::string modelName;
-			//std::cout << "Enter model name: ";
-			//std::cin >> modelName;
-
-			//gm->addGeometry(modelName, model, fileName);
-
-			//// [Note: Does not handle duplicate names]
-			//GeometryObject* geom = gm->getGeometryObject(modelName);
-
-			//addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
 		}
 	},
-		g_twBar, NULL);
+		NULL, NULL);
+}
+
+void TwGUIManager::initMaterialBar()
+{
+
+	g_materialBar = TwNewBar("Materials");
+	TwDefine(" Materials label='Materials' size='250 540' color='96 216 96' position='1025 120' valueswidth=100");
+
+	// Process materials
+	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
+	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMap.begin();
+		it != mmMap.end(); ++it)
+	{
+		const std::string &name = it->first;
+		Material *mat = it->second;
+
+		if (mat->getUseTexture()) continue;
+		
+		// Moved code to a function
+		addMaterialToGUI(g_materialBar, mat, MATERIAL_GROUP_NAME, _index);
+	}
+
 }
 
 void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index) {
@@ -349,6 +384,71 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string posXVarName = POS_X_LABEL + indexStr;
 	std::string posYVarName = POS_Y_LABEL + indexStr;
 	std::string posZVarName = POS_Z_LABEL + indexStr;
+
+	BarItem* item = new BarItem();
+	item->bar = bar;
+	item->name = name;
+
+	std::string removeDef = nameGroupDef + " label='" + REMOVE_LABEL + "'";
+	TwAddButton(bar, removeDef.c_str(),
+		[](void *clientData) {
+		BarItem* item = (BarItem*)clientData;
+		std::string name = item->name;
+		Core::getWorldRef().getGeometryManager()->deleteGeometry(name);
+
+		TwRemoveVar(item->bar, name.c_str());
+	},
+		item, removeDef.c_str());
+
+	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
+	TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
+		[](const void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string oldName = item->name;
+
+		const std::string *newName = static_cast<const std::string*>(value);
+
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		gm->renameGeometry(oldName, *newName);
+
+		GeometryObject* geom = gm->getGeometryObject(*newName);
+
+		TwRemoveVar(item->bar, oldName.c_str());
+		addModelToGUI(item->bar, geom, GEOM_GROUP_NAME, _index);
+	},
+		[](void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string* showName = static_cast<std::string*>(value);
+		TwCopyStdStringToLibrary(*showName, item->name);
+	},
+		item, editNameDef.c_str());
+
+	//std::string materialVarName = "material" + indexStr;
+	std::string materialDef = nameGroupDef + " label='Set Material'";
+	TwAddButton(bar, materialDef.c_str(),
+		[](void *clientData) {
+		BarItem* item = (BarItem*)clientData;
+		std::string name = item->name;
+
+		// Get the material name
+		std::string matName;
+		std::cout << "Set material name: ";
+		std::cin >> matName;
+
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+		Material* mat = mm->getMaterial(matName);
+		if (!mat) {
+			std::cout << "Material not found" << std::endl;
+		}
+		else {
+			GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+
+			gm->getGeometryObject(name)->setMaterial(mat);
+		}
+	},
+		item, materialDef.c_str());
+
+
 
 	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 	TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
@@ -404,7 +504,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, posZDef.c_str());
 
-	std::string rotationVarName = "rotation" + std::to_string(index);
+	std::string rotationVarName = "rotation" + indexStr;
 	std::string rotationDef = nameGroupDef + " label='rotation'";
 	TwAddVarCB(bar, rotationVarName.c_str(), TW_TYPE_QUAT4F,
 		[](const void *value, void *clientData) {
@@ -450,7 +550,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		DirectionalLight *dl = l->asDirectionalLight();
 
 		// lightDir ( to light, not from light ) 
-		std::string dirToWorldVarName = "dirToWorld" + std::to_string(index);
+		std::string dirToWorldVarName = "dirToWorld" + indexStr;
 		std::string dirToWorldDef = nameGroupDef + " label='dirToWorld'";
 		TwAddVarCB(bar, dirToWorldVarName.c_str(), TW_TYPE_DIR3F,
 			[](const void *value, void *clientData) {
@@ -469,9 +569,9 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 
 		// TODO: color, later.... Too tired
 		// TW_TYPE_COLOR3F
-		std::string dirLightColorVarName = "Color" + std::to_string(index);
-		std::string dirLightColorDef = nameGroupDef + " label='Color'";
-		TwAddVarCB(bar, dirLightColorVarName.c_str(), TW_TYPE_COLOR3F,
+		std::string colorVarName = COLOR_LABEL + indexStr;
+		std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+		TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
 			[](const void *value, void *clientData) {
 			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
 			const float *arr = static_cast<const float *>(value);
@@ -483,11 +583,49 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			const osg::Vec3 &color = dl->getColor();
 			float *arr = static_cast<float *>(value);
 			arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
-		}, dl, dirLightColorDef.c_str());
+		}, dl, colorDef.c_str());
 	}
 	else if (l->getLightType() == POINTLIGHT)
 	{
 		PointLight *pl = l->asPointLight();
+
+		BarItem* item = new BarItem();
+		item->bar = bar;
+		item->name = name;
+
+		std::string removeDef = nameGroupDef + " label='" + REMOVE_LABEL + "'";
+		TwAddButton(bar, removeDef.c_str(),
+			[](void *clientData) {
+			BarItem* item = (BarItem*)clientData;
+			std::string name = item->name;
+			Core::getWorldRef().getLightManager()->deleteLight(name);
+
+			TwRemoveVar(item->bar, name.c_str());
+		},
+			item, removeDef.c_str());
+
+		std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
+		TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
+			[](const void *value, void *clientData) {
+			BarItem* item = static_cast<BarItem*>(clientData);
+			std::string oldName = item->name;
+
+			const std::string *newName = static_cast<const std::string*>(value);
+
+			LightManager* lm = Core::getWorldRef().getLightManager();
+			lm->renameLight(oldName, *newName);
+
+			Light* light = lm->getLight(*newName);
+
+			TwRemoveVar(item->bar, oldName.c_str());
+			addLightToGUI(item->bar, light, LIGHT_GROUP_NAME, _index);
+		},
+			[](void *value, void *clientData) {
+			BarItem* item = static_cast<BarItem*>(clientData);
+			std::string* showName = static_cast<std::string*>(value);
+			TwCopyStdStringToLibrary(*showName, item->name);
+		},
+			item, editNameDef.c_str());
 
 		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
@@ -558,9 +696,9 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		// TODO: add color ..
 		// TODO: color, later.... Too tired
 		// TW_TYPE_COLOR3F
-		std::string ptLightColorVarName = "Color" + std::to_string(index);
-		std::string ptLightColorDef = nameGroupDef + " label='Color'";
-		TwAddVarCB(bar, ptLightColorVarName.c_str(), TW_TYPE_COLOR3F,
+		std::string colorVarName = COLOR_LABEL + indexStr;
+		std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+		TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
 			[](const void *value, void *clientData) {
 			PointLight *pl = static_cast<PointLight *>(clientData);
 			const float *arr = static_cast<const float *>(value);
@@ -572,10 +710,118 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			const osg::Vec3 &color = pl->getColor();
 			float *arr = static_cast<float *>(value);
 			arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
-		}, pl, ptLightColorDef.c_str());
+		}, pl, colorDef.c_str());
 	}
 
 	std::string moveStr = " Main/" + name + " group='" + group + "'";
+	TwDefine(moveStr.c_str());
+
+	index++;
+}
+
+void TwGUIManager::addMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index)
+{
+	std::string name = mat->getName();
+	std::string nameGroupDef = " group='" + name + "' ";
+
+	std::string indexStr = std::to_string(index);
+	std::string limitVal = " min=0 max=1 step=0.05";
+
+	BarItem* item = new BarItem();
+	item->bar = bar;
+	item->name = name;
+
+	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
+	TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
+		[](const void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string oldName = item->name;
+
+		const std::string *newName = static_cast<const std::string*>(value);
+
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+		mm->renameMaterial(oldName, *newName);
+
+		Material* mat = mm->getMaterial(*newName);
+
+		TwRemoveVar(item->bar, oldName.c_str());
+		addMaterialToGUI(item->bar, mat, MATERIAL_GROUP_NAME, _index);
+	},
+		[](void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string* showName = static_cast<std::string*>(value);
+		TwCopyStdStringToLibrary(*showName, item->name);
+	},
+		item, editNameDef.c_str());
+
+	std::string colorVarName = COLOR_LABEL + indexStr;
+	std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+	TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const float *arr = static_cast<const float *>(value);
+		osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
+		mat->setAlbedo(color);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const osg::Vec3 &color = mat->getAlbedo();
+		float *arr = static_cast<float *>(value);
+		arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
+	}, mat, colorDef.c_str());
+
+	std::string roughnessVarName = ROUGHNESS_LABEL + indexStr;
+	std::string roughnessDef = nameGroupDef + " label='" + ROUGHNESS_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, roughnessVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setRoughness(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getRoughness();
+		*showVal = val;
+	},
+		mat, roughnessDef.c_str());
+
+	std::string specularVarName = SPECULAR_LABEL + indexStr;
+	std::string specularDef = nameGroupDef + " label='" + SPECULAR_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, specularVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setSpecular(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getSpecular();
+		*showVal = val;
+	},
+		mat, specularDef.c_str());
+
+	std::string metallicVarName = METALLIC_LABEL + indexStr;
+	std::string metallicDef = nameGroupDef + " label='" + METALLIC_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, metallicVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setMetallic(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getMetallic();
+		*showVal = val;
+	},
+		mat, metallicDef.c_str());
+
+	std::string moveStr = " Materials/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
 
 	index++;
@@ -653,7 +899,31 @@ void TwGUIManager::updateEvents() const
 			else if (ea.getKey() == 's')
 			{
 				GeometryObjectManipulator::changeCurrentManipulatorType(TabBoxDragger);
-
+			}
+			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_Tab)
+			{
+				if (_cameraManipulatorActive)
+				{
+					Core::disableCameraManipulator();
+					*(bool *)&_cameraManipulatorActive = false;
+				}
+				else
+				{
+					Core::enableCameraManipulator();
+					*(bool *)&_cameraManipulatorActive = true;
+				}
+			}
+			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F8)
+			{
+				Core::enableGameMode();
+			}
+			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F9)
+			{
+				Core::enablePassDataDisplay();
+			}
+			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F10)
+			{
+				Core::disablePassDataDisplay();
 			}
 			TwKeyPressed(getTwKey(ea.getKey(), useCtrl), getTwModKeyMask(ea.getModKeyMask()));
 		}

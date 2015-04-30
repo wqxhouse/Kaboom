@@ -18,6 +18,8 @@ Unresolved:
 7. BUG: need to delete bullet collision shape after client disconnect from server
 8. glValidation error in LightPass saying different samplers use the same texture (happens on HD4400, not on GTX580)
 
+9. After removing the geometry, if the manipulator is still active it will show on the screen.
+
 Fixed:
 1. Scrolling will crash the program (TwGUI)
 2. Skybox overriding preserved near far plane of gbuffer projection matrix, 

@@ -8,7 +8,10 @@
 #include <util/ConfigSettings.h>
 
 #include "BombFactory.h"
+#include "CollisionSystem.h"
+#include "ExplosionSystem.h"
 #include "InputSystem.h"
+#include "PhysicsSystem.h"
 #include "PlayerFactory.h"
 #include "World.h"
 #include "../network/GameServer.h"
@@ -24,7 +27,8 @@ public:
 
     void update(float timestep);
 
-    void addEntityToWorld(Entity *entity);
+    void addEntity(Entity *entity);
+    void removeEntity(Entity *entity);
 
     EntityManager &getEntityManager();
     const PlayerFactory &getPlayerFactory() const;
@@ -42,6 +46,9 @@ private:
     BombFactory bombFactory;
 
     InputSystem inputSystem;
+    PhysicsSystem physicsSystem;
+    CollisionSystem collisionSystem;
+    ExplosionSystem explosionSystem;
 
     ServerEventHandlerLookup eventHandlerLookup;
     GameServer server;

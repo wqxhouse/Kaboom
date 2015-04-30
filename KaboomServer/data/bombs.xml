@@ -5,5 +5,6 @@
         <name>Bom-Bom</name>
         <size>0.1</size>
         <mass>1.0</mass>
+        <explosion-radius>3.0</explosion-radius>
     </bomb>
 </bombs>
