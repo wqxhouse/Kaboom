@@ -11,6 +11,7 @@
 #include "TwGUIManager.h"
 #include "SkyBox.h"
 #include "AxisVisualizer.h"
+#include "CubeMapPreFilter.h"
 
 class Core
 {
@@ -60,6 +61,9 @@ public:
 
 	static void setAllowChangeEditorProjection(bool tf);
 	static bool allowChangeEditorProjection();
+
+	static void requestPrefilterCubeMap();
+	static void requestPrefilterCubeMapWithCubeMap(osg::TextureCubeMap *cubemap);
 
 	// static void run();
 
@@ -119,11 +123,14 @@ private:
 	static bool _isFirstFrame;
 
 	static bool _allowEditorChangeProjection;
+	static bool _requestPrefilterCubeMap;
 
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 
 
 	static AxisVisualizer _axisVisualizer;
+	static CubeMapPreFilter _cubemapPreFilter;
+
 };
 
 class MainCameraCallback : public osg::NodeCallback

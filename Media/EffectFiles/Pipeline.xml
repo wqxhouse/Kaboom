@@ -2,6 +2,7 @@
 
 <compositor>
   <include>EffectFiles/template.xml</include>
+  <!--<include>EffectFiles/CubemapPreFilterPassConfig.xml</include>-->
   <include>EffectFiles/GeometryPassConfig.xml</include>
   <include>EffectFiles/LightPrePassConfig.xml</include>
   <include>EffectFiles/LightPassConfig.xml</include>
@@ -25,12 +26,6 @@
     <value>0 0 0</value>
   </uniform>
 
-  <!--<technique name="skybox_rendering">
-    <forward_pass name="skybox_pass">
-      <output_buffer target="color">b_shading</output_buffer>
-    </forward_pass>
-  </technique>-->
-
   <buffer name="debugDepth" type="2d">
     <internal_format>depth24</internal_format>
     <source_format>depth</source_format>
@@ -38,6 +33,13 @@
   </buffer>
 
   <technique name="deferred_shading">
+    <forward_pass name="PreFilterCubeMapPass" >
+      <clear_color>0 0 0 1</clear_color>
+      <culling mask="0x8"></culling>
+      <near_far preserve="0"/>
+      <!--<output_buffer target="color">b_cubemap</output_buffer>-->
+    </forward_pass> 
+    
     <forward_pass name="GeometryPass">
       <clear_color>0 0 0 1</clear_color>
       <culling mask="0x1"></culling>
@@ -84,11 +86,13 @@
       <input_buffer unit="1" varname="u_RT0">b_RT0</input_buffer>
       <input_buffer unit="2" varname="u_RT1">b_RT1</input_buffer>
       <input_buffer unit="3" varname="u_RT2">b_RT2</input_buffer>
+      <!--<input_buffer unit="4" varname="u_cubeMapTex">b_cubemap</input_buffer>-->
 
       <clear_mask>depth</clear_mask>
       <output_buffer target="color">b_shading</output_buffer>
 
       <uniform_buffer>u_lightsBuffer</uniform_buffer>
+      <uniform>u_viewInvMat</uniform>
       <uniform>u_projInvMat</uniform>
       <uniform>u_farPlane</uniform>
       <uniform>u_eyePos</uniform>

@@ -27,6 +27,9 @@ uniform vec3 osg_OutputBufferSize;
 uniform vec3 u_eyePos;
 uniform float u_farPlane;
 
+uniform samplerCube u_cubeMapTex;
+uniform mat4 u_viewInvMat;
+
 void main() 
 {
     // Compute texcoords
@@ -72,61 +75,81 @@ void main()
     // Lighting result gets stored in this variables
     vec3 result = vec3(0);
 
-        // Compute point lights
-        ivec2 baseOffset = precomputeCoord + ivec2(0,1);
-        ivec2 currentOffset = ivec2(0);
-        int currentLightId = 0;
-        Light currentLight;
+	//// First calculate IBL contribution
+	int totalMipLevel = 6; // TODO: figure out is it ideal 
+	float mip = totalMipLevel - 1 + log2(material.roughness);
 
-        for (int i = 0; i < countPointLight; i++) 
-		{
-            currentOffset = ivec2(i % 8, i / 8);
-            currentLightId = texelFetch(u_lightsPerTile, baseOffset + currentOffset, 0).r;
-            currentLight = lights[currentLightId];
+	// TODO: refactor lightUtil.glsl to reuse v, l, h
+	vec3 v = normalize(-material.position);
+	vec3 n = normalize(material.normal);
+	vec3 v_ws = (u_viewInvMat * vec4(v, 0)).xyz;
+	vec3 n_ws = (u_viewInvMat * vec4(n, 0)).xyz;
 
-            result += applyPointLight(currentLight, material, u_eyePos);
-        }
+	vec3 lookupWS = -reflect(v_ws, n_ws);
+	float NdotVWS = clamp(dot(n_ws, v_ws), 0.0, 1.0);
+	vec3 specularSample = textureLod( u_cubeMapTex, lookupWS, mip ).rgb;
 
-        //// Compute shadow point lights
-        //baseOffset = precomputeCoord + ivec2(0,3);
-        //for (int i = 0; i < countPointLightShadow; i++) {
-        //    currentOffset = ivec2(i % 8, i / 8);
-        //    currentLightId = texelFetch(lightsPerTile, baseOffset + currentOffset, 0).r;
-        //    currentLight = lights[currentLightId];
+	// A hack. need to generate irradiance map in the prefilter stage
+	vec3 diffuseSample = textureLod( u_cubeMapTex, material.normal, 5 ).rgb;
 
-        //    #if USE_SHADOWS
-        //        result += applyPointLightWithShadow(currentLight, material OCCLUSION_PER_LIGHT_SEND_PARAMETERS );
-        //    #else
-        //        result += applyPointLight(currentLight, material OCCLUSION_PER_LIGHT_SEND_PARAMETERS );
-        //    #endif
-        //}
+	// result += calcEnvContribution(material, diffuseSample, specularSample, NdotVWS);
+	// result += textureLod(u_cubeMapTex, lookupWS, 0).rgb;
 
-        // Compute directional lights
-        baseOffset = precomputeCoord + ivec2(0,5);
-        for (int i = 0; i < countDirectionalLight; i++) 
-		{
-            currentOffset = ivec2(i % 8, i / 8);
-            currentLightId = texelFetch(u_lightsPerTile, baseOffset + currentOffset, 0).r;
-            currentLight = lights[currentLightId];
-            result += applyDirectionalLight(currentLight, material, u_eyePos);
-        }
+    // Compute point lights
+    ivec2 baseOffset = precomputeCoord + ivec2(0,1);
+    ivec2 currentOffset = ivec2(0);
+    int currentLightId = 0;
+    Light currentLight;
 
-		//result = material.baseColor;
-		//result = lights[1].color;
+    for (int i = 0; i < countPointLight; i++) 
+	{
+        currentOffset = ivec2(i % 8, i / 8);
+        currentLightId = texelFetch(u_lightsPerTile, baseOffset + currentOffset, 0).r;
+        currentLight = lights[currentLightId];
+
+        result += applyPointLight(currentLight, material);
+    }
+
+    //// Compute shadow point lights
+    //baseOffset = precomputeCoord + ivec2(0,3);
+    //for (int i = 0; i < countPointLightShadow; i++) {
+    //    currentOffset = ivec2(i % 8, i / 8);
+    //    currentLightId = texelFetch(lightsPerTile, baseOffset + currentOffset, 0).r;
+    //    currentLight = lights[currentLightId];
+
+    //    #if USE_SHADOWS
+    //        result += applyPointLightWithShadow(currentLight, material OCCLUSION_PER_LIGHT_SEND_PARAMETERS );
+    //    #else
+    //        result += applyPointLight(currentLight, material OCCLUSION_PER_LIGHT_SEND_PARAMETERS );
+    //    #endif
+    //}
+
+    // Compute directional lights
+    baseOffset = precomputeCoord + ivec2(0,5);
+    for (int i = 0; i < countDirectionalLight; i++) 
+	{
+        currentOffset = ivec2(i % 8, i / 8);
+        currentLightId = texelFetch(u_lightsPerTile, baseOffset + currentOffset, 0).r;
+        currentLight = lights[currentLightId];
+        result += applyDirectionalLight(currentLight, material);
+    }
+
+	//result = material.baseColor;
+	//result = lights[1].color;
 
 
-        //// Compute shadowed directinal lights
-        //baseOffset = precomputeCoord + ivec2(0,6);
-        //for (int i = 0; i < countDirectionalLightShadow; i++) {
-        //    currentOffset = ivec2(i % 8, i / 8);
-        //    currentLightId = texelFetch(lightsPerTile, baseOffset + currentOffset, 0).r;
-        //    currentLight = lights[currentLightId];
-        //    result += applyDirectionalLightWithShadow(currentLight, material OCCLUSION_PER_LIGHT_SEND_PARAMETERS );
-        //}
+    //// Compute shadowed directinal lights
+    //baseOffset = precomputeCoord + ivec2(0,6);
+    //for (int i = 0; i < countDirectionalLightShadow; i++) {
+    //    currentOffset = ivec2(i % 8, i / 8);
+    //    currentLightId = texelFetch(lightsPerTile, baseOffset + currentOffset, 0).r;
+    //    currentLight = lights[currentLightId];
+    //    result += applyDirectionalLightWithShadow(currentLight, material OCCLUSION_PER_LIGHT_SEND_PARAMETERS );
+    //}
 
 
     // SRGB - gamma correction ( TODO: last step or here??? )
-    result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
+    //result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
     //result = 1.0f - exp(-1.0 * result);
 
 	gl_FragColor = vec4(result, 1.0);

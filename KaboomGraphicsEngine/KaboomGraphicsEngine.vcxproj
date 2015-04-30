@@ -252,6 +252,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\CompositorAnalysis.h" />
     <ClInclude Include="include\Core.h" />
+    <ClInclude Include="include\CubeMapPreFilter.h" />
     <ClInclude Include="include\CubemapUtil.h" />
     <ClInclude Include="include\CustomFirstPersonManipulator.h" />
     <ClInclude Include="include\DirectionalLight.h" />
@@ -279,6 +280,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\AxisVisualizer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Core.cpp" />
+    <ClCompile Include="src\CubemapPreFilter.cpp" />
     <ClCompile Include="src\CubemapUtil.cpp" />
     <ClCompile Include="src\CustomFirstPersonManipulator.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
@@ -307,11 +309,14 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Media\EffectFiles\CubemapPreFilterPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\GeometryPassPlain.xml" />
     <Xml Include="..\Media\EffectFiles\LightPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\LightPrePassConfig.xml" />
-    <Xml Include="..\Media\EffectFiles\Pipeline.xml" />
+    <Xml Include="..\Media\EffectFiles\Pipeline.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\Media\EffectFiles\template.xml" />
     <Xml Include="..\Media\EffectFiles\Test.xml" />
     <Xml Include="..\Media\EffectFiles\TestWorld.xml" />
@@ -321,6 +326,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\BugList.txt" />
     <None Include="..\Media\EffectFiles\smaa.xml" />
     <None Include="..\Media\Shaders\constant.glsl" />
+    <None Include="..\Media\Shaders\cubemapPreFilter.frag" />
+    <None Include="..\Media\Shaders\cubemapPrefilter.vert" />
     <None Include="..\Media\Shaders\defaultQuad.vert" />
     <None Include="..\Media\Shaders\gbufferUtil.glsl" />
     <None Include="..\Media\Shaders\gbuffer_plain.frag" />

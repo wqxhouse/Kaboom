@@ -45,12 +45,17 @@ public:
                             osg::Image* posY, osg::Image* negY, osg::Image* posZ, osg::Image* negZ );
 
 	void setGeomRoot(osg::Group *geomRoot);
+	inline osg::ref_ptr<osg::TextureCubeMap> getCubeMap()
+	{
+		return _textureCubeMap;
+	}
     
     virtual bool computeLocalToWorldMatrix( osg::Matrix& matrix, osg::NodeVisitor* nv ) const;
     virtual bool computeWorldToLocalMatrix( osg::Matrix& matrix, osg::NodeVisitor* nv ) const;
 
 protected:
 	osg::ref_ptr<osg::Geode> _skySphere;
+	osg::ref_ptr<osg::TextureCubeMap> _textureCubeMap;
     virtual ~SkyBox() {}
 };
 

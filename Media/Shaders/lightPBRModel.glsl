@@ -1,11 +1,10 @@
 // GGX
 float DistributionBRDF(float roughness, float NxH)
 {
-
     float m = roughness * roughness;
     float m2 = m * m;
     float d = ( NxH * m2 - NxH ) * NxH + 1;
-    return m2 / ( d*d );
+    return m2 / ( M_PI*d*d );
 }
 
 // Schlick
@@ -19,10 +18,29 @@ float GeometricBRDF(float roughness, float NxV, float NxL)
     return clamp(1.0 / ( v * l ), 0.0, 1.0);
 }
 
+// Appoximation of joint Smith term for GGX
+// [Heitz 2014, "Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs"]
+float Vis_SmithJointApprox(float Roughness, float NoV, float NoL)
+{
+	float a = Roughness * Roughness;
+	float Vis_SmithV = NoL * ( NoV * ( 1 - a ) + a );
+	float Vis_SmithL = NoV * ( NoL * ( 1 - a ) + a );
+	return 0.5 * (1.0 / ( Vis_SmithV + Vis_SmithL ) );
+}
+
 // Schlick
 vec3 FresnelBRDF(vec3 specularColor, float LxH)
 {
-    return specularColor + (1.0 - specularColor) * pow(1.0 - LxH, 5.0); 
+    return specularColor + (1.0 - specularColor) * pow(1.0 - LxH, 5.0);
+}
+
+// Rip off from Unreal 4
+vec3 F_Schlick(vec3 SpecularColor, float VoH)
+{
+	float Fc = pow( 1 - VoH, 5 );							// 1 sub, 3 mul
+	
+	// Anything less than 2% is physically impossible and is instead considered to be shadowing
+	return clamp( 50.0 * SpecularColor.g, 0.0, 1.0 ) * Fc + (1 - Fc) * SpecularColor;
 }
 
 vec3 DiffuseBRDF(vec3 diffuseColor, float roughness, float NxV, float NxL, float VxH) 
