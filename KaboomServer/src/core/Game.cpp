@@ -15,8 +15,8 @@
 Game::Game(ConfigSettings *config)
         : playerFactory(entityManager),
           bombFactory(entityManager),
+          initSystem(this),
           inputSystem(this),
-          physicsSystem(this),
           collisionSystem(this),
           explosionSystem(this),
 	      eventHandlerLookup(this),
@@ -84,39 +84,13 @@ void Game::update(float timeStep) {
     server.receive(this);
 
     // Handle game logic here
+    initSystem.update(timeStep);
     inputSystem.update(timeStep);
-    physicsSystem.update(timeStep);
 
     world.stepSimulation(timeStep);
 
     collisionSystem.update(timeStep);
     explosionSystem.update(timeStep);
-
-    for (Entity *entity : entityManager.getEntityList()) {
-        CharacteristicComponent *charCom = entity->getComponent<CharacteristicComponent>();
-        PositionComponent *posCom = entity->getComponent<PositionComponent>();
-        PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
-
-        const btTransform &worldTrans = physCom->getRigidBody()->getWorldTransform();
-        const btVector3 &pos = worldTrans.getOrigin();
-        
-        posCom->setPosition(pos.getX(), pos.getY(), pos.getZ());
-
-        if (charCom->getType() == EntityType::BOMB) {
-            TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
-
-            if (triggerComp != nullptr) {
-                triggerComp->getGhostObject()->setWorldTransform(worldTrans);
-            }
-        }
-
-        CollisionComponent *colComp = entity->getComponent<CollisionComponent>();
-
-        if (colComp != nullptr) {
-            colComp->setCollided(false);
-            colComp->clearContactEntities();
-        }
-    }
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
 }
