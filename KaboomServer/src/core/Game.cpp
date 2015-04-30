@@ -5,6 +5,7 @@
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 
+#include "CollisionComponent.h"
 #include "InputComponent.h"
 #include "PhysicsComponent.h"
 #include "TriggerComponent.h"
@@ -108,6 +109,13 @@ void Game::update(float timeStep) {
                 triggerComp->getGhostObject()->setWorldTransform(worldTrans);
             }
         }
+
+        CollisionComponent *colComp = entity->getComponent<CollisionComponent>();
+
+        if (colComp != nullptr) {
+            colComp->setCollided(false);
+            colComp->clearContactEntities();
+        }
     }
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
@@ -127,8 +135,4 @@ const BombFactory &Game::getBombFactory() const {
 
 const GameServer &Game::getGameServer() const {
     return server;
-}
-
-World &Game::getWorld() {
-    return world;
 }

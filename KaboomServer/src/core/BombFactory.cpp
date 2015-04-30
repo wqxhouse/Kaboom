@@ -13,6 +13,7 @@
 #include <core/RotationComponent.h>
 #include <util/XMLLoader.h>
 
+#include "CollisionComponent.h"
 #include "ExplosionComponent.h"
 #include "PhysicsComponent.h"
 #include "TriggerComponent.h"
@@ -60,6 +61,7 @@ Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z,
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new TriggerComponent(ghostObject));
+    entity->attachComponent(new CollisionComponent());
 
     return entity;
 }
