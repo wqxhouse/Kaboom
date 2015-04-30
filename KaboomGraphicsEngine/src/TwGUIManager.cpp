@@ -318,6 +318,7 @@ void TwGUIManager::initAddBar()
 			DWORD dw = GetLastError();							// [Debug] Should be 0
 
 			Core::setEnvironmentMapVerticalCross(fileName);
+			Core::requestPrefilterCubeMap();
 
 			// Add model to geometry manager
 			//osg::Node *model = osgDB::readNodeFile(fileName);

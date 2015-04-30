@@ -9,6 +9,7 @@ Visualizer::Visualizer()
 	osg::ref_ptr<osg::Depth> depth = new osg::Depth;
 	depth->setWriteMask(false);
 	_matTrans->getOrCreateStateSet()->setAttributeAndModes(depth);
+	_matTrans->setCullingActive(false);
 }
 
 void Visualizer::setPosition(const osg::Vec3 &pos)

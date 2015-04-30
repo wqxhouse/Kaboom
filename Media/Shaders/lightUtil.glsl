@@ -16,52 +16,86 @@ vec3 computeSpecular(vec3 specularColor, float roughness, float NxL, float LxH, 
     return genericMicrofacetBRDF(specularF, specularG, specularD, NxL, NxV);
 }
 
+vec3 computeSpecularV2(vec3 specularColor, float roughness, float NoL, float NoV, float NoH, float VoH)
+{
+	float D = DistributionBRDF(roughness, NoH); // TODO: energy conservation
+	float Vis = Vis_SmithJointApprox(roughness, NoV, NoL);
+	vec3 F = F_Schlick(specularColor, VoH);
 
-//float computeMipmapFromRoughness(float roughness) {
-//    return max(0.0, fallbackCubemapMipmaps - 11 +  pow(roughness, 0.25) * 11.0);
+	return D * Vis * F; 
+}
+
+//float3 StandardShading( FGBufferData GBuffer, float3 LobeRoughness, float3 LobeEnergy, float3 L, float3 V, half3 N, float2 DiffSpecMask )
+//{
+//	float3 H = normalize(V + L);
+//	float NoL = saturate( dot(N, L) );
+//	//float NoV = saturate( dot(N, V) );
+//	float NoV = abs( dot(N, V) ) + 1e-5;
+//	float NoH = saturate( dot(N, H) );
+//	float VoH = saturate( dot(V, H) );
+	
+//	// Generalized microfacet specular
+//	float D = D_GGX( LobeRoughness[1], NoH ) * LobeEnergy[1];
+//	float Vis = Vis_SmithJointApprox( LobeRoughness[1], NoV, NoL );
+//	float3 F = F_Schlick( GBuffer.SpecularColor, VoH );
+
+//	return Diffuse_Lambert(GBuffer.DiffuseColor) * (LobeEnergy[2] * DiffSpecMask.r) + (D * Vis * DiffSpecMask.g) * F;
 //}
+
+//// accumulate diffuse and specular
+//			{
+//#if 1	// for testing if there is a perf impact
+//				// correct screen space subsurface scattering
+//				float3 SurfaceLightingDiff = SurfaceShading(ScreenSpaceData.GBuffer, LobeRoughness, LobeEnergy, L, V, N, float2(1, 0));
+//				float3 SurfaceLightingSpec = SurfaceShading(ScreenSpaceData.GBuffer, LobeRoughness, LobeEnergy, L, V, N, float2(0, 1));
+//				LightAccumulator_Add(LightAccumulator, SurfaceLightingDiff, SurfaceLightingSpec, LightColor * (NoL * SurfaceAttenuation));
+//#else
+//				// wrong screen space subsurface scattering but potentially faster
+//				float3 SurfaceLighting = SurfaceShading(ScreenSpaceData.GBuffer, LobeRoughness, LobeEnergy, L, V, N, float2(1, 1));
+//				LightAccumulator_Add(LightAccumulator, SurfaceLighting, 0, LightColor * (NoL * SurfaceAttenuation));
+//#endif
+//			}
+
+
 
 vec3 computeLightModel(Light light, Material material, 
         vec3 l, vec3 v, vec3 n, vec3 h, 
         float attenuation, float shadowFactor) 
 {
-    // Performance optimization
         // if (shadowFactor < 0.001) return vec3(0.0);
 
     vec3 lightingResult = vec3(0);
-    vec3 specularColor = mix(vec3(1), material.baseColor, material.metallic) * material.specular;
-    vec3 diffuseColor = mix(material.baseColor, vec3(0), material.metallic);
+    //vec3 specularColor = mix(vec3(1), material.baseColor, material.metallic) * material.specular;
+    //vec3 diffuseColor = mix(material.baseColor, vec3(0), material.metallic);
+	vec3 specularColor = material.specularColor;
+	vec3 diffuseColor = material.diffuseColor;
+
     float roughness = clamp(material.roughness, 0.005, 1.0);
-    // pre-computed cross products
-    float NxL = clamp(dot(n, l), 0.0, 1.0);
-    float LxH = clamp(dot(l, h), 0.0, 1.0);
-    float NxV = abs(dot(n, v)) + 1e-5;
-    float NxH = clamp(dot(n, h), 0.0, 1.0);
+
+    float NoL = clamp(dot(n, l), 0.0, 1.0);
+       float LoH = clamp(dot(l, h), 0.0, 1.0);
+    float NoV = abs(dot(n, v)) + 1e-5;
+    float NoH = clamp(dot(n, h), 0.0, 1.0);
+	float VoH = clamp(dot(v, h), 0.0, 1.0);
+
     // Evaluate specular
-    vec3 specularContribution = computeSpecular(specularColor, roughness, NxL, LxH, NxV, NxH) * NxL;
+    // vec3 specularContribution = computeSpecular(specularColor, roughness, NoL, LoH, NoV, NoH) * NoL;
+	vec3 specularContribution = computeSpecularV2(specularColor, roughness, NoL, NoV, NoH, VoH);
+
     // Energy conservation
-        // specularContribution *= pow(1.0 + roughness*0.5, 2.0);
-    lightingResult += specularContribution * material.baseColor * light.color;
+    // specularContribution *= pow(1.0 + roughness*0.5, 2.0);
+    lightingResult += specularContribution;
+
     // Evaluate diffuse
-    vec3 diffuseContribution = diffuseColor / M_PI * NxL * light.color;
-    lightingResult += diffuseContribution;
-    // Apply shadows
-    lightingResult *= shadowFactor;
-    // Apply point light attenuation
-    lightingResult *= attenuation;
+	// Lambertian
+    vec3 diffuseContribution = diffuseColor / M_PI;
+	// vec3 diffuseContribution = DiffuseBRDF(diffuseColor, roughness, NoV, NoL, VoH);
+    //lightingResult += diffuseContribution;
+
+	vec3 commonTerm = NoL * light.color * shadowFactor * attenuation; // TODO: implement shadow later 
+	lightingResult *= commonTerm;
     return lightingResult;
 }
-
-vec3 computeEnvironmentBRDF(vec3 specularColor, float roughness, float NxV)
-{
-    const vec4 a = vec4(-1, -0.0275, -0.572, 0.022);
-    const vec4 b = vec4(1, 0.0425, 1.04, -0.04);
-    vec4 r = roughness * a + b;
-    float c = min( r.x * r.x, exp2( -9.28 * NxV ) ) * r.x + r.y;
-    vec2 multiplier = vec2( -1.04, 1.04 ) * c + r.zw;
-    return specularColor * multiplier.x + multiplier.y;
-}
-
 
 float computePointLightAttenuation(Light light, float distanceToLight) 
 {
@@ -81,7 +115,7 @@ vec3 applyDirectionalLight(Light light, Material material)
 {
     float attenuation = 1.0;
     // no att for dir light
-
+	
     vec3  l = -light.dirFromLight;
     //vec3  v = normalize(eyePosition - material.position);
     vec3  v = normalize(-material.position);
@@ -101,4 +135,49 @@ vec3 applyPointLight(Light light, Material material)
     vec3  h = normalize(l + v);
     return computeLightModel(light, material, l ,v, n, h, attenuation, 1.0);
 	//return vec3(attenuation);
+}
+
+// https://www.unrealengine.com/blog/physically-based-shading-on-mobile
+vec3 EnvBRDFApprox( vec3 SpecularColor, float Roughness, float NoV )
+{
+	const vec4 c0 = vec4( -1, -0.0275, -0.572, 0.022 );
+	const vec4 c1 = vec4( 1, 0.0425, 1.04, -0.04 );
+	vec4 r = Roughness * c0 + c1;
+	float a004 = min( r.x * r.x, exp2( -9.28 * NoV ) ) * r.x + r.y;
+	vec2 AB = vec2( -1.04, 1.04 ) * a004 + r.zw;
+	return SpecularColor * AB.x + AB.y;
+}
+
+// http://the-witness.net/news/2012/02/seamless-cube-map-filtering/
+vec3 fix_cube_lookup( vec3 v, float cube_size, float lod ) 
+{
+	float M = max(max(abs(v.x), abs(v.y)), abs(v.z));
+	float scale = 1 - exp2(lod) / cube_size;
+	if (abs(v.x) != M) v.x *= scale;
+	if (abs(v.y) != M) v.y *= scale;
+	if (abs(v.z) != M) v.z *= scale;
+	return v;
+}
+
+vec3 calcEnvContribution(Material material, vec3 diffuseSample, vec3 specularSample, float wsNdotV)
+{
+    float roughness = clamp(material.roughness, 0.005, 1.0);
+	float roughness4 = pow(roughness, 4);
+
+	// get the approximate reflectance
+	vec3 reflectance = EnvBRDFApprox( material.specularColor, roughness4, wsNdotV );
+		
+	// combine the specular IBL and the BRDF
+	vec3 specularIBL		= specularSample * reflectance;
+		
+	// still have to figure out how to do env. irradiance
+	vec3 diffuseIBL			= diffuseSample * material.diffuseColor;
+		
+	// not sure how to combine this with the rest
+	return diffuseIBL + specularIBL;
+}
+
+float getLodFromRoughness(float roughness, int cubeMaxLod)
+{
+	return 0.0;
 }

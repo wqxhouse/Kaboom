@@ -176,6 +176,22 @@ void Core::configGeometryObjectManipulator()
 
 void Core::configCubemapPrefilterPass()
 {
+	osg::TextureCubeMap *cubemap = _skybox->getCubeMap();
+
+	// Get prefilter pass from _passes
+	//osgFX::EffectCompositor::PassData passData;
+	//_passes->getPassData("PreFilterCubeMapPass", passData);
+	//osg::Camera *cam = passData.pass;
+	//_cubemapPreFilter = CubeMapPreFilter(cam); // is there an elegant way?
+
+	_cubemapPreFilter.initWithCubeMap(cubemap);
+	osgFX::EffectCompositor::PassData lightPass;
+	_passes->getPassData("LightPass", lightPass);
+	osg::Camera *cam = lightPass.pass;
+	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_cubeMapTex", 4));
+	cam->getOrCreateStateSet()->setTextureAttributeAndModes(4, _cubemapPreFilter.getGeneratedCubemap());
+
+	_passes->addChild(_cubemapPreFilter.getRoot());
 }
 
 void Core::configSceneNode()
@@ -213,7 +229,16 @@ void Core::AdvanceFrame()
 			_isFirstFrame = false;
 		}
 
+		if (_requestPrefilterCubeMap)
+		{
+			_cubemapPreFilter.enableCompute();
+			_requestPrefilterCubeMap = false;
+		}
 		_viewer->frame();
+
+		// _cubemapPreFilter.saveImagesToFile("C:\\3DEngine\\temp");
+		_cubemapPreFilter.disableCompute();
+
 		_lastFrameStartTime = _frameStartTime;
 		_frameStartTime = osg::Timer::instance()->tick();
 	}
@@ -243,6 +268,12 @@ void Core::finalize()
 	if (_hasEnvMap)
 	{
 		configSkyBox();
+		configCubemapPrefilterPass();
+		//osgFX::EffectCompositor::PassData pass;
+		//_passes->getPassData("LightPass", pass);
+		//osg::Camera *cam = pass.pass;
+		//cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_cubeMapTex", 4));
+		//cam->getOrCreateStateSet()->setTextureAttributeAndModes(4, _skybox->getCubeMap());
 	}
 
 	configInGameGUI();
@@ -365,6 +396,7 @@ void Core::setEnvironmentMapVerticalCross(const std::string &cubemap)
 {
 	CubemapUtil ut;
 	bool res = ut.loadVerticalCross(cubemap);
+	// ut.saveImageToFile("C:\\3DEngine\\temp\\cubemap");
 	if (res)
 	{
 		_skybox->setEnvironmentMap(0,
@@ -487,6 +519,20 @@ void Core::configAxisVisualizer()
 	_passes->addChild(_axisVisualizer.getRoot());
 }
 
+void Core::requestPrefilterCubeMap()
+{
+	_requestPrefilterCubeMap = true;
+
+	// TODO: add support of different cubemaps
+	_cubemapPreFilter.changeCubeMap(_skybox->getCubeMap());
+}
+
+void Core::requestPrefilterCubeMapWithCubeMap(osg::TextureCubeMap *cubemap)
+{
+	_requestPrefilterCubeMap = true;
+	_cubemapPreFilter.changeCubeMap(cubemap);
+}
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;
@@ -515,8 +561,10 @@ bool Core::_manipulatorEnabled;
 
 bool Core::_isFirstFrame;
 bool Core::_allowEditorChangeProjection;
+bool Core::_requestPrefilterCubeMap = false;
 
 osg::Timer_t Core::_lastFrameStartTime; 
 osg::Timer_t Core::_frameStartTime; 
 
 AxisVisualizer Core::_axisVisualizer;
+CubeMapPreFilter Core::_cubemapPreFilter;

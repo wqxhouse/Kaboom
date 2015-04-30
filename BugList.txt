@@ -16,6 +16,7 @@ Unresolved:
    1) in inheritedly linked to project matrices and near far plane. 
 
 7. BUG: need to delete bullet collision shape after client disconnect from server
+8. glValidation error in LightPass saying different samplers use the same texture (happens on HD4400, not on GTX580)
 
 Fixed:
 1. Scrolling will crash the program (TwGUI)
@@ -27,3 +28,4 @@ Fixed:
 3. After pressing playgame, the object is still draggable and resizable;
 
 TODO: click close renderer needs to close the game entirely.
+TODO: refactor lightUtil.glsl to reuse NxV NxH ... across a single fragment
