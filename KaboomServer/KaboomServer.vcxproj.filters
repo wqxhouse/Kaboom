@@ -109,7 +109,7 @@
     <ClCompile Include="src\core\ExplosionSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ExplosionComponent.cpp">
+    <ClCompile Include="src\core\TriggerComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -171,6 +171,9 @@
     </ClInclude>
     <ClInclude Include="src\core\ExplosionSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\TriggerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

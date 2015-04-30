@@ -46,13 +46,11 @@ void CollisionSystem::update(float timeStep) {
         if (entityB != nullptr) entityBType = entityB->getComponent<CharacteristicComponent>()->getType();
 
         if (entityAType == EntityType::BOMB) {
-            ExplosionComponent *expComp = entityA->getComponent<ExplosionComponent>();
-            expComp->setExploded(true);
+            entityA->attachComponent(new ExplosionComponent());
         }
 
         if (entityBType == EntityType::BOMB) {
-            ExplosionComponent *expComp = entityB->getComponent<ExplosionComponent>();
-            expComp->setExploded(true);
+            entityB->attachComponent(new ExplosionComponent());
         }
     }
 }

@@ -66,12 +66,15 @@ void World::removeRigidBody(btRigidBody *rigidBody) {
     world.removeRigidBody(rigidBody);
 }
 
-void World::addCollisionObject(btCollisionObject *collisionObject) {
-    world.addCollisionObject(collisionObject);
+void World::addTrigger(btGhostObject *ghostObject) {
+    world.addCollisionObject(
+        ghostObject,
+        btBroadphaseProxy::SensorTrigger,
+        btBroadphaseProxy::AllFilter ^ btBroadphaseProxy::SensorTrigger ^ btBroadphaseProxy::StaticFilter);
 }
 
-void World::removeCollisionObject(btCollisionObject *collisionObject) {
-    world.removeCollisionObject(collisionObject);
+void World::removeTrigger(btGhostObject *ghostObject) {
+    world.removeCollisionObject(ghostObject);
 }
 
 void World::setGravity(float gravity) {

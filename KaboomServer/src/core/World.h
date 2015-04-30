@@ -16,8 +16,8 @@ public:
     void addRigidBody(btRigidBody *rigidBody);
     void removeRigidBody(btRigidBody *rigidBody);
 
-    void addCollisionObject(btCollisionObject *collisionObject);
-    void removeCollisionObject(btCollisionObject *collisionObject);
+    void addTrigger(btGhostObject *ghostObject);
+    void removeTrigger(btGhostObject *ghostObject);
 
     void setGravity(float gravity);
 

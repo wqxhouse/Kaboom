@@ -1,12 +1,13 @@
 #include "Game.h"
 
 #include <core/Entity.h>
+#include <core/CharacteristicComponent.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 
-#include "ExplosionComponent.h"
 #include "InputComponent.h"
 #include "PhysicsComponent.h"
+#include "TriggerComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
 
@@ -33,10 +34,10 @@ void Game::addEntity(Entity *entity) {
         world.addRigidBody(physicsComp->getRigidBody());
     }
 
-    ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
+    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
 
-    if (expComp != nullptr) {
-        world.addCollisionObject(expComp->getGhostObject());
+    if (triggerComp != nullptr) {
+        world.addTrigger(triggerComp->getGhostObject());
     }
 }
 
@@ -47,10 +48,10 @@ void Game::removeEntity(Entity *entity) {
         world.removeRigidBody(physicsComp->getRigidBody());
     }
 
-    ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
+    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
 
-    if (expComp != nullptr) {
-        world.removeCollisionObject(expComp->getGhostObject());
+    if (triggerComp != nullptr) {
+        world.removeTrigger(triggerComp->getGhostObject());
     }
 
     entityManager.destroyEntity(entity->getId());
@@ -90,6 +91,7 @@ void Game::update(float timeStep) {
     explosionSystem.update(timeStep);
 
     for (Entity *entity : entityManager.getEntityList()) {
+        CharacteristicComponent *charCom = entity->getComponent<CharacteristicComponent>();
         PositionComponent *posCom = entity->getComponent<PositionComponent>();
         PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
 
@@ -98,10 +100,12 @@ void Game::update(float timeStep) {
         
         posCom->setPosition(pos.getX(), pos.getY(), pos.getZ());
 
-        auto *expComp = entity->getComponent<ExplosionComponent>();
+        if (charCom->getType() == EntityType::BOMB) {
+            TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
 
-        if (expComp != nullptr) {
-            expComp->getGhostObject()->setWorldTransform(worldTrans);
+            if (triggerComp != nullptr) {
+                triggerComp->getGhostObject()->setWorldTransform(worldTrans);
+            }
         }
     }
 
