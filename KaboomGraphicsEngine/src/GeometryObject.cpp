@@ -79,8 +79,38 @@ osg::Quat GeometryObject::getRotation()
 void GeometryObject::setRotation(const osg::Quat &rot)
 {
 	osg::Matrix mat = _objRoot->getMatrix();
-	mat.setRotate(rot);
+	osg::Vec3 pos = getTranslate();
+	osg::Vec3 scale = getScale();
+
+	mat.makeTranslate(pos);
+	mat.preMult(osg::Matrix::rotate(rot));
+	mat.preMult(osg::Matrix::scale(scale));
+
 	_objRoot->setMatrix(mat);
+}
+
+osg::Vec3 GeometryObject::getScale()
+{
+	const osg::Matrix &mat = _objRoot->getMatrix();
+	return mat.getScale();
+}
+
+void GeometryObject::setScale(const osg::Vec3 &scale)
+{
+	osg::Matrix mat = _objRoot->getMatrix();
+	osg::Vec3 pos = getTranslate();
+	osg::Quat rot = getRotation();
+
+	mat.makeTranslate(pos);
+	mat.preMult(osg::Matrix::rotate(rot));
+	mat.preMult(osg::Matrix::scale(scale));
+
+	_objRoot->setMatrix(mat);
+}
+
+void GeometryObject::decompose(osg::Vec3 &translate, osg::Quat &rot, osg::Vec3 &scale, osg::Quat &so)
+{
+	_objRoot->getMatrix().decompose(translate, rot, scale, so);
 }
 
 void GeometryObject::setUpMaterialState()

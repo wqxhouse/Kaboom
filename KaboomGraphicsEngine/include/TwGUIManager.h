@@ -123,6 +123,7 @@ protected:
 	static std::string tagify(std::string tag, bool b);
 	static std::string tagify(std::string tag, osg::Vec3 &v);
 	static std::string tagify(std::string tag, osg::Vec4 &v);
+	static std::string tagify(std::string tag, osg::Quat &v);
 
 	LightManager *_lm;
 	GeometryObjectManager *_gm;
