@@ -17,6 +17,11 @@ Unresolved:
 
 7. BUG: need to delete bullet collision shape after client disconnect from server
 
+8. Editor mode: After deleting a model with the object manipulator attached to it, the manipulator is
+   still there. (Currently there is a bug involved with detachManipulator() )
+9. Duplicate names of nodes. Managers cannot tell them apart.
+10. Loading a rotated model from XML does not rotate the bounding box.
+
 Fixed:
 1. Scrolling will crash the program (TwGUI)
 2. Skybox overriding preserved near far plane of gbuffer projection matrix, 

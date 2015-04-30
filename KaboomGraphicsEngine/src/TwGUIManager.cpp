@@ -396,6 +396,9 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		Core::getWorldRef().getGeometryManager()->deleteGeometry(name);
 
 		TwRemoveVar(item->bar, name.c_str());
+
+		//Currently there's a bug involved with detach
+		//GeometryObjectManipulator::detachManipulator();
 	},
 		item, removeDef.c_str());
 
@@ -1110,6 +1113,21 @@ std::string TwGUIManager::tagify(std::string tag, osg::Vec4 &v)
 	return addTags(tag, ret);
 }
 
+std::string TwGUIManager::tagify(std::string tag, osg::Quat &q)
+{
+	std::string ret = "";
+
+	for (int i = 0; i < 4; i++) {
+		ret = ret + std::to_string(q[i]);
+
+		if (i < 3) {
+			ret = ret + " ";
+		}
+	}
+
+	return addTags(tag, ret);
+}
+
 void TwGUIManager::exportXML()
 {
 	// Might wanna move this code somewhere else
@@ -1194,9 +1212,12 @@ void TwGUIManager::exportXML()
 		// Geometry properties
 		std::string file = geom->getFileName();
 		std::string mat = geom->getMaterial()->getName();
-		osg::Vec3 pos = geom->getTranslate();
-		osg::Vec4 rot = geom->getRotation().asVec4();
+
+		osg::Vec3 pos, scale;
+		osg::Quat rot, so;
 		// TODO: collider
+
+		geom->decompose(pos, rot, scale, so);
 
 		std::string matTag = "<material name=\"" + mat + "\" />";
 
@@ -1204,6 +1225,7 @@ void TwGUIManager::exportXML()
 		write(f, tabs, matTag);
 		write(f, tabs, tagify("position", pos));
 		write(f, tabs, tagify("orientation", rot));
+		write(f, tabs, tagify("scale", scale));
 		//write(f, tabs, tagify("collider", ));
 
 		tabs--;
