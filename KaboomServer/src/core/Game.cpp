@@ -12,8 +12,7 @@
 #include "../network/ServerEventHandlerLookup.h"
 
 Game::Game(ConfigSettings *config)
-        : config(config),
-          playerFactory(entityManager),
+        : playerFactory(entityManager),
           bombFactory(entityManager),
           inputSystem(this),
           physicsSystem(this),
@@ -66,7 +65,6 @@ void Game::update(float timeStep) {
 
 		//now we create a new player
         Entity *player = playerFactory.createPlayer(0, -5, 5);
-        players.push_back(player);
         addEntity(player);
 
         //first notify the new client what entityId it should keep track of
@@ -87,6 +85,9 @@ void Game::update(float timeStep) {
     // Handle game logic here
     inputSystem.update(timeStep);
     physicsSystem.update(timeStep);
+
+    world.stepSimulation(timeStep);
+
     collisionSystem.update(timeStep);
     explosionSystem.update(timeStep);
 
