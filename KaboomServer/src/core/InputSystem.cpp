@@ -106,7 +106,7 @@ void InputSystem::update(float timeStep)
 		worldVelocity.setZ(velocity.getZ());
 
 		rigidBody->setLinearVelocity(worldVelocity);
-
+		/*
 		if (inputCom->isFiring()) {
             // HACK: for lowering fire rate
             if (g_count > 10) {
@@ -124,6 +124,6 @@ void InputSystem::update(float timeStep)
             } else {
                 g_count++;
             }
-		}
+		}*/
 	}
 }

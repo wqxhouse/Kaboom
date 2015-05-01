@@ -32,6 +32,7 @@
     <ClCompile Include="src\core\CollisionSystem.cpp" />
     <ClCompile Include="src\core\EntitySystem.cpp" />
     <ClCompile Include="src\core\ExplosionSystem.cpp" />
+    <ClCompile Include="src\core\FiringSystem.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\InitializationSystem.cpp" />
     <ClCompile Include="src\core\InputComponent.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="src\core\EntitySystem.h" />
     <ClInclude Include="src\core\ExplosionComponent.h" />
     <ClInclude Include="src\core\ExplosionSystem.h" />
+    <ClInclude Include="src\core\FiringSystem.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\InitializationSystem.h" />
     <ClInclude Include="src\core\InputComponent.h" />
@@ -85,7 +87,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="data\bombs.xml" />
+    <Xml Include="data\bombs.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56B7232B-1CBB-489A-B34A-EDF3151698B6}</ProjectGuid>
