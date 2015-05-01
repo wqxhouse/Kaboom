@@ -23,19 +23,21 @@ public:
 		return _materialMap;
 	}
 
-	void createPlainMaterial(const std::string &name,
+	bool createPlainMaterial(const std::string &name,
 		const osg::Vec3 albedoColor,
 		float roughness,
 		float specular,
 		float metallic);
 
-	void createTextureMaterial(const std::string &name,
+	bool createTextureMaterial(const std::string &name,
 		const std::string &albedoPath,
 		const std::string &roughnessPath,
 		const std::string &metallicPath, 
 		const std::string &normalMapPath);
 
-	void renameMaterial(const std::string &oldName, const std::string &newName);
+	bool renameMaterial(const std::string &oldName, const std::string &newName);
+
+	bool doesNameExist(const std::string &name);
 
 	Material *getMaterial(const std::string &name);
 	Material *getBuiltInMaterial(enum MaterialBuiltIn type);

@@ -47,12 +47,18 @@ Material *MaterialManager::getBuiltInMaterial(enum MaterialBuiltIn type)
 	return _builtInMaterial[(int)type];
 }
 
-void MaterialManager::createPlainMaterial(const std::string &name,
+bool MaterialManager::createPlainMaterial(const std::string &name,
 	const osg::Vec3 albedoColor,
 	float roughness,
 	float specular,
 	float metallic)
 {
+	// Handle duplicated (name) geoms
+	if (doesNameExist(name)) {
+		std::cout << "Name already exists: " << name << std::endl;
+		return false;
+	}
+
 	Material *mat = new Material(name, onTexturePathChange);
 	mat->setAlbedo(albedoColor);
 	mat->setRoughness(roughness);
@@ -60,14 +66,22 @@ void MaterialManager::createPlainMaterial(const std::string &name,
 	mat->setMetallic(metallic);
 
 	_materialMap.insert(std::make_pair(name, mat));
+
+	return true;
 }
 
-void MaterialManager::createTextureMaterial(const std::string &name,
+bool MaterialManager::createTextureMaterial(const std::string &name,
 	const std::string &albedoPath,
 	const std::string &roughnessPath,
 	const std::string &metallicPath,
 	const std::string &normalMapPath)
 {
+	// Handle duplicated (name) geoms
+	if (doesNameExist(name)) {
+		std::cout << "Name already exists: " << name << std::endl;
+		return false;
+	}
+
 	//osg::Image *albedo = osgDB::readImageFile(albedoPath);
 	//osg::Image *specular = osgDB::readImageFile(specularPath);
 	//osg::Image *roughness = osgDB::readImageFile(roughnessPath);
@@ -103,15 +117,37 @@ void MaterialManager::createTextureMaterial(const std::string &name,
 	mat->setNormalMapPath(normalMapPath);
 
 	_materialMap.insert(std::make_pair(name, mat));
+
+	return true;
 }
 
-void MaterialManager::renameMaterial(const std::string &oldName, const std::string &newName)
+bool MaterialManager::renameMaterial(const std::string &oldName, const std::string &newName)
 {
+	// Handle duplicated (name) geoms
+	if (doesNameExist(newName)) {
+		std::cout << "Name already exists: " << newName << std::endl;
+		return false;
+	}
+
 	Material *mat = _materialMap[oldName];
 	_materialMap.erase(oldName);
 
 	mat->setName(newName);
 	_materialMap.insert(std::make_pair(newName, mat));
+
+	return true;
+}
+
+bool MaterialManager::doesNameExist(const std::string &name)
+{
+	std::unordered_map<std::string, Material *>::const_iterator got =
+		_materialMap.find(name);
+
+	// If the name already exists
+	if (got != _materialMap.end()) {
+		return true;
+	}
+	return false;
 }
 
 

@@ -5,27 +5,22 @@ Unresolved:
 
 2. Press ESC will crash the program. Whereas click to close will not carsh the program.
 3. Currently mouse over gui cannot be detected. Thus, control on gui will disable the manipulator.
-4. setting position from GUI doesn't update the manipulator;
-5. Geometry picker bug, crash the program: (randomly, wtf!) 
+4. Geometry picker bug, crash the program: (randomly, wtf!) 
 	- reproduce: pick an object, click on a different manipulator type. 
 	- ! Question is: change mode by key press 'g' 'r' 's' does not crash the program!!!!!!! (wtf!)
 
-6. Linked to 1) due to osgCameraManipulator, managing projection matrix is very tricky. I added
+5. Linked to 1) due to osgCameraManipulator, managing projection matrix is very tricky. I added
    allow modify camera project mode in the gui editor. When enabled, the compute_near_far is disabled 
    But even though the near far value did not change, the light culling artifact will appear, meaning that
    1) in inheritedly linked to project matrices and near far plane. 
 
-7. BUG: need to delete bullet collision shape after client disconnect from server
-8. glValidation error in LightPass saying different samplers use the same texture (happens on HD4400, not on GTX580)
+5. After removing the geometry, if the manipulator is still active it will show on the screen. (Currently there is a bug involved with detachManipulator() )
+6. BUG: need to delete bullet collision shape after client disconnect from server
+7. glValidation error in LightPass saying different samplers use the same texture (happens on HD4400, not on GTX580)
 
-9. After removing the geometry, if the manipulator is still active it will show on the screen.
+8. Manipulator and cameramanipulator checkbox conflict
+9. Editor sometimes duplicate geometries with the default material. (weird)
 
-10. Manipulator and cameramanipulator checkbox conflict
-11. Editor sometimes duplicate geometries with the default material. (weird)
-
-8. Editor mode: After deleting a model with the object manipulator attached to it, the manipulator is
-   still there. (Currently there is a bug involved with detachManipulator() )
-9. Duplicate names of nodes. Managers cannot tell them apart.
 10. Loading a rotated model from XML does not rotate the bounding box.
 
 Fixed:
@@ -36,6 +31,8 @@ Fixed:
    Fixed by add an option in EffectCompositor to not presering near and far plane
    for skybox.
 3. After pressing playgame, the object is still draggable and resizable;
+4. setting position from GUI doesn't update the manipulator;
+6. Duplicate names of nodes. Managers cannot tell them apart.
 
 TODO: click close renderer needs to close the game entirely.
 TODO: refactor lightUtil.glsl to reuse NxV NxH ... across a single fragment

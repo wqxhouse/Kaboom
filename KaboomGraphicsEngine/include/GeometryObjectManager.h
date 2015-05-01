@@ -20,7 +20,10 @@ public:
 	bool addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName);
 	bool setGeometryMaterial(const std::string &geomName, Material *material);
 	void deleteGeometry(const std::string &name);
-	void renameGeometry(const std::string &oldName, const std::string newName);
+	bool renameGeometry(const std::string &oldName, const std::string newName);
+
+	bool doesNameExist(const std::string &name);
+
 	inline const std::unordered_map<std::string, GeometryObject *> getGeometryObjectMapRef() const
 	{
 		return _geomObjMap;
@@ -38,6 +41,7 @@ private:
 
 	std::unordered_map<std::string, GeometryObject *> _geomObjMap;
 	osg::ref_ptr<osg::Group> _geomRoot;
+	int _suffix;
 
 	// TODO: add receive shadow flag when implementing shadow maps
 };
