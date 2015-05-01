@@ -129,6 +129,8 @@ void Core::configPasses()
 
 	configGeometryPass();
 	configLightPass();
+
+	_passes->getOrCreateStateSet()->setMode(GL_TEXTURE_CUBE_MAP_SEAMLESS, osg::StateAttribute::ON);
 }
 
 void Core::configGeometryPass()
@@ -515,6 +517,7 @@ bool Core::isInGameMode()
 
 void Core::configAxisVisualizer()
 {
+	_axisVisualizer.init();
 	_axisVisualizer.setPosition(osg::Vec3());
 	_passes->addChild(_axisVisualizer.getRoot());
 }

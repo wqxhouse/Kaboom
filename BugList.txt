@@ -20,6 +20,9 @@ Unresolved:
 
 9. After removing the geometry, if the manipulator is still active it will show on the screen.
 
+10. Manipulator and cameramanipulator checkbox conflict
+11. Editor sometimes duplicate geometries with the default material. (weird)
+
 Fixed:
 1. Scrolling will crash the program (TwGUI)
 2. Skybox overriding preserved near far plane of gbuffer projection matrix, 

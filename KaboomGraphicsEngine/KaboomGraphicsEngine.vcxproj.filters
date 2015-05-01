@@ -117,6 +117,9 @@
     <ClInclude Include="include\CubeMapPreFilter.h">
       <Filter>Header Files\CubemapUtil</Filter>
     </ClInclude>
+    <ClInclude Include="include\IBLLut.h">
+      <Filter>Header Files\CubemapUtil</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -203,6 +206,9 @@
     <ClCompile Include="src\TwGUIManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\IBLLut.cpp">
+      <Filter>Source Files\CubemapUtil</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">
@@ -230,6 +236,9 @@
       <Filter>Media\EffectFiles</Filter>
     </Xml>
     <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
+    <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Media\Shaders\constant.glsl">
@@ -300,6 +309,12 @@
       <Filter>Media\Shaders</Filter>
     </None>
     <None Include="..\Media\Shaders\cubemapPrefilter.vert">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\importanceSampling.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\iblLut.frag">
       <Filter>Media\Shaders</Filter>
     </None>
   </ItemGroup>
