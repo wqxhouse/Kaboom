@@ -22,7 +22,7 @@ public:
     Game(ConfigSettings *config);
     ~Game();
 
-    void update(float timeStep);
+    void update(float timeStep, int maxSubSteps);
 
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
@@ -51,5 +51,5 @@ private:
 
     World world;
 
-    void stepSimulation(float timeStep);
+    void stepSimulation(float timeStep, int maxSubSteps);
 };
