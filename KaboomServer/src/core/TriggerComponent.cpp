@@ -15,6 +15,10 @@ void TriggerComponent::addTriggerEntity(Entity *entity) {
     triggerEntities.insert(entity);
 }
 
+void TriggerComponent::removeTriggerEntity(Entity *entity) {
+    triggerEntities.erase(entity);
+}
+
 void TriggerComponent::clearTriggerEntities() {
     triggerEntities.clear();
 }
