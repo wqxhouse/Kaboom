@@ -1,6 +1,8 @@
 #pragma once
 
 #include <core/Component.h>
+#include <core/FireMode.h>
+#include <core/BombType.h>
 
 class InputComponent : public Component {
 public:
@@ -10,7 +12,9 @@ public:
             bool movingLeft,
             bool movingRight,
             bool jumping,
-            bool firing);
+            bool firing,
+			FireMode fireMode,
+			BombType bombType);
     ~InputComponent();
 
     const bool &isMovingForward() const;
@@ -19,6 +23,8 @@ public:
     const bool &isMovingRight() const;
     const bool &isJumping() const;
     const bool &isFiring() const;
+	const FireMode &getFireMode() const;
+	const BombType &getSelectedBombType() const;
 
     void setMovingForward(const bool &movingForward);
     void setMovingBackward(const bool &movingBackward);
@@ -26,6 +32,8 @@ public:
     void setMovingRight(const bool &movingRight);
     void setJumping(const bool &jumping);
     void setFiring(const bool &firing);
+	void setFireMode(const FireMode &fireMode);
+	void setSelectedBombType(const BombType &selectedBombType);
 
 private:
     bool movingForward;
@@ -34,4 +42,6 @@ private:
     bool movingRight;
     bool jumping;
     bool firing;
+	FireMode fireMode;
+	BombType selectedBombType;
 };

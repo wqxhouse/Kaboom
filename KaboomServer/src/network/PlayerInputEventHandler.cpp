@@ -28,6 +28,10 @@ void PlayerInputEventHandler::handle(const Event &e) const {
     inputCom->setJumping(evt.isJumping());
     inputCom->setFiring(evt.isFiring());
 
+	//TODO hard code for now, used for testing
+	inputCom->setFireMode(FireMode::LEFT_CLICK);
+	inputCom->setSelectedBombType(BombType::CRACKER_BOMB);
+
     RotationComponent *rotCom = player->getComponent<RotationComponent>();
     rotCom->setYaw(evt.getYaw());
     rotCom->setPitch(evt.getPitch());

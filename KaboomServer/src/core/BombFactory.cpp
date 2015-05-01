@@ -82,7 +82,14 @@ void BombFactory::BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
     }
 
     std::unordered_map<unsigned int, BombType> types = {
-        { 0, BombType::BOM_BOM }
+		{ 0, BombType::NO_BOMB_TYPE },
+        { 1, BombType::CRACKER_BOMB },
+		{ 2, BombType::TIMER_BOMB },
+		{ 3, BombType::RC_BOMB },
+		{ 4, BombType::LAND_MINE },
+		{ 5, BombType::FAKE_BOMB },
+		{ 6, BombType::BOUNCING_BOMB },
+		{ 7, BombType::SALTY_MARTY_BOMB }
     };
 
     for (auto bombNode : xmlRoot->children) {

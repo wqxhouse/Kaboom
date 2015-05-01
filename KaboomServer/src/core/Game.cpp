@@ -19,6 +19,7 @@ Game::Game(ConfigSettings *config)
           initSystem(this),
           inputSystem(this),
           itemSystem(this),
+		  firingSystem(this),
           collisionSystem(this),
           explosionSystem(this),
 	      eventHandlerLookup(this),
@@ -88,6 +89,7 @@ void Game::update(float timeStep) {
     // Handle game logic here
     initSystem.update(timeStep);
     inputSystem.update(timeStep);
+	firingSystem.update(timeStep);
 
     stepSimulation(timeStep);
 

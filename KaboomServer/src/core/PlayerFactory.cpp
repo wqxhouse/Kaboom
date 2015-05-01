@@ -43,7 +43,7 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
-    entity->attachComponent(new BombContainerComponent());
+    entity->attachComponent(new BombContainerComponent(entity->getId()));
 	entity->attachComponent(new JetpackComponent());
 
     return entity;
