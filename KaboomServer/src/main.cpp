@@ -13,7 +13,7 @@ int main() {
     while (true) {
         clock_t beginTime = clock();
 
-        game.update(static_cast<float>(FPS));
+        game.update(static_cast<float>(TICK));
 
         clock_t endTime = clock();
         clock_t elapsedTime = endTime - beginTime;
