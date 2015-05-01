@@ -251,12 +251,11 @@ void TwGUIManager::initAddBar()
 			std::cout << "Enter model name: ";
 			std::cin >> modelName;
 
-			gm->addGeometry(modelName, model, fileName);
+			if (gm->addGeometry(modelName, model, fileName)) {
+				GeometryObject* geom = gm->getGeometryObject(modelName);
 
-			// [Note: Does not handle duplicate names]
-			GeometryObject* geom = gm->getGeometryObject(modelName);
-
-			addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
+				addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
+			}
 		}
 	},
 		g_twBar, NULL);
@@ -279,12 +278,11 @@ void TwGUIManager::initAddBar()
 		std::cout << "Enter point light name: ";
 		std::cin >> lightName;
 
-		lm->addPointLight(lightName, position, color, radius, doShadow);
+		if (lm->addPointLight(lightName, position, color, radius, doShadow)) {
+			Light* lt = lm->getLight(lightName);
 
-		// [Note: Does not handle duplicate names]
-		Light* lt = lm->getLight(lightName);
-
-		addLightToGUI((TwBar*)clientData, lt, LIGHT_GROUP_NAME, _index);
+			addLightToGUI((TwBar*)clientData, lt, LIGHT_GROUP_NAME, _index);
+		}
 	},
 		g_twBar, NULL);
 
@@ -307,12 +305,11 @@ void TwGUIManager::initAddBar()
 		std::cout << "Enter material name: ";
 		std::cin >> matName;
 
-		mm->createPlainMaterial(matName, albedoColor, roughness, specular, metallic);
+		if (mm->createPlainMaterial(matName, albedoColor, roughness, specular, metallic)) {
+			Material* mat = mm->getMaterial(matName);
 
-		// [Note: Does not handle duplicate names]
-		Material* mat = mm->getMaterial(matName);
-
-		addMaterialToGUI((TwBar*)clientData, mat, MATERIAL_GROUP_NAME, _index);
+			addMaterialToGUI((TwBar*)clientData, mat, MATERIAL_GROUP_NAME, _index);
+		}
 	},
 		g_materialBar, NULL);
 
@@ -420,12 +417,14 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		const std::string *newName = static_cast<const std::string*>(value);
 
 		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
-		gm->renameGeometry(oldName, *newName);
 
-		GeometryObject* geom = gm->getGeometryObject(*newName);
+		// Only rename if the name does not already exists
+		if (gm->renameGeometry(oldName, *newName)) {
+			GeometryObject* geom = gm->getGeometryObject(*newName);
 
-		TwRemoveVar(item->bar, oldName.c_str());
-		addModelToGUI(item->bar, geom, GEOM_GROUP_NAME, _index);
+			TwRemoveVar(item->bar, oldName.c_str());
+			addModelToGUI(item->bar, geom, GEOM_GROUP_NAME, _index);
+		}
 	},
 		[](void *value, void *clientData) {
 		BarItem* item = static_cast<BarItem*>(clientData);
@@ -692,12 +691,14 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			const std::string *newName = static_cast<const std::string*>(value);
 
 			LightManager* lm = Core::getWorldRef().getLightManager();
-			lm->renameLight(oldName, *newName);
 
-			Light* light = lm->getLight(*newName);
+			// Only rename if the name does not already exists
+			if (lm->renameLight(oldName, *newName)) {
+				Light* light = lm->getLight(*newName);
 
-			TwRemoveVar(item->bar, oldName.c_str());
-			addLightToGUI(item->bar, light, LIGHT_GROUP_NAME, _index);
+				TwRemoveVar(item->bar, oldName.c_str());
+				addLightToGUI(item->bar, light, LIGHT_GROUP_NAME, _index);
+			}
 		},
 			[](void *value, void *clientData) {
 			BarItem* item = static_cast<BarItem*>(clientData);
@@ -819,12 +820,14 @@ void TwGUIManager::addMaterialToGUI(TwBar* bar, Material* mat, std::string group
 		const std::string *newName = static_cast<const std::string*>(value);
 
 		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
-		mm->renameMaterial(oldName, *newName);
 
-		Material* mat = mm->getMaterial(*newName);
+		// Only rename if the name does not already exists
+		if (mm->renameMaterial(oldName, *newName)) {
+			Material* mat = mm->getMaterial(*newName);
 
-		TwRemoveVar(item->bar, oldName.c_str());
-		addMaterialToGUI(item->bar, mat, MATERIAL_GROUP_NAME, _index);
+			TwRemoveVar(item->bar, oldName.c_str());
+			addMaterialToGUI(item->bar, mat, MATERIAL_GROUP_NAME, _index);
+		}
 	},
 		[](void *value, void *clientData) {
 		BarItem* item = static_cast<BarItem*>(clientData);

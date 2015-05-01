@@ -10,19 +10,21 @@ public:
 	LightManager();
 	~LightManager();
 	
-	void addDirectionalLight(const std::string &name, 
+	bool addDirectionalLight(const std::string &name,
 		const osg::Vec3 &dirToWorld,
 		const osg::Vec3 &color,
 		bool castShadow);
 
-	void addPointLight(const std::string &name,
+	bool addPointLight(const std::string &name,
 		const osg::Vec3 &position,
 		const osg::Vec3 &color,
 		float radius, 
 		bool castShadow);
 
 	void deleteLight(const std::string &name);
-	void renameLight(const std::string &oldName, const std::string &newName);
+	bool renameLight(const std::string &oldName, const std::string &newName);
+
+	bool doesNameExist(const std::string &name);
 
 	inline const std::unordered_map<std::string, Light *> getLightMapRef() const
 	{
