@@ -117,9 +117,6 @@
     <ClInclude Include="include\CubeMapPreFilter.h">
       <Filter>Header Files\CubemapUtil</Filter>
     </ClInclude>
-    <ClInclude Include="include\IBLLut.h">
-      <Filter>Header Files\CubemapUtil</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -205,9 +202,6 @@
     </ClCompile>
     <ClCompile Include="src\TwGUIManager.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IBLLut.cpp">
-      <Filter>Source Files\CubemapUtil</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
