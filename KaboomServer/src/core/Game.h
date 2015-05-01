@@ -3,6 +3,7 @@
 #include <core/EntityManager.h>
 
 #include "BombFactory.h"
+#include "FiringSystem.h"
 #include "CollisionSystem.h"
 #include "ExplosionSystem.h"
 #include "InitializationSystem.h"
@@ -41,6 +42,7 @@ private:
     InitializationSystem initSystem;
     InputSystem inputSystem;
     ItemSystem itemSystem;
+	FiringSystem firingSystem;
     CollisionSystem collisionSystem;
     ExplosionSystem explosionSystem;
 

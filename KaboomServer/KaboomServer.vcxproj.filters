@@ -119,6 +119,7 @@
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\core\ItemSystem.cpp">
+    <ClCompile Include="src\core\FiringSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
   </ItemGroup>
@@ -191,6 +192,7 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\ItemSystem.h">
+    <ClInclude Include="src\core\FiringSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>

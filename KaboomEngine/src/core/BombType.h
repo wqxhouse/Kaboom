@@ -1,5 +1,15 @@
 #pragma once
 
-enum BombType {
-    BOM_BOM = 0
+enum BombType { 
+	NO_BOMB_TYPE = 0,
+	CRACKER_BOMB = 1,
+	TIMER_BOMB = 2,
+	RC_BOMB = 3,
+	LAND_MINE = 4,
+	FAKE_BOMB = 5,
+	BOUNCING_BOMB = 6,
+	SALTY_MARTY_BOMB = 7 
 };
+
+//we use this to iterate through our enums, ADD YOUR NEW BOMB TYPE HERE AS WELL
+BombType const BombTypeArr[] = { NO_BOMB_TYPE, CRACKER_BOMB, TIMER_BOMB, RC_BOMB, LAND_MINE, FAKE_BOMB, BOUNCING_BOMB, SALTY_MARTY_BOMB };
