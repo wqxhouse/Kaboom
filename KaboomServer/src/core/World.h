@@ -28,6 +28,8 @@ public:
     const btCollisionDispatcher &getDispatcher() const;
 
 private:
+    class TriggerCallback;
+
     btDbvtBroadphase broadphase;
     btDefaultCollisionConfiguration collisionConfiguration;
     btCollisionDispatcher dispatcher;
@@ -38,5 +40,13 @@ private:
     void addStaticPlane(btVector3 origin, btVector3 normal);
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
 
-    void handleCollision(Entity *entityA, Entity *entityB);
+    void handleCollision(Entity *entityA, Entity *entityB) const;
+};
+
+class World::TriggerCallback : public btGhostPairCallback {
+public:
+    virtual btBroadphasePair *addOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1);
+
+private:
+    void handleCollision(Entity *entityA, Entity *entityB) const;
 };
