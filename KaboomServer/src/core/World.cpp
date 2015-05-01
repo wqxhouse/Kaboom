@@ -66,8 +66,8 @@ void World::loadMap() {
     addStaticPlane(btVector3(-5, 0, 0), btVector3(0, 0, 1), quat);
 }
 
-void World::stepSimulation(float timeStep) {
-    world.stepSimulation(timeStep);
+void World::stepSimulation(float timeStep, int maxSubSteps) {
+    world.stepSimulation(timeStep, maxSubSteps);
 }
 
 void World::addRigidBody(btRigidBody *rigidBody) {

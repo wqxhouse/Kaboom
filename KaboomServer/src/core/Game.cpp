@@ -59,7 +59,7 @@ void Game::removeEntity(Entity *entity) {
     entityManager.destroyEntity(entity->getId());
 }
 
-void Game::update(float timeStep) {
+void Game::update(float timeStep, int maxSubSteps) {
 
 	//HERE is where the client first connect to server,
     //we want to have client load the gameworld first,
@@ -89,7 +89,7 @@ void Game::update(float timeStep) {
     initSystem.update(timeStep);
     inputSystem.update(timeStep);
 
-    stepSimulation(timeStep);
+    stepSimulation(timeStep, maxSubSteps);
 
     itemSystem.update(timeStep);
     collisionSystem.update(timeStep);
@@ -114,8 +114,8 @@ const GameServer &Game::getGameServer() const {
     return server;
 }
 
-void Game::stepSimulation(float timeStep) {
-    world.stepSimulation(timeStep);
+void Game::stepSimulation(float timeStep, int maxSubSteps) {
+    world.stepSimulation(timeStep, maxSubSteps);
 
     // Update position component and rotation component based on simulation result
     auto entities = getEntityManager().getEntityList();

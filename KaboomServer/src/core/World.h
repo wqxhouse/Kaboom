@@ -13,7 +13,7 @@ public:
 
     void loadMap();
 
-    void stepSimulation(float timeStep);
+    void stepSimulation(float timeStep, int maxSubSteps);
 
     void addRigidBody(btRigidBody *rigidBody);
     void removeRigidBody(btRigidBody *rigidBody);
