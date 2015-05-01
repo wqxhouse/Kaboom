@@ -1,11 +1,23 @@
 #include "AxisVisualizer.h"
 #include <osg/Shape>
+#include <Core.h>
 
 AxisVisualizer::AxisVisualizer()
 {
 	_cam = new osg::Camera;
 	_matTrans->addChild(_cam); // matTrans should not change cam
 
+	// put the following in the init function to be called explicitly
+	// since the constructor is called before Core is initialized, 
+	// so the Core::getXXX function is not valid at this stage.
+
+	//configCamera();
+	//makeAxisGeode();
+}
+
+void AxisVisualizer::init()
+{
+	configCamera();
 	makeAxisGeode();
 }
 
@@ -41,7 +53,7 @@ void AxisVisualizer::makeAxisGeode()
 	matX *= matX.translate(osg::Vec3(0.5, 0, 0));
 
 	osg::Matrix matY;
-	matY.makeRotate(osg::DegreesToRadians(90.0), osg::Vec3(1, 0, 0));
+	matY.makeRotate(osg::DegreesToRadians(-90.0), osg::Vec3(1, 0, 0));
 	matY *= matY.translate(osg::Vec3(0, 0.5, 0));
 
 	osg::Matrix matZ;
@@ -63,4 +75,27 @@ void AxisVisualizer::makeAxisGeode()
 void AxisVisualizer::configCamera()
 {
 	_cam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
+	_cam->setRenderOrder(osg::Camera::NESTED_RENDER);
+	_cam->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+	_cam->setUpdateCallback(new AxisVisalizerCallback);
+
+	osg::Matrix proj;
+	osg::Vec2 screenSize = Core::getScreenSize();
+
+	// let's make a 10, 10 boundary
+	const int axisWidth = 80;
+	const int marginFromScreen = 20;
+
+	int widthX = screenSize.x() - axisWidth - marginFromScreen;
+	proj.makeOrtho2D(-1, 1, -1, 1);
+	_cam->setViewport(widthX, marginFromScreen, 80, 80);
+	_cam->setProjectionMatrix(proj);
+}
+
+void AxisVisalizerCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
+{
+	osg::Camera *cam = static_cast<osg::Camera *>(node);
+
+	Camera &camMain = Core::getMainCamera();
+	cam->setViewMatrix(camMain.getViewMatrix());
 }

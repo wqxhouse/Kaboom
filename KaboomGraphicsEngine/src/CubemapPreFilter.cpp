@@ -26,7 +26,7 @@ CubeMapPreFilter::CubeMapPreFilter(osg::Camera *passCam)
 	}
 
 	osg::Texture *tex = _passCam->getBufferAttachmentMap().begin()->second._texture;
-	_generatedCubemap = static_cast<osg::TextureCubeMap *>(tex);
+	_generatedSpecularCubemap = static_cast<osg::TextureCubeMap *>(tex);
 
 	_isInit = true;
 }
@@ -54,43 +54,33 @@ void CubeMapPreFilter::init()
 	_shaders->addShader(osgDB::readShaderFile("Shaders/cubemapPreFilter.vert"));
 	_shaders->addShader(osgDB::readShaderFile("Shaders/cubemapPreFilter.frag"));
 	_cameraGroup->getOrCreateStateSet()->setAttributeAndModes(_shaders, osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE);
+	// _cameraGroup->getOrCreateStateSet()->setMode(GL_TEXTURE_CUBE_MAP_SEAMLESS, osg::StateAttribute::ON);
 }
 
-void CubeMapPreFilter::setupCameras(int texWidth, const osg::Vec3 &eyePos)
+void CubeMapPreFilter::setupCameras(int texWidth, const osg::Vec3 &eyePos, int &o_maxLodLevel)
 {
-	//int mipMapTotalLevel = 1;
-	// 512 256 128 64 32 16 8 4 2 1 = 10 levels
-	// Since we need more precision at roughness 1
-	// don't generate mipmap all the way down to 1x1
-	//int calcMip = texWidth;
-	//while (calcMip != 1)
-	//{
-	//	calcMip /= 2;
-	//	mipMapTotalLevel++;
-	//}
+	int maxLodLevel = log2(texWidth);
+	o_maxLodLevel = maxLodLevel;
+	const int mipmapCorrection = 1; // for keeping roughness resolution between 0.0 and 0.1
+	int numMipToGenerate = maxLodLevel - mipmapCorrection;
 
-	int mipMapTotalLevel = 6;
-	
-	if (_generatedCubemap == NULL) // allow for binding in the effectcompositor
+	// int mipMapTotalLevel = 6;
+	if (_generatedSpecularCubemap == NULL) // allow for binding in the effectcompositor
 	{
-		_generatedCubemap = new osg::TextureCubeMap;
-		_generatedCubemap->setTextureSize(texWidth, texWidth);
-		_generatedCubemap->setInternalFormat(GL_RGBA16F_ARB);
-		_generatedCubemap->setSourceFormat(GL_RGBA);
-		_generatedCubemap->setSourceType(GL_FLOAT);
-		_generatedCubemap->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP_TO_EDGE);
-		_generatedCubemap->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP_TO_EDGE);
-		_generatedCubemap->setWrap(osg::Texture::WRAP_R, osg::Texture::CLAMP_TO_EDGE);
-		_generatedCubemap->setFilter(osg::TextureCubeMap::MIN_FILTER, osg::TextureCubeMap::LINEAR_MIPMAP_LINEAR);
-		_generatedCubemap->setFilter(osg::TextureCubeMap::MAG_FILTER, osg::TextureCubeMap::LINEAR);
+		_generatedSpecularCubemap = new osg::TextureCubeMap;
+		_generatedSpecularCubemap->setTextureSize(texWidth, texWidth);
+		_generatedSpecularCubemap->setInternalFormat(GL_RGBA16F_ARB);
+		_generatedSpecularCubemap->setSourceFormat(GL_RGBA);
+		_generatedSpecularCubemap->setSourceType(GL_FLOAT);
+		_generatedSpecularCubemap->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP_TO_EDGE);
+		_generatedSpecularCubemap->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP_TO_EDGE);
+		_generatedSpecularCubemap->setWrap(osg::Texture::WRAP_R, osg::Texture::CLAMP_TO_EDGE);
+		_generatedSpecularCubemap->setFilter(osg::TextureCubeMap::MIN_FILTER, osg::TextureCubeMap::LINEAR_MIPMAP_LINEAR);
+		_generatedSpecularCubemap->setFilter(osg::TextureCubeMap::MAG_FILTER, osg::TextureCubeMap::LINEAR);
 	}
 
-	// TODO: try hardware mipmapping first
-	// _generatedCubemap->setUseHardwareMipMapGeneration(true);
-	// _generatedCubemap->setNumMipmapLevels(mipMapTotalLevel);
-
 	int currTexSize = texWidth;
-	for (int mipmapLevel = 0; mipmapLevel < mipMapTotalLevel; mipmapLevel++)
+	for (int mipmapLevel = 0; mipmapLevel < numMipToGenerate; mipmapLevel++)
 	{
 		for (int i = 0; i < 6; i++) // six faces
 		{
@@ -115,7 +105,7 @@ void CubeMapPreFilter::setupCameras(int texWidth, const osg::Vec3 &eyePos)
 			_images.back()->allocateImage(currTexSize, currTexSize, 1, GL_RGBA32F_ARB, GL_FLOAT);
 			cam->attach(osg::Camera::COLOR_BUFFER, _images.back());*/
 
-			cam->attach(osg::Camera::COLOR_BUFFER, _generatedCubemap, mipmapLevel, osg::TextureCubeMap::POSITIVE_X + i, false, 0, 0);
+			cam->attach(osg::Camera::COLOR_BUFFER, _generatedSpecularCubemap, mipmapLevel, osg::TextureCubeMap::POSITIVE_X + i, false, 0, 0);
 			cam->addChild(_switch);
 
 			// lod specific uniform
@@ -139,16 +129,20 @@ void CubeMapPreFilter::initWithCubeMap(osg::TextureCubeMap *cubemap)
 	_cubemap = cubemap;
 
 	int texSize = 512;
-	if (_generatedCubemap != NULL)
+	if (_generatedSpecularCubemap != NULL)
 	{
-		texSize = _generatedCubemap->getTextureWidth();
+		texSize = _generatedSpecularCubemap->getTextureWidth();
 	}
 
-	setupCameras(texSize, osg::Vec3(0, 0, 0));
+	int maxLodLevel = -1;
+	setupCameras(texSize, osg::Vec3(0, 0, 0), maxLodLevel);
+	if (maxLodLevel < 0)
+	{
+		OSG_WARN << "CubemapPrefilter: maxlod level error" << std::endl;
+	}
 
 	osg::StateSet *ss = _cameraGroup->getOrCreateStateSet();
-	ss->addUniform(new osg::Uniform("u_maxLod", 6)); // TODO: test if 6 is appropriate
-	ss->addUniform(new osg::Uniform("u_size", texSize));
+	ss->addUniform(new osg::Uniform("u_maxLodLevel", maxLodLevel)); // TODO: test if 6 is appropriate
 	ss->addUniform(new osg::Uniform("u_cubeMapTex", 0));
 	ss->setTextureAttributeAndModes(0, cubemap);
 

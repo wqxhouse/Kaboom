@@ -141,6 +141,16 @@ vec3 applyPointLight(Light light, Material material)
 	//return vec3(attenuation);
 }
 
+//vec2 EnvBRDF( vec3 SpecularColor, float Roughness, float NoV )
+//{
+//	// Importance sampled preintegrated G * F
+//	vec2 AB = Texture2DSampleLevel( PreIntegratedGF, PreIntegratedGFSampler, vec2( NoV, Roughness ), 0 ).rg;
+
+//	// Anything less than 2% is physically impossible and is instead considered to be shadowing 
+//	vec2 GF = SpecularColor * AB.x + saturate( 50.0 * SpecularColor.g ) * AB.y;
+//	return GF;
+//}
+
 // https://www.unrealengine.com/blog/physically-based-shading-on-mobile
 vec3 EnvBRDFApprox( vec3 SpecularColor, float Roughness, float NoV )
 {
@@ -181,7 +191,45 @@ vec3 calcEnvContribution(Material material, vec3 diffuseSample, vec3 specularSam
 	return diffuseIBL + specularIBL;
 }
 
-float getLodFromRoughness(float roughness, int cubeMaxLod)
+// Modified version of Unreal 4's
+// Need more precision for roughness below 0.5
+// But still keep a the reflection to unnoticable level 
+// when roughness reaching 1.0
+const int roughest_mip = 1; 
+const float roughness_mip_scale = 1.2;
+const int correction = 1; // for gaining precision close to r = 0
+float getLodFromRoughness(float roughness, int maxLodLevel)
 {
-	return 0.0;
+	float LevelFrom0x0 = roughest_mip - roughness_mip_scale * log2(roughness);
+	return maxLodLevel - correction - LevelFrom0x0;
+
+	// 128 -> 8 mips
+	// from 1x1 = 1 - 1.2 * log2(1.0) = 1;
+	// from 1x1 = 1 - 1.2 * log2(0.5) = 1 - 1.2 * (-1) = 1 + 1.2 = 2.2;
+	// from 1x1 = 1 - 1.2 * log2(0.1) = 1 - 1.2 * (-3.32) ~= 1 + 4 = 5;
+
+	// 1.0:   lod = 7 - 1 - 1 = 5;
+	// 0.5:   lod = 7 - 1 - 2.2 = 4.8 ~= 4;
+	// 0.1:   lod = 7 - 1 - 5 ~= 1;
+
+	// To get lod 1, roughness = 0.099 ~= 0.1;
+	// To get lod 0, roughness = 0.05;
+	// Thus from 0 -> 1, 5 steps in the editor (0.1 step)
+	// Actual lowest mipmap 4x4.
+}
+
+float getRoughnessFromLod(float lod, int maxLodLevel)
+{
+	float levelFrom0x0 = maxLodLevel - correction - lod;
+	return exp2( (roughest_mip - levelFrom0x0) / roughness_mip_scale );
+}
+
+// http://the-witness.net/news/2012/02/seamless-cube-map-filtering/
+vec3 fix_cube_lookup( vec3 v, int cube_size, int lod ) {
+	float M = max(max(abs(v.x), abs(v.y)), abs(v.z));
+	float scale = 1 - exp2(float(lod)) / float(cube_size);
+	if (abs(v.x) != M) v.x *= scale;
+	if (abs(v.y) != M) v.y *= scale;
+	if (abs(v.z) != M) v.z *= scale;
+	return v;
 }

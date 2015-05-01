@@ -22,7 +22,7 @@ public:
 
 	inline osg::ref_ptr<osg::TextureCubeMap> getGeneratedCubemap()
 	{
-		return _generatedCubemap;
+		return _generatedSpecularCubemap;
 	}
 
 	// only for debug use
@@ -32,11 +32,12 @@ private:
 	void init();
 	osg::Matrix calcViewMatrix(int face, const osg::Vec3 &eyePos);
 
-	void setupCameras(int texWidth, const osg::Vec3 &eyePos);
+	void setupCameras(int texWidth, const osg::Vec3 &eyePos, int &o_maxLodLevel);
 
 	static osg::ref_ptr<osg::Node> _sphere;
 	osg::observer_ptr<osg::TextureCubeMap> _cubemap;
-	osg::ref_ptr<osg::TextureCubeMap> _generatedCubemap;
+	osg::ref_ptr<osg::TextureCubeMap> _generatedSpecularCubemap;
+	// osg::ref_ptr<osg::TextureCubeMap> _generatedDiffuseCubemap;
 	osg::ref_ptr<osg::Group> _cameraGroup;
 	std::vector<osg::ref_ptr<osg::Camera> > _cameraList;
 	osg::ref_ptr<osg::Group> _switch;

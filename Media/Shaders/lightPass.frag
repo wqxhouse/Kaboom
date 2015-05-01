@@ -76,8 +76,11 @@ void main()
     vec3 result = vec3(0);
 
 	//// First calculate IBL contribution
-	int totalMipLevel = 6; // TODO: figure out is it ideal 
-	float mip = totalMipLevel - 1 + log2(material.roughness);
+	//int totalMipLevel = 6; // TODO: figure out is it ideal 
+	//float mip = totalMipLevel - 1 + log2(material.roughness);
+
+	// TODO: currently hard coded, change it later
+	float lod = getLodFromRoughness(material.roughness, 9);
 
 	// TODO: refactor lightUtil.glsl to reuse v, l, h
 	vec3 v = normalize(-material.position);
@@ -87,12 +90,18 @@ void main()
 
 	vec3 lookupWS = -reflect(v_ws, n_ws);
 	float NdotVWS = clamp(dot(n_ws, v_ws), 0.0, 1.0);
-	vec3 specularSample = textureLod( u_cubeMapTex, lookupWS, mip ).rgb;
+
+	// TODO: hard coded now, fix later
+	// vec3 new_lookup = fix_cube_lookup(lookupWS, 512*512, lod);
+	vec3 specularSample = textureLod( u_cubeMapTex, lookupWS, lod ).rgb;
+	// vec3 specularSample = textureLod( u_cubeMapTex, new_lookup, lod ).rgb;
 
 	// A hack. need to generate irradiance map in the prefilter stage
-	vec3 diffuseSample = textureLod( u_cubeMapTex, material.normal, 5 ).rgb;
+	vec3 ws_normal = (u_viewInvMat * vec4(material.normal, 0)).xyz;
+	//vec3 diffuseSample = textureLod( u_cubeMapTex, ws_normal, 5 ).rgb;
+	vec3 diffuseSample = vec3(1, 1, 1);
 
-	// result += calcEnvContribution(material, diffuseSample, specularSample, NdotVWS);
+	result += calcEnvContribution(material, diffuseSample, specularSample, NdotVWS);
 	// result += textureLod(u_cubeMapTex, lookupWS, 0).rgb;
 
     // Compute point lights
