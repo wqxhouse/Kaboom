@@ -7,6 +7,8 @@
 #include "ExplosionSystem.h"
 #include "InitializationSystem.h"
 #include "InputSystem.h"
+#include "ItemFactory.h"
+#include "ItemSystem.h"
 #include "PlayerFactory.h"
 #include "World.h"
 #include "../network/GameServer.h"
@@ -34,9 +36,11 @@ private:
     EntityManager entityManager;
     PlayerFactory playerFactory;
     BombFactory bombFactory;
+    ItemFactory itemFactory;
 
     InitializationSystem initSystem;
     InputSystem inputSystem;
+    ItemSystem itemSystem;
     CollisionSystem collisionSystem;
     ExplosionSystem explosionSystem;
 

@@ -15,8 +15,10 @@
 Game::Game(ConfigSettings *config)
         : playerFactory(entityManager),
           bombFactory(entityManager),
+          itemFactory(entityManager),
           initSystem(this),
           inputSystem(this),
+          itemSystem(this),
           collisionSystem(this),
           explosionSystem(this),
 	      eventHandlerLookup(this),
@@ -89,6 +91,7 @@ void Game::update(float timeStep) {
 
     stepSimulation(timeStep);
 
+    itemSystem.update(timeStep);
     collisionSystem.update(timeStep);
     explosionSystem.update(timeStep);
 
@@ -124,12 +127,12 @@ void Game::stepSimulation(float timeStep) {
             continue;
         }
 
-        btTransform worldTrans = physComp->getRigidBody()->getWorldTransform();
+        const btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
 
         PositionComponent *posComp = entity->getComponent<PositionComponent>();
 
         if (posComp != nullptr) {
-            btVector3 pos = worldTrans.getOrigin();
+            const btVector3 &pos = worldTrans.getOrigin();
             posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
         }
 

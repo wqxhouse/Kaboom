@@ -115,6 +115,12 @@
     <ClCompile Include="src\core\InitializationSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\ItemFactory.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\ItemSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -179,6 +185,12 @@
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\core\InitializationSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\ItemFactory.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\ItemSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
