@@ -39,7 +39,7 @@ void InitializationSystem::update(float timeStep) {
         if (triggerComp != nullptr) {
             btTransform worldTrans;
 
-            if (physComp == nullptr) {
+            if (physComp != nullptr) {
                 worldTrans = physComp->getRigidBody()->getWorldTransform();
             } else {
                 PositionComponent *posComp = entity->getComponent<PositionComponent>();

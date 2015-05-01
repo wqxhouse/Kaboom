@@ -28,10 +28,11 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
 
     const btScalar mass = 1;
 
-    btTransform startTrans = btTransform::getIdentity();
-    startTrans.setOrigin(btVector3(x, y, z));
+    btTransform worldTrans;
+    worldTrans.setIdentity();
+    worldTrans.setOrigin(btVector3(x, y, z));
 
-    btMotionState *motionState = new btDefaultMotionState(startTrans);
+    btMotionState *motionState = new btDefaultMotionState(worldTrans);
     btCollisionShape *collisionShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
 
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));

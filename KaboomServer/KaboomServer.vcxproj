@@ -36,6 +36,8 @@
     <ClCompile Include="src\core\InitializationSystem.cpp" />
     <ClCompile Include="src\core\InputComponent.cpp" />
     <ClCompile Include="src\core\InputSystem.cpp" />
+    <ClCompile Include="src\core\ItemFactory.cpp" />
+    <ClCompile Include="src\core\ItemSystem.cpp" />
     <ClCompile Include="src\core\JetpackComponent.cpp" />
     <ClCompile Include="src\core\PhysicsComponent.cpp" />
     <ClCompile Include="src\core\PlayerFactory.cpp" />
@@ -63,6 +65,8 @@
     <ClInclude Include="src\core\InitializationSystem.h" />
     <ClInclude Include="src\core\InputComponent.h" />
     <ClInclude Include="src\core\InputSystem.h" />
+    <ClInclude Include="src\core\ItemFactory.h" />
+    <ClInclude Include="src\core\ItemSystem.h" />
     <ClInclude Include="src\core\JetpackComponent.h" />
     <ClInclude Include="src\core\PhysicsComponent.h" />
     <ClInclude Include="src\core\PlayerFactory.h" />

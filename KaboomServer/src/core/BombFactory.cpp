@@ -40,10 +40,11 @@ Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z,
 
     Entity *entity = entityManager.createEntity();
 
-    btTransform posTrans = btTransform::getIdentity();
-    posTrans.setOrigin(btVector3(x, y, z));
+    btTransform worldTrans;
+    worldTrans.setIdentity();
+    worldTrans.setOrigin(btVector3(x, y, z));
 
-    btMotionState *motionState = new btDefaultMotionState(posTrans);
+    btMotionState *motionState = new btDefaultMotionState(worldTrans);
     btCollisionShape *collisionShape = new btSphereShape(data.size);
 
     btRigidBody *rigidBody = new btRigidBody(data.mass, motionState, collisionShape, btVector3(0, 0, 0));
@@ -52,8 +53,7 @@ Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z,
 
     btGhostObject *ghostObject = new btGhostObject();
     ghostObject->setCollisionShape(new btSphereShape(data.explosionRadius));
-    ghostObject->setCollisionFlags(ghostObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-    ghostObject->setWorldTransform(posTrans);
+    ghostObject->setWorldTransform(worldTrans);
     ghostObject->setUserPointer(entity);
 
     entity->attachComponent(new CharacteristicComponent(BOMB, 0, 0));
