@@ -140,6 +140,7 @@ void World::createModelFromXML(osgDB::XmlNode* xmlNode)
 	osg::Node *model = nullptr;
 	osg::Vec3 position;
 	osg::Vec4 orientation;
+	osg::Vec3 scale;
 
 	for (unsigned int i = 0; i < xmlNode->children.size(); ++i)
 	{
@@ -182,6 +183,15 @@ void World::createModelFromXML(osgDB::XmlNode* xmlNode)
 			GeometryObject* tmp;
 			tmp = _geomManager->getGeometryObject(name);
 			tmp->setRotation(quat);
+		}
+		else if (childName == "scale") {
+			loadVec3(xmlChild, scale);
+
+			GeometryObject* tmp;
+			tmp = _geomManager->getGeometryObject(name);
+			tmp->setScale(scale);
+			//tmp->scale(osg::Vec3(1.0f, 1.0f, 1.0f));
+
 		}
 		//else if (childName == "collider") {
 		//	std::stringstream ss; ss << xmlChild->getTrimmedContents();

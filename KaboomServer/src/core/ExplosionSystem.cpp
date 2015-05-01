@@ -4,6 +4,7 @@
 
 #include "ExplosionComponent.h"
 #include "Game.h"
+#include "TriggerComponent.h"
 
 ExplosionSystem::ExplosionSystem(Game *game)
         : EntitySystem(game) {
@@ -16,13 +17,11 @@ void ExplosionSystem::update(float timeStep) {
     auto entities = game->getEntityManager().getEntityList();
 
     for (Entity *entity : entities) {
-        ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
-
-        if (expComp == nullptr || !expComp->isExploded()) {
+        if (!entity->hasComponent<ExplosionComponent>()) {
             continue;
         }
 
-        btGhostObject *ghostObject = expComp->getGhostObject();
+        btGhostObject *ghostObject = entity->getComponent<TriggerComponent>()->getGhostObject();
 
         const auto pairs = ghostObject->getOverlappingPairs();
         const int numPairs = ghostObject->getNumOverlappingObjects();

@@ -1,21 +1,22 @@
 #include "Game.h"
 
 #include <core/Entity.h>
+#include <core/CharacteristicComponent.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 
-#include "ExplosionComponent.h"
+#include "CollisionComponent.h"
 #include "InputComponent.h"
 #include "PhysicsComponent.h"
+#include "TriggerComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
 
 Game::Game(ConfigSettings *config)
-        : config(config),
-          playerFactory(entityManager),
+        : playerFactory(entityManager),
           bombFactory(entityManager),
+          initSystem(this),
           inputSystem(this),
-          physicsSystem(this),
           collisionSystem(this),
           explosionSystem(this),
 	      eventHandlerLookup(this),
@@ -33,10 +34,10 @@ void Game::addEntity(Entity *entity) {
         world.addRigidBody(physicsComp->getRigidBody());
     }
 
-    ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
+    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
 
-    if (expComp != nullptr) {
-        world.addCollisionObject(expComp->getGhostObject());
+    if (triggerComp != nullptr) {
+        world.addTrigger(triggerComp->getGhostObject());
     }
 }
 
@@ -47,10 +48,10 @@ void Game::removeEntity(Entity *entity) {
         world.removeRigidBody(physicsComp->getRigidBody());
     }
 
-    ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
+    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
 
-    if (expComp != nullptr) {
-        world.removeCollisionObject(expComp->getGhostObject());
+    if (triggerComp != nullptr) {
+        world.removeTrigger(triggerComp->getGhostObject());
     }
 
     entityManager.destroyEntity(entity->getId());
@@ -65,7 +66,6 @@ void Game::update(float timeStep) {
 
 		//now we create a new player
         Entity *player = playerFactory.createPlayer(0, -5, 5);
-        players.push_back(player);
         addEntity(player);
 
         //first notify the new client what entityId it should keep track of
@@ -84,26 +84,13 @@ void Game::update(float timeStep) {
     server.receive(this);
 
     // Handle game logic here
+    initSystem.update(timeStep);
     inputSystem.update(timeStep);
-    physicsSystem.update(timeStep);
+
+    world.stepSimulation(timeStep);
+
     collisionSystem.update(timeStep);
     explosionSystem.update(timeStep);
-
-    for (Entity *entity : entityManager.getEntityList()) {
-        PositionComponent *posCom = entity->getComponent<PositionComponent>();
-        PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
-
-        const btTransform &worldTrans = physCom->getRigidBody()->getWorldTransform();
-        const btVector3 &pos = worldTrans.getOrigin();
-        
-        posCom->setPosition(pos.getX(), pos.getY(), pos.getZ());
-
-        auto *expComp = entity->getComponent<ExplosionComponent>();
-
-        if (expComp != nullptr) {
-            expComp->getGhostObject()->setWorldTransform(worldTrans);
-        }
-    }
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
 }
@@ -122,8 +109,4 @@ const BombFactory &Game::getBombFactory() const {
 
 const GameServer &Game::getGameServer() const {
     return server;
-}
-
-World &Game::getWorld() {
-    return world;
 }

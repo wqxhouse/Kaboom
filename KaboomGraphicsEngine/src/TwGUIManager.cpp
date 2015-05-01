@@ -13,6 +13,7 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "GeometryObjectManipulator.h"
+#include <osg/ComputeBoundsVisitor>
 
 int TwGUIManager::_index = 0;
 
@@ -385,9 +386,16 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string posYVarName = POS_Y_LABEL + indexStr;
 	std::string posZVarName = POS_Z_LABEL + indexStr;
 
+	std::string scaleXVarName = SCALE_X_LABEL + indexStr;
+	std::string scaleYVarName = SCALE_Y_LABEL + indexStr;
+	std::string scaleZVarName = SCALE_Z_LABEL + indexStr;
+
+	std::string limitVal = " step=0.05";
+
 	BarItem* item = new BarItem();
 	item->bar = bar;
 	item->name = name;
+
 
 	std::string removeDef = nameGroupDef + " label='" + REMOVE_LABEL + "'";
 	TwAddButton(bar, removeDef.c_str(),
@@ -397,6 +405,9 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		Core::getWorldRef().getGeometryManager()->deleteGeometry(name);
 
 		TwRemoveVar(item->bar, name.c_str());
+
+		//Currently there's a bug involved with detach
+		//GeometryObjectManipulator::detachManipulator();
 	},
 		item, removeDef.c_str());
 
@@ -458,6 +469,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 oldPos = obj->getTranslate();
 		osg::Vec3 newPos = osg::Vec3(posX, oldPos.y(), oldPos.z());
 		obj->setTranslate(newPos);
+
+		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -476,6 +489,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 oldPos = obj->getTranslate();
 		osg::Vec3 newPos = osg::Vec3(oldPos.x(), posY, oldPos.z());
 		obj->setTranslate(newPos);
+
+		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -494,6 +509,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 oldPos = obj->getTranslate();
 		osg::Vec3 newPos = osg::Vec3(oldPos.x(), oldPos.y(), posZ);
 		obj->setTranslate(newPos);
+
+		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -503,6 +520,68 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		*posZ = pos.z();
 	},
 		geom, posZDef.c_str());
+
+
+	std::string scaleXDef = nameGroupDef + " label='" + SCALE_X_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, scaleXVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float scaleX = *(const float *)value;
+		osg::Vec3 oldScale = obj->getScale();
+		osg::Vec3 newScale = osg::Vec3(scaleX, oldScale.y(), oldScale.z());
+		obj->setScale(newScale);
+
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *scaleX = static_cast<float *>(value);
+
+		osg::Vec3 scale = obj->getScale();
+		*scaleX = scale.x();
+	},
+		geom, scaleXDef.c_str());
+
+	std::string scaleYDef = nameGroupDef + " label='" + SCALE_Y_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, scaleYVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float scaleY = *(const float *)value;
+		osg::Vec3 oldScale = obj->getScale();
+		osg::Vec3 newScale = osg::Vec3(oldScale.x(), scaleY, oldScale.z());
+		obj->setScale(newScale);
+
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *scaleY = static_cast<float *>(value);
+
+		osg::Vec3 scale = obj->getScale();
+		*scaleY = scale.y();
+	},
+		geom, scaleYDef.c_str());
+
+	std::string scaleZDef = nameGroupDef + " label='" + SCALE_Z_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, scaleZVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float scaleZ = *(const float *)value;
+		osg::Vec3 oldScale = obj->getScale();
+		osg::Vec3 newScale = osg::Vec3(oldScale.x(), oldScale.y(), scaleZ);
+		obj->setScale(newScale);
+
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *scaleZ = static_cast<float *>(value);
+
+		osg::Vec3 scale = obj->getScale();
+		*scaleZ = scale.z();
+	},
+		geom, scaleZDef.c_str());
+
 
 	std::string rotationVarName = "rotation" + indexStr;
 	std::string rotationDef = nameGroupDef + " label='rotation'";
@@ -1135,6 +1214,21 @@ std::string TwGUIManager::tagify(std::string tag, osg::Vec4 &v)
 	return addTags(tag, ret);
 }
 
+std::string TwGUIManager::tagify(std::string tag, osg::Quat &q)
+{
+	std::string ret = "";
+
+	for (int i = 0; i < 4; i++) {
+		ret = ret + std::to_string(q[i]);
+
+		if (i < 3) {
+			ret = ret + " ";
+		}
+	}
+
+	return addTags(tag, ret);
+}
+
 void TwGUIManager::exportXML()
 {
 	// Might wanna move this code somewhere else
@@ -1219,9 +1313,12 @@ void TwGUIManager::exportXML()
 		// Geometry properties
 		std::string file = geom->getFileName();
 		std::string mat = geom->getMaterial()->getName();
-		osg::Vec3 pos = geom->getTranslate();
-		osg::Vec4 rot = geom->getRotation().asVec4();
+
+		osg::Vec3 pos, scale;
+		osg::Quat rot, so;
 		// TODO: collider
+
+		geom->decompose(pos, rot, scale, so);
 
 		std::string matTag = "<material name=\"" + mat + "\" />";
 
@@ -1229,6 +1326,7 @@ void TwGUIManager::exportXML()
 		write(f, tabs, matTag);
 		write(f, tabs, tagify("position", pos));
 		write(f, tabs, tagify("orientation", rot));
+		write(f, tabs, tagify("scale", scale));
 		//write(f, tabs, tagify("collider", ));
 
 		tabs--;

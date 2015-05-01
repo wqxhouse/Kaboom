@@ -13,8 +13,10 @@
 #include <core/RotationComponent.h>
 #include <util/XMLLoader.h>
 
+#include "CollisionComponent.h"
 #include "ExplosionComponent.h"
 #include "PhysicsComponent.h"
+#include "TriggerComponent.h"
 
 BombFactory::BombDataLookup BombFactory::lookup("data/bombs.xml");
 
@@ -58,7 +60,8 @@ Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z,
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
-    entity->attachComponent(new ExplosionComponent(ghostObject, false));
+    entity->attachComponent(new TriggerComponent(ghostObject));
+    entity->attachComponent(new CollisionComponent());
 
     return entity;
 }

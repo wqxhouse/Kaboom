@@ -59,8 +59,11 @@ void GeometryObject::setTransform(const osg::Matrixf &transform)
 
 osg::Vec3 GeometryObject::getTranslate()
 {
-	const osg::Matrix &mat = _objRoot->getMatrix();
-	return mat.getTrans();
+	osg::Vec3 pos, scale;
+	osg::Quat rot, so;
+
+	_objRoot->getMatrix().decompose(pos, rot, scale, so);
+	return pos;
 }
 
 void GeometryObject::setTranslate(const osg::Vec3 &translate)
@@ -72,15 +75,54 @@ void GeometryObject::setTranslate(const osg::Vec3 &translate)
 
 osg::Quat GeometryObject::getRotation()
 {
-	osg::Quat rot = _objRoot->getMatrix().getRotate();
+	osg::Vec3 pos, scale;
+	osg::Quat rot, so;
+
+	_objRoot->getMatrix().decompose(pos, rot, scale, so);
 	return rot;
 }
 
 void GeometryObject::setRotation(const osg::Quat &rot)
 {
 	osg::Matrix mat = _objRoot->getMatrix();
-	mat.setRotate(rot);
+	osg::Vec3 pos = getTranslate();
+	osg::Vec3 scale = getScale();
+
+	mat.makeTranslate(pos);
+	mat.preMult(osg::Matrix::rotate(rot));
+	mat.preMult(osg::Matrix::scale(scale));
+
 	_objRoot->setMatrix(mat);
+}
+
+osg::Vec3 GeometryObject::getScale()
+{
+	osg::Vec3 pos, scale;
+	osg::Quat rot, so;
+
+	_objRoot->getMatrix().decompose(pos, rot, scale, so);
+	return scale;
+}
+
+void GeometryObject::setScale(const osg::Vec3 &scale)
+{
+	osg::Matrix mat = _objRoot->getMatrix();
+	osg::Vec3 pos = getTranslate();
+	osg::Quat rot = getRotation();
+
+	mat.makeTranslate(pos);
+	mat.preMult(osg::Matrix::rotate(rot));
+
+	std::cout << mat << std::endl;
+	mat.preMult(osg::Matrix::scale(scale));
+	std::cout << mat << std::endl;
+
+	_objRoot->setMatrix(mat);
+}
+
+void GeometryObject::decompose(osg::Vec3 &translate, osg::Quat &rot, osg::Vec3 &scale, osg::Quat &so)
+{
+	_objRoot->getMatrix().decompose(translate, rot, scale, so);
 }
 
 void GeometryObject::setUpMaterialState()

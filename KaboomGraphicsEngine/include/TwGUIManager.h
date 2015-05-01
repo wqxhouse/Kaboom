@@ -24,6 +24,10 @@ const std::string POS_X_LABEL = "posX";
 const std::string POS_Y_LABEL = "posY";
 const std::string POS_Z_LABEL = "posZ";
 
+const std::string SCALE_X_LABEL = "scaleX";
+const std::string SCALE_Y_LABEL = "scaleY";
+const std::string SCALE_Z_LABEL = "scaleZ";
+
 const std::string COLOR_LABEL = "color";
 const std::string ROUGHNESS_LABEL = "roughness";
 const std::string SPECULAR_LABEL = "specular";
@@ -123,6 +127,7 @@ protected:
 	static std::string tagify(std::string tag, bool b);
 	static std::string tagify(std::string tag, osg::Vec3 &v);
 	static std::string tagify(std::string tag, osg::Vec4 &v);
+	static std::string tagify(std::string tag, osg::Quat &v);
 
 	LightManager *_lm;
 	GeometryObjectManager *_gm;

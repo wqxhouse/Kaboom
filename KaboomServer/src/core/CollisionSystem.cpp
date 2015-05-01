@@ -4,6 +4,7 @@
 
 #include <core/CharacteristicComponent.h>
 
+#include "CollisionComponent.h"
 #include "ExplosionComponent.h"
 #include "Game.h"
 
@@ -15,44 +16,26 @@ CollisionSystem::~CollisionSystem() {
 }
 
 void CollisionSystem::update(float timeStep) {
-    const btCollisionDispatcher &dispatcher = game->getWorld().getDispatcher();
+    auto entities = game->getEntityManager().getEntityList();
 
-    int numManifolds = dispatcher.getNumManifolds();
+    for (Entity *entity : entities) {
+        CollisionComponent *colComp = entity->getComponent<CollisionComponent>();
 
-    for (int i = 0; i < numManifolds; ++i) {
-        const btPersistentManifold *contactManifold = dispatcher.getManifoldByIndexInternal(i);
-
-        int numContacts = contactManifold->getNumContacts();
-
-        if (numContacts == 0) {
+        if (colComp == nullptr) {
             continue;
         }
 
-        const btCollisionObject *collisionObjA = static_cast<const btCollisionObject *>(contactManifold->getBody0());
-        const btCollisionObject *collisionObjB = static_cast<const btCollisionObject *>(contactManifold->getBody1());
+        auto contactEntities = colComp->getContactEntities();
 
-        // Ignore ghost objects.
-        if (!collisionObjA->hasContactResponse() || !collisionObjB->hasContactResponse()) {
-            continue;
-        }
+        CharacteristicComponent *charComp = entity->getComponent<CharacteristicComponent>();
 
-        Entity *entityA = static_cast<Entity *>(collisionObjA->getUserPointer());
-        Entity *entityB = static_cast<Entity *>(collisionObjB->getUserPointer());
-        
-        EntityType entityAType = EntityType::UNINITIATED;
-        EntityType entityBType = EntityType::UNINITIATED;
-
-        if (entityA != nullptr) entityAType = entityA->getComponent<CharacteristicComponent>()->getType();
-        if (entityB != nullptr) entityBType = entityB->getComponent<CharacteristicComponent>()->getType();
-
-        if (entityAType == EntityType::BOMB) {
-            ExplosionComponent *expComp = entityA->getComponent<ExplosionComponent>();
-            expComp->setExploded(true);
-        }
-
-        if (entityBType == EntityType::BOMB) {
-            ExplosionComponent *expComp = entityB->getComponent<ExplosionComponent>();
-            expComp->setExploded(true);
+        switch (charComp->getType()) {
+            case EntityType::BOMB: {
+                if (colComp->isCollided()) {
+                    entity->attachComponent(new ExplosionComponent());
+                }
+                break;
+            }
         }
     }
 }
