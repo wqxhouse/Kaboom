@@ -119,6 +119,8 @@
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\core\ItemSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
     <ClCompile Include="src\core\FiringSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
@@ -192,13 +194,13 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\ItemSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
     <ClInclude Include="src\core\FiringSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="data\bombs.xml">
-      <Filter>Resource Files</Filter>
-    </Xml>
+    <Xml Include="data\bombs.xml" />
   </ItemGroup>
 </Project>
