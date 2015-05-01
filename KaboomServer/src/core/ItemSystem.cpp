@@ -19,22 +19,13 @@ void ItemSystem::update(float timeStep) {
 
         TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
 
-        btGhostObject *ghostObject = triggerComp->getGhostObject();
-        int numObjects = ghostObject->getNumOverlappingObjects();
+        auto triggerEntities = triggerComp->getTriggerEntities();
 
-        for (int i = 0; i < numObjects; ++i) {
-            btCollisionObject *obj = ghostObject->getOverlappingObject(i);
-            
-            Entity *target = static_cast<Entity *>(obj->getUserPointer());
-
-            if (target == nullptr) {
+        for (Entity *triggerentity : triggerEntities) {
+            if (triggerentity->getComponent<CharacteristicComponent>()->getType() != EntityType::PLAYER) {
                 continue;
             }
-
-            if (target->getComponent<CharacteristicComponent>()->getType() != EntityType::PLAYER) {
-                continue;
-            }
-
+            int a = 0;
             // TODO: Handle item pickup logic here.
         }
     }

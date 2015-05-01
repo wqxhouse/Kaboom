@@ -26,6 +26,13 @@ void InitializationSystem::update(float timeStep) {
             colComp->clearContactEntities();
         }
 
+        // Clear trigger entities
+        TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
+
+        if (triggerComp != nullptr) {
+            //triggerComp->clearTriggerEntities();
+        }
+
         // Activate rigid bodies
         PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
 
@@ -34,8 +41,6 @@ void InitializationSystem::update(float timeStep) {
         }
 
         // Update trigger position and rotation
-        TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
-
         if (triggerComp != nullptr) {
             btTransform worldTrans;
 

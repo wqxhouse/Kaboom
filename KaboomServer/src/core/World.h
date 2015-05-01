@@ -46,7 +46,9 @@ private:
 class World::TriggerCallback : public btGhostPairCallback {
 public:
     virtual btBroadphasePair *addOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1);
+    virtual void *removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher);
 
 private:
-    void handleCollision(Entity *entityA, Entity *entityB) const;
+    void addTriggerEntity(Entity *entityA, Entity *entityB) const;
+    void removeTriggerEntity(Entity *entityA, Entity *entityB) const;
 };

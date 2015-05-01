@@ -166,20 +166,43 @@ btBroadphasePair *World::TriggerCallback::addOverlappingPair(btBroadphaseProxy *
     btCollisionObject *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
 
     Entity *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
-    Entity *entity1 = static_cast<Entity *>(colObj0->getUserPointer());
+    Entity *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
 
-    handleCollision(entity0, entity1);
-    handleCollision(entity1, entity0);
+    addTriggerEntity(entity0, entity1);
+    addTriggerEntity(entity1, entity0);
 
     return btGhostPairCallback::addOverlappingPair(proxy0, proxy1);
 }
 
-void World::TriggerCallback::handleCollision(Entity *entityA, Entity *entityB) const {
+void *World::TriggerCallback::removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher) {
+    btCollisionObject *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
+    btCollisionObject *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
+
+    Entity *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
+    Entity *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
+
+    removeTriggerEntity(entity0, entity1);
+    removeTriggerEntity(entity1, entity0);
+
+    return btGhostPairCallback::removeOverlappingPair(proxy0, proxy1, dispatcher);
+}
+
+void World::TriggerCallback::addTriggerEntity(Entity *entityA, Entity *entityB) const {
     if (entityA != nullptr) {
         TriggerComponent *triggerComp = entityA->getComponent<TriggerComponent>();
 
         if (triggerComp != nullptr && entityB != nullptr) {
             triggerComp->addTriggerEntity(entityB);
+        }
+    }
+}
+
+void World::TriggerCallback::removeTriggerEntity(Entity *entityA, Entity *entityB) const {
+    if (entityA != nullptr) {
+        TriggerComponent *triggerComp = entityA->getComponent<TriggerComponent>();
+
+        if (triggerComp != nullptr && entityB != nullptr) {
+            triggerComp->removeTriggerEntity(entityB);
         }
     }
 }

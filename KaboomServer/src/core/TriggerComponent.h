@@ -14,6 +14,7 @@ public:
     btGhostObject *getGhostObject() const;
 
     void addTriggerEntity(Entity *entity);
+    void removeTriggerEntity(Entity *entity);
     void clearTriggerEntities();
 
     const std::unordered_set<Entity *> &getTriggerEntities() const;
