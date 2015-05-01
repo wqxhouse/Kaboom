@@ -1,7 +1,7 @@
 #include "InputComponent.h"
 
 InputComponent::InputComponent()
-    : InputComponent(false, false, false, false, false, false) {
+: InputComponent(false, false, false, false, false, false, FireMode::NOT_FIRING, BombType::NO_BOMB_TYPE) {
 }
 
 InputComponent::InputComponent(bool movingForward,
@@ -9,13 +9,17 @@ InputComponent::InputComponent(bool movingForward,
         bool movingLeft,
         bool movingRight,
         bool jumping,
-        bool firing)
+        bool firing,
+		FireMode fireMode,
+		BombType selectedBombType)
         : movingForward(movingForward),
           movingBackward(movingBackward),
           movingLeft(movingLeft),
           movingRight(movingRight),
           jumping(jumping),
-          firing(firing) {
+          firing(firing),
+		  fireMode(fireMode),
+		  selectedBombType(selectedBombType){
 }
 
 InputComponent::~InputComponent() {
@@ -45,6 +49,14 @@ const bool &InputComponent::isFiring() const {
     return firing;
 }
 
+const FireMode &InputComponent::getFireMode() const {
+	return fireMode;
+}
+
+const BombType &InputComponent::getSelectedBombType() const {
+	return selectedBombType;
+}
+
 void InputComponent::setMovingForward(const bool &movingForward) {
     this->movingForward = movingForward;
 }
@@ -67,4 +79,12 @@ void InputComponent::setJumping(const bool &jumping) {
 
 void InputComponent::setFiring(const bool &firing) {
     this->firing = firing;
+}
+
+void InputComponent::setFireMode(const FireMode &fireMode){
+	this->fireMode = fireMode;
+}
+
+void InputComponent::setSelectedBombType(const BombType &selectedBombType){
+	this->selectedBombType = selectedBombType;
 }

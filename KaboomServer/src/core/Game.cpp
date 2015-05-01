@@ -17,6 +17,7 @@ Game::Game(ConfigSettings *config)
           bombFactory(entityManager),
           initSystem(this),
           inputSystem(this),
+		  firingSystem(this),
           collisionSystem(this),
           explosionSystem(this),
 	      eventHandlerLookup(this),
@@ -86,6 +87,7 @@ void Game::update(float timeStep) {
     // Handle game logic here
     initSystem.update(timeStep);
     inputSystem.update(timeStep);
+	firingSystem.update(timeStep);
 
     world.stepSimulation(timeStep);
 

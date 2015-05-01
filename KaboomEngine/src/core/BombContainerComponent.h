@@ -2,35 +2,49 @@
 
 #include <ostream>
 #include <vector>
+#include <unordered_map>
+
+#include "CoolDown.h"
+#include "BombType.h"
 
 #include "Component.h"
 
 class BombContainerComponent : public Component {
 public:
-	BombContainerComponent();
+	BombContainerComponent(unsigned int entityId);
 	~BombContainerComponent();
 
-	void addBombToInv(Entity *bomb, int owner);
-	Entity *fireBomb();
-	void selectRightBomb();
-	void selectLeftBomb();
+	void addBombToInv(BombType bombType);
+	void addBombToInv(BombType bombType, unsigned int howMany);
+	unsigned getNumOfBomb(BombType bombType);
+	void deleteBombInInv(BombType bombType);
+	void deleteBombInInv(BombType bombType, unsigned int);
 
-	std::vector<Entity *> inventory();
-	std::vector<Entity *> active();
+	void addBombInActiveBomb(Entity *);
+	void deleteBombInActiveBomb(Entity *);
 
-	friend std::ostream& operator<<(std::ostream &os, const BombContainerComponent &o) {
+	CoolDown* getBombCoolDown(BombType bombType);
+
+	friend std::ostream& operator<<(std::ostream &os, const BombContainerComponent &o) {//TODO update this
         os << "BombContainerComponent: {" << std::endl;
-        os << "    selectedBomb: " << o.selectedBomb << std::endl;
+        os << "    entityId: " << o.entityId << std::endl;
         os << "    maxSize: " << o.maxSize << std::endl;
+		os << "    bombInInv { " << std::endl;
+		for (BombType bombType : BombTypeArr){
+			os << "        " << bombType << " : " << o.bombInventoryMap.at(bombType) << std::endl;
+		}
+		os << "    }" << std::endl;
         os << "}";
 
         return os;
     }
 
 private:
-    int selectedBomb;
     int maxSize;
+	unsigned int entityId; 
 
-	std::vector<Entity *> bombInventory;
+	std::unordered_map<BombType, unsigned int> bombInventoryMap;
+	std::unordered_map<BombType, CoolDown *> bombCoolDownMap;
+	//std::unordered_map<BombType, unsigned int, std::hash<unsigned int>> cooldown
 	std::vector<Entity *> activeBombs;
 };

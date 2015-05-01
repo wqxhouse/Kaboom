@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <bombs>
     <bomb>
-        <id>0</id>
-        <name>Bom-Bom</name>
+        <id>1</id>
+        <name>CRACKER_BOMB</name>
         <size>0.1</size>
         <mass>1.0</mass>
         <explosion-radius>3.0</explosion-radius>
