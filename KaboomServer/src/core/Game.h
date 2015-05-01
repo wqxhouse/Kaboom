@@ -19,7 +19,7 @@ public:
     Game(ConfigSettings *config);
     ~Game();
 
-    void update(float timestep);
+    void update(float timeStep);
 
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
@@ -44,4 +44,6 @@ private:
     GameServer server;
 
     World world;
+
+    void stepSimulation(float timeStep);
 };

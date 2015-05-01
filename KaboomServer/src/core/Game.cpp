@@ -87,7 +87,7 @@ void Game::update(float timeStep) {
     initSystem.update(timeStep);
     inputSystem.update(timeStep);
 
-    world.stepSimulation(timeStep);
+    stepSimulation(timeStep);
 
     collisionSystem.update(timeStep);
     explosionSystem.update(timeStep);
@@ -109,4 +109,35 @@ const BombFactory &Game::getBombFactory() const {
 
 const GameServer &Game::getGameServer() const {
     return server;
+}
+
+void Game::stepSimulation(float timeStep) {
+    world.stepSimulation(timeStep);
+
+    // Update position component and rotation component based on simulation result
+    auto entities = getEntityManager().getEntityList();
+
+    for (Entity *entity : entities) {
+        PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
+
+        if (physComp == nullptr) {
+            continue;
+        }
+
+        btTransform worldTrans = physComp->getRigidBody()->getWorldTransform();
+
+        PositionComponent *posComp = entity->getComponent<PositionComponent>();
+
+        if (posComp != nullptr) {
+            btVector3 pos = worldTrans.getOrigin();
+            posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
+        }
+
+        RotationComponent *rotComp = entity->getComponent<RotationComponent>();
+
+        if (rotComp != nullptr) {
+            btQuaternion rot = worldTrans.getRotation();
+            // TODO: Set rotComp
+        }
+    }
 }
