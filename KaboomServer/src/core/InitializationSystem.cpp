@@ -3,6 +3,7 @@
 #include <core/CharacteristicComponent.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
+#include <core/RotationComponent.h>
 
 #include "CollisionComponent.h"
 #include "Game.h"
@@ -17,6 +18,7 @@ void InitializationSystem::update(float timeStep) {
     auto entities = game->getEntityManager().getEntityList();
 
     for (Entity *entity : entities) {
+        // Clear collision results
         CollisionComponent *colComp = entity->getComponent<CollisionComponent>();
 
         if (colComp != nullptr) {
@@ -24,26 +26,35 @@ void InitializationSystem::update(float timeStep) {
             colComp->clearContactEntities();
         }
 
+        // Activate rigid bodies
         PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
 
-        if (physComp == nullptr) {
-            continue;
+        if (physComp != nullptr) {
+            entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
         }
 
-        entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
-
-        const btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
-        const btVector3 &pos = worldTrans.getOrigin();
-
-        PositionComponent *posCom = entity->getComponent<PositionComponent>();
-
-        if (posCom != nullptr) {
-            posCom->setPosition(pos.getX(), pos.getY(), pos.getZ());
-        }
-
+        // Update trigger position and rotation
         TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
 
         if (triggerComp != nullptr) {
+            btTransform worldTrans;
+
+            if (physComp == nullptr) {
+                worldTrans = physComp->getRigidBody()->getWorldTransform();
+            } else {
+                PositionComponent *posComp = entity->getComponent<PositionComponent>();
+
+                if (posComp != nullptr) {
+                    worldTrans.setOrigin(btVector3(posComp->getX(), posComp->getY(), posComp->getZ()));
+                }
+
+                RotationComponent *rotComp = entity->getComponent<RotationComponent>();
+
+                if (rotComp != nullptr) {
+                    // TODO: set rotation
+                }
+            }
+
             triggerComp->getGhostObject()->setWorldTransform(worldTrans);
         }
     }
