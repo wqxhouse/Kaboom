@@ -191,6 +191,7 @@
     <ClInclude Include="src\core\FireMode.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
     <ClInclude Include="src\core\RotationComponent.h" />
+    <ClInclude Include="src\core\WeaponPickupComponent.h" />
     <ClInclude Include="src\network\AssignEvent.h" />
     <ClInclude Include="src\network\DisconnectEvent.h" />
     <ClInclude Include="src\network\EmptyEvent.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="src\core\EntityManager.cpp" />
     <ClCompile Include="src\core\PositionComponent.cpp" />
     <ClCompile Include="src\core\RotationComponent.cpp" />
+    <ClCompile Include="src\core\WeaponPickupComponent.cpp" />
     <ClCompile Include="src\network\AssignEvent.cpp" />
     <ClCompile Include="src\network\DisconnectEvent.cpp" />
     <ClCompile Include="src\network\EmptyEvent.cpp" />

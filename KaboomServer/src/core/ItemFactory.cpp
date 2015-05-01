@@ -6,6 +6,7 @@
 #include <core/Entity.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
+#include <core/WeaponPickupComponent.h>
 
 #include "TriggerComponent.h"
 
@@ -13,7 +14,7 @@ ItemFactory::ItemFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-Entity *ItemFactory::createBomb(const BombType &type, float x, float y, float z) const {
+Entity *ItemFactory::createItem(const BombType &type, unsigned int amount, float x, float y, float z) const {
     const float ITEM_RADIUS = 1.0f;
 
     Entity *entity = entityManager.createEntity();
@@ -30,6 +31,7 @@ Entity *ItemFactory::createBomb(const BombType &type, float x, float y, float z)
     entity->attachComponent(new CharacteristicComponent(EntityType::ITEM, 0, 0));
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new TriggerComponent(ghostObject));
+	entity->attachComponent(new WeaponPickupComponent(type, 5)); //todo this is hard coded right now, we might want to randomize
 
     return entity;
 }
