@@ -4,6 +4,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
+class Entity;
+
 class World {
 public:
     World();
@@ -16,10 +18,12 @@ public:
     void addRigidBody(btRigidBody *rigidBody);
     void removeRigidBody(btRigidBody *rigidBody);
 
-    void addCollisionObject(btCollisionObject *collisionObject);
-    void removeCollisionObject(btCollisionObject *collisionObject);
+    void addTrigger(btGhostObject *ghostObject);
+    void removeTrigger(btGhostObject *ghostObject);
 
     void setGravity(float gravity);
+
+    void onTick(btScalar timeStep);
 
     const btCollisionDispatcher &getDispatcher() const;
 
@@ -33,4 +37,6 @@ private:
 
     void addStaticPlane(btVector3 origin, btVector3 normal);
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
+
+    void handleCollision(Entity *entityA, Entity *entityB);
 };

@@ -20,8 +20,5 @@ void DisconnectEventHandler::handle(const Event &e) const {
 
     game->getGameServer().sendDisconnectEvent(player);
 
-    PhysicsComponent *physComp = player->getComponent<PhysicsComponent>();
-    game->getWorld().removeRigidBody(physComp->getRigidBody());
-
-    game->getEntityManager().destroyEntity(player->getId());
+    game->removeEntity(player);
 }
