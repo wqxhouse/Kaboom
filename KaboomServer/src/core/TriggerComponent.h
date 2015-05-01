@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_set>
+
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <core/Component.h>
@@ -11,6 +13,12 @@ public:
 
     btGhostObject *getGhostObject() const;
 
+    void addTriggerEntity(Entity *entity);
+    void clearTriggerEntities();
+
+    const std::unordered_set<Entity *> &getTriggerEntities() const;
+
 private:
     btGhostObject *ghostObject;
+    std::unordered_set<Entity *> triggerEntities;
 };

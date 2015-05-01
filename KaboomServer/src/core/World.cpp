@@ -6,6 +6,7 @@
 #include <core/EntityType.h>
 
 #include "CollisionComponent.h"
+#include "TriggerComponent.h"
 
 void onTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     World *w = static_cast<World *>(world->getWorldUserInfo());
@@ -16,7 +17,7 @@ World::World()
         : dispatcher(&collisionConfiguration),
           world(&dispatcher, &broadphase, &solver, &collisionConfiguration) {
     setGravity(4.0f);
-    broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+    broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new TriggerCallback());
     world.setInternalTickCallback(onTickCallback, this);
 }
 
@@ -146,7 +147,7 @@ void World::addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rota
     addRigidBody(groundRigidBody);
 }
 
-void World::handleCollision(Entity *entityA, Entity *entityB) {
+void World::handleCollision(Entity *entityA, Entity *entityB) const {
     if (entityA != nullptr) {
         CollisionComponent *colComp = entityA->getComponent<CollisionComponent>();
 
@@ -156,6 +157,29 @@ void World::handleCollision(Entity *entityA, Entity *entityB) {
             if (entityB != nullptr) {
                 colComp->addContactEntity(entityB);
             }
+        }
+    }
+}
+
+btBroadphasePair *World::TriggerCallback::addOverlappingPair(btBroadphaseProxy *proxy0, btBroadphaseProxy *proxy1) {
+    btCollisionObject *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
+    btCollisionObject *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
+
+    Entity *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
+    Entity *entity1 = static_cast<Entity *>(colObj0->getUserPointer());
+
+    handleCollision(entity0, entity1);
+    handleCollision(entity1, entity0);
+
+    return btGhostPairCallback::addOverlappingPair(proxy0, proxy1);
+}
+
+void World::TriggerCallback::handleCollision(Entity *entityA, Entity *entityB) const {
+    if (entityA != nullptr) {
+        TriggerComponent *triggerComp = entityA->getComponent<TriggerComponent>();
+
+        if (triggerComp != nullptr && entityB != nullptr) {
+            triggerComp->addTriggerEntity(entityB);
         }
     }
 }
