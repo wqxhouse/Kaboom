@@ -75,6 +75,10 @@ void ClientNetwork::connectToServer(const std::string &serverAddress, const int 
 			hasError = true;
 		}
 
+		// Don't buffer packet
+		int flag = 1;
+		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
+
 		// Connect to server.
 		iResult = connect(clientSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
 

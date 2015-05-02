@@ -53,11 +53,12 @@ void GameServer::receive(Game *game) {
             continue;
         }
 
+		EmptyEvent emptyEvent;
+		PlayerInputEvent playerInputEvent;
         bool receivedPlayerInputEvent = false;
 
         unsigned int i = 0;
         while (i < (unsigned int)len) {
-            EmptyEvent emptyEvent;
             emptyEvent.deserialize(&network_data[i]);
 
             switch (emptyEvent.getOpcode()) {
@@ -69,14 +70,10 @@ void GameServer::receive(Game *game) {
                     eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
                 }
                 case EVENT_PLAYER_INPUT: {
-                    PlayerInputEvent playerInputEvent;
                     playerInputEvent.deserialize(&network_data[i]);
                     playerInputEvent.setPlayerId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
 
-                    if (!receivedPlayerInputEvent) {
-                        eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
-                        receivedPlayerInputEvent = true;
-                    }
+                    receivedPlayerInputEvent = true;
 
                     break;
                 }
@@ -87,14 +84,19 @@ void GameServer::receive(Game *game) {
             }
 
             i += emptyEvent.getByteSize();
-        }
+		}
+
+		if (receivedPlayerInputEvent) {
+			eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
+		}
     }
 
-	for (auto id : network->disconnectedClients){
+	for (auto id : network->disconnectedClients) {
 		DisconnectEvent disconnectEvent(clientIdToEntityId[id]);
 		eventHandlerLookup.find(disconnectEvent.getOpcode())->handle(disconnectEvent);
 		clientIdToEntityId.erase(id);
 	}
+
     network->removeDisconnectedClients();
 }
 
