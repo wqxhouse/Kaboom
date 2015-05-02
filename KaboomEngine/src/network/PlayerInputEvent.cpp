@@ -12,7 +12,7 @@ PlayerInputEvent::PlayerInputEvent(
         bool firing,
         float yaw,
         float pitch)
-        : Event(EventOpcode::PLAYER_INPUT, sizeof(PlayerInputEvent)),
+        : Event(EVENT_PLAYER_INPUT, sizeof(PlayerInputEvent)),
           playerId(playerId),
           movingForward(movingForward),
           movingBackward(movingBackward),

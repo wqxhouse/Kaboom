@@ -67,7 +67,7 @@ bool EntityManager::isEntityAlive(unsigned int id) const {
 std::vector<Entity *> EntityManager::getEntityList() const {
 	std::vector<Entity *> list;
 
-	for (auto kv : entities){
+	for (auto kv : entities) {
 		list.push_back(kv.second);
 	}
 

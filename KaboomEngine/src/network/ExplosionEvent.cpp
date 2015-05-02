@@ -3,7 +3,7 @@
 #include <string>
 
 ExplosionEvent::ExplosionEvent(unsigned int bombId)
-        : Event(EventOpcode::EXPLOSION, sizeof(ExplosionEvent)),
+        : Event(EVENT_EXPLOSION, sizeof(ExplosionEvent)),
           bombId(bombId) {
 }
 

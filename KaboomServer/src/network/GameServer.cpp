@@ -64,14 +64,14 @@ void GameServer::receive(Game *game) {
             emptyEvent.deserialize(&network_data[i]);
 
             switch (emptyEvent.getOpcode()) {
-                case EventOpcode::DISCONNECT: {
+                case EVENT_DISCONNECT: {
                     DisconnectEvent disconnectEvent;
                     disconnectEvent.deserialize(&network_data[i]);
 					disconnectEvent.setPlayerId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
 
                     eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
                 }
-                case EventOpcode::PLAYER_INPUT: {
+                case EVENT_PLAYER_INPUT: {
                     PlayerInputEvent playerInputEvent;
                     playerInputEvent.deserialize(&network_data[i]);
                     playerInputEvent.setPlayerId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients

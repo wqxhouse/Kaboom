@@ -3,7 +3,7 @@
 #include <string>
 
 AssignEvent::AssignEvent(unsigned int entityId)
-	    : Event(EventOpcode::ASSIGN_ENTITY, sizeof(AssignEvent)),
+        : Event(EVENT_ASSIGN, sizeof(AssignEvent)),
           entityId(entityId) {
 }
 

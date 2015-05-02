@@ -4,8 +4,8 @@
 #include "PlayerInputEventHandler.h"
 
 ServerEventHandlerLookup::ServerEventHandlerLookup(Game *game) {
-    addHandler(EventOpcode::PLAYER_INPUT, new PlayerInputEventHandler(game));
-    addHandler(EventOpcode::DISCONNECT, new DisconnectEventHandler(game));
+    addHandler(EVENT_PLAYER_INPUT, new PlayerInputEventHandler(game));
+    addHandler(EVENT_DISCONNECT, new DisconnectEventHandler(game));
 }
 
 ServerEventHandlerLookup::~ServerEventHandlerLookup() {

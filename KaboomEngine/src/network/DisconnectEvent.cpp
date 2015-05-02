@@ -3,7 +3,7 @@
 #include <string>
 
 DisconnectEvent::DisconnectEvent(unsigned int playerId)
-        : Event(EventOpcode::DISCONNECT, sizeof(DisconnectEvent)),
+        : Event(EVENT_DISCONNECT, sizeof(DisconnectEvent)),
           playerId(playerId) {
 }
 
