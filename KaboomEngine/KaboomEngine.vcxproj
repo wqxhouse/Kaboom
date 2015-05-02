@@ -181,8 +181,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\core\BombContainerComponent.h" />
-    <ClInclude Include="src\core\BombType.h" />
-    <ClInclude Include="src\core\CharacteristicComponent.h" />
     <ClInclude Include="src\core\Component.h" />
     <ClInclude Include="src\core\CoolDown.h" />
     <ClInclude Include="src\core\Entity.h" />
@@ -209,7 +207,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\BombContainerComponent.cpp" />
-    <ClCompile Include="src\core\CharacteristicComponent.cpp" />
     <ClCompile Include="src\core\Component.cpp" />
     <ClCompile Include="src\core\CoolDown.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />

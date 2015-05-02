@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <bombs>
     <bomb>
-        <id>1</id>
+        <id>65537</id>
         <name>CRACKER_BOMB</name>
         <size>0.1</size>
         <mass>1.0</mass>

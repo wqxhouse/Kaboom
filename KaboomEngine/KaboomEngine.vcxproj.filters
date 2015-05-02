@@ -88,9 +88,6 @@
     <ClInclude Include="src\core\BombContainerComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\CharacteristicComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\PositionComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
@@ -102,9 +99,6 @@
     </ClInclude>
     <ClInclude Include="src\network\DisconnectEvent.h">
       <Filter>Header Files\Network\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\BombType.h">
-      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\network\ExplosionEvent.h">
       <Filter>Header Files\Network\Events</Filter>
@@ -152,9 +146,6 @@
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
     <ClCompile Include="src\core\BombContainerComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\CharacteristicComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\core\PositionComponent.cpp">

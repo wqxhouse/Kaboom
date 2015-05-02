@@ -1,6 +1,5 @@
 #include "ItemSystem.h"
 
-#include <core/CharacteristicComponent.h>
 #include <core/WeaponPickupComponent.h>
 #include "Game.h"
 #include "TriggerComponent.h"
@@ -14,7 +13,7 @@ void ItemSystem::update(float timeStep) {
     auto entities = game->getEntityManager().getEntityList();
 
     for (Entity *itemEntity : entities) {
-		if (itemEntity->getComponent<CharacteristicComponent>()->getType() != EntityType::ITEM) {
+        if ((itemEntity->getType() & CAT_PICKUP) != CAT_PICKUP) {
             continue;
         }
 
@@ -23,10 +22,10 @@ void ItemSystem::update(float timeStep) {
         auto triggerEntities = triggerComp->getTriggerEntities();
 
         for (Entity *triggerentity : triggerEntities) {
-            if (triggerentity->getComponent<CharacteristicComponent>()->getType() != EntityType::PLAYER) {
+            if ((triggerentity->getType() & CAT_PLAYER) != CAT_PLAYER) {
                 continue;
             }
-            int a = 0;
+
             // TODO: Handle item pickup logic here.
 			// Do the Upper cap for max amount of bombs here
 			WeaponPickupComponent* weaponPickupComponent = itemEntity->getComponent<WeaponPickupComponent>();

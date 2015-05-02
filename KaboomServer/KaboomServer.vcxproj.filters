@@ -201,6 +201,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="data\bombs.xml" />
+    <Xml Include="data\bombs.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 #include "InputComponent.h"
 
 InputComponent::InputComponent()
-: InputComponent(false, false, false, false, false, false, FireMode::NOT_FIRING, BombType::NO_BOMB_TYPE) {
+    : InputComponent(false, false, false, false, false, false, FireMode::NOT_FIRING, EntityType::NONE) {
 }
 
 InputComponent::InputComponent(bool movingForward,
@@ -11,7 +11,7 @@ InputComponent::InputComponent(bool movingForward,
         bool jumping,
         bool firing,
 		FireMode fireMode,
-		BombType selectedBombType)
+        EntityType selectedBombType)
         : movingForward(movingForward),
           movingBackward(movingBackward),
           movingLeft(movingLeft),
@@ -53,7 +53,7 @@ const FireMode &InputComponent::getFireMode() const {
 	return fireMode;
 }
 
-const BombType &InputComponent::getSelectedBombType() const {
+const EntityType &InputComponent::getSelectedBombType() const {
 	return selectedBombType;
 }
 
@@ -85,6 +85,6 @@ void InputComponent::setFireMode(const FireMode &fireMode){
 	this->fireMode = fireMode;
 }
 
-void InputComponent::setSelectedBombType(const BombType &selectedBombType){
+void InputComponent::setSelectedBombType(const EntityType &selectedBombType) {
 	this->selectedBombType = selectedBombType;
 }

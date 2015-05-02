@@ -2,7 +2,7 @@
 
 #include <core/Component.h>
 #include <core/FireMode.h>
-#include <core/BombType.h>
+#include <core/EntityType.h>
 
 class InputComponent : public Component {
 public:
@@ -14,7 +14,7 @@ public:
             bool jumping,
             bool firing,
 			FireMode fireMode,
-			BombType bombType);
+            EntityType bombType);
     ~InputComponent();
 
     const bool &isMovingForward() const;
@@ -24,7 +24,7 @@ public:
     const bool &isJumping() const;
     const bool &isFiring() const;
 	const FireMode &getFireMode() const;
-	const BombType &getSelectedBombType() const;
+    const EntityType &getSelectedBombType() const;
 
     void setMovingForward(const bool &movingForward);
     void setMovingBackward(const bool &movingBackward);
@@ -33,7 +33,7 @@ public:
     void setJumping(const bool &jumping);
     void setFiring(const bool &firing);
 	void setFireMode(const FireMode &fireMode);
-	void setSelectedBombType(const BombType &selectedBombType);
+    void setSelectedBombType(const EntityType &selectedBombType);
 
 private:
     bool movingForward;
@@ -43,5 +43,5 @@ private:
     bool jumping;
     bool firing;
 	FireMode fireMode;
-	BombType selectedBombType;
+    EntityType selectedBombType;
 };

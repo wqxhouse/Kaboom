@@ -1,6 +1,5 @@
 #include "GameServer.h"
 
-#include <core/CharacteristicComponent.h>
 #include <core/Entity.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
@@ -16,9 +15,9 @@
 #include "../core/Game.h"
 
 GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &eventHandlerLookup)
-    : eventHandlerLookup(eventHandlerLookup),
-	  nextClientId(0),
-	  currClientId(0){
+        : eventHandlerLookup(eventHandlerLookup),
+	      nextClientId(0),
+	      currClientId(0) {
     printf("<Server> Creating a Network Server\n");
     // set up the server network to listen 
     network = new ServerNetwork(config);
@@ -134,9 +133,8 @@ void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *>
         }
 
         PositionComponent *posComp = entity->getComponent<PositionComponent>();
-        CharacteristicComponent *charComp = entity->getComponent<CharacteristicComponent>();
 
-        if (posComp == nullptr || charComp == nullptr) {
+        if (posComp == nullptr) {
             return;
         }
 
@@ -145,7 +143,7 @@ void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *>
             posComp->getX(),
             posComp->getY(),
             posComp->getZ(),
-            charComp->getType(),
+            entity->getType(),
             0);
         sendEvent(spawnEvent, currClientId);
     }
@@ -187,13 +185,12 @@ void GameServer::sendRotationEvent(Entity *entity) const {
 
 void GameServer::sendSpawnEvent(Entity *entity) const {
     PositionComponent *posComp = entity->getComponent<PositionComponent>();
-    CharacteristicComponent *charComp = entity->getComponent<CharacteristicComponent>();
 
-    if (posComp == nullptr || charComp == nullptr) {
+    if (posComp == nullptr) {
         return;
     }
 
-    SpawnEvent spawnEvent(entity->getId(), posComp->getX(), posComp->getY(), posComp->getZ(), charComp->getType(), 0);
+    SpawnEvent spawnEvent(entity->getId(), posComp->getX(), posComp->getY(), posComp->getZ(), entity->getType(), 0);
     sendEvent(spawnEvent);
 }
 

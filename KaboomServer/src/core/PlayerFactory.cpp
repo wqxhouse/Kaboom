@@ -3,7 +3,6 @@
 #include <btBulletDynamicsCommon.h>
 
 #include <core/BombContainerComponent.h>
-#include <core/CharacteristicComponent.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
@@ -24,7 +23,7 @@ Entity *PlayerFactory::createPlayer() const {
 }
 
 Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
-    Entity *entity = entityManager.createEntity();
+    Entity *entity = entityManager.createEntity(PLAYER);
 
     const btScalar mass = 1;
 
@@ -38,7 +37,6 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);
 
-    entity->attachComponent(new CharacteristicComponent(PLAYER, 0, 0));
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());

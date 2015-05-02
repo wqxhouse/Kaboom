@@ -7,7 +7,6 @@
 
 #include <osgDB/XmlParser>
 
-#include <core/CharacteristicComponent.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
@@ -27,18 +26,18 @@ BombFactory::BombFactory(EntityManager &entityManager)
 BombFactory::~BombFactory() {
 }
 
-Entity *BombFactory::createBomb(const BombType &type) const {
+Entity *BombFactory::createBomb(const EntityType &type) const {
 	return createBomb(type, 0.0f, 0.0f, 0.0f);
 }
 
-Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z) const {
+Entity *BombFactory::createBomb(const EntityType &type, float x, float y, float z) const {
     return createBomb(type, x, y, z, 0.0f, 0.0f, 0.0f);
 }
 
-Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z, float vx, float vy, float vz) const {
+Entity *BombFactory::createBomb(const EntityType &type, float x, float y, float z, float vx, float vy, float vz) const {
     const BombData &data = lookup[type];
 
-    Entity *entity = entityManager.createEntity();
+    Entity *entity = entityManager.createEntity(type);
 
     btTransform worldTrans;
     worldTrans.setIdentity();
@@ -56,7 +55,6 @@ Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z,
     ghostObject->setWorldTransform(worldTrans);
     ghostObject->setUserPointer(entity);
 
-    entity->attachComponent(new CharacteristicComponent(BOMB, 0, 0));
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
@@ -81,15 +79,8 @@ void BombFactory::BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
         return;
     }
 
-    std::unordered_map<unsigned int, BombType> types = {
-		{ 0, BombType::NO_BOMB_TYPE },
-        { 1, BombType::CRACKER_BOMB },
-		{ 2, BombType::TIMER_BOMB },
-		{ 3, BombType::RC_BOMB },
-		{ 4, BombType::LAND_MINE },
-		{ 5, BombType::FAKE_BOMB },
-		{ 6, BombType::BOUNCING_BOMB },
-		{ 7, BombType::SALTY_MARTY_BOMB }
+    std::unordered_map<unsigned int, EntityType> types = {
+        { KABOOM_V2, KABOOM_V2 },
     };
 
     for (auto bombNode : xmlRoot->children) {
@@ -118,6 +109,6 @@ void BombFactory::BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
     }
 }
 
-const BombFactory::BombData &BombFactory::BombDataLookup::operator[](const BombType &type) const {
+const BombFactory::BombData &BombFactory::BombDataLookup::operator[](const EntityType &type) const {
     return bombs.at(type);
 }
