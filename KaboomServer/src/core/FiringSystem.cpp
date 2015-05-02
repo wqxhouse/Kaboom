@@ -1,7 +1,6 @@
 #include "FiringSystem.h"
 
 #include <btBulletDynamicsCommon.h>
-#include <core/CharacteristicComponent.h>
 #include <core/FireMode.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
@@ -45,7 +44,7 @@ void FiringSystem::update(float timeStep) {
 
 		if (inputComponent->isFiring() && inputComponent->getFireMode() != FireMode::NOT_FIRING ){
 
-			BombType selectedBombType = inputComponent->getSelectedBombType();
+            EntityType selectedBombType = inputComponent->getSelectedBombType();
 
 			if (inputComponent->getFireMode() == FireMode::LEFT_CLICK) {
 

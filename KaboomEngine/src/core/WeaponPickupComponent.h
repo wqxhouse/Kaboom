@@ -1,19 +1,20 @@
 #pragma once
 
 #include <ostream>
-#include "BombType.h"
+
 #include "Component.h"
+#include "EntityType.h"
 
 class WeaponPickupComponent : public Component {
 public:
 	WeaponPickupComponent();
-	WeaponPickupComponent(BombType, unsigned int);
+    WeaponPickupComponent(EntityType, unsigned int);
 	~WeaponPickupComponent();
 
-    BombType getBombType() const;
+    EntityType getBombType() const;
 	unsigned int getAmount() const;
 
-    void setBombType(BombType );
+    void setBombType(EntityType);
 	void setAmount(unsigned int);
 
 
@@ -27,6 +28,6 @@ public:
     }
 
 private:
-	BombType bombType;
+    EntityType bombType;
 	unsigned int amount;
 };

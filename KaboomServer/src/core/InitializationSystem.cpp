@@ -1,6 +1,5 @@
 #include "InitializationSystem.h"
 
-#include <core/CharacteristicComponent.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>

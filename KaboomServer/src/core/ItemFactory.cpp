@@ -2,7 +2,6 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <core/CharacteristicComponent.h>
 #include <core/Entity.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
@@ -14,10 +13,10 @@ ItemFactory::ItemFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-Entity *ItemFactory::createItem(const BombType &type, unsigned int amount, float x, float y, float z) const {
+Entity *ItemFactory::createItem(const EntityType &type, unsigned int amount, float x, float y, float z) const {
     const float ITEM_RADIUS = 1.0f;
 
-    Entity *entity = entityManager.createEntity();
+    Entity *entity = entityManager.createEntity(CAT_PICKUP);
 
     btTransform worldTrans;
     worldTrans.setIdentity();
@@ -28,7 +27,6 @@ Entity *ItemFactory::createItem(const BombType &type, unsigned int amount, float
     ghostObject->setUserPointer(entity);
     ghostObject->setWorldTransform(worldTrans);
 
-    entity->attachComponent(new CharacteristicComponent(EntityType::ITEM, 0, 0));
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new TriggerComponent(ghostObject));
 	entity->attachComponent(new WeaponPickupComponent(type, 5)); //todo this is hard coded right now, we might want to randomize

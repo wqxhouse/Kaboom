@@ -2,8 +2,8 @@
 
 #include <unordered_map>
 
-#include <core/BombType.h>
 #include <util/XMLLoader.h>
+#include <core/EntityType.h>
 
 class Entity;
 class EntityManager;
@@ -13,9 +13,9 @@ public:
     BombFactory(EntityManager &entityManager);
     ~BombFactory();
 
-    Entity *createBomb(const BombType &type) const;
-    Entity *createBomb(const BombType &type, float x, float y, float z) const;
-    Entity *createBomb(const BombType &type, float x, float y, float z, float vx, float vy, float vz) const;
+    Entity *createBomb(const EntityType &type) const;
+    Entity *createBomb(const EntityType &type, float x, float y, float z) const;
+    Entity *createBomb(const EntityType &type, float x, float y, float z, float vx, float vy, float vz) const;
 
 private:
     class BombDataLookup;
@@ -37,10 +37,10 @@ class BombFactory::BombDataLookup : public XMLLoader {
 public:
     BombDataLookup(const std::string &filename);
 
-    const BombData &operator[](const BombType &type) const;
+    const BombData &operator[](const EntityType &type) const;
 
 private:
-    std::unordered_map<BombType, BombData> bombs;
+    std::unordered_map<EntityType, BombData> bombs;
 
     virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 };

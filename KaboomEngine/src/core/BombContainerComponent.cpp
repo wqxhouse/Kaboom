@@ -1,36 +1,34 @@
 #include "BombContainerComponent.h"
 
-#include "CharacteristicComponent.h"
 #include "Entity.h"
 
 BombContainerComponent::BombContainerComponent(unsigned int entityId) 
-:	entityId(entityId){
-
+        : entityId(entityId) {
 	//default bombs and bomb fire rate, hardcoded right now
-	for (BombType bombType : BombTypeArr){ //hardcode, or we can randomize it here
-		bombInventoryMap[bombType] = 10;// 10 # of bombs for each type for now
-		bombCoolDownMap[bombType] = new CoolDown(500);//all the bombs has a 500ms cooldown
-	}
+//    for (EntityType bombType : BombTypeArr) { //hardcode, or we can randomize it here
+//		bombInventoryMap[bombType] = 10;// 10 # of bombs for each type for now
+//		bombCoolDownMap[bombType] = new CoolDown(500);//all the bombs has a 500ms cooldown
+//	}
 }
 
-BombContainerComponent::~BombContainerComponent() {
-	for (BombType bombType : BombTypeArr) {
-		delete bombCoolDownMap[bombType]; //prevent memory leak
-	}
+BombContainerComponent::~BombContainerComponent() {   
+//    for (EntityType bombType : BombTypeArr) {
+//		delete bombCoolDownMap[bombType]; //prevent memory leak
+//	}
 }
 
-void BombContainerComponent::addBombToInv(BombType bombType) {
+void BombContainerComponent::addBombToInv(EntityType bombType) {
 	addBombToInv(bombType, 1);
 }
-void BombContainerComponent::addBombToInv(BombType bombType, unsigned int howMany) {
+void BombContainerComponent::addBombToInv(EntityType bombType, unsigned int howMany) {
 	//todo add uppper limit here
 	bombInventoryMap[bombType] += howMany;
 }
 
-void BombContainerComponent::deleteBombInInv(BombType bombType) {
+void BombContainerComponent::deleteBombInInv(EntityType bombType) {
 	deleteBombInInv(bombType, 1);
 }
-void BombContainerComponent::deleteBombInInv(BombType bombType, unsigned int howMany) {
+void BombContainerComponent::deleteBombInInv(EntityType bombType, unsigned int howMany) {
 	//todo add uppper limit here
 	if (bombInventoryMap[bombType] - howMany < 0){
 		bombInventoryMap[bombType] = 0;
@@ -40,7 +38,7 @@ void BombContainerComponent::deleteBombInInv(BombType bombType, unsigned int how
 
 }
 
-unsigned int BombContainerComponent::getNumOfBomb(BombType bombType){
+unsigned int BombContainerComponent::getNumOfBomb(EntityType bombType) {
 	return bombInventoryMap[bombType];
 };
 
@@ -54,7 +52,7 @@ void BombContainerComponent::deleteBombInActiveBomb(Entity * bomb){
 		}
 	}
 }
-CoolDown * BombContainerComponent::getBombCoolDown(BombType bombtype) {
+CoolDown * BombContainerComponent::getBombCoolDown(EntityType bombtype) {
 	return bombCoolDownMap[bombtype];
 }
 /*

@@ -1,7 +1,5 @@
 #include "ExplosionSystem.h"
 
-#include <core/CharacteristicComponent.h>
-
 #include "ExplosionComponent.h"
 #include "Game.h"
 #include "TriggerComponent.h"
@@ -36,9 +34,7 @@ void ExplosionSystem::update(float timeStep) {
 
             // TODO: Handle damage
 
-            CharacteristicComponent *charComp = target->getComponent<CharacteristicComponent>();
-
-            if (charComp != nullptr && charComp->getType() == EntityType::PLAYER) {
+            if (target->getType() & CAT_PLAYER) {
                 // TODO: Handle knockback
                 continue;
             }

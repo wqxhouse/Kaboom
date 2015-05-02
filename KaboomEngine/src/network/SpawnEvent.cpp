@@ -3,17 +3,17 @@
 #include <string>
 
 SpawnEvent::SpawnEvent()
-    : SpawnEvent(0, 0.0f, 0.0f, 0.0f, UNINITIATED, 0) {
+        : SpawnEvent(0, 0.0f, 0.0f, 0.0f, EntityType::NONE, 0) {
 }
 
 SpawnEvent::SpawnEvent(unsigned int entityId, float x, float y, float z, EntityType type, int feature)
-    : Event(EventOpcode::ENTITY_SPAWN, sizeof(SpawnEvent)),
-    entityId(entityId),
-    x(x),
-    y(y),
-    z(z),
-	type(type),
-	feature(feature) {
+        : Event(EventOpcode::ENTITY_SPAWN, sizeof(SpawnEvent)),
+          entityId(entityId),
+          x(x),
+          y(y),
+          z(z),
+          type(type),
+          feature(feature) {
 }
 
 SpawnEvent::~SpawnEvent() {
@@ -36,11 +36,11 @@ const float &SpawnEvent::getZ() const {
 }
 
 const EntityType &SpawnEvent::getType() const {
-	return type;
+    return type;
 }
 
 const int &SpawnEvent::getFeature() const {
-	return feature;
+    return feature;
 }
 
 void SpawnEvent::serialize(char * buf) const {

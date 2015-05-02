@@ -1,7 +1,6 @@
 #include "Game.h"
 
 #include <core/Entity.h>
-#include <core/CharacteristicComponent.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 
