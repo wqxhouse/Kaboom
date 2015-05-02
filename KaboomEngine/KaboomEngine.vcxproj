@@ -207,7 +207,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\BombContainerComponent.cpp" />
-    <ClCompile Include="src\core\Component.cpp" />
     <ClCompile Include="src\core\CoolDown.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />

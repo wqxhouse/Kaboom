@@ -5,6 +5,7 @@
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <core/Component.h>
+#include <core/Entity.h>
 
 class TriggerComponent : public Component {
 public:

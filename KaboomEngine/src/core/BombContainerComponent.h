@@ -5,9 +5,8 @@
 #include <unordered_map>
 
 #include "CoolDown.h"
-#include "EntityType.h"
-
 #include "Component.h"
+#include "Entity.h"
 
 class BombContainerComponent : public Component {
 public:
@@ -16,7 +15,7 @@ public:
 
     void addBombToInv(EntityType bombType);
     void addBombToInv(EntityType bombType, unsigned int howMany);
-    unsigned getNumOfBomb(EntityType bombType);
+    unsigned int getNumOfBomb(EntityType bombType);
     void deleteBombInInv(EntityType bombType);
     void deleteBombInInv(EntityType bombType, unsigned int);
 
@@ -25,7 +24,7 @@ public:
 
     CoolDown* getBombCoolDown(EntityType bombType);
 
-	friend std::ostream& operator<<(std::ostream &os, const BombContainerComponent &o) {//TODO update this
+	friend std::ostream &operator<<(std::ostream &os, const BombContainerComponent &o) {//TODO update this
         os << "BombContainerComponent: {" << std::endl;
         os << "    entityId: " << o.entityId << std::endl;
         os << "    maxSize: " << o.maxSize << std::endl;

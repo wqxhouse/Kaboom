@@ -8,7 +8,6 @@
 class EventHandlerLookup {
 public:
     EventHandlerLookup();
-    ~EventHandlerLookup();
 
     void addHandler(const EventOpcode &opcode, EventHandler *handler);
 

@@ -7,12 +7,11 @@
 class EntityManager {
 public:
     EntityManager();
-    ~EntityManager();
 
-    const unsigned int &generateId();
+    unsigned int generateId();
 
-    Entity *createEntity(const EntityType &type = EntityType::NONE);
-    Entity *createEntity(const unsigned int &id, const EntityType &type = EntityType::NONE);
+    Entity *createEntity(const EntityType &type = NONE);
+    Entity *createEntity(unsigned int id, const EntityType &type = NONE);
 
     void destroyEntity(unsigned int id);
 

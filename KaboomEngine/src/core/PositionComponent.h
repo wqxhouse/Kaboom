@@ -6,9 +6,7 @@
 
 class PositionComponent : public Component {
 public:
-    PositionComponent();
-    PositionComponent(float x, float y, float z);
-    ~PositionComponent();
+    PositionComponent(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 
     float getX() const;
     float getY() const;
@@ -20,7 +18,7 @@ public:
 
     void setPosition(float x, float y, float z);
 
-    friend std::ostream& operator<<(std::ostream &os, const PositionComponent &o) {
+    friend std::ostream &operator<<(std::ostream &os, const PositionComponent &o) {
         os << "PositionComponent: {" << std::endl;
         os << "    x: " << o.x << std::endl;
         os << "    y: " << o.y << std::endl;

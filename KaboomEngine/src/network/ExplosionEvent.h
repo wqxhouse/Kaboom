@@ -6,11 +6,9 @@
 
 class ExplosionEvent : public Event {
 public:
-    ExplosionEvent(unsigned int bombId);
-    ~ExplosionEvent();
-    ExplosionEvent();
+    ExplosionEvent(unsigned int bombId = 0);
 
-    const unsigned int &getBombId() const;
+    unsigned int getBombId() const;
 
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);
