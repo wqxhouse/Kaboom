@@ -13,7 +13,6 @@ class Game;
 class GameServer {
 public:
     GameServer(ConfigSettings *, const ServerEventHandlerLookup &eventHandlerLookup);
-    ~GameServer();
 
     bool acceptNewClient(unsigned int);
 

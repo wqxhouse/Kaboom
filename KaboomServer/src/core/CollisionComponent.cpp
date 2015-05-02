@@ -1,8 +1,5 @@
 #include "CollisionComponent.h"
 
-CollisionComponent::CollisionComponent() {
-}
-
 void CollisionComponent::addContactEntity(Entity *entity) {
     contactEntities.insert(entity);
 }

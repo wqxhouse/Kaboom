@@ -8,8 +8,6 @@ class Entity;
 
 class CollisionComponent : public Component {
 public:
-    CollisionComponent();
-
     void addContactEntity(Entity *entity);
     void clearContactEntities();
 

@@ -2,9 +2,9 @@
 
 #include "EntitySystem.h"
 
-class CollisionSystem : public EntitySystem {
+class PickupSystem : public EntitySystem {
 public:
-    CollisionSystem(Game *game);
+    PickupSystem(Game *game);
 
     virtual void update(float timeStep);
 };

@@ -14,10 +14,10 @@
 Game::Game(ConfigSettings *config)
         : playerFactory(entityManager),
           bombFactory(entityManager),
-          itemFactory(entityManager),
+          pickupFactory(entityManager),
           initSystem(this),
           inputSystem(this),
-          itemSystem(this),
+          pickupSystem(this),
 		  firingSystem(this),
           collisionSystem(this),
           explosionSystem(this),
@@ -92,8 +92,8 @@ void Game::update(float timeStep, int maxSubSteps) {
 
     stepSimulation(timeStep, maxSubSteps);
 
-    itemSystem.update(timeStep);
     collisionSystem.update(timeStep);
+    pickupSystem.update(timeStep);
     explosionSystem.update(timeStep);
 
     server.sendGameStatePackets(getEntityManager().getEntityList());

@@ -1,15 +1,15 @@
-#include "ItemSystem.h"
+#include "PickupSystem.h"
 
 #include <core/WeaponPickupComponent.h>
+
 #include "Game.h"
 #include "TriggerComponent.h"
 
-
-ItemSystem::ItemSystem(Game *game)
+PickupSystem::PickupSystem(Game *game)
         : EntitySystem(game) {
 }
 
-void ItemSystem::update(float timeStep) {
+void PickupSystem::update(float timeStep) {
     auto entities = game->getEntityManager().getEntityList();
 
     for (Entity *itemEntity : entities) {

@@ -16,13 +16,8 @@
 #define VELOCITYCAP 2
 #define VELOCTIYACCELERATION .1
 
-int g_count = 0; // HACK: for lowering fire rate
-
 InputSystem::InputSystem(Game *game)
         : EntitySystem(game) {
-}
-
-InputSystem::~InputSystem() {
 }
 
 void InputSystem::update(float timeStep) 

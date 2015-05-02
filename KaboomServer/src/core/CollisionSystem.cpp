@@ -10,9 +10,6 @@ CollisionSystem::CollisionSystem(Game *game)
         : EntitySystem(game) {
 }
 
-CollisionSystem::~CollisionSystem() {
-}
-
 void CollisionSystem::update(float timeStep) {
     auto entities = game->getEntityManager().getEntityList();
 

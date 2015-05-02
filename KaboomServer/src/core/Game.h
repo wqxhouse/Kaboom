@@ -8,8 +8,8 @@
 #include "ExplosionSystem.h"
 #include "InitializationSystem.h"
 #include "InputSystem.h"
-#include "ItemFactory.h"
-#include "ItemSystem.h"
+#include "PickupFactory.h"
+#include "PickupSystem.h"
 #include "PlayerFactory.h"
 #include "World.h"
 #include "../network/GameServer.h"
@@ -37,11 +37,11 @@ private:
     EntityManager entityManager;
     PlayerFactory playerFactory;
     BombFactory bombFactory;
-    ItemFactory itemFactory;
+    PickupFactory pickupFactory;
 
     InitializationSystem initSystem;
     InputSystem inputSystem;
-    ItemSystem itemSystem;
+    PickupSystem pickupSystem;
 	FiringSystem firingSystem;
     CollisionSystem collisionSystem;
     ExplosionSystem explosionSystem;
