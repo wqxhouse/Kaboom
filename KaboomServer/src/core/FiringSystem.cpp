@@ -45,9 +45,11 @@ void FiringSystem::update(float timeStep) {
         const EntityType &bombType = inputComp->getSelectedBombType();
 
         if (inputComp->getFireMode() == FireMode::LEFT_CLICK) {
+            const BombData &bombData = BombDataLookup::instance[bombType];
+
             Stopwatch &stopwatch = invComp->getStopwatch(bombType);
-            const int cooldown = BombDataLookup::instance[bombType].cooldown;
-            auto timeelapsed = stopwatch.getTimeElapsed();
+            const int cooldown = bombData.cooldown;
+
             if (invComp->getSize(bombType) > 0 && stopwatch.getTimeElapsed() > cooldown) {
                 invComp->removeFromInventory(bombType);
                 stopwatch.start();
@@ -61,16 +63,16 @@ void FiringSystem::update(float timeStep) {
                 rot1.setRotation(btVector3(1, 0, 0), deg2rad(pitch));
                 btQuaternion rot = rot0 * rot1; // order different from osg::Quat
                 btVector3 viewDir = quatRotate(rot, btVector3(0, 1, 0));
-
+                viewDir.normalize();
 
                 Entity* bombEntity = game->getBombFactory().createBomb(
                     bombType,
                     posComp->getX() + viewDir.getX(),
                     posComp->getY() + viewDir.getY(),
                     posComp->getZ() + viewDir.getZ(),
-                    viewDir.getX() * 5, // TODO: Change launch speed
-                    viewDir.getY() * 5,
-                    viewDir.getZ() * 5);
+                    viewDir.getX() * bombData.launchSpeed,
+                    viewDir.getY() * bombData.launchSpeed,
+                    viewDir.getZ() * bombData.launchSpeed);
 
                 invComp->addToActiveBomb(bombEntity);
 
