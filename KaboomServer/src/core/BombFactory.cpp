@@ -102,6 +102,8 @@ void BombFactory::BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
                 loadFloat(dataNode, data.mass);
             } else if (dataNode->name == "explosion-radius") {
                 loadFloat(dataNode, data.explosionRadius);
+            } else if (dataNode->name == "cooldown") {
+                loadUint(dataNode, data.cooldown);
             }
         }
 

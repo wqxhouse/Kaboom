@@ -37,11 +37,14 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);
 
+    BombContainerComponent *invComp = new BombContainerComponent();
+    invComp->addToInventory(KABOOM_V2, 10);
+
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
-    entity->attachComponent(new BombContainerComponent(entity->getId()));
+    entity->attachComponent(invComp);
 	entity->attachComponent(new JetpackComponent());
 
     return entity;

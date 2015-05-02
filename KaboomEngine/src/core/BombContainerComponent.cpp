@@ -2,59 +2,34 @@
 
 #include "Entity.h"
 
-BombContainerComponent::BombContainerComponent(unsigned int entityId) 
-        : entityId(entityId) {
-	//default bombs and bomb fire rate, hardcoded right now
-//    for (EntityType bombType : BombTypeArr) { //hardcode, or we can randomize it here
-//		bombInventoryMap[bombType] = 10;// 10 # of bombs for each type for now
-//		bombCoolDownMap[bombType] = new CoolDown(500);//all the bombs has a 500ms cooldown
-//	}
+void BombContainerComponent::addToInventory(const EntityType &bombType, unsigned int amount) {
+    inventory[bombType] += amount;
 }
 
-BombContainerComponent::~BombContainerComponent() {   
-//    for (EntityType bombType : BombTypeArr) {
-//		delete bombCoolDownMap[bombType]; //prevent memory leak
-//	}
+void BombContainerComponent::removeFromInventory(const EntityType &bombType, unsigned int amount) {
+    if (inventory[bombType] - amount < 0) {
+        inventory[bombType] = 0;
+    } else {
+        inventory[bombType] -= amount;
+    }
 }
 
-void BombContainerComponent::addBombToInv(EntityType bombType) {
-	addBombToInv(bombType, 1);
-}
-void BombContainerComponent::addBombToInv(EntityType bombType, unsigned int howMany) {
-	//todo add uppper limit here
-	bombInventoryMap[bombType] += howMany;
-}
-
-void BombContainerComponent::deleteBombInInv(EntityType bombType) {
-	deleteBombInInv(bombType, 1);
-}
-void BombContainerComponent::deleteBombInInv(EntityType bombType, unsigned int howMany) {
-	//todo add uppper limit here
-	if (bombInventoryMap[bombType] - howMany < 0){
-		bombInventoryMap[bombType] = 0;
-	} else {
-		bombInventoryMap[bombType] -= howMany;
-	}
-
-}
-
-unsigned int BombContainerComponent::getNumOfBomb(EntityType bombType) {
-	return bombInventoryMap[bombType];
+unsigned int BombContainerComponent::getSize(const EntityType &bombType) const {
+    if (inventory.count(bombType) > 0) {
+        return inventory.at(bombType);
+    } else {
+        return 0;
+    }
 };
 
-void BombContainerComponent::addBombInActiveBomb(Entity * bomb){
-	activeBombs.push_back(bomb);
+void BombContainerComponent::addToActiveBomb(Entity *bomb) {
+    activeBombs.push_back(bomb);
 }
-void BombContainerComponent::deleteBombInActiveBomb(Entity * bomb){
-	for (std::vector<Entity*>::iterator it = activeBombs.begin(); it != activeBombs.end(); ++it) {
-		if ((*it)->getId() == bomb->getId()){
-			activeBombs.erase(it);
-		}
-	}
+
+void BombContainerComponent::removeFromActiveBomb(Entity *bomb) {
+    activeBombs.erase(std::find(activeBombs.begin(), activeBombs.end(), bomb));
 }
-CoolDown * BombContainerComponent::getBombCoolDown(EntityType bombtype) {
-	return bombCoolDownMap[bombtype];
-}
+
 /*
 Entity *BombContainerComponent::fireBombIfValid(BombType bombType, FireMode fireMode) {
 

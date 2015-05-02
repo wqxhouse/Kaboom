@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <bombs>
     <bomb>
-        <id>65537</id>
-        <name>CRACKER_BOMB</name>
+        <id>131073</id>
+        <name>Kaboom 2.0</name>
         <size>0.1</size>
         <mass>1.0</mass>
         <explosion-radius>3.0</explosion-radius>
+        <cooldown>500</cooldown>
     </bomb>
 </bombs>

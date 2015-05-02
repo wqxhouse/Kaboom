@@ -30,7 +30,7 @@ void ItemSystem::update(float timeStep) {
 			// Do the Upper cap for max amount of bombs here
 			WeaponPickupComponent* weaponPickupComponent = itemEntity->getComponent<WeaponPickupComponent>();
 			if (weaponPickupComponent != nullptr) {
-				triggerentity->getComponent<BombContainerComponent>()->addBombToInv(weaponPickupComponent->getBombType(), weaponPickupComponent->getAmount());
+				triggerentity->getComponent<BombContainerComponent>()->addToInventory(weaponPickupComponent->getBombType(), weaponPickupComponent->getAmount());
 			}
 
 			//TODO: to avoid multiple people picking up the item at the same time, we need to delete the itemEntity right after
