@@ -10,4 +10,5 @@ struct BombData {
     float explosionRadius;
     int cooldown;
     int launchSpeed;
+    int capacity;
 };

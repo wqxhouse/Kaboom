@@ -1,6 +1,6 @@
 #include "WeaponPickupComponent.h"
 
-WeaponPickupComponent::WeaponPickupComponent(const EntityType &bombType, unsigned int amount)
+WeaponPickupComponent::WeaponPickupComponent(const EntityType &bombType, int amount)
         : bombType(bombType),
           amount(amount) {
 }
@@ -13,10 +13,10 @@ void WeaponPickupComponent::setBombType(const EntityType &bombType) {
     this->bombType = bombType;
 }
 
-unsigned int WeaponPickupComponent::getAmount() const {
+int WeaponPickupComponent::getAmount() const {
     return amount;
 }
 
-void WeaponPickupComponent::setAmount(unsigned int amount) {
+void WeaponPickupComponent::setAmount(int amount) {
     this->amount = amount;
 }

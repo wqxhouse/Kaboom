@@ -8,5 +8,6 @@
         <explosion-radius>3.0</explosion-radius>
         <cooldown>500</cooldown>
         <launch-speed>5</launch-speed>
+        <capacity>20</capacity>
     </bomb>
 </bombs>

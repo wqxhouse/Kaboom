@@ -81,9 +81,9 @@ void World::removeRigidBody(btRigidBody *rigidBody) {
 void World::addTrigger(btGhostObject *ghostObject) {
     ghostObject->setCollisionFlags(ghostObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
     world.addCollisionObject(
-        ghostObject,
-        btBroadphaseProxy::SensorTrigger,
-        btBroadphaseProxy::AllFilter ^ btBroadphaseProxy::SensorTrigger ^ btBroadphaseProxy::StaticFilter);
+            ghostObject,
+            btBroadphaseProxy::SensorTrigger,
+            btBroadphaseProxy::AllFilter ^ btBroadphaseProxy::SensorTrigger ^ btBroadphaseProxy::StaticFilter);
 }
 
 void World::removeTrigger(btGhostObject *ghostObject) {
