@@ -14,10 +14,10 @@ public:
 
     BombContainerComponent(const InventoryType &inventory = InventoryType());
 
-    void addToInventory(const EntityType &bombType, unsigned int amount = 1);
-    void removeFromInventory(const EntityType &bombType, unsigned int amount = 1);
+    void addToInventory(const EntityType &bombType, int amount = 1);
+    void removeFromInventory(const EntityType &bombType, int amount = 1);
 
-    unsigned int getSize(const EntityType &bombType) const;
+    int getAmount(const EntityType &bombType) const;
     Stopwatch &getStopwatch(const EntityType &bombType);
 
 	void addToActiveBomb(Entity *bomb);

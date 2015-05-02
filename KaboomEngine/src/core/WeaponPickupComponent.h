@@ -9,13 +9,13 @@ class WeaponPickupComponent : public Component {
 public:
     WeaponPickupComponent(
             const EntityType &type = KABOOM_V2,
-            unsigned int amount = 1);
+            int amount = 1);
 
     const EntityType &getBombType() const;
-    unsigned int getAmount() const;
+    int getAmount() const;
 
     void setBombType(const EntityType &type);
-    void setAmount(unsigned int amount);
+    void setAmount(int amount);
 
     friend std::ostream &operator<<(std::ostream &os, const WeaponPickupComponent &o) {
         os << "WeaponPickupComponent: {" << std::endl;
@@ -28,5 +28,5 @@ public:
 
 private:
     EntityType bombType;
-    unsigned int amount;
+    int amount;
 };

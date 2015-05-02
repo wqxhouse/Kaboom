@@ -14,14 +14,14 @@ PickupFactory::PickupFactory(EntityManager &entityManager)
 }
 
 Entity *PickupFactory::createPickup(
-        const EntityType &type,
+        const EntityType &pickupType,
         unsigned int amount,
         float x,
         float y,
         float z) const {
     const float PICKUP_RADIUS = 1.0f;
 
-    Entity *entity = entityManager.createEntity(CAT_PICKUP);
+    Entity *entity = entityManager.createEntity(pickupType);
 
     btTransform worldTrans;
     worldTrans.setIdentity();
@@ -34,7 +34,7 @@ Entity *PickupFactory::createPickup(
 
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new TriggerComponent(ghostObject));
-	entity->attachComponent(new WeaponPickupComponent(type, 5)); //todo this is hard coded right now, we might want to randomize
+    entity->attachComponent(new WeaponPickupComponent(pickupType, amount));
 
     return entity;
 }

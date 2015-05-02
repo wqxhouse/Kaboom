@@ -50,7 +50,7 @@ void FiringSystem::update(float timeStep) {
             Stopwatch &stopwatch = invComp->getStopwatch(bombType);
             const int cooldown = bombData.cooldown;
 
-            if (invComp->getSize(bombType) > 0 && stopwatch.getTimeElapsed() > cooldown) {
+            if (invComp->getAmount(bombType) > 0 && stopwatch.getTimeElapsed() > cooldown) {
                 invComp->removeFromInventory(bombType);
                 stopwatch.start();
 

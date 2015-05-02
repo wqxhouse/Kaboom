@@ -2,11 +2,10 @@
 
 #include <unordered_map>
 
-#include <core/EntityType.h>
-
 #include "BombData.h"
 
 class Entity;
+enum EntityType;
 class EntityManager;
 
 class BombFactory {

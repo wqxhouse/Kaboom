@@ -3,7 +3,7 @@
 enum EntityCategory {
     CAT_PLAYER = 1 << 16,
     CAT_BOMB = 2 << 16,
-    CAT_PICKUP = 3 << 16
+    CAT_POWERUP = 3 << 16
 };
 
 enum EntityType {
