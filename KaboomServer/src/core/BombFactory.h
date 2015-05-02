@@ -26,6 +26,7 @@ private:
         float size;
         float mass;
         float explosionRadius;
+        unsigned int cooldown;
     };
 
     static BombDataLookup lookup;

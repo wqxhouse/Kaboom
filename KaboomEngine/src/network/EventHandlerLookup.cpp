@@ -1,8 +1,5 @@
 #include "EventHandlerLookup.h"
 
-EventHandlerLookup::EventHandlerLookup() {
-}
-
 void EventHandlerLookup::addHandler(const EventOpcode &opcode, EventHandler *handler) {
     handlers[opcode] = handler;
 }

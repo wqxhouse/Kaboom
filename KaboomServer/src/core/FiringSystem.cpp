@@ -48,10 +48,10 @@ void FiringSystem::update(float timeStep) {
 
 			if (inputComponent->getFireMode() == FireMode::LEFT_CLICK) {
 
-				if (bombComponent->getNumOfBomb(selectedBombType) > 0 && 
-					bombComponent->getBombCoolDown(selectedBombType)->isReady()) {
+				if (bombComponent->getSize(selectedBombType) > 0 && 
+					rand() % 10 == 0) {//bombComponent->getBombCoolDown(selectedBombType)->isReady()) { // TODO: Fix cooldown
 
-					bombComponent->deleteBombInInv(selectedBombType);
+					bombComponent->removeFromInventory(selectedBombType);
 
 					// forward & backward & left & right w.r.t orientation
 					btQuaternion rot0;
@@ -72,7 +72,7 @@ void FiringSystem::update(float timeStep) {
 																		   viewDir.getY() * 5,
 																		   viewDir.getZ() * 5);
 
-					bombComponent->addBombInActiveBomb(bombEntity);
+					bombComponent->addToActiveBomb(bombEntity);
 
 					game->addEntity(bombEntity);
 					game->getGameServer().sendSpawnEvent(bombEntity);

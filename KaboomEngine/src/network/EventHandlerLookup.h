@@ -7,8 +7,6 @@
 
 class EventHandlerLookup {
 public:
-    EventHandlerLookup();
-
     void addHandler(const EventOpcode &opcode, EventHandler *handler);
 
     EventHandler *find(const EventOpcode &opcode) const;
