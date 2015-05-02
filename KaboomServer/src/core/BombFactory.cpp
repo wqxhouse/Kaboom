@@ -12,12 +12,11 @@
 #include <core/RotationComponent.h>
 #include <util/XMLLoader.h>
 
+#include "BombDataLookup.h"
 #include "CollisionComponent.h"
 #include "ExplosionComponent.h"
 #include "PhysicsComponent.h"
 #include "TriggerComponent.h"
-
-BombFactory::BombDataLookup BombFactory::lookup("data/bombs.xml");
 
 BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
@@ -31,7 +30,7 @@ Entity *BombFactory::createBomb(
         float vx,
         float vy,
         float vz) const {
-    const BombData &data = lookup[type];
+    const BombData &data = BombDataLookup::instance[type];
 
     Entity *entity = entityManager.createEntity(type);
 
@@ -58,51 +57,4 @@ Entity *BombFactory::createBomb(
     entity->attachComponent(new CollisionComponent());
 
     return entity;
-}
-
-BombFactory::BombDataLookup::BombDataLookup(const std::string &filename) {
-    loadXMLFile(filename);
-}
-
-void BombFactory::BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
-    if (xmlRoot->type == osgDB::XmlNode::ROOT) {
-        for (auto child : xmlRoot->children) {
-            if (child->name == "bombs") {
-                return loadXMLNode(child);
-            }
-        }
-
-        return;
-    }
-
-    for (auto bombNode : xmlRoot->children) {
-        if (bombNode->name != "bomb") {
-            continue;
-        }
-
-        BombData data;
-        memset(&data, 0, sizeof(BombData));
-
-        for (auto dataNode : bombNode->children) {
-            if (dataNode->name == "id") {
-                loadUint(dataNode, data.id);
-            } else if (dataNode->name == "name") {
-                loadString(dataNode, data.name);
-            } else if (dataNode->name == "size") {
-                loadFloat(dataNode, data.size);
-            } else if (dataNode->name == "mass") {
-                loadFloat(dataNode, data.mass);
-            } else if (dataNode->name == "explosion-radius") {
-                loadFloat(dataNode, data.explosionRadius);
-            } else if (dataNode->name == "cooldown") {
-                loadUint(dataNode, data.cooldown);
-            }
-        }
-
-        bombs[static_cast<EntityType>(data.id)] = data;
-    }
-}
-
-const BombFactory::BombData &BombFactory::BombDataLookup::operator[](const EntityType &type) const {
-    return bombs.at(type);
 }

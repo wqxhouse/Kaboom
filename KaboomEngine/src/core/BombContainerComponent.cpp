@@ -5,6 +5,11 @@
 BombContainerComponent::BombContainerComponent(const InventoryType &inventory)
         : capacity(0),
           inventory(inventory) {
+    for (auto kv : inventory) {
+        Stopwatch stopwatch;
+        stopwatch.start();
+        stopwatches[kv.first] = stopwatch;
+    }
 }
 
 void BombContainerComponent::addToInventory(const EntityType &bombType, unsigned int amount) {
@@ -13,7 +18,8 @@ void BombContainerComponent::addToInventory(const EntityType &bombType, unsigned
 
 void BombContainerComponent::removeFromInventory(const EntityType &bombType, unsigned int amount) {
     if (inventory[bombType] - amount < 0) {
-        inventory[bombType] = 0;
+        inventory.erase(bombType);
+        stopwatches.erase(bombType);
     } else {
         inventory[bombType] -= amount;
     }
@@ -26,6 +32,10 @@ unsigned int BombContainerComponent::getSize(const EntityType &bombType) const {
         return 0;
     }
 };
+
+Stopwatch &BombContainerComponent::getStopwatch(const EntityType &bombType) {
+    return stopwatches[bombType];
+}
 
 void BombContainerComponent::addToActiveBomb(Entity *bomb) {
     activeBombs.push_back(bomb);

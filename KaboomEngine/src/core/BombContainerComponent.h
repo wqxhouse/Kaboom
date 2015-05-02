@@ -6,6 +6,7 @@
 
 #include "Component.h"
 #include "Entity.h"
+#include "../util/Stopwatch.h"
 
 class BombContainerComponent : public Component {
 public:
@@ -17,6 +18,7 @@ public:
     void removeFromInventory(const EntityType &bombType, unsigned int amount = 1);
 
     unsigned int getSize(const EntityType &bombType) const;
+    Stopwatch &getStopwatch(const EntityType &bombType);
 
 	void addToActiveBomb(Entity *bomb);
 	void removeFromActiveBomb(Entity *bomb);
@@ -39,4 +41,5 @@ private:
 
     InventoryType inventory;
 	std::vector<Entity *> activeBombs;
+    std::unordered_map<EntityType, Stopwatch> stopwatches;
 };
