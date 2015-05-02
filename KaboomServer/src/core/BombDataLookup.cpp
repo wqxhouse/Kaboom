@@ -38,6 +38,8 @@ void BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
                 loadFloat(dataNode, data.explosionRadius);
             } else if (dataNode->name == "cooldown") {
                 loadInt(dataNode, data.cooldown);
+            } else if (dataNode->name == "launch-speed") {
+                loadInt(dataNode, data.launchSpeed);
             }
         }
 

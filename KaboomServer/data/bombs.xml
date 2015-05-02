@@ -7,5 +7,6 @@
         <mass>1.0</mass>
         <explosion-radius>3.0</explosion-radius>
         <cooldown>500</cooldown>
+        <launch-speed>5</launch-speed>
     </bomb>
 </bombs>
