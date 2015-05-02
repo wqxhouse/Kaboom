@@ -6,15 +6,17 @@
 
 class PositionEvent : public Event {
 public:
-    PositionEvent();
-    PositionEvent(unsigned int entityId, float x, float y, float z);
-    ~PositionEvent();
+    PositionEvent(
+            unsigned int entityId = 0,
+            float x = 0.0f,
+            float y = 0.0f,
+            float z = 0.0f);
 
-    const unsigned int &getEntityId() const;
+    unsigned int getEntityId() const;
 
-    const float &getX() const;
-    const float &getY() const;
-    const float &getZ() const;
+    float getX() const;
+    float getY() const;
+    float getZ() const;
 
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);

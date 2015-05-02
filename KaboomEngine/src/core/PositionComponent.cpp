@@ -1,14 +1,9 @@
 #include "PositionComponent.h"
 
-PositionComponent::PositionComponent()
-    : PositionComponent(0, 0, 0) {
-}
-
 PositionComponent::PositionComponent(float x, float y, float z)
-    : x(x), y(y), z(z) {
-}
-
-PositionComponent::~PositionComponent() {
+        : x(x),
+          y(y),
+          z(z) {
 }
 
 float PositionComponent::getX() const {

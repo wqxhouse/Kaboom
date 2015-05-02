@@ -1,30 +1,22 @@
 #include "WeaponPickupComponent.h"
 
-WeaponPickupComponent::WeaponPickupComponent()
-        : WeaponPickupComponent(KABOOM_V2, 1) {
-}
-
-WeaponPickupComponent::WeaponPickupComponent(EntityType bombType, unsigned int amount)
+WeaponPickupComponent::WeaponPickupComponent(const EntityType &bombType, unsigned int amount)
         : bombType(bombType),
-	      amount(amount){
+          amount(amount) {
 }
 
-WeaponPickupComponent::~WeaponPickupComponent() {
-}
-
-EntityType WeaponPickupComponent::getBombType() const {
+const EntityType &WeaponPickupComponent::getBombType() const {
     return bombType;
 }
 
-void WeaponPickupComponent::setBombType(EntityType bombType) {
-	this->bombType = bombType;
+void WeaponPickupComponent::setBombType(const EntityType &bombType) {
+    this->bombType = bombType;
 }
 
 unsigned int WeaponPickupComponent::getAmount() const {
-	return amount;
+    return amount;
 }
 
 void WeaponPickupComponent::setAmount(unsigned int amount) {
-	this->amount = amount;
+    this->amount = amount;
 }
-

@@ -6,14 +6,15 @@
 
 class RotationEvent : public Event {
 public:
-	RotationEvent();
-    RotationEvent(unsigned int entityId, float yaw, float pitch);
-    ~RotationEvent();
+    RotationEvent(
+            unsigned int entityId = 0,
+            float yaw = 0.0f,
+            float pitch = 0.0f);
 
-    const unsigned int &getEntityId() const;
+    unsigned int getEntityId() const;
 
-    const float &getYaw() const;
-    const float &getPitch() const;
+    float getYaw() const;
+    float getPitch() const;
 
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);

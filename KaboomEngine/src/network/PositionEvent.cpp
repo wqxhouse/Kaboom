@@ -2,34 +2,27 @@
 
 #include <string>
 
-PositionEvent::PositionEvent()
-    : PositionEvent(0, 0.0f, 0.0f, 0.0f) {
-}
-
 PositionEvent::PositionEvent(unsigned int entityId, float x, float y, float z)
-    : Event(EventOpcode::POSITION, sizeof(PositionEvent)),
-    entityId(entityId),
-    x(x),
-    y(y),
-    z(z) {
+        : Event(EventOpcode::POSITION, sizeof(PositionEvent)),
+          entityId(entityId),
+          x(x),
+          y(y),
+          z(z) {
 }
 
-PositionEvent::~PositionEvent() {
-}
-
-const unsigned int &PositionEvent::getEntityId() const {
+unsigned int PositionEvent::getEntityId() const {
     return entityId;
 }
 
-const float &PositionEvent::getX() const {
+float PositionEvent::getX() const {
     return x;
 }
 
-const float &PositionEvent::getY() const {
+float PositionEvent::getY() const {
     return y;
 }
 
-const float &PositionEvent::getZ() const {
+float PositionEvent::getZ() const {
     return z;
 }
 

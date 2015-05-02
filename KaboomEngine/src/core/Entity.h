@@ -9,7 +9,7 @@ class Component;
 
 class Entity {
 public:
-    Entity(const unsigned int &id, const EntityType &type = EntityType::NONE);
+    Entity(unsigned int id, const EntityType &type = NONE);
     ~Entity();
 
     void attachComponent(Component *component);
@@ -28,7 +28,7 @@ public:
         }
     }
 
-    const unsigned int &getId() const;
+    unsigned int getId() const;
 
     const EntityType &getType() const;
     void setType(const EntityType &type);

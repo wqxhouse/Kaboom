@@ -2,16 +2,9 @@
 
 #include <string>
 
-ExplosionEvent::ExplosionEvent()
-        : ExplosionEvent(0) {
-}
-
 ExplosionEvent::ExplosionEvent(unsigned int bombId)
         : Event(EventOpcode::EXPLOSION, sizeof(ExplosionEvent)),
           bombId(bombId) {
-}
-
-ExplosionEvent::~ExplosionEvent() {
 }
 
 void ExplosionEvent::serialize(char *buf) const {
@@ -22,6 +15,6 @@ void ExplosionEvent::deserialize(char *buf) {
     memcpy(this, buf, sizeof(ExplosionEvent));
 }
 
-const unsigned int &ExplosionEvent::getBombId() const {
+unsigned int ExplosionEvent::getBombId() const {
     return bombId;
 }

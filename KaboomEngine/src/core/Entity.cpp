@@ -2,7 +2,7 @@
 
 #include "Component.h"
 
-Entity::Entity(const unsigned int &id, const EntityType &type)
+Entity::Entity(unsigned int id, const EntityType &type)
         : id(id),
           type(type) {
 }
@@ -14,11 +14,10 @@ Entity::~Entity() {
 }
 
 void Entity::attachComponent(Component *component) {
-    component->setParentEntity(this);
     components[&typeid(*component)] = component;
 }
 
-const unsigned int &Entity::getId() const {
+unsigned int Entity::getId() const {
     return id;
 }
 

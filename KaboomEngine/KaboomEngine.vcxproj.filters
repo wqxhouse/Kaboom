@@ -114,9 +114,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\Component.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\Entity.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>

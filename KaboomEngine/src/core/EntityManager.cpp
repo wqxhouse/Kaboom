@@ -1,6 +1,6 @@
 #include "EntityManager.h"
 
-#include <stdexcept>
+#include <iostream>
 #include <sstream>
 
 #include "Entity.h"
@@ -9,10 +9,7 @@ EntityManager::EntityManager()
         : nextId(0) {
 }
 
-EntityManager::~EntityManager() {
-}
-
-const unsigned int &EntityManager::generateId() {
+unsigned int EntityManager::generateId() {
     while (isEntityAlive(nextId)) {
         ++nextId;
     }
@@ -24,13 +21,14 @@ Entity *EntityManager::createEntity(const EntityType &type) {
     return createEntity(generateId(), type);
 }
 
-Entity *EntityManager::createEntity(const unsigned int &id, const EntityType &type) {
+Entity *EntityManager::createEntity(unsigned int id, const EntityType &type) {
     if (isEntityAlive(id)) {
         std::ostringstream error;
         error << "Unable to create entity with ID " << id << "." << std::endl;
-        error << "Entity with this ID is already alive." << std::endl;
+        error << "Entity with this ID is already alive.";
 
-        // throw std::runtime_error(error.str());
+        std::cerr << error.str() << std::endl;
+
 		return nullptr;
     }
 
@@ -52,9 +50,10 @@ Entity *EntityManager::getEntity(unsigned int id) const {
     if (!isEntityAlive(id)) {
         std::ostringstream error;
         error << "Unable to retrieve entity with ID " << id << "." << std::endl;
-        error << "Entity with this ID is not alive." << std::endl;
+        error << "Entity with this ID is not alive.";
 
-        // throw std::runtime_error(error.str());
+        std::cerr << error.str() << std::endl;
+
         return nullptr;
     }
 

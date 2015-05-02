@@ -1,14 +1,8 @@
 #include "RotationComponent.h"
 
-RotationComponent::RotationComponent()
-    : RotationComponent(0, 0) {
-}
-
 RotationComponent::RotationComponent(float yaw, float pitch)
-    : yaw(yaw), pitch(pitch) {
-}
-
-RotationComponent::~RotationComponent() {
+        : yaw(yaw),
+          pitch(pitch) {
 }
 
 float RotationComponent::getYaw() const {

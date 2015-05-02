@@ -4,7 +4,6 @@
 class CoolDown {
 public:
 	CoolDown(clock_t coolDownDuration);
-	~CoolDown();
 
 	bool isReady();
 

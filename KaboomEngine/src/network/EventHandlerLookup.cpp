@@ -3,9 +3,6 @@
 EventHandlerLookup::EventHandlerLookup() {
 }
 
-EventHandlerLookup::~EventHandlerLookup() {
-}
-
 void EventHandlerLookup::addHandler(const EventOpcode &opcode, EventHandler *handler) {
     handlers[opcode] = handler;
 }

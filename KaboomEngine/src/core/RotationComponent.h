@@ -6,9 +6,7 @@
 
 class RotationComponent : public Component {
 public:
-    RotationComponent();
-    RotationComponent(float yaw, float pitch);
-    ~RotationComponent();
+    RotationComponent(float yaw = 0.0f, float pitch = 0.0f);
 
     float getYaw() const;
     float getPitch() const;
@@ -18,7 +16,7 @@ public:
 
     void setRotation(float yaw, float pitch);
 
-    friend std::ostream& operator<<(std::ostream &os, const RotationComponent &o) {
+    friend std::ostream &operator<<(std::ostream &os, const RotationComponent &o) {
         os << "RotationComponent: {" << std::endl;
         os << "    yaw: " << o.yaw << std::endl;
         os << "    pitch: " << o.pitch << std::endl;
