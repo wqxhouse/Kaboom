@@ -182,7 +182,6 @@
   <ItemGroup>
     <ClInclude Include="src\core\BombContainerComponent.h" />
     <ClInclude Include="src\core\Component.h" />
-    <ClInclude Include="src\core\CoolDown.h" />
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\EntityType.h" />
@@ -203,11 +202,11 @@
     <ClInclude Include="src\network\PositionEvent.h" />
     <ClInclude Include="src\network\RotationEvent.h" />
     <ClInclude Include="src\network\SpawnEvent.h" />
+    <ClInclude Include="src\util\Stopwatch.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\BombContainerComponent.cpp" />
-    <ClCompile Include="src\core\CoolDown.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
     <ClCompile Include="src\core\PositionComponent.cpp" />
@@ -223,6 +222,7 @@
     <ClCompile Include="src\network\PositionEvent.cpp" />
     <ClCompile Include="src\network\RotationEvent.cpp" />
     <ClCompile Include="src\network\SpawnEvent.cpp" />
+    <ClCompile Include="src\util\Stopwatch.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>

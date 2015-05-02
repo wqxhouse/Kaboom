@@ -40,6 +40,12 @@
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{be66f7ba-63cd-4573-8dda-abf5f0a603da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Util">
+      <UniqueIdentifier>{fad1e889-f9ea-4bbb-95b2-62d295f49d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util">
+      <UniqueIdentifier>{4de75734-e00b-47d2-a0a2-84e3806bee01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Component.h">
@@ -106,11 +112,11 @@
     <ClInclude Include="src\core\FireMode.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\CoolDown.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\WeaponPickupComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\Stopwatch.h">
+      <Filter>Header Files\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,11 +166,11 @@
     <ClCompile Include="src\network\ExplosionEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\CoolDown.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\WeaponPickupComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\Stopwatch.cpp">
+      <Filter>Source Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

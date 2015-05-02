@@ -3,7 +3,8 @@
 #include <unordered_map>
 
 #include <core/EntityType.h>
-#include <util/XMLLoader.h>
+
+#include "BombData.h"
 
 class Entity;
 class EntityManager;
@@ -22,30 +23,5 @@ public:
             float vz = 0.0f) const;
 
 private:
-    class BombDataLookup;
-
-    struct BombData {
-        unsigned int id;
-        std::string name;
-        float size;
-        float mass;
-        float explosionRadius;
-        unsigned int cooldown;
-    };
-
-    static BombDataLookup lookup;
-
     EntityManager &entityManager;
-};
-
-class BombFactory::BombDataLookup : public XMLLoader {
-public:
-    BombDataLookup(const std::string &filename);
-
-    const BombData &operator[](const EntityType &type) const;
-
-private:
-    std::unordered_map<EntityType, BombData> bombs;
-
-    virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 };
