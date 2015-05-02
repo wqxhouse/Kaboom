@@ -3,7 +3,7 @@
 #include <string>
 
 EmptyEvent::EmptyEvent()
-        : Event(EventOpcode::EMPTY, sizeof(EmptyEvent)) {
+        : Event(EVENT_EMPTY, sizeof(EmptyEvent)) {
 }
 
 void EmptyEvent::serialize(char *buf) const {

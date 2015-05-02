@@ -3,7 +3,7 @@
 #include <string>
 
 SpawnEvent::SpawnEvent(unsigned int entityId, float x, float y, float z, EntityType type, int feature)
-        : Event(EventOpcode::ENTITY_SPAWN, sizeof(SpawnEvent)),
+        : Event(EVENT_SPAWN, sizeof(SpawnEvent)),
           entityId(entityId),
           x(x),
           y(y),

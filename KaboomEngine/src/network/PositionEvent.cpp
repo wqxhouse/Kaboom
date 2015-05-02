@@ -3,7 +3,7 @@
 #include <string>
 
 PositionEvent::PositionEvent(unsigned int entityId, float x, float y, float z)
-        : Event(EventOpcode::POSITION, sizeof(PositionEvent)),
+        : Event(EVENT_POSITION, sizeof(PositionEvent)),
           entityId(entityId),
           x(x),
           y(y),
