@@ -48,6 +48,9 @@ void PickupSystem::update(float timeStep) {
 
             invComp->addToInventory(bombType, amount);
 
+            game->removeEntity(pickup);
+            // TODO: Send remove pickup event to clients
+
 			//TODO: to avoid multiple people picking up the item at the same time, we need to delete the itemEntity right after
 			
         }
