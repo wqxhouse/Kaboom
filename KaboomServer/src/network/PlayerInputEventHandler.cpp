@@ -12,9 +12,6 @@ PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
         : game(game) {
 }
 
-PlayerInputEventHandler::~PlayerInputEventHandler() {
-}
-
 void PlayerInputEventHandler::handle(const Event &e) const {
     const PlayerInputEvent &evt = static_cast<const PlayerInputEvent &>(e);
 

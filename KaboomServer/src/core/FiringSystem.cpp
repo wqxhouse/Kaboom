@@ -18,9 +18,6 @@ FiringSystem::FiringSystem(Game *game)
         : EntitySystem(game) {
 }
 
-FiringSystem::~FiringSystem() {
-}
-
 void FiringSystem::update(float timeStep) {
 	//find player entity,
 	//find input entity,

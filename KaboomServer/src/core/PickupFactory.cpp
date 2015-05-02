@@ -1,4 +1,4 @@
-#include "ItemFactory.h"
+#include "PickupFactory.h"
 
 #include <btBulletDynamicsCommon.h>
 
@@ -9,12 +9,17 @@
 
 #include "TriggerComponent.h"
 
-ItemFactory::ItemFactory(EntityManager &entityManager)
+PickupFactory::PickupFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-Entity *ItemFactory::createItem(const EntityType &type, unsigned int amount, float x, float y, float z) const {
-    const float ITEM_RADIUS = 1.0f;
+Entity *PickupFactory::createPickup(
+        const EntityType &type,
+        unsigned int amount,
+        float x,
+        float y,
+        float z) const {
+    const float PICKUP_RADIUS = 1.0f;
 
     Entity *entity = entityManager.createEntity(CAT_PICKUP);
 
@@ -23,7 +28,7 @@ Entity *ItemFactory::createItem(const EntityType &type, unsigned int amount, flo
     worldTrans.setOrigin(btVector3(x, y, z));
 
     btGhostObject *ghostObject = new btGhostObject();
-    ghostObject->setCollisionShape(new btSphereShape(ITEM_RADIUS));
+    ghostObject->setCollisionShape(new btSphereShape(PICKUP_RADIUS));
     ghostObject->setUserPointer(entity);
     ghostObject->setWorldTransform(worldTrans);
 

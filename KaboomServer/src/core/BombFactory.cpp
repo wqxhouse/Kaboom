@@ -23,18 +23,14 @@ BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-BombFactory::~BombFactory() {
-}
-
-Entity *BombFactory::createBomb(const EntityType &type) const {
-	return createBomb(type, 0.0f, 0.0f, 0.0f);
-}
-
-Entity *BombFactory::createBomb(const EntityType &type, float x, float y, float z) const {
-    return createBomb(type, x, y, z, 0.0f, 0.0f, 0.0f);
-}
-
-Entity *BombFactory::createBomb(const EntityType &type, float x, float y, float z, float vx, float vy, float vz) const {
+Entity *BombFactory::createBomb(
+        const EntityType &type,
+        float x,
+        float y,
+        float z,
+        float vx,
+        float vy,
+        float vz) const {
     const BombData &data = lookup[type];
 
     Entity *entity = entityManager.createEntity(type);
@@ -79,10 +75,6 @@ void BombFactory::BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
         return;
     }
 
-    std::unordered_map<unsigned int, EntityType> types = {
-        { KABOOM_V2, KABOOM_V2 },
-    };
-
     for (auto bombNode : xmlRoot->children) {
         if (bombNode->name != "bomb") {
             continue;
@@ -107,7 +99,7 @@ void BombFactory::BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
             }
         }
 
-        bombs[types[data.id]] = data;
+        bombs[static_cast<EntityType>(data.id)] = data;
     }
 }
 

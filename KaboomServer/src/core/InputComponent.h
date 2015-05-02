@@ -7,7 +7,8 @@
 class InputComponent : public Component {
 public:
     InputComponent();
-    InputComponent(bool movingForward,
+    InputComponent(
+            bool movingForward,
             bool movingBackward,
             bool movingLeft,
             bool movingRight,

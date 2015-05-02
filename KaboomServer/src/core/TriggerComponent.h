@@ -10,7 +10,6 @@
 class TriggerComponent : public Component {
 public:
     TriggerComponent(btGhostObject *ghostObject);
-    ~TriggerComponent();
 
     btGhostObject *getGhostObject() const;
 

@@ -8,9 +8,6 @@ ExplosionSystem::ExplosionSystem(Game *game)
         : EntitySystem(game) {
 }
 
-ExplosionSystem::~ExplosionSystem() {
-}
-
 void ExplosionSystem::update(float timeStep) {
     auto entities = game->getEntityManager().getEntityList();
 

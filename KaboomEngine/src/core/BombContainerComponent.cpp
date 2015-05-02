@@ -2,6 +2,11 @@
 
 #include "Entity.h"
 
+BombContainerComponent::BombContainerComponent(const InventoryType &inventory)
+        : capacity(0),
+          inventory(inventory) {
+}
+
 void BombContainerComponent::addToInventory(const EntityType &bombType, unsigned int amount) {
     inventory[bombType] += amount;
 }

@@ -27,9 +27,6 @@ GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &
     config->getValue(ConfigSettings::str_max_client, maxPlayers);
 }
 
-GameServer::~GameServer() {
-}
-
 bool GameServer::acceptNewClient(unsigned int entity_id) {
 	if (network->acceptNewClient(nextClientId)) {
 		printf("<Server> Client %d has connected to the server, with entitiy id %d\n", nextClientId, entity_id);

@@ -4,9 +4,6 @@ PhysicsComponent::PhysicsComponent(btRigidBody *rigidBody)
     : rigidBody(rigidBody) {
 }
 
-PhysicsComponent::~PhysicsComponent() {
-}
-
 btRigidBody *PhysicsComponent::getRigidBody() const {
     return rigidBody;
 }

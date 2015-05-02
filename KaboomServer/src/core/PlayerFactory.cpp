@@ -15,13 +15,6 @@ PlayerFactory::PlayerFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-PlayerFactory::~PlayerFactory() {
-}
-
-Entity *PlayerFactory::createPlayer() const {
-    return createPlayer(0.0f, 0.0f, 0.0f);
-}
-
 Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
     Entity *entity = entityManager.createEntity(PLAYER);
 
@@ -37,15 +30,12 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);
 
-    BombContainerComponent *invComp = new BombContainerComponent();
-    invComp->addToInventory(KABOOM_V2, 10);
-
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
-    entity->attachComponent(invComp);
-	entity->attachComponent(new JetpackComponent());
+    entity->attachComponent(new BombContainerComponent({ { { KABOOM_V2, 10 } } }));
+    entity->attachComponent(new JetpackComponent());
 
     return entity;
 }

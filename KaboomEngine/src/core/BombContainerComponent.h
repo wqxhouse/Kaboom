@@ -9,6 +9,10 @@
 
 class BombContainerComponent : public Component {
 public:
+    typedef std::unordered_map<EntityType, unsigned int> InventoryType;
+
+    BombContainerComponent(const InventoryType &inventory = InventoryType());
+
     void addToInventory(const EntityType &bombType, unsigned int amount = 1);
     void removeFromInventory(const EntityType &bombType, unsigned int amount = 1);
 
@@ -33,6 +37,6 @@ public:
 private:
     int capacity; // TODO: capacity is not set
 
-    std::unordered_map<EntityType, unsigned int> inventory;
+    InventoryType inventory;
 	std::vector<Entity *> activeBombs;
 };

@@ -2,8 +2,8 @@
 
 #include <unordered_map>
 
-#include <util/XMLLoader.h>
 #include <core/EntityType.h>
+#include <util/XMLLoader.h>
 
 class Entity;
 class EntityManager;
@@ -11,11 +11,15 @@ class EntityManager;
 class BombFactory {
 public:
     BombFactory(EntityManager &entityManager);
-    ~BombFactory();
 
-    Entity *createBomb(const EntityType &type) const;
-    Entity *createBomb(const EntityType &type, float x, float y, float z) const;
-    Entity *createBomb(const EntityType &type, float x, float y, float z, float vx, float vy, float vz) const;
+    Entity *createBomb(
+            const EntityType &type,
+            float x = 0.0f,
+            float y = 0.0f,
+            float z = 0.0f,
+            float vx = 0.0f,
+            float vy = 0.0f,
+            float vz = 0.0f) const;
 
 private:
     class BombDataLookup;
