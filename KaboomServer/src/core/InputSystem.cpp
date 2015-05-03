@@ -5,6 +5,7 @@
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
+#include <core/PlayerStatusComponent.h>
 
 #include "Game.h"
 #include "InputComponent.h"
@@ -28,8 +29,9 @@ void InputSystem::update(float timeStep)
 		PositionComponent *posCom = entity->getComponent<PositionComponent>();
 		PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
 		JetpackComponent *jetCom = entity->getComponent<JetpackComponent>();
+		PlayerStatusComponent *playerStatusCom = entity->getComponent<PlayerStatusComponent>();
 
-		if (inputCom == nullptr || physCom == nullptr) {
+		if (inputCom == nullptr || physCom == nullptr || playerStatusCom == nullptr) {
 			continue;
 		}
 
@@ -100,7 +102,14 @@ void InputSystem::update(float timeStep)
 		btVector3 worldVelocity(right * localVelocity.getX() + front * localVelocity.getY());
 		worldVelocity.setZ(velocity.getZ());
 
-		rigidBody->setLinearVelocity(worldVelocity);
+		if (!playerStatusCom->checkIsKnockBacked()) { //don't move if we are knockbacked
+			printf("Playser is moving on input \n");
+			rigidBody->setLinearVelocity(worldVelocity);
+		}
+		else {
+			printf("Player is knocked back \n");
+		}
+		
 		/*
 		if (inputCom->isFiring()) {
             // HACK: for lowering fire rate
