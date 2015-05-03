@@ -7,6 +7,7 @@
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 
+#include "BombDataLookup.h"
 #include "InputComponent.h"
 #include "PhysicsComponent.h"
 #include "JetpackComponent.h"
@@ -30,11 +31,15 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);
 
+    const BombContainerComponent::InventoryType initInv = {
+        { KABOOM_V2, { 10, Timer(BombDataLookup::instance[KABOOM_V2].cooldown) } }
+    };
+
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
-    entity->attachComponent(new BombContainerComponent({ { { KABOOM_V2, 10 } } }));
+    entity->attachComponent(new BombContainerComponent(initInv));
     entity->attachComponent(new JetpackComponent());
 
     return entity;
