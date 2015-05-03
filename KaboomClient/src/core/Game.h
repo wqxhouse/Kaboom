@@ -12,6 +12,12 @@
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 
+#include <osgAudio/Source.h>
+#include <osgAudio/AudioEnvironment.h>
+#include <osgAudio/Sample.h>
+
+using namespace osgAudio;
+
 class InputManager;
 
 class Game {
@@ -35,6 +41,8 @@ public:
     MaterialManager* getMaterialManager();
 
     Camera &getCamera();
+	osg::ref_ptr<Source> source;
+	osg::ref_ptr<Sample> sample;
 
 private:
     enum GameStateMachine {
