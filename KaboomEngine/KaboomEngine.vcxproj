@@ -185,6 +185,7 @@
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\EntityType.h" />
+    <ClInclude Include="src\core\EquipmentComponent.h" />
     <ClInclude Include="src\core\FireMode.h" />
     <ClInclude Include="src\core\PlayerStatusComponent.h" />
     <ClInclude Include="src\core\PositionComponent.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="src\core\BombContainerComponent.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
+    <ClCompile Include="src\core\EquipmentComponent.cpp" />
     <ClCompile Include="src\core\PlayerStatusComponent.cpp" />
     <ClCompile Include="src\core\PositionComponent.cpp" />
     <ClCompile Include="src\core\RotationComponent.cpp" />
