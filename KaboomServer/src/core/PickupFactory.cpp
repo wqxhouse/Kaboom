@@ -5,6 +5,7 @@
 #include <core/Entity.h>
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
+#include <core/RotationComponent.h>
 #include <core/WeaponPickupComponent.h>
 
 #include "TriggerComponent.h"
@@ -33,6 +34,7 @@ Entity *PickupFactory::createPickup(
     ghostObject->setWorldTransform(worldTrans);
 
     entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new RotationComponent());
     entity->attachComponent(new TriggerComponent(ghostObject));
     entity->attachComponent(new WeaponPickupComponent(pickupType, amount));
 
