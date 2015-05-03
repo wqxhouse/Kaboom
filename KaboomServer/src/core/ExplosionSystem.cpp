@@ -49,7 +49,7 @@ void ExplosionSystem::update(float timeStep) {
 
 					playerPhysicComp->getRigidBody()->applyCentralImpulse(impulseVec);
 
-					playerStatusComp->getKnockBackTimer().setDuration(500); 
+					playerStatusComp->getKnockBackTimer().setDuration(bombData.knockbackDuration); 
 					playerStatusComp->getKnockBackTimer().start();
 					playerStatusComp->setIsKnockBacked(true);
 

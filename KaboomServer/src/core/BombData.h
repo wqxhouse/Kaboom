@@ -12,6 +12,7 @@ struct BombData {
     int launchSpeed;
     int capacity;
 	float knockbackRatio;
+	int knockbackDuration;
 	int maxDamage;
 	int minDamage;
 };
