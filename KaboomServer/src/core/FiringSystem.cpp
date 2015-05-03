@@ -3,6 +3,7 @@
 #include <btBulletDynamicsCommon.h>
 
 #include <core/FireMode.h>
+#include <core/EquipmentComponent.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 #include <util/Timer.h>
@@ -31,21 +32,25 @@ void FiringSystem::update(float timeStep) {
     auto entities = game->getEntityManager().getEntityList();
 
     for (Entity *entity : entities) {
-        if ((entity->getType() & CAT_CHARACTER) != CAT_CHARACTER) {
+        PositionComponent* posComp = entity->getComponent<PositionComponent>();
+        RotationComponent* rotComp = entity->getComponent<RotationComponent>();
+        BombContainerComponent* invComp = entity->getComponent<BombContainerComponent>();
+        EquipmentComponent *equipComp = entity->getComponent<EquipmentComponent>();
+        InputComponent* inputComp = entity->getComponent<InputComponent>();
+
+        if (posComp == nullptr ||
+                rotComp == nullptr ||
+                invComp == nullptr ||
+                equipComp == nullptr ||
+                inputComp == nullptr) {
             continue;
         }
-
-        InputComponent* inputComp = entity->getComponent<InputComponent>();
 
         if (!inputComp->isFiring() || inputComp->getFireMode() == NOT_FIRING) {
             continue;
         }
 
-        BombContainerComponent* invComp = entity->getComponent<BombContainerComponent>();
-        PositionComponent* posComp = entity->getComponent<PositionComponent>();
-        RotationComponent* rotComp = entity->getComponent<RotationComponent>();
-
-        const EntityType &bombType = inputComp->getSelectedBombType();
+        const EntityType &bombType = equipComp->getEquipmentType();
 
         if (inputComp->getFireMode() == FireMode::LEFT_CLICK) {
             const BombData &bombData = BombDataLookup::instance[bombType];

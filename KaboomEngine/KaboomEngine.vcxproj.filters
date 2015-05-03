@@ -121,6 +121,9 @@
     <ClInclude Include="src\core\PlayerStatusComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\EquipmentComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
@@ -176,6 +179,9 @@
       <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="src\core\PlayerStatusComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\EquipmentComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>
