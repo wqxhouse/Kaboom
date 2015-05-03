@@ -6,19 +6,20 @@
 
 #include "Component.h"
 #include "Entity.h"
-#include "../util/Stopwatch.h"
+#include "../util/Timer.h"
 
 class BombContainerComponent : public Component {
 public:
-    typedef std::unordered_map<EntityType, unsigned int> InventoryType;
+    typedef std::unordered_map<EntityType, std::pair<unsigned int, Timer>> InventoryType;
 
     BombContainerComponent(const InventoryType &inventory = InventoryType());
 
     void addToInventory(const EntityType &bombType, int amount = 1);
     void removeFromInventory(const EntityType &bombType, int amount = 1);
 
+    bool hasBomb(const EntityType &bombType) const;
     int getAmount(const EntityType &bombType) const;
-    Stopwatch &getStopwatch(const EntityType &bombType);
+    Timer &getTimer(const EntityType &bombType);
 
 	void addToActiveBomb(Entity *bomb);
 	void removeFromActiveBomb(Entity *bomb);
@@ -28,7 +29,10 @@ public:
         os << "    capacity: " << o.capacity << std::endl;
 		os << "    inventory: { " << std::endl;
         for (auto kv : o.inventory) {
-			os << "        " << kv.first << ": " << kv.second << std::endl;
+			os << "        " << kv.first << ": {" << std::endl;
+            os << "            amount: " << kv.second.first << std::endl;
+            os << "            expired: " << kv.second.second.isExpired() << std::endl;
+            os << "        }" << std::endl;
 		}
 		os << "    }" << std::endl;
         os << "}";
@@ -41,5 +45,4 @@ private:
 
     InventoryType inventory;
 	std::vector<Entity *> activeBombs;
-    std::unordered_map<EntityType, Stopwatch> stopwatches;
 };

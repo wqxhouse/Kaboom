@@ -1,9 +1,11 @@
 #include "FiringSystem.h"
 
 #include <btBulletDynamicsCommon.h>
+
 #include <core/FireMode.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
+#include <util/Timer.h>
 
 #include "BombDataLookup.h"
 #include "InputComponent.h"
@@ -47,12 +49,15 @@ void FiringSystem::update(float timeStep) {
         if (inputComp->getFireMode() == FireMode::LEFT_CLICK) {
             const BombData &bombData = BombDataLookup::instance[bombType];
 
-            Stopwatch &stopwatch = invComp->getStopwatch(bombType);
-            const int cooldown = bombData.cooldown;
+            if (!invComp->hasBomb(bombType)) {
+                continue;
+            }
 
-            if (invComp->getAmount(bombType) > 0 && stopwatch.getTimeElapsed() > cooldown) {
+            Timer &timer = invComp->getTimer(bombType);
+
+            if (invComp->getAmount(bombType) > 0 && timer.isExpired()) {
                 invComp->removeFromInventory(bombType);
-                stopwatch.start();
+                timer.start();
 
                 // forward & backward & left & right w.r.t orientation
                 btQuaternion rot0;

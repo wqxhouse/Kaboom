@@ -115,7 +115,7 @@
     <ClInclude Include="src\core\WeaponPickupComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\Stopwatch.h">
+    <ClInclude Include="src\util\Timer.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
   </ItemGroup>
@@ -169,7 +169,7 @@
     <ClCompile Include="src\core\WeaponPickupComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\Stopwatch.cpp">
+    <ClCompile Include="src\util\Timer.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
