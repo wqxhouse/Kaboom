@@ -25,7 +25,7 @@ void PickupSystem::update(float timeStep) {
         auto triggerEntities = triggerComp->getTriggerEntities();
 
         for (Entity *player : triggerEntities) {
-            if ((player->getType() & CAT_PLAYER) != CAT_PLAYER) {
+            if ((player->getType() & CAT_CHARACTER) != CAT_CHARACTER) {
                 continue;
             }
 

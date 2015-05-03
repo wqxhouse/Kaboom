@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClCompile Include="src\core\BombDataLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
+    <ClCompile Include="src\core\CharacterDataLookup.cpp" />
     <ClCompile Include="src\core\CollisionComponent.cpp" />
     <ClCompile Include="src\core\CollisionSystem.cpp" />
     <ClCompile Include="src\core\EntitySystem.cpp" />
@@ -42,7 +43,7 @@
     <ClCompile Include="src\core\PickupSystem.cpp" />
     <ClCompile Include="src\core\JetpackComponent.cpp" />
     <ClCompile Include="src\core\PhysicsComponent.cpp" />
-    <ClCompile Include="src\core\PlayerFactory.cpp" />
+    <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\TriggerComponent.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -60,6 +61,8 @@
     <ClInclude Include="src\core\BombData.h" />
     <ClInclude Include="src\core\BombDataLookup.h" />
     <ClInclude Include="src\core\BombFactory.h" />
+    <ClInclude Include="src\core\CharacterData.h" />
+    <ClInclude Include="src\core\CharacterDataLookup.h" />
     <ClInclude Include="src\core\CollisionComponent.h" />
     <ClInclude Include="src\core\CollisionSystem.h" />
     <ClInclude Include="src\core\EntitySystem.h" />
@@ -74,7 +77,7 @@
     <ClInclude Include="src\core\PickupSystem.h" />
     <ClInclude Include="src\core\JetpackComponent.h" />
     <ClInclude Include="src\core\PhysicsComponent.h" />
-    <ClInclude Include="src\core\PlayerFactory.h" />
+    <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\TriggerComponent.h" />
     <ClInclude Include="src\core\World.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
@@ -97,6 +100,7 @@
     <Xml Include="data\bombs.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="data\characters.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56B7232B-1CBB-489A-B34A-EDF3151698B6}</ProjectGuid>

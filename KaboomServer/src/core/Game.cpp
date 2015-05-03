@@ -12,7 +12,7 @@
 #include "../network/ServerEventHandlerLookup.h"
 
 Game::Game(ConfigSettings *config)
-        : playerFactory(entityManager),
+        : characterFactory(entityManager),
           bombFactory(entityManager),
           pickupFactory(entityManager),
           initSystem(this),
@@ -68,7 +68,7 @@ void Game::update(float timeStep, int maxSubSteps) {
 	if (server.acceptNewClient(entityManager.generateId())) {
 
 		//now we create a new player
-        Entity *player = playerFactory.createPlayer(0, -5, 5);
+        Entity *player = characterFactory.createCharacter(0, -5, 5);
         addEntity(player);
 
         //first notify the new client what entityId it should keep track of
@@ -104,8 +104,8 @@ EntityManager &Game::getEntityManager() {
     return entityManager;
 }
 
-const PlayerFactory &Game::getPlayerFactory() const {
-    return playerFactory;
+const CharacterFactory &Game::getCharacterFactory() const {
+    return characterFactory;
 }
 
 const BombFactory &Game::getBombFactory() const {

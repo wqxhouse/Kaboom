@@ -249,7 +249,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
   <ItemGroup>
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
-    <ClCompile Include="src\core\PlayerFactory.cpp" />
+    <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\SceneNodeComponent.cpp" />
     <ClCompile Include="src\input\InputEventHandler.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
@@ -273,7 +273,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
   <ItemGroup>
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\core\PlayerFactory.h" />
+    <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\SceneNodeComponent.h" />
     <ClInclude Include="src\input\InputEventHandler.h" />
     <ClInclude Include="src\input\InputManager.h" />

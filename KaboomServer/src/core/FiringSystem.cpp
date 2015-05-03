@@ -30,7 +30,7 @@ void FiringSystem::update(float timeStep) {
     auto entities = game->getEntityManager().getEntityList();
 
     for (Entity *entity : entities) {
-        if ((entity->getType() & CAT_PLAYER) != CAT_PLAYER) {
+        if ((entity->getType() & CAT_CHARACTER) != CAT_CHARACTER) {
             continue;
         }
 

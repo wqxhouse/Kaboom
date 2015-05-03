@@ -18,7 +18,7 @@
 
 Game::Game(ConfigSettings *config)
         : config(config),
-          playerFactory(entityManager),
+          characterFactory(entityManager),
           bombFactory(entityManager),
           eventHandlerLookup(this),
           client(eventHandlerLookup), 
@@ -162,8 +162,8 @@ EntityManager &Game::getEntityManager() {
     return entityManager;
 }
 
-const PlayerFactory &Game::getPlayerFactory() const {
-    return playerFactory;
+const CharacterFactory &Game::getCharacterFactory() const {
+    return characterFactory;
 }
 
 const BombFactory &Game::getBombFactory() const {

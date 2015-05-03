@@ -15,9 +15,9 @@ void SpawnEventHandler::handle(const Event &e) const {
     const EntityType &type = evt.getType();
     Entity *entity = nullptr;
 
-    if (type & CAT_PLAYER) {
-        entity = game->getPlayerFactory().createPlayer(evt.getEntityId(), evt.getX(), evt.getY(), evt.getZ());
-    } else if (type & CAT_BOMB) {
+    if ((type & CAT_CHARACTER) == CAT_CHARACTER) {
+        entity = game->getCharacterFactory().createCharacter(evt.getEntityId(), evt.getX(), evt.getY(), evt.getZ());
+    } else if ((type & CAT_BOMB) == CAT_BOMB) {
         entity = game->getBombFactory().createBomb(evt.getEntityId(), evt.getX(), evt.getY(), evt.getZ());
     }
 

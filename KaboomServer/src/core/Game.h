@@ -4,13 +4,13 @@
 
 #include "BombFactory.h"
 #include "FiringSystem.h"
+#include "CharacterFactory.h"
 #include "CollisionSystem.h"
 #include "ExplosionSystem.h"
 #include "InitializationSystem.h"
 #include "InputSystem.h"
 #include "PickupFactory.h"
 #include "PickupSystem.h"
-#include "PlayerFactory.h"
 #include "World.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
@@ -28,14 +28,14 @@ public:
     void removeEntity(Entity *entity);
 
     EntityManager &getEntityManager();
-    const PlayerFactory &getPlayerFactory() const;
+    const CharacterFactory &getCharacterFactory() const;
     const BombFactory &getBombFactory() const;
 
     const GameServer &getGameServer() const;
 
 private:
     EntityManager entityManager;
-    PlayerFactory playerFactory;
+    CharacterFactory characterFactory;
     BombFactory bombFactory;
     PickupFactory pickupFactory;
 
