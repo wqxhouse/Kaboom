@@ -1,4 +1,4 @@
-#include "PlayerFactory.h"
+#include "CharacterFactory.h"
 
 #include <btBulletDynamicsCommon.h>
 
@@ -8,18 +8,18 @@
 #include <core/RotationComponent.h>
 
 #include "BombDataLookup.h"
+#include "CharacterDataLookup.h"
 #include "InputComponent.h"
 #include "PhysicsComponent.h"
 #include "JetpackComponent.h"
 
-PlayerFactory::PlayerFactory(EntityManager &entityManager)
+CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
-    Entity *entity = entityManager.createEntity(PLAYER);
-
-    const btScalar mass = 1;
+Entity *CharacterFactory::createCharacter(float x, float y, float z) const {
+    Entity *entity = entityManager.createEntity(DEFAULT_CHARACTER);
+    const CharacterData &characterData = CharacterDataLookup::instance[DEFAULT_CHARACTER];
 
     btTransform worldTrans;
     worldTrans.setIdentity();
@@ -28,18 +28,21 @@ Entity *PlayerFactory::createPlayer(float x, float y, float z) const {
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
     btCollisionShape *collisionShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
 
-    btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, btVector3(0, 0, 0));
+    btRigidBody *rigidBody = new btRigidBody(characterData.mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);
 
-    const BombContainerComponent::InventoryType initInv = {
-        { KABOOM_V2, { 10, Timer(BombDataLookup::instance[KABOOM_V2].cooldown) } }
-    };
+    BombContainerComponent::InventoryType inventory = BombContainerComponent::InventoryType();
+
+    for (auto kv : characterData.inventory) {
+        const BombData &bombData = BombDataLookup::instance[kv.first];
+        inventory[kv.first] = { kv.second, Timer(bombData.cooldown) };
+    }
 
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
-    entity->attachComponent(new BombContainerComponent(initInv));
+    entity->attachComponent(new BombContainerComponent(inventory));
     entity->attachComponent(new JetpackComponent());
 
     return entity;

@@ -31,7 +31,7 @@ void ExplosionSystem::update(float timeStep) {
 
             // TODO: Handle damage
 
-            if (target->getType() & CAT_PLAYER) {
+            if (target->getType() & CAT_CHARACTER) {
                 // TODO: Handle knockback
                 continue;
             }

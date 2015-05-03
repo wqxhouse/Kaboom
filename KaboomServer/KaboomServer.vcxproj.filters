@@ -63,9 +63,6 @@
     <ClCompile Include="src\network\ServerNetwork.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\PlayerFactory.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\GameServer.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
@@ -127,6 +124,12 @@
     <ClCompile Include="src\core\BombDataLookup.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\CharacterDataLookup.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\CharacterFactory.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -137,9 +140,6 @@
     </ClInclude>
     <ClInclude Include="src\core\Game.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\PlayerFactory.h">
-      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\network\GameServer.h">
       <Filter>Header Files\Network</Filter>
@@ -208,9 +208,21 @@
     <ClInclude Include="src\core\BombDataLookup.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\CharacterDataLookup.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\CharacterData.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\CharacterFactory.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data\bombs.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="data\characters.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<characters>
+    <character>
+        <id>65537</id>
+        <name>Default Character</name>
+        <mass>1.0</mass>
+        <inventory>
+            <item>
+                <id>131073</id>
+                <amount>20</amount>
+            </item>
+        </inventory>
+    </character>
+</characters>

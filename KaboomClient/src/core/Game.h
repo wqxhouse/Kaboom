@@ -7,8 +7,8 @@
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
 
+#include "CharacterFactory.h"
 #include "BombFactory.h"
-#include "PlayerFactory.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 
@@ -26,7 +26,7 @@ public:
     void removeAllEntities();
 
     EntityManager &getEntityManager();
-    const PlayerFactory &getPlayerFactory() const;
+    const CharacterFactory &getCharacterFactory() const;
     const BombFactory &getBombFactory() const;
 
     const GameClient &getGameClient() const;
@@ -48,7 +48,7 @@ private:
     InputManager *inputManager;
 
     EntityManager entityManager;
-    PlayerFactory playerFactory;
+    CharacterFactory characterFactory;
 	BombFactory bombFactory;
 
     ClientEventHandlerLookup eventHandlerLookup;

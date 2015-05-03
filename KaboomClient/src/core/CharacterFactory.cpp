@@ -1,4 +1,4 @@
-#include "PlayerFactory.h"
+#include "CharacterFactory.h"
 
 #include <osg/Geode>
 #include <osg/MatrixTransform>
@@ -11,11 +11,11 @@
 
 #include "SceneNodeComponent.h"
 
-PlayerFactory::PlayerFactory(EntityManager &entityManager)
+CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-Entity *PlayerFactory::createPlayer(unsigned int id, float x, float y, float z) const {
+Entity *CharacterFactory::createCharacter(unsigned int id, float x, float y, float z) const {
     Entity *entity = entityManager.createEntity(id);
 
     osg::ref_ptr<osg::Box> box = new osg::Box;
