@@ -16,6 +16,8 @@
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 
+#include <osgAudio/FileStream.h>
+
 Game::Game(ConfigSettings *config)
         : config(config),
           playerFactory(entityManager),
@@ -57,12 +59,22 @@ Game::Game(ConfigSettings *config)
 
     inputManager = new InputManager(client);
     inputManager->loadConfig();
-
+	
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
     Core::addEventHandler(&inputManager->getMouseEventHandler());
 
 	_geometryManager = Core::getWorldRef().getGeometryManager();
 	_materialManager = Core::getWorldRef().getMaterialManager();
+	source = new Source;
+	
+	if (sample.valid()) {
+		source->stop();
+	}
+	sample = new Sample("C:\\Users\\melapier\\Downloads\\ins\\share\\osgAudio\\data\\a.wav");
+	source->setSound(sample.get());
+	source->setGain(1);
+	source->setLooping(false);
+	//source->play();
 }
 
 Game::~Game() {

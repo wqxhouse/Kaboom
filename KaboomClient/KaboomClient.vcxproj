@@ -234,8 +234,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(OSG_LIB_PATH);$(SolutionDir)\3rdParty\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;osg.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;osgViewer.lib;osgManipulator.lib;AntTweakBar64.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OSG_LIB_PATH);$(THIRDPARTY_LIB_PATH);$(SolutionDir)\3rdParty\lib;%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
+      <AdditionalDependencies>osgAudio.lib;ws2_32.lib;osg.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;osgViewer.lib;osgManipulator.lib;AntTweakBar64.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib</AdditionalDependencies>
       <AdditionalOptions>
       </AdditionalOptions>
       <SubSystem>Console</SubSystem>
