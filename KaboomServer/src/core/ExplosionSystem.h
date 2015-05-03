@@ -2,6 +2,7 @@
 
 #include "EntitySystem.h"
 
+// Damages and knockbacks nearby entities.
 class ExplosionSystem : public EntitySystem {
 public:
     ExplosionSystem(Game *game);
