@@ -23,9 +23,6 @@ void CharacterDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
         }
 
         CharacterData data;
-        data.id = 0;
-        data.name = std::string();
-        data.inventory = std::unordered_map<EntityType, int>();
 
         for (auto dataNode : characterNode->children) {
             if (dataNode->name == "id") {
