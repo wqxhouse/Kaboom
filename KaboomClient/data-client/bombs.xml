@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<bombs>
+    <bomb>
+        <id>131073</id>
+        <name>Kaboom 2.0</name>
+        <size>0.1</size>
+    </bomb>
+</bombs>

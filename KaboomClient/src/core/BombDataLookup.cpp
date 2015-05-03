@@ -1,6 +1,6 @@
 #include "BombDataLookup.h"
 
-const BombDataLookup BombDataLookup::instance("data-server/bombs.xml");
+const BombDataLookup BombDataLookup::instance("data-client/bombs.xml");
 
 BombDataLookup::BombDataLookup(const std::string &filename) {
     loadXMLFile(filename);
@@ -31,16 +31,6 @@ void BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
                 loadString(dataNode, data.name);
             } else if (dataNode->name == "size") {
                 loadFloat(dataNode, data.size);
-            } else if (dataNode->name == "mass") {
-                loadFloat(dataNode, data.mass);
-            } else if (dataNode->name == "explosion-radius") {
-                loadFloat(dataNode, data.explosionRadius);
-            } else if (dataNode->name == "cooldown") {
-                loadInt(dataNode, data.cooldown);
-            } else if (dataNode->name == "launch-speed") {
-                loadInt(dataNode, data.launchSpeed);
-            } else if (dataNode->name == "capacity") {
-                loadInt(dataNode, data.capacity);
             }
         }
 

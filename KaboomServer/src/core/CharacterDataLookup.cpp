@@ -1,6 +1,6 @@
 #include "CharacterDataLookup.h"
 
-const CharacterDataLookup CharacterDataLookup::instance("data/characters.xml");
+const CharacterDataLookup CharacterDataLookup::instance("data-server/characters.xml");
 
 CharacterDataLookup::CharacterDataLookup(const std::string &filename) {
     loadXMLFile(filename);
