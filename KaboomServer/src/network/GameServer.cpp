@@ -132,18 +132,16 @@ void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *>
         }
 
         PositionComponent *posComp = entity->getComponent<PositionComponent>();
-
-        if (posComp == nullptr) {
-            return;
-        }
+        RotationComponent *rotComp = entity->getComponent<RotationComponent>();
 
         SpawnEvent spawnEvent(
-            entity->getId(),
-            posComp->getX(),
-            posComp->getY(),
-            posComp->getZ(),
-            entity->getType(),
-            0);
+                entity->getId(),
+                entity->getType(),
+                posComp->getX(),
+                posComp->getY(),
+                posComp->getZ(),
+                rotComp->getYaw(),
+                rotComp->getPitch());
         sendEvent(spawnEvent, currClientId);
     }
 }
@@ -184,12 +182,16 @@ void GameServer::sendRotationEvent(Entity *entity) const {
 
 void GameServer::sendSpawnEvent(Entity *entity) const {
     PositionComponent *posComp = entity->getComponent<PositionComponent>();
+    RotationComponent *rotComp = entity->getComponent<RotationComponent>();
 
-    if (posComp == nullptr) {
-        return;
-    }
-
-    SpawnEvent spawnEvent(entity->getId(), posComp->getX(), posComp->getY(), posComp->getZ(), entity->getType(), 0);
+    SpawnEvent spawnEvent(
+            entity->getId(),
+            entity->getType(),
+            posComp->getX(),
+            posComp->getY(),
+            posComp->getZ(),
+            rotComp->getYaw(),
+            rotComp->getPitch());
     sendEvent(spawnEvent);
 }
 

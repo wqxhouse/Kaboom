@@ -2,18 +2,30 @@
 
 #include <string>
 
-SpawnEvent::SpawnEvent(unsigned int entityId, float x, float y, float z, EntityType type, int feature)
+SpawnEvent::SpawnEvent(
+        unsigned int entityId,
+        EntityType type,
+        float x,
+        float y,
+        float z,
+        float yaw,
+        float pitch)
         : Event(EVENT_SPAWN, sizeof(SpawnEvent)),
           entityId(entityId),
+          type(type),
           x(x),
           y(y),
           z(z),
-          type(type),
-          feature(feature) {
+          yaw(yaw),
+          pitch(pitch) {
 }
 
 unsigned int SpawnEvent::getEntityId() const {
     return entityId;
+}
+
+const EntityType &SpawnEvent::getType() const {
+    return type;
 }
 
 float SpawnEvent::getX() const {
@@ -28,18 +40,18 @@ float SpawnEvent::getZ() const {
     return z;
 }
 
-const EntityType &SpawnEvent::getType() const {
-    return type;
+float SpawnEvent::getYaw() const {
+    return yaw;
 }
 
-int SpawnEvent::getFeature() const {
-    return feature;
+float SpawnEvent::getPitch() const {
+    return pitch;
 }
 
-void SpawnEvent::serialize(char * buf) const {
+void SpawnEvent::serialize(char *buf) const {
     memcpy(buf, this, sizeof(SpawnEvent));
 }
 
-void SpawnEvent::deserialize(char * buf) {
+void SpawnEvent::deserialize(char *buf) {
     memcpy(this, buf, sizeof(SpawnEvent));
 }
