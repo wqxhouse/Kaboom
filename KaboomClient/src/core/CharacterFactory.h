@@ -7,7 +7,14 @@ class CharacterFactory {
 public:
     CharacterFactory(EntityManager &entityManager);
 
-    Entity *createCharacter(unsigned int id, float x, float y, float z) const;
+    Entity *createCharacter(
+            unsigned int id,
+            EntityType characterType,
+            float x,
+            float y,
+            float z,
+            float yaw,
+            float pitch) const;
 
 private:
     EntityManager &entityManager;

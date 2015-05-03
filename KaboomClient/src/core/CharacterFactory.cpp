@@ -15,8 +15,15 @@ CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-Entity *CharacterFactory::createCharacter(unsigned int id, float x, float y, float z) const {
-    Entity *entity = entityManager.createEntity(id);
+Entity *CharacterFactory::createCharacter(
+        unsigned int id,
+        EntityType characterType,
+        float x,
+        float y,
+        float z,
+        float yaw,
+        float pitch) const {
+    Entity *entity = entityManager.createEntity(id, characterType);
 
     osg::ref_ptr<osg::Box> box = new osg::Box;
     osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(box);
@@ -32,7 +39,7 @@ Entity *CharacterFactory::createCharacter(unsigned int id, float x, float y, flo
 
     entity->attachComponent(new SceneNodeComponent(playerNode));
     entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent());
+    entity->attachComponent(new RotationComponent(yaw, pitch));
 
     return entity;
 }
