@@ -9,17 +9,27 @@
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 
+#include "BombDataLookup.h"
 #include "SceneNodeComponent.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-Entity *BombFactory::createBomb(unsigned int id, float x, float y, float z) const {
-    Entity *entity = entityManager.createEntity(id);
+Entity *BombFactory::createBomb(
+        unsigned int id,
+        EntityType bombType,
+        float x,
+        float y,
+        float z,
+        float yaw,
+        float pitch) const {
+    const BombData &bombData = BombDataLookup::instance[bombType];
+
+    Entity *entity = entityManager.createEntity(id, bombType);
 
     osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere();
-	sphere->setRadius(0.1); //make this dynamic
+    sphere->setRadius(bombData.size);
     osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(sphere);
     osg::ref_ptr<osg::Geode> model = new osg::Geode;
     model->addDrawable(drawable);
@@ -33,7 +43,7 @@ Entity *BombFactory::createBomb(unsigned int id, float x, float y, float z) cons
 
 	entity->attachComponent(new SceneNodeComponent(bombNode));
     entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent());
+    entity->attachComponent(new RotationComponent(yaw, pitch));
 
     return entity;
 }

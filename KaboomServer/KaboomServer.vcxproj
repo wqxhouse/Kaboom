@@ -99,10 +99,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="data\bombs.xml">
-      <SubType>Designer</SubType>
-    </Xml>
-    <Xml Include="data\characters.xml" />
+    <Xml Include="data-server\bombs.xml" />
+    <Xml Include="data-server\characters.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56B7232B-1CBB-489A-B34A-EDF3151698B6}</ProjectGuid>
@@ -292,7 +290,7 @@
     </Link>
     <PostBuildEvent>
       <Message>Copy data directory to output directory.</Message>
-      <Command>xcopy "$(ProjectDir)\data" "$(TargetDir)\data" /F /Y /I</Command>
+      <Command>xcopy "$(ProjectDir)\data-server" "$(TargetDir)\data-server" /F /Y /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
