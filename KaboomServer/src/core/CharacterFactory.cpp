@@ -17,9 +17,16 @@ CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-Entity *CharacterFactory::createCharacter(float x, float y, float z) const {
-    Entity *entity = entityManager.createEntity(DEFAULT_CHARACTER);
-    const CharacterData &characterData = CharacterDataLookup::instance[DEFAULT_CHARACTER];
+Entity *CharacterFactory::createCharacter(
+        const EntityType &characterType,
+        float x,
+        float y,
+        float z,
+        float yaw,
+        float pitch) const {
+    const CharacterData &characterData = CharacterDataLookup::instance[characterType];
+
+    Entity *entity = entityManager.createEntity(characterType);
 
     btTransform worldTrans;
     worldTrans.setIdentity();
@@ -40,7 +47,7 @@ Entity *CharacterFactory::createCharacter(float x, float y, float z) const {
 
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent());
+    entity->attachComponent(new RotationComponent(yaw, pitch));
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new BombContainerComponent(inventory));
     entity->attachComponent(new JetpackComponent());
