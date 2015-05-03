@@ -2,8 +2,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <core/FireMode.h>
 #include <core/EquipmentComponent.h>
+#include <core/FireMode.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 #include <util/Timer.h>
@@ -13,9 +13,6 @@
 #include "Game.h"
 #include "../math/Conversion.h"
 
-//repetitive stuff, should move this to global.h
-#define PI 3.14159265359
-#define deg2rad(d) (PI / 180.0 * d)
 #define VELOCITYCAP 2
 #define VELOCTIYACCELERATION .1
 
@@ -24,11 +21,6 @@ FiringSystem::FiringSystem(Game *game)
 }
 
 void FiringSystem::update(float timeStep) {
-    //find player entity,
-    //find input entity,
-    //find bombContainer component
-    //checks for firing, add cooldown
-
     auto entities = game->getEntityManager().getEntityList();
 
     for (Entity *entity : entities) {
@@ -87,7 +79,7 @@ void FiringSystem::update(float timeStep) {
                 game->getGameServer().sendSpawnEvent(bombEntity);
             }
         } else if (inputComp->getFireMode() == FireMode::RIGHT_CLICK) {
-            //todo
+            // TODO
         }
     }
 }
