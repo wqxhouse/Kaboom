@@ -1,6 +1,7 @@
 #pragma once
 
 class Entity;
+enum EntityType;
 class EntityManager;
 
 class BombFactory {
