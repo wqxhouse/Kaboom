@@ -47,6 +47,8 @@ void BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 				loadInt(dataNode, data.maxDamage);
 			} else if (dataNode->name == "minDamage") {
 				loadInt(dataNode, data.minDamage);
+			} else if (dataNode->name == "knockback-duration") {
+				loadInt(dataNode, data.knockbackDuration);
 			}
         }
 

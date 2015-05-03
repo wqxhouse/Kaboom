@@ -10,5 +10,6 @@
         <launch-speed>5</launch-speed>
         <capacity>20</capacity>
         <knockback-ratio>5.0</knockback-ratio>
+        <knockback-duration>500</knockback-duration>
     </bomb>
 </bombs>

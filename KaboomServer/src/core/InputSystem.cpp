@@ -103,11 +103,7 @@ void InputSystem::update(float timeStep)
 		worldVelocity.setZ(velocity.getZ());
 
 		if (!playerStatusCom->checkIsKnockBacked()) { //don't move if we are knockbacked
-			printf("Playser is moving on input \n");
 			rigidBody->setLinearVelocity(worldVelocity);
-		}
-		else {
-			printf("Player is knocked back \n");
 		}
 		
 		/*
