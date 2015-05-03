@@ -1,8 +1,12 @@
 #include "ExplosionSystem.h"
 
+#include <core/PlayerStatusComponent.h>
+
+#include "BombDataLookup.h"
 #include "ExplosionComponent.h"
 #include "Game.h"
 #include "TriggerComponent.h"
+#include "../math/Conversion.h"
 
 ExplosionSystem::ExplosionSystem(Game *game)
         : EntitySystem(game) {
@@ -11,33 +15,51 @@ ExplosionSystem::ExplosionSystem(Game *game)
 void ExplosionSystem::update(float timeStep) {
     auto entities = game->getEntityManager().getEntityList();
 
-    for (Entity *entity : entities) {
-        if (!entity->hasComponent<ExplosionComponent>()) {
+    for (Entity *bombEntity : entities) {
+		if (!bombEntity->hasComponent<ExplosionComponent>() || !bombEntity->hasComponent<TriggerComponent>()) {
             continue;
         }
 
-        btGhostObject *ghostObject = entity->getComponent<TriggerComponent>()->getGhostObject();
 
-        const auto pairs = ghostObject->getOverlappingPairs();
-        const int numPairs = ghostObject->getNumOverlappingObjects();
+		TriggerComponent* bombTriggerComp = bombEntity->getComponent<TriggerComponent>();
 
-        for (int i = 0; i < numPairs; i++) {
-            // Target is the entity within the range of explosion
-            Entity *target = static_cast<Entity *>(pairs[i]->getUserPointer());
 
-            if (target == nullptr) {
-                continue;
-            }
+		for (auto collidedEntity : bombTriggerComp->getTriggerEntities()) {
 
-            // TODO: Handle damage
+			if (collidedEntity->getType() & CAT_CHARACTER) {
+				if (collidedEntity->hasComponent<PlayerStatusComponent>() && collidedEntity->hasComponent<PhysicsComponent>()) {
 
-            if (target->getType() & CAT_CHARACTER) {
-                // TODO: Handle knockback
-                continue;
-            }
-        }
+					PlayerStatusComponent* playerStatusComp = collidedEntity->getComponent<PlayerStatusComponent>();
+					PhysicsComponent* playerPhysicComp = collidedEntity->getComponent<PhysicsComponent>();
+					
+					//begin timer on knockback, during this time the player cannot move
 
-        game->getGameServer().sendExplosionEvent(entity);
-        game->removeEntity(entity);
+					btVector3 explosionPos = bombTriggerComp->getGhostObject()->getWorldTransform().getOrigin();
+					btVector3 playerPos = playerPhysicComp->getRigidBody()->getCenterOfMassPosition();
+
+					btVector3 dirVec = btVector3(playerPos - explosionPos);
+					dirVec.normalize();
+
+					btScalar distFromExplosion = playerPos.distance(explosionPos);
+
+
+					const BombData &bombData = BombDataLookup::instance[bombEntity->getType()];
+
+					btVector3 impulseVec = (bombData.knockbackRatio / distFromExplosion) * dirVec; //inverse function
+
+					playerPhysicComp->getRigidBody()->applyCentralImpulse(impulseVec);
+
+					playerStatusComp->getKnockBackTimer().setDuration(500); 
+					playerStatusComp->getKnockBackTimer().start();
+					playerStatusComp->setIsKnockBacked(true);
+
+					//TODO apply damage base on dist
+
+				}
+			}
+		}
+
+		game->getGameServer().sendExplosionEvent(bombEntity);
+		game->removeEntity(bombEntity);
     }
 }

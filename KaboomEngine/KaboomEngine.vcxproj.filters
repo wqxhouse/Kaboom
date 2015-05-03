@@ -118,6 +118,9 @@
     <ClInclude Include="src\util\Timer.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\PlayerStatusComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
@@ -171,6 +174,9 @@
     </ClCompile>
     <ClCompile Include="src\util\Timer.cpp">
       <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\PlayerStatusComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

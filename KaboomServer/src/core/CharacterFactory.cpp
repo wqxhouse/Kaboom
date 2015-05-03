@@ -6,6 +6,7 @@
 #include <core/EntityManager.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
+#include <core/PlayerStatusComponent.h>
 
 #include "BombDataLookup.h"
 #include "CharacterDataLookup.h"
@@ -44,6 +45,7 @@ Entity *CharacterFactory::createCharacter(float x, float y, float z) const {
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new BombContainerComponent(inventory));
     entity->attachComponent(new JetpackComponent());
+	entity->attachComponent(new PlayerStatusComponent());
 
     return entity;
 }

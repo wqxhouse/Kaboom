@@ -17,3 +17,15 @@ btVector3 getViewDirection(float x, float y, float z, float yaw, float pitch) {
 
     return dir;
 }
+
+
+btVector3 getImpulseVector(btVector3 pointA, btVector3 pointB, btScalar knockBackRatio) {
+	btVector3 dirVec = btVector3(pointB - pointA);
+	dirVec.normalize();
+
+	btScalar distFromExplosion = pointB.distance(pointA);
+
+	btVector3 impulseVec = (knockBackRatio / distFromExplosion) * dirVec;
+	return impulseVec;
+
+}
