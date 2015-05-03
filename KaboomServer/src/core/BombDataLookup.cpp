@@ -23,7 +23,6 @@ void BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
         }
 
         BombData data;
-        memset(&data, 0, sizeof(BombData));
 
         for (auto dataNode : bombNode->children) {
             if (dataNode->name == "id") {
