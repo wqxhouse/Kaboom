@@ -231,10 +231,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="data\bombs.xml">
+    <Xml Include="data-server\bombs.xml">
       <Filter>Resource Files</Filter>
     </Xml>
-    <Xml Include="data\characters.xml">
+    <Xml Include="data-server\characters.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>
