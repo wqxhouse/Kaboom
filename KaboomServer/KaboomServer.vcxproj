@@ -47,6 +47,7 @@
     <ClCompile Include="src\core\TriggerComponent.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\Conversion.cpp" />
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
     <ClCompile Include="src\network\GameServer.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\TriggerComponent.h" />
     <ClInclude Include="src\core\World.h" />
+    <ClInclude Include="src\math\Conversion.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
     <ClInclude Include="src\network\GameServer.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
