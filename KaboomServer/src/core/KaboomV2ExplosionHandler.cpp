@@ -39,7 +39,7 @@ void KaboomV2ExplosionHandler::handle(
 
         const BombData &bombData = BombDataLookup::instance[entity->getType()];
 
-        btVector3 impulseVec = (bombData.knockbackRatio / distFromExplosion) * dirVec; //inverse function
+        btVector3 impulseVec = (bombData.knockbackAmount / distFromExplosion) * dirVec; //inverse function
 
         playerPhysicsComp->getRigidBody()->applyCentralImpulse(impulseVec);
 
