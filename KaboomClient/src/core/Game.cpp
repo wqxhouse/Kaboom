@@ -74,7 +74,7 @@ Game::Game(ConfigSettings *config)
 	if (sample.valid()) {
 		source->stop();
 	}
-	sample = new Sample("C:\\Users\\melapier\\Downloads\\Kaboom\\Media\\SoundEffctsa.wav");
+	sample = new Sample("C:\\Users\\melapier\\Downloads\\Kaboom\\Media\\SoundEffcts\\a.wav");
 	source->setSound(sample.get());
 	source->setGain(1);
 	source->setLooping(false);
