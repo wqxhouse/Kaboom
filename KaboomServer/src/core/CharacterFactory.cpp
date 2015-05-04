@@ -4,6 +4,7 @@
 
 #include <core/BombContainerComponent.h>
 #include <core/EntityManager.h>
+#include <core/EquipmentComponent.h>
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 #include <core/PlayerStatusComponent.h>
@@ -55,6 +56,7 @@ Entity *CharacterFactory::createCharacter(
     entity->attachComponent(new JetpackComponent());
 	entity->attachComponent(new PlayerStatusComponent());
 	entity->attachComponent(new HealthComponent(characterData.healthStartAmount, characterData.healthCap));
+    entity->attachComponent(new EquipmentComponent(KABOOM_V2));
 
     return entity;
 }

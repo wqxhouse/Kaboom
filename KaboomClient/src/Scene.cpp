@@ -1,5 +1,6 @@
 #include "stdafx.h" 
 
+#include <util/ConfigSettings.h>
 #include "Scene.h"
 #include "World.h"
 #include "Core.h"
@@ -34,6 +35,24 @@ void setupScene()
 	//l->addDirectionalLight("Sun", osg::Vec3(-1, -1, -1), osg::Vec3(0.7, 0.7, 0.7), false);
 
 	Core::setEnvironmentMapVerticalCross("Cubemaps/haha.png");
+
+/*
+	ConfigSettings* config = ConfigSettings::config;
+	std::string str_mediaPath = "";
+	std::string str_material_xml = "";
+	std::string str_world_xml = "";
+
+	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+	config->getValue(ConfigSettings::str_material_xml, str_material_xml);
+	config->getValue(ConfigSettings::str_world_xml, str_world_xml);
+
+	str_world_xml = str_mediaPath + str_world_xml;
+
+	Core::loadMaterialFile(str_material_xml);
+	Core::loadWorldFile(str_world_xml);
+*/
+
+
 
 	//Core::setEnvironmentMap(
 	//	"Cubemap_snow/posx.jpg", "Cubemap_snow/negx.jpg",

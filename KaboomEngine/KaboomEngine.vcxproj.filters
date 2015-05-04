@@ -124,6 +124,9 @@
     <ClInclude Include="src\core\HealthComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\EquipmentComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
@@ -181,7 +184,11 @@
     <ClCompile Include="src\core\PlayerStatusComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="src\core\HealthComponent.cpp">
+=======
+    <ClCompile Include="src\core\EquipmentComponent.cpp">
+>>>>>>> origin/develop
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,7 @@
 #include "BombDataLookup.h"
 
+#include "KaboomV2CollisionHandler.h"
+
 const BombDataLookup BombDataLookup::instance("data-server/bombs.xml");
 
 BombDataLookup::BombDataLookup(const std::string &filename) {
@@ -17,6 +19,10 @@ void BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
         return;
     }
 
+    std::unordered_map<EntityType, CollisionHandler *> collisionHandlers = {
+        { KABOOM_V2, new KaboomV2CollisionHandler() }
+    };
+
     for (auto bombNode : xmlRoot->children) {
         if (bombNode->name != "bomb") {
             continue;
@@ -26,7 +32,11 @@ void BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 
         for (auto dataNode : bombNode->children) {
             if (dataNode->name == "id") {
-                loadUint(dataNode, data.id);
+                unsigned int id;
+                loadUint(dataNode, id);
+
+                data.type = static_cast<EntityType>(id);
+                data.collisionHandler = collisionHandlers[data.type];
             } else if (dataNode->name == "name") {
                 loadString(dataNode, data.name);
             } else if (dataNode->name == "size") {
@@ -52,7 +62,7 @@ void BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 			} 
         }
 
-        bombs[static_cast<EntityType>(data.id)] = data;
+        bombs[data.type] = data;
     }
 }
 
