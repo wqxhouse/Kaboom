@@ -184,11 +184,10 @@
     <ClCompile Include="src\core\PlayerStatusComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="src\core\HealthComponent.cpp">
-=======
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
     <ClCompile Include="src\core\EquipmentComponent.cpp">
->>>>>>> origin/develop
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>
