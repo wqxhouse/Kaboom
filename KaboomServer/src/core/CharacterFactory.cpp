@@ -7,6 +7,7 @@
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 #include <core/PlayerStatusComponent.h>
+#include <core/HealthComponent.h>
 
 #include "BombDataLookup.h"
 #include "CharacterDataLookup.h"
@@ -34,7 +35,7 @@ Entity *CharacterFactory::createCharacter(
     worldTrans.setOrigin(btVector3(x, y, z));
 
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
-    btCollisionShape *collisionShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
+    btCollisionShape *collisionShape = new btCapsuleShape(btScalar(.25f), btScalar(.5f));
 
     btRigidBody *rigidBody = new btRigidBody(characterData.mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);
@@ -53,6 +54,7 @@ Entity *CharacterFactory::createCharacter(
     entity->attachComponent(new BombContainerComponent(inventory));
     entity->attachComponent(new JetpackComponent());
 	entity->attachComponent(new PlayerStatusComponent());
+	entity->attachComponent(new HealthComponent(characterData.healthStartAmount, characterData.healthCap));
 
     return entity;
 }
