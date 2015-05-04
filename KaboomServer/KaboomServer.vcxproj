@@ -39,6 +39,7 @@
     <ClCompile Include="src\core\InitializationSystem.cpp" />
     <ClCompile Include="src\core\InputComponent.cpp" />
     <ClCompile Include="src\core\InputSystem.cpp" />
+    <ClCompile Include="src\core\KaboomV2CollisionController.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
     <ClCompile Include="src\core\PickupSystem.cpp" />
     <ClCompile Include="src\core\JetpackComponent.cpp" />
@@ -65,7 +66,9 @@
     <ClInclude Include="src\core\CharacterData.h" />
     <ClInclude Include="src\core\CharacterDataLookup.h" />
     <ClInclude Include="src\core\CollisionComponent.h" />
+    <ClInclude Include="src\core\CollisionController.h" />
     <ClInclude Include="src\core\CollisionSystem.h" />
+    <ClInclude Include="src\core\DefaultCollisionController.h" />
     <ClInclude Include="src\core\EntitySystem.h" />
     <ClInclude Include="src\core\ExplosionComponent.h" />
     <ClInclude Include="src\core\ExplosionSystem.h" />
@@ -74,6 +77,7 @@
     <ClInclude Include="src\core\InitializationSystem.h" />
     <ClInclude Include="src\core\InputComponent.h" />
     <ClInclude Include="src\core\InputSystem.h" />
+    <ClInclude Include="src\core\KaboomV2CollisionController.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
     <ClInclude Include="src\core\PickupSystem.h" />
     <ClInclude Include="src\core\JetpackComponent.h" />

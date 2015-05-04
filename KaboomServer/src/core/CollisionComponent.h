@@ -4,10 +4,17 @@
 
 #include <core/Component.h>
 
+#include "CollisionController.h"
+#include "DefaultCollisionController.h"
+
 class Entity;
 
 class CollisionComponent : public Component {
 public:
+    CollisionComponent(CollisionController *controller);
+
+    CollisionController *getController() const;
+
     void addContactEntity(Entity *entity);
     void clearContactEntities();
 
@@ -17,6 +24,8 @@ public:
     const std::unordered_set<Entity *> &getContactEntities() const;
 
 private:
+    CollisionController *controller;
+
     bool collided;
     std::unordered_set<Entity *> contactEntities;
 };
