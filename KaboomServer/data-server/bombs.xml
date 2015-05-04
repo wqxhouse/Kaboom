@@ -9,7 +9,7 @@
         <cooldown>500</cooldown>
         <launch-speed>5</launch-speed>
         <capacity>20</capacity>
-        <knockback-ratio>5.0</knockback-ratio>
+        <knockback-amount>5.0</knockback-amount>
         <knockback-duration>500</knockback-duration>
     </bomb>
 </bombs>
