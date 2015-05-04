@@ -7,11 +7,7 @@ class Game;
 
 class CollisionController {
 public:
-    CollisionController(Entity *entity) : entity(entity) {}
     virtual ~CollisionController() {}
 
-    virtual void onCollision(Game *game, const std::unordered_set<Entity *> &collidedEntities) = 0;
-
-protected:
-    Entity *entity;
+    virtual void onCollision(Game *game, Entity *entity, const std::unordered_set<Entity *> &collidedEntities) = 0;
 };

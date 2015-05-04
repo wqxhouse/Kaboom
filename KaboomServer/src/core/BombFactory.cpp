@@ -55,7 +55,7 @@ Entity *BombFactory::createBomb(
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new TriggerComponent(ghostObject));
-    entity->attachComponent(new CollisionComponent(new KaboomV2CollisionController(entity))); // TODO: make this generic
+    entity->attachComponent(new CollisionComponent(data.collisionController));
 
     return entity;
 }

@@ -19,7 +19,7 @@ void CollisionSystem::update(float timeStep) {
         }
 
         if (colComp->isCollided()) {
-            colComp->getController()->onCollision(game, colComp->getContactEntities());
+            colComp->getController()->onCollision(game, entity, colComp->getContactEntities());
         }
     }
 }
