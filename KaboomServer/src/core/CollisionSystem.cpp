@@ -1,7 +1,7 @@
 #include "CollisionSystem.h"
 
 #include "CollisionComponent.h"
-#include "CollisionController.h"
+#include "CollisionHandler.h"
 #include "Game.h"
 
 CollisionSystem::CollisionSystem(Game *game)
@@ -19,7 +19,7 @@ void CollisionSystem::update(float timeStep) {
         }
 
         if (colComp->isCollided()) {
-            colComp->getController()->onCollision(game, entity, colComp->getContactEntities());
+            colComp->getHandler()->handle(game, entity, colComp->getContactEntities());
         }
     }
 }

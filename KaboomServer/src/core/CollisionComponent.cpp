@@ -1,11 +1,11 @@
 #include "CollisionComponent.h"
 
-CollisionComponent::CollisionComponent(CollisionController *controller)
-        : controller(controller) {
+CollisionComponent::CollisionComponent(CollisionHandler *handler)
+        : handler(handler) {
 }
 
-CollisionController *CollisionComponent::getController() const {
-    return controller;
+CollisionHandler *CollisionComponent::getHandler() const {
+    return handler;
 }
 
 void CollisionComponent::addContactEntity(Entity *entity) {

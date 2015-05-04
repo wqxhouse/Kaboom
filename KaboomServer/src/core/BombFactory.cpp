@@ -15,7 +15,7 @@
 #include "BombDataLookup.h"
 #include "CollisionComponent.h"
 #include "ExplosionComponent.h"
-#include "KaboomV2CollisionController.h"
+#include "KaboomV2CollisionHandler.h"
 #include "PhysicsComponent.h"
 #include "TriggerComponent.h"
 
@@ -55,7 +55,7 @@ Entity *BombFactory::createBomb(
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new TriggerComponent(ghostObject));
-    entity->attachComponent(new CollisionComponent(data.collisionController));
+    entity->attachComponent(new CollisionComponent(data.collisionHandler));
 
     return entity;
 }
