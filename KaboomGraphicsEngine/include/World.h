@@ -20,8 +20,6 @@ public:
 	World();
 	~World();
 
-	void createPlainMaterialFromXML(osgDB::XmlNode* xmlNode);
-	void createTexturedMaterialFromXML(osgDB::XmlNode* xmlNode);
 	void createModelFromXML(osgDB::XmlNode* xmlNode);
 	void createLightFromXML(osgDB::XmlNode* xmlNode);
 

@@ -23,6 +23,7 @@ std::string ConfigSettings::str_mediaFilePath = "MediaPath";
 std::string ConfigSettings::str_screenPosX = "ScreenPosX";
 std::string ConfigSettings::str_screenPosY = "ScreenPosY";
 
+std::string ConfigSettings::str_material_xml = "MaterialXML";
 std::string ConfigSettings::str_world_xml = "WorldXML";
 std::string ConfigSettings::str_export_xml = "ExportXML";
 

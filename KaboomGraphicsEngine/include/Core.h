@@ -20,6 +20,7 @@ public:
 
 	static osg::Vec2 getScreenSize();
 
+	static void loadMaterialFile(const std::string &filePath);
 	static void loadWorldFile(const std::string &worldFilePath);
 	static World &getWorldRef();
 
