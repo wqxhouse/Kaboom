@@ -10,5 +10,7 @@
                 <amount>20</amount>
             </item>
         </inventory>
+        <health-start>100</health-start>
+        <health-cap>100</health-cap>
     </character>
 </characters>

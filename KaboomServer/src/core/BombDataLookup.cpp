@@ -41,15 +41,15 @@ void BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
                 loadInt(dataNode, data.launchSpeed);
             } else if (dataNode->name == "capacity") {
                 loadInt(dataNode, data.capacity);
-			} else if (dataNode->name == "knockback-ratio") {
-				loadFloat(dataNode, data.knockbackRatio);
+			} else if (dataNode->name == "knockback-amount") {
+				loadFloat(dataNode, data.knockbackAmount);
+			} else if (dataNode->name == "knockback-duration") {
+				loadInt(dataNode, data.knockbackDuration);
 			} else if (dataNode->name == "maxDamage") {
 				loadInt(dataNode, data.maxDamage);
 			} else if (dataNode->name == "minDamage") {
 				loadInt(dataNode, data.minDamage);
-			} else if (dataNode->name == "knockback-duration") {
-				loadInt(dataNode, data.knockbackDuration);
-			}
+			} 
         }
 
         bombs[static_cast<EntityType>(data.id)] = data;

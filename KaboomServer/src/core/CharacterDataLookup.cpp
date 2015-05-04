@@ -46,7 +46,11 @@ void CharacterDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 
                     data.inventory[static_cast<EntityType>(itemId)] = amount;
                 }
-            }
+			} else if (dataNode->name == "health-start") {
+				loadInt(dataNode, data.healthStartAmount);
+			} else if (dataNode->name == "health-cap") {
+				loadInt(dataNode, data.healthCap);
+			}
         }
 
         characters[static_cast<EntityType>(data.id)] = data;

@@ -8,4 +8,6 @@ struct CharacterData {
     std::string name;
     float mass;
     std::unordered_map<EntityType, int> inventory;
+	int healthStartAmount;
+	int healthCap;
 };
