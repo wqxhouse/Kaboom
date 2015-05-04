@@ -1,10 +1,7 @@
 #include "CollisionSystem.h"
 
-#include <btBulletDynamicsCommon.h>
-
 #include "CollisionComponent.h"
 #include "CollisionController.h"
-#include "ExplosionComponent.h"
 #include "Game.h"
 
 CollisionSystem::CollisionSystem(Game *game)
