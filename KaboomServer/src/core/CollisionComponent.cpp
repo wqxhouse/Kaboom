@@ -1,5 +1,13 @@
 #include "CollisionComponent.h"
 
+CollisionComponent::CollisionComponent(CollisionController *controller)
+        : controller(controller) {
+}
+
+CollisionController *CollisionComponent::getController() const {
+    return controller;
+}
+
 void CollisionComponent::addContactEntity(Entity *entity) {
     contactEntities.insert(entity);
 }
