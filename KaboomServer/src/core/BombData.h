@@ -2,7 +2,7 @@
 
 #include <string>
 
-class CollisionController;
+class CollisionHandler;
 enum EntityType;
 
 struct BombData {
@@ -19,5 +19,5 @@ struct BombData {
 	int maxDamage;
 	int minDamage;
 
-    CollisionController *collisionController;
+    CollisionHandler *collisionHandler;
 };

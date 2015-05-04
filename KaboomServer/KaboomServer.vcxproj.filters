@@ -55,11 +55,11 @@
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{2884c07e-166f-4543-9b7e-bd5410c849ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Collision Controllers">
-      <UniqueIdentifier>{67d047d1-a851-4006-8338-4db3a892a220}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Collision Controllers">
+    <Filter Include="Source Files\Collision Handlers">
       <UniqueIdentifier>{03a7f687-4af2-42ed-8d90-874c8a6de109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Collision Handlers">
+      <UniqueIdentifier>{67d047d1-a851-4006-8338-4db3a892a220}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -145,8 +145,8 @@
     <ClCompile Include="src\math\Conversion.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\KaboomV2CollisionController.cpp">
-      <Filter>Source Files\Collision Controllers</Filter>
+    <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp">
+      <Filter>Source Files\Collision Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,14 +238,14 @@
     <ClInclude Include="src\math\Conversion.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\KaboomV2CollisionController.h">
-      <Filter>Header Files\Collision Controllers</Filter>
+    <ClInclude Include="src\core\CollisionHandler.h">
+      <Filter>Header Files\Collision Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\DefaultCollisionController.h">
-      <Filter>Header Files\Collision Controllers</Filter>
+    <ClInclude Include="src\core\DefaultCollisionHandler.h">
+      <Filter>Header Files\Collision Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\CollisionController.h">
-      <Filter>Header Files\Collision Controllers</Filter>
+    <ClInclude Include="src\core\KaboomV2CollisionHandler.h">
+      <Filter>Header Files\Collision Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
