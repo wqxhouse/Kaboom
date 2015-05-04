@@ -25,8 +25,8 @@ Entity *CharacterFactory::createCharacter(
         float pitch) const {
     Entity *entity = entityManager.createEntity(id, characterType);
 
-    osg::ref_ptr<osg::Box> box = new osg::Box;
-    osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(box);
+	osg::ref_ptr<osg::Capsule> capsule = new osg::Capsule(osg::Vec3(), .25f, .5f);
+	osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(capsule);
     osg::ref_ptr<osg::Geode> model = new osg::Geode;
     model->addDrawable(drawable);
 
