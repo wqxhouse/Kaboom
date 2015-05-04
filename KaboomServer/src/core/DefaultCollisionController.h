@@ -4,7 +4,5 @@
 
 class DefaultCollisionController : public CollisionController {
 public:
-    DefaultCollisionController(Entity *entity) : CollisionController(entity) {}
-
-    virtual void onCollision(Game *game, const std::unordered_set<Entity *> &collidedEntities) {}
+    virtual void onCollision(Game *game, Entity *entity, const std::unordered_set<Entity *> &collidedEntities) {}
 };

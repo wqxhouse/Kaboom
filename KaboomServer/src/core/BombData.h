@@ -2,8 +2,11 @@
 
 #include <string>
 
+class CollisionController;
+enum EntityType;
+
 struct BombData {
-    unsigned int id;
+    EntityType type;
     std::string name;
     float size;
     float mass;
@@ -15,4 +18,6 @@ struct BombData {
 	int knockbackDuration;
 	int maxDamage;
 	int minDamage;
+
+    CollisionController *collisionController;
 };

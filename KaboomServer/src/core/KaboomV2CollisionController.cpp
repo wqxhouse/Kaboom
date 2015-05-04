@@ -4,12 +4,9 @@
 
 #include "ExplosionComponent.h"
 
-KaboomV2CollisionController::KaboomV2CollisionController(Entity *entity)
-        : CollisionController(entity) {
-}
-
 void KaboomV2CollisionController::onCollision(
         Game *game,
+        Entity *entity,
         const std::unordered_set<Entity *> &collidedEntities) {
     entity->attachComponent(new ExplosionComponent());
 }
