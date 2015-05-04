@@ -55,6 +55,18 @@
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{2884c07e-166f-4543-9b7e-bd5410c849ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Collision Handlers">
+      <UniqueIdentifier>{03a7f687-4af2-42ed-8d90-874c8a6de109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Collision Handlers">
+      <UniqueIdentifier>{67d047d1-a851-4006-8338-4db3a892a220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Explosion Handlers">
+      <UniqueIdentifier>{d3538abd-d30e-41a9-87de-b9b84b2a7380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ExplosionHandlers">
+      <UniqueIdentifier>{f9f54351-5956-45bd-b1d0-e399de36705e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -138,6 +150,15 @@
     </ClCompile>
     <ClCompile Include="src\math\Conversion.cpp">
       <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp">
+      <Filter>Source Files\Collision Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\KaboomV2ExplosionHandler.cpp">
+      <Filter>Source Files\ExplosionHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\ExplosionComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +249,24 @@
     </ClInclude>
     <ClInclude Include="src\math\Conversion.h">
       <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\CollisionHandler.h">
+      <Filter>Header Files\Collision Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\DefaultCollisionHandler.h">
+      <Filter>Header Files\Collision Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\KaboomV2CollisionHandler.h">
+      <Filter>Header Files\Collision Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\ExplosionHandler.h">
+      <Filter>Header Files\Explosion Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\DefaultExplosionHandler.h">
+      <Filter>Header Files\Explosion Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\KaboomV2ExplosionHandler.h">
+      <Filter>Header Files\Explosion Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

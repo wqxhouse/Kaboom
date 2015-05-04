@@ -27,7 +27,6 @@ void PlayerInputEventHandler::handle(const Event &e) const {
 
 	//TODO hard code for now, used for testing
 	inputCom->setFireMode(FireMode::LEFT_CLICK);
-	inputCom->setSelectedBombType(KABOOM_V2);
 
     RotationComponent *rotCom = player->getComponent<RotationComponent>();
     rotCom->setYaw(evt.getYaw());

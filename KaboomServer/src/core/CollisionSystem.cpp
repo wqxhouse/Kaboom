@@ -1,9 +1,7 @@
 #include "CollisionSystem.h"
 
-#include <btBulletDynamicsCommon.h>
-
 #include "CollisionComponent.h"
-#include "ExplosionComponent.h"
+#include "CollisionHandler.h"
 #include "Game.h"
 
 CollisionSystem::CollisionSystem(Game *game)
@@ -20,12 +18,8 @@ void CollisionSystem::update(float timeStep) {
             continue;
         }
 
-        auto contactEntities = colComp->getContactEntities();
-
-        if (entity->getType() & CAT_BOMB) {
-            if (colComp->isCollided()) {
-                entity->attachComponent(new ExplosionComponent());
-            }
+        if (colComp->isCollided()) {
+            colComp->getHandler()->handle(game, entity, colComp->getContactEntities());
         }
     }
 }
