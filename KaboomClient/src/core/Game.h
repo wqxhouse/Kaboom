@@ -20,6 +20,7 @@ using namespace osgAudio;
 
 class InputManager;
 enum SOUNDS{
+	BASIC,
 	KABOOM_FIRE,
 	KABOOM_EXPLODE
 
