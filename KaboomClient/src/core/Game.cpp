@@ -1,21 +1,21 @@
 #include "Game.h"
 
 #include <iostream>
+
 #include <osg/Group>
+#include <osgAudio/FileStream.h>
 
 #include <Core.h>
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
-
 #include <components/PositionComponent.h>
 #include <core/Entity.h>
 
-#include "SceneNodeComponent.h"
 #include "../Scene.h"
+#include "../components/SceneNodeComponent.h"
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
-#include <osgAudio/FileStream.h>
 
 Game::Game(ConfigSettings *config)
         : config(config),

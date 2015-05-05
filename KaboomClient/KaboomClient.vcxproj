@@ -249,11 +249,11 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\SceneNodeComponent.cpp" />
     <ClCompile Include="src\core\BombDataLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
-    <ClCompile Include="src\core\SceneNodeComponent.cpp" />
     <ClCompile Include="src\input\InputEventHandler.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
@@ -274,12 +274,12 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\SceneNodeComponent.h" />
     <ClInclude Include="src\core\BombData.h" />
     <ClInclude Include="src\core\BombDataLookup.h" />
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
-    <ClInclude Include="src\core\SceneNodeComponent.h" />
     <ClInclude Include="src\input\InputEventHandler.h" />
     <ClInclude Include="src\input\InputManager.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />

@@ -9,7 +9,7 @@
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
 
-#include "SceneNodeComponent.h"
+#include "../components/SceneNodeComponent.h"
 
 CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
