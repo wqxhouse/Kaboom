@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/Component.h>
+#include <components/Component.h>
 #include <core/FireMode.h>
 
 class InputComponent : public Component {

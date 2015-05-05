@@ -1,10 +1,11 @@
 #include "PositionEventHandler.h"
 
 #include <osg/MatrixTransform>
+
 #include <Core.h>
 #include <GeometryObject.h>
+#include <components/PositionComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
 #include <network/PositionEvent.h>
 
 #include "../core/Game.h"

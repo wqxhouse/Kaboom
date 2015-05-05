@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-#include "Component.h"
+#include "../components/Component.h"
 
 Entity::Entity(unsigned int id, const EntityType &type)
         : id(id),

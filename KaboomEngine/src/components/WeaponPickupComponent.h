@@ -3,7 +3,7 @@
 #include <ostream>
 
 #include "Component.h"
-#include "EntityType.h"
+#include "../core/EntityType.h"
 
 class WeaponPickupComponent : public Component {
 public:

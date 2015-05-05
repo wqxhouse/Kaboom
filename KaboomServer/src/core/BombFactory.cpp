@@ -7,9 +7,9 @@
 
 #include <osgDB/XmlParser>
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/EntityManager.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 #include <util/XMLLoader.h>
 
 #include "BombDataLookup.h"

@@ -1,8 +1,8 @@
 #include "InitializationSystem.h"
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/EntityManager.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 
 #include "Game.h"
 #include "../components/CollisionComponent.h"

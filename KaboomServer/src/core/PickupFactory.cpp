@@ -2,11 +2,11 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
+#include <components/WeaponPickupComponent.h>
 #include <core/Entity.h>
 #include <core/EntityManager.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
-#include <core/WeaponPickupComponent.h>
 
 #include "../components/TriggerComponent.h"
 

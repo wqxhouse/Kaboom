@@ -1,8 +1,8 @@
 #include "PlayerInputEventHandler.h"
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 #include <network/PlayerInputEvent.h>
 
 #include "../core/Game.h"

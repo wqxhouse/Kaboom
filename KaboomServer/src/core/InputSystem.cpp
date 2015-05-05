@@ -2,10 +2,10 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
+#include <components/PlayerStatusComponent.h>
 #include <core/EntityManager.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
-#include <core/PlayerStatusComponent.h>
 
 #include "Game.h"
 #include "../components/InputComponent.h"

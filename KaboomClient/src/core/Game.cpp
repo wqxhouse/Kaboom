@@ -7,8 +7,8 @@
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
 
+#include <components/PositionComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
 
 #include "SceneNodeComponent.h"
 #include "../Scene.h"

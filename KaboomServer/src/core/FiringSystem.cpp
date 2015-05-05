@@ -2,10 +2,10 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <core/EquipmentComponent.h>
+#include <components/EquipmentComponent.h>
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/FireMode.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 #include <util/Timer.h>
 
 #include "BombDataLookup.h"

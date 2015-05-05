@@ -1,6 +1,8 @@
 #pragma once
+
 #include <ctime>
-#include <core/Component.h>
+#include <components/Component.h>
+
 #define REFUELRATE 25
 #define TANKSIZE 100
 #define REFUELTIME 1000
