@@ -5,7 +5,7 @@
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 #include "NetworkServices.h"
-#include "../core/PhysicsComponent.h"
+#include "../components/PhysicsComponent.h"
 
 class Entity;
 class Game;

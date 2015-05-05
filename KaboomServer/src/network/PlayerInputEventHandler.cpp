@@ -6,7 +6,7 @@
 #include <network/PlayerInputEvent.h>
 
 #include "../core/Game.h"
-#include "../core/InputComponent.h"
+#include "../components/InputComponent.h"
 
 PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
         : game(game) {

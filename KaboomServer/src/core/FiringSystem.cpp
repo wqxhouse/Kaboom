@@ -9,8 +9,8 @@
 #include <util/Timer.h>
 
 #include "BombDataLookup.h"
-#include "InputComponent.h"
 #include "Game.h"
+#include "../components/InputComponent.h"
 #include "../math/Conversion.h"
 
 #define VELOCITYCAP 2

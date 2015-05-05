@@ -106,15 +106,6 @@
     <ClCompile Include="src\network\DisconnectEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\InputComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\JetpackComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\PhysicsComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\CollisionSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
@@ -123,12 +114,6 @@
     </ClCompile>
     <ClCompile Include="src\core\ExplosionSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\TriggerComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\CollisionComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\core\InitializationSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
@@ -160,10 +145,25 @@
     <ClCompile Include="src\core\KaboomV2ExplosionHandler.cpp">
       <Filter>Source Files\Explosion Handlers</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ExplosionComponent.cpp">
+    <ClCompile Include="src\components\CollisionComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\TimerHandlerComponent.cpp">
+    <ClCompile Include="src\components\ExplosionComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\InputComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\JetpackComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\PhysicsComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\TimerHandlerComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\TriggerComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -199,32 +199,14 @@
     <ClInclude Include="src\network\DisconnectEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\InputComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\JetpackComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\PhysicsComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\CollisionSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
     <ClInclude Include="src\core\InputSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\ExplosionComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\ExplosionSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\TriggerComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\CollisionComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\core\InitializationSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
@@ -274,11 +256,29 @@
     <ClInclude Include="src\core\KaboomV2ExplosionHandler.h">
       <Filter>Header Files\Explosion Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\TimerHandlerComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\TimerHandler.h">
       <Filter>Header Files\Timer Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\CollisionComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\ExplosionComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\InputComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\JetpackComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\PhysicsComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\TimerHandlerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\TriggerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@
 #include <core/RotationComponent.h>
 #include <core/WeaponPickupComponent.h>
 
-#include "TriggerComponent.h"
+#include "../components/TriggerComponent.h"
 
 PickupFactory::PickupFactory(EntityManager &entityManager)
         : entityManager(entityManager) {

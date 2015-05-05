@@ -1,8 +1,8 @@
 #include "CollisionSystem.h"
 
-#include "CollisionComponent.h"
 #include "CollisionHandler.h"
 #include "Game.h"
+#include "../components/CollisionComponent.h"
 
 CollisionSystem::CollisionSystem(Game *game)
         : EntitySystem(game) {

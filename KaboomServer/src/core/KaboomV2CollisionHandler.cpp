@@ -2,8 +2,8 @@
 
 #include <core/Entity.h>
 
-#include "ExplosionComponent.h"
 #include "KaboomV2ExplosionHandler.h"
+#include "../components/ExplosionComponent.h"
 
 void KaboomV2CollisionHandler::handle(
         Game *game,

@@ -3,7 +3,7 @@
 #include <core/Component.h>
 #include <util/Timer.h>
 
-#include "TimerHandler.h"
+#include "../core/TimerHandler.h"
 
 class TimerHandlerComponent : public Component {
 public:
