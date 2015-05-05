@@ -299,7 +299,7 @@
     </Link>
     <PostBuildEvent>
       <Message>Copy data directory to output directory.</Message>
-      <Command>xcopy "$(ProjectDir)\data-server" "$(TargetDir)\data-server" /F /Y /I</Command>
+      <Command>xcopy "$(ProjectDir)\data-server" "$(TargetDir)\data-server" /D /I /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
