@@ -37,17 +37,10 @@
     <ClCompile Include="src\core\BombDataLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\CharacterDataLookup.cpp" />
-    <ClCompile Include="src\core\CollisionSystem.cpp" />
-    <ClCompile Include="src\core\EntitySystem.cpp" />
-    <ClCompile Include="src\core\ExplosionSystem.cpp" />
-    <ClCompile Include="src\core\FiringSystem.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
-    <ClCompile Include="src\core\InitializationSystem.cpp" />
-    <ClCompile Include="src\core\InputSystem.cpp" />
     <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp" />
     <ClCompile Include="src\core\KaboomV2ExplosionHandler.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
-    <ClCompile Include="src\core\PickupSystem.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -58,6 +51,13 @@
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp" />
     <ClCompile Include="src\network\ServerEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ServerNetwork.cpp" />
+    <ClCompile Include="src\systems\CollisionSystem.cpp" />
+    <ClCompile Include="src\systems\EntitySystem.cpp" />
+    <ClCompile Include="src\systems\ExplosionSystem.cpp" />
+    <ClCompile Include="src\systems\FiringSystem.cpp" />
+    <ClCompile Include="src\systems\InitializationSystem.cpp" />
+    <ClCompile Include="src\systems\InputSystem.cpp" />
+    <ClCompile Include="src\systems\PickupSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -76,20 +76,13 @@
     <ClInclude Include="src\core\CharacterData.h" />
     <ClInclude Include="src\core\CharacterDataLookup.h" />
     <ClInclude Include="src\core\CollisionHandler.h" />
-    <ClInclude Include="src\core\CollisionSystem.h" />
     <ClInclude Include="src\core\DefaultCollisionHandler.h" />
     <ClInclude Include="src\core\DefaultExplosionHandler.h" />
-    <ClInclude Include="src\core\EntitySystem.h" />
     <ClInclude Include="src\core\ExplosionHandler.h" />
-    <ClInclude Include="src\core\ExplosionSystem.h" />
-    <ClInclude Include="src\core\FiringSystem.h" />
     <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\core\InitializationSystem.h" />
-    <ClInclude Include="src\core\InputSystem.h" />
     <ClInclude Include="src\core\KaboomV2CollisionHandler.h" />
     <ClInclude Include="src\core\KaboomV2ExplosionHandler.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
-    <ClInclude Include="src\core\PickupSystem.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\TimerHandler.h" />
     <ClInclude Include="src\core\World.h" />
@@ -100,6 +93,13 @@
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
     <ClInclude Include="src\network\ServerEventHandlerLookup.h" />
     <ClInclude Include="src\network\ServerNetwork.h" />
+    <ClInclude Include="src\systems\CollisionSystem.h" />
+    <ClInclude Include="src\systems\EntitySystem.h" />
+    <ClInclude Include="src\systems\ExplosionSystem.h" />
+    <ClInclude Include="src\systems\FiringSystem.h" />
+    <ClInclude Include="src\systems\InitializationSystem.h" />
+    <ClInclude Include="src\systems\InputSystem.h" />
+    <ClInclude Include="src\systems\PickupSystem.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

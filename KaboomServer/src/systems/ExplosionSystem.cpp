@@ -1,9 +1,9 @@
 #include "ExplosionSystem.h"
 
-#include "ExplosionHandler.h"
-#include "Game.h"
 #include "../components/ExplosionComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../core/ExplosionHandler.h"
+#include "../core/Game.h"
 
 ExplosionSystem::ExplosionSystem(Game *game)
         : EntitySystem(game) {

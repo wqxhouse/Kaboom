@@ -7,10 +7,10 @@
 #include <components/PlayerStatusComponent.h>
 #include <core/EntityManager.h>
 
-#include "Game.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
+#include "../core/Game.h"
 #include "../math/Conversion.h"
 
 #define VELOCITYCAP 2

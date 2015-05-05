@@ -4,10 +4,10 @@
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
 
-#include "Game.h"
 #include "../components/CollisionComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../core/Game.h"
 
 InitializationSystem::InitializationSystem(Game *game)
         : EntitySystem(game) {

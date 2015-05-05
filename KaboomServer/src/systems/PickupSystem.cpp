@@ -2,9 +2,9 @@
 
 #include <components/WeaponPickupComponent.h>
 
-#include "BombDataLookup.h"
-#include "Game.h"
 #include "../components/TriggerComponent.h"
+#include "../core/BombDataLookup.h"
+#include "../core/Game.h"
 
 PickupSystem::PickupSystem(Game *game)
         : EntitySystem(game) {

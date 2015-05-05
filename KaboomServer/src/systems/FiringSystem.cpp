@@ -8,9 +8,9 @@
 #include <core/FireMode.h>
 #include <util/Timer.h>
 
-#include "BombDataLookup.h"
-#include "Game.h"
 #include "../components/InputComponent.h"
+#include "../core/BombDataLookup.h"
+#include "../core/Game.h"
 #include "../math/Conversion.h"
 
 #define VELOCITYCAP 2
