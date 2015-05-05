@@ -6,6 +6,11 @@
 #include "../core/Game.h"
 #include <cmath>
 
+#ifndef M_PI
+#define M_PI 3.1415926535897932384626433832795029
+#endif
+
+
 ExplosionEventHandler::ExplosionEventHandler(Game *game)
         : game(game) {
 }
@@ -46,8 +51,11 @@ void ExplosionEventHandler::handle(const Event &e) const {
 		float mag2 = sqrt(x2*x2+y2*y2+z2*z2);
 		mag = sqrt(x*x + y*y + z*z);
 		float radian = (x*x2 + y*y2 + z*z2) / (mag*mag2);
-		game->source->setPosition(0, cos(radian), sin(radian));
-
+		printf("before acos %f \n", radian);
+		radian = acos(radian);
+		//game->source->setPosition(cos(radian), 0, sin(radian));
+		std::cout << " x2 " << x2 << " y2 " << y2 << " z2 " << z2 << std::endl;
+		printf("radian is %f \n",radian);
 		osgAudio::AudioEnvironment::instance()->update();
 		game->source->play();
 	}
