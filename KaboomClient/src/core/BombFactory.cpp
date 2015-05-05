@@ -10,7 +10,7 @@
 #include <core/EntityManager.h>
 
 #include "BombDataLookup.h"
-#include "SceneNodeComponent.h"
+#include "../components/SceneNodeComponent.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
