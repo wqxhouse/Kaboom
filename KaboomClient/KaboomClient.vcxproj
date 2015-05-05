@@ -243,7 +243,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)\KaboomClient\config.ini" "$(TargetDir)" /y
-xcopy "$(ProjectDir)\data-client" "$(TargetDir)\data-client" /F /Y /I</Command>
+xcopy "$(ProjectDir)\data-client" "$(TargetDir)\data-client" /F /Y /I
+xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /F /Y /I</Command>
       <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
