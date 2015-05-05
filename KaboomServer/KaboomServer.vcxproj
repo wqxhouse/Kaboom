@@ -47,6 +47,7 @@
     <ClCompile Include="src\core\JetpackComponent.cpp" />
     <ClCompile Include="src\core\PhysicsComponent.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
+    <ClCompile Include="src\core\TimerHandlerComponent.cpp" />
     <ClCompile Include="src\core\TriggerComponent.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -88,6 +89,8 @@
     <ClInclude Include="src\core\JetpackComponent.h" />
     <ClInclude Include="src\core\PhysicsComponent.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
+    <ClInclude Include="src\core\TimerHandler.h" />
+    <ClInclude Include="src\core\TimerHandlerComponent.h" />
     <ClInclude Include="src\core\TriggerComponent.h" />
     <ClInclude Include="src\core\World.h" />
     <ClInclude Include="src\math\Conversion.h" />

@@ -64,8 +64,11 @@
     <Filter Include="Header Files\Explosion Handlers">
       <UniqueIdentifier>{d3538abd-d30e-41a9-87de-b9b84b2a7380}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ExplosionHandlers">
+    <Filter Include="Source Files\Explosion Handlers">
       <UniqueIdentifier>{f9f54351-5956-45bd-b1d0-e399de36705e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Timer Handlers">
+      <UniqueIdentifier>{c4f22983-595e-4d7a-9901-35fe0289257d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -155,9 +158,12 @@
       <Filter>Source Files\Collision Handlers</Filter>
     </ClCompile>
     <ClCompile Include="src\core\KaboomV2ExplosionHandler.cpp">
-      <Filter>Source Files\ExplosionHandlers</Filter>
+      <Filter>Source Files\Explosion Handlers</Filter>
     </ClCompile>
     <ClCompile Include="src\core\ExplosionComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\TimerHandlerComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -267,6 +273,12 @@
     </ClInclude>
     <ClInclude Include="src\core\KaboomV2ExplosionHandler.h">
       <Filter>Header Files\Explosion Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\TimerHandlerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\TimerHandler.h">
+      <Filter>Header Files\Timer Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
