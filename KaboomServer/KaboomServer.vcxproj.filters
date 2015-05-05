@@ -262,9 +262,6 @@
     <ClInclude Include="src\systems\CollisionSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\systems\EntitySystem.h">
-      <Filter>Header Files\Entity Component System\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="src\systems\ExplosionSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
@@ -279,6 +276,9 @@
     </ClInclude>
     <ClInclude Include="src\systems\PickupSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\EntitySystem.h">
+      <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
