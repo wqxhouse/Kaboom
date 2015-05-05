@@ -56,17 +56,17 @@ void InputSystem::update(float timeStep) {
 
         // Define y to be front speed, x to be right speed
         if (inputCom->isMovingForward()) {
-            localVelocity.setY(1);
+            localVelocity.setY(2);
         } else if (inputCom->isMovingBackward()) {
-            localVelocity.setY(-1);
+            localVelocity.setY(-2);
         } else {
             localVelocity.setY(0);
         }
 
         if (inputCom->isMovingLeft()) {
-            localVelocity.setX(-1);
+            localVelocity.setX(-2);
         } else if (inputCom->isMovingRight()) {
-            localVelocity.setX(1);
+            localVelocity.setX(2);
         } else {
             localVelocity.setX(0);
         }
