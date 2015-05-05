@@ -81,8 +81,6 @@ public:
 	static void addMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
 
 protected:
-	static int _index;
-
 	struct Position
 	{
 		float x;
@@ -139,5 +137,8 @@ protected:
 
 	bool _cameraManipulatorActive;
 	int _manipulatorBits;
+
+	std::string nameToCopy;
+	static int _index;
 
 };

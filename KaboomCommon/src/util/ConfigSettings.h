@@ -58,6 +58,7 @@ public:
 	static std::string str_material_xml;
 	static std::string str_world_xml;
 	static std::string str_export_xml;
+	static std::string str_typeid_xml;
 
 	// server and client shared vars
 	static std::string str_server_address;

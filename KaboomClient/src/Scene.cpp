@@ -49,7 +49,7 @@ void createInfinitePlane(GeometryObjectManager *manager, MaterialManager *matMan
 	floorGeometry->addPrimitiveSet(floorBase);
 
 	floorGeo->addDrawable(floorGeometry);
-	manager->addGeometry("__Huge_floor", floorGeo, osg::Vec3(0, 0, 0));
+	manager->addGeometry("__Huge_floor", floorGeo, osg::Vec3(0, 0, -1));
 
 	// material
 	ConfigSettings* config = ConfigSettings::config;
@@ -70,6 +70,21 @@ void setupScene()
 	GeometryObjectManager *g = w.getGeometryManager();
 	MaterialManager *m = w.getMaterialManager();
 	LightManager *l = w.getLightManager();
+
+	// Load XML files
+	ConfigSettings* config = ConfigSettings::config;
+	std::string str_mediaPath = "";
+	std::string str_material_xml = "";
+	std::string str_world_xml = "";
+
+	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+	config->getValue(ConfigSettings::str_material_xml, str_material_xml);
+	config->getValue(ConfigSettings::str_world_xml, str_world_xml);
+
+	str_world_xml = str_mediaPath + str_world_xml;
+
+	Core::loadMaterialFile(str_material_xml);
+	//Core::loadWorldFile(str_world_xml);
 
 	createInfinitePlane(g, m);
 	l->addDirectionalLight("Sun", osg::Vec3(0.1, -0.88, -0.46), osg::Vec3(0.7, 0.7, 0.7), false);
