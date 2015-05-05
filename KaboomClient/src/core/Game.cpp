@@ -57,7 +57,6 @@ Game::Game(ConfigSettings *config)
 
 	Core::loadMaterialFile(str_material_xml);
 	Core::loadWorldFile(str_world_xml);
-	
 	* End testing code */
 
     inputManager = new InputManager(client);
@@ -71,11 +70,15 @@ Game::Game(ConfigSettings *config)
 	source = new Source;
 	
 	printf("check for sound errors");
-	sample = new Sample("sounds/a.wav");
+	sample = new Sample("C:\\Users\\melapier\\Downloads\\Kaboom\\x64\\SemiDebug\\sounds\\a.wav");
 	source->setSound(sample.get());
 	source->setGain(1);
 	source->setLooping(false);
-	//sounds->insert({ KABOOM_EXPLODE, sample });
+	sounds->at(KABOOM_EXPLODE)=sample;
+	sample = new Sample("C:\\Users\\melapier\\Downloads\\Kaboom\\x64\\SemiDebug\\sounds\\a.wav");
+	sounds->at(KABOOM_FIRE) = sample;
+	sample = new Sample("C:\\Users\\melapier\\Downloads\\Kaboom\\x64\\SemiDebug\\sounds\\a.wav");
+	sounds->at(BASIC) = sample ;
 	printf("finished check sound errors");
 	
 }
