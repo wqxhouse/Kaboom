@@ -21,6 +21,11 @@ GeometryObjectManager::~GeometryObjectManager()
 
 bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, osg::Vec3 pos)
 {
+	if (geomNode == nullptr) {
+		std::cout << "geomNode is null: " << name << std::endl;
+		return false;
+	}
+
 	// Handle duplicated (name) geoms
 	if (doesNameExist(name)) {
 		std::cout << "Name already exists: " << name << std::endl;
@@ -37,6 +42,11 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 
 bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName)
 {
+	if (geomNode == nullptr) {
+		std::cout << "geomNode is null: " << name << std::endl;
+		return false;
+	}
+
 	// Handle duplicated (name) geoms
 	if (doesNameExist(name)) {
 		std::cout << "Name already exists: " << name << std::endl;
