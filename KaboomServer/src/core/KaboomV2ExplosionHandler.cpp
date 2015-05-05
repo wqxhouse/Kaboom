@@ -7,10 +7,10 @@
 
 #include "BombData.h"
 #include "BombDataLookup.h"
-#include "ExplosionComponent.h"
 #include "Game.h"
-#include "PhysicsComponent.h"
-#include "TriggerComponent.h"
+#include "../components/ExplosionComponent.h"
+#include "../components/PhysicsComponent.h"
+#include "../components/TriggerComponent.h"
 
 void KaboomV2ExplosionHandler::handle(
         Game *game,

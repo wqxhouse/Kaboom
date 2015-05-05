@@ -2,7 +2,7 @@
 
 #include <core/Component.h>
 
-#include "ExplosionHandler.h"
+#include "../core/ExplosionHandler.h"
 
 class ExplosionComponent : public Component {
 public:

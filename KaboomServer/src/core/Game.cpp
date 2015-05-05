@@ -4,10 +4,10 @@
 #include <core/PositionComponent.h>
 #include <core/RotationComponent.h>
 
-#include "CollisionComponent.h"
-#include "InputComponent.h"
-#include "PhysicsComponent.h"
-#include "TriggerComponent.h"
+#include "../components/CollisionComponent.h"
+#include "../components/InputComponent.h"
+#include "../components/PhysicsComponent.h"
+#include "../components/TriggerComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
 

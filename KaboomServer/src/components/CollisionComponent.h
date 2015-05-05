@@ -4,7 +4,7 @@
 
 #include <core/Component.h>
 
-#include "CollisionHandler.h"
+#include "../core/CollisionHandler.h"
 
 class Entity;
 

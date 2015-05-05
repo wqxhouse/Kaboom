@@ -5,8 +5,8 @@
 #include <core/Entity.h>
 #include <core/EntityType.h>
 
-#include "CollisionComponent.h"
-#include "TriggerComponent.h"
+#include "../components/CollisionComponent.h"
+#include "../components/TriggerComponent.h"
 
 void onTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     World *w = static_cast<World *>(world->getWorldUserInfo());

@@ -8,9 +8,9 @@
 #include <core/PlayerStatusComponent.h>
 
 #include "Game.h"
-#include "InputComponent.h"
-#include "PhysicsComponent.h"
-#include "JetpackComponent.h"
+#include "../components/InputComponent.h"
+#include "../components/PhysicsComponent.h"
+#include "../components/JetpackComponent.h"
 #include "../math/Conversion.h"
 
 #define VELOCITYCAP 2

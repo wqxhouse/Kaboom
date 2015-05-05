@@ -12,9 +12,9 @@
 
 #include "BombDataLookup.h"
 #include "CharacterDataLookup.h"
-#include "InputComponent.h"
-#include "PhysicsComponent.h"
-#include "JetpackComponent.h"
+#include "../components/InputComponent.h"
+#include "../components/PhysicsComponent.h"
+#include "../components/JetpackComponent.h"
 
 CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {

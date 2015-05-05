@@ -4,7 +4,7 @@
 
 #include "BombDataLookup.h"
 #include "Game.h"
-#include "TriggerComponent.h"
+#include "../components/TriggerComponent.h"
 
 PickupSystem::PickupSystem(Game *game)
         : EntitySystem(game) {

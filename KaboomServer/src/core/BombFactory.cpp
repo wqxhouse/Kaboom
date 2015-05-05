@@ -13,11 +13,11 @@
 #include <util/XMLLoader.h>
 
 #include "BombDataLookup.h"
-#include "CollisionComponent.h"
-#include "ExplosionComponent.h"
 #include "KaboomV2CollisionHandler.h"
-#include "PhysicsComponent.h"
-#include "TriggerComponent.h"
+#include "../components/CollisionComponent.h"
+#include "../components/ExplosionComponent.h"
+#include "../components/PhysicsComponent.h"
+#include "../components/TriggerComponent.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
