@@ -11,6 +11,7 @@
 #include <core/EntityManager.h>
 
 #include "BombDataLookup.h"
+#include "CharacterData.h"
 #include "CharacterDataLookup.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
@@ -36,7 +37,8 @@ Entity *CharacterFactory::createCharacter(
     worldTrans.setOrigin(btVector3(x, y, z));
 
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
-    btCollisionShape *collisionShape = new btCapsuleShape(btScalar(.25f), btScalar(.5f));
+
+    btCollisionShape *collisionShape = new btCapsuleShapeZ(btScalar(characterData.collisionRadius), btScalar(characterData.collisionHeight)); //TODO we need to load this from character.xml
 
     btRigidBody *rigidBody = new btRigidBody(characterData.mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);

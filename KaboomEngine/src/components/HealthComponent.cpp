@@ -1,8 +1,8 @@
 #include "HealthComponent.h"
 
-HealthComponent::HealthComponent(int healthAmoumt, int healthCap)
-	: healthAmount(healthAmount),
-	healthCap(healthCap),
+HealthComponent::HealthComponent(int _healthAmoumt, int _healthCap)
+:   healthAmount(_healthAmoumt),
+    healthCap(_healthCap),
 	shieldAmount(0),
 	shieldCap(0){
 }
@@ -19,7 +19,7 @@ void HealthComponent::addToHealthAmount(int healthAmount) {
 }
 void HealthComponent::subtractFromHealthAmount(int healthAmount) {
 	if (this->healthAmount - healthAmount < 0) {
-		this->healthAmount = healthCap;
+		this->healthAmount = 0;
 	} else {
 		this->healthAmount -= healthAmount;
 	}

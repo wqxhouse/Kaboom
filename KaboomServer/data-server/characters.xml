@@ -4,6 +4,8 @@
         <id>65537</id>
         <name>Default Character</name>
         <mass>1.0</mass>
+        <collision-radius>0.5</collision-radius>
+        <collision-height>1</collision-height>
         <inventory>
             <item>
                 <id>131073</id>

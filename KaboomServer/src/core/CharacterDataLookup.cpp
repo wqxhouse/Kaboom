@@ -31,7 +31,14 @@ void CharacterDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
                 loadString(dataNode, data.name);
             } else if (dataNode->name == "mass") {
                 loadFloat(dataNode, data.mass);
-            } else if (dataNode->name == "inventory") {
+			}
+			else if (dataNode->name == "collision-radius") {
+				loadFloat(dataNode, data.collisionRadius);
+			}
+			else if (dataNode->name == "collision-height") {
+				loadFloat(dataNode, data.collisionHeight);
+			}
+			else if (dataNode->name == "inventory") {
                 for (auto itemNode : dataNode->children) {
                     unsigned int itemId = 0;
                     int amount = 0;
