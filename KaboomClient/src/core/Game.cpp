@@ -15,7 +15,6 @@
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
-
 #include <osgAudio/FileStream.h>
 
 Game::Game(ConfigSettings *config)
@@ -71,14 +70,14 @@ Game::Game(ConfigSettings *config)
 	_materialManager = Core::getWorldRef().getMaterialManager();
 	source = new Source;
 	
-	if (sample.valid()) {
-		source->stop();
-	}
-	sample = new Sample("C:\\Users\\melapier\\Downloads\\Kaboom\\Media\\SoundEffcts\\a.wav");
+	printf("check for sound errors");
+	sample = new Sample("C:\\Users\\melapier\\Downloads\\ins\\share\\osgAudio\\data\\a.wav");
 	source->setSound(sample.get());
 	source->setGain(1);
 	source->setLooping(false);
-	//source->play();
+	//sounds->insert({ KABOOM_EXPLODE, sample });
+	printf("finished check sound errors");
+	
 }
 
 Game::~Game() {
