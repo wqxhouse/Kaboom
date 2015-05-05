@@ -97,35 +97,14 @@
     <ClCompile Include="src\core\BombFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\EntitySystem.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\World.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\network\DisconnectEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\CollisionSystem.cpp">
-      <Filter>Source Files\Entity Component System\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\InputSystem.cpp">
-      <Filter>Source Files\Entity Component System\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\ExplosionSystem.cpp">
-      <Filter>Source Files\Entity Component System\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\InitializationSystem.cpp">
-      <Filter>Source Files\Entity Component System\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\FiringSystem.cpp">
-      <Filter>Source Files\Entity Component System\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\PickupFactory.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\PickupSystem.cpp">
-      <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
     <ClCompile Include="src\core\BombDataLookup.cpp">
       <Filter>Source Files\Core</Filter>
@@ -166,6 +145,27 @@
     <ClCompile Include="src\components\TriggerComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\systems\CollisionSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\ExplosionSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\FiringSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\InitializationSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\InputSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\PickupSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\EntitySystem.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -190,35 +190,14 @@
     <ClInclude Include="src\core\BombFactory.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\EntitySystem.h">
-      <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\World.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\network\DisconnectEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\CollisionSystem.h">
-      <Filter>Header Files\Entity Component System\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\InputSystem.h">
-      <Filter>Header Files\Entity Component System\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\ExplosionSystem.h">
-      <Filter>Header Files\Entity Component System\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\InitializationSystem.h">
-      <Filter>Header Files\Entity Component System\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\FiringSystem.h">
-      <Filter>Header Files\Entity Component System\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\PickupFactory.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\PickupSystem.h">
-      <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
     <ClInclude Include="src\core\BombData.h">
       <Filter>Header Files\Core</Filter>
@@ -279,6 +258,27 @@
     </ClInclude>
     <ClInclude Include="src\components\TriggerComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\CollisionSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\EntitySystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\ExplosionSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\FiringSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\InitializationSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\InputSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\PickupSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,17 +3,17 @@
 #include <core/EntityManager.h>
 
 #include "BombFactory.h"
-#include "FiringSystem.h"
-#include "CharacterFactory.h"
-#include "CollisionSystem.h"
-#include "ExplosionSystem.h"
-#include "InitializationSystem.h"
-#include "InputSystem.h"
-#include "PickupFactory.h"
-#include "PickupSystem.h"
 #include "World.h"
+#include "CharacterFactory.h"
+#include "PickupFactory.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
+#include "../systems/FiringSystem.h"
+#include "../systems/CollisionSystem.h"
+#include "../systems/ExplosionSystem.h"
+#include "../systems/InitializationSystem.h"
+#include "../systems/InputSystem.h"
+#include "../systems/PickupSystem.h"
 
 class ConfigSettings;
 

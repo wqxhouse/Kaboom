@@ -188,7 +188,6 @@
     <ClInclude Include="src\components\PositionComponent.h" />
     <ClInclude Include="src\components\RotationComponent.h" />
     <ClInclude Include="src\components\WeaponPickupComponent.h" />
-    <ClInclude Include="src\core\Component.h" />
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\EntityType.h" />
