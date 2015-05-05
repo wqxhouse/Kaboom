@@ -1,8 +1,8 @@
 #include "GameServer.h"
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 #include <network/AssignEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>

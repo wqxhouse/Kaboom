@@ -1,7 +1,8 @@
 #pragma once
 
+#include <components/BombContainerComponent.h>
 #include <network/NetworkData.h>
-#include <core/BombContainerComponent.h>
+
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 #include "NetworkServices.h"

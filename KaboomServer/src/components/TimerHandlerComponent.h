@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/Component.h>
+#include <components/Component.h>
 #include <util/Timer.h>
 
 #include "../core/TimerHandler.h"

@@ -5,9 +5,9 @@
 #include <osg/Shape>
 #include <osg/ShapeDrawable>
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/EntityManager.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 
 #include "SceneNodeComponent.h"
 

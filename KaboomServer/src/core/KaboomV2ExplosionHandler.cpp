@@ -2,8 +2,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include <components/PlayerStatusComponent.h>
 #include <core/Entity.h>
-#include <core/PlayerStatusComponent.h>
 
 #include "BombData.h"
 #include "BombDataLookup.h"

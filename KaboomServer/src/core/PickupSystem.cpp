@@ -1,6 +1,6 @@
 #include "PickupSystem.h"
 
-#include <core/WeaponPickupComponent.h>
+#include <components/WeaponPickupComponent.h>
 
 #include "BombDataLookup.h"
 #include "Game.h"

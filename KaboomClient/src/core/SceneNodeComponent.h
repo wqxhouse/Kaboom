@@ -3,7 +3,7 @@
 #include <osg/ref_ptr>
 #include <osg/Node>
 
-#include <core/Component.h>
+#include <components/Component.h>
 
 class SceneNodeComponent : public Component {
 public:

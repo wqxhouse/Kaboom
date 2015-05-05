@@ -1,8 +1,8 @@
 #include "Game.h"
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 
 #include "../components/CollisionComponent.h"
 #include "../components/InputComponent.h"

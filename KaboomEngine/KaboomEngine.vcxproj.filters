@@ -91,15 +91,6 @@
     <ClInclude Include="src\network\SpawnEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\BombContainerComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\PositionComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\RotationComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\AssignEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
@@ -112,19 +103,31 @@
     <ClInclude Include="src\core\FireMode.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\WeaponPickupComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\util\Timer.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\PlayerStatusComponent.h">
+    <ClInclude Include="src\components\BombContainerComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\HealthComponent.h">
+    <ClInclude Include="src\components\Component.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\EquipmentComponent.h">
+    <ClInclude Include="src\components\EquipmentComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\HealthComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\PlayerStatusComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\PositionComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\RotationComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\WeaponPickupComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -157,15 +160,6 @@
     <ClCompile Include="src\network\SpawnEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\BombContainerComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\PositionComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\RotationComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\network\AssignEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
@@ -175,19 +169,28 @@
     <ClCompile Include="src\network\ExplosionEvent.cpp">
       <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\WeaponPickupComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\util\Timer.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\PlayerStatusComponent.cpp">
+    <ClCompile Include="src\components\BombContainerComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\HealthComponent.cpp">
+    <ClCompile Include="src\components\EquipmentComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\EquipmentComponent.cpp">
+    <ClCompile Include="src\components\HealthComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\PlayerStatusComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\PositionComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\RotationComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\WeaponPickupComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>

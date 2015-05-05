@@ -2,13 +2,13 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <core/BombContainerComponent.h>
+#include <components/BombContainerComponent.h>
+#include <components/EquipmentComponent.h>
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
+#include <components/PlayerStatusComponent.h>
+#include <components/HealthComponent.h>
 #include <core/EntityManager.h>
-#include <core/EquipmentComponent.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
-#include <core/PlayerStatusComponent.h>
-#include <core/HealthComponent.h>
 
 #include "BombDataLookup.h"
 #include "CharacterDataLookup.h"

@@ -1,15 +1,16 @@
 #include "ExplosionEventHandler.h"
 
-#include <network/ExplosionEvent.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
-#include "../core/Game.h"
 #include <cmath>
+
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
+#include <network/ExplosionEvent.h>
+
+#include "../core/Game.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626433832795029
 #endif
-
 
 ExplosionEventHandler::ExplosionEventHandler(Game *game)
         : game(game) {

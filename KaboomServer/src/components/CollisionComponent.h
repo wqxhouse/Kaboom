@@ -2,7 +2,7 @@
 
 #include <unordered_set>
 
-#include <core/Component.h>
+#include <components/Component.h>
 
 #include "../core/CollisionHandler.h"
 

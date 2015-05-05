@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "Component.h"
-#include "Entity.h"
+#include "../core/Entity.h"
 #include "../util/Timer.h"
 
 class BombContainerComponent : public Component {
