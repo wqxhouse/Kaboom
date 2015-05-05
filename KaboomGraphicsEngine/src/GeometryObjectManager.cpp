@@ -80,9 +80,28 @@ bool GeometryObjectManager::renameGeometry(const std::string &oldName, const std
 	GeometryObject *geomObj = _geomObjMap[oldName];
 	_geomObjMap.erase(oldName);
 
-	geomObj->setName(newName);
+	geomObj->rename(newName);
 	_geomObjMap.insert(std::make_pair(newName, geomObj));
+
 	return true;
+}
+
+GeometryObject* GeometryObjectManager::copyGeometry(const std::string &name)
+{
+	GeometryObject* geomToCopy = getGeometryObject(name);
+	if (geomToCopy == NULL) return NULL;
+
+	// Handle duplicated (name) geoms
+	std::string newName = name;
+	while (doesNameExist(newName)) {
+		newName = newName + std::to_string(_suffix++);
+	}
+
+	GeometryObject* newGeom = geomToCopy->copy(newName);
+	_geomObjMap.insert(std::make_pair(newName, newGeom));
+	_geomRoot->addChild(newGeom->getRoot());
+
+	return newGeom;
 }
 
 bool GeometryObjectManager::doesNameExist(const std::string &name)

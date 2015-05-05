@@ -26,6 +26,7 @@ std::string ConfigSettings::str_screenPosY = "ScreenPosY";
 std::string ConfigSettings::str_material_xml = "MaterialXML";
 std::string ConfigSettings::str_world_xml = "WorldXML";
 std::string ConfigSettings::str_export_xml = "ExportXML";
+std::string ConfigSettings::str_typeid_xml = "TypeIdXML";
 
 // server and client shared vars
 std::string ConfigSettings::str_server_port = "ServerPort";

@@ -27,6 +27,8 @@ TwGUIManager::TwGUIManager()
 	_lm = Core::getWorldRef().getLightManager();
 	_mm = Core::getWorldRef().getMaterialManager();
 
+	nameToCopy = "";
+
 	TwInit(TW_OPENGL, NULL);
 }
 
@@ -1139,6 +1141,26 @@ void TwGUIManager::updateEvents() const
 					osg::Vec3 fromEyeToScalePoint = -dirVec + fromObjToEyeScale;
 					osg::Vec3 newEyePos = eyePos + fromEyeToScalePoint;
 					Core::setCurrentCameraManipulatorHomePosition(newEyePos, center, osg::Vec3(0, 0, 1));
+				}
+			}
+			else if (ea.getKey() == 'c')
+			{
+				osg::ref_ptr<osg::MatrixTransform> obj = GeometryObjectManipulator::getCurrNode();
+				if (obj != nullptr) {
+					std::string nodeName = obj->getName();
+					std::string prefix("Transform_");
+
+					*(std::string *)&nameToCopy = nodeName.substr(prefix.length());
+				}
+			}
+			else if (ea.getKey() == 'v')
+			{
+				if (nameToCopy != "") {
+					GeometryObject* newGeom = _gm->copyGeometry(nameToCopy);
+
+					if (newGeom != nullptr) {
+						addModelToGUI(g_twBar, newGeom, GEOM_GROUP_NAME, _index);
+					}
 				}
 			}
 			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F8)

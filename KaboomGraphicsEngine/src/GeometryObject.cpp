@@ -188,9 +188,55 @@ void GeometryObject::setScale(const osg::Vec3 &scale)
 	_objRoot->setMatrix(mat);
 }
 
+osg::Matrix GeometryObject::getMatrix()
+{
+	return _objRoot->getMatrix();
+}
+
+void GeometryObject::setMatrix(const osg::Matrix &matrix)
+{
+	_objRoot->setMatrix(matrix);
+}
+
 void GeometryObject::decompose(osg::Vec3 &translate, osg::Quat &rot, osg::Vec3 &scale, osg::Quat &so)
 {
 	_objRoot->getMatrix().decompose(translate, rot, scale, so);
+}
+
+void GeometryObject::rename(const std::string& newName)
+{
+	this->setName(newName);
+
+	// Have to rename some children of GeometryObject's root node
+	osg::ref_ptr<osg::MatrixTransform> geomRoot = _objRoot;
+	renameHelper(geomRoot, std::string("Transform_"), newName);
+
+	for (unsigned int i = 0; i < geomRoot->getNumChildren(); i++) {
+		osg::ref_ptr<osg::Node> child = geomRoot->getChild(i);
+		renameHelper(child, std::string("MaterialNode_"), newName);		
+	}
+}
+
+void GeometryObject::renameHelper(osg::Node *node, const std::string &prefix, const std::string &newName)
+{
+	std::string nodeName = node->getName();
+	auto res = std::mismatch(prefix.begin(), prefix.end(), nodeName.begin());
+
+	if (res.first == prefix.end())
+	{
+		node->setName(prefix + newName);
+	}
+}
+
+GeometryObject* GeometryObject::copy(const std::string &newName)
+{
+	GeometryObject* copy = new GeometryObject(newName, _materialNode->getChild(0), _fileName);
+
+	copy->setMaterial(_material);
+	copy->setMatrix(this->getMatrix());
+	//copy->_materialNode = this->_materialNode;
+
+	return copy;
 }
 
 void GeometryObject::setUpMaterialState()
