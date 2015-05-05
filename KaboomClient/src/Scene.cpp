@@ -49,7 +49,7 @@ void createInfinitePlane(GeometryObjectManager *manager, MaterialManager *matMan
 	floorGeometry->addPrimitiveSet(floorBase);
 
 	floorGeo->addDrawable(floorGeometry);
-	manager->addGeometry("__Huge_floor", floorGeo, osg::Vec3(0, 0, 0));
+	manager->addGeometry("__Huge_floor", floorGeo, osg::Vec3(0, 0, -1));
 
 	// material
 	ConfigSettings* config = ConfigSettings::config;
