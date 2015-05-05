@@ -71,7 +71,7 @@ Game::Game(ConfigSettings *config)
 	source = new Source;
 	
 	printf("check for sound errors");
-	sample = new Sample("C:\\Users\\melapier\\Downloads\\ins\\share\\osgAudio\\data\\a.wav");
+	sample = new Sample("sounds/a.wav");
 	source->setSound(sample.get());
 	source->setGain(1);
 	source->setLooping(false);
