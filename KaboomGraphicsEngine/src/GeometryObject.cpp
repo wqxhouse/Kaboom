@@ -188,6 +188,16 @@ void GeometryObject::setScale(const osg::Vec3 &scale)
 	_objRoot->setMatrix(mat);
 }
 
+osg::Matrix GeometryObject::getMatrix()
+{
+	return _objRoot->getMatrix();
+}
+
+void GeometryObject::setMatrix(const osg::Matrix &matrix)
+{
+	_objRoot->setMatrix(matrix);
+}
+
 void GeometryObject::decompose(osg::Vec3 &translate, osg::Quat &rot, osg::Vec3 &scale, osg::Quat &so)
 {
 	_objRoot->getMatrix().decompose(translate, rot, scale, so);
@@ -218,12 +228,13 @@ void GeometryObject::renameHelper(osg::Node *node, const std::string &prefix, co
 	}
 }
 
-GeometryObject* GeometryObject::copy()
+GeometryObject* GeometryObject::copy(const std::string &newName)
 {
-	GeometryObject* copy = new GeometryObject(_name, _objRoot, _fileName);
+	GeometryObject* copy = new GeometryObject(newName, _materialNode->getChild(0), _fileName);
 
 	copy->setMaterial(_material);
-	copy->_materialNode = this->_materialNode;
+	copy->setMatrix(this->getMatrix());
+	//copy->_materialNode = this->_materialNode;
 
 	return copy;
 }

@@ -21,7 +21,7 @@ public:
 	bool setGeometryMaterial(const std::string &geomName, Material *material);
 	void deleteGeometry(const std::string &name);
 	bool renameGeometry(const std::string &oldName, const std::string newName);
-	void copyGeometry(const std::string &name);
+	GeometryObject* copyGeometry(const std::string &name);
 
 	bool doesNameExist(const std::string &name);
 
