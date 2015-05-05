@@ -28,6 +28,10 @@ const std::string SCALE_X_LABEL = "scaleX";
 const std::string SCALE_Y_LABEL = "scaleY";
 const std::string SCALE_Z_LABEL = "scaleZ";
 
+const std::string ROT_X_LABEL = "rotX";
+const std::string ROT_Y_LABEL = "rotY";
+const std::string ROT_Z_LABEL = "rotZ";
+
 const std::string COLOR_LABEL = "color";
 const std::string ROUGHNESS_LABEL = "roughness";
 const std::string SPECULAR_LABEL = "specular";

@@ -15,6 +15,8 @@
 #include "GeometryObjectManipulator.h"
 #include <osg/ComputeBoundsVisitor>
 
+const float PI_F = 3.14159265358979f;
+
 int TwGUIManager::_index = 0;
 
 TwGUIManager::TwGUIManager()
@@ -387,7 +389,11 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string scaleYVarName = SCALE_Y_LABEL + indexStr;
 	std::string scaleZVarName = SCALE_Z_LABEL + indexStr;
 
-	std::string limitVal = " step=0.05";
+	std::string rotXVarName = ROT_X_LABEL + indexStr;
+	std::string rotYVarName = ROT_Y_LABEL + indexStr;
+	std::string rotZVarName = ROT_Z_LABEL + indexStr;
+
+	std::string scaleLimitVal = " step=0.05";
 
 	BarItem* item = new BarItem();
 	item->bar = bar;
@@ -521,7 +527,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		geom, posZDef.c_str());
 
 
-	std::string scaleXDef = nameGroupDef + " label='" + SCALE_X_LABEL + "'" + limitVal;
+	std::string scaleXDef = nameGroupDef + " label='" + SCALE_X_LABEL + "'" + scaleLimitVal;
 	TwAddVarCB(bar, scaleXVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -541,7 +547,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, scaleXDef.c_str());
 
-	std::string scaleYDef = nameGroupDef + " label='" + SCALE_Y_LABEL + "'" + limitVal;
+	std::string scaleYDef = nameGroupDef + " label='" + SCALE_Y_LABEL + "'" + scaleLimitVal;
 	TwAddVarCB(bar, scaleYVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -561,7 +567,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, scaleYDef.c_str());
 
-	std::string scaleZDef = nameGroupDef + " label='" + SCALE_Z_LABEL + "'" + limitVal;
+	std::string scaleZDef = nameGroupDef + " label='" + SCALE_Z_LABEL + "'" + scaleLimitVal;
 	TwAddVarCB(bar, scaleZVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -582,6 +588,88 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		geom, scaleZDef.c_str());
 
 
+
+
+	std::string rotXDef = nameGroupDef + " label='" + ROT_X_LABEL + "'";
+	TwAddVarCB(bar, rotXVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float rotX = *(const float *)value;			// Range is -pi to pi
+
+		rotX *= PI_F / 180.0f;
+
+		osg::Vec3 oldRot = obj->getEulerRotation();
+		osg::Vec3 newRot = osg::Vec3(rotX, oldRot.y(), oldRot.z());
+		obj->setRotation(newRot);
+
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *rotX = static_cast<float *>(value);
+
+		osg::Vec3 rot = obj->getEulerRotation();
+		*rotX = rot.x() * 180.0f / PI_F;
+	},
+		geom, rotXDef.c_str());
+
+	std::string rotYDef = nameGroupDef + " label='" + ROT_Y_LABEL + "'";
+	TwAddVarCB(bar, rotYVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float rotY = *(const float *)value;			// Range is -pi/2 to pi/2
+
+		rotY /= 2.0f;
+		rotY *= PI_F / 180.0f;
+		/*
+		float bounds = PI_F / 2.0f;
+
+		if (rotY > bounds) {
+			rotY = -bounds + (rotY - bounds);
+		}
+		else if (rotY < -bounds) {
+			rotY = bounds + (rotY - bounds);
+		}*/
+
+		osg::Vec3 oldRot = obj->getEulerRotation();
+		osg::Vec3 newRot = osg::Vec3(oldRot.x(), rotY, oldRot.z());
+
+		obj->setRotation(newRot);
+
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *rotY = static_cast<float *>(value);
+
+		osg::Vec3 rot = obj->getEulerRotation();
+		*rotY = rot.y() * 2.0f * 180.0f / PI_F;
+	},
+		geom, rotYDef.c_str());
+
+	std::string rotZDef = nameGroupDef + " label='" + ROT_Z_LABEL + "'";
+	TwAddVarCB(bar, rotZVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float rotZ = *(const float *)value;			// Range is -pi to pi
+
+		rotZ *= PI_F / 180.0f;
+
+		osg::Vec3 oldRot = obj->getEulerRotation();
+		osg::Vec3 newRot = osg::Vec3(oldRot.x(), oldRot.y(), rotZ);
+		obj->setRotation(newRot);
+
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *rotZ = static_cast<float *>(value);
+
+		osg::Vec3 rot = obj->getEulerRotation();
+		*rotZ = rot.z() * 180.0f / PI_F;
+	},
+		geom, rotZDef.c_str());
+
 	std::string rotationVarName = "rotation" + indexStr;
 	std::string rotationDef = nameGroupDef + " label='rotation'";
 	TwAddVarCB(bar, rotationVarName.c_str(), TW_TYPE_QUAT4F,
@@ -593,6 +681,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		// so that the following is safe
 		osg::Quat newRot = osg::Quat(rotArr[0], rotArr[1], rotArr[2], rotArr[3]);
 		obj->setRotation(newRot);
+
+		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
