@@ -14,6 +14,7 @@
 //#include "../osgLibRocket/RenderInterface.h"
 //#include "../osgLibRocket/SystemInterface.h"
 
+#include "MaterialLoader.h"
 #include "World.h"
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
@@ -57,6 +58,12 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 
 	_sceneRoot->addChild(_passes);
 	_hasInit = true;
+}
+
+void Core::loadMaterialFile(const std::string &filePath)
+{
+	MaterialLoader ml = MaterialLoader(_world.getMaterialManager());
+	ml.loadXMLFile(filePath);
 }
 
 void Core::loadWorldFile(const std::string &worldFilePath)

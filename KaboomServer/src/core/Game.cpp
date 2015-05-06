@@ -1,27 +1,30 @@
 #include "Game.h"
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
-#include <core/CharacteristicComponent.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 
-#include "CollisionComponent.h"
-#include "InputComponent.h"
-#include "PhysicsComponent.h"
-#include "TriggerComponent.h"
+#include "../components/CollisionComponent.h"
+#include "../components/InputComponent.h"
+#include "../components/PhysicsComponent.h"
+#include "../components/TriggerComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
 
 Game::Game(ConfigSettings *config)
-        : playerFactory(entityManager),
+        : characterFactory(entityManager),
           bombFactory(entityManager),
+          pickupFactory(entityManager),
           initSystem(this),
           inputSystem(this),
+          pickupSystem(this),
+		  firingSystem(this),
           collisionSystem(this),
           explosionSystem(this),
 	      eventHandlerLookup(this),
 	      server(config, eventHandlerLookup) {
     world.loadMap();
+    addEntity(pickupFactory.createPickup(KABOOM_V2, 5)); // Spawn five Kaboom 2.0 at origin
 }
 
 Game::~Game() {
@@ -57,7 +60,7 @@ void Game::removeEntity(Entity *entity) {
     entityManager.destroyEntity(entity->getId());
 }
 
-void Game::update(float timeStep) {
+void Game::update(float timeStep, int maxSubSteps) {
 
 	//HERE is where the client first connect to server,
     //we want to have client load the gameworld first,
@@ -65,7 +68,7 @@ void Game::update(float timeStep) {
 	if (server.acceptNewClient(entityManager.generateId())) {
 
 		//now we create a new player
-        Entity *player = playerFactory.createPlayer(0, -5, 5);
+        Entity *player = characterFactory.createCharacter(DEFAULT_CHARACTER, 0.0f, -5.0f, 5.0f);
         addEntity(player);
 
         //first notify the new client what entityId it should keep track of
@@ -86,10 +89,12 @@ void Game::update(float timeStep) {
     // Handle game logic here
     initSystem.update(timeStep);
     inputSystem.update(timeStep);
+	firingSystem.update(timeStep);
 
-    world.stepSimulation(timeStep);
+    stepSimulation(timeStep, maxSubSteps);
 
     collisionSystem.update(timeStep);
+    pickupSystem.update(timeStep);
     explosionSystem.update(timeStep);
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
@@ -99,8 +104,8 @@ EntityManager &Game::getEntityManager() {
     return entityManager;
 }
 
-const PlayerFactory &Game::getPlayerFactory() const {
-    return playerFactory;
+const CharacterFactory &Game::getCharacterFactory() const {
+    return characterFactory;
 }
 
 const BombFactory &Game::getBombFactory() const {
@@ -109,4 +114,35 @@ const BombFactory &Game::getBombFactory() const {
 
 const GameServer &Game::getGameServer() const {
     return server;
+}
+
+void Game::stepSimulation(float timeStep, int maxSubSteps) {
+    world.stepSimulation(timeStep, maxSubSteps);
+
+    // Update position component and rotation component based on simulation result
+    auto entities = getEntityManager().getEntityList();
+
+    for (Entity *entity : entities) {
+        PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
+
+        if (physComp == nullptr) {
+            continue;
+        }
+
+        const btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
+
+        PositionComponent *posComp = entity->getComponent<PositionComponent>();
+
+        if (posComp != nullptr) {
+            const btVector3 &pos = worldTrans.getOrigin();
+            posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
+        }
+
+        RotationComponent *rotComp = entity->getComponent<RotationComponent>();
+
+        if (rotComp != nullptr) {
+            btQuaternion rot = worldTrans.getRotation();
+            // TODO: Set rotComp
+        }
+    }
 }

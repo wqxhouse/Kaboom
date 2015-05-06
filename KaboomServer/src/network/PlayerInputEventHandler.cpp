@@ -1,18 +1,15 @@
 #include "PlayerInputEventHandler.h"
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 #include <network/PlayerInputEvent.h>
 
 #include "../core/Game.h"
-#include "../core/InputComponent.h"
+#include "../components/InputComponent.h"
 
 PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
         : game(game) {
-}
-
-PlayerInputEventHandler::~PlayerInputEventHandler() {
 }
 
 void PlayerInputEventHandler::handle(const Event &e) const {
@@ -27,6 +24,9 @@ void PlayerInputEventHandler::handle(const Event &e) const {
     inputCom->setMovingRight(evt.isMovingRight());
     inputCom->setJumping(evt.isJumping());
     inputCom->setFiring(evt.isFiring());
+
+	//TODO hard code for now, used for testing
+	inputCom->setFireMode(FireMode::LEFT_CLICK);
 
     RotationComponent *rotCom = player->getComponent<RotationComponent>();
     rotCom->setYaw(evt.getYaw());

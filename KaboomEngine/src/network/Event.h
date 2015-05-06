@@ -4,11 +4,9 @@
 
 class Event {
 public:
-    ~Event();
-
     EventOpcode getOpcode() const;
 
-    const unsigned int getByteSize() const;
+    unsigned int getByteSize() const;
 
     virtual void serialize(char *buf) const = 0;
     virtual void deserialize(char *buf) = 0;

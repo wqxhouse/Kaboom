@@ -55,6 +55,7 @@ public:
 	static std::string str_screenPosX;
 	static std::string str_screenPosY;
 
+	static std::string str_material_xml;
 	static std::string str_world_xml;
 	static std::string str_export_xml;
 

@@ -7,12 +7,23 @@
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
 
+#include "CharacterFactory.h"
 #include "BombFactory.h"
-#include "PlayerFactory.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 
+#include <osgAudio/Source.h>
+#include <osgAudio/AudioEnvironment.h>
+#include <osgAudio/Sample.h>
+
+using namespace osgAudio;
+
 class InputManager;
+enum SOUNDS{
+	KABOOM_FIRE,
+	KABOOM_EXPLODE
+
+};
 
 class Game {
 public:
@@ -26,7 +37,7 @@ public:
     void removeAllEntities();
 
     EntityManager &getEntityManager();
-    const PlayerFactory &getPlayerFactory() const;
+    const CharacterFactory &getCharacterFactory() const;
     const BombFactory &getBombFactory() const;
 
     const GameClient &getGameClient() const;
@@ -35,6 +46,9 @@ public:
     MaterialManager* getMaterialManager();
 
     Camera &getCamera();
+	osg::ref_ptr<Source> source;
+	osg::ref_ptr<Sample> sample;
+	std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
 
 private:
     enum GameStateMachine {
@@ -48,7 +62,7 @@ private:
     InputManager *inputManager;
 
     EntityManager entityManager;
-    PlayerFactory playerFactory;
+    CharacterFactory characterFactory;
 	BombFactory bombFactory;
 
     ClientEventHandlerLookup eventHandlerLookup;

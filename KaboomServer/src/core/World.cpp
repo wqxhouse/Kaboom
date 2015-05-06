@@ -5,7 +5,8 @@
 #include <core/Entity.h>
 #include <core/EntityType.h>
 
-#include "CollisionComponent.h"
+#include "../components/CollisionComponent.h"
+#include "../components/TriggerComponent.h"
 
 void onTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     World *w = static_cast<World *>(world->getWorldUserInfo());
@@ -16,7 +17,7 @@ World::World()
         : dispatcher(&collisionConfiguration),
           world(&dispatcher, &broadphase, &solver, &collisionConfiguration) {
     setGravity(4.0f);
-    broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+    broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new TriggerCallback());
     world.setInternalTickCallback(onTickCallback, this);
 }
 
@@ -65,8 +66,8 @@ void World::loadMap() {
     addStaticPlane(btVector3(-5, 0, 0), btVector3(0, 0, 1), quat);
 }
 
-void World::stepSimulation(float timeStep) {
-    world.stepSimulation(timeStep);
+void World::stepSimulation(float timeStep, int maxSubSteps) {
+    world.stepSimulation(timeStep, maxSubSteps);
 }
 
 void World::addRigidBody(btRigidBody *rigidBody) {
@@ -78,10 +79,11 @@ void World::removeRigidBody(btRigidBody *rigidBody) {
 }
 
 void World::addTrigger(btGhostObject *ghostObject) {
+    ghostObject->setCollisionFlags(ghostObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
     world.addCollisionObject(
-        ghostObject,
-        btBroadphaseProxy::SensorTrigger,
-        btBroadphaseProxy::AllFilter ^ btBroadphaseProxy::SensorTrigger ^ btBroadphaseProxy::StaticFilter);
+            ghostObject,
+            btBroadphaseProxy::SensorTrigger,
+            btBroadphaseProxy::AllFilter ^ btBroadphaseProxy::SensorTrigger ^ btBroadphaseProxy::StaticFilter);
 }
 
 void World::removeTrigger(btGhostObject *ghostObject) {
@@ -145,7 +147,7 @@ void World::addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rota
     addRigidBody(groundRigidBody);
 }
 
-void World::handleCollision(Entity *entityA, Entity *entityB) {
+void World::handleCollision(Entity *entityA, Entity *entityB) const {
     if (entityA != nullptr) {
         CollisionComponent *colComp = entityA->getComponent<CollisionComponent>();
 
@@ -155,6 +157,52 @@ void World::handleCollision(Entity *entityA, Entity *entityB) {
             if (entityB != nullptr) {
                 colComp->addContactEntity(entityB);
             }
+        }
+    }
+}
+
+btBroadphasePair *World::TriggerCallback::addOverlappingPair(btBroadphaseProxy *proxy0, btBroadphaseProxy *proxy1) {
+    btCollisionObject *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
+    btCollisionObject *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
+
+    Entity *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
+    Entity *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
+
+    addTriggerEntity(entity0, entity1);
+    addTriggerEntity(entity1, entity0);
+
+    return btGhostPairCallback::addOverlappingPair(proxy0, proxy1);
+}
+
+void *World::TriggerCallback::removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher) {
+    btCollisionObject *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
+    btCollisionObject *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
+
+    Entity *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
+    Entity *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
+
+    removeTriggerEntity(entity0, entity1);
+    removeTriggerEntity(entity1, entity0);
+
+    return btGhostPairCallback::removeOverlappingPair(proxy0, proxy1, dispatcher);
+}
+
+void World::TriggerCallback::addTriggerEntity(Entity *entityA, Entity *entityB) const {
+    if (entityA != nullptr) {
+        TriggerComponent *triggerComp = entityA->getComponent<TriggerComponent>();
+
+        if (triggerComp != nullptr && entityB != nullptr) {
+            triggerComp->addTriggerEntity(entityB);
+        }
+    }
+}
+
+void World::TriggerCallback::removeTriggerEntity(Entity *entityA, Entity *entityB) const {
+    if (entityA != nullptr) {
+        TriggerComponent *triggerComp = entityA->getComponent<TriggerComponent>();
+
+        if (triggerComp != nullptr && entityB != nullptr) {
+            triggerComp->removeTriggerEntity(entityB);
         }
     }
 }

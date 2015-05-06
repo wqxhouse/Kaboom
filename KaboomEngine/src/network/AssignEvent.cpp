@@ -2,16 +2,9 @@
 
 #include <string>
 
-AssignEvent::AssignEvent()
-	: AssignEvent(0) {
-}
-
-AssignEvent::AssignEvent(unsigned int id)
-	: Event(EventOpcode::ASSIGN_ENTITY, sizeof(AssignEvent)),
-    entityId(id) {
-}
-
-AssignEvent::~AssignEvent() {
+AssignEvent::AssignEvent(unsigned int entityId)
+        : Event(EVENT_ASSIGN, sizeof(AssignEvent)),
+          entityId(entityId) {
 }
 
 void AssignEvent::serialize(char *buf) const {
@@ -22,6 +15,6 @@ void AssignEvent::deserialize(char *buf) {
 	memcpy(this, buf, sizeof(AssignEvent));
 }
 
-const unsigned int &AssignEvent::getEntityId() const {
+unsigned int AssignEvent::getEntityId() const {
 	return entityId;
 }

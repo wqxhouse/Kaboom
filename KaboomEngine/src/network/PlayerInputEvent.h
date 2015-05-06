@@ -6,32 +6,31 @@
 
 class PlayerInputEvent : public Event {
 public:
-    PlayerInputEvent();
-    PlayerInputEvent(unsigned int playerId,
-            bool movingForward,
-            bool movingBackward,
-            bool movingLeft,
-            bool movingRight,
-            bool jumping,
-            bool firing,
-            float yaw,
-            float pitch);
-    ~PlayerInputEvent();
+    PlayerInputEvent(
+            unsigned int playerId = 0,
+            bool movingForward = false,
+            bool movingBackward = false,
+            bool movingLeft = false,
+            bool movingRight = false,
+            bool jumping = false,
+            bool firing = false,
+            float yaw = 0.0f,
+            float pitch = 0.0f);
 
-    const unsigned int &getPlayerId() const;
-    void setPlayerId(const unsigned int &playerId);
+    unsigned int getPlayerId() const;
+    void setPlayerId(unsigned int playerId);
 
-    const bool &isMovingForward() const;
-    const bool &isMovingBackward() const;
-    const bool &isMovingLeft() const;
-    const bool &isMovingRight() const;
+    bool isMovingForward() const;
+    bool isMovingBackward() const;
+    bool isMovingLeft() const;
+    bool isMovingRight() const;
 
-    const bool &isJumping() const;
+    bool isJumping() const;
 
-    const bool &isFiring() const;
+    bool isFiring() const;
 
-    const float &getYaw() const;
-    const float &getPitch() const;
+    float getYaw() const;
+    float getPitch() const;
 
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);

@@ -42,7 +42,9 @@ public:
 	osg::Vec3 getTranslate();
 	void setTranslate(const osg::Vec3 &translate);
 
+	osg::Vec3 getEulerRotation();
 	osg::Quat getRotation();
+	void setRotation(const osg::Vec3 &rot);
 	void setRotation(const osg::Quat &rot);
 
 	osg::Vec3 getScale();

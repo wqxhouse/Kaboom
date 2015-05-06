@@ -90,9 +90,6 @@
     <ClInclude Include="include\TwGUIManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\CompositorAnalysis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -116,6 +113,12 @@
     </ClInclude>
     <ClInclude Include="include\CubeMapPreFilter.h">
       <Filter>Header Files\CubemapUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\World.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +173,6 @@
     <ClCompile Include="src\SkyBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -203,6 +203,12 @@
     <ClCompile Include="src\TwGUIManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MaterialLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">
@@ -231,6 +237,12 @@
     </Xml>
     <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
     <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\Materials.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\TypeId.xml">
       <Filter>Media\EffectFiles</Filter>
     </Xml>
   </ItemGroup>

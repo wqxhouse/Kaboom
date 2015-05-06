@@ -53,7 +53,7 @@ void GameClient::receive() {
         //printf("byteSize is %d\n", emptyEvent.getByteSize());
 
         switch (emptyEvent.getOpcode()) {
-            case EventOpcode::ASSIGN_ENTITY: {
+            case EVENT_ASSIGN: {
                 AssignEvent assignEvent;
                 assignEvent.deserialize(&networkData[i]);
 
@@ -64,31 +64,31 @@ void GameClient::receive() {
 
                 break;
             }
-            case EventOpcode::DISCONNECT: {
+            case EVENT_DISCONNECT: {
                 DisconnectEvent disconnectEvent;
                 disconnectEvent.deserialize(&networkData[i]);
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
                 break;
             }
-            case EventOpcode::POSITION: {
+            case EVENT_POSITION: {
                 PositionEvent positionEvent;
                 positionEvent.deserialize(&networkData[i]);
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(positionEvent);
                 break;
             }
-            case EventOpcode::ROTATION: {
+            case EVENT_ROTATION: {
                 RotationEvent rotationEvent;
                 rotationEvent.deserialize(&networkData[i]);
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(rotationEvent);
                 break;
             }
-            case EventOpcode::ENTITY_SPAWN: {
+            case EVENT_SPAWN: {
                 SpawnEvent spawnEvent;
                 spawnEvent.deserialize(&networkData[i]);
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
                 break;
             }
-            case EventOpcode::EXPLOSION: {
+            case EVENT_EXPLOSION: {
                 ExplosionEvent explosionEvent;
                 explosionEvent.deserialize(&networkData[i]);
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(explosionEvent);

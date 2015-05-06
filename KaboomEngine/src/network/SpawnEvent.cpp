@@ -2,51 +2,56 @@
 
 #include <string>
 
-SpawnEvent::SpawnEvent()
-    : SpawnEvent(0, 0.0f, 0.0f, 0.0f, UNINITIATED, 0) {
+SpawnEvent::SpawnEvent(
+        unsigned int entityId,
+        EntityType type,
+        float x,
+        float y,
+        float z,
+        float yaw,
+        float pitch)
+        : Event(EVENT_SPAWN, sizeof(SpawnEvent)),
+          entityId(entityId),
+          type(type),
+          x(x),
+          y(y),
+          z(z),
+          yaw(yaw),
+          pitch(pitch) {
 }
 
-SpawnEvent::SpawnEvent(unsigned int entityId, float x, float y, float z, EntityType type, int feature)
-    : Event(EventOpcode::ENTITY_SPAWN, sizeof(SpawnEvent)),
-    entityId(entityId),
-    x(x),
-    y(y),
-    z(z),
-	type(type),
-	feature(feature) {
-}
-
-SpawnEvent::~SpawnEvent() {
-}
-
-const unsigned int &SpawnEvent::getEntityId() const {
+unsigned int SpawnEvent::getEntityId() const {
     return entityId;
 }
 
-const float &SpawnEvent::getX() const {
+const EntityType &SpawnEvent::getType() const {
+    return type;
+}
+
+float SpawnEvent::getX() const {
     return x;
 }
 
-const float &SpawnEvent::getY() const {
+float SpawnEvent::getY() const {
     return y;
 }
 
-const float &SpawnEvent::getZ() const {
+float SpawnEvent::getZ() const {
     return z;
 }
 
-const EntityType &SpawnEvent::getType() const {
-	return type;
+float SpawnEvent::getYaw() const {
+    return yaw;
 }
 
-const int &SpawnEvent::getFeature() const {
-	return feature;
+float SpawnEvent::getPitch() const {
+    return pitch;
 }
 
-void SpawnEvent::serialize(char * buf) const {
+void SpawnEvent::serialize(char *buf) const {
     memcpy(buf, this, sizeof(SpawnEvent));
 }
 
-void SpawnEvent::deserialize(char * buf) {
+void SpawnEvent::deserialize(char *buf) {
     memcpy(this, buf, sizeof(SpawnEvent));
 }
