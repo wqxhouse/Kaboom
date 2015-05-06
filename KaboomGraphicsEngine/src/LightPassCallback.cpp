@@ -1,7 +1,8 @@
 #include "LightPassCallback.h"
 #include "Core.h"
 
-LightPassCallback::LightPassCallback()
+LightPassCallback::LightPassCallback(CubeMapPreFilter *cubemapPrefilter)
+	: _cubemapPreFilter(cubemapPrefilter)
 {
 }
 
@@ -22,9 +23,10 @@ void LightPassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	// update uniform
 	ss->getUniform("u_viewInvMat")->set(inv_viewMat);
 	ss->getUniform("u_projInvMat")->set(inv_projMat);
+	ss->getUniform("u_maxLodLevel")->set(_cubemapPreFilter->getCubemapMaxLodLevel());
 
-	osg::Vec3 dummy;
-	osg::Vec3 eye;
-	Core::getMainCamera().getViewMatrix().getLookAt(eye, dummy, dummy);
-	ss->getUniform("u_eyePos")->set(eye);
+	//osg::Vec3 dummy;
+	//osg::Vec3 eye;
+	//Core::getMainCamera().getViewMatrix().getLookAt(eye, dummy, dummy);
+	//ss->getUniform("u_eyePos")->set(eye);
 }

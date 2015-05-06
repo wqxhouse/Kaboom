@@ -25,39 +25,6 @@ vec3 computeSpecularV2(vec3 specularColor, float roughness, float NoL, float NoV
 	return D * Vis * F; 
 }
 
-//float3 StandardShading( FGBufferData GBuffer, float3 LobeRoughness, float3 LobeEnergy, float3 L, float3 V, half3 N, float2 DiffSpecMask )
-//{
-//	float3 H = normalize(V + L);
-//	float NoL = saturate( dot(N, L) );
-//	//float NoV = saturate( dot(N, V) );
-//	float NoV = abs( dot(N, V) ) + 1e-5;
-//	float NoH = saturate( dot(N, H) );
-//	float VoH = saturate( dot(V, H) );
-	
-//	// Generalized microfacet specular
-//	float D = D_GGX( LobeRoughness[1], NoH ) * LobeEnergy[1];
-//	float Vis = Vis_SmithJointApprox( LobeRoughness[1], NoV, NoL );
-//	float3 F = F_Schlick( GBuffer.SpecularColor, VoH );
-
-//	return Diffuse_Lambert(GBuffer.DiffuseColor) * (LobeEnergy[2] * DiffSpecMask.r) + (D * Vis * DiffSpecMask.g) * F;
-//}
-
-//// accumulate diffuse and specular
-//			{
-//#if 1	// for testing if there is a perf impact
-//				// correct screen space subsurface scattering
-//				float3 SurfaceLightingDiff = SurfaceShading(ScreenSpaceData.GBuffer, LobeRoughness, LobeEnergy, L, V, N, float2(1, 0));
-//				float3 SurfaceLightingSpec = SurfaceShading(ScreenSpaceData.GBuffer, LobeRoughness, LobeEnergy, L, V, N, float2(0, 1));
-//				LightAccumulator_Add(LightAccumulator, SurfaceLightingDiff, SurfaceLightingSpec, LightColor * (NoL * SurfaceAttenuation));
-//#else
-//				// wrong screen space subsurface scattering but potentially faster
-//				float3 SurfaceLighting = SurfaceShading(ScreenSpaceData.GBuffer, LobeRoughness, LobeEnergy, L, V, N, float2(1, 1));
-//				LightAccumulator_Add(LightAccumulator, SurfaceLighting, 0, LightColor * (NoL * SurfaceAttenuation));
-//#endif
-//			}
-
-
-
 vec3 computeLightModel(Light light, Material material, 
         vec3 l, vec3 v, vec3 n, vec3 h, 
         float attenuation, float shadowFactor) 
@@ -141,56 +108,6 @@ vec3 applyPointLight(Light light, Material material)
 	//return vec3(attenuation);
 }
 
-//vec2 EnvBRDF( vec3 SpecularColor, float Roughness, float NoV )
-//{
-//	// Importance sampled preintegrated G * F
-//	vec2 AB = Texture2DSampleLevel( PreIntegratedGF, PreIntegratedGFSampler, vec2( NoV, Roughness ), 0 ).rg;
-
-//	// Anything less than 2% is physically impossible and is instead considered to be shadowing 
-//	vec2 GF = SpecularColor * AB.x + saturate( 50.0 * SpecularColor.g ) * AB.y;
-//	return GF;
-//}
-
-// https://www.unrealengine.com/blog/physically-based-shading-on-mobile
-vec3 EnvBRDFApprox( vec3 SpecularColor, float Roughness, float NoV )
-{
-	const vec4 c0 = vec4( -1, -0.0275, -0.572, 0.022 );
-	const vec4 c1 = vec4( 1, 0.0425, 1.04, -0.04 );
-	vec4 r = Roughness * c0 + c1;
-	float a004 = min( r.x * r.x, exp2( -9.28 * NoV ) ) * r.x + r.y;
-	vec2 AB = vec2( -1.04, 1.04 ) * a004 + r.zw;
-	return SpecularColor * AB.x + AB.y;
-}
-
-// http://the-witness.net/news/2012/02/seamless-cube-map-filtering/
-vec3 fix_cube_lookup( vec3 v, float cube_size, float lod ) 
-{
-	float M = max(max(abs(v.x), abs(v.y)), abs(v.z));
-	float scale = 1 - exp2(lod) / cube_size;
-	if (abs(v.x) != M) v.x *= scale;
-	if (abs(v.y) != M) v.y *= scale;
-	if (abs(v.z) != M) v.z *= scale;
-	return v;
-}
-
-vec3 calcEnvContribution(Material material, vec3 diffuseSample, vec3 specularSample, float wsNdotV)
-{
-    float roughness = clamp(material.roughness, 0.005, 1.0);
-	float roughness4 = pow(roughness, 4);
-
-	// get the approximate reflectance
-	vec3 reflectance = EnvBRDFApprox( material.specularColor, roughness4, wsNdotV );
-		
-	// combine the specular IBL and the BRDF
-	vec3 specularIBL		= specularSample * reflectance;
-		
-	// still have to figure out how to do env. irradiance
-	vec3 diffuseIBL			= diffuseSample * material.diffuseColor;
-		
-	// not sure how to combine this with the rest
-	return diffuseIBL + specularIBL;
-}
-
 // Modified version of Unreal 4's
 // Need more precision for roughness below 0.5
 // But still keep a the reflection to unnoticable level 
@@ -201,7 +118,8 @@ const int correction = 1; // for gaining precision close to r = 0
 float getLodFromRoughness(float roughness, int maxLodLevel)
 {
 	float LevelFrom0x0 = roughest_mip - roughness_mip_scale * log2(roughness);
-	return maxLodLevel - correction - LevelFrom0x0;
+	// return maxLodLevel - correction - LevelFrom0x0;
+	return maxLodLevel - LevelFrom0x0;
 
 	// 128 -> 8 mips
 	// from 1x1 = 1 - 1.2 * log2(1.0) = 1;
@@ -220,16 +138,61 @@ float getLodFromRoughness(float roughness, int maxLodLevel)
 
 float getRoughnessFromLod(float lod, int maxLodLevel)
 {
-	float levelFrom0x0 = maxLodLevel - correction - lod;
+	// float levelFrom0x0 = maxLodLevel - correction - lod;
+	float levelFrom0x0 = maxLodLevel - lod;
 	return exp2( (roughest_mip - levelFrom0x0) / roughness_mip_scale );
 }
 
-// http://the-witness.net/news/2012/02/seamless-cube-map-filtering/
-vec3 fix_cube_lookup( vec3 v, int cube_size, int lod ) {
-	float M = max(max(abs(v.x), abs(v.y)), abs(v.z));
-	float scale = 1 - exp2(float(lod)) / float(cube_size);
-	if (abs(v.x) != M) v.x *= scale;
-	if (abs(v.y) != M) v.y *= scale;
-	if (abs(v.z) != M) v.z *= scale;
-	return v;
+// https://www.unrealengine.com/blog/physically-based-shading-on-mobile
+vec3 EnvBRDFApprox( vec3 SpecularColor, float Roughness, float NoV )
+{
+	const vec4 c0 = vec4( -1, -0.0275, -0.572, 0.022 );
+	const vec4 c1 = vec4( 1, 0.0425, 1.04, -0.04 );
+	vec4 r = Roughness * c0 + c1;
+	float a004 = min( r.x * r.x, exp2( -9.28 * NoV ) ) * r.x + r.y;
+	vec2 AB = vec2( -1.04, 1.04 ) * a004 + r.zw;
+	return SpecularColor * AB.x + AB.y;
+}
+
+vec3 EnvBRDF( in sampler2D lutTex, vec3 SpecularColor, float Roughness, float wsNoV )
+{
+	// Importance sampled preintegrated G * F
+	vec2 lut = texture( lutTex, vec2( wsNoV, Roughness ) ).rg;
+	vec3 GF = SpecularColor * lut.x + clamp( 50.0 * SpecularColor.g, 0.0, 1.0 ) * lut.y;
+	return GF;
+}
+
+vec3 calcEnvContribution(Material material, 
+	in samplerCube diffuseSampler, 
+	in samplerCube specularSampler, 
+	in sampler2D lutSampler,
+	mat4 viewInvMat, int maxLodLevel)
+{
+    float roughness = clamp(material.roughness, 0.005, 1.0);
+	//float roughness4 = pow(roughness, 4);
+
+	//// get the approximate reflectance
+	//vec3 reflectance = EnvBRDFApprox( material.specularColor, roughness4, wsNdotV );
+	float lod = getLodFromRoughness(material.roughness, maxLodLevel);
+
+	vec3 v = normalize(-material.position);
+	vec3 n = normalize(material.normal);
+	vec3 v_ws = (viewInvMat * vec4(v, 0)).xyz;
+	vec3 n_ws = (viewInvMat * vec4(n, 0)).xyz;
+
+	vec3 lookup_ws = -reflect(v_ws, n_ws);
+	float NoV_ws = clamp(dot(n_ws, v_ws), 0.0, 1.0);
+
+	vec3 diffuseSample = textureLod(diffuseSampler, n_ws, 0).rgb; 
+	vec3 prefilteredSpecular = textureLod(specularSampler, lookup_ws, lod).rgb;
+
+	vec3 reflectance =  EnvBRDF(lutSampler, material.specularColor, roughness, NoV_ws);
+
+	// complete the specularIBL
+	vec3 specularIBL = prefilteredSpecular * reflectance;
+		
+	// still have to figure out how to do env. irradiance
+	vec3 diffuseIBL = diffuseSample * material.diffuseColor / M_PI;
+	return diffuseIBL + specularIBL;
+	// return diffuseSample;
 }

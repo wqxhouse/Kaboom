@@ -24,11 +24,15 @@ varying vec2 v_uvcoord;
 varying vec3 v_viewRay;
 
 uniform vec3 osg_OutputBufferSize;
-uniform vec3 u_eyePos;
+// uniform vec3 u_eyePos;
 uniform float u_farPlane;
 
 uniform samplerCube u_cubeMapTex;
+uniform samplerCube u_cubeMapDiffuseTex;
+uniform sampler2D u_lutTex;
 uniform mat4 u_viewInvMat;
+
+uniform int u_maxLodLevel;
 
 void main() 
 {
@@ -72,37 +76,8 @@ void main()
     //int countDirectionalLightShadow = min(MAX_SHADOW_POINT_LIGHTS, 
     //    texelFetch(lightsPerTile, precomputeCoord + ivec2(3,0), 0).r);
 
-    // Lighting result gets stored in this variables
     vec3 result = vec3(0);
-
-	//// First calculate IBL contribution
-	//int totalMipLevel = 6; // TODO: figure out is it ideal 
-	//float mip = totalMipLevel - 1 + log2(material.roughness);
-
-	// TODO: currently hard coded, change it later
-	float lod = getLodFromRoughness(material.roughness, 9);
-
-	// TODO: refactor lightUtil.glsl to reuse v, l, h
-	vec3 v = normalize(-material.position);
-	vec3 n = normalize(material.normal);
-	vec3 v_ws = (u_viewInvMat * vec4(v, 0)).xyz;
-	vec3 n_ws = (u_viewInvMat * vec4(n, 0)).xyz;
-
-	vec3 lookupWS = -reflect(v_ws, n_ws);
-	float NdotVWS = clamp(dot(n_ws, v_ws), 0.0, 1.0);
-
-	// TODO: hard coded now, fix later
-	// vec3 new_lookup = fix_cube_lookup(lookupWS, 512*512, lod);
-	vec3 specularSample = textureLod( u_cubeMapTex, lookupWS, lod ).rgb;
-	// vec3 specularSample = textureLod( u_cubeMapTex, new_lookup, lod ).rgb;
-
-	// A hack. need to generate irradiance map in the prefilter stage
-	vec3 ws_normal = (u_viewInvMat * vec4(material.normal, 0)).xyz;
-	//vec3 diffuseSample = textureLod( u_cubeMapTex, ws_normal, 5 ).rgb;
-	vec3 diffuseSample = vec3(1, 1, 1);
-
-	result += calcEnvContribution(material, diffuseSample, specularSample, NdotVWS);
-	// result += textureLod(u_cubeMapTex, lookupWS, 0).rgb;
+	result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel);
 
     // Compute point lights
     ivec2 baseOffset = precomputeCoord + ivec2(0,1);
@@ -158,7 +133,7 @@ void main()
 
 
     // SRGB - gamma correction ( TODO: last step or here??? )
-    //result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
+    result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
     //result = 1.0f - exp(-1.0 * result);
 
 	gl_FragColor = vec4(result, 1.0);

@@ -5,7 +5,7 @@
 #include <string>
 #include <osg/Vec3>
 
-typedef void(*TextureChangeCallback)(const std::string &texturePath);
+typedef void(*TextureChangeCallback)(const std::string &texturePath, osg::Texture::WrapMode mode);
 
 class Material
 {
@@ -81,28 +81,28 @@ public:
 		_specular = specular;
 	}
 
-	inline void setAlbedoTexturePath(const std::string &albedoTexPath)
+	inline void setAlbedoTexturePath(const std::string &albedoTexPath, osg::Texture::WrapMode mode)
 	{
 		_albedoMapPath = albedoTexPath;
-		_onTextureChangeFunc(albedoTexPath);
+		_onTextureChangeFunc(albedoTexPath, mode);
 	}
 
-	inline void setRoughnessMapPath(const std::string &roughnessTexPath)
+	inline void setRoughnessMapPath(const std::string &roughnessTexPath, osg::Texture::WrapMode mode)
 	{
 		_roughnessMapPath = roughnessTexPath;
-		_onTextureChangeFunc(roughnessTexPath);
+		_onTextureChangeFunc(roughnessTexPath, mode);
 	}
 
-	inline void setMetallicMapPath(const std::string &metallicTexPath)
+	inline void setMetallicMapPath(const std::string &metallicTexPath, osg::Texture::WrapMode mode)
 	{
 		_metallicMapPath = metallicTexPath;
-		_onTextureChangeFunc(metallicTexPath);
+		_onTextureChangeFunc(metallicTexPath, mode);
 	}
 
-	inline void setNormalMapPath(const std::string &normalMapTexPath)
+	inline void setNormalMapPath(const std::string &normalMapTexPath, osg::Texture::WrapMode mode)
 	{
 		_normalMapPath = normalMapTexPath;
-		_onTextureChangeFunc(normalMapTexPath);
+		_onTextureChangeFunc(normalMapTexPath, mode);
 	}
 
 	inline std::string getAlbedoTexturePath()

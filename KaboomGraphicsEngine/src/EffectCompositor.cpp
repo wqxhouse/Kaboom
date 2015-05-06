@@ -493,7 +493,7 @@ void EffectCompositor::traverse( osg::NodeVisitor& nv )
 			// note that here model view matrix *under this cullvisitor* is actually view matrix
 			Core::_cam._viewMatrix = *cv->getModelViewMatrix();
 			Core::_cam._eye = cv->getEyeLocal();
-			Core::_cam._lookat = cv->getLookVectorLocal();
+			Core::_cam._lookat = Core::_cam._eye + cv->getLookVectorLocal();
 			Core::_cam._up = cv->getUpLocal();
 		}
 

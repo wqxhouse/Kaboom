@@ -10,6 +10,11 @@
 
 GeometryObject::GeometryObject(const std::string &name, osg::Node *geomNode)
 {
+	if (geomNode == NULL)
+	{
+		OSG_WARN << "Geometry object node is NULL " << std::endl;
+	}
+
 	getPlainShader();
 	getTexturedShader();
 

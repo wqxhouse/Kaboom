@@ -20,4 +20,5 @@
 
   <uniform name="u_viewInvMat" type="mat4"></uniform>
   <uniform name="u_projInvMat" type="mat4"></uniform>
+  <uniform name="u_maxLodLevel" type="int"></uniform>
 </compositor>

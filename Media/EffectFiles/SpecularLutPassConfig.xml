@@ -8,4 +8,16 @@
     <filter param="min_filter">nearest</filter>
     <filter param="mag_filter">nearest</filter>
   </buffer>
+
+  <shader name="spec_lut_vs" type="vertex">
+    <version>120</version>
+    <file>Shaders/defaultQuad.vert</file>
+  </shader>
+  
+  <shader name="spec_lut_ps" type="fragment">
+    <version>420</version>
+    <file>Shaders/iblLut.frag</file>
+  </shader>
+
+
 </compositor>

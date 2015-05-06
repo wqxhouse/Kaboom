@@ -33,7 +33,8 @@ public:
 		const std::string &albedoPath,
 		const std::string &roughnessPath,
 		const std::string &metallicPath, 
-		const std::string &normalMapPath);
+		const std::string &normalMapPath, 
+		osg::Texture::WrapMode mode=osg::Texture::CLAMP_TO_EDGE);
 
 	void renameMaterial(const std::string &oldName, const std::string &newName);
 
@@ -49,7 +50,7 @@ private:
 	void createBuiltInMaterials();
 
 	// update texture cache	and associated geometry object binding
-	static void onTexturePathChange(const std::string &texturePath);
+	static void onTexturePathChange(const std::string &texturePath, osg::Texture::WrapMode mode);
 	static MaterialManager *_weakMaterialManagerPtr;
 
 	// TODO: separate textured material and plain material,
