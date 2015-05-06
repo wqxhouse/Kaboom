@@ -24,6 +24,7 @@ Game::Game(ConfigSettings *config)
 	      eventHandlerLookup(this),
 	      server(config, eventHandlerLookup) {
     world.loadMap();
+	//TODO Wai Ho problems with pickup being of class bomb which causes some problems in logic commented it out for now. 
     addEntity(pickupFactory.createPickup(KABOOM_V2, 5)); // Spawn five Kaboom 2.0 at origin
 }
 
