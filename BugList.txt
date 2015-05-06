@@ -17,6 +17,7 @@ Unresolved:
 
 7. BUG: need to delete bullet collision shape after client disconnect from server
 8. glValidation error in LightPass saying different samplers use the same texture (happens on HD4400, not on GTX580)
+	(when turning on the OSG_NOTIFY_LEVEL=DEBUG / INFO)
 
 9. After removing the geometry, if the manipulator is still active it will show on the screen.
 
@@ -27,6 +28,18 @@ Unresolved:
    still there. (Currently there is a bug involved with detachManipulator() )
 9. Duplicate names of nodes. Managers cannot tell them apart.
 10. Loading a rotated model from XML does not rotate the bounding box.
+
+11. If no env map, won't draw anything - partially fixed by enforcing cubemap load
+
+12. mipmap cannot reach 1x1 when roughness = 1.0, metallic = 0.0
+13. roughness 0 metallic 1 will have ugly edges (bright). Probably normal floating point precision issue.
+14. Sometimes, the first time cubemap is prefiltered(after the program start, at the first frame), the result seems to be different 
+	if you load the same cubemap and convolve it again.
+
+15. press 's' for a while will crash the program. (scale key for triggering the tabboxmanipulator)
+
+16. after 'z' then unlock camera does not preserve position
+17. Directional light dirToWorld a liitle weird on the GUI
 
 Fixed:
 1. Scrolling will crash the program (TwGUI)

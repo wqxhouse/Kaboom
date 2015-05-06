@@ -299,9 +299,6 @@
     <None Include="..\Media\Shaders\SMAA\neighborhood.vert">
       <Filter>Media\Shaders\smaa</Filter>
     </None>
-    <None Include="..\Media\Shaders\cubemapPreFilter.frag">
-      <Filter>Media\Shaders</Filter>
-    </None>
     <None Include="..\Media\Shaders\cubemapPrefilter.vert">
       <Filter>Media\Shaders</Filter>
     </None>
@@ -309,6 +306,12 @@
       <Filter>Media\Shaders</Filter>
     </None>
     <None Include="..\Media\Shaders\iblLut.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\cubemapSpecularPreFilter.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\cubemapDiffusePreFilter.frag">
       <Filter>Media\Shaders</Filter>
     </None>
   </ItemGroup>

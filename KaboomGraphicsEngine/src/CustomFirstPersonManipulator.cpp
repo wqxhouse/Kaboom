@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 WSH. All rights reserved.
 //
 #include "CustomFirstPersonManipulator.h"
+#include <Core.h>
+
+using namespace osgGA;
 
 CustomFirstPersonManipulator::CustomFirstPersonManipulator(int flag)
 	: osgGA::FirstPersonManipulator(flag)
@@ -18,6 +21,55 @@ CustomFirstPersonManipulator::~CustomFirstPersonManipulator()
 
 }
 
+/** Handles events. Returns true if handled, false otherwise.*/
+bool CustomFirstPersonManipulator::handle(const GUIEventAdapter& ea, GUIActionAdapter& us)
+{
+	// disable scrolling
+	if (ea.getScrollingMotion() == GUIEventAdapter::SCROLL_UP)
+	{
+		return true;
+	}
+	else if (ea.getScrollingMotion() == GUIEventAdapter::SCROLL_DOWN)
+	{
+		return true;
+	}
+
+	bool res = StandardManipulator::handle(ea, us);
+	flushKeyBuffer();
+	return res;
+}
+
+void CustomFirstPersonManipulator::flushKeyBuffer()
+{
+	double spf = Core::getLastFrameDuration();
+	for (int i = 0; i < _keyBuffer.size(); i++)
+	{
+		int key = _keyBuffer[i];
+		if (key == 0)
+		{
+			moveForward(10.0 * spf);
+		}
+		else if (key == 1)
+		{
+			moveForward(-10.0 * spf);
+		}
+		else if (key == 2)
+		{
+			moveRight(-10.0 * spf);
+		}
+		else if (key == 3)
+		{
+			moveRight(10.0 * spf);
+		}
+	}
+	_keyBuffer.clear();
+}
+
+bool CustomFirstPersonManipulator::handleKeyUp(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
+{
+	return true;
+}
+
 bool CustomFirstPersonManipulator::handleKeyDown(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
 {
 	if (ea.getKey() == osgGA::GUIEventAdapter::KEY_Space)
@@ -27,28 +79,22 @@ bool CustomFirstPersonManipulator::handleKeyDown(const osgGA::GUIEventAdapter& e
 		home(ea, us);
 		return true;
 	}
-	if (ea.getKey() == 'w')
+	else if (ea.getKey() == 'w')
 	{
-		osg::Vec3d eye;
-		osg::Vec3d center;
-		osg::Vec3d up;
-		moveForward(5.0);
-		return true;
+		_keyBuffer.push_back(0);
 	}
-	if (ea.getKey() == 's')
+	else if (ea.getKey() == 's')
 	{
-		moveForward(-5.0);
-		return true;
+		_keyBuffer.push_back(1);
 	}
-	if (ea.getKey() == 'a')
+	else if (ea.getKey() == 'a')
 	{
-		moveRight(-5.0);
-		return true;
+		_keyBuffer.push_back(2);
 	}
-	if (ea.getKey() == 'd')
+	else if (ea.getKey() == 'd')
 	{
-		moveRight(5.0);
-		return true;
+		_keyBuffer.push_back(3);
 	}
+
 	return false;
 }

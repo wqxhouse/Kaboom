@@ -40,6 +40,11 @@ public:
 
 	static void enableCameraManipulator();
 	static void disableCameraManipulator();
+	static void switchToTrackBallCamManipulator();
+	static void switchToFirstPersonCamManipulator();
+	static void setCurrentCameraManipulatorHomePosition(const osg::Vec3 &eye,  
+													   const osg::Vec3 &lookAt, 
+													   const osg::Vec3 &up);
 
 	static void enablePassDataDisplay();
 	static void disablePassDataDisplay();
@@ -54,6 +59,7 @@ public:
 	static void disableGeometryObjectManipulator();
 
 	static bool isInGameMode();
+	static bool isCamLocked();
 	static double getLastFrameDuration();
 	static bool isViewerClosed();
 
@@ -67,6 +73,14 @@ public:
 
 	// static void run();
 
+	enum CamManipulatorType
+	{
+		TRACKBALL,
+		FIRSTPERSON
+	};
+
+	static enum Core::CamManipulatorType getCurrCamManipulatorType();
+
 private:
 	static void configPasses();
 	static void configSceneNode();
@@ -75,6 +89,7 @@ private:
 	static void configGeometryObjectManipulator();
 
 	static void configCubemapPrefilterPass();
+	static void configSpecularIBLLutPass();
 	static void configGeometryPass();
 	static void configLightPass();
 
@@ -113,12 +128,14 @@ private:
 	static Camera _savedManipulatorCam;
 
 	static osg::ref_ptr<CompositorAnalysis> _analysisHUD;
+	static enum CamManipulatorType _currCamManipulatorType;
 
 	// on screen flags
 	static bool _gameMode;
 	static bool _passDataDisplay;
 	static bool _guiEnabled;
 	static bool _manipulatorEnabled;
+
 
 	static bool _isFirstFrame;
 

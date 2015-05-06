@@ -76,6 +76,23 @@ void TwGUIManager::initMainBar()
 	},
 		&this->_cameraManipulatorActive, NULL);
 
+	TwAddVarCB(g_twBar, "FPS Cam", TW_TYPE_BOOL8, 
+		[](const void *data, void *cliantData) {
+		bool isFps = *static_cast<const bool *>(data);
+		if (isFps) Core::switchToFirstPersonCamManipulator();
+		else Core::switchToTrackBallCamManipulator();
+		}, 
+		[](void *data, void *clientData) {
+			if (Core::getCurrCamManipulatorType() == Core::TRACKBALL)
+			{
+				*(bool *)data = false;
+			}
+			else
+			{
+				*(bool *)data = true;
+			}
+		}, NULL, NULL);
+
 	TwAddVarCB(g_twBar, "Change Projection", TW_TYPE_BOOL8, 
 		[](const void *data, void *clientData) {
 		bool b = *static_cast<const bool *>(data);
@@ -234,22 +251,46 @@ void TwGUIManager::initAddBar()
 			std::string str_mediaPath = "";
 			config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
 
-			// Append the file name to the destination path -> new file location
-			strToWCchar(toPath, str_mediaPath);
-			strToWCchar(newFile, fileName);
-			wcscat_s(toPath, newFile);
+			std::string geomAssetPath = str_mediaPath + "Assets/GeometryObject/";
 
-			CopyFile(fromPath, toPath, FALSE);
-			DWORD dw = GetLastError();							// [Debug] Should be 0
+			//// Append the file name to the destination path -> new file location
+			//strToWCchar(toPath, str_mediaPath);
+			//strToWCchar(newFile, fileName);
+			//wcscat_s(toPath, newFile);
+
+			//CopyFile(fromPath, toPath, FALSE);
+			//DWORD dw = GetLastError();							// [Debug] Should be 0
 
 			// Add model to geometry manager
+			OSG_WARN << "Loading geometry object... " << fileName;
 			osg::Node *model = osgDB::readNodeFile(fileName);
+			if (model != NULL)
+			{
+				OSG_WARN << "Successfully! " << std::endl;
+			}
+			else
+			{
+				OSG_WARN << "Failed ! May crash the program..." << std::endl;
+			}
+
 			GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
 
 			// Get the input name
 			std::string modelName;
 			std::cout << "Enter model name: ";
 			std::cin >> modelName;
+
+			std::string objAssetFullPath = geomAssetPath + modelName + "/";
+
+			// Append the file name to the destination path -> new file location
+			strToWCchar(toPath, objAssetFullPath);
+			strToWCchar(newFile, fileName);
+
+			CreateDirectory(toPath, NULL);
+
+			wcscat_s(toPath, newFile);
+			CopyFile(fromPath, toPath, FALSE);
+			DWORD dw = GetLastError();							// [Debug] Should be 0
 
 			gm->addGeometry(modelName, model, fileName);
 
@@ -337,7 +378,7 @@ void TwGUIManager::initAddBar()
 			ConfigSettings* config = ConfigSettings::config;
 			std::string str_mediaPath = "";
 			config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-			str_mediaPath += "Cubemaps/";
+			str_mediaPath += "Assets/EnvironmentMap/";
 
 			// Append the file name to the destination path -> new file location
 			strToWCchar(toPath, str_mediaPath);
@@ -937,7 +978,13 @@ void TwGUIManager::updateEvents() const
 		case TranslateAxisDragger:
 			*(int *)&_manipulatorBits = 0x4;
 			break;
+		default:
+			*(int *)&_manipulatorBits = 0x0;
 		}
+	}
+	else
+	{
+		*(int *)&_manipulatorBits = 0x0;
 	}
 
 	unsigned int size = _eventsToHandle.size();
@@ -967,18 +1014,6 @@ void TwGUIManager::updateEvents() const
 			{
 				useCtrl = true;
 			}
-			else if (ea.getKey() == 'g')
-			{
-				GeometryObjectManipulator::changeCurrentManipulatorType(TranslateAxisDragger);
-			}
-			else if (ea.getKey() == 'r')
-			{
-				GeometryObjectManipulator::changeCurrentManipulatorType(TrackballDragger);
-			}
-			else if (ea.getKey() == 's')
-			{
-				GeometryObjectManipulator::changeCurrentManipulatorType(TabBoxDragger);
-			}
 			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_Tab)
 			{
 				if (_cameraManipulatorActive)
@@ -990,6 +1025,24 @@ void TwGUIManager::updateEvents() const
 				{
 					Core::enableCameraManipulator();
 					*(bool *)&_cameraManipulatorActive = true;
+				}
+			}
+			else if (ea.getKey() == 'z')
+			{
+				osg::MatrixTransform *mt = NULL;
+				if ((mt = GeometryObjectManipulator::getCurrNode()) != NULL)
+				{
+					osg::BoundingSphere bs = mt->getBound();
+					osg::Vec3 center = bs.center();
+					float radius = bs.radius();
+					osg::Vec3 eyePos = Core::getMainCamera().getEyePosition();
+					osg::Vec3 dirVec = eyePos - center;
+					osg::Vec3 fromObjToEyeScale = dirVec;
+					fromObjToEyeScale.normalize();
+					fromObjToEyeScale *= radius * 1.5;
+					osg::Vec3 fromEyeToScalePoint = -dirVec + fromObjToEyeScale;
+					osg::Vec3 newEyePos = eyePos + fromEyeToScalePoint;
+					Core::setCurrentCameraManipulatorHomePosition(newEyePos, center, osg::Vec3(0, 0, 1));
 				}
 			}
 			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F8)
@@ -1236,9 +1289,10 @@ void TwGUIManager::exportXML()
 	std::string str_export_xml = "";
 	std::string str_mediaPath = "";
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-	config->getValue(ConfigSettings::str_export_xml, str_export_xml);
+	// config->getValue(ConfigSettings::str_export_xml, str_export_xml);
 
-	std::string exportPath = str_mediaPath + str_export_xml;
+	// TODO: support custom file names
+	std::string exportPath = str_mediaPath + "Assets/World/export.xml";
 
 	// Open file to write
 	int tabs = 0;

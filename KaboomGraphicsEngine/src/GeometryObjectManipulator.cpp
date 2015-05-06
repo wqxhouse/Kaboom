@@ -28,6 +28,10 @@ void GeometryObjectManipulator::detachManipulator()
 		_dragger->setHandleEvents(false);
 		_rootNode->removeChild(_dragger.get());
 		_dragger = NULL;
+
+		// TODO: test if this crash the program
+		_currNode = NULL;
+		_currType = NONE;
 	}
 }
 

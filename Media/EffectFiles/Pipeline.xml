@@ -2,7 +2,7 @@
 
 <compositor>
   <include>EffectFiles/template.xml</include>
-  <!--<include>EffectFiles/CubemapPreFilterPassConfig.xml</include>-->
+  <include>EffectFiles/SpecularLutPassConfig.xml</include>
   <include>EffectFiles/GeometryPassConfig.xml</include>
   <include>EffectFiles/LightPrePassConfig.xml</include>
   <include>EffectFiles/LightPassConfig.xml</include>
@@ -37,9 +37,14 @@
       <clear_color>0 0 0 1</clear_color>
       <culling mask="0x8"></culling>
       <near_far preserve="0"/>
-      <!--<output_buffer target="color">b_cubemap</output_buffer>-->
-    </forward_pass> 
-    
+    </forward_pass>
+
+    <deferred_pass name="SpecularLutPass" >
+      <shader>spec_lut_vs</shader>
+      <shader>spec_lut_ps</shader>
+      <output_buffer target="color">b_lut</output_buffer>
+    </deferred_pass>
+
     <forward_pass name="GeometryPass">
       <clear_color>0 0 0 1</clear_color>
       <culling mask="0x1"></culling>
@@ -87,6 +92,7 @@
       <input_buffer unit="2" varname="u_RT1">b_RT1</input_buffer>
       <input_buffer unit="3" varname="u_RT2">b_RT2</input_buffer>
       <!--<input_buffer unit="4" varname="u_cubeMapTex">b_cubemap</input_buffer>-->
+      <!-- 5 is the lut -->
 
       <clear_mask>depth</clear_mask>
       <output_buffer target="color">b_shading</output_buffer>
@@ -95,7 +101,8 @@
       <uniform>u_viewInvMat</uniform>
       <uniform>u_projInvMat</uniform>
       <uniform>u_farPlane</uniform>
-      <uniform>u_eyePos</uniform>
+      <!--<uniform>u_eyePos</uniform>-->
+      <uniform>u_maxLodLevel</uniform>
 
       <shader>lightPass_vs</shader>
       <shader>lightPass_fs</shader>

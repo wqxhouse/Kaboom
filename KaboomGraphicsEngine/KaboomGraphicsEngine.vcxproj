@@ -326,7 +326,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\BugList.txt" />
     <None Include="..\Media\EffectFiles\smaa.xml" />
     <None Include="..\Media\Shaders\constant.glsl" />
-    <None Include="..\Media\Shaders\cubemapPreFilter.frag" />
+    <None Include="..\Media\Shaders\cubemapDiffusePreFilter.frag" />
+    <None Include="..\Media\Shaders\cubemapSpecularPreFilter.frag" />
     <None Include="..\Media\Shaders\cubemapPrefilter.vert" />
     <None Include="..\Media\Shaders\defaultQuad.vert" />
     <None Include="..\Media\Shaders\gbufferUtil.glsl" />

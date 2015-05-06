@@ -38,18 +38,23 @@ vec3 ImportanceSampleGGX( vec2 Xi, float Roughness4, vec3 N )
 	return TangentX * H.x + TangentY * H.y + N * H.z;
 }
 
-vec3 ImportanceSampleDiffuse(vec2 Xi, vec3 N)
+// CosineSampleHemisphere
+vec3 ImportanceSampleDiffuse( vec2 E, vec3 N )
 {
-    float CosTheta = 1.0-Xi.y;
-    float SinTheta = sqrt(1.0-CosTheta*CosTheta);
-    float Phi = 2*M_PI*Xi.x;
+	float Phi = 2 * M_PI * E.x;
+	float CosTheta = sqrt( E.y );
+	float SinTheta = sqrt( 1 - CosTheta * CosTheta );
 
-    vec3 H;
-    H.x = SinTheta * cos( Phi );
-    H.y = SinTheta * sin( Phi );
-    H.z = CosTheta;
+	//float CosTheta = 1.0-E.y;
+ //   float SinTheta = sqrt(1.0-CosTheta*CosTheta);
+ //   float Phi = 2*M_PI*E.x;
 
-    vec3 UpVector = abs(N.z) < 0.999 ? vec3(0,0,1) : vec3(1,0,0);
+	vec3 H;
+	H.x = SinTheta * cos( Phi );
+	H.y = SinTheta * sin( Phi );
+	H.z = CosTheta;
+
+	vec3 UpVector = abs(N.z) < 0.999 ? vec3(0,0,1) : vec3(1,0,0);
     vec3 TangentX = normalize( cross( UpVector, N ) );
     vec3 TangentY = cross( N, TangentX );
 

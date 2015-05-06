@@ -163,7 +163,7 @@ void Core::configLightPass()
 	if (lightPass.pass != NULL)
 	{
 		lightPass.pass->getOrCreateStateSet()->
-			setUpdateCallback(new LightPassCallback());
+			setUpdateCallback(new LightPassCallback(&_cubemapPreFilter));
 	}
 	else
 	{
@@ -191,7 +191,9 @@ void Core::configCubemapPrefilterPass()
 	_passes->getPassData("LightPass", lightPass);
 	osg::Camera *cam = lightPass.pass;
 	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_cubeMapTex", 4));
-	cam->getOrCreateStateSet()->setTextureAttributeAndModes(4, _cubemapPreFilter.getGeneratedCubemap());
+	cam->getOrCreateStateSet()->setTextureAttributeAndModes(4, _cubemapPreFilter.getGeneratedSpecularCubemap());
+	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_cubeMapDiffuseTex", 5));
+	cam->getOrCreateStateSet()->setTextureAttributeAndModes(5, _cubemapPreFilter.getGeneratedDiffuseCubemap());
 
 	_passes->addChild(_cubemapPreFilter.getRoot());
 }
@@ -211,6 +213,10 @@ void Core::configViewer()
 	_viewer->addEventHandler(_gui.get());
 	// _viewer->addEventHandler(new osgViewer::StatsHandler);
 	_viewer->getCamera()->setFinalDrawCallback(_gui.get());
+
+	osg::Matrix defaultProjection;
+	defaultProjection.makePerspective(80, _screenSize.x() / _screenSize.y(), 1, 500);
+	_viewer->getCamera()->setProjectionMatrix(defaultProjection);
 
 	_viewer->setUpViewInWindow(_winPos.x(), _winPos.y(), _screenSize.x(), _screenSize.y());
 	_viewer->setKeyEventSetsDone(0);
@@ -240,6 +246,7 @@ void Core::AdvanceFrame()
 
 		// _cubemapPreFilter.saveImagesToFile("C:\\3DEngine\\temp");
 		_cubemapPreFilter.disableCompute();
+		_passes->setPassActivated("SpecularLutPass", false);
 
 		_lastFrameStartTime = _frameStartTime;
 		_frameStartTime = osg::Timer::instance()->tick();
@@ -267,15 +274,14 @@ void Core::finalize()
 	_gui->initializeTwGUI();
 	
 	// skybox
-	if (_hasEnvMap)
+	if (!_hasEnvMap)
 	{
+		OSG_WARN << "Must setup a cubemap, loading default cubemap"  << std::endl;
+		setEnvironmentMapVerticalCross("DefaultAssets/Cubemap/Sky.hdr");
 		configSkyBox();
 		configCubemapPrefilterPass();
-		//osgFX::EffectCompositor::PassData pass;
-		//_passes->getPassData("LightPass", pass);
-		//osg::Camera *cam = pass.pass;
-		//cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_cubeMapTex", 4));
-		//cam->getOrCreateStateSet()->setTextureAttributeAndModes(4, _skybox->getCubeMap());
+		configSpecularIBLLutPass();
+		_hasEnvMap = true;
 	}
 
 	configInGameGUI();
@@ -286,8 +292,12 @@ void Core::finalize()
 	_analysisHUD->toggleHelper(); // disabled by default
 
 	//_viewer->run();
-	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
+	CustomFirstPersonManipulator *fpsManipulator = new CustomFirstPersonManipulator;
+	fpsManipulator->setHomePosition(osg::Vec3(0, 0, 10), osg::Vec3(0, 1, 10), osg::Vec3(0, 0, 1));
+	fpsManipulator->setAllowThrow(false);
+	_viewer->setCameraManipulator(fpsManipulator);
 	_viewer->getCamera()->setUpdateCallback(new MainCameraCallback);
+	_currCamManipulatorType = Core::FIRSTPERSON;
 
 	_viewer->realize();
 	//while (!_viewer->done())
@@ -338,8 +348,52 @@ void Core::enableCameraManipulator()
 	_camManipulatorTemp = NULL;
 
 	_gui->setCameraManipulatorActive(true);
+
+	// TODO: test if this will crash the program!
+	GeometryObjectManipulator::detachManipulator();
 }
 
+void Core::switchToFirstPersonCamManipulator()
+{
+	CustomFirstPersonManipulator *firstPersonCam = new CustomFirstPersonManipulator; 
+	firstPersonCam->setAllowThrow(false);
+	firstPersonCam->setHomePosition(_cam.getEyePosition(),
+		_cam.getLookAt(), osg::Vec3(0, 0, 1));
+	_viewer->setCameraManipulator(firstPersonCam);
+	_currCamManipulatorType = Core::FIRSTPERSON;
+}
+
+void Core::switchToTrackBallCamManipulator()
+{
+	osgGA::TrackballManipulator *trackBallCam = new osgGA::TrackballManipulator;
+	trackBallCam->setHomePosition(_cam.getEyePosition(),
+		_cam.getLookAt(), _cam.getUp());
+	_viewer->setCameraManipulator(trackBallCam);
+	_currCamManipulatorType = Core::TRACKBALL;
+}
+
+void Core::setCurrentCameraManipulatorHomePosition(const osg::Vec3 &eye, const osg::Vec3 &lookAt, const osg::Vec3 &up)
+{
+	osgGA::CameraManipulator *cam;
+	if ((cam = _viewer->getCameraManipulator()) != NULL)
+	{
+		cam->setHomePosition(eye, lookAt, up);
+	}
+	else
+	{
+		// temporoary enable it without detaching the node
+		_camManipulatorTemp->setHomePosition(eye, lookAt, up);
+		_viewer->getCamera()->setProjectionMatrix(_savedManipulatorCam.getProjectionMatrix());
+		_viewer->setCameraManipulator(_camManipulatorTemp);
+
+		_savedManipulatorCam = Camera();
+		_camManipulatorTemp = NULL;
+
+		// disable after changing the position
+		disableCameraManipulator();
+	}
+
+}
 
 void Core::enableGeometryObjectManipulator()
 {
@@ -536,6 +590,36 @@ void Core::requestPrefilterCubeMapWithCubeMap(osg::TextureCubeMap *cubemap)
 	_cubemapPreFilter.changeCubeMap(cubemap);
 }
 
+void Core::configSpecularIBLLutPass()
+{
+	osgFX::EffectCompositor::PassData pd;
+	_passes->getPassData("SpecularLutPass", pd);
+	osg::ref_ptr<osg::Camera> cam = pd.pass;
+	auto buffer = (*cam->getBufferAttachmentMap().begin()).second._texture;
+	osg::ref_ptr<osg::Texture> lutTex = static_cast<osg::Texture *>(buffer);
+
+	// TODO: since same across different cubemaps
+	// consider save it to hard drive 
+	// feed the lut_texture to lightpass
+
+	osgFX::EffectCompositor::PassData lightPass;
+	_passes->getPassData("LightPass", lightPass);
+	osg::ref_ptr<osg::Camera> lightPassCam = lightPass.pass;
+	lightPassCam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_lutTex", 6));
+	lightPassCam->getOrCreateStateSet()->setTextureAttributeAndModes(6, lutTex);
+}
+
+bool Core::isCamLocked()
+{
+	// TODO: this is a hack
+	return _camManipulatorTemp != NULL ? true : false;
+}
+
+enum Core::CamManipulatorType Core::getCurrCamManipulatorType()
+{
+	return _currCamManipulatorType;
+}
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;
@@ -571,3 +655,5 @@ osg::Timer_t Core::_frameStartTime;
 
 AxisVisualizer Core::_axisVisualizer;
 CubeMapPreFilter Core::_cubemapPreFilter;
+
+enum Core::CamManipulatorType Core::_currCamManipulatorType;
