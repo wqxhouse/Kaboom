@@ -45,6 +45,11 @@ struct BarItem {
 	std::string name;
 };
 
+struct ModelMatrix {
+	std::string name;
+	osg::Matrix matrix;
+};
+
 class Core;
 class TwGUIManager : public osgGA::GUIEventHandler, public osg::Camera::DrawCallback
 {
@@ -80,6 +85,10 @@ public:
 	static void addLightToGUI(TwBar* bar, Light* geom, std::string group, int& index);
 	static void addMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
 
+	static ModelMatrix* makeModelMatrix(GeometryObject* geom);
+	static void addGeomToUndo(GeometryObject* geom);
+	static void clearRedoList();
+
 protected:
 	struct Position
 	{
@@ -99,6 +108,14 @@ protected:
 		g_manipulatorSelectorBar = NULL;
 		g_addBar = NULL;
 		g_materialBar = NULL;
+
+		for (int i = 0; i < _undos.size(); i++) {
+			delete _undos[i];
+		}
+
+		for (int i = 0; i < _redos.size(); i++) {
+			delete _redos[i];
+		}
 	}
 
 	TwMouseButtonID getTwButton(int button) const;
@@ -109,6 +126,8 @@ protected:
 	void initManipuatorSelectorBar();
 	void initAddBar();
 	void initMaterialBar();
+
+	static void doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<ModelMatrix*> &dest);
 
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;
 	TwBar *g_twBar;
@@ -140,5 +159,9 @@ protected:
 
 	std::string nameToCopy;
 	static int _index;
+
+	static std::vector<ModelMatrix*> _undos;
+	static std::vector<ModelMatrix*> _redos;
+	static ModelMatrix* _currChange;
 
 };
