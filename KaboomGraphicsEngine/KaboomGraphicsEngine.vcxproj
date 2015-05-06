@@ -274,9 +274,11 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\TwGUIManager.h" />
     <ClInclude Include="include\Visualizer.h" />
     <ClInclude Include="include\World.h" />
+    <ClInclude Include="MaterialLoader.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MaterialLoader.cpp" />
     <ClCompile Include="src\AxisVisualizer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Core.cpp" />
@@ -313,6 +315,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <Xml Include="..\Media\EffectFiles\GeometryPassPlain.xml" />
     <Xml Include="..\Media\EffectFiles\LightPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\LightPrePassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\Materials.xml" />
     <Xml Include="..\Media\EffectFiles\Pipeline.xml">
       <SubType>Designer</SubType>
     </Xml>
@@ -321,6 +324,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <Xml Include="..\Media\EffectFiles\Test.xml" />
     <Xml Include="..\Media\EffectFiles\TestWorld.xml" />
     <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
+    <Xml Include="..\Media\EffectFiles\TypeId.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\BugList.txt" />

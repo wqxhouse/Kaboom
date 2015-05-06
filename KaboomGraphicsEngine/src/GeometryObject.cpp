@@ -3,6 +3,7 @@
 #include "GeometryObject.h"
 #include <osgDB/ReadFile>
 #include <osg/CullFace>
+#include <cmath>
 
 #include "Material.h"
 #include "MaterialManager.h"
@@ -78,6 +79,27 @@ void GeometryObject::setTranslate(const osg::Vec3 &translate)
 	_objRoot->setMatrix(mat);
 }
 
+osg::Vec3 GeometryObject::getEulerRotation()
+{
+	osg::Vec4 quat = getRotation().asVec4();
+
+	float q0 = quat.x();
+	float q1 = quat.y();
+	float q2 = quat.z();
+	float q3 = quat.w();
+
+	float xRoll, yPitch, zYaw;
+
+
+	// Roll and yaw are actually swapped
+	xRoll = atan2f(2 * (q0 * q3 + q1 * q2), 1 - 2 * (q2 * q2 + q3 * q3));
+	yPitch = asinf(2 * (q0 * q2 - q3 * q1));
+	zYaw = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+	
+	return osg::Vec3(xRoll, yPitch, zYaw);
+
+}
+
 osg::Quat GeometryObject::getRotation()
 {
 	osg::Vec3 pos, scale;
@@ -85,6 +107,47 @@ osg::Quat GeometryObject::getRotation()
 
 	_objRoot->getMatrix().decompose(pos, rot, scale, so);
 	return rot;
+}
+
+void GeometryObject::setRotation(const osg::Vec3 &rot)
+{
+	float xRoll, yPitch, zYaw;
+
+	// Roll and yaw are actually swapped
+	xRoll = rot.z();
+	yPitch = rot.y();
+	zYaw = rot.x();
+
+	float tmp1, tmp2, tmp3, tmp4;
+	float cx, sx, cy, sy, cz, sz;
+
+	cx = cosf(xRoll / 2.0f);
+	sx = sinf(xRoll / 2.0f);
+	cy = cosf(yPitch / 2.0f);
+	sy = sinf(yPitch / 2.0f);
+	cz = cosf(zYaw / 2.0f);
+	sz = sinf(zYaw / 2.0f);
+
+	/*cx = cosf(xRoll / 2.0f);
+	sx = sinf(xRoll / 2.0f);
+	cy = cosf(yPitch / 2.0f);
+	sy = sinf(yPitch / 2.0f);
+	cz = cosf(zYaw / 2.0f);
+	sz = sinf(zYaw / 2.0f);*/
+
+	tmp1 = cx * cy * cz + sx * sy * sz;
+	tmp2 = sx * cy * cz - cx * sy * sz;
+	tmp3 = cx * sy * cz + sx * cy * sz;
+	tmp4 = cx * cy * sz - sx * sy * cz;
+	
+	osg::Quat quat = osg::Quat(osg::Vec4(tmp1, tmp2, tmp3, tmp4));
+	/*osg::Vec4 tmp1 = osg::Vec4(cosf(zYaw / 2.0f), 0.0f, 0.0f, sinf(zYaw / 2.0f));
+	osg::Vec4 tmp2 = osg::Vec4(cosf(yPitch / 2.0f), 0.0f, sinf(yPitch / 2.0f), 0.0f);
+	osg::Vec4 tmp3 = osg::Vec4(cosf(xRoll / 2.0f), sinf(xRoll / 2.0f), 0.0f, 0.0f);
+
+	osg::Quat quat = osg::Quat(tmp1 * tmp2 * tmp3);
+*/
+	setRotation(quat);
 }
 
 void GeometryObject::setRotation(const osg::Quat &rot)

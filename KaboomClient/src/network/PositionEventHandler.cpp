@@ -1,14 +1,15 @@
 #include "PositionEventHandler.h"
 
 #include <osg/MatrixTransform>
+
 #include <Core.h>
 #include <GeometryObject.h>
+#include <components/PositionComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
 #include <network/PositionEvent.h>
 
+#include "../components/SceneNodeComponent.h"
 #include "../core/Game.h"
-#include "../core/SceneNodeComponent.h"
 
 PositionEventHandler::PositionEventHandler(Game *game)
         : game(game) {

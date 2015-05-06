@@ -27,53 +27,79 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\CollisionComponent.cpp" />
+    <ClCompile Include="src\components\ExplosionComponent.cpp" />
+    <ClCompile Include="src\components\InputComponent.cpp" />
+    <ClCompile Include="src\components\JetpackComponent.cpp" />
+    <ClCompile Include="src\components\PhysicsComponent.cpp" />
+    <ClCompile Include="src\components\TimerHandlerComponent.cpp" />
+    <ClCompile Include="src\components\TriggerComponent.cpp" />
+    <ClCompile Include="src\core\BombDataLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
-    <ClCompile Include="src\core\CollisionComponent.cpp" />
-    <ClCompile Include="src\core\CollisionSystem.cpp" />
-    <ClCompile Include="src\core\EntitySystem.cpp" />
-    <ClCompile Include="src\core\ExplosionSystem.cpp" />
+    <ClCompile Include="src\core\CharacterDataLookup.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
-    <ClCompile Include="src\core\InitializationSystem.cpp" />
-    <ClCompile Include="src\core\InputComponent.cpp" />
-    <ClCompile Include="src\core\InputSystem.cpp" />
-    <ClCompile Include="src\core\JetpackComponent.cpp" />
-    <ClCompile Include="src\core\PhysicsComponent.cpp" />
-    <ClCompile Include="src\core\PlayerFactory.cpp" />
-    <ClCompile Include="src\core\TriggerComponent.cpp" />
+    <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp" />
+    <ClCompile Include="src\core\KaboomV2ExplosionHandler.cpp" />
+    <ClCompile Include="src\core\PickupFactory.cpp" />
+    <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\Conversion.cpp" />
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
     <ClCompile Include="src\network\GameServer.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp" />
     <ClCompile Include="src\network\ServerEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ServerNetwork.cpp" />
+    <ClCompile Include="src\systems\CollisionSystem.cpp" />
+    <ClCompile Include="src\systems\EntitySystem.cpp" />
+    <ClCompile Include="src\systems\ExplosionSystem.cpp" />
+    <ClCompile Include="src\systems\FiringSystem.cpp" />
+    <ClCompile Include="src\systems\InitializationSystem.cpp" />
+    <ClCompile Include="src\systems\InputSystem.cpp" />
+    <ClCompile Include="src\systems\PickupSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\CollisionComponent.h" />
+    <ClInclude Include="src\components\ExplosionComponent.h" />
+    <ClInclude Include="src\components\InputComponent.h" />
+    <ClInclude Include="src\components\JetpackComponent.h" />
+    <ClInclude Include="src\components\PhysicsComponent.h" />
+    <ClInclude Include="src\components\TimerHandlerComponent.h" />
+    <ClInclude Include="src\components\TriggerComponent.h" />
+    <ClInclude Include="src\core\BombData.h" />
+    <ClInclude Include="src\core\BombDataLookup.h" />
     <ClInclude Include="src\core\BombFactory.h" />
-    <ClInclude Include="src\core\CollisionComponent.h" />
-    <ClInclude Include="src\core\CollisionSystem.h" />
-    <ClInclude Include="src\core\EntitySystem.h" />
-    <ClInclude Include="src\core\ExplosionComponent.h" />
-    <ClInclude Include="src\core\ExplosionSystem.h" />
+    <ClInclude Include="src\core\CharacterData.h" />
+    <ClInclude Include="src\core\CharacterDataLookup.h" />
+    <ClInclude Include="src\core\CollisionHandler.h" />
+    <ClInclude Include="src\core\DefaultCollisionHandler.h" />
+    <ClInclude Include="src\core\DefaultExplosionHandler.h" />
+    <ClInclude Include="src\core\ExplosionHandler.h" />
     <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\core\InitializationSystem.h" />
-    <ClInclude Include="src\core\InputComponent.h" />
-    <ClInclude Include="src\core\InputSystem.h" />
-    <ClInclude Include="src\core\JetpackComponent.h" />
-    <ClInclude Include="src\core\PhysicsComponent.h" />
-    <ClInclude Include="src\core\PlayerFactory.h" />
-    <ClInclude Include="src\core\TriggerComponent.h" />
+    <ClInclude Include="src\core\KaboomV2CollisionHandler.h" />
+    <ClInclude Include="src\core\KaboomV2ExplosionHandler.h" />
+    <ClInclude Include="src\core\PickupFactory.h" />
+    <ClInclude Include="src\core\CharacterFactory.h" />
+    <ClInclude Include="src\core\TimerHandler.h" />
     <ClInclude Include="src\core\World.h" />
+    <ClInclude Include="src\math\Conversion.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
     <ClInclude Include="src\network\GameServer.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
     <ClInclude Include="src\network\ServerEventHandlerLookup.h" />
     <ClInclude Include="src\network\ServerNetwork.h" />
+    <ClInclude Include="src\systems\CollisionSystem.h" />
+    <ClInclude Include="src\systems\EntitySystem.h" />
+    <ClInclude Include="src\systems\ExplosionSystem.h" />
+    <ClInclude Include="src\systems\FiringSystem.h" />
+    <ClInclude Include="src\systems\InitializationSystem.h" />
+    <ClInclude Include="src\systems\InputSystem.h" />
+    <ClInclude Include="src\systems\PickupSystem.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -85,7 +111,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="data\bombs.xml" />
+    <Xml Include="data-server\bombs.xml" />
+    <Xml Include="data-server\characters.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56B7232B-1CBB-489A-B34A-EDF3151698B6}</ProjectGuid>
@@ -275,7 +302,7 @@
     </Link>
     <PostBuildEvent>
       <Message>Copy data directory to output directory.</Message>
-      <Command>xcopy "$(ProjectDir)\data" "$(TargetDir)\data" /F /Y /I</Command>
+      <Command>xcopy "$(ProjectDir)\data-server" "$(TargetDir)\data-server" /D /I /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

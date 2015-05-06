@@ -2,11 +2,8 @@
 
 #include <string>
 
-PlayerInputEvent::PlayerInputEvent()
-        : PlayerInputEvent(0, false, false, false, false, false, false, 0.0f, 0.0f) {
-}
-
-PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
+PlayerInputEvent::PlayerInputEvent(
+        unsigned int playerId,
         bool movingForward,
         bool movingBackward,
         bool movingLeft,
@@ -15,7 +12,7 @@ PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
         bool firing,
         float yaw,
         float pitch)
-        : Event(EventOpcode::PLAYER_INPUT, sizeof(PlayerInputEvent)),
+        : Event(EVENT_PLAYER_INPUT, sizeof(PlayerInputEvent)),
           playerId(playerId),
           movingForward(movingForward),
           movingBackward(movingBackward),
@@ -27,46 +24,43 @@ PlayerInputEvent::PlayerInputEvent(unsigned int playerId,
           pitch(pitch) {
 }
 
-PlayerInputEvent::~PlayerInputEvent() {
-}
-
-const unsigned int &PlayerInputEvent::getPlayerId() const {
+unsigned int PlayerInputEvent::getPlayerId() const {
     return playerId;
 }
 
-void PlayerInputEvent::setPlayerId(const unsigned int &playerId) {
+void PlayerInputEvent::setPlayerId(unsigned int playerId) {
     this->playerId = playerId;
 }
 
-const bool &PlayerInputEvent::isMovingForward() const {
+bool PlayerInputEvent::isMovingForward() const {
     return movingForward;
 }
 
-const bool &PlayerInputEvent::isMovingBackward() const {
+bool PlayerInputEvent::isMovingBackward() const {
     return movingBackward;
 }
 
-const bool &PlayerInputEvent::isMovingLeft() const {
+bool PlayerInputEvent::isMovingLeft() const {
     return movingLeft;
 }
 
-const bool &PlayerInputEvent::isMovingRight() const {
+bool PlayerInputEvent::isMovingRight() const {
     return movingRight;
 }
 
-const bool &PlayerInputEvent::isJumping() const {
+bool PlayerInputEvent::isJumping() const {
     return jumping;
 }
 
-const bool &PlayerInputEvent::isFiring() const {
+bool PlayerInputEvent::isFiring() const {
     return firing;
 }
 
-const float &PlayerInputEvent::getYaw() const {
+float PlayerInputEvent::getYaw() const {
     return yaw;
 }
 
-const float &PlayerInputEvent::getPitch() const {
+float PlayerInputEvent::getPitch() const {
     return pitch;
 }
 

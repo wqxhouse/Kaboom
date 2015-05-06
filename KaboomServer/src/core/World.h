@@ -13,7 +13,7 @@ public:
 
     void loadMap();
 
-    void stepSimulation(float timeStep);
+    void stepSimulation(float timeStep, int maxSubSteps);
 
     void addRigidBody(btRigidBody *rigidBody);
     void removeRigidBody(btRigidBody *rigidBody);
@@ -28,6 +28,8 @@ public:
     const btCollisionDispatcher &getDispatcher() const;
 
 private:
+    class TriggerCallback;
+
     btDbvtBroadphase broadphase;
     btDefaultCollisionConfiguration collisionConfiguration;
     btCollisionDispatcher dispatcher;
@@ -38,5 +40,15 @@ private:
     void addStaticPlane(btVector3 origin, btVector3 normal);
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
 
-    void handleCollision(Entity *entityA, Entity *entityB);
+    void handleCollision(Entity *entityA, Entity *entityB) const;
+};
+
+class World::TriggerCallback : public btGhostPairCallback {
+public:
+    virtual btBroadphasePair *addOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1);
+    virtual void *removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher);
+
+private:
+    void addTriggerEntity(Entity *entityA, Entity *entityB) const;
+    void removeTriggerEntity(Entity *entityA, Entity *entityB) const;
 };

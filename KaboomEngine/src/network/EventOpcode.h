@@ -1,12 +1,12 @@
 #pragma once
 
 enum EventOpcode {
-    EMPTY = 0,
-    POSITION = 1,
-    ROTATION = 2,
-    PLAYER_INPUT = 3,
-    ENTITY_SPAWN = 4,
-    DISCONNECT = 5,
-	ASSIGN_ENTITY = 6,
-    EXPLOSION = 7,
+    EVENT_EMPTY = 0,
+    EVENT_POSITION = 1,
+    EVENT_ROTATION = 2,
+    EVENT_PLAYER_INPUT = 3,
+    EVENT_SPAWN = 4,
+    EVENT_DISCONNECT = 5,
+    EVENT_ASSIGN = 6,
+    EVENT_EXPLOSION = 7,
 };

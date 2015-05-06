@@ -1,24 +1,25 @@
 #include "Game.h"
 
 #include <iostream>
+
 #include <osg/Group>
+#include <osgAudio/FileStream.h>
 
 #include <Core.h>
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
-
+#include <components/PositionComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
 
-#include "SceneNodeComponent.h"
 #include "../Scene.h"
+#include "../components/SceneNodeComponent.h"
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 
 Game::Game(ConfigSettings *config)
         : config(config),
-          playerFactory(entityManager),
+          characterFactory(entityManager),
           bombFactory(entityManager),
           eventHandlerLookup(this),
           client(eventHandlerLookup), 
@@ -42,27 +43,41 @@ Game::Game(ConfigSettings *config)
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
     setupScene();
 
-	// For testing in-game editor *
-	/*
+	/* For testing in-game editor *
+	
 	std::string str_mediaPath = "";
+	std::string str_material_xml = "";
 	std::string str_world_xml = "";
+
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+	config->getValue(ConfigSettings::str_material_xml, str_material_xml);
 	config->getValue(ConfigSettings::str_world_xml, str_world_xml);
 
 	str_world_xml = str_mediaPath + str_world_xml;
 
+	Core::loadMaterialFile(str_material_xml);
 	Core::loadWorldFile(str_world_xml);
-	*/
-	/* End testing code */
+	
+	* End testing code */
 
     inputManager = new InputManager(client);
     inputManager->loadConfig();
-
+	
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
     Core::addEventHandler(&inputManager->getMouseEventHandler());
 
 	_geometryManager = Core::getWorldRef().getGeometryManager();
 	_materialManager = Core::getWorldRef().getMaterialManager();
+	source = new Source;
+	
+	printf("check for sound errors");
+	sample = new Sample("sounds/a.wav");
+	source->setSound(sample.get());
+	source->setGain(1);
+	source->setLooping(false);
+	//sounds->insert({ KABOOM_EXPLODE, sample });
+	printf("finished check sound errors");
+	
 }
 
 Game::~Game() {
@@ -162,8 +177,8 @@ EntityManager &Game::getEntityManager() {
     return entityManager;
 }
 
-const PlayerFactory &Game::getPlayerFactory() const {
-    return playerFactory;
+const CharacterFactory &Game::getCharacterFactory() const {
+    return characterFactory;
 }
 
 const BombFactory &Game::getBombFactory() const {

@@ -3,11 +3,13 @@
 #include <typeinfo>
 #include <unordered_map>
 
+#include "EntityType.h"
+
 class Component;
 
 class Entity {
 public:
-    Entity(const unsigned int &id);
+    Entity(unsigned int id, const EntityType &type = NONE);
     ~Entity();
 
     void attachComponent(Component *component);
@@ -26,9 +28,14 @@ public:
         }
     }
 
-    const unsigned int &getId() const;
+    unsigned int getId() const;
+
+    const EntityType &getType() const;
+    void setType(const EntityType &type);
 
 private:
     unsigned int id;
+    EntityType type;
+
     std::unordered_map<const std::type_info *, Component *> components;
 };

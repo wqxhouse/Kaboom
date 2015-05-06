@@ -59,7 +59,7 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config) {
         closesocket(ListenSocket);
         WSACleanup();
         exit(1);
-    }
+	}
 
     // Setup the TCP listening socket
     iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
@@ -95,7 +95,11 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config) {
 
 bool ServerNetwork::acceptNewClient(unsigned int id) {
     // if client waiting, accept the connection and save the socket
-    SOCKET socket = accept(ListenSocket, NULL, NULL);
+	SOCKET socket = accept(ListenSocket, NULL, NULL);
+
+	// Don't buffer packet
+	int flag = 1;
+	setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
 
     if (socket != INVALID_SOCKET) {
         // insert new client into session id table

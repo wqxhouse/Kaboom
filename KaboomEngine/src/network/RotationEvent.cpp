@@ -2,29 +2,22 @@
 
 #include <string>
 
-RotationEvent::RotationEvent()
-    : RotationEvent(0, 0.0f, 0.0f) {
-}
-
 RotationEvent::RotationEvent(unsigned int entityId, float yaw, float pitch)
-    : Event(EventOpcode::ROTATION, sizeof(RotationEvent)),
-    entityId(entityId),
-    yaw(yaw),
-    pitch(pitch) {
+        : Event(EVENT_ROTATION, sizeof(RotationEvent)),
+          entityId(entityId),
+          yaw(yaw),
+          pitch(pitch) {
 }
 
-RotationEvent::~RotationEvent() {
-}
-
-const unsigned int &RotationEvent::getEntityId() const {
+unsigned int RotationEvent::getEntityId() const {
     return entityId;
 }
 
-const float &RotationEvent::getYaw() const {
+float RotationEvent::getYaw() const {
     return yaw;
 }
 
-const float &RotationEvent::getPitch() const {
+float RotationEvent::getPitch() const {
     return pitch;
 }
 

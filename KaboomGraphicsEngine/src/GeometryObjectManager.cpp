@@ -6,6 +6,7 @@
 GeometryObjectManager::GeometryObjectManager()
 {
 	_geomRoot = new osg::Group;
+	_suffix = 1;
 }
 
 GeometryObjectManager::~GeometryObjectManager()
@@ -20,10 +21,20 @@ GeometryObjectManager::~GeometryObjectManager()
 
 bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, osg::Vec3 pos)
 {
+	if (geomNode == nullptr) {
+		std::cout << "geomNode is null: " << name << std::endl;
+		return false;
+	}
+
+	// Handle duplicated (name) geoms
+	if (doesNameExist(name)) {
+		std::cout << "Name already exists: " << name << std::endl;
+		return false;
+	}
+
 	GeometryObject *geomObj = new GeometryObject(name, geomNode);
 	geomObj->setTranslate(pos);
 
-	// TODO: process duplicated (name) geoms
 	_geomObjMap.insert(std::make_pair(name, geomObj));
 	_geomRoot->addChild(geomObj->getRoot());
 	return true;
@@ -31,15 +42,26 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 
 bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName)
 {
+	if (geomNode == nullptr) {
+		std::cout << "geomNode is null: " << name << std::endl;
+		return false;
+	}
+
+	// Handle duplicated (name) geoms
+	if (doesNameExist(name)) {
+		std::cout << "Name already exists: " << name << std::endl;
+		return false;
+	}
+
 	GeometryObject *geomObj = new GeometryObject(name, geomNode, fileName);
 
-	// TODO: process duplicated (name) geoms
 	_geomObjMap.insert(std::make_pair(name, geomObj));
 	_geomRoot->addChild(geomObj->getRoot());
 	return true;
 }
 
-void GeometryObjectManager::deleteGeometry(const std::string &name){
+void GeometryObjectManager::deleteGeometry(const std::string &name)
+{
 	GeometryObject *geomObj = _geomObjMap[name];
 	
 	_geomObjMap.erase(name);
@@ -47,12 +69,32 @@ void GeometryObjectManager::deleteGeometry(const std::string &name){
 	delete geomObj;
 }
 
-void GeometryObjectManager::renameGeometry(const std::string &oldName, const std::string newName){
+bool GeometryObjectManager::renameGeometry(const std::string &oldName, const std::string newName)
+{
+	// Handle duplicated (name) geoms
+	if (doesNameExist(newName)) {
+		std::cout << "Name already exists: " << newName << std::endl;
+		return false;
+	}
+
 	GeometryObject *geomObj = _geomObjMap[oldName];
 	_geomObjMap.erase(oldName);
 
 	geomObj->setName(newName);
 	_geomObjMap.insert(std::make_pair(newName, geomObj));
+	return true;
+}
+
+bool GeometryObjectManager::doesNameExist(const std::string &name)
+{
+	std::unordered_map<std::string, GeometryObject *>::const_iterator got =
+		_geomObjMap.find(name);
+
+	// If the name already exists
+	if (got != _geomObjMap.end()) {
+		return true;
+	}
+	return false;
 }
 
 bool GeometryObjectManager::setGeometryMaterial(const std::string &geomName, Material *material)

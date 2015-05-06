@@ -6,16 +6,14 @@
 
 class AssignEvent : public Event {
 public:
-	AssignEvent(unsigned int entityId);
-	~AssignEvent();
-	AssignEvent();
+	AssignEvent(unsigned int entityId = 0);
 
-    const unsigned int &getEntityId() const;
+    unsigned int getEntityId() const;
 
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);
 
-	friend std::ostream& operator<<(std::ostream &os, const AssignEvent &o) {
+	friend std::ostream &operator<<(std::ostream &os, const AssignEvent &o) {
         os << "AssignEvent: {" << std::endl;
         os << "    entityId: " << o.entityId << std::endl;
         os << "}";
