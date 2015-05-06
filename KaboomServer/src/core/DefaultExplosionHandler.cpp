@@ -1,4 +1,4 @@
-#include "KaboomV2ExplosionHandler.h"
+#include "DefaultExplosionHandler.h"
 
 #include <btBulletDynamicsCommon.h>
 
@@ -15,7 +15,7 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/TriggerComponent.h"
 
-void KaboomV2ExplosionHandler::handle(
+void DefaultExplosionHandler::handle(
         Game *game,
         Entity *entity,
         const std::unordered_set<Entity *> &nearbyEntities) {

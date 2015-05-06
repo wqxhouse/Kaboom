@@ -14,4 +14,18 @@
         <maxDamage>80</maxDamage>
         <minDamage>20</minDamage>
     </bomb>
+    <bomb>
+        <id>131074</id>
+        <name>Time Bomb</name>
+        <size>0.1</size>
+        <mass>1.0</mass>
+        <explosion-radius>2.0</explosion-radius>
+        <cooldown>500</cooldown>
+        <launch-speed>5</launch-speed>
+        <capacity>20</capacity>
+        <knockback-amount>5.0</knockback-amount>
+        <knockback-duration>250</knockback-duration>
+        <maxDamage>80</maxDamage>
+        <minDamage>20</minDamage>
+    </bomb>
 </bombs>

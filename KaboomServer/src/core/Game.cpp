@@ -20,6 +20,7 @@ Game::Game(ConfigSettings *config)
           pickupSystem(this),
 		  firingSystem(this),
           collisionSystem(this),
+          timerSystem(this),
           explosionSystem(this),
 	      eventHandlerLookup(this),
 	      server(config, eventHandlerLookup) {
@@ -95,6 +96,7 @@ void Game::update(float timeStep, int maxSubSteps) {
     stepSimulation(timeStep, maxSubSteps);
 
     collisionSystem.update(timeStep);
+    timerSystem.update(timeStep);
     pickupSystem.update(timeStep);
     explosionSystem.update(timeStep);
 

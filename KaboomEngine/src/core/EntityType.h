@@ -10,4 +10,5 @@ enum EntityType {
     NONE = 0,
     DEFAULT_CHARACTER = CAT_CHARACTER | 1,
     KABOOM_V2 = CAT_BOMB | 1,
+    TIME_BOMB = CAT_BOMB | 2,
 };
