@@ -39,6 +39,7 @@ Game::Game(ConfigSettings *config)
     int bufferH = atoi(renbufferHStr.c_str());
     int screenW = atoi(screenWStr.c_str());
     int screenH = atoi(screenHStr.c_str());
+	sounds = new std::unordered_map<SOUNDS, osg::ref_ptr<Sample> >();
 
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
     setupScene();
@@ -69,16 +70,23 @@ Game::Game(ConfigSettings *config)
 	_materialManager = Core::getWorldRef().getMaterialManager();
 	source = new Source;
 	
-	printf("check for sound errors");
+	printf("check for sound errors\n");
 	sample = new Sample("C:\\Users\\melapier\\Downloads\\Kaboom\\x64\\SemiDebug\\sounds\\a.wav");
 	source->setSound(sample.get());
 	source->setGain(1);
 	source->setLooping(false);
-	sounds->at(KABOOM_EXPLODE)=sample;
+	printf("Adding KABOOM_EXPLODE TO MAP\n");
+	sounds->insert(std::make_pair(KABOOM_EXPLODE,sample));
+	//sounds->at(KABOOM_EXPLODE)=sample;
+	printf("Added KABOOM_EXPLODE TO MAP\n");
 	sample = new Sample("C:\\Users\\melapier\\Downloads\\Kaboom\\x64\\SemiDebug\\sounds\\a.wav");
-	sounds->at(KABOOM_FIRE) = sample;
+	printf("Adding KABOOM_FIRE TO MAP\n");
+	sounds->insert(std::make_pair(KABOOM_FIRE, sample));
+	printf("Added KABOOM_FIRE TO MAP\n");
 	sample = new Sample("C:\\Users\\melapier\\Downloads\\Kaboom\\x64\\SemiDebug\\sounds\\a.wav");
-	sounds->at(BASIC) = sample ;
+	printf("Adding BASIC TO MAP\n");
+	sounds->insert(std::make_pair(BASIC, sample));
+	printf("Added BASIC TO MAP\n");
 	printf("finished check sound errors");
 	
 }
