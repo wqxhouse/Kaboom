@@ -14,6 +14,7 @@
 #include "../systems/InitializationSystem.h"
 #include "../systems/InputSystem.h"
 #include "../systems/PickupSystem.h"
+#include "../systems/TimerSystem.h"
 
 class ConfigSettings;
 
@@ -44,6 +45,7 @@ private:
     PickupSystem pickupSystem;
 	FiringSystem firingSystem;
     CollisionSystem collisionSystem;
+    TimerSystem timerSystem;
     ExplosionSystem explosionSystem;
 
     ServerEventHandlerLookup eventHandlerLookup;

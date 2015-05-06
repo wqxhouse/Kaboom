@@ -39,9 +39,10 @@
     <ClCompile Include="src\core\CharacterDataLookup.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp" />
-    <ClCompile Include="src\core\KaboomV2ExplosionHandler.cpp" />
+    <ClCompile Include="src\core\DefaultExplosionHandler.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
+    <ClCompile Include="src\core\TimeBombTimerHandler.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\Conversion.cpp" />
@@ -85,6 +86,7 @@
     <ClInclude Include="src\core\KaboomV2ExplosionHandler.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
+    <ClInclude Include="src\core\TimeBombTimerHandler.h" />
     <ClInclude Include="src\core\TimerHandler.h" />
     <ClInclude Include="src\core\World.h" />
     <ClInclude Include="src\math\Conversion.h" />

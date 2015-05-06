@@ -2,7 +2,7 @@
 
 #include <core/Entity.h>
 
-#include "KaboomV2ExplosionHandler.h"
+#include "DefaultExplosionHandler.h"
 #include "../components/ExplosionComponent.h"
 
 void KaboomV2CollisionHandler::handle(
@@ -13,5 +13,5 @@ void KaboomV2CollisionHandler::handle(
 	//for (auto collidedEntity : collidedEntities){
 	//	if (entity->getComponent<B)
 	//}
-    entity->attachComponent(new ExplosionComponent(new KaboomV2ExplosionHandler));
+    entity->attachComponent(new ExplosionComponent(new DefaultExplosionHandler()));
 }
