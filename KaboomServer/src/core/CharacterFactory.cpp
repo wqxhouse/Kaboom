@@ -42,6 +42,7 @@ Entity *CharacterFactory::createCharacter(
 
     btRigidBody *rigidBody = new btRigidBody(characterData.mass, motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);
+	rigidBody->setAngularFactor(btVector3(0, 0, 1));//NOTE : prevent body from rotating in the x and y axis
 
     BombContainerComponent::InventoryType inventory = BombContainerComponent::InventoryType();
 
