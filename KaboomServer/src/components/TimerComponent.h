@@ -5,9 +5,9 @@
 
 #include "../core/TimerHandler.h"
 
-class TimerHandlerComponent : public Component {
+class TimerComponent : public Component {
 public:
-    TimerHandlerComponent(Timer *timer, TimerHandler *handler);
+    TimerComponent(Timer *timer, TimerHandler *handler);
 
     Timer *getTimer();
     TimerHandler *getHandler() const;

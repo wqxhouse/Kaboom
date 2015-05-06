@@ -32,7 +32,7 @@
     <ClCompile Include="src\components\InputComponent.cpp" />
     <ClCompile Include="src\components\JetpackComponent.cpp" />
     <ClCompile Include="src\components\PhysicsComponent.cpp" />
-    <ClCompile Include="src\components\TimerHandlerComponent.cpp" />
+    <ClCompile Include="src\components\TimerComponent.cpp" />
     <ClCompile Include="src\components\TriggerComponent.cpp" />
     <ClCompile Include="src\core\BombDataLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
@@ -58,6 +58,7 @@
     <ClCompile Include="src\systems\InitializationSystem.cpp" />
     <ClCompile Include="src\systems\InputSystem.cpp" />
     <ClCompile Include="src\systems\PickupSystem.cpp" />
+    <ClCompile Include="src\systems\TimerSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -68,7 +69,7 @@
     <ClInclude Include="src\components\InputComponent.h" />
     <ClInclude Include="src\components\JetpackComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
-    <ClInclude Include="src\components\TimerHandlerComponent.h" />
+    <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
     <ClInclude Include="src\core\BombData.h" />
     <ClInclude Include="src\core\BombDataLookup.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="src\systems\InitializationSystem.h" />
     <ClInclude Include="src\systems\InputSystem.h" />
     <ClInclude Include="src\systems\PickupSystem.h" />
+    <ClInclude Include="src\systems\TimerSystem.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
