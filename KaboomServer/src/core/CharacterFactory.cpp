@@ -11,7 +11,6 @@
 #include <core/EntityManager.h>
 
 #include "common.h"
-#include "CharacterData.h"
 #include "EntityConfigLookup.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"

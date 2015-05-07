@@ -208,9 +208,6 @@
     <ClInclude Include="src\core\PickupFactory.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\CharacterData.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\CharacterFactory.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
