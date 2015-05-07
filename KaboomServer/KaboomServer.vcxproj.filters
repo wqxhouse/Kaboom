@@ -112,9 +112,6 @@
     <ClCompile Include="src\core\CharacterFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\math\Conversion.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp">
       <Filter>Source Files\Explosion Triggers</Filter>
     </ClCompile>
@@ -181,6 +178,9 @@
     <ClCompile Include="src\core\CharacterConfigLoader.cpp">
       <Filter>Source Files\Configurations</Filter>
     </ClCompile>
+    <ClCompile Include="src\math\util.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -216,9 +216,6 @@
     </ClInclude>
     <ClInclude Include="src\core\CharacterFactory.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\math\Conversion.h">
-      <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\core\CollisionHandler.h">
       <Filter>Header Files\Explosion Triggers</Filter>
@@ -303,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="src\core\CharacterConfigLoader.h">
       <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\util.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

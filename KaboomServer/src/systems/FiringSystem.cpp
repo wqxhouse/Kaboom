@@ -11,7 +11,7 @@
 #include "../components/InputComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
-#include "../math/Conversion.h"
+#include "../math/util.h"
 
 #define VELOCITYCAP 2
 #define VELOCTIYACCELERATION .1
