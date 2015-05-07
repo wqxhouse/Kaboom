@@ -3,7 +3,7 @@
 #include <components/WeaponPickupComponent.h>
 
 #include "../components/TriggerComponent.h"
-#include "../core/BombDataLookup.h"
+#include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 
 PickupSystem::PickupSystem(Game *game)
@@ -33,7 +33,7 @@ void PickupSystem::processEntity(Entity *entity) {
 
         const EntityType &bombType = weaponPickupComp->getBombType();
 
-        const int capacity = BombDataLookup::instance()[bombType].getInt("capacity");
+        const int capacity = EntityConfigLookup::instance()[bombType].getInt("capacity");
         const int invAmount = invComp->getAmount(bombType);
         const int pickupAmount = weaponPickupComp->getAmount();
 

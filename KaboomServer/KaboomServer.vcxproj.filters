@@ -172,7 +172,7 @@
     <ClCompile Include="src\core\BombDataLoader.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\BombDataLookup.cpp">
+    <ClCompile Include="src\core\EntityConfigLookup.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -295,7 +295,7 @@
     <ClInclude Include="src\core\BombDataLoader.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\BombDataLookup.h">
+    <ClInclude Include="src\core\EntityConfigLookup.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>

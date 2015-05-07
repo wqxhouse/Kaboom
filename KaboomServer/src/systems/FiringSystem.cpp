@@ -9,7 +9,7 @@
 #include <util/Timer.h>
 
 #include "../components/InputComponent.h"
-#include "../core/BombDataLookup.h"
+#include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/Conversion.h"
 
@@ -42,7 +42,7 @@ void FiringSystem::processEntity(Entity *entity) {
     const EntityType &bombType = equipComp->getEquipmentType();
 
     if (inputComp->getFireMode() == FireMode::LEFT_CLICK) {
-        const Configuration &bombConfig = BombDataLookup::instance()[bombType];
+        const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
 
         if (invComp->hasBomb(bombType)) {
             Timer &timer = invComp->getTimer(bombType);
