@@ -300,7 +300,6 @@ void TwGUIManager::initAddBar()
 			CopyFile(fromPath, toPath, FALSE);
 			DWORD dw = GetLastError();							// [Debug] Should be 0
 
-			gm->addGeometry(modelName, model, fileName);
 			if (gm->addGeometry(modelName, model, fileName)) {
 				GeometryObject* geom = gm->getGeometryObject(modelName);
 
