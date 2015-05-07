@@ -24,11 +24,6 @@ std::string Configuration::getString(const char *name) const {
     return std::string(properties.at(name).s);
 }
 
-template <typename T>
-T Configuration::getPointer(const char *name) const {
-    return static_cast<T>(properties.at(name).ptr);
-}
-
 void Configuration::set(const char *name, bool value) {
     properties[name].b = value;
 }
@@ -50,10 +45,10 @@ void Configuration::set(const char *name, const char *value) {
         delete[] properties[name].s;
     }
 
-    int len = strnlen_s(name, 256);
+    int len = strnlen_s(value, 256);
     char *szValue = new char[len];
 
-    strncpy_s(szValue, len, value, len);
+    strcpy_s(szValue, len + 1, value);
     properties[name].s = szValue;
 }
 

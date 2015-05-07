@@ -33,7 +33,7 @@ void PickupSystem::processEntity(Entity *entity) {
 
         const EntityType &bombType = weaponPickupComp->getBombType();
 
-        const int capacity = BombDataLookup::instance[bombType].capacity;
+        const int capacity = BombDataLookup::instance()[bombType].getInt("capacity");
         const int invAmount = invComp->getAmount(bombType);
         const int pickupAmount = weaponPickupComp->getAmount();
 

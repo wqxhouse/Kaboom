@@ -14,7 +14,9 @@ public:
     std::string getString(const char *name) const;
 
     template <typename T>
-    T getPointer(const char *name) const;
+    T getPointer(const char *name) const {
+        return static_cast<T>(properties.at(name).ptr);
+    }
 
     void set(const char *name, bool value);
     void set(const char *name, int value);

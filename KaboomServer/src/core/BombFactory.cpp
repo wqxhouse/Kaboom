@@ -33,7 +33,7 @@ Entity *BombFactory::createBomb(
         float vx,
         float vy,
         float vz) const {
-    const BombData &data = BombDataLookup::instance[type];
+    const Configuration &bombConfig = BombDataLookup::instance()[type];
 
     Entity *entity = entityManager.createEntity(type);
 
@@ -42,14 +42,14 @@ Entity *BombFactory::createBomb(
     worldTrans.setOrigin(btVector3(x, y, z));
 
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
-    btCollisionShape *collisionShape = new btSphereShape(data.size);
+    btCollisionShape *collisionShape = new btSphereShape(bombConfig.getFloat("size"));
 
-    btRigidBody *rigidBody = new btRigidBody(data.mass, motionState, collisionShape, btVector3(0, 0, 0));
+    btRigidBody *rigidBody = new btRigidBody(bombConfig.getFloat("mass"), motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setLinearVelocity(btVector3(vx, vy, vz));
     rigidBody->setUserPointer(entity);
 
     btGhostObject *ghostObject = new btGhostObject();
-    ghostObject->setCollisionShape(new btSphereShape(data.explosionRadius));
+    ghostObject->setCollisionShape(new btSphereShape(bombConfig.getFloat("explosion-radius")));
     ghostObject->setWorldTransform(worldTrans);
     ghostObject->setUserPointer(entity);
 
@@ -59,7 +59,7 @@ Entity *BombFactory::createBomb(
     entity->attachComponent(new TriggerComponent(ghostObject));
 
     if (type == KABOOM_V2) {
-        entity->attachComponent(new CollisionComponent(data.collisionHandler));
+        entity->attachComponent(new CollisionComponent(bombConfig.getPointer<CollisionHandler *>("collision-handler")));
     }
 
     if (type == TIME_BOMB) {
