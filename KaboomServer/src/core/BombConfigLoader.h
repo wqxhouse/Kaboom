@@ -6,9 +6,9 @@
 #include <util/Configuration.h>
 #include <util/XMLLoader.h>
 
-class BombDataLoader : public XMLLoader {
+class BombConfigLoader : public XMLLoader {
 public:
-    BombDataLoader(std::unordered_map<EntityType, Configuration> &config);
+    BombConfigLoader(std::unordered_map<EntityType, Configuration> &config);
 
     void load(const std::string &filename);
 

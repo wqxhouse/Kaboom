@@ -34,7 +34,7 @@
     <ClCompile Include="src\components\PhysicsComponent.cpp" />
     <ClCompile Include="src\components\TimerComponent.cpp" />
     <ClCompile Include="src\components\TriggerComponent.cpp" />
-    <ClCompile Include="src\core\BombDataLoader.cpp" />
+    <ClCompile Include="src\core\BombConfigLoader.cpp" />
     <ClCompile Include="src\core\EntityConfigLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\CharacterConfigLoader.cpp" />
@@ -74,7 +74,7 @@
     <ClInclude Include="src\components\PhysicsComponent.h" />
     <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
-    <ClInclude Include="src\core\BombDataLoader.h" />
+    <ClInclude Include="src\core\BombConfigLoader.h" />
     <ClInclude Include="src\core\common.h" />
     <ClInclude Include="src\core\EntityConfigLookup.h" />
     <ClInclude Include="src\core\BombFactory.h" />
