@@ -1,6 +1,7 @@
 #include "EntityConfigLookup.h"
 
-#include "BombDataLoader.h"
+#include "BombConfigLoader.h"
+#include "CharacterConfigLoader.h"
 
 const EntityConfigLookup& EntityConfigLookup::instance() {
     static bool initialized = false;
@@ -17,8 +18,11 @@ const EntityConfigLookup& EntityConfigLookup::instance() {
 }
 
 void EntityConfigLookup::load(const std::string &filename) {
-    BombDataLoader bombDataLoader(config);
-    bombDataLoader.load(filename);
+    BombConfigLoader bombConfigLoader(config);
+    bombConfigLoader.load(filename);
+
+    CharacterConfigLoader charConfigLoader(config);
+    charConfigLoader.load(filename);
 }
 
 const Configuration &EntityConfigLookup::operator[](EntityType type) const {
