@@ -10,8 +10,7 @@
 #include <components/HealthComponent.h>
 #include <core/EntityManager.h>
 
-#include "CharacterData.h"
-#include "CharacterDataLookup.h"
+#include "common.h"
 #include "EntityConfigLookup.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
@@ -28,7 +27,7 @@ Entity *CharacterFactory::createCharacter(
         float z,
         float yaw,
         float pitch) const {
-    const CharacterData &characterData = CharacterDataLookup::instance[characterType];
+    const Configuration &charConfig = EntityConfigLookup::instance()[characterType];
 
     Entity *entity = entityManager.createEntity(characterType);
 
@@ -38,16 +37,19 @@ Entity *CharacterFactory::createCharacter(
 
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
 
-    btCollisionShape *collisionShape = new btCapsuleShapeZ(btScalar(characterData.collisionRadius), btScalar(characterData.collisionHeight)); //TODO we need to load this from character.xml
+    btCollisionShape *collisionShape = new btCapsuleShapeZ(btScalar(charConfig.getFloat("collision-radius")), btScalar(charConfig.getFloat("collision-height")));
 
-    btRigidBody *rigidBody = new btRigidBody(characterData.mass, motionState, collisionShape, btVector3(0, 0, 0));
+    btRigidBody *rigidBody = new btRigidBody(charConfig.getFloat("mass"), motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);
 	rigidBody->setAngularFactor(btVector3(0, 0, 1));//NOTE : prevent body from rotating in the x and y axis
 
-    BombContainerComponent::InventoryType inventory = BombContainerComponent::InventoryType();
+    BombContainerComponent::InventoryType inventory;
 
-    for (auto kv : characterData.inventory) {
-        inventory[kv.first] = { kv.second, Timer(EntityConfigLookup::instance()[kv.first].getInt("cooldown")) };
+    InventoryType *startingInventory = charConfig.getPointer<InventoryType *>("starting-inventory");
+
+    for (auto kv : *startingInventory) {
+        int cooldown = EntityConfigLookup::instance()[kv.first].getInt("cooldown");
+        inventory[kv.first] = { kv.second, Timer(cooldown) };
     }
 
     entity->attachComponent(new InputComponent());
@@ -57,7 +59,7 @@ Entity *CharacterFactory::createCharacter(
     entity->attachComponent(new BombContainerComponent(inventory));
     entity->attachComponent(new JetpackComponent());
 	entity->attachComponent(new PlayerStatusComponent());
-	entity->attachComponent(new HealthComponent(characterData.healthStartAmount, characterData.healthCap));
+    entity->attachComponent(new HealthComponent(charConfig.getInt("health-start"), charConfig.getInt("health-cap")));
     entity->attachComponent(new EquipmentComponent(TIME_BOMB));
 
     return entity;
