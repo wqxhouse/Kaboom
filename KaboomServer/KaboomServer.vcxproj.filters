@@ -103,9 +103,6 @@
     <ClCompile Include="src\core\PickupFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\CharacterDataLookup.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\CharacterFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -175,6 +172,9 @@
     <ClCompile Include="src\core\EntityConfigLookup.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\CharacterConfigLoader.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -206,9 +206,6 @@
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\core\PickupFactory.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\CharacterDataLookup.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\CharacterData.h">
@@ -296,6 +293,12 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\EntityConfigLookup.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\CharacterConfigLoader.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\common.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
