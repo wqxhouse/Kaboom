@@ -66,6 +66,12 @@ void World::loadMap() {
     addStaticPlane(btVector3(-5, 0, 0), btVector3(0, 0, 1), quat);
 }
 
+void World::loadMapFromXML(const std::string &mapXMLFile){
+
+
+
+}
+
 void World::stepSimulation(float timeStep, int maxSubSteps) {
     world.stepSimulation(timeStep, maxSubSteps);
 }
