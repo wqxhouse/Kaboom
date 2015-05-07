@@ -114,10 +114,13 @@
     <ClInclude Include="include\CubeMapPreFilter.h">
       <Filter>Header Files\CubemapUtil</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialLoader.h">
+    <ClInclude Include="include\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\World.h">
+    <ClInclude Include="include\MaterialLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DraggerUpdateCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -203,10 +206,13 @@
     <ClCompile Include="src\TwGUIManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MaterialLoader.cpp">
+    <ClCompile Include="src\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\World.cpp">
+    <ClCompile Include="src\MaterialLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DraggerUpdateCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
