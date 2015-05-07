@@ -7,16 +7,16 @@
 
 enum EntityType;
 
-class BombDataLookup {
+class EntityConfigLookup {
 public:
-    static const BombDataLookup& instance();
+    static const EntityConfigLookup& instance();
 
     void load(const std::string &filename);
 
     const Configuration &operator[](EntityType type) const;
 
 private:
-    BombDataLookup() {}
+    EntityConfigLookup() {}
 
     std::unordered_map<EntityType, Configuration> config;
 };

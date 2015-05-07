@@ -7,9 +7,9 @@
 #include <core/Entity.h>
 
 #include "BombData.h"
-#include "BombDataLookup.h"
 #include "CharacterData.h"
 #include "CharacterDataLookup.h"
+#include "EntityConfigLookup.h"
 #include "Game.h"
 #include "../components/ExplosionComponent.h"
 #include "../components/PhysicsComponent.h"
@@ -43,7 +43,7 @@ void DefaultExplosionHandler::handle(
         btScalar playerDistanceFromExplosion = playerPos.distance(explosionPos);
 
 
-        const Configuration &bombConfig = BombDataLookup::instance()[entity->getType()];
+        const Configuration &bombConfig = EntityConfigLookup::instance()[entity->getType()];
 		const CharacterData &characterData = CharacterDataLookup::instance[nearbyEntity->getType()];
 
 

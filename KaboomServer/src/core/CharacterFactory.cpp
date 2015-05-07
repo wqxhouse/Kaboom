@@ -10,9 +10,9 @@
 #include <components/HealthComponent.h>
 #include <core/EntityManager.h>
 
-#include "BombDataLookup.h"
 #include "CharacterData.h"
 #include "CharacterDataLookup.h"
+#include "EntityConfigLookup.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
@@ -47,7 +47,7 @@ Entity *CharacterFactory::createCharacter(
     BombContainerComponent::InventoryType inventory = BombContainerComponent::InventoryType();
 
     for (auto kv : characterData.inventory) {
-        inventory[kv.first] = { kv.second, Timer(BombDataLookup::instance()[kv.first].getInt("cooldown")) };
+        inventory[kv.first] = { kv.second, Timer(EntityConfigLookup::instance()[kv.first].getInt("cooldown")) };
     }
 
     entity->attachComponent(new InputComponent());
