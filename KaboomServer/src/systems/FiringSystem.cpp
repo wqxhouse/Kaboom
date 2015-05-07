@@ -17,40 +17,34 @@
 #define VELOCTIYACCELERATION .1
 
 FiringSystem::FiringSystem(Game *game)
-        : EntitySystem(game) {
+        : game(game) {
 }
 
-void FiringSystem::update(float timeStep) {
-    auto entities = game->getEntityManager().getEntityList();
+bool FiringSystem::checkEntity(Entity *entity) {
+    return entity->hasComponent<PositionComponent>() &&
+            entity->hasComponent<RotationComponent>() &&
+            entity->hasComponent<BombContainerComponent>() &&
+            entity->hasComponent<EquipmentComponent>() &&
+            entity->hasComponent<InputComponent>();
+}
 
-    for (Entity *entity : entities) {
-        PositionComponent* posComp = entity->getComponent<PositionComponent>();
-        RotationComponent* rotComp = entity->getComponent<RotationComponent>();
-        BombContainerComponent* invComp = entity->getComponent<BombContainerComponent>();
-        EquipmentComponent *equipComp = entity->getComponent<EquipmentComponent>();
-        InputComponent* inputComp = entity->getComponent<InputComponent>();
+void FiringSystem::processEntity(Entity *entity) {
+    PositionComponent* posComp = entity->getComponent<PositionComponent>();
+    RotationComponent* rotComp = entity->getComponent<RotationComponent>();
+    BombContainerComponent* invComp = entity->getComponent<BombContainerComponent>();
+    EquipmentComponent *equipComp = entity->getComponent<EquipmentComponent>();
+    InputComponent* inputComp = entity->getComponent<InputComponent>();
 
-        if (posComp == nullptr ||
-                rotComp == nullptr ||
-                invComp == nullptr ||
-                equipComp == nullptr ||
-                inputComp == nullptr) {
-            continue;
-        }
+    if (!inputComp->isFiring() || inputComp->getFireMode() == NOT_FIRING) {
+        return;
+    }
 
-        if (!inputComp->isFiring() || inputComp->getFireMode() == NOT_FIRING) {
-            continue;
-        }
+    const EntityType &bombType = equipComp->getEquipmentType();
 
-        const EntityType &bombType = equipComp->getEquipmentType();
+    if (inputComp->getFireMode() == FireMode::LEFT_CLICK) {
+        const BombData &bombData = BombDataLookup::instance[bombType];
 
-        if (inputComp->getFireMode() == FireMode::LEFT_CLICK) {
-            const BombData &bombData = BombDataLookup::instance[bombType];
-
-            if (!invComp->hasBomb(bombType)) {
-                continue;
-            }
-
+        if (invComp->hasBomb(bombType)) {
             Timer &timer = invComp->getTimer(bombType);
 
             if (invComp->getAmount(bombType) > 0 && timer.isExpired()) {
@@ -78,8 +72,8 @@ void FiringSystem::update(float timeStep) {
                 game->addEntity(bombEntity);
                 game->getGameServer().sendSpawnEvent(bombEntity);
             }
-        } else if (inputComp->getFireMode() == FireMode::RIGHT_CLICK) {
-            // TODO
         }
+    } else if (inputComp->getFireMode() == FireMode::RIGHT_CLICK) {
+        // TODO
     }
 }

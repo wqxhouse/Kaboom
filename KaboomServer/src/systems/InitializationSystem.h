@@ -1,10 +1,17 @@
 #pragma once
 
-#include "EntitySystem.h"
+#include <systems/EntitySystem.h>
+
+class Game;
 
 class InitializationSystem : public EntitySystem {
 public:
     InitializationSystem(Game *game);
 
-    virtual void update(float timeStep);
+    virtual bool checkEntity(Entity *entity);
+
+    virtual void processEntity(Entity *entity);
+
+private:
+    Game *game;
 };

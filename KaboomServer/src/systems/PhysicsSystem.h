@@ -4,9 +4,11 @@
 
 class Game;
 
-class InputSystem : public EntitySystem {
+class PhysicsSystem : public EntitySystem {
 public:
-    InputSystem(Game *game);
+    PhysicsSystem(Game *game);
+
+    virtual void preprocessEntities(std::vector<Entity *> entities);
 
     virtual bool checkEntity(Entity *entity);
 

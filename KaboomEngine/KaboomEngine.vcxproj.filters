@@ -127,6 +127,9 @@
     <ClInclude Include="src\components\Component.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
+    <ClInclude Include="src\systems\EntitySystem.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
@@ -189,6 +192,9 @@
     </ClCompile>
     <ClCompile Include="src\components\WeaponPickupComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\EntitySystem.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,21 +10,31 @@
 #include "../components/TriggerComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
+#include "../systems/FiringSystem.h"
+#include "../systems/CollisionSystem.h"
+#include "../systems/ExplosionSystem.h"
+#include "../systems/InitializationSystem.h"
+#include "../systems/InputSystem.h"
+#include "../systems/PhysicsSystem.h"
+#include "../systems/PickupSystem.h"
+#include "../systems/TimerSystem.h"
 
 Game::Game(ConfigSettings *config)
         : characterFactory(entityManager),
           bombFactory(entityManager),
           pickupFactory(entityManager),
-          initSystem(this),
-          inputSystem(this),
-          pickupSystem(this),
-		  firingSystem(this),
-          collisionSystem(this),
-          timerSystem(this),
-          explosionSystem(this),
 	      eventHandlerLookup(this),
 	      server(config, eventHandlerLookup) {
     world.loadMap();
+    systemManager.addSystem(new InitializationSystem(this));
+    systemManager.addSystem(new InputSystem(this));
+    systemManager.addSystem(new FiringSystem(this));
+    systemManager.addSystem(new PhysicsSystem(this));
+    systemManager.addSystem(new CollisionSystem(this));
+    systemManager.addSystem(new TimerSystem(this));
+    systemManager.addSystem(new PickupSystem(this));
+    systemManager.addSystem(new ExplosionSystem(this));
+
 	//TODO Wai Ho problems with pickup being of class bomb which causes some problems in logic commented it out for now. 
     addEntity(pickupFactory.createPickup(KABOOM_V2, 5)); // Spawn five Kaboom 2.0 at origin
 }
@@ -88,17 +98,7 @@ void Game::update(float timeStep, int maxSubSteps) {
 
     server.receive(this);
 
-    // Handle game logic here
-    initSystem.update(timeStep);
-    inputSystem.update(timeStep);
-	firingSystem.update(timeStep);
-
-    stepSimulation(timeStep, maxSubSteps);
-
-    collisionSystem.update(timeStep);
-    timerSystem.update(timeStep);
-    pickupSystem.update(timeStep);
-    explosionSystem.update(timeStep);
+    systemManager.processSystems(this);
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
 }

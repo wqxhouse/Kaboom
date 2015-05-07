@@ -5,21 +5,17 @@
 #include "../core/Game.h"
 
 TimerSystem::TimerSystem(Game *game)
-    : EntitySystem(game) {
+        : game(game) {
 }
 
-void TimerSystem::update(float timeStep) {
-    auto entities = game->getEntityManager().getEntityList();
+bool TimerSystem::checkEntity(Entity *entity) {
+    return entity->hasComponent<TimerComponent>();
+}
 
-    for (Entity *entity : entities) {
-        TimerComponent *timerComp = entity->getComponent<TimerComponent>();
+void TimerSystem::processEntity(Entity *entity) {
+    TimerComponent *timerComp = entity->getComponent<TimerComponent>();
 
-        if (timerComp == nullptr) {
-            continue;
-        }
-
-        if (timerComp->getTimer()->isExpired()) {
-            timerComp->getHandler()->handle(game, entity);
-        }
+    if (timerComp->getTimer()->isExpired()) {
+        timerComp->getHandler()->handle(game, entity);
     }
 }

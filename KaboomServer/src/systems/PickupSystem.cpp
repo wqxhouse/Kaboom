@@ -7,52 +7,46 @@
 #include "../core/Game.h"
 
 PickupSystem::PickupSystem(Game *game)
-        : EntitySystem(game) {
+        : game(game) {
 }
 
-void PickupSystem::update(float timeStep) {
-    auto entities = game->getEntityManager().getEntityList();
+bool PickupSystem::checkEntity(Entity *entity) {
+    return entity->hasComponent<WeaponPickupComponent>() &&
+            entity->hasComponent<TriggerComponent>();
+}
 
-    for (Entity *pickup : entities) {
-        WeaponPickupComponent* weaponPickupComp = pickup->getComponent<WeaponPickupComponent>(); // TODO: Make this generic
+void PickupSystem::processEntity(Entity *entity) {
+    WeaponPickupComponent *weaponPickupComp = entity->getComponent<WeaponPickupComponent>();
+    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
 
-        if (weaponPickupComp == nullptr) {
+    auto triggerEntities = triggerComp->getTriggerEntities();
+
+    for (Entity *player : triggerEntities) {
+        if ((player->getType() & CAT_CHARACTER) != CAT_CHARACTER) {
             continue;
         }
 
-        TriggerComponent *triggerComp = pickup->getComponent<TriggerComponent>();
+        // TODO: Handle item pickup logic here.
+        // Do the Upper cap for max amount of bombs here
 
-        auto triggerEntities = triggerComp->getTriggerEntities();
+        BombContainerComponent *invComp = player->getComponent<BombContainerComponent>();
 
-        for (Entity *player : triggerEntities) {
-            if ((player->getType() & CAT_CHARACTER) != CAT_CHARACTER) {
-                continue;
-            }
+        const EntityType &bombType = weaponPickupComp->getBombType();
 
-            // TODO: Handle item pickup logic here.
-			// Do the Upper cap for max amount of bombs here
+        const int capacity = BombDataLookup::instance[bombType].capacity;
+        const int invAmount = invComp->getAmount(bombType);
+        const int pickupAmount = weaponPickupComp->getAmount();
 
-            BombContainerComponent *invComp = player->getComponent<BombContainerComponent>();
+        int amount = capacity - invAmount;
 
-            const EntityType &bombType = weaponPickupComp->getBombType();
-
-            const int capacity = BombDataLookup::instance[bombType].capacity;
-            const int invAmount = invComp->getAmount(bombType);
-            const int pickupAmount = weaponPickupComp->getAmount();
-
-            int amount = capacity - invAmount;
-
-            if (weaponPickupComp->getAmount() < amount) {
-                amount = weaponPickupComp->getAmount();
-            }
-
-            invComp->addToInventory(bombType, amount);
-
-            game->removeEntity(pickup);
-            // TODO: Send remove pickup event to clients
-
-			//TODO: to avoid multiple people picking up the item at the same time, we need to delete the itemEntity right after
-			
+        if (weaponPickupComp->getAmount() < amount) {
+            amount = weaponPickupComp->getAmount();
         }
+
+        invComp->addToInventory(bombType, amount);
+
+        game->removeEntity(entity);
+
+        // TODO: Send remove pickup event to clients
     }
 }
