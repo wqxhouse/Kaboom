@@ -13,6 +13,8 @@ public:
 
     void loadMap();
 
+	void loadMapFromXML(const std::string &);
+
     void stepSimulation(float timeStep, int maxSubSteps);
 
     void addRigidBody(btRigidBody *rigidBody);
@@ -26,6 +28,7 @@ public:
     void onTick(btScalar timeStep);
 
     const btCollisionDispatcher &getDispatcher() const;
+
 
 private:
     class TriggerCallback;
