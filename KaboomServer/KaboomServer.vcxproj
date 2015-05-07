@@ -78,7 +78,6 @@
     <ClInclude Include="src\core\common.h" />
     <ClInclude Include="src\core\EntityConfigLookup.h" />
     <ClInclude Include="src\core\BombFactory.h" />
-    <ClInclude Include="src\core\CharacterData.h" />
     <ClInclude Include="src\core\CharacterConfigLoader.h" />
     <ClInclude Include="src\core\CollisionHandler.h" />
     <ClInclude Include="src\core\DefaultCollisionHandler.h" />
