@@ -154,9 +154,6 @@
     <ClCompile Include="src\systems\PickupSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\systems\EntitySystem.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
     <ClCompile Include="src\systems\TimerSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
@@ -168,6 +165,12 @@
     </ClCompile>
     <ClCompile Include="src\core\TimeBombTimerHandler.cpp">
       <Filter>Source Files\Explosion Triggers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\SystemManager.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\PhysicsSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,9 +277,6 @@
     <ClInclude Include="src\systems\PickupSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\systems\EntitySystem.h">
-      <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
     <ClInclude Include="src\systems\TimerSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
@@ -288,6 +288,12 @@
     </ClInclude>
     <ClInclude Include="src\core\TimerHandler.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\SystemManager.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\PhysicsSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
