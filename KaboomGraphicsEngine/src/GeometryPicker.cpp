@@ -87,6 +87,13 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 				if (name.substr(0, 9) == "Transform")
 				{
 					objectName = name.substr(10, name.size() - 1);
+
+					// For unpickable/unmovable objects
+					if (objectName.substr(0, 1) == "*") {
+						objectName = "";
+						continue;
+					}
+
 					if (temp->asTransform() == NULL || temp->asTransform()->asMatrixTransform() == NULL)
 					{
 						OSG_WARN << "GeometryPicker : node " << temp->getName() << " is not a MatrixTransform" << std::endl;

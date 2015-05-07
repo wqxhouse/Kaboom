@@ -2,6 +2,8 @@
 #include <osg/ComputeBoundsVisitor>
 #include "Core.h"
 
+DraggerUpdateCallback GeometryObjectManipulator::_draggerCB = DraggerUpdateCallback(NULL);
+
 void GeometryObjectManipulator::initWithRootNode(osg::Group *root)
 {
 	_rootNode = root;
@@ -144,6 +146,9 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		}
 
 		_dragger->addTransformUpdating(_currNode.get());
+
+		_draggerCB.setNode(_currNode);
+		_dragger->addDraggerCallback(&_draggerCB);
 
 		_dragger->setHandleEvents(true);
 		_rootNode->addChild(_dragger.get());
