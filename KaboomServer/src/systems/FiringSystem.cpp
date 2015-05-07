@@ -42,7 +42,7 @@ void FiringSystem::processEntity(Entity *entity) {
     const EntityType &bombType = equipComp->getEquipmentType();
 
     if (inputComp->getFireMode() == FireMode::LEFT_CLICK) {
-        const BombData &bombData = BombDataLookup::instance[bombType];
+        const Configuration &bombConfig = BombDataLookup::instance()[bombType];
 
         if (invComp->hasBomb(bombType)) {
             Timer &timer = invComp->getTimer(bombType);
@@ -58,14 +58,16 @@ void FiringSystem::processEntity(Entity *entity) {
                         rotComp->getYaw(),
                         rotComp->getPitch());
 
+                float launchSpeed = bombConfig.getInt("launch-speed");
+
                 Entity* bombEntity = game->getBombFactory().createBomb(
                         bombType,
                         posComp->getX() + viewDir.getX(),
                         posComp->getY() + viewDir.getY(),
                         posComp->getZ() + viewDir.getZ(),
-                        viewDir.getX() * bombData.launchSpeed,
-                        viewDir.getY() * bombData.launchSpeed,
-                        viewDir.getZ() * bombData.launchSpeed);
+                        viewDir.getX() * launchSpeed,
+                        viewDir.getY() * launchSpeed,
+                        viewDir.getZ() * launchSpeed);
 
                 invComp->addToActiveBomb(bombEntity);
 

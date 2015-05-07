@@ -1,22 +1,22 @@
 #pragma once
 
+#include <string>
 #include <unordered_map>
 
-#include <core/EntityType.h>
-#include <util/XMLLoader.h>
+#include <util/Configuration.h>
 
-#include "BombData.h"
+enum EntityType;
 
-class BombDataLookup : public XMLLoader {
+class BombDataLookup {
 public:
-    static const BombDataLookup instance;
+    static const BombDataLookup& instance();
 
-    BombDataLookup(const std::string &filename);
+    void load(const std::string &filename);
 
-    const BombData &operator[](const EntityType &type) const;
+    const Configuration &operator[](EntityType type) const;
 
 private:
-    std::unordered_map<EntityType, BombData> bombs;
+    BombDataLookup() {}
 
-    virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
+    std::unordered_map<EntityType, Configuration> config;
 };

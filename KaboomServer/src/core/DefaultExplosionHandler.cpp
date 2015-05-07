@@ -43,28 +43,28 @@ void DefaultExplosionHandler::handle(
         btScalar playerDistanceFromExplosion = playerPos.distance(explosionPos);
 
 
-        const BombData &bombData = BombDataLookup::instance[entity->getType()];
+        const Configuration &bombConfig = BombDataLookup::instance()[entity->getType()];
 		const CharacterData &characterData = CharacterDataLookup::instance[nearbyEntity->getType()];
 
 
-		float maxDistancePossible = bombData.explosionRadius + (characterData.collisionRadius * 2); 
+        float maxDistancePossible = bombConfig.getFloat("explosion-radius") + (characterData.collisionRadius * 2);
 		float distancePercentAway = (maxDistancePossible - playerDistanceFromExplosion) / maxDistancePossible;
-		btVector3 impulseVec = (bombData.knockbackAmount * distancePercentAway) * dirVec; //linear equation
+        btVector3 impulseVec = (bombConfig.getFloat("knockback-amount") * distancePercentAway) * dirVec; //linear equation
 
 		printf("playerDistanceFromExplosion : %f\n", playerDistanceFromExplosion);
-		printf("maxDistancePossible : %f\n", bombData.explosionRadius + (characterData.collisionRadius * 2));
+        printf("maxDistancePossible : %f\n", bombConfig.getFloat("explosion-radius") + (characterData.collisionRadius * 2));
 		printf("distancePercentAway : %f\n", (maxDistancePossible - playerDistanceFromExplosion) / maxDistancePossible);
 
         playerPhysicsComp->getRigidBody()->applyCentralImpulse(impulseVec);
 
-        playerStatusComp->getKnockBackTimer().setDuration(bombData.knockbackDuration);
+        playerStatusComp->getKnockBackTimer().setDuration(bombConfig.getFloat("knockback-duration"));
         playerStatusComp->getKnockBackTimer().start();
         playerStatusComp->setIsKnockBacked(true); //we could do some camera shake with this
 
         //apply damage
-		printf("damage taken: %d \n", int((distancePercentAway * (bombData.maxDamage - bombData.minDamage))) + bombData.minDamage);
+        printf("damage taken: %d \n", int((distancePercentAway * (bombConfig.getFloat("max-damage") - bombConfig.getFloat("min-damage")))) + bombConfig.getFloat("min-damage"));
 
-		playerHealthComp->subtractFromHealthAmount(int((distancePercentAway * (bombData.maxDamage - bombData.minDamage))) + bombData.minDamage);
+        playerHealthComp->subtractFromHealthAmount(int((distancePercentAway * (bombConfig.getFloat("max-damage") - bombConfig.getFloat("min-damage"))) + bombConfig.getFloat("min-damage")));
 		playerStatusComp->getDamageTimer().setDuration(250); // this should be global
 		playerStatusComp->getDamageTimer().start();
 		playerStatusComp->setIsDamaged(true);
