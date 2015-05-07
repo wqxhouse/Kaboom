@@ -5,8 +5,9 @@
 
 #include "../core/Game.h"
 
-PhysicsSystem::PhysicsSystem(Game *game)
-        : game(game) {
+PhysicsSystem::PhysicsSystem(Game *game, World &world)
+        : game(game),
+          world(world) {
 }
 
 void PhysicsSystem::preprocessEntities(std::vector<Entity *> entities) {
@@ -14,7 +15,7 @@ void PhysicsSystem::preprocessEntities(std::vector<Entity *> entities) {
     const float TIME_STEP = 1.0f / FPS;
     const int MAX_SUB_STEPS = 1;
 
-    game->stepSimulation(TIME_STEP, MAX_SUB_STEPS); // TODO: Extract constant
+    world.stepSimulation(TIME_STEP, MAX_SUB_STEPS); // TODO: Extract constant
 }
 
 bool PhysicsSystem::checkEntity(Entity *entity) {

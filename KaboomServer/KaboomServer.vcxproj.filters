@@ -205,16 +205,10 @@
     <ClInclude Include="src\core\PickupFactory.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\BombData.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\BombDataLookup.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\CharacterDataLookup.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\CharacterData.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\CharacterFactory.h">
@@ -301,6 +295,9 @@
       <Filter>Resource Files</Filter>
     </Xml>
     <Xml Include="data-server\characters.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="data-server\game.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>

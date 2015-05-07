@@ -3,10 +3,11 @@
 #include <systems/EntitySystem.h>
 
 class Game;
+class World;
 
 class PhysicsSystem : public EntitySystem {
 public:
-    PhysicsSystem(Game *game);
+    PhysicsSystem(Game *game, World &world);
 
     virtual void preprocessEntities(std::vector<Entity *> entities);
 
@@ -16,4 +17,5 @@ public:
 
 private:
     Game *game;
+    World &world;
 };

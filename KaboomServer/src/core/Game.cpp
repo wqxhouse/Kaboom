@@ -29,7 +29,7 @@ Game::Game(ConfigSettings *config)
     systemManager.addSystem(new InitializationSystem(this));
     systemManager.addSystem(new InputSystem(this));
     systemManager.addSystem(new FiringSystem(this));
-    systemManager.addSystem(new PhysicsSystem(this));
+    systemManager.addSystem(new PhysicsSystem(this, world));
     systemManager.addSystem(new CollisionSystem(this));
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
@@ -117,35 +117,4 @@ const BombFactory &Game::getBombFactory() const {
 
 const GameServer &Game::getGameServer() const {
     return server;
-}
-
-void Game::stepSimulation(float timeStep, int maxSubSteps) {
-    world.stepSimulation(timeStep, maxSubSteps);
-
-    // Update position component and rotation component based on simulation result
-    auto entities = getEntityManager().getEntityList();
-
-    for (Entity *entity : entities) {
-        PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
-
-        if (physComp == nullptr) {
-            continue;
-        }
-
-        const btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
-
-        PositionComponent *posComp = entity->getComponent<PositionComponent>();
-
-        if (posComp != nullptr) {
-            const btVector3 &pos = worldTrans.getOrigin();
-            posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
-        }
-
-        RotationComponent *rotComp = entity->getComponent<RotationComponent>();
-
-        if (rotComp != nullptr) {
-            btQuaternion rot = worldTrans.getRotation();
-            // TODO: Set rotComp
-        }
-    }
 }

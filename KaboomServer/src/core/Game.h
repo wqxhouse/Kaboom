@@ -29,8 +29,6 @@ public:
     const GameServer &getGameServer() const;
 
 private:
-    friend class PhysicsSystem;
-
     EntityManager entityManager;
     SystemManager systemManager;
 
