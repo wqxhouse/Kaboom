@@ -6,8 +6,6 @@
 #include <util/Configuration.h>
 #include <util/XMLLoader.h>
 
-#include "BombData.h"
-
 class BombDataLoader : public XMLLoader {
 public:
     BombDataLoader(std::unordered_map<EntityType, Configuration> &config);

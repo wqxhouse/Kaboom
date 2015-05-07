@@ -6,7 +6,6 @@
 #include <components/HealthComponent.h>
 #include <core/Entity.h>
 
-#include "BombData.h"
 #include "CharacterData.h"
 #include "CharacterDataLookup.h"
 #include "EntityConfigLookup.h"
