@@ -19,12 +19,12 @@
 #include "../systems/PickupSystem.h"
 #include "../systems/TimerSystem.h"
 
-Game::Game(ConfigSettings *config)
+Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
           bombFactory(entityManager),
           pickupFactory(entityManager),
 	      eventHandlerLookup(this),
-	      server(config, eventHandlerLookup) {
+          server(configSettings, eventHandlerLookup) {
     world.loadMap();
     systemManager.addSystem(new InitializationSystem(this));
     systemManager.addSystem(new InputSystem(this));
@@ -101,6 +101,10 @@ void Game::update(float timeStep, int maxSubSteps) {
     systemManager.processSystems(this);
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
+}
+
+Configuration &Game::getConfiguration() {
+    return config;
 }
 
 EntityManager &Game::getEntityManager() {
