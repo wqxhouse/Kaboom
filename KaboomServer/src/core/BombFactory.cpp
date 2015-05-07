@@ -63,7 +63,7 @@ Entity *BombFactory::createBomb(
     }
 
     if (type == TIME_BOMB) {
-        Timer *timer = new Timer(3000);
+        Timer *timer = new Timer(bombConfig.getInt("delay"));
         timer->start();
         entity->attachComponent(new TimerComponent(timer, new TimeBombTimerHandler()));
     }
