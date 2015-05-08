@@ -455,12 +455,14 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		[](void *clientData) {
 		BarItem* item = (BarItem*)clientData;
 		std::string name = item->name;
+
+		// Have to detach before deleting the geometry
+		GeometryObjectManipulator::detachManipulator();
+
 		Core::getWorldRef().getGeometryManager()->deleteGeometry(name);
 
 		TwRemoveVar(item->bar, name.c_str());
 
-		//Currently there's a bug involved with detach
-		//GeometryObjectManipulator::detachManipulator();
 	},
 		item, removeDef.c_str());
 
