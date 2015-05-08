@@ -181,6 +181,9 @@
     <ClCompile Include="src\math\util.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\components\DetonatorComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -297,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="src\core\CollisionHandler.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\DetonatorComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

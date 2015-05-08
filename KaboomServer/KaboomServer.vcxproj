@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\components\CollisionComponent.cpp" />
+    <ClCompile Include="src\components\DetonatorComponent.cpp" />
     <ClCompile Include="src\components\ExplosionComponent.cpp" />
     <ClCompile Include="src\components\InputComponent.cpp" />
     <ClCompile Include="src\components\JetpackComponent.cpp" />
@@ -68,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\CollisionComponent.h" />
+    <ClInclude Include="src\components\DetonatorComponent.h" />
     <ClInclude Include="src\components\ExplosionComponent.h" />
     <ClInclude Include="src\components\InputComponent.h" />
     <ClInclude Include="src\components\JetpackComponent.h" />
