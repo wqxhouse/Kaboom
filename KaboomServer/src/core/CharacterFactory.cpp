@@ -47,8 +47,7 @@ Entity *CharacterFactory::createCharacter(
     BombContainerComponent::InventoryType inventory = BombContainerComponent::InventoryType();
 
     for (auto kv : characterData.inventory) {
-        const BombData &bombData = BombDataLookup::instance[kv.first];
-        inventory[kv.first] = { kv.second, Timer(bombData.cooldown) };
+        inventory[kv.first] = { kv.second, Timer(BombDataLookup::instance()[kv.first].getInt("cooldown")) };
     }
 
     entity->attachComponent(new InputComponent());
