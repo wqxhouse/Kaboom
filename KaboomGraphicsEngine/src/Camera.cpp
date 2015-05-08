@@ -43,6 +43,12 @@ void Camera::setFovYAndUpdate(float fovy)
 	_projMatrix.makePerspective(fovy, _screenSize.x() / _screenSize.y(), _nearPlane, _farPlane);
 }
 
+void Camera::setFovXAndUpdate(float fovx)
+{
+	_fovy = fovXToY(fovx, _screenSize);
+	_projMatrix.makePerspective(_fovy, _screenSize.x() / _screenSize.y(), _nearPlane, _farPlane);
+}
+
 void Camera::setNearAndFarAndUpdate(float near, float far)
 {
 	_nearPlane = near;
@@ -106,4 +112,19 @@ osg::Quat Camera::eulerToQuat(float yaw, float pitch)
 	q1.makeRotate(osg::DegreesToRadians(pitch), 1, 0, 0);
 
 	return q1 * q0;
+}
+
+// TODO: check the math, seems converting forth and back produces some errors, like 2 deg more for 90x->y and y->x
+float Camera::fovXToY(float fovx, const osg::Vec2 screenSize)
+{
+	float fovxRad = osg::DegreesToRadians(fovx);
+	float fovy = osg::RadiansToDegrees(atan(tan(fovxRad / 2) * (screenSize.x() / screenSize.y())));
+	return fovy;
+}
+
+float Camera::fovYToX(float fovy, const osg::Vec2 screenSize)
+{
+	float fovyRad = osg::DegreesToRadians(fovy);
+	float fovx = osg::RadiansToDegrees(2 * atan(tan(fovyRad / 2) * (screenSize.x() / screenSize.y())));
+	return fovx;
 }

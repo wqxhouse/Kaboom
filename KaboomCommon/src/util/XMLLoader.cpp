@@ -18,6 +18,7 @@ void XMLLoader::loadXMLFile(const std::string &filePath)
 	else
 	{
 		// TODO : output to console bad xml
+		OSG_WARN << "Bad xml at " << filePath << std::endl;
 	}
 }
 
