@@ -31,21 +31,46 @@ Entity *CharacterFactory::createCharacter(
 
     Entity *entity = entityManager.createEntity(characterType);
 
+    createBase(entity, x, y, z, yaw, pitch);
+
+    switch (characterType) {
+        case DEFAULT_CHARACTER: {
+            createDefaultCharacter(entity);
+            break;
+        }
+    }
+
+    return entity;
+}
+
+void CharacterFactory::createBase(
+        Entity *entity,
+        float x,
+        float y,
+        float z,
+        float yaw,
+        float pitch) const {
+    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+
+    float collisionRadius = config.getFloat("collision-radius");
+    float collisionHeight = config.getFloat("collision-height");
+    float mass = config.getFloat("mass");
+    InventoryType *startingInventory = config.getPointer<InventoryType *>("starting-inventory");
+    float healthStart = config.getInt("health-start");
+    float healthCap = config.getInt("health-cap");
+
     btTransform worldTrans;
     worldTrans.setIdentity();
     worldTrans.setOrigin(btVector3(x, y, z));
 
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
+    btCollisionShape *collisionShape = new btCapsuleShapeZ(btScalar(collisionRadius), btScalar(collisionHeight));
 
-    btCollisionShape *collisionShape = new btCapsuleShapeZ(btScalar(charConfig.getFloat("collision-radius")), btScalar(charConfig.getFloat("collision-height")));
-
-    btRigidBody *rigidBody = new btRigidBody(charConfig.getFloat("mass"), motionState, collisionShape, btVector3(0, 0, 0));
+    btRigidBody *rigidBody = new btRigidBody(btScalar(mass), motionState, collisionShape, btVector3(0, 0, 0));
     rigidBody->setUserPointer(entity);
-	rigidBody->setAngularFactor(btVector3(0, 0, 1));//NOTE : prevent body from rotating in the x and y axis
+    rigidBody->setAngularFactor(btVector3(0, 0, 1)); // NOTE : prevent body from rotating in the x and y axis
 
     BombContainerComponent::InventoryType inventory;
-
-    InventoryType *startingInventory = charConfig.getPointer<InventoryType *>("starting-inventory");
 
     for (auto kv : *startingInventory) {
         int cooldown = EntityConfigLookup::instance()[kv.first].getInt("cooldown");
@@ -57,10 +82,11 @@ Entity *CharacterFactory::createCharacter(
     entity->attachComponent(new RotationComponent(yaw, pitch));
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new BombContainerComponent(inventory));
-    entity->attachComponent(new JetpackComponent());
-	entity->attachComponent(new PlayerStatusComponent());
-    entity->attachComponent(new HealthComponent(charConfig.getInt("health-start"), charConfig.getInt("health-cap")));
-    entity->attachComponent(new EquipmentComponent(TIME_BOMB));
+    entity->attachComponent(new PlayerStatusComponent());
+    entity->attachComponent(new HealthComponent(healthStart, healthCap));
+}
 
-    return entity;
+void CharacterFactory::createDefaultCharacter(Entity *entity) const {
+    entity->attachComponent(new JetpackComponent());
+    entity->attachComponent(new EquipmentComponent(TIME_BOMB));
 }

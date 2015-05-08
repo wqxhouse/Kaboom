@@ -33,23 +33,53 @@ Entity *BombFactory::createBomb(
         float vx,
         float vy,
         float vz) const {
-    const Configuration &bombConfig = EntityConfigLookup::instance()[type];
-
     Entity *entity = entityManager.createEntity(type);
+
+    createBase(entity, x, y, z, vx, vy, vz);
+
+    switch (type) {
+        case KABOOM_V2: {
+            createKaboomV2(entity);
+            break;
+        }
+        case TIME_BOMB: {
+            createTimeBomb(entity);
+            break;
+        }
+    }
+
+    return entity;
+}
+
+void BombFactory::createBase(Entity *entity,
+        float x,
+        float y,
+        float z,
+        float vx,
+        float vy,
+        float vz) const {
+    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+
+    float size = config.getFloat("size");
+    float mass = config.getFloat("mass");
+    float explosionRadius = config.getFloat("explosion-radius");
 
     btTransform worldTrans;
     worldTrans.setIdentity();
     worldTrans.setOrigin(btVector3(x, y, z));
 
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
-    btCollisionShape *collisionShape = new btSphereShape(bombConfig.getFloat("size"));
+    btCollisionShape *collisionShape = new btSphereShape(size);
 
-    btRigidBody *rigidBody = new btRigidBody(bombConfig.getFloat("mass"), motionState, collisionShape, btVector3(0, 0, 0));
+    btVector3 localInertia;
+    collisionShape->calculateLocalInertia(mass, localInertia);
+
+    btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, localInertia);
     rigidBody->setLinearVelocity(btVector3(vx, vy, vz));
     rigidBody->setUserPointer(entity);
 
     btGhostObject *ghostObject = new btGhostObject();
-    ghostObject->setCollisionShape(new btSphereShape(bombConfig.getFloat("explosion-radius")));
+    ghostObject->setCollisionShape(new btSphereShape(explosionRadius));
     ghostObject->setWorldTransform(worldTrans);
     ghostObject->setUserPointer(entity);
 
@@ -57,16 +87,24 @@ Entity *BombFactory::createBomb(
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new TriggerComponent(ghostObject));
+}
 
-    if (type == KABOOM_V2) {
-        entity->attachComponent(new CollisionComponent(bombConfig.getPointer<CollisionHandler *>("collision-handler")));
-    }
+void BombFactory::createKaboomV2(Entity *entity) const {
+    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
 
-    if (type == TIME_BOMB) {
-        Timer *timer = new Timer(bombConfig.getInt("delay"));
-        timer->start();
-        entity->attachComponent(new TimerComponent(timer, new TimeBombTimerHandler()));
-    }
+    CollisionHandler *collisionHandler = config.getPointer<CollisionHandler *>("collision-handler");
 
-    return entity;
+    entity->attachComponent(new CollisionComponent(collisionHandler));
+}
+
+void BombFactory::createTimeBomb(Entity *entity) const {
+    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+
+    int delay = config.getInt("delay");
+    TimerHandler *timerHandler = config.getPointer<TimerHandler *>("timer-handler");
+
+    Timer *timer = new Timer(delay);
+    timer->start();
+    
+    entity->attachComponent(new TimerComponent(timer, timerHandler));
 }
