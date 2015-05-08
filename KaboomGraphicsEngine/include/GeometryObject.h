@@ -50,7 +50,13 @@ public:
 	osg::Vec3 getScale();
 	void setScale(const osg::Vec3 &scale);
 
+	osg::Matrix getMatrix();
+	void setMatrix(const osg::Matrix &matrix);
+
 	void decompose(osg::Vec3 &translate, osg::Quat &rot, osg::Vec3 &scale, osg::Quat &so);
+
+	void rename(const std::string& newName);
+	GeometryObject* copy(const std::string &newName);
 
 	// For GUI control or script control
 	inline void setGeometryUpdateCallback(void(*geomObjUpdateCallback)(GeometryObject *))
@@ -66,6 +72,8 @@ public:
 private:
 	void setUpMaterialState();
 	void updateMaterialState();
+
+	void renameHelper(osg::Node *node, const std::string &prefix, const std::string &newName);
 		
 	std::string _name;
 	std::string _fileName;

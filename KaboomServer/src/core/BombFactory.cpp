@@ -14,9 +14,11 @@
 
 #include "BombDataLookup.h"
 #include "KaboomV2CollisionHandler.h"
+#include "TimeBombTimerHandler.h"
 #include "../components/CollisionComponent.h"
 #include "../components/ExplosionComponent.h"
 #include "../components/PhysicsComponent.h"
+#include "../components/TimerComponent.h"
 #include "../components/TriggerComponent.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
@@ -55,7 +57,16 @@ Entity *BombFactory::createBomb(
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new TriggerComponent(ghostObject));
-    entity->attachComponent(new CollisionComponent(data.collisionHandler));
+
+    if (type == KABOOM_V2) {
+        entity->attachComponent(new CollisionComponent(data.collisionHandler));
+    }
+
+    if (type == TIME_BOMB) {
+        Timer *timer = new Timer(3000);
+        timer->start();
+        entity->attachComponent(new TimerComponent(timer, new TimeBombTimerHandler()));
+    }
 
     return entity;
 }

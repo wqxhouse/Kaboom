@@ -256,6 +256,10 @@ void Core::AdvanceFrame()
 		_cubemapPreFilter.disableCompute();
 		_passes->setPassActivated("SpecularLutPass", false);
 
+		// handle mouse over of libRocket
+		// TODO: is it proper to place it here???
+		freezeCameraOnGUIDemand();
+
 		_lastFrameStartTime = _frameStartTime;
 		_frameStartTime = osg::Timer::instance()->tick();
 	}
@@ -269,6 +273,22 @@ double Core::getLastFrameDuration()
 bool Core::isViewerClosed()
 {
 	return _viewer->done();
+}
+
+void Core::freezeCameraOnGUIDemand()
+{
+	if (_gui->isMouseOver() || _libRocketGui->isMouseOver())
+	{
+		disableCameraManipulator();
+	}
+	else
+	{
+		// preserve the GUI cam lock setting
+		if (_gui->isCamControlOn())
+		{
+			enableCameraManipulator();
+		}
+	}
 }
 
 void Core::finalize()
@@ -334,6 +354,7 @@ Camera &Core::getMainCamera()
 // Used in GUI focus
 void Core::disableCameraManipulator()
 {
+	std::cout << "disableCam" << std::endl;
 	if (_viewer->getCameraManipulator() != NULL)
 	{
 		_camManipulatorTemp = _viewer->getCameraManipulator();
@@ -345,6 +366,7 @@ void Core::disableCameraManipulator()
 
 void Core::enableCameraManipulator()
 {
+	std::cout << "enableCam" << std::endl;
 	if (_camManipulatorTemp == NULL) return;
 	// std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
 

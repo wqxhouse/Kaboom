@@ -89,6 +89,8 @@ namespace osgLibRocket
       */
     void setCamera(osg::Camera* cam);
 
+	bool isMouseOver();
+
     osgGA::GUIEventHandler* GetGUIEventHandler() const { return mGUIEventHandler; }
 
   private:

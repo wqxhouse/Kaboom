@@ -4,9 +4,10 @@
 
 class Game;
 
-class InputSystem : public EntitySystem {
+// Notifies timer handler when a timer expires.
+class TimerSystem : public EntitySystem {
 public:
-    InputSystem(Game *game);
+    TimerSystem(Game *game);
 
     virtual bool checkEntity(Entity *entity);
 

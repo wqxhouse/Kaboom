@@ -3,10 +3,13 @@
 #include <systems/EntitySystem.h>
 
 class Game;
+class World;
 
-class InputSystem : public EntitySystem {
+class PhysicsSystem : public EntitySystem {
 public:
-    InputSystem(Game *game);
+    PhysicsSystem(Game *game, World &world);
+
+    virtual void preprocessEntities(std::vector<Entity *> entities);
 
     virtual bool checkEntity(Entity *entity);
 
@@ -14,4 +17,5 @@ public:
 
 private:
     Game *game;
+    World &world;
 };

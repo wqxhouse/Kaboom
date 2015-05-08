@@ -10,56 +10,52 @@
 #include "../core/Game.h"
 
 InitializationSystem::InitializationSystem(Game *game)
-        : EntitySystem(game) {
+        : game(game) {
 }
 
-void InitializationSystem::update(float timeStep) {
-    auto entities = game->getEntityManager().getEntityList();
+bool InitializationSystem::checkEntity(Entity *entity) {
+    return true;
+}
 
-    for (Entity *entity : entities) {
-        // Clear collision results
-        CollisionComponent *colComp = entity->getComponent<CollisionComponent>();
+void InitializationSystem::processEntity(Entity *entity) {
+    // Clear collision results
+    CollisionComponent *colComp = entity->getComponent<CollisionComponent>();
 
-        if (colComp != nullptr) {
-            colComp->setCollided(false);
-            colComp->clearContactEntities();
-        }
+    if (colComp != nullptr) {
+        colComp->setCollided(false);
+        colComp->clearContactEntities();
+    }
 
-        // Clear trigger entities
-        TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
+    // Activate rigid bodies
+    PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
 
-        if (triggerComp != nullptr) {
-            //triggerComp->clearTriggerEntities();
-        }
+    if (physComp != nullptr) {
+        entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
+    }
 
-        // Activate rigid bodies
-        PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
+    // Update trigger position and rotation
+    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
+
+    if (triggerComp != nullptr) {
+        btTransform worldTrans;
 
         if (physComp != nullptr) {
-            entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
-        }
+            worldTrans = physComp->getRigidBody()->getWorldTransform();
+        } else {
+            PositionComponent *posComp = entity->getComponent<PositionComponent>();
 
-        // Update trigger position and rotation
-        if (triggerComp != nullptr) {
-            btTransform worldTrans;
-
-            if (physComp != nullptr) {
-                worldTrans = physComp->getRigidBody()->getWorldTransform();
-            } else {
-                PositionComponent *posComp = entity->getComponent<PositionComponent>();
-
-                if (posComp != nullptr) {
-                    worldTrans.setOrigin(btVector3(posComp->getX(), posComp->getY(), posComp->getZ()));
-                }
-
-                RotationComponent *rotComp = entity->getComponent<RotationComponent>();
-
-                if (rotComp != nullptr) {
-                    // TODO: set rotation
-                }
+            if (posComp != nullptr) {
+                worldTrans.setOrigin(btVector3(posComp->getX(), posComp->getY(), posComp->getZ()));
             }
 
-            triggerComp->getGhostObject()->setWorldTransform(worldTrans);
+            RotationComponent *rotComp = entity->getComponent<RotationComponent>();
+
+            if (rotComp != nullptr) {
+                // TODO: set rotation
+            }
         }
+
+        triggerComp->getGhostObject()->setWorldTransform(worldTrans);
     }
 }
+
