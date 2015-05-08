@@ -2,20 +2,28 @@
 
 #include <unordered_map>
 
-#include <core/EntityType.h>
 #include <util/Configuration.h>
 #include <util/XMLLoader.h>
 
-class BombDataLoader : public XMLLoader {
+#include <osg/Node>
+#include <osgDB/XmlParser>
+
+#include <osg/MatrixTransform>
+
+class OsgObjectLoader : public XMLLoader {
 public:
-    BombDataLoader(std::unordered_map<EntityType, Configuration> &config);
+	OsgObjectLoader(std::unordered_map<std::string, Configuration> &config);
 
     void load(const std::string &filename);
 
+
 private:
-    std::unordered_map<EntityType, Configuration> &config;
+	std::unordered_map<std::string, Configuration> &config;
 
     virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 
-    void loadValue(osgDB::XmlNode *xmlNode, const std::string &valueType, EntityType type);
+	void createModelFromXML(osgDB::XmlNode* xmlNode);
+
+	osg::ref_ptr<osg::MatrixTransform> getNodeFromMap(const std::string name);
+
 };

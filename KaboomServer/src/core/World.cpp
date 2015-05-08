@@ -5,6 +5,10 @@
 #include <core/Entity.h>
 #include <core/EntityType.h>
 
+#include <osgbDynamics/MotionState.h>
+#include <osgbCollision/CollisionShapes.h>
+
+#include "../core/OsgObjectLoader.h"
 #include "../components/CollisionComponent.h"
 #include "../components/TriggerComponent.h"
 
@@ -13,12 +17,18 @@ void onTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     w->onTick(timeStep);
 }
 
-World::World()
+World::World(ConfigSettings * configSettings)
         : dispatcher(&collisionConfiguration),
-          world(&dispatcher, &broadphase, &solver, &collisionConfiguration) {
+          world(&dispatcher, &broadphase, &solver, &collisionConfiguration),
+		  config(configSettings){
+
     setGravity(4.0f);
     broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new TriggerCallback());
     world.setInternalTickCallback(onTickCallback, this);
+
+	//TODO make an on off switch here to disable debugViewer
+	debugViewer = new OsgBulletDebugViewer(config);
+	debugViewer->init();
 }
 
 World::~World() {
@@ -68,8 +78,43 @@ void World::loadMap() {
 
 void World::loadMapFromXML(const std::string &mapXMLFile){
 
+	OsgObjectLoader osgObjectLoader(osgNodeConfigMap);
+	osgObjectLoader.load(mapXMLFile);
+
+	for (auto it = osgNodeConfigMap.begin(); it != osgNodeConfigMap.end(); ++it) {
+		Configuration osgObjectConfig = it->second;
+
+		osg::MatrixTransform * node = osgObjectConfig.getPointer<osg::MatrixTransform *>("node");
+
+		osgbDynamics::MotionState * motion = new osgbDynamics::MotionState;
+		motion->setTransform(node);
+		btCollisionShape * collisionShape = osgbCollision::btConvexTriMeshCollisionShapeFromOSG(node);
+
+		btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(0, motion, collisionShape, btVector3(0, 0, 0));
+		btRigidBody * rigidbody = new btRigidBody(rigidBodyCI);
+		addRigidBody(rigidbody);
+
+		//TODO what happen then to the MatrixTransform????
+
+		osg::Node* debugNode = osgbCollision::osgNodeFromBtCollisionShape(collisionShape);
+		debugViewer->addNodeWireFrame(debugNode);
 
 
+		// Create an OSG representation of the Bullet shape and attach it.
+		// This is mainly for debugging.
+		//osg::Node* debugNode = osgbCollision::osgNodeFromBtCollisionShape(collision);
+		//node->addChild(debugNode);
+
+
+		// Set debug node state.
+		//osg::StateSet* state = debugNode->getOrCreateStateSet();
+		//osg::PolygonMode* pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE);
+		//state->setAttributeAndModes(pm);
+		//osg::PolygonOffset* po = new osg::PolygonOffset(-1, -1);
+		//state->setAttributeAndModes(po);
+		//state->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+
+	}
 }
 
 void World::stepSimulation(float timeStep, int maxSubSteps) {
@@ -178,6 +223,10 @@ btBroadphasePair *World::TriggerCallback::addOverlappingPair(btBroadphaseProxy *
     addTriggerEntity(entity1, entity0);
 
     return btGhostPairCallback::addOverlappingPair(proxy0, proxy1);
+}
+
+void World::renderDebugFrame() {
+	debugViewer->renderFrame();
 }
 
 void *World::TriggerCallback::removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher) {

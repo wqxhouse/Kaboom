@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<world>  
+  <model name="testBox">
+    <file>C:\Users\Steven\Desktop\Kaboom\Media\DefaultAssets\GeometryObject\3boxStack.dae</file>
+    <material name="testMat" />
+    <position>5.0 5.0 0.0</position>
+    <orientation>0.06 -0.05 0.01 1.00</orientation> <!--quaternion-->
+    <collider></collider>
+  </model>
+  <model name="test6SidePlatform">
+    <file>C:\Users\Steven\Desktop\Kaboom\Media\DefaultAssets\GeometryObject\6SideCircularPlatform.dae</file>
+    <material name="testMat" />
+    <position>0.0 0.0 0.0</position>
+    <orientation>0.06 -0.05 0.01 1.00</orientation> <!--quaternion-->
+    <collider></collider>
+  </model>
+  <model name="test12SidePlatform">
+    <file>C:\Users\Steven\Desktop\Kaboom\Media\DefaultAssets\GeometryObject\12SideCircularPlatform.dae</file>
+    <material name="testMat" />
+    <position>-5.0 -5.0 0.0</position>
+    <orientation>0.06 -0.05 0.01 1.00</orientation> <!--quaternion-->
+    <collider></collider>
+  </model>
+
+
+  <light name="Sun" type="directional">
+    <color>0.9 0.8 0.5</color>
+    <direction>-1 -1 -1</direction>
+    <castShadow>0</castShadow>
+  </light>
+
+  <light name="pt1" type="point">
+    <color>0.7 0.3 0.3</color>
+    <position>7 0 0</position>
+    <radius>100</radius>
+    <castShadow>0</castShadow>
+  </light>
+
+  <light name="pt2" type="point">
+    <color>0.3 0.7 0.3</color>
+    <position>-7 0 0</position>
+    <radius>100</radius>
+    <castShadow>0</castShadow>
+  </light>
+
+  <light name="pt3" type="point">
+    <color>0.7 0.7 0.3</color>
+    <position>0 7 0</position>
+    <radius>100</radius>
+    <castShadow>0</castShadow>
+  </light>
+
+  <light name="pt4" type="point">
+    <color>0.3 0.3 0.7</color>
+    <position>0 -7 0</position>
+    <radius>100</radius>
+    <castShadow>0</castShadow>
+  </light>
+</world>
