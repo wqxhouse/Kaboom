@@ -1179,7 +1179,14 @@ void TwGUIManager::updateEvents() const
 	unsigned int size = _eventsToHandle.size();
 	for (unsigned int i = 0; i < size; ++i)
 	{
-		if (_eventsToHandle.front() == NULL) return; // attemps to fix crashing; but reason of NULL events unknown
+		// attemps to fix crashing; but reason of NULL events unknown
+		// actually reminds me of CSE131 return ErrorSTO back
+		if (_eventsToHandle.front() == NULL)
+		{
+			const_cast<TwGUIManager*>(this)->_eventsToHandle.pop();
+			continue;
+		} 
+
 		const osgGA::GUIEventAdapter& ea = *(_eventsToHandle.front());
 		float x = ea.getX(), y = ea.getWindowHeight() - ea.getY();
 		switch (ea.getEventType())
