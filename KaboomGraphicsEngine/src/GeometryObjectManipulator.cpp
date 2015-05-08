@@ -26,6 +26,7 @@ void GeometryObjectManipulator::detachManipulator()
 {
 	if (_rootNode != NULL && _currNode != NULL && _dragger != NULL)
 	{
+		std::cout << "Ref count " << _currNode->getThreadSafeReferenceCounting() << std::endl;
 		_dragger->removeTransformUpdating(_currNode.get());
 		_dragger->setHandleEvents(false);
 		_rootNode->removeChild(_dragger.get());

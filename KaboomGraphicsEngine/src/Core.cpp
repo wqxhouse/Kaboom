@@ -328,22 +328,11 @@ void Core::finalize()
 	_viewer->getCamera()->setUpdateCallback(new MainCameraCallback);
 	_currCamManipulatorType = Core::FIRSTPERSON;
 
+	// TODO: keep it single threaded for now.
+	// I just notice our Core and all shared static classes are not thread-safe
+	// so that it will result in crashes or unexpected behaviors, such as dead-lock of a cameramanipulator enable/disable;
+	_viewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
 	_viewer->realize();
-	//while (!_viewer->done())
-	//{
-	//	if (_camCallback != NULL)
-	//	{
-	//		_camCallback(&_cam);
-	//	}
-
-	//	Camera &c = getMainCamera();
-	//	//std::cout << "Before: " << c.getLookAt() << std::endl;
-	//	const osg::Vec3 &cc = osg::Vec3(100, 100, 100);
-	//	//c.setLookAtAndUpdate(cc);
-	//	//std::cout << "After1 : " << c.getLookAt() << std::endl;
-	//	
-	//	_viewer->frame();
-	//}
 }
 
 Camera &Core::getMainCamera()
