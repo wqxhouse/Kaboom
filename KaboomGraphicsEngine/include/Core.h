@@ -16,6 +16,14 @@ namespace osgLibRocket
 	class GuiNode;
 }
 
+namespace Rocket
+{
+	namespace Core
+	{
+		class ElementDocument;
+	}
+}
+
 class Core
 {
 public:
@@ -56,6 +64,9 @@ public:
 	static void enableGUI();
 	static void disableGUI();
 
+	static void hideInEditorLibRocketGUI();
+	static void showInEditorLibRocketGUI();
+
 	static void enableGameMode();
 	static void disableGameMode();
 
@@ -64,6 +75,7 @@ public:
 
 	static bool isInGameMode();
 	static bool isCamLocked();
+	static bool isLibRocketEditorHidden();
 	static double getLastFrameDuration();
 	static bool isViewerClosed();
 
@@ -146,11 +158,12 @@ private:
 	static bool _guiEnabled;
 	static bool _manipulatorEnabled;
 
-
 	static bool _isFirstFrame;
 
 	static bool _allowEditorChangeProjection;
 	static bool _requestPrefilterCubeMap;
+
+	static bool _isLibRocketEditorHidden;
 
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 
@@ -158,6 +171,7 @@ private:
 	static AxisVisualizer _axisVisualizer;
 	static CubeMapPreFilter _cubemapPreFilter;
 
+	static std::vector<Rocket::Core::ElementDocument *> _libRocketWindows;
 };
 
 class MainCameraCallback : public osg::NodeCallback
