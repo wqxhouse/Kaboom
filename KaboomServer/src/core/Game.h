@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/EntityManager.h>
+#include <util/Configuration.h>
 
 #include "BombFactory.h"
 #include "World.h"
@@ -14,13 +15,15 @@ class ConfigSettings;
 
 class Game {
 public:
-    Game(ConfigSettings *config);
+    Game(ConfigSettings *configSettings);
     ~Game();
 
     void update(float timeStep, int maxSubSteps);
 
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
+
+    Configuration &getConfiguration();
 
     EntityManager &getEntityManager();
     const CharacterFactory &getCharacterFactory() const;
@@ -29,6 +32,8 @@ public:
     const GameServer &getGameServer() const;
 
 private:
+    Configuration config;
+
     EntityManager entityManager;
     SystemManager systemManager;
 

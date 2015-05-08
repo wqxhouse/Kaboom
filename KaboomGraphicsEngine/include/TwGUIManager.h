@@ -104,6 +104,8 @@ public:
 	static void addGeomToUndo(GeometryObject* geom);
 	static void clearRedoList();
 
+	static ModelMatrix* _currChange;
+
 protected:
 	struct Position
 	{
@@ -179,7 +181,6 @@ protected:
 
 	static std::vector<ModelMatrix*> _undos;
 	static std::vector<ModelMatrix*> _redos;
-	static ModelMatrix* _currChange;
 
 	bool _isMouseOver;
 };
