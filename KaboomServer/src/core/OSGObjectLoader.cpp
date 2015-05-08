@@ -1,71 +1,127 @@
-#include "BombDataLoader.h"
+#include "OsgObjectLoader.h"
 
-#include "KaboomV2CollisionHandler.h"
+#include <osgDB/ReadFile>
 
-BombDataLoader::BombDataLoader(std::unordered_map<EntityType, Configuration> &config)
-        : config(config) {
+#include <osgDB/FileUtils>
+#include <osgDB/FileNameUtils>
+#include <osgDB/Options>
+#include <osgDB/XmlParser>
+
+OsgObjectLoader::OsgObjectLoader(std::unordered_map<std::string, Configuration> &config)
+	: config(config) {
 }
 
-void BombDataLoader::load(const std::string &filename) {
+void OsgObjectLoader::load(const std::string &filename) {
     loadXMLFile(filename);
 }
 
-void BombDataLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
-    if (xmlRoot->type == osgDB::XmlNode::ROOT) {
-        for (auto child : xmlRoot->children) {
-            if (child->name == "bombs") {
-                return loadXMLNode(child);
-            }
-        }
+void OsgObjectLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 
-        return;
-    }
+	if (xmlRoot->type == osgDB::XmlNode::ROOT) {
+		for (unsigned int i = 0; i < xmlRoot->children.size(); ++i) {
+			osgDB::XmlNode* xmlChild = xmlRoot->children[i];
+			if (xmlChild->name == "world")
+				return loadXMLNode(xmlChild);
+		}
+	}
 
-    for (auto bombNode : xmlRoot->children) {
-        if (bombNode->name != "bomb") {
-            continue;
-        }
+	for (unsigned int i = 0; i < xmlRoot->children.size(); ++i) {
+		osgDB::XmlNode* xmlChild = xmlRoot->children[i];
+		if (!isXMLNodeType(xmlChild)) continue;
 
-        EntityType type = NONE;
+		const std::string& childName = xmlChild->name;
+		//std::cout << childName << std::endl;
 
-        for (auto dataNode : bombNode->children) {
-            const std::string &valueType = dataNode->properties["type"];
-
-            if (dataNode->name == "id") {
-                unsigned int id;
-                loadUint(dataNode, id);
-                type = static_cast<EntityType>(id);
-            }
-
-            loadValue(dataNode, valueType, type);
-        }
-
-        const std::unordered_map<EntityType, CollisionHandler *> collisionHandlers = {
-            { KABOOM_V2, new KaboomV2CollisionHandler() }
-        };
-
-        if (collisionHandlers.count(type) > 0) {
-            config[type].set("collision-handler", collisionHandlers.at(type));
-        }
-    }
+		if (childName == "model") {
+			createModelFromXML(xmlChild);
+		}
+	}
 }
 
-void BombDataLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string &valueType, EntityType type) {
-    if (valueType == "int") {
-        int val;
-        loadInt(xmlNode, val);
-        config[type].set(xmlNode->name.c_str(), val);
-    } else if (valueType == "uint") {
-        unsigned int val;
-        loadUint(xmlNode, val);
-        config[type].set(xmlNode->name.c_str(), val);
-    } else if (valueType == "float") {
-        float val;
-        loadFloat(xmlNode, val);
-        config[type].set(xmlNode->name.c_str(), val);
-    } else if (valueType == "string") {
-        std::string val;
-        loadString(xmlNode, val);
-        config[type].set(xmlNode->name.c_str(), val.c_str());
-    }
+
+void OsgObjectLoader::createModelFromXML(osgDB::XmlNode* xmlNode) {
+	std::string name = xmlNode->properties["name"];
+	osg::Node *modelNode = nullptr;
+	osg::Vec3 position;
+	osg::Vec4 orientation;
+	osg::Vec3 scaleVec3;
+
+	osg::MatrixTransform* transformNode;
+
+	for (unsigned int i = 0; i < xmlNode->children.size(); ++i) {
+
+		osgDB::XmlNode* xmlChild = xmlNode->children[i];
+		if (!isXMLNodeType(xmlChild)) {
+			continue;
+		}
+		const std::string& childName = xmlChild->name;
+
+		if (childName == "file") {
+			std::string fileName = "";
+			loadString(xmlChild, fileName);
+			modelNode = osgDB::readNodeFile(fileName);
+
+			if (modelNode == nullptr) {
+				std::cout << "model is null: " << name << std::endl;
+				return;
+			}
+
+			transformNode = new osg::MatrixTransform;
+			transformNode->addChild(modelNode);
+
+			config[name].set("node", transformNode);
+		}
+		else if (childName == "position") {
+			loadVec3(xmlChild, position);
+
+			osg::Matrix translate;
+			translate.makeTranslate(position);
+
+			transformNode = config[name].getPointer<osg::MatrixTransform *>("node");
+			if (transformNode != nullptr) {
+				transformNode->setMatrix(translate);
+			}
+
+		}
+		else if (childName == "orientation") {
+			loadVec4(xmlChild, orientation);
+
+			osg::Quat quat = osg::Quat(orientation);
+
+			transformNode = config[name].getPointer<osg::MatrixTransform *>("node");
+			if (transformNode != nullptr) {
+
+				osg::Matrix mat = transformNode->getMatrix();
+
+				osg::Vec3 pos, scale;
+				osg::Quat rot, so;
+				mat.decompose(pos, rot, scale, so);
+
+				mat.makeTranslate(pos);
+				mat.preMult(osg::Matrix::rotate(quat));//give our rotation here
+				mat.preMult(osg::Matrix::scale(scale));
+
+				transformNode->setMatrix(mat);
+			}
+		}
+		else if (childName == "scale") {
+			loadVec3(xmlChild, scaleVec3);
+
+			transformNode = config[name].getPointer<osg::MatrixTransform *>("node");
+			if (transformNode != nullptr) {
+
+				osg::Matrix mat = transformNode->getMatrix();
+
+				osg::Vec3 pos, scale;
+				osg::Quat rot, so;
+				mat.decompose(pos, rot, scale, so);
+
+				mat.makeTranslate(pos);
+				mat.preMult(osg::Matrix::rotate(rot));
+				mat.preMult(osg::Matrix::scale(scaleVec3));//give our scaling here
+
+				transformNode->setMatrix(mat);
+			}
+		}
+	}
 }

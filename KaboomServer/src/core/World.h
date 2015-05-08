@@ -1,19 +1,31 @@
 #pragma once
-
+#include <string>
+#include <unordered_map>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <btBulletDynamicsCommon.h>
+
+#include <osg/Node>
+#include <osgDB/XmlParser>
+
+#include <osg/MatrixTransform>
+
+#include <util/Configuration.h>
+#include <util/ConfigSettings.h>
+
+#include "OsgBulletDebugViewer.h"
+
 
 class Entity;
 
 class World {
 public:
-    World();
+    World(ConfigSettings * );
     ~World();
 
     void loadMap();
 
-	void loadMapFromXML(const std::string &);
+	void loadMapFromXML(const std::string &mapXMLFile);
 
     void stepSimulation(float timeStep, int maxSubSteps);
 
@@ -29,9 +41,15 @@ public:
 
     const btCollisionDispatcher &getDispatcher() const;
 
+	void renderDebugFrame();
 
 private:
     class TriggerCallback;
+
+	std::unordered_map<std::string, Configuration> osgNodeConfigMap;
+
+	OsgBulletDebugViewer* debugViewer;
+	ConfigSettings* config;
 
     btDbvtBroadphase broadphase;
     btDefaultCollisionConfiguration collisionConfiguration;
@@ -44,6 +62,7 @@ private:
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
 
     void handleCollision(Entity *entityA, Entity *entityB) const;
+
 };
 
 class World::TriggerCallback : public btGhostPairCallback {
