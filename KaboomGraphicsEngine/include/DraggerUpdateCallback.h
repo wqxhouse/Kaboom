@@ -13,5 +13,5 @@ public:
 	virtual bool receive(const osgManipulator::MotionCommand & cmd);
 
 private:
-	GeometryObject *_geomObj;
+	std::string _geomName;
 };

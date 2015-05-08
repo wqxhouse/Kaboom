@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "TwGUIManager.h"
+#include "GeometryObjectManager.h"
 
 DraggerUpdateCallback::DraggerUpdateCallback(
 	 osg::MatrixTransform *transform, int handleCommandMask)
@@ -15,27 +16,26 @@ void DraggerUpdateCallback::setNode(osg::MatrixTransform *transform) {
 		std::string nodeName = transform->getName();
 		std::string prefix("Transform_");
 
-		std::string realName = nodeName.substr(prefix.length());
-
-		if (realName != "") {
-			_geomObj = Core::getWorldRef().getGeometryManager()->
-				getGeometryObject(realName);
-		}
+		_geomName = nodeName.substr(prefix.length());
 	}
 }
 
 bool DraggerUpdateCallback::receive(const osgManipulator::MotionCommand & cmd)
 {
+	
+	GeometryObject* geomObj = Core::getWorldRef().getGeometryManager()->getGeometryObject(_geomName);
+	if (geomObj == NULL) return false;
+
 	switch (cmd.getStage())
 	{
 	case osgManipulator::MotionCommand::START:
-		if (_geomObj != NULL) {
-			TwGUIManager::addGeomToUndo(_geomObj);
+		if (geomObj != NULL) {
+			TwGUIManager::addGeomToUndo(geomObj);
 		}
 		break;
 	case osgManipulator::MotionCommand::FINISH:
-		if (_geomObj != NULL) {
-			TwGUIManager::_currChange = TwGUIManager::makeModelMatrix(_geomObj);
+		if (geomObj != NULL) {
+			TwGUIManager::_currChange = TwGUIManager::makeModelMatrix(geomObj);
 		}
 		break;
 	}
