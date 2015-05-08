@@ -103,6 +103,8 @@ private:
 
 	static void configLibRocketGUI();
 
+	static void freezeCameraOnGUIDemand();
+
 	static std::string _mediaPath;
 		
 	static osg::ref_ptr<osgFX::EffectCompositor> _passes;

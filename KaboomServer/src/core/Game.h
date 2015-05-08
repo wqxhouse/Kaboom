@@ -8,12 +8,7 @@
 #include "PickupFactory.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
-#include "../systems/FiringSystem.h"
-#include "../systems/CollisionSystem.h"
-#include "../systems/ExplosionSystem.h"
-#include "../systems/InitializationSystem.h"
-#include "../systems/InputSystem.h"
-#include "../systems/PickupSystem.h"
+#include "../systems/SystemManager.h"
 
 class ConfigSettings;
 
@@ -35,16 +30,11 @@ public:
 
 private:
     EntityManager entityManager;
+    SystemManager systemManager;
+
     CharacterFactory characterFactory;
     BombFactory bombFactory;
     PickupFactory pickupFactory;
-
-    InitializationSystem initSystem;
-    InputSystem inputSystem;
-    PickupSystem pickupSystem;
-	FiringSystem firingSystem;
-    CollisionSystem collisionSystem;
-    ExplosionSystem explosionSystem;
 
     ServerEventHandlerLookup eventHandlerLookup;
     GameServer server;

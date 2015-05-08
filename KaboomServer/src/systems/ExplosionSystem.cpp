@@ -6,20 +6,17 @@
 #include "../core/Game.h"
 
 ExplosionSystem::ExplosionSystem(Game *game)
-        : EntitySystem(game) {
+        : game(game) {
 }
 
-void ExplosionSystem::update(float timeStep) {
-    auto entities = game->getEntityManager().getEntityList();
+bool ExplosionSystem::checkEntity(Entity *entity) {
+    return entity->hasComponent<ExplosionComponent>() &&
+            entity->hasComponent<TriggerComponent>();
+}
 
-    for (Entity *entity : entities) {
-        ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
-        TriggerComponent* triggerComp = entity->getComponent<TriggerComponent>();
+void ExplosionSystem::processEntity(Entity *entity) {
+    ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
+    TriggerComponent* triggerComp = entity->getComponent<TriggerComponent>();
 
-        if (expComp == nullptr || triggerComp == nullptr) {
-            continue;
-        }
-
-        expComp->getHandler()->handle(game, entity, triggerComp->getTriggerEntities());
-    }
+    expComp->getHandler()->handle(game, entity, triggerComp->getTriggerEntities());
 }

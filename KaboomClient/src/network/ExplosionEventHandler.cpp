@@ -36,7 +36,9 @@ void ExplosionEventHandler::handle(const Event &e) const {
 		std::cout << " x " << x << " y " << y << " z " << z << std::endl;
 		//game->source->rewind();
 		game->source=new Source;
-		game->source->setSound(game->sample.get());
+		game->source->setSound(game->sounds->at(KABOOM_EXPLODE));
+		game->source->setGain(1);
+		game->source->setLooping(false);
 		//game->source->setReferenceDistance(sqrt(x*x + y*y + z*z));
 		game->source->setRolloffFactor(sqrt(x*x + y*y + z*z));
 		float mag = sqrt(x*x + y*y + z*z);

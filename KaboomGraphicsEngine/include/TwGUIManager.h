@@ -45,6 +45,11 @@ struct BarItem {
 	std::string name;
 };
 
+struct ModelMatrix {
+	std::string name;
+	osg::Matrix matrix;
+};
+
 class Core;
 class TwGUIManager : public osgGA::GUIEventHandler, public osg::Camera::DrawCallback
 {
@@ -73,6 +78,17 @@ public:
 		return _manipulatorBits;
 	}
 
+	inline bool isMouseOver()
+	{
+		return _isMouseOver;
+	}
+
+	// NOTE: this is different from the actual cam manipulator status in Core
+	inline bool isCamControlOn()
+	{
+		return _cameraManipulatorActive;
+	}
+
 	virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 	virtual void operator()(osg::RenderInfo& renderInfo) const;
 	
@@ -84,9 +100,11 @@ public:
 	static void addLightToGUI(TwBar* bar, Light* geom, std::string group, int& index);
 	static void addMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
 
-protected:
-	static int _index;
+	static ModelMatrix* makeModelMatrix(GeometryObject* geom);
+	static void addGeomToUndo(GeometryObject* geom);
+	static void clearRedoList();
 
+protected:
 	struct Position
 	{
 		float x;
@@ -105,16 +123,27 @@ protected:
 		g_manipulatorSelectorBar = NULL;
 		g_addBar = NULL;
 		g_materialBar = NULL;
+
+		for (int i = 0; i < _undos.size(); i++) {
+			delete _undos[i];
+		}
+
+		for (int i = 0; i < _redos.size(); i++) {
+			delete _redos[i];
+		}
 	}
 
 	TwMouseButtonID getTwButton(int button) const;
 	int getTwKey(int key, bool useCtrl) const;
 	int getTwModKeyMask(int modkey) const;
 
+
 	void initMainBar();
 	void initManipuatorSelectorBar();
 	void initAddBar();
 	void initMaterialBar();
+
+	static void doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<ModelMatrix*> &dest);
 
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;
 	TwBar *g_twBar;
@@ -145,4 +174,12 @@ protected:
 	bool _cameraManipulatorActive;
 	int _manipulatorBits;
 
+	std::string nameToCopy;
+	static int _index;
+
+	static std::vector<ModelMatrix*> _undos;
+	static std::vector<ModelMatrix*> _redos;
+	static ModelMatrix* _currChange;
+
+	bool _isMouseOver;
 };

@@ -5,21 +5,17 @@
 #include "../core/Game.h"
 
 CollisionSystem::CollisionSystem(Game *game)
-        : EntitySystem(game) {
+        : game(game) {
 }
 
-void CollisionSystem::update(float timeStep) {
-    auto entities = game->getEntityManager().getEntityList();
+bool CollisionSystem::checkEntity(Entity *entity) {
+    return entity->hasComponent<CollisionComponent>();
+}
 
-    for (Entity *entity : entities) {
-        CollisionComponent *colComp = entity->getComponent<CollisionComponent>();
+void CollisionSystem::processEntity(Entity *entity) {
+    CollisionComponent *colComp = entity->getComponent<CollisionComponent>();
 
-        if (colComp == nullptr) {
-            continue;
-        }
-
-        if (colComp->isCollided()) {
-            colComp->getHandler()->handle(game, entity, colComp->getContactEntities());
-        }
+    if (colComp->isCollided()) {
+        colComp->getHandler()->handle(game, entity, colComp->getContactEntities());
     }
 }

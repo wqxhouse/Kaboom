@@ -7,5 +7,5 @@ class TimerHandler {
 public:
     virtual ~TimerHandler() {}
 
-    virtual void handle(Game *game, Entity *entity) const = 0;
+    virtual void handle(Game *game, Entity *entity) = 0;
 };

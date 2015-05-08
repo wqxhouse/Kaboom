@@ -18,6 +18,9 @@
 const float PI_F = 3.14159265358979f;
 
 int TwGUIManager::_index = 0;
+std::vector<ModelMatrix*> TwGUIManager::_undos = std::vector<ModelMatrix*>();
+std::vector<ModelMatrix*> TwGUIManager::_redos = std::vector<ModelMatrix*>();
+ModelMatrix* TwGUIManager::_currChange = NULL;
 
 TwGUIManager::TwGUIManager()
 // Note, this flag assumes that you do not touch viewer manipulator settings
@@ -27,6 +30,8 @@ TwGUIManager::TwGUIManager()
 	_lm = Core::getWorldRef().getLightManager();
 	_mm = Core::getWorldRef().getMaterialManager();
 	_freezeGUI = false;
+
+	nameToCopy = "";
 
 	TwInit(TW_OPENGL, NULL);
 }
@@ -515,11 +520,14 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float posX = *(const float *)value;
 		osg::Vec3 oldPos = obj->getTranslate();
 		osg::Vec3 newPos = osg::Vec3(posX, oldPos.y(), oldPos.z());
 		obj->setTranslate(newPos);
 
+		_currChange = makeModelMatrix(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -535,11 +543,14 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, posYVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float posY = *(const float *)value;
 		osg::Vec3 oldPos = obj->getTranslate();
 		osg::Vec3 newPos = osg::Vec3(oldPos.x(), posY, oldPos.z());
 		obj->setTranslate(newPos);
 
+		_currChange = makeModelMatrix(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -555,11 +566,14 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, posZVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float posZ = *(const float *)value;
 		osg::Vec3 oldPos = obj->getTranslate();
 		osg::Vec3 newPos = osg::Vec3(oldPos.x(), oldPos.y(), posZ);
 		obj->setTranslate(newPos);
 
+		_currChange = makeModelMatrix(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -576,11 +590,14 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, scaleXVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float scaleX = *(const float *)value;
 		osg::Vec3 oldScale = obj->getScale();
 		osg::Vec3 newScale = osg::Vec3(scaleX, oldScale.y(), oldScale.z());
 		obj->setScale(newScale);
 
+		_currChange = makeModelMatrix(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -596,11 +613,14 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, scaleYVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float scaleY = *(const float *)value;
 		osg::Vec3 oldScale = obj->getScale();
 		osg::Vec3 newScale = osg::Vec3(oldScale.x(), scaleY, oldScale.z());
 		obj->setScale(newScale);
 
+		_currChange = makeModelMatrix(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -616,11 +636,14 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, scaleZVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float scaleZ = *(const float *)value;
 		osg::Vec3 oldScale = obj->getScale();
 		osg::Vec3 newScale = osg::Vec3(oldScale.x(), oldScale.y(), scaleZ);
 		obj->setScale(newScale);
 
+		_currChange = makeModelMatrix(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -639,6 +662,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, rotXVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float rotX = *(const float *)value;			// Range is -pi to pi
 
 		rotX *= PI_F / 180.0f;
@@ -647,6 +672,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newRot = osg::Vec3(rotX, oldRot.y(), oldRot.z());
 		obj->setRotation(newRot);
 
+		_currChange = makeModelMatrix(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -662,6 +688,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, rotYVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float rotY = *(const float *)value;			// Range is -pi/2 to pi/2
 
 		rotY /= 2.0f;
@@ -681,6 +709,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 
 		obj->setRotation(newRot);
 
+		_currChange = makeModelMatrix(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -696,6 +725,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, rotZVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float rotZ = *(const float *)value;			// Range is -pi to pi
 
 		rotZ *= PI_F / 180.0f;
@@ -704,6 +735,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newRot = osg::Vec3(oldRot.x(), oldRot.y(), rotZ);
 		obj->setRotation(newRot);
 
+		_currChange = makeModelMatrix(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -1056,6 +1088,67 @@ void TW_CALL TwGUIManager::loadModelFunc(void* clientData)
 	// TODO: implement
 }
 
+ModelMatrix* TwGUIManager::makeModelMatrix(GeometryObject* geom)
+{
+	ModelMatrix* item = new ModelMatrix();
+	item->name = geom->getName();
+	item->matrix = geom->getMatrix();
+	return item;
+}
+
+void TwGUIManager::addGeomToUndo(GeometryObject* geom)
+{
+	ModelMatrix* item = makeModelMatrix(geom);
+
+	_undos.push_back(item);
+	clearRedoList();
+}
+
+void TwGUIManager::clearRedoList() 
+{
+	int size = _redos.size();
+	for (int i = 0; i < size; i++) {
+		ModelMatrix* item = _redos.back();
+		_redos.pop_back();
+		delete item;
+	}
+}
+
+void TwGUIManager::doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<ModelMatrix*> &dest)
+{
+	if (from.size() > 0) {
+		ModelMatrix* oldChange = _currChange;		// before the changes	
+
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		bool didChange = false;
+
+		// Loop b/c previous geoms may have been deleted/renamed
+		while (from.size() > 0) {
+			_currChange = from.back();
+			from.pop_back();
+
+			// Apply undo
+			GeometryObject* geom = gm->getGeometryObject(_currChange->name);
+			if (geom != NULL) {
+				geom->setMatrix(_currChange->matrix);
+				didChange = true;
+				break;
+			}
+			else {
+				delete _currChange;
+			}
+		}
+
+		// Only add to redo stack if we did undo something
+		if (didChange && (oldChange != NULL)) {
+			dest.push_back(oldChange);
+		}
+
+		GeometryObjectManipulator::updateBoundingBox();
+	}
+}
+
+
 // TODO: anttweakbar by default uses opengl convention for world coordinates on widgets(arrow)
 // Need to change them to conform to osg convention
 void TwGUIManager::updateEvents() const
@@ -1102,15 +1195,7 @@ void TwGUIManager::updateEvents() const
 		case osgGA::GUIEventAdapter::DRAG:
 		case osgGA::GUIEventAdapter::MOVE:
 		{
-			int handledByBar = TwMouseMotion(x, y);
-			if (!handledByBar && _cameraManipulatorActive)
-			{
-				Core::enableCameraManipulator();
-			}
-			else // mouse over gui
-			{
-				Core::disableCameraManipulator();
-			}
+			*(bool *)&_isMouseOver = TwMouseMotion(x, y);
 			break;
 		}
 		case osgGA::GUIEventAdapter::KEYDOWN:
@@ -1133,7 +1218,7 @@ void TwGUIManager::updateEvents() const
 					*(bool *)&_cameraManipulatorActive = true;
 				}
 			}
-			else if (ea.getKey() == 'z')
+			else if (ea.getKey() == 'p')
 			{
 				osg::MatrixTransform *mt = NULL;
 				if ((mt = GeometryObjectManipulator::getCurrNode()) != NULL)
@@ -1150,6 +1235,34 @@ void TwGUIManager::updateEvents() const
 					osg::Vec3 newEyePos = eyePos + fromEyeToScalePoint;
 					Core::setCurrentCameraManipulatorHomePosition(newEyePos, center, osg::Vec3(0, 0, 1));
 				}
+			}
+			else if (ea.getKey() == 'c')
+			{
+				osg::ref_ptr<osg::MatrixTransform> obj = GeometryObjectManipulator::getCurrNode();
+				if (obj != NULL) {
+					std::string nodeName = obj->getName();
+					std::string prefix("Transform_");
+
+					*(std::string *)&nameToCopy = nodeName.substr(prefix.length());
+				}
+			}
+			else if (ea.getKey() == 'v')
+			{
+				if (nameToCopy != "") {
+					GeometryObject* newGeom = _gm->copyGeometry(nameToCopy);
+
+					if (newGeom != NULL) {
+						addModelToGUI(g_twBar, newGeom, GEOM_GROUP_NAME, _index);
+					}
+				}
+			}
+			else if (ea.getKey() == 'z')
+			{
+				doUndoRedo(_undos, _redos);
+			}
+			else if (ea.getKey() == 'y')
+			{
+				doUndoRedo(_redos, _undos);
 			}
 			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F8)
 			{

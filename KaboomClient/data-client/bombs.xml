@@ -5,4 +5,9 @@
         <name>Kaboom 2.0</name>
         <size>0.1</size>
     </bomb>
+    <bomb>
+        <id>131074</id>
+        <name>Time Bomb</name>
+        <size>0.1</size>
+    </bomb>
 </bombs>

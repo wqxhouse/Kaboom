@@ -39,6 +39,7 @@ Game::Game(ConfigSettings *config)
     int bufferH = atoi(renbufferHStr.c_str());
     int screenW = atoi(screenWStr.c_str());
     int screenH = atoi(screenHStr.c_str());
+	sounds = new std::unordered_map<SOUNDS, osg::ref_ptr<Sample> >();
 
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
     setupScene();
@@ -57,7 +58,6 @@ Game::Game(ConfigSettings *config)
 
 	Core::loadMaterialFile(str_material_xml);
 	Core::loadWorldFile(str_world_xml);
-	
 	* End testing code */
 
     inputManager = new InputManager(client);
@@ -70,12 +70,30 @@ Game::Game(ConfigSettings *config)
 	_materialManager = Core::getWorldRef().getMaterialManager();
 	source = new Source;
 	
-	printf("check for sound errors");
-	sample = new Sample("sounds/a.wav");
+	printf("check for sound errors\n");
+	sample = new Sample("sounds\\a.wav");
 	source->setSound(sample.get());
 	source->setGain(1);
 	source->setLooping(false);
-	//sounds->insert({ KABOOM_EXPLODE, sample });
+	printf("Adding KABOOM_EXPLODE TO MAP\n");
+	sounds->insert(std::make_pair(KABOOM_EXPLODE,sample));
+	//sounds->at(KABOOM_EXPLODE)=sample;
+	printf("Added KABOOM_EXPLODE TO MAP\n");
+	sample = new Sample("sounds\\a.wav");
+	printf("Adding KABOOM_FIRE TO MAP\n");
+	sounds->insert(std::make_pair(KABOOM_FIRE, sample));
+	printf("Added KABOOM_FIRE TO MAP\n");
+	sample = new Sample("sounds\\a.wav");
+	printf("Adding BASIC TO MAP\n");
+	sounds->insert(std::make_pair(BASIC, sample));
+	printf("Added BASIC TO MAP\n");
+	/*sample = new Sample("C:\\Users\\melapier\\Downloads\\djsona.wav");
+	backgroundMusic = new Source;
+	backgroundMusic->setSound(sample.get());
+	backgroundMusic->setGain(1);
+	backgroundMusic->setLooping(true);
+	backgroundMusic->play();*/
+	//delete source;
 	printf("finished check sound errors");
 	
 }

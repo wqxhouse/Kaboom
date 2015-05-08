@@ -20,6 +20,7 @@ using namespace osgAudio;
 
 class InputManager;
 enum SOUNDS{
+	BASIC,
 	KABOOM_FIRE,
 	KABOOM_EXPLODE
 
@@ -47,6 +48,7 @@ public:
 
     Camera &getCamera();
 	osg::ref_ptr<Source> source;
+	osg::ref_ptr<Source> backgroundMusic;
 	osg::ref_ptr<Sample> sample;
 	std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
 

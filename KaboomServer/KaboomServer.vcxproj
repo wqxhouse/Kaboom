@@ -32,16 +32,17 @@
     <ClCompile Include="src\components\InputComponent.cpp" />
     <ClCompile Include="src\components\JetpackComponent.cpp" />
     <ClCompile Include="src\components\PhysicsComponent.cpp" />
-    <ClCompile Include="src\components\TimerHandlerComponent.cpp" />
+    <ClCompile Include="src\components\TimerComponent.cpp" />
     <ClCompile Include="src\components\TriggerComponent.cpp" />
     <ClCompile Include="src\core\BombDataLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\CharacterDataLookup.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp" />
-    <ClCompile Include="src\core\KaboomV2ExplosionHandler.cpp" />
+    <ClCompile Include="src\core\DefaultExplosionHandler.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
+    <ClCompile Include="src\core\TimeBombTimerHandler.cpp" />
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\Conversion.cpp" />
@@ -52,12 +53,14 @@
     <ClCompile Include="src\network\ServerEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ServerNetwork.cpp" />
     <ClCompile Include="src\systems\CollisionSystem.cpp" />
-    <ClCompile Include="src\systems\EntitySystem.cpp" />
     <ClCompile Include="src\systems\ExplosionSystem.cpp" />
     <ClCompile Include="src\systems\FiringSystem.cpp" />
     <ClCompile Include="src\systems\InitializationSystem.cpp" />
     <ClCompile Include="src\systems\InputSystem.cpp" />
+    <ClCompile Include="src\systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\systems\PickupSystem.cpp" />
+    <ClCompile Include="src\systems\SystemManager.cpp" />
+    <ClCompile Include="src\systems\TimerSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -68,7 +71,7 @@
     <ClInclude Include="src\components\InputComponent.h" />
     <ClInclude Include="src\components\JetpackComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
-    <ClInclude Include="src\components\TimerHandlerComponent.h" />
+    <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
     <ClInclude Include="src\core\BombData.h" />
     <ClInclude Include="src\core\BombDataLookup.h" />
@@ -84,6 +87,7 @@
     <ClInclude Include="src\core\KaboomV2ExplosionHandler.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
+    <ClInclude Include="src\core\TimeBombTimerHandler.h" />
     <ClInclude Include="src\core\TimerHandler.h" />
     <ClInclude Include="src\core\World.h" />
     <ClInclude Include="src\math\Conversion.h" />
@@ -94,12 +98,14 @@
     <ClInclude Include="src\network\ServerEventHandlerLookup.h" />
     <ClInclude Include="src\network\ServerNetwork.h" />
     <ClInclude Include="src\systems\CollisionSystem.h" />
-    <ClInclude Include="src\systems\EntitySystem.h" />
     <ClInclude Include="src\systems\ExplosionSystem.h" />
     <ClInclude Include="src\systems\FiringSystem.h" />
     <ClInclude Include="src\systems\InitializationSystem.h" />
     <ClInclude Include="src\systems\InputSystem.h" />
+    <ClInclude Include="src\systems\PhysicsSystem.h" />
     <ClInclude Include="src\systems\PickupSystem.h" />
+    <ClInclude Include="src\systems\SystemManager.h" />
+    <ClInclude Include="src\systems\TimerSystem.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

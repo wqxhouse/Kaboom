@@ -542,8 +542,14 @@ namespace osgLibRocket
 			// If anyone has a more elegant solution for this then please contact me
 			_camera->setViewMatrix(osg::Matrix::translate(0, -h, 0) * osg::Matrix::scale(1, -1, 1) * osg::Matrix::identity());
 			_camera->setViewport(0, 0, w, h);
-
 		}
+	}
+
+	bool GuiNode::isMouseOver()
+	{
+		if (_context == NULL) return false;
+		bool hover = (_context->GetHoverElement() != _context->GetRootElement());
+		return hover;
 	}
 
 	bool GuiNode::handle(const osgGA::GUIEventAdapter& ea, const osg::NodePath& np, osgGA::GUIActionAdapter& aa)
