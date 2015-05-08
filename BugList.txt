@@ -10,7 +10,10 @@ Unresolved:
    But even though the near far value did not change, the light culling artifact will appear, meaning that
    1) in inheritedly linked to project matrices and near far plane. 
 
-5. After removing the geometry, if the manipulator is still active it will show on the screen. (Currently there is a bug involved with detachManipulator() )
+5. After removing the geometry, if the manipulator is still active it will show on the screen. 
+And this happens randomly
+(Currently there is a bug involved with detachManipulator() )
+
 6. BUG: need to delete bullet collision shape after client disconnect from server
 7. glValidation error in LightPass saying different samplers use the same texture (happens on HD4400, not on GTX580)
 	(when turning on the OSG_NOTIFY_LEVEL=DEBUG / INFO)
@@ -28,6 +31,18 @@ Unresolved:
 16. Directional light dirToWorld ARROW a little weird on the GUI (direction wrong)
 
 17. rotate and axis manipulator scale wrong
+18. add model from file doesn't appear on the editor anymore
+19.  In draggerupdatecallback, _geomObj will be dangling pointer after the actual geomObj is freed. 
+Thus your null check in the receive will not work.
+robin [3:48 AM]
+1) pick geom 
+2) delete geom( with a chance of not removing the manipulator)
+3) try drag the manipulator
+4) crash, pointing to DraggerUpdateCallback::receive. 
+At this point the _geomObj still has its address but an invalid one, since geommanager already had it deleted.
+20.sometimes the dragger paddle are also get scaled
+21.not sure why but it seems after rotating the geom, the tabbox bound is not rotated according to the rotation.
+
 
 Should be fixed, but need more tests:
 1. Geometry picker bug, crash the program: (randomly, wtf!) 
