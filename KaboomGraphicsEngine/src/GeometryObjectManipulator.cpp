@@ -24,9 +24,8 @@ enum ManipulatorType GeometryObjectManipulator::getCurrentManipulatorType()
 
 void GeometryObjectManipulator::detachManipulator()
 {
-	if (_rootNode != NULL && _currNode != NULL && _dragger != NULL)
+	if (_rootNode.valid() && _currNode.valid() && _dragger.valid())
 	{
-		std::cout << "Ref count " << _currNode->getThreadSafeReferenceCounting() << std::endl;
 		_dragger->removeTransformUpdating(_currNode.get());
 		_dragger->setHandleEvents(false);
 		_rootNode->removeChild(_dragger.get());
@@ -62,13 +61,13 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 {
 	if (Core::isInGameMode()) return;
 
-	if (node == NULL || _rootNode == NULL)
+	if (node == NULL || !_rootNode.valid())
 	{
 		return;
 	}
 
 	// unassign prev node dragger
-	if (_currNode != NULL && _dragger != NULL)
+	if (_currNode.valid()  && _dragger.valid())
 	{
 		// _currNode->removeChild(_dragger.get());
 		_dragger->removeTransformUpdating(_currNode.get());
@@ -135,7 +134,7 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		OSG_WARN << "GeometryObjectManipulator: Dragger not implemented" << std::endl;
 	}
 
-	if (_dragger != NULL)
+	if (_dragger.valid())
 	{
 		_currType = type;
 		float scale = _currNode->getBound().radius();
@@ -148,7 +147,7 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 
 		_dragger->addTransformUpdating(_currNode.get());
 
-		_draggerCB.setNode(_currNode);
+		_draggerCB.setNode(_currNode.get());
 		_dragger->addDraggerCallback(&_draggerCB);
 
 		_dragger->setHandleEvents(true);
@@ -163,8 +162,8 @@ osg::ref_ptr<osg::MatrixTransform> GeometryObjectManipulator::getCurrNode()
 
 void GeometryObjectManipulator::updateBoundingBox() 
 {
-	if (_currNode == nullptr) return;
-	if (_dragger == nullptr) return;
+	if (!_currNode.valid()) return;
+	if (!_dragger.valid()) return;
 
 	float scale = _currNode->getBound().radius();
 	if (_currType != TabBoxDragger)
@@ -190,7 +189,7 @@ void GeometryObjectManipulator::updateBoundingBox()
 
 bool GeometryObjectManipulator::setVisible(bool tf)
 {
-	if (_dragger != NULL)
+	if (_dragger.valid())
 	{
 		if (tf)
 		{
@@ -208,7 +207,7 @@ bool GeometryObjectManipulator::setVisible(bool tf)
 
 bool GeometryObjectManipulator::isVisible()
 {
-	if (_dragger == NULL) return false;
+	if (!_dragger.valid()) return false;
 	return _dragger->getNodeMask() == 0x4 ? true : false;
 }
 

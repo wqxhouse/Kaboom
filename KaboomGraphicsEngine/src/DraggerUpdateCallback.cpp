@@ -4,13 +4,13 @@
 #include "TwGUIManager.h"
 
 DraggerUpdateCallback::DraggerUpdateCallback(
-	osg::observer_ptr<osg::MatrixTransform> transform, int handleCommandMask)
-: osgManipulator::DraggerTransformCallback(transform.get(), handleCommandMask)
+	 osg::MatrixTransform *transform, int handleCommandMask)
+: osgManipulator::DraggerTransformCallback(transform, handleCommandMask)
 {
 	setNode(transform);
 }
 
-void DraggerUpdateCallback::setNode(osg::observer_ptr<osg::MatrixTransform> transform) {
+void DraggerUpdateCallback::setNode(osg::MatrixTransform *transform) {
 	if (transform != NULL) {
 		std::string nodeName = transform->getName();
 		std::string prefix("Transform_");
