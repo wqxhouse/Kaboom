@@ -8,7 +8,10 @@
 #include <core/FireMode.h>
 #include <util/Timer.h>
 
+#include "../components/DetonatorComponent.h"
+#include "../components/ExplosionComponent.h"
 #include "../components/InputComponent.h"
+#include "../core/DefaultExplosionHandler.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
@@ -34,8 +37,18 @@ void FiringSystem::processEntity(Entity *entity) {
     BombContainerComponent* invComp = entity->getComponent<BombContainerComponent>();
     EquipmentComponent *equipComp = entity->getComponent<EquipmentComponent>();
     InputComponent* inputComp = entity->getComponent<InputComponent>();
+    DetonatorComponent *detonatorComp = entity->getComponent<DetonatorComponent>();
 
     if (!inputComp->isFiring() || inputComp->getFireMode() == NOT_FIRING) {
+        if (detonatorComp != nullptr) {
+            if (detonatorComp->isDetonated()) {
+                entity->detachComponent<DetonatorComponent>();
+                delete detonatorComp;
+            } else {
+                detonatorComp->setReady(true);
+            }
+        }
+
         return;
     }
 
@@ -45,35 +58,47 @@ void FiringSystem::processEntity(Entity *entity) {
         const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
 
         if (invComp->hasBomb(bombType)) {
-            Timer &timer = invComp->getTimer(bombType);
+            if (detonatorComp != nullptr) {
+                if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {
+                    detonatorComp->getBomb()->attachComponent(new ExplosionComponent(new DefaultExplosionHandler()));
+                    detonatorComp->setDetonated(true);
+                }
+            } else {
+                Timer &timer = invComp->getTimer(bombType);
 
-            if (invComp->getAmount(bombType) > 0 && timer.isExpired()) {
-                invComp->removeFromInventory(bombType);
-                timer.start();
+                if (invComp->getAmount(bombType) > 0 && timer.isExpired()) {
+                    invComp->removeFromInventory(bombType);
+                    timer.start();
 
-                btVector3 viewDir = getViewDirection(
-                        posComp->getX(),
-                        posComp->getY(),
-                        posComp->getZ(),
-                        rotComp->getYaw(),
-                        rotComp->getPitch());
+                    btVector3 viewDir = getViewDirection(
+                            posComp->getX(),
+                            posComp->getY(),
+                            posComp->getZ(),
+                            rotComp->getYaw(),
+                            rotComp->getPitch());
 
-                float launchSpeed = bombConfig.getFloat("launch-speed");
+                    float launchSpeed = bombConfig.getFloat("launch-speed");
 
-                Entity* bombEntity = game->getBombFactory().createBomb(
-                        bombType,
-                        posComp->getX() + viewDir.getX(),
-                        posComp->getY() + viewDir.getY(),
-                        posComp->getZ() + viewDir.getZ(),
-                        viewDir.getX() * launchSpeed,
-                        viewDir.getY() * launchSpeed,
-                        viewDir.getZ() * launchSpeed);
+                    Entity* bombEntity = game->getBombFactory().createBomb(
+                            bombType,
+                            posComp->getX() + viewDir.getX(),
+                            posComp->getY() + viewDir.getY(),
+                            posComp->getZ() + viewDir.getZ(),
+                            viewDir.getX() * launchSpeed,
+                            viewDir.getY() * launchSpeed,
+                            viewDir.getZ() * launchSpeed);
 
-                invComp->addToActiveBomb(bombEntity);
+                    if (bombType == REMOTE_DETONATOR) {
+                        entity->attachComponent(new DetonatorComponent(bombEntity));
+                    }
 
-                game->addEntity(bombEntity);
-                game->getGameServer().sendSpawnEvent(bombEntity);
+                    invComp->addToActiveBomb(bombEntity);
+
+                    game->addEntity(bombEntity);
+                    game->getGameServer().sendSpawnEvent(bombEntity);
+                }
             }
+
         }
     } else if (inputComp->getFireMode() == FireMode::RIGHT_CLICK) {
         // TODO

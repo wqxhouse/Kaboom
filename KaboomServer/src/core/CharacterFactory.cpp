@@ -88,5 +88,5 @@ void CharacterFactory::createBase(
 
 void CharacterFactory::createDefaultCharacter(Entity *entity) const {
     entity->attachComponent(new JetpackComponent());
-    entity->attachComponent(new EquipmentComponent(TIME_BOMB));
+    entity->attachComponent(new EquipmentComponent(REMOTE_DETONATOR));
 }
