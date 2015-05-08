@@ -539,6 +539,7 @@ void Core::enableGameMode()
 		disableCameraManipulator();
 		disableGUI();
 		disableGeometryObjectManipulator();
+		hideInEditorLibRocketGUI();
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
 	}
@@ -553,6 +554,7 @@ void Core::disableGameMode()
 		enableGUI();
 		enableCameraManipulator();
 		enableGeometryObjectManipulator();
+		showInEditorLibRocketGUI();
 
 		//// TODO: change back to editor key bindings
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
@@ -652,8 +654,6 @@ void Core::configLibRocketGUI()
 
 	_libRocketGui = new osgLibRocket::GuiNode("default", true);
 
-	// create a camera that will be rendered after the main OSG scene.
-	// This is adapted from osghud example
 	osg::ref_ptr<osg::Camera> cam = new osg::Camera();
 	cam->setClearMask(GL_DEPTH_BUFFER_BIT);
 	cam->setRenderOrder(osg::Camera::POST_RENDER, 100);
@@ -667,8 +667,7 @@ void Core::configLibRocketGUI()
 	// same graphics context as main camera
 	cam->setGraphicsContext(gc);
 
-	// passing the camera to the gui node makes it render to that cam
-	// and adapt the camera settings in accord to the window size
+	// adapt the camera settings w.r.t the window size
 	_libRocketGui->setCamera(cam);
 	cam->addChild(_libRocketGui);
 	_sceneRoot->addChild(cam);
@@ -678,8 +677,27 @@ void Core::configLibRocketGUI()
 	Rocket::Core::ElementDocument* window1 = _libRocketGui->getContext()->LoadDocument(testWindowPath.c_str());
 	window1->Show();
 	window1->RemoveReference();
+	_libRocketWindows.push_back(window1);
 
 	_viewer->addEventHandler(_libRocketGui->GetGUIEventHandler());
+}
+
+void Core::hideInEditorLibRocketGUI()
+{
+	for (int i = 0; i < _libRocketWindows.size(); i++)
+	{
+		_libRocketWindows[i]->Hide();
+	}
+	_isLibRocketEditorHidden = true;
+}
+
+void Core::showInEditorLibRocketGUI()
+{
+	for (int i = 0; i < _libRocketWindows.size(); i++)
+	{
+		_libRocketWindows[i]->Show();
+	}
+	_isLibRocketEditorHidden = false;
 }
 
 bool Core::isCamLocked()
@@ -688,9 +706,44 @@ bool Core::isCamLocked()
 	return _camManipulatorTemp != NULL ? true : false;
 }
 
+bool Core::isLibRocketEditorHidden()
+{
+	return _isLibRocketEditorHidden;
+}
+
 enum Core::CamManipulatorType Core::getCurrCamManipulatorType()
 {
 	return _currCamManipulatorType;
+}
+
+void Core::setEditorFPSCamWalkingSpeed(float metersPerSec)
+{
+	if (_currCamManipulatorType == FIRSTPERSON && _viewer->getCameraManipulator() != NULL)
+	{
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_viewer->getCameraManipulator());
+		m->setWalkingSpeed(metersPerSec);
+	}
+	else
+	{
+		if (_camManipulatorTemp == NULL) return;
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_camManipulatorTemp.get());
+		m->setWalkingSpeed(metersPerSec);
+	}
+}
+
+float Core::getEditorFPSCamWalkingSpeed()
+{
+	if (_currCamManipulatorType == FIRSTPERSON && _viewer->getCameraManipulator() != NULL)
+	{
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_viewer->getCameraManipulator());
+		return m->getWalkingSpeed();
+	}
+	else
+	{ 
+		if (_camManipulatorTemp == NULL) return 0.0;
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_camManipulatorTemp.get());
+		return m->getWalkingSpeed();
+	}
 }
 
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
@@ -732,3 +785,5 @@ CubeMapPreFilter Core::_cubemapPreFilter;
 enum Core::CamManipulatorType Core::_currCamManipulatorType;
 
 osg::ref_ptr<osgLibRocket::GuiNode> Core::_libRocketGui;
+std::vector<Rocket::Core::ElementDocument *> Core::_libRocketWindows;
+bool Core::_isLibRocketEditorHidden;

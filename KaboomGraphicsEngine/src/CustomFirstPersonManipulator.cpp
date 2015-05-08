@@ -13,88 +13,99 @@ using namespace osgGA;
 CustomFirstPersonManipulator::CustomFirstPersonManipulator(int flag)
 	: osgGA::FirstPersonManipulator(flag)
 {
-
+	_movingForward = _movingBackward = _movingLeft = _movingRight = false;
+	_metersPerSec = 10.0;
 }
 
 CustomFirstPersonManipulator::~CustomFirstPersonManipulator()
 {
+}
 
+void CustomFirstPersonManipulator::setWalkingSpeed(float metersPerSec)
+{
+	if (metersPerSec < 0) return;
+	_metersPerSec = metersPerSec;
+}
+
+float CustomFirstPersonManipulator::getWalkingSpeed()
+{
+	return _metersPerSec;
+}
+
+bool CustomFirstPersonManipulator::handleFrame(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us)
+{
+	double spf = Core::getLastFrameDuration();
+
+	if (_movingForward)
+	{
+		moveForward(_metersPerSec * spf);
+	}
+	else if (_movingBackward)
+	{
+		moveForward(-_metersPerSec * spf);
+	}
+
+	if (_movingLeft)
+	{
+		moveRight(-_metersPerSec * spf);
+	}
+	else if (_movingRight)
+	{
+		moveRight(_metersPerSec * spf);
+	}
+
+	return StandardManipulator::handleFrame(ea, us);
 }
 
 /** Handles events. Returns true if handled, false otherwise.*/
-bool CustomFirstPersonManipulator::handle(const GUIEventAdapter& ea, GUIActionAdapter& us)
+bool CustomFirstPersonManipulator::handleKeyDown(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us)
 {
-	// disable scrolling
-	if (ea.getScrollingMotion() == GUIEventAdapter::SCROLL_UP)
+	int key = tolower(ea.getKey());
+
+	switch (key)
 	{
+	case osgGA::GUIEventAdapter::KEY_W:
+		_movingForward = true;
 		return true;
-	}
-	else if (ea.getScrollingMotion() == GUIEventAdapter::SCROLL_DOWN)
-	{
+	case osgGA::GUIEventAdapter::KEY_S:
+		_movingBackward = true;
 		return true;
-	}
-
-	bool res = StandardManipulator::handle(ea, us);
-	flushKeyBuffer();
-	return res;
-}
-
-void CustomFirstPersonManipulator::flushKeyBuffer()
-{
-	double spf = Core::getLastFrameDuration();
-	for (int i = 0; i < _keyBuffer.size(); i++)
-	{
-		int key = _keyBuffer[i];
-		if (key == 0)
-		{
-			moveForward(10.0 * spf);
-		}
-		else if (key == 1)
-		{
-			moveForward(-10.0 * spf);
-		}
-		else if (key == 2)
-		{
-			moveRight(-10.0 * spf);
-		}
-		else if (key == 3)
-		{
-			moveRight(10.0 * spf);
-		}
-	}
-	_keyBuffer.clear();
-}
-
-bool CustomFirstPersonManipulator::handleKeyUp(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
-{
-	return true;
-}
-
-bool CustomFirstPersonManipulator::handleKeyDown(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
-{
-	if (ea.getKey() == osgGA::GUIEventAdapter::KEY_Space)
-	{
+	case osgGA::GUIEventAdapter::KEY_A:
+		_movingLeft = true;
+		return true;
+	case osgGA::GUIEventAdapter::KEY_D:
+		_movingRight = true;
+		return true;
+	case osgGA::GUIEventAdapter::KEY_Space:
 		flushMouseEventStack();
 		_thrown = false;
 		home(ea, us);
 		return true;
 	}
-	else if (ea.getKey() == 'w')
+
+	return StandardManipulator::handleKeyDown(ea, us);
+}
+
+/** Handles events. Returns true if handled, false otherwise.*/
+bool CustomFirstPersonManipulator::handleKeyUp(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us)
+{
+	int key = tolower(ea.getKey());
+
+	switch (key)
 	{
-		_keyBuffer.push_back(0);
-	}
-	else if (ea.getKey() == 's')
-	{
-		_keyBuffer.push_back(1);
-	}
-	else if (ea.getKey() == 'a')
-	{
-		_keyBuffer.push_back(2);
-	}
-	else if (ea.getKey() == 'd')
-	{
-		_keyBuffer.push_back(3);
+		case osgGA::GUIEventAdapter::KEY_W:
+			_movingForward = false;
+			return true;
+		case osgGA::GUIEventAdapter::KEY_S:
+			_movingBackward = false;
+			return true;
+		case osgGA::GUIEventAdapter::KEY_A:
+			_movingLeft = false;
+			return true;
+		case osgGA::GUIEventAdapter::KEY_D:
+			_movingRight = false;
+			return true;
 	}
 
-	return false;
+	return StandardManipulator::handleKeyUp(ea, us);
 }
