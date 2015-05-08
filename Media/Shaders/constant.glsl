@@ -17,4 +17,4 @@ const float sqrt_of_2 = 1.4142135623;
 #define MAX_POINT_LIGHTS 256 
 #define MAX_VISIBLE_LIGHTS 128 
 
-#pragma optionNV (unroll all)
+// #pragma optionNV (unroll all)
