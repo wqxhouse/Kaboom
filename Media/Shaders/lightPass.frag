@@ -6,6 +6,8 @@
 #include "Shaders/Material.glsl"
 #include "Shaders/lightUtil.glsl"
 
+#pragma optionNV (unroll all)
+
 uniform sampler2D u_RT0;
 uniform sampler2D u_RT1;
 uniform sampler2D u_RT2;
