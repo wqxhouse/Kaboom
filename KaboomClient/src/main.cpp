@@ -28,7 +28,7 @@ RawBlameHistory     78 lines(66 sloc)  2.519 kb
 * (programming by Chris 'Xenon' Hanson, AlphaPixel, LLC xenon at alphapixel.com)
 * based on a fork of:
 * Osg AL - OpenSceneGraph Audio Library
-* Copyright (C) 2004 VRlab, Umeå University
+* Copyright (C) 2004 VRlab, Ume?University
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -105,4 +105,4 @@ int main()
 }*/
 
 //Status API Training Shop Blog About
-//© 2015 GitHub, Inc.Terms Privacy Security Contact
+//?2015 GitHub, Inc.Terms Privacy Security Contact

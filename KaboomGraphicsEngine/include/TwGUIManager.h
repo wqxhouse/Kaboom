@@ -62,10 +62,11 @@ public:
 
 	void updateEvents() const;
 
-	inline void setCameraManipulatorActive(bool tf)
-	{
-		_cameraManipulatorActive = tf;
-	}
+	// deprecated. Let gui handle this var itself
+	//inline void setCameraManipulatorActive(bool tf)
+	//{
+	//	_cameraManipulatorActive = tf;
+	//}
 
 	inline int getManipulatorBits()
 	{
@@ -74,6 +75,9 @@ public:
 
 	virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 	virtual void operator()(osg::RenderInfo& renderInfo) const;
+	
+	void requestFreeze();
+	void requestUnFreeze();
 
 	static void exportXML();
 	static void addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index);
@@ -137,6 +141,7 @@ protected:
 	GeometryObjectManager *_gm;
 	MaterialManager *_mm;
 
+	bool _freezeGUI;
 	bool _cameraManipulatorActive;
 	int _manipulatorBits;
 

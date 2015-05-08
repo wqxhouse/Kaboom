@@ -2,8 +2,6 @@
 
 #include <osgViewer/Viewer>
 
-//#include "../osgLibRocket/GuiNode.h"
-
 #include "EffectCompositor.h"
 #include "CompositorAnalysis.h"
 #include "World.h"
@@ -12,6 +10,11 @@
 #include "SkyBox.h"
 #include "AxisVisualizer.h"
 #include "CubeMapPreFilter.h"
+
+namespace osgLibRocket
+{
+	class GuiNode;
+}
 
 class Core
 {
@@ -98,6 +101,8 @@ private:
 	static void configInGameGUI();
 	static void configAxisVisualizer();
 
+	static void configLibRocketGUI();
+
 	static std::string _mediaPath;
 		
 	static osg::ref_ptr<osgFX::EffectCompositor> _passes;
@@ -130,6 +135,8 @@ private:
 
 	static osg::ref_ptr<CompositorAnalysis> _analysisHUD;
 	static enum CamManipulatorType _currCamManipulatorType;
+
+	static osg::ref_ptr<osgLibRocket::GuiNode> _libRocketGui;
 
 	// on screen flags
 	static bool _gameMode;
