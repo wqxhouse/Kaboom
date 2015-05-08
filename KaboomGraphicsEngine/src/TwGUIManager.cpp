@@ -26,6 +26,7 @@ TwGUIManager::TwGUIManager()
 	_gm = Core::getWorldRef().getGeometryManager();
 	_lm = Core::getWorldRef().getLightManager();
 	_mm = Core::getWorldRef().getMaterialManager();
+	_freezeGUI = false;
 
 	TwInit(TW_OPENGL, NULL);
 }
@@ -1055,7 +1056,6 @@ void TW_CALL TwGUIManager::loadModelFunc(void* clientData)
 	// TODO: implement
 }
 
-// TODO: bug, scrolling frequently will crash the program
 // TODO: anttweakbar by default uses opengl convention for world coordinates on widgets(arrow)
 // Need to change them to conform to osg convention
 void TwGUIManager::updateEvents() const
@@ -1101,8 +1101,18 @@ void TwGUIManager::updateEvents() const
 			break;
 		case osgGA::GUIEventAdapter::DRAG:
 		case osgGA::GUIEventAdapter::MOVE:
-			TwMouseMotion(x, y);
+		{
+			int handledByBar = TwMouseMotion(x, y);
+			if (!handledByBar && _cameraManipulatorActive) // mouse over
+			{
+				Core::enableCameraManipulator();
+			}
+			else
+			{
+				Core::disableCameraManipulator();
+			}
 			break;
+		}
 		case osgGA::GUIEventAdapter::KEYDOWN:
 		{
 			bool useCtrl = false;
@@ -1167,19 +1177,16 @@ bool TwGUIManager::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdap
 	// TODO: have some bugs, some times insert some null events, making program crash 
 	switch (ea.getEventType())
 	{
-	case osgGA::GUIEventAdapter::FRAME:  // Update transform values
-		/*if (_scene.valid())
-		{
-		osg::Vec3 pos(position[0], position[1], position[2]);
-		osg::Quat quat(rotation[0], rotation[1], rotation[2], rotation[3]);
-		_scene->setMatrix(osg::Matrix::rotate(quat) * osg::Matrix::translate(pos));
-		}*/
+	case osgGA::GUIEventAdapter::FRAME:  
 		return false;
 	}
 
 	// As AntTweakBar handle all events within the OpenGL context, we have to record the event here
 	// and process it later in the draw callback
-	_eventsToHandle.push(&ea);
+	if (!_freezeGUI)
+	{
+		_eventsToHandle.push(&ea);
+	}
 	return false;
 }
 
@@ -1187,8 +1194,19 @@ void TwGUIManager::operator()(osg::RenderInfo& renderInfo) const
 {
 	osg::Viewport* viewport = renderInfo.getCurrentCamera()->getViewport();
 	if (viewport) TwWindowSize(viewport->width(), viewport->height());
+
 	updateEvents();
 	TwDraw();
+}
+
+void TwGUIManager::requestFreeze()
+{
+	_freezeGUI = true;;
+}
+
+void TwGUIManager::requestUnFreeze()
+{
+	_freezeGUI = false;
 }
 
 TwMouseButtonID TwGUIManager::getTwButton(int button) const
