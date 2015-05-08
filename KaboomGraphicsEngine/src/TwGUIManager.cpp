@@ -59,6 +59,21 @@ void TwGUIManager::initMainBar()
 
 	TwAddSeparator(g_twBar, NULL, NULL);
 
+	TwAddVarCB(g_twBar, "Show LibRocketGUI", TW_TYPE_BOOL8,
+		[](const void *data, void *clientData) {
+		bool tick = *(bool *)data;
+		if (tick)
+		{
+			Core::showInEditorLibRocketGUI();
+		}
+		else
+		{
+			Core::hideInEditorLibRocketGUI();
+		}
+	}, [](void *data, void *clientData) {
+		*(bool *)data = !Core::isLibRocketEditorHidden();
+	}, NULL, NULL);
+
 	// Add option to disable/enable camera manipulator
 	// I did not find a way to intercept the hover event to make
 	// this automatic
@@ -100,6 +115,13 @@ void TwGUIManager::initMainBar()
 				*(bool *)data = true;
 			}
 		}, NULL, NULL);
+
+	TwAddVarCB(g_twBar, "FPS Cam Speed", TW_TYPE_FLOAT, 
+		[](const void *data, void *clientData) {
+		Core::setEditorFPSCamWalkingSpeed(*(float *)data);
+	}, [](void *data, void *clientData) {
+		*(float *)data = Core::getEditorFPSCamWalkingSpeed();
+	}, NULL, "step=1.0 min=0.0 max=100.0");
 
 	TwAddVarCB(g_twBar, "Change Projection", TW_TYPE_BOOL8, 
 		[](const void *data, void *clientData) {

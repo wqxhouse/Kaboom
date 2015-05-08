@@ -19,12 +19,20 @@ public:
 	CustomFirstPersonManipulator(int flags = DEFAULT_SETTINGS);
 	virtual ~CustomFirstPersonManipulator();
 
+	void setWalkingSpeed(float metersPerSec);
+	float getWalkingSpeed();
+
 protected:
-	virtual bool handleKeyDown(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us);
-	virtual bool handleKeyUp(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us);
-	virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us);
-	void flushKeyBuffer();
-	std::vector<int> _keyBuffer;
+	virtual bool handleFrame(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
+	virtual bool handleKeyDown(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
+	virtual bool handleKeyUp(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
+
+	bool _movingForward;
+	bool _movingBackward;
+	bool _movingLeft;
+	bool _movingRight;
+
+	float _metersPerSec;
 };
 
 #endif /* defined(__vrphysics__CustomFirstPersonManipulator__) */

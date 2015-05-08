@@ -58,7 +58,7 @@ void FiringSystem::processEntity(Entity *entity) {
                         rotComp->getYaw(),
                         rotComp->getPitch());
 
-                float launchSpeed = bombConfig.getInt("launch-speed");
+                float launchSpeed = bombConfig.getFloat("launch-speed");
 
                 Entity* bombEntity = game->getBombFactory().createBomb(
                         bombType,

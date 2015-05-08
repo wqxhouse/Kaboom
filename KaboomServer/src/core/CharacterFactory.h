@@ -18,4 +18,7 @@ public:
 
 private:
     EntityManager &entityManager;
+
+    void createBase(Entity *entity, float x, float y, float z, float yaw, float pitch) const;
+    void createDefaultCharacter(Entity *entity) const;
 };

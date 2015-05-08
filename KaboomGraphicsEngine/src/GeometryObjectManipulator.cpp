@@ -77,6 +77,14 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 	}
 
 	_currNode = node;
+
+	osg::ComputeBoundsVisitor bound;
+	_currNode->accept(bound);
+
+	osg::BoundingBox bbox = bound.getBoundingBox();
+	float xscale = (bbox.xMax() - bbox.xMin());
+	float yscale = (bbox.yMax() - bbox.yMin());
+	float zscale = (bbox.zMax() - bbox.zMin());
 	
 	switch (type)
 	{
@@ -115,14 +123,6 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 
 		_tabBoxDragger->setNodeMask(0x4);
 
-		osg::ComputeBoundsVisitor bound;
-		_currNode->accept(bound);
-
-		osg::BoundingBox bbox = bound.getBoundingBox();
-		float xscale = (bbox.xMax() - bbox.xMin());
-		float yscale = (bbox.yMax() - bbox.yMin());
-		float zscale = (bbox.zMax() - bbox.zMin());
-
 		osg::Vec3f center = bbox.center();
 		_tabBoxDragger->setMatrix(osg::Matrix::scale(xscale, yscale, zscale) *
 			osg::Matrix::translate(center));
@@ -137,10 +137,15 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 	if (_dragger.valid())
 	{
 		_currType = type;
-		float scale = _currNode->getBound().radius();
+
 		if (type != TabBoxDragger)
 		{
-			if (type == TranslateAxisDragger) scale *= 1.6;
+			// Get biggest axis radius
+			float scale;				
+			scale = (xscale > yscale) ? xscale : yscale;
+			scale = (scale > zscale) ? scale : zscale;
+			scale /= 2.0f;
+
 			_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
 				osg::Matrix::translate(_currNode->getBound().center()));
 		}
@@ -165,21 +170,26 @@ void GeometryObjectManipulator::updateBoundingBox()
 	if (!_currNode.valid()) return;
 	if (!_dragger.valid()) return;
 
-	float scale = _currNode->getBound().radius();
+	osg::ComputeBoundsVisitor bound;
+	_currNode->accept(bound);
+
+	osg::BoundingBox bbox = bound.getBoundingBox();
+	float xscale = (bbox.xMax() - bbox.xMin());
+	float yscale = (bbox.yMax() - bbox.yMin());
+	float zscale = (bbox.zMax() - bbox.zMin());
+
 	if (_currType != TabBoxDragger)
 	{
-		if (_currType == TranslateAxisDragger) scale *= 1.6;
+		// Get biggest axis radius
+		float scale;				
+		scale = (xscale > yscale) ? xscale : yscale;
+		scale = (scale > zscale) ? scale : zscale;
+		scale /= 2.0f;
+
 		_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
 			osg::Matrix::translate(_currNode->getBound().center()));
 	}
 	else {
-		osg::ComputeBoundsVisitor bound;
-		_currNode->accept(bound);
-
-		osg::BoundingBox bbox = bound.getBoundingBox();
-		float xscale = (bbox.xMax() - bbox.xMin());
-		float yscale = (bbox.yMax() - bbox.yMin());
-		float zscale = (bbox.zMax() - bbox.zMin());
 
 		osg::Vec3f center = bbox.center();
 		_dragger->setMatrix(osg::Matrix::scale(xscale, yscale, zscale) *
