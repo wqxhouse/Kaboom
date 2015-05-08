@@ -19,9 +19,9 @@ CubeMapPreFilter::CubeMapPreFilter(osg::Camera *passCam)
 	_passCam = passCam;
 	// assume cubemap is in the passcam attachment 
 
-	if (_passCam == NULL || _passCam->getBufferAttachmentMap().size() == 0)
+	if (!_passCam.valid() || _passCam->getBufferAttachmentMap().size() == 0)
 	{
-		OSG_WARN << "CubemapPreFilter: Buffer attachment is empty" << std::endl;
+		OSG_WARN << "CubemapPreFilter: PassCam null or Buffer attachment is empty" << std::endl;
 		return;
 	}
 

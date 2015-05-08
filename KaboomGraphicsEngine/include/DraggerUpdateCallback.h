@@ -7,9 +7,9 @@
 class DraggerUpdateCallback : public osgManipulator::DraggerTransformCallback
 {
 public:
-	DraggerUpdateCallback(osg::observer_ptr<osg::MatrixTransform> transform, int handleCommandMask = HANDLE_ALL);
+	DraggerUpdateCallback(osg::MatrixTransform *transform, int handleCommandMask = HANDLE_ALL);
 
-	void setNode(osg::observer_ptr<osg::MatrixTransform> transform);
+	void setNode(osg::MatrixTransform *transform);
 	virtual bool receive(const osgManipulator::MotionCommand & cmd);
 
 private:
