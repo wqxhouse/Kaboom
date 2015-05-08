@@ -147,6 +147,7 @@ GeometryObject *GeometryObjectManager::getGeometryObject(const std::string& geom
 	else
 	{
 		// TODO: console output, need to implement text hud or something
+		OSG_WARN << "Geom object " << geomName << " not found in the geometryManager" << std::endl;
 		return NULL;
 	}
 }
