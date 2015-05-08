@@ -197,3 +197,4 @@ FakesAssemblies/
 
 Media/Assets/**
 !Media/DefaultAssets/**
+!3rdParty/**
