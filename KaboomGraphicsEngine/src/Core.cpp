@@ -223,7 +223,9 @@ void Core::configViewer()
 	_viewer->getCamera()->setFinalDrawCallback(_gui.get());
 
 	osg::Matrix defaultProjection;
-	defaultProjection.makePerspective(80, _screenSize.x() / _screenSize.y(), 1, 500);
+	
+	float fovy = Camera::fovXToY(90, _screenSize);
+	defaultProjection.makePerspective(fovy, _screenSize.x() / _screenSize.y(), 1, 500);
 	_viewer->getCamera()->setProjectionMatrix(defaultProjection);
 
 	_viewer->setUpViewInWindow(_winPos.x(), _winPos.y(), _screenSize.x(), _screenSize.y());

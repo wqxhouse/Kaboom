@@ -140,7 +140,8 @@ void Game::run() {
 			// TODO: the following doesn't need to be updated for every event
 			// but need to set as soon as the game mode is on
 			// TODO: put this two as initial values in the config file
-			Core::getMainCamera().setFovYAndUpdate(89);
+			
+			Core::getMainCamera().setFovXAndUpdate(90);
 			Core::getMainCamera().setNearAndFarAndUpdate(1, 500);
 
 			// TODO: Robin: need to check this.
