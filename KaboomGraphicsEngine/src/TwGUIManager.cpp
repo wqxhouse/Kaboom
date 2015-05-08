@@ -1103,11 +1103,11 @@ void TwGUIManager::updateEvents() const
 		case osgGA::GUIEventAdapter::MOVE:
 		{
 			int handledByBar = TwMouseMotion(x, y);
-			if (!handledByBar && _cameraManipulatorActive) // mouse over
+			if (!handledByBar && _cameraManipulatorActive)
 			{
 				Core::enableCameraManipulator();
 			}
-			else
+			else // mouse over gui
 			{
 				Core::disableCameraManipulator();
 			}
