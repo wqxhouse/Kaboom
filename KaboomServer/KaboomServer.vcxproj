@@ -80,12 +80,10 @@
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\CharacterConfigLoader.h" />
     <ClInclude Include="src\core\CollisionHandler.h" />
-    <ClInclude Include="src\core\DefaultCollisionHandler.h" />
     <ClInclude Include="src\core\DefaultExplosionHandler.h" />
     <ClInclude Include="src\core\ExplosionHandler.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\KaboomV2CollisionHandler.h" />
-    <ClInclude Include="src\core\KaboomV2ExplosionHandler.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\TimeBombTimerHandler.h" />
