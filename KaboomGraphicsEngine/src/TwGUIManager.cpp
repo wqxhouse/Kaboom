@@ -59,6 +59,21 @@ void TwGUIManager::initMainBar()
 
 	TwAddSeparator(g_twBar, NULL, NULL);
 
+	TwAddVarCB(g_twBar, "Show LibRocketGUI", TW_TYPE_BOOL8,
+		[](const void *data, void *clientData) {
+		bool tick = *(bool *)data;
+		if (tick)
+		{
+			Core::showInEditorLibRocketGUI();
+		}
+		else
+		{
+			Core::hideInEditorLibRocketGUI();
+		}
+	}, [](void *data, void *clientData) {
+		*(bool *)data = !Core::isLibRocketEditorHidden();
+	}, NULL, NULL);
+
 	// Add option to disable/enable camera manipulator
 	// I did not find a way to intercept the hover event to make
 	// this automatic
