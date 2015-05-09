@@ -6,11 +6,9 @@
 #include <util/Configuration.h>
 #include <util/XMLLoader.h>
 
-#include "BombData.h"
-
-class BombDataLoader : public XMLLoader {
+class CharacterConfigLoader : public XMLLoader {
 public:
-    BombDataLoader(std::unordered_map<EntityType, Configuration> &config);
+    CharacterConfigLoader(std::unordered_map<EntityType, Configuration> &config);
 
     void load(const std::string &filename);
 
@@ -19,5 +17,6 @@ private:
 
     virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 
+    void loadInventory(osgDB::XmlNode *xmlNode, EntityType type);
     void loadValue(osgDB::XmlNode *xmlNode, const std::string &valueType, EntityType type);
 };

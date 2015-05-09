@@ -6,10 +6,7 @@
 #include <components/HealthComponent.h>
 #include <core/Entity.h>
 
-#include "BombData.h"
-#include "BombDataLookup.h"
-#include "CharacterData.h"
-#include "CharacterDataLookup.h"
+#include "EntityConfigLookup.h"
 #include "Game.h"
 #include "../components/ExplosionComponent.h"
 #include "../components/PhysicsComponent.h"
@@ -43,16 +40,16 @@ void DefaultExplosionHandler::handle(
         btScalar playerDistanceFromExplosion = playerPos.distance(explosionPos);
 
 
-        const Configuration &bombConfig = BombDataLookup::instance()[entity->getType()];
-		const CharacterData &characterData = CharacterDataLookup::instance[nearbyEntity->getType()];
+        const Configuration &bombConfig = EntityConfigLookup::instance()[entity->getType()];
+        const Configuration &charConfig = EntityConfigLookup::instance()[nearbyEntity->getType()];
 
 
-        float maxDistancePossible = bombConfig.getFloat("explosion-radius") + (characterData.collisionRadius * 2);
+        float maxDistancePossible = bombConfig.getFloat("explosion-radius") + (charConfig.getFloat("collision-radius") * 2);
 		float distancePercentAway = (maxDistancePossible - playerDistanceFromExplosion) / maxDistancePossible;
         btVector3 impulseVec = (bombConfig.getFloat("knockback-amount") * distancePercentAway) * dirVec; //linear equation
 
 		printf("playerDistanceFromExplosion : %f\n", playerDistanceFromExplosion);
-        printf("maxDistancePossible : %f\n", bombConfig.getFloat("explosion-radius") + (characterData.collisionRadius * 2));
+        printf("maxDistancePossible : %f\n", bombConfig.getFloat("explosion-radius") + (charConfig.getFloat("collision-radius") * 2));
 		printf("distancePercentAway : %f\n", (maxDistancePossible - playerDistanceFromExplosion) / maxDistancePossible);
 
         playerPhysicsComp->getRigidBody()->applyCentralImpulse(impulseVec);
