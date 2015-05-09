@@ -13,6 +13,7 @@ using namespace osgGA;
 CustomFirstPersonManipulator::CustomFirstPersonManipulator(int flag)
 	: osgGA::FirstPersonManipulator(flag)
 {
+	_movingForward = _movingBackward = _movingLeft = _movingRight = false;
 }
 
 CustomFirstPersonManipulator::~CustomFirstPersonManipulator()
