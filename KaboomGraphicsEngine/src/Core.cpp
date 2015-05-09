@@ -716,6 +716,36 @@ enum Core::CamManipulatorType Core::getCurrCamManipulatorType()
 	return _currCamManipulatorType;
 }
 
+void Core::setEditorFPSCamWalkingSpeed(float metersPerSec)
+{
+	if (_currCamManipulatorType == FIRSTPERSON && _viewer->getCameraManipulator() != NULL)
+	{
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_viewer->getCameraManipulator());
+		m->setWalkingSpeed(metersPerSec);
+	}
+	else
+	{
+		if (_camManipulatorTemp == NULL) return;
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_camManipulatorTemp.get());
+		m->setWalkingSpeed(metersPerSec);
+	}
+}
+
+float Core::getEditorFPSCamWalkingSpeed()
+{
+	if (_currCamManipulatorType == FIRSTPERSON && _viewer->getCameraManipulator() != NULL)
+	{
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_viewer->getCameraManipulator());
+		return m->getWalkingSpeed();
+	}
+	else
+	{ 
+		if (_camManipulatorTemp == NULL) return 0.0;
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_camManipulatorTemp.get());
+		return m->getWalkingSpeed();
+	}
+}
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;

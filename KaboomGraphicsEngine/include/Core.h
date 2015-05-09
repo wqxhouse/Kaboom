@@ -73,6 +73,9 @@ public:
 	static void enableGeometryObjectManipulator();
 	static void disableGeometryObjectManipulator();
 
+	static void setEditorFPSCamWalkingSpeed(float metersPerSec);
+	static float getEditorFPSCamWalkingSpeed();
+
 	static bool isInGameMode();
 	static bool isCamLocked();
 	static bool isLibRocketEditorHidden();

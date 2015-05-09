@@ -14,10 +14,22 @@ CustomFirstPersonManipulator::CustomFirstPersonManipulator(int flag)
 	: osgGA::FirstPersonManipulator(flag)
 {
 	_movingForward = _movingBackward = _movingLeft = _movingRight = false;
+	_metersPerSec = 10.0;
 }
 
 CustomFirstPersonManipulator::~CustomFirstPersonManipulator()
 {
+}
+
+void CustomFirstPersonManipulator::setWalkingSpeed(float metersPerSec)
+{
+	if (metersPerSec < 0) return;
+	_metersPerSec = metersPerSec;
+}
+
+float CustomFirstPersonManipulator::getWalkingSpeed()
+{
+	return _metersPerSec;
 }
 
 bool CustomFirstPersonManipulator::handleFrame(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us)
@@ -26,20 +38,20 @@ bool CustomFirstPersonManipulator::handleFrame(const osgGA::GUIEventAdapter &ea,
 
 	if (_movingForward)
 	{
-		moveForward(10.0 * spf);
+		moveForward(_metersPerSec * spf);
 	}
 	else if (_movingBackward)
 	{
-		moveForward(-10.0 * spf);
+		moveForward(-_metersPerSec * spf);
 	}
 
 	if (_movingLeft)
 	{
-		moveRight(-10.0 * spf);
+		moveRight(-_metersPerSec * spf);
 	}
 	else if (_movingRight)
 	{
-		moveRight(10.0 * spf);
+		moveRight(_metersPerSec * spf);
 	}
 
 	return StandardManipulator::handleFrame(ea, us);
