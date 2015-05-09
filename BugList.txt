@@ -43,6 +43,8 @@ At this point the _geomObj still has its address but an invalid one, since geomm
 20.sometimes the dragger paddle are also get scaled
 21.not sure why but it seems after rotating the geom, the tabbox bound is not rotated according to the rotation.
 
+22. first person maniupulator moving while dragging and mouse over and then off the gui will make the camera shifting automatically. 
+
 
 Should be fixed, but need more tests:
 1. Geometry picker bug, crash the program: (randomly, wtf!) 
