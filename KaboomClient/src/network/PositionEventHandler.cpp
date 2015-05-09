@@ -38,6 +38,8 @@ void PositionEventHandler::handle(const Event &e) const {
 
     //if the entity is the player entity the client is controlling, change the camera position everytime the player moves
     if (entity->getId() == game->getGameClient().getCurrentPlayerEntityId()) {
-        game->getCamera().setFpsEyePositionAndUpdate(pos);
+		// TODO: make it in the xml file
+		osg::Vec3 characterHeadPos = pos + osg::Vec3(0, 0, 1);
+        game->getCamera().setFpsEyePositionAndUpdate(characterHeadPos);
     }
 }
