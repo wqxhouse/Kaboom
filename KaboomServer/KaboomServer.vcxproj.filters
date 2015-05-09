@@ -217,12 +217,6 @@
     <ClInclude Include="src\core\CharacterFactory.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\CollisionHandler.h">
-      <Filter>Header Files\Explosion Triggers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\DefaultCollisionHandler.h">
-      <Filter>Header Files\Explosion Triggers</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\KaboomV2CollisionHandler.h">
       <Filter>Header Files\Explosion Triggers</Filter>
     </ClInclude>
@@ -230,9 +224,6 @@
       <Filter>Header Files\Explosion Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\core\DefaultExplosionHandler.h">
-      <Filter>Header Files\Explosion Handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\KaboomV2ExplosionHandler.h">
       <Filter>Header Files\Explosion Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\components\CollisionComponent.h">
@@ -303,6 +294,9 @@
     </ClInclude>
     <ClInclude Include="src\math\util.h">
       <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\CollisionHandler.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

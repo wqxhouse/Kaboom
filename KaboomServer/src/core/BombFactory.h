@@ -21,4 +21,8 @@ public:
 
 private:
     EntityManager &entityManager;
+
+    void createBase(Entity *entity, float x, float y, float z, float vx, float vy, float vz) const;
+    void createKaboomV2(Entity *entity) const;
+    void createTimeBomb(Entity *entity) const;
 };
