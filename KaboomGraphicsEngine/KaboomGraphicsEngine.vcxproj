@@ -274,6 +274,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\PointLight.h" />
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\TwGUIManager.h" />
+    <ClInclude Include="include\TypeIdLoader.h" />
     <ClInclude Include="include\Visualizer.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="stdafx.h" />
@@ -306,6 +307,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\TwGUIManager.cpp" />
+    <ClCompile Include="src\TypeIdLoader.cpp" />
     <ClCompile Include="src\Visualizer.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="stdafx.cpp">
