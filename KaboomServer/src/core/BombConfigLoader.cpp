@@ -1,16 +1,16 @@
-#include "BombDataLoader.h"
+#include "BombConfigLoader.h"
 
 #include "KaboomV2CollisionHandler.h"
 
-BombDataLoader::BombDataLoader(std::unordered_map<EntityType, Configuration> &config)
+BombConfigLoader::BombConfigLoader(std::unordered_map<EntityType, Configuration> &config)
         : config(config) {
 }
 
-void BombDataLoader::load(const std::string &filename) {
+void BombConfigLoader::load(const std::string &filename) {
     loadXMLFile(filename);
 }
 
-void BombDataLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
+void BombConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
     if (xmlRoot->type == osgDB::XmlNode::ROOT) {
         for (auto child : xmlRoot->children) {
             if (child->name == "bombs") {
@@ -50,7 +50,7 @@ void BombDataLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
     }
 }
 
-void BombDataLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string &valueType, EntityType type) {
+void BombConfigLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string &valueType, EntityType type) {
     if (valueType == "int") {
         int val;
         loadInt(xmlNode, val);

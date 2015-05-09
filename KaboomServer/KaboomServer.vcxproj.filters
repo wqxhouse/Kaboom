@@ -67,6 +67,12 @@
     <Filter Include="Header Files\Explosion Triggers">
       <UniqueIdentifier>{67d047d1-a851-4006-8338-4db3a892a220}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Configurations">
+      <UniqueIdentifier>{c5584dda-5809-4ac2-b574-b5e34a5ff0a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Configurations">
+      <UniqueIdentifier>{600e909e-2863-43b4-88bd-1c9a1e0b594d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -103,14 +109,8 @@
     <ClCompile Include="src\core\PickupFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\CharacterDataLookup.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\CharacterFactory.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\math\Conversion.cpp">
-      <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp">
       <Filter>Source Files\Explosion Triggers</Filter>
@@ -169,11 +169,17 @@
     <ClCompile Include="src\systems\PhysicsSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\BombDataLoader.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="src\core\BombConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\BombDataLookup.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="src\core\EntityConfigLookup.cpp">
+      <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\CharacterConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\util.cpp">
+      <Filter>Source Files\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,17 +214,8 @@
     <ClInclude Include="src\core\PickupFactory.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\CharacterDataLookup.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\CharacterData.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\CharacterFactory.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\math\Conversion.h">
-      <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\core\CollisionHandler.h">
       <Filter>Header Files\Explosion Triggers</Filter>
@@ -292,11 +289,20 @@
     <ClInclude Include="src\systems\PhysicsSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\BombDataLoader.h">
+    <ClInclude Include="src\core\common.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\BombDataLookup.h">
-      <Filter>Header Files\Core</Filter>
+    <ClInclude Include="src\core\BombConfigLoader.h">
+      <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\EntityConfigLookup.h">
+      <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\CharacterConfigLoader.h">
+      <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\util.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

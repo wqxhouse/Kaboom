@@ -12,7 +12,7 @@
 #include <core/EntityManager.h>
 #include <util/XMLLoader.h>
 
-#include "BombDataLookup.h"
+#include "EntityConfigLookup.h"
 #include "KaboomV2CollisionHandler.h"
 #include "TimeBombTimerHandler.h"
 #include "../components/CollisionComponent.h"
@@ -33,7 +33,7 @@ Entity *BombFactory::createBomb(
         float vx,
         float vy,
         float vz) const {
-    const Configuration &bombConfig = BombDataLookup::instance()[type];
+    const Configuration &bombConfig = EntityConfigLookup::instance()[type];
 
     Entity *entity = entityManager.createEntity(type);
 

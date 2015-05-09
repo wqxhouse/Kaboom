@@ -2,8 +2,6 @@
 
 #include <unordered_map>
 
-#include "BombData.h"
-
 class Entity;
 enum EntityType;
 class EntityManager;
