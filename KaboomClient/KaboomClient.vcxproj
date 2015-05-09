@@ -254,6 +254,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
+    <ClCompile Include="src\core\SoundManager.cpp" />
     <ClCompile Include="src\input\InputEventHandler.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
@@ -280,6 +281,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
+    <ClInclude Include="src\core\SoundManager.h" />
     <ClInclude Include="src\input\InputEventHandler.h" />
     <ClInclude Include="src\input\InputManager.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
