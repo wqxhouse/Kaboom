@@ -31,6 +31,7 @@
     <ClCompile Include="src\components\DetonatorComponent.cpp" />
     <ClCompile Include="src\components\InputComponent.cpp" />
     <ClCompile Include="src\components\JetpackComponent.cpp" />
+    <ClCompile Include="src\components\JumpComponent.cpp" />
     <ClCompile Include="src\components\PhysicsComponent.cpp" />
     <ClCompile Include="src\components\TimerComponent.cpp" />
     <ClCompile Include="src\components\TriggerComponent.cpp" />
@@ -75,6 +76,7 @@
     <ClInclude Include="src\components\ExplosionComponent.h" />
     <ClInclude Include="src\components\InputComponent.h" />
     <ClInclude Include="src\components\JetpackComponent.h" />
+    <ClInclude Include="src\components\JumpComponent.h" />
     <ClInclude Include="src\components\MessageHandlerComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
     <ClInclude Include="src\components\TimerComponent.h" />

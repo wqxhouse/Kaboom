@@ -88,7 +88,7 @@ void setupScene()
 	//Core::loadWorldFile(str_world_xml);
 
 	createInfinitePlane(g, m);
-	l->addDirectionalLight("Sun", osg::Vec3(0.1, -0.88, -0.46), osg::Vec3(0.7, 0.7, 0.7), false);
+	/*l->addDirectionalLight("Sun", osg::Vec3(0.1, -0.88, -0.46), osg::Vec3(0.7, 0.7, 0.7), false);*/
 
 	osg::ref_ptr<osg::Sphere> sp = new osg::Sphere;
 	osg::ref_ptr<osg::ShapeDrawable> sd = new osg::ShapeDrawable;
@@ -96,12 +96,12 @@ void setupScene()
 	osg::ref_ptr<osg::Geode> geode = new osg::Geode;
 	geode->addDrawable(sd);
 	g->addGeometry("sphere", geode, osg::Vec3(0, 20, 1));
-
+	/*
 	m->createPlainMaterial("SphereMat", osg::Vec3(0.3, 0.3, 0.3), 0.1, 0.5, 1.0);
 	g->setGeometryMaterial("sphere", m->getMaterial("SphereMat"));
 
 	l->addPointLight("debug", osg::Vec3(0, 0, 2), osg::Vec3(0, 1, 0), 100, false);
 	l->addPointLight("debug1", osg::Vec3(0, 0, 2), osg::Vec3(0, 1, 0), 100, false);
-	l->addPointLight("debug2", osg::Vec3(0, 0, 2), osg::Vec3(0, 1, 0), 100, false);
+	l->addPointLight("debug2", osg::Vec3(0, 0, 2), osg::Vec3(0, 1, 0), 100, false);*/
 
 }

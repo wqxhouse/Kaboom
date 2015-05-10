@@ -12,6 +12,7 @@
 #include "../core/OsgObjectConfigLoader.h"
 #include "../components/CollisionComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../components/JumpComponent.h"
 
 void onTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     World *w = static_cast<World *>(world->getWorldUserInfo());
@@ -25,7 +26,7 @@ World::World(ConfigSettings * configSettings)
 
 	config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
 
-    setGravity(4.0f);
+    setGravity(9.8f);
     broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new TriggerCallback());
     world.setInternalTickCallback(onTickCallback, this);
 
@@ -129,10 +130,10 @@ void World::loadMapFromXML(const std::string &mapXMLFile){
 
 void World::stepSimulation(float timeStep, int maxSubSteps) {
 
-	debugViewer->getDbgDraw()->BeginDraw();
 
     world.stepSimulation(timeStep, maxSubSteps);
 
+	debugViewer->getDbgDraw()->BeginDraw();
 	world.debugDrawWorld();
 	debugViewer->getDbgDraw()->EndDraw();
 	
@@ -183,6 +184,11 @@ void World::onTick(btScalar timeStep) {
         const btCollisionObject *collisionObjA = static_cast<const btCollisionObject *>(manifold->getBody0());
         const btCollisionObject *collisionObjB = static_cast<const btCollisionObject *>(manifold->getBody1());
 
+		btManifoldPoint contactPoint = manifold->getContactPoint(0);
+		std::cout << "a: " << contactPoint.m_normalWorldOnB.getX() << " " <<
+			contactPoint.m_normalWorldOnB.getY() << " " <<
+			contactPoint.m_normalWorldOnB.getZ() << " " << std::endl;
+
         // Ignore ghost objects.
         if (!collisionObjA->hasContactResponse() || !collisionObjB->hasContactResponse()) {
             continue;
@@ -191,8 +197,8 @@ void World::onTick(btScalar timeStep) {
         Entity *entityA = static_cast<Entity *>(collisionObjA->getUserPointer());
         Entity *entityB = static_cast<Entity *>(collisionObjB->getUserPointer());
 
-        handleCollision(entityA, entityB);
-        handleCollision(entityB, entityA);
+        handleCollision(entityA, entityB, contactPoint);
+        handleCollision(entityB, entityA, contactPoint);
     }
 }
 
@@ -221,18 +227,43 @@ void World::addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rota
     addRigidBody(groundRigidBody);
 }
 
-void World::handleCollision(Entity *entityA, Entity *entityB) const {
+void World::handleCollision(Entity *entityA, Entity *entityB, const btManifoldPoint &contactPoint) const {
     if (entityA != nullptr) {
-        CollisionComponent *colComp = entityA->getComponent<CollisionComponent>();
+      /*  CollisionComponent *colComp = entityA->getComponent<CollisionComponent>();
 
         if (colComp != nullptr) {
             colComp->setCollided(true);
 
             if (entityB != nullptr) {
-                colComp->addContactEntity(entityB);
-            }
-        }
+                colComp->addContactEntity(entityB);*/
+	
+				// only test if one of them is a character
+				if (entityA->hasComponent<JumpComponent>())
+				{
+					bool collideGround = isCollidingGround(contactPoint);
+					if (collideGround)
+					{
+						entityA->getComponent<JumpComponent>()->setJumping(false);
+					}
+				}
+				/*else if (entityB->hasComponent<JumpComponent>())
+				{
+				bool collideGround = isCollidingGround(contactPoint);
+				entityB->getComponent<JumpComponent>()->setJumping(false);
+				}*/
+            //}
+        //}
     }
+}
+
+bool World::isCollidingGround(const btManifoldPoint &contactPoint) const
+{
+	btVector3 normal = contactPoint.m_normalWorldOnB;
+	btVector3 up = btVector3(0, 0, 1);
+	double dot = normal.dot(up);
+
+	// allow for error
+	return dot > 0.05 ? true : false; 
 }
 
 void World::renderDebugFrame() {

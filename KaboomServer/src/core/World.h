@@ -73,8 +73,8 @@ private:
     void addStaticPlane(btVector3 origin, btVector3 normal);
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
 
-    void handleCollision(Entity *entityA, Entity *entityB) const;
-
+	void handleCollision(Entity *entityA, Entity *entityB, const btManifoldPoint &contactPoint) const; 
+	bool isCollidingGround(const btManifoldPoint &contactPoint) const;
 };
 
 class World::TriggerCallback : public btGhostPairCallback {

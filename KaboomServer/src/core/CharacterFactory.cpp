@@ -15,6 +15,7 @@
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
+#include "../components/JumpComponent.h"
 
 CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
@@ -84,6 +85,7 @@ void CharacterFactory::createBase(
     entity->attachComponent(new BombContainerComponent(inventory));
     entity->attachComponent(new PlayerStatusComponent());
     entity->attachComponent(new HealthComponent(healthStart, healthCap));
+	entity->attachComponent(new JumpComponent);
 }
 
 void CharacterFactory::createDefaultCharacter(Entity *entity) const {

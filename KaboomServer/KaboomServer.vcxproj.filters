@@ -193,6 +193,9 @@
     <ClCompile Include="src\messaging\TimeBombMessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\components\JumpComponent.cpp">
+      <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -333,6 +336,9 @@
     </ClInclude>
     <ClInclude Include="src\messaging\TimeBombMessageHandler.h">
       <Filter>Header Files\Messaging\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\JumpComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
