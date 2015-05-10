@@ -27,6 +27,7 @@ const std::string POS_Z_LABEL = "posZ";
 const std::string SCALE_X_LABEL = "scaleX";
 const std::string SCALE_Y_LABEL = "scaleY";
 const std::string SCALE_Z_LABEL = "scaleZ";
+const std::string SCALE_UNIFORM_LABEL = "scale uniform";
 
 const std::string ROT_X_LABEL = "rotX";
 const std::string ROT_Y_LABEL = "rotY";
