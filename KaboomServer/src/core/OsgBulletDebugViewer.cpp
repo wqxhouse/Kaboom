@@ -1,5 +1,7 @@
 #include "OsgBulletDebugViewer.h"
 
+#include <osgViewer/ViewerEventHandlers>
+
 OsgBulletDebugViewer::OsgBulletDebugViewer(ConfigSettings * configSettings)
 	: config(configSettings){
 
@@ -28,10 +30,20 @@ void OsgBulletDebugViewer::init() {
 	viewer.setCameraManipulator(tb);
 
 	root = new osg::Group;
+
 	viewer.setSceneData(root.get());
+	viewer.addEventHandler(new osgViewer::StatsHandler);
+
+	//dbgDraw = new osgbCollision::GLDebugDrawer();
+	//dbgDraw->setDebugMode();
+	//root->addChild(dbgDraw->getSceneGraph());
+	dbgDraw = new osgbCollision::GLDebugDrawer();
+	dbgDraw->setDebugMode(~btIDebugDraw::DBG_NoDebug);
+	root->addChild(dbgDraw->getSceneGraph());
+
 }
 
-void OsgBulletDebugViewer::addNode(osg::Node * node) {
+void OsgBulletDebugViewer::addNode(osg::Node* node) {
 	root->addChild(node);
 }
 
@@ -49,4 +61,8 @@ void OsgBulletDebugViewer::addNodeWireFrame(osg::Node * node) {
 
 void OsgBulletDebugViewer::renderFrame() {
 	viewer.frame();
+}
+
+osgbCollision::GLDebugDrawer* OsgBulletDebugViewer::getDbgDraw(){
+	return dbgDraw;
 }

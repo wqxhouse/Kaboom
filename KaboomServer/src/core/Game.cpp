@@ -60,7 +60,7 @@ void Game::addEntity(Entity *entity) {
     PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
     if (physicsComp != nullptr) {
-        world.addRigidBody(physicsComp->getRigidBody());
+        world.addRigidBodyAndConvertToOSG(physicsComp->getRigidBody());
     }
 
     TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
@@ -116,7 +116,6 @@ void Game::update(float timeStep, int maxSubSteps) {
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
 
-
 	//TODO put an on/off switch here
 	world.renderDebugFrame();
 }
@@ -139,4 +138,8 @@ const BombFactory &Game::getBombFactory() const {
 
 const GameServer &Game::getGameServer() const {
     return server;
+}
+
+const World &Game::getWorld() const{
+	return world;
 }

@@ -42,9 +42,9 @@ Game::Game(ConfigSettings *config)
 	sounds = new std::unordered_map<SOUNDS, osg::ref_ptr<Sample> >();
 
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
-    setupScene();
+    //setupScene();
 
-	/* For testing in-game editor *
+	/* For testing in-game editor */
 	
 	std::string str_mediaPath = "";
 	std::string str_material_xml = "";
@@ -58,7 +58,7 @@ Game::Game(ConfigSettings *config)
 
 	Core::loadMaterialFile(str_material_xml);
 	Core::loadWorldFile(str_world_xml);
-	* End testing code */
+	/* End testing code */
 
     inputManager = new InputManager(client);
     inputManager->loadConfig();

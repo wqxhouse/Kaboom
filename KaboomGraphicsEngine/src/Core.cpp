@@ -345,7 +345,7 @@ Camera &Core::getMainCamera()
 // Used in GUI focus
 void Core::disableCameraManipulator()
 {
-	std::cout << "disableCam" << std::endl;
+	//std::cout << "disableCam" << std::endl;
 	if (_viewer->getCameraManipulator() != NULL)
 	{
 		_camManipulatorTemp = _viewer->getCameraManipulator();
@@ -357,7 +357,7 @@ void Core::disableCameraManipulator()
 
 void Core::enableCameraManipulator()
 {
-	std::cout << "enableCam" << std::endl;
+	//std::cout << "enableCam" << std::endl;
 	if (_camManipulatorTemp == NULL) return;
 	// std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
 
