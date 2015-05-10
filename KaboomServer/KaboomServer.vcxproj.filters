@@ -181,9 +181,6 @@
     <ClCompile Include="src\math\util.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\OsgObjectLoader.cpp">
-      <Filter>Source Files\Configurations</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\OsgBulletDebugViewer.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -303,9 +300,6 @@
     </ClInclude>
     <ClInclude Include="src\math\util.h">
       <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\OsgObjectLoader.h">
-      <Filter>Header Files\Configurations</Filter>
     </ClInclude>
     <ClInclude Include="src\core\OsgBulletDebugViewer.h">
       <Filter>Header Files\Core</Filter>
