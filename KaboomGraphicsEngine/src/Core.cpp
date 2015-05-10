@@ -15,6 +15,7 @@
 #include <osgLibRocket/SystemInterface.h>
 #include <osgLibRocket/RenderInterface.h>
 
+#include "TypeIdLoader.h"
 #include "MaterialLoader.h"
 #include "World.h"
 #include "GeometryObjectManager.h"
@@ -63,8 +64,14 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 
 void Core::loadMaterialFile(const std::string &filePath)
 {
-	MaterialLoader ml = MaterialLoader(_world.getMaterialManager());
-	ml.loadXMLFile(filePath);
+	MaterialLoader loader = MaterialLoader(_world.getMaterialManager());
+	loader.loadXMLFile(filePath);
+}
+
+void Core::loadTypeIdFile(const std::string &filePath)
+{
+	TypeIdLoader loader;
+	loader.loadXMLFile(filePath);
 }
 
 void Core::loadWorldFile(const std::string &worldFilePath)

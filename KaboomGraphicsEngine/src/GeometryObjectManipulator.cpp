@@ -123,8 +123,15 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 
 		_tabBoxDragger->setNodeMask(0x4);
 
+		osg::Vec3 pos, scale;
+		osg::Quat rot, so;
+		osg::Matrix rotMatrix;
+
+		_currNode->getMatrix().decompose(pos, rot, scale, so);
+		rot.get(rotMatrix);
+
 		osg::Vec3f center = bbox.center();
-		_tabBoxDragger->setMatrix(osg::Matrix::scale(xscale, yscale, zscale) *
+		_tabBoxDragger->setMatrix(rotMatrix * osg::Matrix::scale(xscale, yscale, zscale) *
 			osg::Matrix::translate(center));
 
 		_dragger = _tabBoxDragger.get();
@@ -178,6 +185,13 @@ void GeometryObjectManipulator::updateBoundingBox()
 	float yscale = (bbox.yMax() - bbox.yMin());
 	float zscale = (bbox.zMax() - bbox.zMin());
 
+	osg::Vec3 pos, scale;
+	osg::Quat rot, so;
+	osg::Matrix rotMatrix;
+
+	_currNode->getMatrix().decompose(pos, rot, scale, so);
+	rot.get(rotMatrix);
+
 	if (_currType != TabBoxDragger)
 	{
 		// Get biggest axis radius
@@ -190,9 +204,8 @@ void GeometryObjectManipulator::updateBoundingBox()
 			osg::Matrix::translate(_currNode->getBound().center()));
 	}
 	else {
-
 		osg::Vec3f center = bbox.center();
-		_dragger->setMatrix(osg::Matrix::scale(xscale, yscale, zscale) *
+		_dragger->setMatrix(rotMatrix * osg::Matrix::scale(xscale, yscale, zscale) *
 			osg::Matrix::translate(center));
 	}
 }

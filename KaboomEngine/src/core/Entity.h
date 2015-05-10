@@ -28,6 +28,11 @@ public:
         }
     }
 
+    template <typename T>
+    void detachComponent() {
+        components.erase(&typeid(T));
+    }
+
     unsigned int getId() const;
 
     const EntityType &getType() const;
