@@ -1,9 +1,12 @@
 #include "ExplosionSystem.h"
 
-#include "../components/ExplosionComponent.h"
+#include <core/Entity.h>
+
+#include "../components/MessageHandlerComponent.h"
 #include "../components/TriggerComponent.h"
-#include "../core/ExplosionHandler.h"
-#include "../core/Game.h"
+#include "../messaging/ExplosionMessage.h"
+
+class ExplosionComponent;
 
 ExplosionSystem::ExplosionSystem(Game *game)
         : game(game) {
@@ -11,12 +14,14 @@ ExplosionSystem::ExplosionSystem(Game *game)
 
 bool ExplosionSystem::checkEntity(Entity *entity) {
     return entity->hasComponent<ExplosionComponent>() &&
-            entity->hasComponent<TriggerComponent>();
+            entity->hasComponent<TriggerComponent>() &&
+            entity->hasComponent<MessageHandlerComponent>();
 }
 
 void ExplosionSystem::processEntity(Entity *entity) {
-    ExplosionComponent *expComp = entity->getComponent<ExplosionComponent>();
-    TriggerComponent* triggerComp = entity->getComponent<TriggerComponent>();
+    auto triggerComp = entity->getComponent<TriggerComponent>();
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
 
-    expComp->getHandler()->handle(game, entity, triggerComp->getTriggerEntities());
+    ExplosionMessage message(game, entity, triggerComp->getTriggerEntities());
+    handlerComp->getHandler()->handle(message);
 }

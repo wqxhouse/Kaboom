@@ -1,14 +1,9 @@
 #include "TimerComponent.h"
 
-TimerComponent::TimerComponent(Timer *timer, TimerHandler *handler)
-        : timer(timer),
-          handler(handler) {
+TimerComponent::TimerComponent(Timer *timer)
+        : timer(timer) {
 }
 
 Timer *TimerComponent::getTimer() {
     return timer;
-}
-
-TimerHandler *TimerComponent::getHandler() const {
-    return handler;
 }
