@@ -1,8 +1,5 @@
 #include "BombConfigLoader.h"
 
-#include "KaboomV2CollisionHandler.h"
-#include "TimeBombTimerHandler.h"
-
 BombConfigLoader::BombConfigLoader(std::unordered_map<EntityType, Configuration> &config)
         : config(config) {
 }
@@ -39,22 +36,6 @@ void BombConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
             }
 
             loadValue(dataNode, valueType, type);
-        }
-
-        const std::unordered_map<EntityType, CollisionHandler *> collisionHandlers = {
-            { KABOOM_V2, new KaboomV2CollisionHandler() }
-        };
-
-        if (collisionHandlers.count(type) > 0) {
-            config[type].set("collision-handler", collisionHandlers.at(type));
-        }
-
-        const std::unordered_map<EntityType, TimerHandler *> timerHandlers = {
-            { TIME_BOMB, new TimeBombTimerHandler() }
-        };
-
-        if (timerHandlers.count(type) > 0) {
-            config[type].set("timer-handler", timerHandlers.at(type));
         }
     }
 }
