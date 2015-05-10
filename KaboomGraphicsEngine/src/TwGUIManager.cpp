@@ -1549,7 +1549,7 @@ void TwGUIManager::exportXML()
 	config->getValue(ConfigSettings::str_export_xml, str_export_xml);
 
 	// TODO: support custom file names
-	std::string exportPath = str_mediaPath + str_export_xml;//"Assets/World/export.xml";
+	std::string exportPath = str_mediaPath + "Assets/World/export.xml";
 
 	// Open file to write
 	int tabs = 0;
