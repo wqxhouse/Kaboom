@@ -59,11 +59,6 @@ bool sphereInFrustumDebug(FrustumDebug frustum, vec4 pos, float radius)
 		inFrustum = inFrustum && (d >= -radius);
     }
 
-	//for(uint i = 4; i < 6; ++i)
-	//{
-	//	float d = dot(frustum.frustumPlanes[i], pos);
-	//	inFrustum = inFrustum && (d <= radius);
-	//}
 	return inFrustum;
 }
 

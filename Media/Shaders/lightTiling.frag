@@ -13,7 +13,7 @@ uniform float u_farPlane;
 #include "Shaders/lightCulling.glsl"
 
 layout (r32i, binding=0) uniform iimage2D o_destination;
-//layout (r32f, binding=0) uniform image2D o_destination;
+// layout (r32f, binding=0) uniform image2D o_destination;
 
 layout(std140) uniform u_lightsBuffer
 {
@@ -66,13 +66,13 @@ void visualizeTiledDepth(ivec2 storageCoord, float maxDepthLinear, float minDept
 }
 
 varying vec2 v_uvcoord;
-	uniform sampler2D u_normalDepthTex;
-uniform sampler2D u_depthBufferTex;
+uniform sampler2D u_normalDepthTex;
+// uniform sampler2D u_depthBufferTex;
 
 //// Matrices used for the culling
 uniform mat4 u_projMat;
-uniform mat4 u_viewMat;
-uniform mat4 u_viewProjMat;
+//uniform mat4 u_viewMat;
+//uniform mat4 u_viewProjMat;
 
 uniform vec3 osg_OutputBufferSize;
 
@@ -83,8 +83,8 @@ const ivec2 tileSize = ivec2(LIGHT_TILE_SIZE_X, LIGHT_TILE_SIZE_Y);
 void main() 
 {
     // Common variables
-    // ivec2 screenSize = textureSize(u_normalDepthTex, 0);
-    ivec2 screenSize = textureSize(u_depthBufferTex, 0);
+    ivec2 screenSize = textureSize(u_normalDepthTex, 0);
+    // ivec2 screenSize = textureSize(u_depthBufferTex, 0);
 
     // How many patches there are (e.g. 50x30 for a resolution of 1600x960)
     ivec2 precomputeSize = ivec2(osg_OutputBufferSize.xy);
@@ -109,7 +109,6 @@ void main()
     float storedDepth;
 
     // Compute min / max depth per tile
-    // for (int x = 0; x < LIGHT_TILE_SIZE_X; x+=LIGHTING_MIN_MAX_DEPTH_ACCURACY*2) 
     for (int x = 0; x < LIGHT_TILE_SIZE_X; x+=LIGHTING_MIN_MAX_DEPTH_ACCURACY) 
 	{
         for (int y = 0; y < LIGHT_TILE_SIZE_Y; y+=LIGHTING_MIN_MAX_DEPTH_ACCURACY) 
@@ -122,31 +121,22 @@ void main()
             // 0 because they sample values which are outside of the colortex. 
             newCoord = min(newCoord, clampMax);
 
-			 vec2 sampledDepth = texelFetch(u_normalDepthTex, newCoord, 0).zw;
-			 storedDepth = recoverDepth(sampledDepth);
-			//storedDepth = texelFetch(u_depthBufferTex, newCoord, 0).x;
+			vec2 sampledDepth = texelFetch(u_normalDepthTex, newCoord, 0).zw;
+			storedDepth = recoverDepth(sampledDepth);
 
+			// TODO: figure out exactly why non-linear depth buffer will make sphere test fail
+			// if the camera is beyond certain distance. 
+			// storedDepth = texelFetch(u_depthBufferTex, newCoord, 0).x;
             minDepth = min(minDepth, storedDepth);
             maxDepth = max(maxDepth, storedDepth);
-
         }
     }
 
-    //float minDepthTightLinear = getLinearZTightFromLinearZ(minDepth);
-    //float maxDepthTightLinear = getLinearZTightFromLinearZ(maxDepth);
-	// float minViewZ = -getViewZFromLinearZ(minDepth);
-	// float maxViewZ = -getViewZFromLinearZ(maxDepth);
-
-	//float minTileViewZ = -getViewZFromZ(minDepth);
-	//float maxTileViewZ = -getViewZFromZ(maxDepth);
+/*	float minTileViewZ = -getViewZFromZ(minDepth);
+	float maxTileViewZ = -getViewZFromZ(maxDepth);*/
 
 	float minTileViewZ = minDepth * u_nearPlane;
 	float maxTileViewZ = maxDepth * u_farPlane;
-
-	// debug
-	//gl_FragColor = vec4(minDepthTightLinear);
-	// gl_FragColor = vec4(0, 0, 0, 0);
-	// gl_FragColor = vec4(1, 1, 1, 1);
 
     // Init counters
     int processedPointLights = 0;
@@ -257,3 +247,4 @@ void main()
     imageStore(o_destination, storageCoord + ivec2(2, 0), ivec4(processedDirectionalLights));
 //    imageStore(o_destination, storageCoord + ivec2(3, 0), ivec4(processedDirectionalShadowLights));
 }
+
