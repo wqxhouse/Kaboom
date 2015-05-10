@@ -15,16 +15,12 @@
 #include <osgAudio/Source.h>
 #include <osgAudio/AudioEnvironment.h>
 #include <osgAudio/Sample.h>
+#include "SoundManager.h"
 
 using namespace osgAudio;
 
 class InputManager;
-enum SOUNDS{
-	BASIC,
-	KABOOM_FIRE,
-	KABOOM_EXPLODE
 
-};
 
 class Game {
 public:
@@ -38,6 +34,7 @@ public:
     void removeAllEntities();
 
     EntityManager &getEntityManager();
+	SoundManager &getSoundManager();
     const CharacterFactory &getCharacterFactory() const;
     const BombFactory &getBombFactory() const;
 
@@ -64,6 +61,7 @@ private:
     InputManager *inputManager;
 
     EntityManager entityManager;
+	SoundManager soundManager;
     CharacterFactory characterFactory;
 	BombFactory bombFactory;
 

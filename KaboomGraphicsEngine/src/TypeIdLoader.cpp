@@ -1,5 +1,6 @@
 #include "TypeIdLoader.h"
 
+#include "Core.h"
 #include <osgDB/ReadFile>
 #include "stdafx.h" 
 
@@ -42,7 +43,8 @@ void TypeIdLoader::loadXMLNode(osgDB::XmlNode *xmlRoot)
 
 void TypeIdLoader::createTypeFromXML(osgDB::XmlNode* xmlNode)
 {
-	std::string id = xmlNode->properties["id"];
+	std::string id_str = xmlNode->properties["id"];
+	int id = std::stoi(id_str);
 
 	std::string meshPath, materialName;
 
@@ -64,7 +66,13 @@ void TypeIdLoader::createTypeFromXML(osgDB::XmlNode* xmlNode)
 	setDefaultString(meshPath);
 	setDefaultString(materialName);
 
-	/*
-	_materialManager->createTextureMaterial(name,
-		albedoTex, roughnessTex, metallicTex, normalPath);*/
+	// Get the material
+	Material* mat = Core::getWorldRef().getMaterialManager()->getMaterial(materialName);
+
+	// Load the model
+	osg::Node *model = nullptr;
+	model = osgDB::readNodeFile(meshPath);
+
+	// Pre-load geometry to manager
+	Core::getWorldRef().getGeometryManager()->storeTypeIdGeometry(id, model, meshPath, mat);
 }

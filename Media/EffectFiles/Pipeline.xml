@@ -27,7 +27,7 @@
   </uniform>
 
   <buffer name="debugDepth" type="2d">
-    <internal_format>depth24</internal_format>
+    <internal_format>depth32</internal_format>
     <source_format>depth</source_format>
     <source_type>float</source_type>
   </buffer>
@@ -64,7 +64,8 @@
 
     <deferred_pass name="LightPrePass">
       <input_buffer unit="0" varname="o_destination">b_PerTileStorage</input_buffer>
-      <input_buffer unit="1" varname="u_normalDepthTex">b_RT2</input_buffer>
+      <!--<input_buffer unit="1" varname="u_normalDepthTex">b_RT2</input_buffer>-->
+      <input_buffer unit="1" varname="u_normalDepthTex">debugDepth</input_buffer>
       <output_buffer target="color">b_computeShaderTrigger</output_buffer>
 
       <clear_mask>color</clear_mask>
@@ -75,9 +76,9 @@
       <uniform>u_arrayDirectionalLight</uniform>
       <uniform>u_arrayPointLight</uniform>
 
-      <uniform>u_viewMat</uniform>
+      <!--<uniform>u_viewMat</uniform>-->
       <uniform>u_projMat</uniform>
-      <uniform>u_viewProjMat</uniform>
+      <!--<uniform>u_viewProjMat</uniform>-->
 
       <uniform>u_nearPlane</uniform>
       <uniform>u_farPlane</uniform>

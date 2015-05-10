@@ -12,11 +12,11 @@ body.window
 	padding-top: 43px;
 	padding-bottom: 20px;
 	
-	min-width: 250px;
-	max-width: 800px;
+	//min-width: 250px;
+	//max-width: 1280px;
 	
-	min-height: 135px;
-	max-height: 700px;
+	//min-height: 135px;
+	//max-height: 720px;
 }
 
 
@@ -72,7 +72,7 @@ div#window
 	width: auto;
 	padding: 10px 15px;
 
-	background-decorator: tiled-box;
+	/*background-decorator: tiled-box;
 	background-top-left-image: invader.tga 0px 0px 133px 140px;
 	background-top-right-image: invader.tga 136px 0px 146px 140px;
 	background-top-image: invader.tga stretch 134px 0px 135px 140px;
@@ -80,7 +80,7 @@ div#window
 	background-bottom-right-image: invader.tga 136px 140px 146px 151px;
 	background-bottom-image: invader.tga stretch 11px 140px 12px 151px;
 	background-left-image: invader.tga stretch 0px 139px 10px 140px;
-	background-center-image: invader.tga stretch 11px 139px 12px 140px;
+	background-center-image: invader.tga stretch 11px 139px 12px 140px;*/
 }
 
 div#content

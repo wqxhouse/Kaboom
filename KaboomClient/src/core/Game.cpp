@@ -72,6 +72,7 @@ Game::Game(ConfigSettings *config)
 	
 	printf("check for sound errors\n");
 	sample = new Sample("sounds\\a.wav");
+	soundManager.addToMap(KABOOM_EXPLODE,"sounds\\a.wav");
 	source->setSound(sample.get());
 	source->setGain(1);
 	source->setLooping(false);
@@ -194,6 +195,9 @@ void Game::removeAllEntities() {
 
 EntityManager &Game::getEntityManager() {
     return entityManager;
+}
+SoundManager &Game::getSoundManager() {
+	return soundManager;
 }
 
 const CharacterFactory &Game::getCharacterFactory() const {
