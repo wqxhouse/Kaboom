@@ -24,6 +24,14 @@ std::string Configuration::getString(const char *name) const {
     return std::string(properties.at(name).s);
 }
 
+osg::Vec3 Configuration::getVec3(const char *name) const {
+	return properties.at(name).vec3;
+}
+
+osg::Vec4 Configuration::getVec4(const char *name) const {
+	return properties.at(name).vec4;
+}
+
 void Configuration::set(const char *name, bool value) {
     properties[name].b = value;
 }
@@ -51,7 +59,16 @@ void Configuration::set(const char *name, const char *value) {
     strcpy_s(szValue, len + 1, value);
     properties[name].s = szValue;
 }
-
 void Configuration::set(const char *name, void *value) {
     properties[name].ptr = value;
 }
+
+void Configuration::set(const char *name, osg::Vec3 value) {
+	properties[name].vec3 = value;
+}
+
+void Configuration::set(const char *name, osg::Vec4 value) {
+	properties[name].vec4 = value;
+}
+
+

@@ -1,21 +1,40 @@
 #pragma once
-
+#include <string>
+#include <unordered_map>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <btBulletDynamicsCommon.h>
+
+#include <osg/Node>
+#include <osgDB/XmlParser>
+
+#include <osg/MatrixTransform>
+
+#include <osgbCollision/GLDebugDrawer.h>
+
+#include <util/Configuration.h>
+#include <util/ConfigSettings.h>
+
+#include "OsgBulletDebugViewer.h"
+
 
 class Entity;
 
 class World {
 public:
-    World();
+    World(ConfigSettings * );
     ~World();
 
     void loadMap();
 
-    void stepSimulation(float timeStep, int maxSubSteps);
+	void loadMapFromXML(const std::string &mapXMLFile);
 
+    void stepSimulation(float timeStep, int maxSubSteps);
+	
     void addRigidBody(btRigidBody *rigidBody);
+
+	void addRigidBodyAndConvertToOSG(btRigidBody *rigidBody);
+
     void removeRigidBody(btRigidBody *rigidBody);
 
     void addTrigger(btGhostObject *ghostObject);
@@ -27,8 +46,22 @@ public:
 
     const btCollisionDispatcher &getDispatcher() const;
 
+	void renderDebugFrame();
+
+	OsgBulletDebugViewer* getDebugViewer();
+
+	void debugDrawWorld(); //use for updating the debug world frame
+
 private:
     class TriggerCallback;
+
+	std::string mediaPath;
+
+	std::unordered_map<std::string, Configuration> osgNodeConfigMap;
+
+	OsgBulletDebugViewer* debugViewer;
+
+	ConfigSettings* config;
 
     btDbvtBroadphase broadphase;
     btDefaultCollisionConfiguration collisionConfiguration;
@@ -41,6 +74,7 @@ private:
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
 
     void handleCollision(Entity *entityA, Entity *entityB) const;
+
 };
 
 class World::TriggerCallback : public btGhostPairCallback {

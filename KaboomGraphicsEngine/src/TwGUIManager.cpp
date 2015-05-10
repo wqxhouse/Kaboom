@@ -459,6 +459,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string scaleXVarName = SCALE_X_LABEL + indexStr;
 	std::string scaleYVarName = SCALE_Y_LABEL + indexStr;
 	std::string scaleZVarName = SCALE_Z_LABEL + indexStr;
+	std::string scaleUniformVarName = SCALE_UNIFORM_LABEL + indexStr;
 
 	std::string rotXVarName = ROT_X_LABEL + indexStr;
 	std::string rotYVarName = ROT_Y_LABEL + indexStr;
@@ -678,8 +679,28 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, scaleZDef.c_str());
 
+	std::string scaleUniformDef= nameGroupDef + " label='" + SCALE_UNIFORM_LABEL + "'" + scaleLimitVal;
+	TwAddVarCB(bar, scaleUniformVarName.c_str(), TW_TYPE_FLOAT,
+			   [](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
 
+		float scaleUniform = *(const float *)value;
+		osg::Vec3 oldScale = obj->getScale();
+		osg::Vec3 newScale = osg::Vec3(scaleUniform, scaleUniform, scaleUniform);
+		obj->setScale(newScale);
 
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *scaleUniform = static_cast<float *>(value);
+
+		osg::Vec3 scale = obj->getScale();
+		*scaleUniform = scale.x();
+	},
+		geom, scaleUniformDef.c_str());
 
 	std::string rotXDef = nameGroupDef + " label='" + ROT_X_LABEL + "'";
 	TwAddVarCB(bar, rotXVarName.c_str(), TW_TYPE_FLOAT,
@@ -1546,7 +1567,7 @@ void TwGUIManager::exportXML()
 	std::string str_export_xml = "";
 	std::string str_mediaPath = "";
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-	// config->getValue(ConfigSettings::str_export_xml, str_export_xml);
+	config->getValue(ConfigSettings::str_export_xml, str_export_xml);
 
 	// TODO: support custom file names
 	std::string exportPath = str_mediaPath + "Assets/World/export.xml";

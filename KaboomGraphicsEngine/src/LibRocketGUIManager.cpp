@@ -105,8 +105,13 @@ bool LibRocketGUIManager::valid()
 bool LibRocketGUIManager::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa, osg::Object *obj, osg::NodeVisitor *nv)
 {
 	// can put some extra handling logic here
-	auto eventhandler = _gui->GetGUIEventHandler();
-	return eventhandler->handle(ea, aa, obj, nv);
+	
+	if (_isGUIEnabled)
+	{
+		auto eventhandler = _gui->GetGUIEventHandler();
+		return eventhandler->handle(ea, aa, obj, nv);
+	}
+	return false;
 }
 
 Rocket::Core::Context *LibRocketGUIManager::getContext()

@@ -42,6 +42,8 @@
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp" />
     <ClCompile Include="src\core\DefaultExplosionHandler.cpp" />
+    <ClCompile Include="src\core\OsgBulletDebugViewer.cpp" />
+    <ClCompile Include="src\core\OsgObjectConfigLoader.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\TimeBombTimerHandler.cpp" />
@@ -86,6 +88,8 @@
     <ClInclude Include="src\core\ExplosionHandler.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\KaboomV2CollisionHandler.h" />
+    <ClInclude Include="src\core\OsgBulletDebugViewer.h" />
+    <ClInclude Include="src\core\OsgObjectConfigLoader.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\TimeBombTimerHandler.h" />
@@ -304,7 +308,7 @@
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OSG_LIB_PATH);$(BULLET_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;osg.lib;osgDB.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;osg.lib;osgDB.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;osgbDynamics.lib;osgbCollision.lib;osgwTools.lib;osgbInteraction.lib;osgViewer.lib;osgGA.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
