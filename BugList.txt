@@ -44,6 +44,9 @@ At this point the _geomObj still has its address but an invalid one, since geomm
 23. Mouse over gui can move object (triggered the manipulator, since the cam locked on mouse over)
 24. scrolling (scaling) on fps camera for some reason comes back... bad..
 
+25. change camera type will reset the fps camera walking speed
+26. change to trackball manipulator will make walking speed display 0.0;
+
 Should be fixed, but need more tests:
 1. Geometry picker bug, crash the program: (randomly, wtf!) 
 	- reproduce: pick an object, click on a different manipulator type. 
