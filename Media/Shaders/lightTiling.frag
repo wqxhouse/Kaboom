@@ -66,7 +66,8 @@ void visualizeTiledDepth(ivec2 storageCoord, float maxDepthLinear, float minDept
 }
 
 varying vec2 v_uvcoord;
-uniform sampler2D u_normalDepthTex;
+	uniform sampler2D u_normalDepthTex;
+uniform sampler2D u_depthBufferTex;
 
 //// Matrices used for the culling
 uniform mat4 u_projMat;
@@ -82,7 +83,8 @@ const ivec2 tileSize = ivec2(LIGHT_TILE_SIZE_X, LIGHT_TILE_SIZE_Y);
 void main() 
 {
     // Common variables
-    ivec2 screenSize = textureSize(u_normalDepthTex, 0);
+    // ivec2 screenSize = textureSize(u_normalDepthTex, 0);
+    ivec2 screenSize = textureSize(u_depthBufferTex, 0);
 
     // How many patches there are (e.g. 50x30 for a resolution of 1600x960)
     ivec2 precomputeSize = ivec2(osg_OutputBufferSize.xy);
@@ -112,7 +114,6 @@ void main()
 	{
         for (int y = 0; y < LIGHT_TILE_SIZE_Y; y+=LIGHTING_MIN_MAX_DEPTH_ACCURACY) 
 		{
-            // newCoord = screenCoord + ivec2(x + y%2,y);
             newCoord = screenCoord + ivec2(x, y);
 
             // Check if out of screen bounds.
@@ -121,9 +122,9 @@ void main()
             // 0 because they sample values which are outside of the colortex. 
             newCoord = min(newCoord, clampMax);
 
-			vec2 sampledDepth = texelFetch(u_normalDepthTex, newCoord, 0).zw;
-			storedDepth = recoverDepth(sampledDepth);
-            // storedDepth = texelFetch(depth, newCoord, 0).r;
+			 vec2 sampledDepth = texelFetch(u_normalDepthTex, newCoord, 0).zw;
+			 storedDepth = recoverDepth(sampledDepth);
+			//storedDepth = texelFetch(u_depthBufferTex, newCoord, 0).x;
 
             minDepth = min(minDepth, storedDepth);
             maxDepth = max(maxDepth, storedDepth);
@@ -131,18 +132,27 @@ void main()
         }
     }
 
-    // Also store linear depth to be able to compare
-    // light depth and min/max depth easily
-    //float minDepthLinear = getLinearZTightFromLinearZ(minDepth);
-    //float maxDepthLinear = getLinearZTightFromLinearZ(maxDepth);
+    //float minDepthTightLinear = getLinearZTightFromLinearZ(minDepth);
+    //float maxDepthTightLinear = getLinearZTightFromLinearZ(maxDepth);
+	// float minViewZ = -getViewZFromLinearZ(minDepth);
+	// float maxViewZ = -getViewZFromLinearZ(maxDepth);
 
-	// debugging output
+	//float minTileViewZ = -getViewZFromZ(minDepth);
+	//float maxTileViewZ = -getViewZFromZ(maxDepth);
+
+	float minTileViewZ = minDepth * u_nearPlane;
+	float maxTileViewZ = maxDepth * u_farPlane;
+
+	// debug
+	//gl_FragColor = vec4(minDepthTightLinear);
+	// gl_FragColor = vec4(0, 0, 0, 0);
+	// gl_FragColor = vec4(1, 1, 1, 1);
 
     // Init counters
     int processedPointLights = 0;
     //int processedShadowPointLights = 0;
     int processedDirectionalLights = 0;
-    //int processedDirectionalShadowLights = 0;
+    //int processedShadowDirectionalLights = 0;
 
         // Compute tile bounds, needed for frustum
         vec2 tileScale = vec2(virtualScreenSize) * 0.5f / vec2(tileSize);
@@ -154,8 +164,6 @@ void main()
         vec4 frustumRL = vec4(-u_projMat[0][0] * tileScale.x, 0.0f, tileBias.x, 0.0f);
         vec4 frustumTL = vec4(0.0f, -u_projMat[1][1] * tileScale.y, tileBias.y, 0.0f);
 
-        // The doc said frustumOffset = vec4(0,0,1,0) but panda uses 
-        // apparently an inverted coordinate system
         const vec4 frustumOffset = vec4(0.0f, 0.0f, -1.0f, 0.0f);
 
 		// debug
@@ -165,13 +173,8 @@ void main()
 			fd.frustumPlanes[1] = frustumOffset + frustumRL;
 			fd.frustumPlanes[2] = frustumOffset - frustumTL;
 			fd.frustumPlanes[3] = frustumOffset + frustumTL;
-			//fd.frustumPlanes[4] = vec4(0.0, 0.0, 1.0, -minDepthLinear);
-			//fd.frustumPlanes[5] = vec4(0.0, 0.0, -1.0, maxDepthLinear);
-
-			// TODO: not sure why, but actually flipping the sign of viewZ did the trick...
-			// damn, spent 1 whole day debugging this
-			fd.frustumPlanes[4] = vec4(0.0, 0.0, 1.0, minDepth * u_farPlane);
-			fd.frustumPlanes[5] = vec4(0.0, 0.0, -1.0, -maxDepth * u_farPlane);
+			fd.frustumPlanes[4] = vec4(0.0, 0.0, -1.0, -minTileViewZ);
+			fd.frustumPlanes[5] = vec4(0.0, 0.0, 1.0, maxTileViewZ);
 		}
 
 		// debug, normalize
@@ -179,18 +182,6 @@ void main()
 		{
 			fd.frustumPlanes[i] *= 1.0 / length(fd.frustumPlanes[i].xyz);
 		}
-
-        // Calculate frustum planes
-        //Frustum frustum;
-        //frustum.left   = normalize(frustumOffset - frustumRL);
-        //frustum.right  = normalize(frustumOffset + frustumRL);
-        //frustum.top    = normalize(frustumOffset - frustumTL);
-        //frustum.bottom = normalize(frustumOffset + frustumTL);
-        //frustum.near   = minDepthLinear;
-        //frustum.far    = maxDepthLinear;
-
-        //frustum.viewMat = u_viewMat;
-        //frustum.mvpMat  = u_viewProjMat;
 
         // Buffer layout:
         // First 8 pixels store count
@@ -259,7 +250,7 @@ void main()
         //    processedDirectionalShadowLights += 1;
         //}
 
-	gl_FragColor = vec4(minDepth);
+	//gl_FragColor = vec4(minDepth);
 
     imageStore(o_destination, storageCoord + ivec2(0, 0), ivec4(processedPointLights));
 //    imageStore(o_destination, storageCoord + ivec2(1, 0), ivec4(processedShadowPointLights));
