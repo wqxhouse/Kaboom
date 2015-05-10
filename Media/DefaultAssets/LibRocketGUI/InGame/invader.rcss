@@ -447,10 +447,12 @@ scrollbarvertical
 
 scrollbarvertical slidertrack
 {
+/*
 	background-decorator: tiled-vertical;
 	background-top-image: invader.tga 70px 199px 97px 201px;
 	background-center-image: invader.tga stretch 70px 201px 97px 202px;
 	background-bottom-image: invader.tga 70px 203px 97px 204px;
+	*/
 }
 
 scrollbarvertical sliderbar

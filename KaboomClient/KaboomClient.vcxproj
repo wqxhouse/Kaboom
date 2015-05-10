@@ -242,7 +242,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <LinkTimeCodeGeneration />
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)\KaboomClient\config.ini" "$(TargetDir)" /D /I /Y
+      <Command>xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(ProjectDir)" /D /I /Y
+xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(TargetDir)" /D /I /Y
 xcopy "$(ProjectDir)\data-client" "$(TargetDir)\data-client" /D /I /Y
 xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
       <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
@@ -301,9 +302,6 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Config.ini" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\KaboomCommon\KaboomCommon.vcxproj">
       <Project>{1608d432-d1e3-4cac-ab94-4cf307a6d9aa}</Project>
     </ProjectReference>
@@ -316,6 +314,12 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-client\bombs.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\SharedConfig\Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\BugList.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
