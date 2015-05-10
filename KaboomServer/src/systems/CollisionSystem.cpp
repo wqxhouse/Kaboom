@@ -1,21 +1,26 @@
 #include "CollisionSystem.h"
 
+#include <core/Entity.h>
+
 #include "../components/CollisionComponent.h"
-#include "../core/CollisionHandler.h"
-#include "../core/Game.h"
+#include "../components/MessageHandlerComponent.h"
+#include "../messaging/CollisionMessage.h"
 
 CollisionSystem::CollisionSystem(Game *game)
         : game(game) {
 }
 
 bool CollisionSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<CollisionComponent>();
+    return entity->hasComponent<CollisionComponent>() &&
+            entity->hasComponent<MessageHandlerComponent>();
 }
 
 void CollisionSystem::processEntity(Entity *entity) {
-    CollisionComponent *colComp = entity->getComponent<CollisionComponent>();
+    auto colComp = entity->getComponent<CollisionComponent>();
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
 
     if (colComp->isCollided()) {
-        colComp->getHandler()->handle(game, entity, colComp->getContactEntities());
+        CollisionMessage message(game, entity, colComp->getContactEntities());
+        handlerComp->getHandler()->handle(message);
     }
 }

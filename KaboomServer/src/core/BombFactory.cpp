@@ -13,13 +13,16 @@
 #include <util/XMLLoader.h>
 
 #include "EntityConfigLookup.h"
-#include "KaboomV2CollisionHandler.h"
-#include "TimeBombTimerHandler.h"
 #include "../components/CollisionComponent.h"
 #include "../components/ExplosionComponent.h"
+#include "../components/MessageHandlerComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/TimerComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../messaging/DefaultExplosionMessageHandler.h"
+#include "../messaging/KaboomV2MessageHandler.h"
+#include "../messaging/MessageHandlerChain.h"
+#include "../messaging/TimeBombMessageHandler.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
@@ -83,28 +86,36 @@ void BombFactory::createBase(Entity *entity,
     ghostObject->setWorldTransform(worldTrans);
     ghostObject->setUserPointer(entity);
 
+    static DefaultExplosionMessageHandler explosionHandler;
+
+    MessageHandlerChain *chain = new MessageHandlerChain();
+    chain->addHandler(&explosionHandler);
+
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new TriggerComponent(ghostObject));
+    entity->attachComponent(new MessageHandlerComponent(new MessageHandlerChain()));
 }
 
 void BombFactory::createKaboomV2(Entity *entity) const {
-    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
-    CollisionHandler *collisionHandler = config.getPointer<CollisionHandler *>("collision-handler");
+    static KaboomV2MessageHandler kaboomV2Handler;
 
-    entity->attachComponent(new CollisionComponent(collisionHandler));
+    chain->addHandler(&kaboomV2Handler);
 }
 
 void BombFactory::createTimeBomb(Entity *entity) const {
     const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    static TimeBombMessageHandler timeBombHandler;
+    chain->addHandler(&timeBombHandler);
 
     int delay = config.getInt("delay");
-    TimerHandler *timerHandler = config.getPointer<TimerHandler *>("timer-handler");
-
-    Timer *timer = new Timer(delay);
-    timer->start();
     
-    entity->attachComponent(new TimerComponent(timer, timerHandler));
+    entity->attachComponent(new TimerComponent(new Timer(delay)));
 }

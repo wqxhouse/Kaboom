@@ -11,7 +11,6 @@
 #include "../components/DetonatorComponent.h"
 #include "../components/ExplosionComponent.h"
 #include "../components/InputComponent.h"
-#include "../core/DefaultExplosionHandler.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
@@ -60,7 +59,7 @@ void FiringSystem::processEntity(Entity *entity) {
         if (invComp->hasBomb(bombType)) {
             if (detonatorComp != nullptr) {
                 if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {
-                    detonatorComp->getBomb()->attachComponent(new ExplosionComponent(new DefaultExplosionHandler()));
+                    detonatorComp->getBomb()->attachComponent(new ExplosionComponent());
                     detonatorComp->setDetonated(true);
                 }
             } else {

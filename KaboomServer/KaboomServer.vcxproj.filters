@@ -55,23 +55,26 @@
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{2884c07e-166f-4543-9b7e-bd5410c849ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Explosion Handlers">
-      <UniqueIdentifier>{d3538abd-d30e-41a9-87de-b9b84b2a7380}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Explosion Handlers">
-      <UniqueIdentifier>{f9f54351-5956-45bd-b1d0-e399de36705e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Explosion Triggers">
-      <UniqueIdentifier>{03a7f687-4af2-42ed-8d90-874c8a6de109}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Explosion Triggers">
-      <UniqueIdentifier>{67d047d1-a851-4006-8338-4db3a892a220}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Configurations">
       <UniqueIdentifier>{c5584dda-5809-4ac2-b574-b5e34a5ff0a1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Configurations">
       <UniqueIdentifier>{600e909e-2863-43b4-88bd-1c9a1e0b594d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Messaging">
+      <UniqueIdentifier>{7237c58b-ef8d-40fa-9fe3-2ca2490b55ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Messaging">
+      <UniqueIdentifier>{5a4dcb15-944d-48c5-bdc9-8d70abb54106}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Messaging\Messages">
+      <UniqueIdentifier>{8659be0e-297b-4370-a58d-d7996663a8ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Messaging\Handlers">
+      <UniqueIdentifier>{2653e8bc-e4d0-48ab-a132-fc9cf82ed633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Messaging\Handlers">
+      <UniqueIdentifier>{b7c43108-cad9-412e-a545-5f21e254292a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,13 +115,7 @@
     <ClCompile Include="src\core\CharacterFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp">
-      <Filter>Source Files\Explosion Triggers</Filter>
-    </ClCompile>
     <ClCompile Include="src\components\CollisionComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\ExplosionComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\components\InputComponent.cpp">
@@ -157,12 +154,6 @@
     <ClCompile Include="src\components\TimerComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\DefaultExplosionHandler.cpp">
-      <Filter>Source Files\Explosion Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\TimeBombTimerHandler.cpp">
-      <Filter>Source Files\Explosion Triggers</Filter>
-    </ClCompile>
     <ClCompile Include="src\systems\SystemManager.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
@@ -189,6 +180,18 @@
     </ClCompile>
     <ClCompile Include="src\components\DetonatorComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\messaging\KaboomV2MessageHandler.cpp">
+      <Filter>Source Files\Messaging\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\messaging\DefaultExplosionMessageHandler.cpp">
+      <Filter>Source Files\Messaging\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\messaging\MessageHandlerChain.cpp">
+      <Filter>Source Files\Messaging</Filter>
+    </ClCompile>
+    <ClCompile Include="src\messaging\TimeBombMessageHandler.cpp">
+      <Filter>Source Files\Messaging\Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -225,15 +228,6 @@
     </ClInclude>
     <ClInclude Include="src\core\CharacterFactory.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\KaboomV2CollisionHandler.h">
-      <Filter>Header Files\Explosion Triggers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\ExplosionHandler.h">
-      <Filter>Header Files\Explosion Handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\DefaultExplosionHandler.h">
-      <Filter>Header Files\Explosion Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\components\CollisionComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
@@ -277,12 +271,6 @@
     <ClInclude Include="src\components\TimerComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\TimeBombTimerHandler.h">
-      <Filter>Header Files\Explosion Triggers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\TimerHandler.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\systems\SystemManager.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
@@ -307,14 +295,44 @@
     <ClInclude Include="src\core\OsgBulletDebugViewer.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\CollisionHandler.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\OsgObjectConfigLoader.h">
       <Filter>Header Files\Configurations</Filter>
     </ClInclude>
     <ClInclude Include="src\components\DetonatorComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\ExplosionMessage.h">
+      <Filter>Header Files\Messaging\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\KaboomV2MessageHandler.h">
+      <Filter>Header Files\Messaging\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\DefaultExplosionMessageHandler.h">
+      <Filter>Header Files\Messaging\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\MessageHandler.h">
+      <Filter>Header Files\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\Message.h">
+      <Filter>Header Files\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\MessageType.h">
+      <Filter>Header Files\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\MessageHandlerChain.h">
+      <Filter>Header Files\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\MessageHandlerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\TimerExpiredMessage.h">
+      <Filter>Header Files\Messaging\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\CollisionMessage.h">
+      <Filter>Header Files\Messaging\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\TimeBombMessageHandler.h">
+      <Filter>Header Files\Messaging\Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

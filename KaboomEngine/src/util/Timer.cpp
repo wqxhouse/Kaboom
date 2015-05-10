@@ -2,7 +2,7 @@
 
 Timer::Timer(clock_t duration)
         : duration(duration),
-          startTime(0) {
+          startTime(clock()) {
 }
 
 void Timer::start() {
