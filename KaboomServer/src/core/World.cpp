@@ -8,7 +8,8 @@
 #include <osgbDynamics/MotionState.h>
 #include <osgbCollision/CollisionShapes.h>
 
-#include "../core/OsgObjectLoader.h"
+
+#include "../core/OsgObjectConfigLoader.h"
 #include "../components/CollisionComponent.h"
 #include "../components/TriggerComponent.h"
 
@@ -22,6 +23,8 @@ World::World(ConfigSettings * configSettings)
           world(&dispatcher, &broadphase, &solver, &collisionConfiguration),
 		  config(configSettings){
 
+	config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
+
     setGravity(4.0f);
     broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new TriggerCallback());
     world.setInternalTickCallback(onTickCallback, this);
@@ -29,39 +32,13 @@ World::World(ConfigSettings * configSettings)
 	//TODO make an on off switch here to disable debugViewer
 	debugViewer = new OsgBulletDebugViewer(config);
 	debugViewer->init();
+	world.setDebugDrawer(debugViewer->getDbgDraw());
 }
 
 World::~World() {
 }
 
 void World::loadMap() {
-    /*
-    btTransform transform;
-    transform.setIdentity();//reset x,y,z and rotation to 0
-    transform.setOrigin(btVector3(0,0,0)); //origin at 0
-
-    // TODO: Fix memory leak.
-    btCollisionShape *groundShape = new btStaticPlaneShape(btVector3(0, 0, 1), 0); //have the plane lays on the z axis, 1 means to face up
-    btDefaultMotionState *groundMotionState = new btDefaultMotionState(transform);//btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, -1)));
-    //mass, motionshape,		collisionShape, localInertia
-    btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0,    groundMotionState, groundShape, btVector3(0, 0, 0));//mass = 0, means static objects!
-    btRigidBody *groundRigidBody = new btRigidBody(groundRigidBodyCI);
-
-    addRigidBody(groundRigidBody);
-
-    //add a wall infront
-    btTransform transform2;
-    transform2.setIdentity();//reset x,y,z and rotation to 0
-    transform2.setOrigin(btVector3(0, -10, 0));
-
-    btCollisionShape *groundShape2 = new btStaticPlaneShape(btVector3(0, 1, 0), 0); //have the plane lays on the y axis, 1 means to face up
-    btDefaultMotionState *groundMotionState2 = new btDefaultMotionState(transform2);//btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, -1)));
-    //mass, motionshape,		collisionShape, localInertia
-    btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI2(0, groundMotionState2, groundShape2, btVector3(0, 0, 0));//mass = 0, means static objects!
-    btRigidBody *groundRigidBody2 = new btRigidBody(groundRigidBodyCI2);
-
-    addRigidBody(groundRigidBody2);
-    */
 
     addStaticPlane(btVector3(0, 0, 0), btVector3(0, 0, 1));//floor
     addStaticPlane(btVector3(0, -10, 0), btVector3(0, 1, 0));//back wall
@@ -78,26 +55,59 @@ void World::loadMap() {
 
 void World::loadMapFromXML(const std::string &mapXMLFile){
 
-	OsgObjectLoader osgObjectLoader(osgNodeConfigMap);
-	osgObjectLoader.load(mapXMLFile);
+	OsgObjectConfigLoader osgObjectConfigLoader(osgNodeConfigMap);
+	osgObjectConfigLoader.load(mapXMLFile);
 
 	for (auto it = osgNodeConfigMap.begin(); it != osgNodeConfigMap.end(); ++it) {
 		Configuration osgObjectConfig = it->second;
 
-		osg::MatrixTransform * node = osgObjectConfig.getPointer<osg::MatrixTransform *>("node");
+		std::string filePath= osgObjectConfig.getString("file");
+		osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(mediaPath + filePath);
+		osg::ref_ptr<osg::MatrixTransform> transfromNode = new osg::MatrixTransform;
+		transfromNode->addChild(node);
+
+		osg::Matrix mat;
+
+		osg::Vec3 pos, scale;
+		osg::Quat rot, so;
+		mat.decompose(pos, rot, scale, so);
+
+		mat.makeTranslate(osgObjectConfig.getVec3("position"));
+		mat.preMult(osg::Matrix::rotate(osg::Quat(osgObjectConfig.getVec4("orientation"))));
+		mat.preMult(osg::Matrix::scale(osgObjectConfig.getVec3("scale")));
+
+		transfromNode->setMatrix(mat);
+
+		osgbDynamics::MotionState * motion = new osgbDynamics::MotionState;
+		motion->setTransform(transfromNode);
+
+		btCollisionShape * collisionShape = osgbCollision::btTriMeshCollisionShapeFromOSG(transfromNode);
+		btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(0, motion, collisionShape, btVector3(0, 0, 0));
+		btRigidBody * rigidbody = new btRigidBody(rigidBodyCI);
+		addRigidBody(rigidbody);
+		
+		debugViewer->addNode(transfromNode);
+
+
+
+		/*osg::MatrixTransform* node = osgObjectConfig.getPointer<osg::MatrixTransform *>("node");
 
 		osgbDynamics::MotionState * motion = new osgbDynamics::MotionState;
 		motion->setTransform(node);
-		btCollisionShape * collisionShape = osgbCollision::btConvexTriMeshCollisionShapeFromOSG(node);
+
+		btCollisionShape * collisionShape = osgbCollision::btTriMeshCollisionShapeFromOSG(node);
 
 		btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(0, motion, collisionShape, btVector3(0, 0, 0));
 		btRigidBody * rigidbody = new btRigidBody(rigidBodyCI);
 		addRigidBody(rigidbody);
 
+		debugViewer->addNode(node);*/
+		//osg::ref_ptr<osg::Node> debugNode = osgbCollision::osgNodeFromBtCollisionShape(rigidbody->getCollisionShape());//osgbCollision::osgNodeFromBtCollisionShape(rigidBody->getCollisionShape());
+		//debugViewer->addNode(debugNode);
 		//TODO what happen then to the MatrixTransform????
 
-		osg::Node* debugNode = osgbCollision::osgNodeFromBtCollisionShape(collisionShape);
-		debugViewer->addNodeWireFrame(debugNode);
+		//osg::Node* debugNode = osgbCollision::osgNodeFromBtCollisionShape(collisionShape);
+		//debugViewer->addNodeWireFrame(debugNode);
 
 
 		// Create an OSG representation of the Bullet shape and attach it.
@@ -118,13 +128,26 @@ void World::loadMapFromXML(const std::string &mapXMLFile){
 }
 
 void World::stepSimulation(float timeStep, int maxSubSteps) {
+
+	debugViewer->getDbgDraw()->BeginDraw();
+
     world.stepSimulation(timeStep, maxSubSteps);
+
+	world.debugDrawWorld();
+	debugViewer->getDbgDraw()->EndDraw();
+	
 }
 
 void World::addRigidBody(btRigidBody *rigidBody) {
-    world.addRigidBody(rigidBody);
+	world.addRigidBody(rigidBody);
 }
 
+void World::addRigidBodyAndConvertToOSG(btRigidBody *rigidBody){
+	osg::ref_ptr<osg::Node> node = osgbCollision::osgNodeFromBtCollisionShape(rigidBody->getCollisionShape());
+	debugViewer->addNode(node);
+
+	world.addRigidBody(rigidBody);
+}
 void World::removeRigidBody(btRigidBody *rigidBody) {
     world.removeRigidBody(rigidBody);
 }
@@ -212,6 +235,20 @@ void World::handleCollision(Entity *entityA, Entity *entityB) const {
     }
 }
 
+void World::renderDebugFrame() {
+
+	debugViewer->renderFrame();
+
+}
+
+OsgBulletDebugViewer * World::getDebugViewer(){
+	return debugViewer;
+}
+
+void World::debugDrawWorld() {
+	world.debugDrawWorld();
+}
+
 btBroadphasePair *World::TriggerCallback::addOverlappingPair(btBroadphaseProxy *proxy0, btBroadphaseProxy *proxy1) {
     btCollisionObject *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
     btCollisionObject *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
@@ -225,9 +262,7 @@ btBroadphasePair *World::TriggerCallback::addOverlappingPair(btBroadphaseProxy *
     return btGhostPairCallback::addOverlappingPair(proxy0, proxy1);
 }
 
-void World::renderDebugFrame() {
-	debugViewer->renderFrame();
-}
+
 
 void *World::TriggerCallback::removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher) {
     btCollisionObject *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);

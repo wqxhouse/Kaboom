@@ -187,6 +187,9 @@
     <ClCompile Include="src\core\OsgBulletDebugViewer.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\OsgObjectConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -309,6 +312,9 @@
     </ClInclude>
     <ClInclude Include="src\core\CollisionHandler.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\OsgObjectConfigLoader.h">
+      <Filter>Header Files\Configurations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

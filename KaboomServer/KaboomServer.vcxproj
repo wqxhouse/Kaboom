@@ -42,6 +42,7 @@
     <ClCompile Include="src\core\KaboomV2CollisionHandler.cpp" />
     <ClCompile Include="src\core\DefaultExplosionHandler.cpp" />
     <ClCompile Include="src\core\OsgBulletDebugViewer.cpp" />
+    <ClCompile Include="src\core\OsgObjectConfigLoader.cpp" />
     <ClCompile Include="src\core\OsgObjectLoader.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\KaboomV2CollisionHandler.h" />
     <ClInclude Include="src\core\OsgBulletDebugViewer.h" />
+    <ClInclude Include="src\core\OsgObjectConfigLoader.h" />
     <ClInclude Include="src\core\OsgObjectLoader.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />

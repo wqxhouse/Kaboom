@@ -10,6 +10,7 @@
 #include <osg/PolygonMode>
 #include <osg/PolygonOffset>
 
+#include <osgbCollision/GLDebugDrawer.h>
 #include <util/ConfigSettings.h>
 
 //#include <btBulletDynamicsCommon.h>
@@ -32,10 +33,11 @@ public:
 	void init();
 	void renderFrame();
 
-	void addNode(osg::Node*);
+	void addNode(osg::Node* );
 
-	void addNodeWireFrame(osg::Node *);
+	void addNodeWireFrame(osg::Node* );
 
+	osgbCollision::GLDebugDrawer* getDbgDraw();
 private:
 	ConfigSettings* config;
 
@@ -44,4 +46,5 @@ private:
 
 	osg::ref_ptr<osg::Group> root;
 
+	osgbCollision::GLDebugDrawer* dbgDraw;
 };

@@ -10,6 +10,8 @@
 
 #include <osg/MatrixTransform>
 
+#include <osgbCollision/GLDebugDrawer.h>
+
 #include <util/Configuration.h>
 #include <util/ConfigSettings.h>
 
@@ -28,8 +30,11 @@ public:
 	void loadMapFromXML(const std::string &mapXMLFile);
 
     void stepSimulation(float timeStep, int maxSubSteps);
-
+	
     void addRigidBody(btRigidBody *rigidBody);
+
+	void addRigidBodyAndConvertToOSG(btRigidBody *rigidBody);
+
     void removeRigidBody(btRigidBody *rigidBody);
 
     void addTrigger(btGhostObject *ghostObject);
@@ -43,12 +48,19 @@ public:
 
 	void renderDebugFrame();
 
+	OsgBulletDebugViewer* getDebugViewer();
+
+	void debugDrawWorld(); //use for updating the debug world frame
+
 private:
     class TriggerCallback;
+
+	std::string mediaPath;
 
 	std::unordered_map<std::string, Configuration> osgNodeConfigMap;
 
 	OsgBulletDebugViewer* debugViewer;
+
 	ConfigSettings* config;
 
     btDbvtBroadphase broadphase;
