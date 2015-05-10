@@ -48,14 +48,14 @@ public:
 
 	void renderDebugFrame();
 
-	OsgBulletDebugViewer* getDebugViewer();
-
 	void debugDrawWorld(); //use for updating the debug world frame
 
 private:
     class TriggerCallback;
 
 	std::string mediaPath;
+
+	bool debugMode;
 
 	std::unordered_map<std::string, Configuration> osgNodeConfigMap;
 
