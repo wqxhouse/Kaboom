@@ -33,6 +33,7 @@ void OsgBulletDebugViewer::init() {
 
 	viewer.setSceneData(root.get());
 	viewer.addEventHandler(new osgViewer::StatsHandler);
+	//viewer.realize();
 
 	//dbgDraw = new osgbCollision::GLDebugDrawer();
 	//dbgDraw->setDebugMode();
@@ -60,7 +61,7 @@ void OsgBulletDebugViewer::addNodeWireFrame(osg::Node * node) {
 }
 
 void OsgBulletDebugViewer::renderFrame() {
-	viewer.frame();
+	//viewer.frame();
 }
 
 osgbCollision::GLDebugDrawer* OsgBulletDebugViewer::getDbgDraw(){

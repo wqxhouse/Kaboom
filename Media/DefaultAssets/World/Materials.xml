@@ -1,0 +1,20 @@
+<material name="SphereMat" type="plain">
+		<albedo>0.300000 0.300000 0.300000</albedo>
+		<roughness>0.100000</roughness>
+		<specular>0.500000</specular>
+		<metallic>1.000000</metallic>
+	</material>
+
+	<material name="roundGroundMat" type="plain">
+		<albedo>0.913726 0.137255 0.784314</albedo>
+		<roughness>0.460000</roughness>
+		<specular>0.500000</specular>
+		<metallic>0.000000</metallic>
+	</material>
+
+	<material name="brick1Mat" type="plain">
+		<albedo>1.000000 0.980392 0.184314</albedo>
+		<roughness>0.350000</roughness>
+		<specular>0.500000</specular>
+		<metallic>0.490000</metallic>
+	</material>

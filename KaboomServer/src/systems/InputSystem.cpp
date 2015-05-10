@@ -10,6 +10,7 @@
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
+#include "../components/JumpComponent.h"
 #include "../core/Game.h"
 #include "../math/util.h"
 
@@ -57,24 +58,43 @@ void InputSystem::processEntity(Entity *entity) {
 
     btVector3 localVelocity(0.0, 0.0, 0.0);
 
+	JumpComponent *jumpCom = entity->getComponent<JumpComponent>();
+	bool jumping = false;
+	if (jumpCom != NULL)
+	{
+		if (!jumpCom->isJumping() && inputComp->isJumping())
+		{
+			velocity.setZ(velocity.getZ() + 1.0);
+			jumpCom->setJumping(true);
+			jumping = true;
+		}
+	}
+
     // Define y to be front speed, x to be right speed
-    if (inputComp->isMovingForward()) {
-        localVelocity.setY(2);
-    } else if (inputComp->isMovingBackward()) {
-        localVelocity.setY(-2);
-    } else {
-        localVelocity.setY(0);
-    }
+	if (!jumping)
+	{
+		if (inputComp->isMovingForward()) {
+			localVelocity.setY(2);
+		}
+		else if (inputComp->isMovingBackward()) {
+			localVelocity.setY(-2);
+		}
+		else {
+			localVelocity.setY(0);
+		}
 
-    if (inputComp->isMovingLeft()) {
-        localVelocity.setX(-2);
-    } else if (inputComp->isMovingRight()) {
-        localVelocity.setX(2);
-    } else {
-        localVelocity.setX(0);
-    }
+		if (inputComp->isMovingLeft()) {
+			localVelocity.setX(-2);
+		}
+		else if (inputComp->isMovingRight()) {
+			localVelocity.setX(2);
+		}
+		else {
+			localVelocity.setX(0);
+		}
+	}
 
-    JetpackComponent *jetComp = entity->getComponent<JetpackComponent>();
+/*    JetpackComponent *jetComp = entity->getComponent<JetpackComponent>();
 
     if (jetComp != nullptr) {
         if (inputComp->isJumping()) {
@@ -91,7 +111,10 @@ void InputSystem::processEntity(Entity *entity) {
         } else {
             jetComp->refillJetpack();
         }
-    }
+    }*/
+
+
+
 
     btVector3 worldVelocity(right * localVelocity.getX() + front * localVelocity.getY());
     worldVelocity.setZ(velocity.getZ());
