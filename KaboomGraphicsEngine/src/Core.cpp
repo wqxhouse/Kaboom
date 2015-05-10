@@ -10,11 +10,6 @@
 #include <osg/Depth>
 #include <osgViewer/GraphicsWindow>
 
-#include <osgLibRocket/FileInterface.h>
-#include <osgLibRocket/GuiNode.h>
-#include <osgLibRocket/SystemInterface.h>
-#include <osgLibRocket/RenderInterface.h>
-
 #include "TypeIdLoader.h"
 #include "MaterialLoader.h"
 #include "World.h"
@@ -43,6 +38,10 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	_winPos = osg::Vec2(winPosX, winPosY);
 	_sceneRoot = new osg::Group;
 	_gui = new TwGUIManager;
+
+	// let configLibRocketGUI create the instance
+	_libRocketInGameGUI = NULL;
+	_libRocketEditorGUI = NULL;
 	_skybox = new SkyBox;
 
 	_analysisHUD = NULL;
@@ -57,6 +56,9 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	configSceneNode();
 	configPasses();
 	configViewer();
+
+	// need to do it before finalize(), since client needs this before running
+	configLibRocketGUI();
 
 	_sceneRoot->addChild(_passes);
 	_hasInit = true;
@@ -286,7 +288,7 @@ bool Core::isViewerClosed()
 
 void Core::freezeCameraOnGUIDemand()
 {
-	if (_gui->isMouseOver() || _libRocketGui->isMouseOver())
+	if (_gui->isMouseOver() || _libRocketEditorGUI->isMouseOver())
 	{
 		disableCameraManipulator();
 	}
@@ -321,8 +323,6 @@ void Core::finalize()
 		_hasEnvMap = true;
 	}
 
-	configInGameGUI();
-	configLibRocketGUI();
 	configGeometryObjectManipulator();
 	configAxisVisualizer();
 
@@ -419,7 +419,6 @@ void Core::setCurrentCameraManipulatorHomePosition(const osg::Vec3 &eye, const o
 		// disable after changing the position
 		disableCameraManipulator();
 	}
-
 }
 
 void Core::enableGeometryObjectManipulator()
@@ -444,21 +443,6 @@ void Core::configSkyBox()
 	_passes->addChild(_skybox);
 }
 
-void Core::configInGameGUI()
-{
-	//	osgLibRocket::FileInterface* file_interface = new osgLibRocket::FileInterface();
-	//	Rocket::Core::SetFileInterface(file_interface);
-	//
-	//	// create and set libRocket to OSG interfaces
-	//	osgLibRocket::RenderInterface* renderer = new osgLibRocket::RenderInterface();
-	//	Rocket::Core::SetRenderInterface(renderer);
-	//
-	//	osgLibRocket::SystemInterface* system_interface = new osgLibRocket::SystemInterface();
-	//	Rocket::Core::SetSystemInterface(system_interface);
-	//
-	//	Rocket::Core::Initialise();
-	//}
-}
 void Core::setEnvironmentMap(
 	const std::string &posX,
 	const std::string &negX,
@@ -516,7 +500,7 @@ void Core::enablePassDataDisplay()
 	}
 }
 
-void Core::enableGUI()
+void Core::enableTwGUI()
 {
 	if (!_guiEnabled && !_gameMode)
 	{
@@ -526,7 +510,7 @@ void Core::enableGUI()
 	}
 }
 
-void Core::disableGUI()
+void Core::disableTwGUI()
 {
 	if (_guiEnabled)
 	{
@@ -544,9 +528,12 @@ void Core::enableGameMode()
 
 		disablePassDataDisplay();
 		disableCameraManipulator();
-		disableGUI();
+		disableTwGUI();
 		disableGeometryObjectManipulator();
-		hideInEditorLibRocketGUI();
+		_libRocketEditorGUI->disableGUI();
+		_libRocketInGameGUI->enableGUI();
+		LibRocketGUIManager::bindDebugWindow(_libRocketInGameGUI);
+
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
 	}
@@ -558,10 +545,13 @@ void Core::disableGameMode()
 	{
 		_gameMode = false;
 
-		enableGUI();
+		enableTwGUI();
 		enableCameraManipulator();
 		enableGeometryObjectManipulator();
-		showInEditorLibRocketGUI();
+
+		_libRocketEditorGUI->enableGUI();
+		_libRocketInGameGUI->disableGUI();
+		LibRocketGUIManager::bindDebugWindow(_libRocketEditorGUI);
 
 		//// TODO: change back to editor key bindings
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
@@ -640,82 +630,29 @@ void Core::configSpecularIBLLutPass()
 
 void Core::configLibRocketGUI()
 {
-	osgLibRocket::FileInterface* file_interface = new osgLibRocket::FileInterface();
-	Rocket::Core::SetFileInterface(file_interface);
-
-	// create and set libRocket to OSG interfaces
-	osgLibRocket::RenderInterface* renderer = new osgLibRocket::RenderInterface();
-	Rocket::Core::SetRenderInterface(renderer);
-
-	osgLibRocket::SystemInterface* system_interface = new osgLibRocket::SystemInterface();
-	Rocket::Core::SetSystemInterface(system_interface);
-
-	Rocket::Core::Initialise();
-	// load some fonts
-
-	std::string guiPath = _mediaPath + "DefaultAssets\\LibRocketGUI\\";
-	Rocket::Core::FontDatabase::LoadFontFace((guiPath + "Delicious-Roman.otf").c_str());
-	Rocket::Core::FontDatabase::LoadFontFace((guiPath + "Delicious-Italic.otf").c_str());
-	Rocket::Core::FontDatabase::LoadFontFace((guiPath + "Delicious-Bold.otf").c_str());
-	Rocket::Core::FontDatabase::LoadFontFace((guiPath + "Delicious-BoldItalic.otf").c_str());
-
-	_libRocketGui = new osgLibRocket::GuiNode("default", true);
-
-	osg::ref_ptr<osg::Camera> cam = new osg::Camera();
-	cam->setClearMask(GL_DEPTH_BUFFER_BIT);
-	cam->setRenderOrder(osg::Camera::POST_RENDER, 100);
-	cam->setAllowEventFocus(false);
-	cam->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-
 	osgViewer::ViewerBase::Views views;
 	_viewer->getViews(views);
-
 	osg::GraphicsContext* gc = _viewer->getCamera()->getGraphicsContext();
-	// same graphics context as main camera
-	cam->setGraphicsContext(gc);
 
-	// adapt the camera settings w.r.t the window size
-	_libRocketGui->setCamera(cam);
-	cam->addChild(_libRocketGui);
-	_sceneRoot->addChild(cam);
-
+	std::string guiPath = _mediaPath + "DefaultAssets\\LibRocketGUI\\";
+	_libRocketEditorGUI = new LibRocketGUIManager(guiPath, gc);
+	_libRocketInGameGUI = new LibRocketGUIManager(guiPath, gc);
+	_libRocketInGameGUI->disableGUI();
+	
 	// Create Editor GUI 
-	std::string testWindowPath = guiPath + "demo.rml";
-	Rocket::Core::ElementDocument* window1 = _libRocketGui->getContext()->LoadDocument(testWindowPath.c_str());
-	window1->Show();
-	window1->RemoveReference();
-	_libRocketWindows.push_back(window1);
+	std::string testWindowPath = guiPath + "InEditor\\setNameWindow.rml";
+	_libRocketEditorGUI->addWindow(testWindowPath, true);
 
-	_viewer->addEventHandler(_libRocketGui->GetGUIEventHandler());
-}
-
-void Core::hideInEditorLibRocketGUI()
-{
-	for (int i = 0; i < _libRocketWindows.size(); i++)
-	{
-		_libRocketWindows[i]->Hide();
-	}
-	_isLibRocketEditorHidden = true;
-}
-
-void Core::showInEditorLibRocketGUI()
-{
-	for (int i = 0; i < _libRocketWindows.size(); i++)
-	{
-		_libRocketWindows[i]->Show();
-	}
-	_isLibRocketEditorHidden = false;
+	_viewer->addEventHandler(_libRocketEditorGUI);
+	_sceneRoot->addChild(_libRocketEditorGUI->getRoot());
+	_viewer->addEventHandler(_libRocketInGameGUI);
+	_sceneRoot->addChild(_libRocketInGameGUI->getRoot());
 }
 
 bool Core::isCamLocked()
 {
 	// TODO: this is a hack
 	return _camManipulatorTemp != NULL ? true : false;
-}
-
-bool Core::isLibRocketEditorHidden()
-{
-	return _isLibRocketEditorHidden;
 }
 
 enum Core::CamManipulatorType Core::getCurrCamManipulatorType()
@@ -753,6 +690,31 @@ float Core::getEditorFPSCamWalkingSpeed()
 	}
 }
 
+
+void Core::enableLibRocketInEditorGUI()
+{
+	if (_libRocketEditorGUI == NULL) return;
+	_libRocketEditorGUI->enableGUI();
+}
+
+void Core::disableLibRocketInEditorGUI()
+{
+	if (_libRocketEditorGUI == NULL) return;
+	_libRocketEditorGUI->disableGUI();
+}
+
+bool Core::isLibRocketInEditorGUIEnabled()
+{
+	if (_libRocketEditorGUI == NULL) return false;
+	return _libRocketEditorGUI->isGUIEnabled();
+}
+
+
+osg::ref_ptr<LibRocketGUIManager> Core::getInGameLibRocketGUIManager()
+{
+	return _libRocketInGameGUI;
+}
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;
@@ -770,6 +732,9 @@ Camera Core::_cam;
 Camera Core::_savedManipulatorCam;
 
 osg::ref_ptr<TwGUIManager> Core::_gui;
+osg::ref_ptr<LibRocketGUIManager> Core::_libRocketEditorGUI;
+osg::ref_ptr<LibRocketGUIManager> Core::_libRocketInGameGUI;
+
 osg::ref_ptr<SkyBox> Core::_skybox;
 std::string Core::_mediaPath;
 osg::ref_ptr<CompositorAnalysis> Core::_analysisHUD;
@@ -787,10 +752,7 @@ osg::Timer_t Core::_lastFrameStartTime;
 osg::Timer_t Core::_frameStartTime;
 
 AxisVisualizer Core::_axisVisualizer;
+
 CubeMapPreFilter Core::_cubemapPreFilter;
 
 enum Core::CamManipulatorType Core::_currCamManipulatorType;
-
-osg::ref_ptr<osgLibRocket::GuiNode> Core::_libRocketGui;
-std::vector<Rocket::Core::ElementDocument *> Core::_libRocketWindows;
-bool Core::_isLibRocketEditorHidden;

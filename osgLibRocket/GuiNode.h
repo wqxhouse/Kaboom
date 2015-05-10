@@ -51,7 +51,7 @@ namespace osgLibRocket
      * @param renderer Access to renderer interface singleton
      * @param debug Set to true to add libRocket debug gui
      */
-    GuiNode(const std::string& contextname, bool debug = false);
+    GuiNode(const std::string& contextname);
     ~GuiNode();
 
     /**

@@ -64,14 +64,14 @@ void TwGUIManager::initMainBar()
 		bool tick = *(bool *)data;
 		if (tick)
 		{
-			Core::showInEditorLibRocketGUI();
+			Core::enableLibRocketInEditorGUI();
 		}
 		else
 		{
-			Core::hideInEditorLibRocketGUI();
+			Core::disableLibRocketInEditorGUI();
 		}
 	}, [](void *data, void *clientData) {
-		*(bool *)data = !Core::isLibRocketEditorHidden();
+		*(bool *)data = Core::isLibRocketInEditorGUIEnabled();
 	}, NULL, NULL);
 
 	// Add option to disable/enable camera manipulator

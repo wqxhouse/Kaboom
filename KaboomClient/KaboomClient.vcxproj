@@ -218,7 +218,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(SolutionDir);$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -255,6 +255,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\SoundManager.cpp" />
+    <ClCompile Include="src\GameGUI.cpp" />
     <ClCompile Include="src\input\InputEventHandler.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
@@ -282,6 +283,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\SoundManager.h" />
+    <ClInclude Include="src\GameGUI.h" />
     <ClInclude Include="src\input\InputEventHandler.h" />
     <ClInclude Include="src\input\InputManager.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />

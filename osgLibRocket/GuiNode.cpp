@@ -94,15 +94,13 @@ namespace osgLibRocket
 		}
 	};
 
-	GuiNode::GuiNode(const std::string& contextname, bool debug)
+	GuiNode::GuiNode(const std::string& contextname)
 		: _previousTraversalNumber(osg::UNINITIALIZED_FRAME_NUMBER)
 		, _contextEventListener(NULL)
 		, _camera(NULL)
 		, mGUIEventHandler(new GUIEventHandler(this))
 
 	{
-
-
 		_renderer = dynamic_cast<osgLibRocket::RenderInterface*>(Rocket::Core::GetRenderInterface());
 		if (_renderer == NULL)
 		{
@@ -124,13 +122,6 @@ namespace osgLibRocket
 		_context = Rocket::Core::CreateContext(contextname.c_str(), Rocket::Core::Vector2i(1024, 768));
 		if (_context != NULL)
 		{
-			// add error and other debug stuff to this gui. only one gui at a time may have the
-			// debug view
-			if (debug)
-			{
-				Rocket::Debugger::Initialise(_context);
-			}
-
 			_contextEventListener = new EventListener(_context->GetRootElement());
 			_context->AddEventListener("keydown", _contextEventListener);
 			_context->AddEventListener("keyup", _contextEventListener);
@@ -447,10 +438,8 @@ namespace osgLibRocket
 		}
 	}
 
-
 	void GuiNode::mousePosition(osgViewer::View* view, const osgGA::GUIEventAdapter& ea, const osg::NodePath& nodePath, int& x, int &y)
 	{
-
 		if (_camera.valid())
 		{
 			// fullscreen
@@ -471,9 +460,6 @@ namespace osgLibRocket
 		else
 		{
 			// in-scene
-
-
-
 			if (!view->getCamera() || nodePath.empty())
 			{
 				x = ea.getX();
@@ -523,7 +509,6 @@ namespace osgLibRocket
 
 			x = projected[0];
 			y = projected[1];
-
 		}
 	}
 

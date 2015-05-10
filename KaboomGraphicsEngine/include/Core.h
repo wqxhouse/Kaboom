@@ -6,22 +6,16 @@
 #include "CompositorAnalysis.h"
 #include "World.h"
 #include "Camera.h"
-#include "TwGUIManager.h"
 #include "SkyBox.h"
 #include "AxisVisualizer.h"
 #include "CubeMapPreFilter.h"
 
+#include "TwGUIManager.h"
+#include "LibRocketGUIManager.h"
+
 namespace osgLibRocket
 {
 	class GuiNode;
-}
-
-namespace Rocket
-{
-	namespace Core
-	{
-		class ElementDocument;
-	}
 }
 
 class Core
@@ -44,6 +38,7 @@ public:
 	static void setEnvironmentMap(
 		const std::string &posX,
 		const std::string &negX,
+
 		const std::string &posY,
 		const std::string &negY,
 		const std::string &posZ, 
@@ -62,11 +57,13 @@ public:
 	static void enablePassDataDisplay();
 	static void disablePassDataDisplay();
 
-	static void enableGUI();
-	static void disableGUI();
+	static void enableTwGUI();
+	static void disableTwGUI();
 
-	static void hideInEditorLibRocketGUI();
-	static void showInEditorLibRocketGUI();
+	static void enableLibRocketInEditorGUI();
+	static void disableLibRocketInEditorGUI();
+	static bool isLibRocketInEditorGUIEnabled();
+	static osg::ref_ptr<LibRocketGUIManager> getInGameLibRocketGUIManager();
 
 	static void enableGameMode();
 	static void disableGameMode();
@@ -79,7 +76,6 @@ public:
 
 	static bool isInGameMode();
 	static bool isCamLocked();
-	static bool isLibRocketEditorHidden();
 	static double getLastFrameDuration();
 	static bool isViewerClosed();
 
@@ -114,7 +110,6 @@ private:
 	static void configLightPass();
 
 	static void configFilePath();
-	static void configInGameGUI();
 	static void configAxisVisualizer();
 
 	static void configLibRocketGUI();
@@ -135,7 +130,6 @@ private:
 	static osg::Vec2 _renderResolution;
 	static osg::Vec2 _winPos;
 
-
 	static World _world;
 	static bool _hasInit;
 	static bool _hasEnvMap;
@@ -145,6 +139,8 @@ private:
 	static Camera _cam;
 
 	static osg::ref_ptr<TwGUIManager> _gui;
+	static osg::ref_ptr<LibRocketGUIManager> _libRocketEditorGUI;
+	static osg::ref_ptr<LibRocketGUIManager> _libRocketInGameGUI;
 
 	// use as a temp for temporarily remove the manipulator when out of focus
 	// CAUTIOUS: when enabled, this variable is NULL
@@ -153,8 +149,6 @@ private:
 
 	static osg::ref_ptr<CompositorAnalysis> _analysisHUD;
 	static enum CamManipulatorType _currCamManipulatorType;
-
-	static osg::ref_ptr<osgLibRocket::GuiNode> _libRocketGui;
 
 	// on screen flags
 	static bool _gameMode;
@@ -167,15 +161,11 @@ private:
 	static bool _allowEditorChangeProjection;
 	static bool _requestPrefilterCubeMap;
 
-	static bool _isLibRocketEditorHidden;
-
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 
 
 	static AxisVisualizer _axisVisualizer;
 	static CubeMapPreFilter _cubemapPreFilter;
-
-	static std::vector<Rocket::Core::ElementDocument *> _libRocketWindows;
 };
 
 class MainCameraCallback : public osg::NodeCallback
