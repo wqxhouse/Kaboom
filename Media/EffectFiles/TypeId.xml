@@ -1,6 +1,6 @@
 <dynamic_objects>
     <type id="0"> 
-        <mesh>path</mesh>
+        <mesh>cow.osg</mesh>
         <material name="planeMat" />
     </type>
     
