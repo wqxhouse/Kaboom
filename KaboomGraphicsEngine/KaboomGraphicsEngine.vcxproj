@@ -262,6 +262,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\GeometryObjectManager.h" />
     <ClInclude Include="include\GeometryObjectManipulator.h" />
     <ClInclude Include="include\GeometryPicker.h" />
+    <ClInclude Include="include\LibRocketGUIManager.h" />
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\LightBound.h" />
     <ClInclude Include="include\LightManager.h" />
@@ -295,6 +296,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\GeometryObjectManager.cpp" />
     <ClCompile Include="src\GeometryObjectManipulator.cpp" />
     <ClCompile Include="src\GeometryPicker.cpp" />
+    <ClCompile Include="src\LibRocketGUIManager.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\LightBound.cpp" />
     <ClCompile Include="src\LightManager.cpp" />

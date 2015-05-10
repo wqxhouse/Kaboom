@@ -166,6 +166,8 @@ bool GeometryObjectManager::storeTypeIdGeometry(const int type_id, osg::Node *ge
 	GeometryObject *geomObj = new GeometryObject(geomName, geomNode, fileName);
 	geomObj->setMaterial(material);
 	_typeIdGeomMap.insert(std::make_pair(type_id, geomObj));
+
+	return true;
 }
 
 GeometryObject *GeometryObjectManager::getGeometryObject(const std::string& geomName)

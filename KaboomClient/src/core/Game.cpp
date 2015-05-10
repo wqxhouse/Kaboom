@@ -12,6 +12,7 @@
 #include <core/Entity.h>
 
 #include "../Scene.h"
+#include "../GameGUI.h"
 #include "../components/SceneNodeComponent.h"
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
@@ -43,6 +44,7 @@ Game::Game(ConfigSettings *config)
 
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
     setupScene();
+	setupGUI();
 
 	/* For testing in-game editor *
 	
