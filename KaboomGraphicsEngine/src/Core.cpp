@@ -682,6 +682,26 @@ void Core::configLibRocketGUI()
 	// Create Editor GUI 
 	std::string testWindowPath = guiPath + "demo.rml";
 	Rocket::Core::ElementDocument* window1 = _libRocketGui->getContext()->LoadDocument(testWindowPath.c_str());
+
+	Rocket::Core::Element * win = window1->GetFirstChild();
+
+	Rocket::Core::Element * newElement = window1->CreateElement("div");
+	if (newElement == NULL)
+	{
+		return;
+	}
+	Rocket::Core::ElementText * new_text_element = window1->CreateTextNode("Sample Marty");
+	if (new_text_element == NULL)
+	{
+		newElement->RemoveReference();
+		return;
+	}
+	newElement->AppendChild(new_text_element);
+	win->AppendChild(newElement);
+	std::cout << "after: " << win->GetNumChildren() << std::endl;
+	//window1->ReplaceChild(window1->GetFirstChild(),win);
+	//win->RemoveReference();
+
 	window1->Show();
 	window1->RemoveReference();
 	_libRocketWindows.push_back(window1);
