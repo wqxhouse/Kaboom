@@ -6,6 +6,7 @@ struct Light
     // directional light & spot light
     float radius;
     // point light
+	// float intensity;
 };
 
 vec3 computeSpecular(vec3 specularColor, float roughness, float NxL, float LxH, float NxV, float NxH) 

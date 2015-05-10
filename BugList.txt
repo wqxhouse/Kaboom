@@ -1,7 +1,4 @@
 Unresolved:
-1. Point Light Tile culling fails to handle edges of geometry. 
-	- create a point light not entirely covering the geometry. 
-	  tile artifact will show on the edge
 
 2. Press ESC will crash the program. Whereas click to close will not carsh the program.
 
@@ -44,7 +41,8 @@ At this point the _geomObj still has its address but an invalid one, since geomm
 21.not sure why but it seems after rotating the geom, the tabbox bound is not rotated according to the rotation.
 
 22. first person maniupulator moving while dragging and mouse over and then off the gui will make the camera shifting automatically. 
-
+23. Mouse over gui can move object (triggered the manipulator, since the cam locked on mouse over)
+24. scrolling (scaling) on fps camera for some reason comes back... bad..
 
 Should be fixed, but need more tests:
 1. Geometry picker bug, crash the program: (randomly, wtf!) 
@@ -52,6 +50,10 @@ Should be fixed, but need more tests:
 	- ! Question is: change mode by key press 'g' 'r' 's' does not crash the program!!!!!!! (wtf!)
 
 2. press 's' for a while will crash the program. (scale key for triggering the tabboxmanipulator)
+3. Point Light Tile culling fails to handle edges of geometry. 
+	- create a point light not entirely covering the geometry. 
+	  tile artifact will show on the edge
+
 
 
 Fixed:

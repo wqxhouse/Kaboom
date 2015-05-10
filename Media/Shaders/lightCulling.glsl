@@ -28,21 +28,26 @@ float getLinearZTightFromLinearZ(float linz)
 	return (linz * ndcFar - ndcNear) / ndcD;
 }
 
-float getLinearZTightFromZ(float z) 
+float getLinearZFromLinearZTight(float linz_tight)
+{
+	return (linz_tight * ndcD + ndcNear) / ndcFar;
+}
+
+float getViewZFromLinearZ(float linz)
+{
+	return -linz * ndcFar;
+}
+
+float getViewZFromTightLinearZ(float tightLinz)
+{
+	return -(tightLinz * ndcD + ndcNear);
+}
+
+float getViewZFromZ(float z) 
 {
     float z_n = z * 2.0 - 1.0;
     float z_e = ndcC / (ndcA - z_n * ndcD);
-    return z_e;
-}
-
-bool sphereInFrustum(Frustum frustum, vec4 pos, float radius) 
-{
-    bvec4 result;
-    result.x = -radius <= dot(frustum.left, pos);
-    result.y = -radius <= dot(frustum.right, pos);
-    result.z = -radius <= dot(frustum.top, pos);
-    result.w = -radius <= dot(frustum.bottom, pos);
-    return all(result);
+    return -z_e;
 }
 
 bool sphereInFrustumDebug(FrustumDebug frustum, vec4 pos, float radius)
@@ -53,42 +58,16 @@ bool sphereInFrustumDebug(FrustumDebug frustum, vec4 pos, float radius)
 		float d = dot(frustum.frustumPlanes[i], pos);
 		inFrustum = inFrustum && (d >= -radius);
     }
+
+	//for(uint i = 4; i < 6; ++i)
+	//{
+	//	float d = dot(frustum.frustumPlanes[i], pos);
+	//	inFrustum = inFrustum && (d <= radius);
+	//}
 	return inFrustum;
 }
 
 bool isPointLightInFrustumDebug(Light light, FrustumDebug fd)
 {
 	return sphereInFrustumDebug(fd, vec4(light.position, 1.0), light.radius);
-}
-
-bool isPointLightInFrustum(Light light, Frustum frustum) 
-{
-    vec4 projectedPos = frustum.viewMat * vec4(light.position, 1);
-	//return true;
-
-    // Top/Left/Bottom/Right frustum check
-    if (sphereInFrustum(frustum, projectedPos, light.radius)) 
-	{
-        // Project to screen to get actual depth value
-        vec4 projectedScreen = frustum.mvpMat * vec4(light.position, 1);
-        projectedScreen.xyz = (projectedScreen.xyz / projectedScreen.w);
-
-        // Fetch linear z
-        // We have to use linear space because the radius of the light
-        // is also linear, and otherwise we couldn't compare the values
-        // properly.
-        float linearProjZ = getLinearZTightFromZ(projectedScreen.z) * 2.0 - 1.0;
-
-        // Check if the light is < max-depth
-        if ( linearProjZ - sqrt_of_2*light.radius < frustum.far ) 
-		{
-            // Check if the light is > min-depth
-            // Maybe this check can be ommitted as it won't happen very often
-            if (linearProjZ + sqrt_of_2*light.radius > frustum.near) 
-			{
-                return true;
-            }
-        }
-    }
-    return false;
 }
