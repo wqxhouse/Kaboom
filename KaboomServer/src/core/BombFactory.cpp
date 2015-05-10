@@ -95,7 +95,7 @@ void BombFactory::createBase(Entity *entity,
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new TriggerComponent(ghostObject));
-    entity->attachComponent(new MessageHandlerComponent(new MessageHandlerChain()));
+    entity->attachComponent(new MessageHandlerComponent(chain));
 }
 
 void BombFactory::createKaboomV2(Entity *entity) const {
