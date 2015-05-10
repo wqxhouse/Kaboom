@@ -530,8 +530,10 @@ void Core::enableGameMode()
 		disableCameraManipulator();
 		disableTwGUI();
 		disableGeometryObjectManipulator();
+
 		_libRocketEditorGUI->disableGUI();
 		_libRocketInGameGUI->enableGUI();
+
 		LibRocketGUIManager::bindDebugWindow(_libRocketInGameGUI);
 
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());

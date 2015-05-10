@@ -181,6 +181,12 @@
     <ClCompile Include="src\math\util.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\OsgBulletDebugViewer.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\OsgObjectConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
     <ClCompile Include="src\components\DetonatorComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
@@ -298,8 +304,14 @@
     <ClInclude Include="src\math\util.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\OsgBulletDebugViewer.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\core\CollisionHandler.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\OsgObjectConfigLoader.h">
+      <Filter>Header Files\Configurations</Filter>
     </ClInclude>
     <ClInclude Include="src\components\DetonatorComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>

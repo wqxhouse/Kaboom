@@ -24,8 +24,22 @@ Game::Game(ConfigSettings *configSettings)
           bombFactory(entityManager),
           pickupFactory(entityManager),
 	      eventHandlerLookup(this),
-          server(configSettings, eventHandlerLookup) {
-    world.loadMap();
+          server(configSettings, eventHandlerLookup), 
+		  world(configSettings){
+
+    //world.loadMap();
+	std::string str_mediaPath = "";
+	std::string str_world_xml = "";
+
+	configSettings->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+	configSettings->getValue(ConfigSettings::str_world_xml, str_world_xml);
+
+	str_world_xml = str_mediaPath + str_world_xml;
+
+	std::cout << str_world_xml << std::endl;
+	world.loadMapFromXML(str_world_xml);
+
+
     systemManager.addSystem(new InitializationSystem(this));
     systemManager.addSystem(new InputSystem(this));
     systemManager.addSystem(new FiringSystem(this));
@@ -46,7 +60,7 @@ void Game::addEntity(Entity *entity) {
     PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
     if (physicsComp != nullptr) {
-        world.addRigidBody(physicsComp->getRigidBody());
+        world.addRigidBodyAndConvertToOSG(physicsComp->getRigidBody());
     }
 
     TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
@@ -101,6 +115,9 @@ void Game::update(float timeStep, int maxSubSteps) {
     systemManager.processSystems(this);
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
+
+	//TODO put an on/off switch here
+	world.renderDebugFrame();
 }
 
 Configuration &Game::getConfiguration() {
@@ -121,4 +138,8 @@ const BombFactory &Game::getBombFactory() const {
 
 const GameServer &Game::getGameServer() const {
     return server;
+}
+
+const World &Game::getWorld() const{
+	return world;
 }

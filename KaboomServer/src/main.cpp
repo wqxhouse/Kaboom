@@ -23,6 +23,9 @@ int main() {
 
         if (sleepTime > 0) {
             Sleep(sleepTime);
-        }
+		} else {
+			printf("Warning we need to slow down our server ticks!\n");
+		}
+
     }
 }

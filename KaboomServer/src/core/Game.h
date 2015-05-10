@@ -31,6 +31,7 @@ public:
 
     const GameServer &getGameServer() const;
 
+	const World & getWorld() const;
 private:
     Configuration config;
 
