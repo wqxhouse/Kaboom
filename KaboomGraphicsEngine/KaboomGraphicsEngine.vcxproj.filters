@@ -126,6 +126,9 @@
     <ClInclude Include="include\TypeIdLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\LightVisualizer.h">
+      <Filter>Header Files\Visualizer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -220,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="src\TypeIdLoader.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightVisualizer.cpp">
+      <Filter>Source Files\Visualizer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
