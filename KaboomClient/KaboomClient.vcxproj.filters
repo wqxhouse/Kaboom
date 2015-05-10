@@ -183,13 +183,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Config.ini">
+    <Xml Include="data-client\bombs.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\SharedConfig\Config.ini">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="data-client\bombs.xml">
-      <Filter>Resource Files</Filter>
-    </Xml>
+    <Text Include="..\BugList.txt" />
   </ItemGroup>
 </Project>

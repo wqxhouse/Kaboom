@@ -197,4 +197,7 @@
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\BugList.txt" />
+  </ItemGroup>
 </Project>

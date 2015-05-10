@@ -1246,7 +1246,7 @@ void TwGUIManager::updateEvents() const
 		case osgGA::GUIEventAdapter::DRAG:
 		case osgGA::GUIEventAdapter::MOVE:
 		{
-			*(bool *)&_isMouseOver = TwMouseMotion(x, y);
+			*(bool *)&_isMouseOver = (bool)TwMouseMotion(x, y);
 			break;
 		}
 		case osgGA::GUIEventAdapter::KEYDOWN:

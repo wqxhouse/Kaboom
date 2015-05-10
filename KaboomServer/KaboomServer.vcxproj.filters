@@ -325,4 +325,12 @@
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\BugList.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\SharedConfig\Config.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

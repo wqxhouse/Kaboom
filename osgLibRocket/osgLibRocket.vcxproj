@@ -231,6 +231,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="..\BugList.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

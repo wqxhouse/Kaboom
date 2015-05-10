@@ -28,13 +28,6 @@
 		<metallic>0.300000</metallic>
 	</material>
 
-	<material name="testMatTextured" type="textured">
-		<albedoTex>test_albedoTex</albedoTex>
-		<roughnessTex>test_roughnessTex</roughnessTex>
-		<metallicTex>test_metallicTex</metallicTex>
-		<normalPath>test_normalPath</normalPath>
-	</material>
-
 	<model name="testBox">
 		<file>DefaultAssets\GeometryObject\3boxStack.dae</file>
 		<material name="testMat" />

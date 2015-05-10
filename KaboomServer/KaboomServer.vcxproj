@@ -125,6 +125,12 @@
     <Xml Include="data-server\bombs.xml" />
     <Xml Include="data-server\characters.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\BugList.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\SharedConfig\Config.ini" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56B7232B-1CBB-489A-B34A-EDF3151698B6}</ProjectGuid>
     <RootNamespace>KaboomServer</RootNamespace>
@@ -312,8 +318,10 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Message>Copy data directory to output directory.</Message>
-      <Command>xcopy "$(ProjectDir)\data-server" "$(TargetDir)\data-server" /D /I /Y</Command>
+      <Message>Copy config file and data directory to output directory.</Message>
+      <Command>xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(ProjectDir)" /D /I /Y
+xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(TargetDir)" /D /I /Y
+xcopy "$(ProjectDir)\data-server" "$(TargetDir)\data-server" /D /I /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

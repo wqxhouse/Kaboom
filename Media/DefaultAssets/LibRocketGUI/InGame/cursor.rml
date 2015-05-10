@@ -1,9 +1,0 @@
-<!-- Cursor document, used by the Ogre3D sample. -->
-<rml>
-  <head>
-
-  </head>
-  <body>
-  <img id="cursorimage" style="position:relative;top:-32px; left:-32px;" src="clear.png" />
-	</body>
-</rml>
