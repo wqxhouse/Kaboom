@@ -9,12 +9,15 @@ public:
     PickupFactory(EntityManager &entityManager);
 
     Entity *createPickup(
-            const EntityType &type,
-            unsigned int amount = 1,
+            EntityType type,
+            int amount = 1,
             float x = 0.0f,
             float y = 0.0f,
             float z = 0.0f) const;
 
 private:
     EntityManager &entityManager;
+
+    void createBase(Entity *entity, int amount, float x, float y, float z) const;
+    void createBombPickup(Entity *entity) const;
 };

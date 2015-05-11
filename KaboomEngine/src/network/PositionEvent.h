@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <string>
 
 #include "Event.h"
 
@@ -10,16 +11,37 @@ public:
             unsigned int entityId = 0,
             float x = 0.0f,
             float y = 0.0f,
-            float z = 0.0f);
+            float z = 0.0f)
+            : Event(EVENT_POSITION, sizeof(PositionEvent)),
+              entityId(entityId),
+              x(x),
+              y(y),
+              z(z) {
+    }
 
-    unsigned int getEntityId() const;
+    inline virtual void serialize(char *buf) const {
+        memcpy(buf, this, sizeof(PositionEvent));
+    }
 
-    float getX() const;
-    float getY() const;
-    float getZ() const;
+    inline virtual void deserialize(char *buf) {
+        memcpy(this, buf, sizeof(PositionEvent));
+    }
 
-    virtual void serialize(char *buf) const;
-    virtual void deserialize(char *buf);
+    inline unsigned int getEntityId() const {
+        return entityId;
+    }
+
+    inline float getX() const {
+        return x;
+    }
+
+    inline float getY() const {
+        return y;
+    }
+
+    inline float getZ() const {
+        return z;
+    }
 
     friend std::ostream& operator<<(std::ostream &os, const PositionEvent &o) {
         os << "PositionEvent: {" << std::endl;

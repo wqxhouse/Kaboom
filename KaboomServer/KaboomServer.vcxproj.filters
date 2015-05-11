@@ -178,6 +178,9 @@
     <ClCompile Include="src\messaging\DefaultCharacterMessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\messaging\BombPickupMessageHandler.cpp">
+      <Filter>Source Files\Messaging\Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -332,6 +335,12 @@
       <Filter>Header Files\Messaging\Messages</Filter>
     </ClInclude>
     <ClInclude Include="src\messaging\DefaultCharacterMessageHandler.h">
+      <Filter>Header Files\Messaging\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\PickupMessage.h">
+      <Filter>Header Files\Messaging\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\BombPickupMessageHandler.h">
       <Filter>Header Files\Messaging\Handlers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -43,7 +43,8 @@ void TwGUIManager::initializeTwGUI()
 
 	initMainBar();
 	initManipuatorSelectorBar();
-	initMaterialBar();
+	initPlainMaterialBar();
+	initTexturedMaterialBar();
 	initAddBar();				// should be done last
 }
 
@@ -257,7 +258,7 @@ void TwGUIManager::initManipuatorSelectorBar()
 void TwGUIManager::initAddBar()
 {
 	g_addBar = TwNewBar("Add");
-	TwDefine(" Add size='250 100' color='216 96 224' position='1025 16'");
+	TwDefine(" Add size='250 120' color='216 96 224' position='1025 16'");
 
 	// 'Add model' button
 	TwAddButton(g_addBar, "Add model",
@@ -325,6 +326,10 @@ void TwGUIManager::initAddBar()
 			if (gm->addGeometry(modelName, model, fileName)) {
 				GeometryObject* geom = gm->getGeometryObject(modelName);
 
+				// Calculate light position relative to center of screen
+				Camera cam = Core::getMainCamera();
+				osg::Vec3 position = cam.getScreenCenterCoord(0.3f);
+				geom->setTranslate(position);
 
 				addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
 			}
@@ -350,6 +355,10 @@ void TwGUIManager::initAddBar()
 		std::cout << "Enter point light name: ";
 		std::cin >> lightName;
 
+		// Calculate light position relative to center of screen
+		Camera cam = Core::getMainCamera();
+		position = cam.getScreenCenterCoord(0.1f);
+
 		if (lm->addPointLight(lightName, position, color, radius, doShadow)) {
 			Light* lt = lm->getLight(lightName);
 
@@ -358,8 +367,8 @@ void TwGUIManager::initAddBar()
 	},
 		g_twBar, NULL);
 
-	// 'Add material' button
-	TwAddButton(g_addBar, "Add material",
+	// 'Add plain material' button
+	TwAddButton(g_addBar, "Add plain material",
 		[](void *clientData) {
 
 		// TODO: Find out which default values to use
@@ -380,10 +389,36 @@ void TwGUIManager::initAddBar()
 		if (mm->createPlainMaterial(matName, albedoColor, roughness, specular, metallic)) {
 			Material* mat = mm->getMaterial(matName);
 
-			addMaterialToGUI((TwBar*)clientData, mat, MATERIAL_GROUP_NAME, _index);
+			addPlainMaterialToGUI((TwBar*)clientData, mat, PLAIN_MATERIAL_GROUP_NAME, _index);
 		}
 	},
-		g_materialBar, NULL);
+		g_plainMaterialBar, NULL);
+
+	// 'Add textured material' button
+	TwAddButton(g_addBar, "Add textured material",
+		[](void *clientData) {
+
+		// Material default properties
+		std::string albedoPath = "";
+		std::string roughnessPath = "";
+		std::string metallicPath = "";
+		std::string normalMapPat = "";
+
+		// Add material to material manager
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+		// Get the input name
+		std::string matName;
+		std::cout << "Enter material name: ";
+		std::cin >> matName;
+
+		if (mm->createTextureMaterial(matName, albedoPath, roughnessPath, metallicPath, normalMapPat)) {
+			Material* mat = mm->getMaterial(matName);
+
+			addTexturedMaterialToGUI((TwBar*)clientData, mat, TEXTURED_MATERIAL_GROUP_NAME, _index);
+		}
+	},
+		g_texturedMaterialBar, NULL);
 
 	// 'Change cubemap' button
 	TwAddButton(g_addBar, "Change cubemap",
@@ -424,11 +459,10 @@ void TwGUIManager::initAddBar()
 		NULL, NULL);
 }
 
-void TwGUIManager::initMaterialBar()
+void TwGUIManager::initPlainMaterialBar()
 {
-
-	g_materialBar = TwNewBar("Materials");
-	TwDefine(" Materials label='Materials' size='250 540' color='96 216 96' position='1025 120' valueswidth=100");
+	g_plainMaterialBar = TwNewBar("Plain_Materials");
+	TwDefine(" Plain_Materials label='Plain Materials' size='250 240' color='96 216 96' position='1025 140' valueswidth=100");
 
 	// Process materials
 	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
@@ -441,7 +475,27 @@ void TwGUIManager::initMaterialBar()
 		if (mat->getUseTexture()) continue;
 		
 		// Moved code to a function
-		addMaterialToGUI(g_materialBar, mat, MATERIAL_GROUP_NAME, _index);
+		addPlainMaterialToGUI(g_plainMaterialBar, mat, PLAIN_MATERIAL_GROUP_NAME, _index);
+	}
+}
+
+void TwGUIManager::initTexturedMaterialBar()
+{
+	g_texturedMaterialBar = TwNewBar("Textured_Materials");
+	TwDefine(" Textured_Materials label='Textured Materials' size='250 240' color='216 96 96' position='1025 380' valueswidth=100");
+
+	// Process materials
+	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
+	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMap.begin();
+		it != mmMap.end(); ++it)
+	{
+		const std::string &name = it->first;
+		Material *mat = it->second;
+
+		if (!mat->getUseTexture()) continue;
+
+		// Moved code to a function
+		addTexturedMaterialToGUI(g_texturedMaterialBar, mat, TEXTURED_MATERIAL_GROUP_NAME, _index);
 	}
 
 }
@@ -1010,7 +1064,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 	index++;
 }
 
-void TwGUIManager::addMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index)
+void TwGUIManager::addPlainMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index)
 {
 	std::string name = mat->getName();
 	std::string nameGroupDef = " group='" + name + "' ";
@@ -1037,7 +1091,7 @@ void TwGUIManager::addMaterialToGUI(TwBar* bar, Material* mat, std::string group
 			Material* mat = mm->getMaterial(*newName);
 
 			TwRemoveVar(item->bar, oldName.c_str());
-			addMaterialToGUI(item->bar, mat, MATERIAL_GROUP_NAME, _index);
+			addPlainMaterialToGUI(item->bar, mat, PLAIN_MATERIAL_GROUP_NAME, _index);
 		}
 	},
 		[](void *value, void *clientData) {
@@ -1114,7 +1168,199 @@ void TwGUIManager::addMaterialToGUI(TwBar* bar, Material* mat, std::string group
 	},
 		mat, metallicDef.c_str());
 
-	std::string moveStr = " Materials/" + name + " group='" + group + "'";
+	std::string moveStr = " Plain_Materials/" + name + " group='" + group + "'";
+	TwDefine(moveStr.c_str());
+
+	index++;
+}
+
+void TwGUIManager::addTexturedMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index)
+{
+	std::string name = mat->getName();
+	std::string nameGroupDef = " group='" + name + "' ";
+
+	std::string indexStr = std::to_string(index);
+	std::string limitVal = " min=0 max=1 step=0.01";
+
+	BarItem* item = new BarItem();
+	item->bar = bar;
+	item->name = name;
+
+	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
+	TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
+		[](const void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string oldName = item->name;
+
+		const std::string *newName = static_cast<const std::string*>(value);
+
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+		// Only rename if the name does not already exists
+		if (mm->renameMaterial(oldName, *newName)) {
+			Material* mat = mm->getMaterial(*newName);
+
+			TwRemoveVar(item->bar, oldName.c_str());
+			addTexturedMaterialToGUI(item->bar, mat, TEXTURED_MATERIAL_GROUP_NAME, _index);
+		}
+	},
+		[](void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string* showName = static_cast<std::string*>(value);
+		TwCopyStdStringToLibrary(*showName, item->name);
+	},
+		item, editNameDef.c_str());
+
+	//std::string albedoPathVarName = ALBEDO_PATH_LABEL + indexStr;
+	std::string albedoPathDef = nameGroupDef + " label='" + ALBEDO_PATH_LABEL + "'";
+	TwAddButton(bar, albedoPathDef.c_str(),
+		[](void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+
+		std::string filePath = "";
+		bool validFile = openFile(filePath);
+
+		if (validFile) {
+			const size_t newsize = 4096;
+			wchar_t fromPath[newsize];
+
+			std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+			strToWCchar(fromPath, filePath);
+
+			mat->setAlbedoTexturePath(filePath, mat->getMode());
+		}
+	},
+		mat, albedoPathDef.c_str());
+
+	//std::string roughnessPathVarName = ROUGHNESS_PATH_LABEL + indexStr;
+	std::string roughnessPathDef = nameGroupDef + " label='" + ROUGHNESS_PATH_LABEL + "'";
+	TwAddButton(bar, roughnessPathDef.c_str(),
+		[](void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+
+		std::string filePath = "";
+		bool validFile = openFile(filePath);
+
+		if (validFile) {
+			const size_t newsize = 4096;
+			wchar_t fromPath[newsize];
+
+			std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+			strToWCchar(fromPath, filePath);
+
+			mat->setRoughnessMapPath(filePath, mat->getMode());
+		}
+	},
+		mat, roughnessPathDef.c_str());
+
+	//std::string metallicPathVarName = METALLIC_PATH_LABEL + indexStr;
+	std::string metallicPathDef = nameGroupDef + " label='" + METALLIC_PATH_LABEL + "'";
+	TwAddButton(bar, metallicPathDef.c_str(),
+		[](void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+
+		std::string filePath = "";
+		bool validFile = openFile(filePath);
+
+		if (validFile) {
+			const size_t newsize = 4096;
+			wchar_t fromPath[newsize];
+
+			std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+			strToWCchar(fromPath, filePath);
+
+			mat->setMetallicMapPath(filePath, mat->getMode());
+		}
+	},
+		mat, metallicPathDef.c_str());
+
+	//std::string normalMapPathVarName = NORMAL_MAP_PATH_LABEL + indexStr;
+	std::string normalMapPathDef = nameGroupDef + " label='" + NORMAL_MAP_PATH_LABEL + "'";
+	TwAddButton(bar, normalMapPathDef.c_str(),
+		[](void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+
+		std::string filePath = "";
+		bool validFile = openFile(filePath);
+
+		if (validFile) {
+			const size_t newsize = 4096;
+			wchar_t fromPath[newsize];
+
+			std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+			strToWCchar(fromPath, filePath);
+
+			mat->setNormalMapPath(filePath, mat->getMode());
+		}
+	},
+		mat, normalMapPathDef.c_str());
+
+	/*TwAddVarCB(bar, albedoPathVarName.c_str(), TW_TYPE_COLOR3F,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const float *arr = static_cast<const float *>(value);
+		osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
+		mat->setAlbedo(color);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const osg::Vec3 &color = mat->getAlbedo();
+		float *arr = static_cast<float *>(value);
+		arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
+	}, mat, colorDef.c_str());
+
+	std::string roughnessVarName = ROUGHNESS_LABEL + indexStr;
+	std::string roughnessDef = nameGroupDef + " label='" + ROUGHNESS_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, roughnessVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setRoughness(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getRoughness();
+		*showVal = val;
+	},
+		mat, roughnessDef.c_str());
+
+	std::string specularVarName = SPECULAR_LABEL + indexStr;
+	std::string specularDef = nameGroupDef + " label='" + SPECULAR_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, specularVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setSpecular(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getSpecular();
+		*showVal = val;
+	},
+		mat, specularDef.c_str());
+
+	std::string metallicVarName = METALLIC_LABEL + indexStr;
+	std::string metallicDef = nameGroupDef + " label='" + METALLIC_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, metallicVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setMetallic(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getMetallic();
+		*showVal = val;
+	},
+		mat, metallicDef.c_str());
+*/
+	std::string moveStr = " Textured_Materials/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
 
 	index++;

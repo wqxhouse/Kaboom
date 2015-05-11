@@ -4,15 +4,22 @@
 
 class Event {
 public:
-    EventOpcode getOpcode() const;
+    inline EventOpcode getOpcode() const {
+        return eventOpcode;
+    };
 
-    unsigned int getByteSize() const;
+    inline unsigned int getByteSize() const {
+        return byteSize;
+    };
 
     virtual void serialize(char *buf) const = 0;
     virtual void deserialize(char *buf) = 0;
 
 protected:
-    Event(EventOpcode opcode, unsigned int byteSize);
+    Event(EventOpcode opcode, unsigned int byteSize)
+            : eventOpcode(opcode),
+              byteSize(byteSize) {
+    }
 
     EventOpcode eventOpcode;
     unsigned int byteSize;
