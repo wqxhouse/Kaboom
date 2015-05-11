@@ -40,6 +40,7 @@
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\util.cpp" />
+    <ClCompile Include="src\messaging\DefaultCharacterMessageHandler.cpp" />
     <ClCompile Include="src\messaging\DefaultExplosionMessageHandler.cpp" />
     <ClCompile Include="src\messaging\KaboomV2MessageHandler.cpp" />
     <ClCompile Include="src\messaging\MessageHandlerChain.cpp" />
@@ -86,7 +87,10 @@
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\World.h" />
     <ClInclude Include="src\math\util.h" />
+    <ClInclude Include="src\messaging\Attack1Message.h" />
+    <ClInclude Include="src\messaging\Attack2Message.h" />
     <ClInclude Include="src\messaging\CollisionMessage.h" />
+    <ClInclude Include="src\messaging\DefaultCharacterMessageHandler.h" />
     <ClInclude Include="src\messaging\DefaultExplosionMessageHandler.h" />
     <ClInclude Include="src\messaging\ExplosionMessage.h" />
     <ClInclude Include="src\messaging\KaboomV2MessageHandler.h" />
@@ -94,6 +98,7 @@
     <ClInclude Include="src\messaging\MessageHandler.h" />
     <ClInclude Include="src\messaging\MessageHandlerChain.h" />
     <ClInclude Include="src\messaging\MessageType.h" />
+    <ClInclude Include="src\messaging\NoAttackMessage.h" />
     <ClInclude Include="src\messaging\TimerExpiredMessage.h" />
     <ClInclude Include="src\messaging\TimeBombMessageHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
