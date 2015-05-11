@@ -4,6 +4,7 @@
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
 #include <network/AssignEvent.h>
+#include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
 #include <network/ExplosionEvent.h>
@@ -158,6 +159,26 @@ void GameServer::sendGameStatePackets(const std::vector<Entity *> &entities) con
     }
 }
 
+void GameServer::sendSpawnEvent(Entity *entity) const {
+    PositionComponent *posComp = entity->getComponent<PositionComponent>();
+    RotationComponent *rotComp = entity->getComponent<RotationComponent>();
+
+    SpawnEvent spawnEvent(
+            entity->getId(),
+            entity->getType(),
+            posComp->getX(),
+            posComp->getY(),
+            posComp->getZ(),
+            rotComp->getYaw(),
+            rotComp->getPitch());
+    sendEvent(spawnEvent);
+}
+
+void GameServer::sendDestroyEvent(Entity *entity) const {
+    DestroyEvent evt(entity->getId());
+    sendEvent(evt);
+}
+
 void GameServer::sendPositionEvent(Entity *entity) const {
     PositionComponent *posComp = entity->getComponent<PositionComponent>();
 
@@ -178,21 +199,6 @@ void GameServer::sendRotationEvent(Entity *entity) const {
 
     RotationEvent rotEvent(entity->getId(), rotComp->getYaw(), rotComp->getPitch());
     sendEvent(rotEvent);
-}
-
-void GameServer::sendSpawnEvent(Entity *entity) const {
-    PositionComponent *posComp = entity->getComponent<PositionComponent>();
-    RotationComponent *rotComp = entity->getComponent<RotationComponent>();
-
-    SpawnEvent spawnEvent(
-            entity->getId(),
-            entity->getType(),
-            posComp->getX(),
-            posComp->getY(),
-            posComp->getZ(),
-            rotComp->getYaw(),
-            rotComp->getPitch());
-    sendEvent(spawnEvent);
 }
 
 void GameServer::sendExplosionEvent(Entity *bomb) const {
