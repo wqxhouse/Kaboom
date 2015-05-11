@@ -6,10 +6,17 @@ class btRigidBody;
 
 class PhysicsComponent : public Component {
 public:
-    PhysicsComponent(btRigidBody *rigidBody);
+    PhysicsComponent(btRigidBody *rigidBody)
+            : rigidBody(rigidBody) {
+    }
 
-    btRigidBody *getRigidBody() const;
-    void setRigidBody(btRigidBody *rigidBody);
+    inline btRigidBody *getRigidBody() const {
+        return rigidBody;
+    }
+
+    inline void setRigidBody(btRigidBody *rigidBody) {
+        this->rigidBody = rigidBody;
+    }
 
 private:
     btRigidBody *rigidBody;

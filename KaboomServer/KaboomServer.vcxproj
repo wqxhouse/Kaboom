@@ -27,14 +27,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\CollisionComponent.cpp" />
-    <ClCompile Include="src\components\DetonatorComponent.cpp" />
     <ClCompile Include="src\components\InputComponent.cpp" />
     <ClCompile Include="src\components\JetpackComponent.cpp" />
-    <ClCompile Include="src\components\JumpComponent.cpp" />
-    <ClCompile Include="src\components\PhysicsComponent.cpp" />
-    <ClCompile Include="src\components\TimerComponent.cpp" />
-    <ClCompile Include="src\components\TriggerComponent.cpp" />
     <ClCompile Include="src\core\BombConfigLoader.cpp" />
     <ClCompile Include="src\core\EntityConfigLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />

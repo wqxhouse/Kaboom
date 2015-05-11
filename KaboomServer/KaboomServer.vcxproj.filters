@@ -115,19 +115,10 @@
     <ClCompile Include="src\core\CharacterFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\CollisionComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\components\InputComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\components\JetpackComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\PhysicsComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\TriggerComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\systems\CollisionSystem.cpp">
@@ -150,9 +141,6 @@
     </ClCompile>
     <ClCompile Include="src\systems\TimerSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\TimerComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\systems\SystemManager.cpp">
       <Filter>Source Files\Entity Component System</Filter>
@@ -178,9 +166,6 @@
     <ClCompile Include="src\core\OsgObjectConfigLoader.cpp">
       <Filter>Source Files\Configurations</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\DetonatorComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\messaging\KaboomV2MessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
     </ClCompile>
@@ -192,9 +177,6 @@
     </ClCompile>
     <ClCompile Include="src\messaging\TimeBombMessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\JumpComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
