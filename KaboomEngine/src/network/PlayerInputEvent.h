@@ -16,26 +16,71 @@ public:
             bool attacking1 = false,
             bool attacking2 = false,
             float yaw = 0.0f,
-            float pitch = 0.0f);
+            float pitch = 0.0f)
+            : Event(EVENT_PLAYER_INPUT, sizeof(PlayerInputEvent)),
+              playerId(playerId),
+              movingForward(movingForward),
+              movingBackward(movingBackward),
+              movingLeft(movingLeft),
+              movingRight(movingRight),
+              jumping(jumping),
+              attacking1(attacking1),
+              attacking2(attacking2),
+              yaw(yaw),
+              pitch(pitch) {
+    }
 
-    unsigned int getPlayerId() const;
-    void setPlayerId(unsigned int playerId);
+    inline void serialize(char *buf) const {
+        memcpy(buf, this, sizeof(PlayerInputEvent));
+    }
 
-    bool isMovingForward() const;
-    bool isMovingBackward() const;
-    bool isMovingLeft() const;
-    bool isMovingRight() const;
+    inline void deserialize(char *buf) {
+        memcpy(this, buf, sizeof(PlayerInputEvent));
+    }
 
-    bool isJumping() const;
+    inline unsigned int getPlayerId() const {
+        return playerId;
+    }
 
-    bool isAttacking1() const;
-    bool isAttacking2() const;
+    inline void setPlayerId(unsigned int playerId) {
+        this->playerId = playerId;
+    }
 
-    float getYaw() const;
-    float getPitch() const;
+    inline bool isMovingForward() const {
+        return movingForward;
+    }
 
-    virtual void serialize(char *buf) const;
-    virtual void deserialize(char *buf);
+    inline bool isMovingBackward() const {
+        return movingBackward;
+    }
+
+    inline bool isMovingLeft() const {
+        return movingLeft;
+    }
+
+    inline bool isMovingRight() const {
+        return movingRight;
+    }
+
+    inline bool isJumping() const {
+        return jumping;
+    }
+
+    inline bool isAttacking1() const {
+        return attacking1;
+    }
+
+    inline bool isAttacking2() const {
+        return attacking2;
+    }
+
+    inline float getYaw() const {
+        return yaw;
+    }
+
+    inline float getPitch() const {
+        return pitch;
+    }
 
     friend std::ostream& operator<<(std::ostream &os, const PlayerInputEvent &o) {
         os << "PlayerInputEvent: {" << std::endl;
