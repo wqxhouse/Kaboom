@@ -1,7 +1,5 @@
 #include "BombFactory.h"
 
-#include <stdexcept>
-
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
@@ -54,7 +52,8 @@ Entity *BombFactory::createBomb(
     return entity;
 }
 
-void BombFactory::createBase(Entity *entity,
+void BombFactory::createBase(
+        Entity *entity,
         float x,
         float y,
         float z,

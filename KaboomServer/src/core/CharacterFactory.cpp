@@ -90,5 +90,5 @@ void CharacterFactory::createBase(
 
 void CharacterFactory::createDefaultCharacter(Entity *entity) const {
     entity->attachComponent(new JetpackComponent());
-    entity->attachComponent(new EquipmentComponent(REMOTE_DETONATOR));
+    entity->attachComponent(new EquipmentComponent(KABOOM_V2));
 }
