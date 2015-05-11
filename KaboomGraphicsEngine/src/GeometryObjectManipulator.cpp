@@ -12,7 +12,7 @@ void GeometryObjectManipulator::initWithRootNode(osg::Group *root)
 	if (_depth == NULL)
 	{
 		_depth = new osg::Depth;
-		_depth->setFunction(osg::Depth::LESS);
+		_depth->setFunction(osg::Depth::ALWAYS);
 		_depth->setWriteMask(false);
 	}
 }
@@ -34,6 +34,8 @@ void GeometryObjectManipulator::detachManipulator()
 		// TODO: test if this crash the program
 		_currNode = NULL;
 		_currType = NONE;
+		_attachingLight = false;
+		_attachedLight = NULL;
 	}
 }
 
@@ -52,7 +54,14 @@ void GeometryObjectManipulator::changeCurrentNode(osg::MatrixTransform *node)
 	else
 	{
 		assignManipulatorToGeometryTransformNode(node, TabBoxDragger);
-		_currType = TabBoxDragger;
+		if (_attachedLight)
+		{
+			_currType = TranslateAxisDragger;
+		}
+		else
+		{
+			_currType = TabBoxDragger;
+		}
 	}
 }
 
@@ -60,6 +69,12 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 	(osg::MatrixTransform *node, enum ManipulatorType type)
 {
 	if (Core::isInGameMode()) return;
+
+	// enforce light to be translateDragger
+	if (_attachingLight)
+	{
+		type = TranslateAxisDragger;
+	}
 
 	if (node == NULL || !_rootNode.valid())
 	{
@@ -153,7 +168,7 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 			float scale;				
 			scale = (xscale > yscale) ? xscale : yscale;
 			scale = (scale > zscale) ? scale : zscale;
-			scale /= 2.0f;
+			// scale /= 2.0f;
 
 			_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
 				osg::Matrix::translate(_currNode->getBound().center()));
@@ -167,6 +182,29 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		_dragger->setHandleEvents(true);
 		_rootNode->addChild(_dragger.get());
 	}
+}
+
+void GeometryObjectManipulator::attachTransformNode(osg::MatrixTransform *node)
+{
+	_attachingLight = false;
+	_attachedLight = NULL;
+	changeCurrentNode(node);
+}
+
+void GeometryObjectManipulator::attachLight(Light *light)
+{
+	std::cout << "Attaching light " << light->getName() << std::endl;
+	_attachingLight = true;
+	_attachedLight = light;
+	_lightManipulatorGhostObject->setMatrix(osg::Matrix::translate(light->getPosition()));
+
+	osg::Geode *geode = new osg::Geode;
+	geode->addDrawable(osg::createTexturedQuadGeometry(osg::Vec3(-0.5f, 0.0f, -0.5f),
+		osg::Vec3(1.0f, 0.0f, 0.0f),
+		osg::Vec3(0.0f, 0.0f, 1.0f)));
+	_lightManipulatorGhostObject->addChild(geode);
+	// changeCurrentManipulatorType(TranslateAxisDragger);
+	changeCurrentNode(_lightManipulatorGhostObject);
 }
 
 osg::ref_ptr<osg::MatrixTransform> GeometryObjectManipulator::getCurrNode()
@@ -200,7 +238,7 @@ void GeometryObjectManipulator::updateBoundingBox()
 		float scale;				
 		scale = (xscale > yscale) ? xscale : yscale;
 		scale = (scale > zscale) ? scale : zscale;
-		scale /= 2.0f;
+		// scale /= 2.0f;
 
 		_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
 			osg::Matrix::translate(_currNode->getBound().center()));
@@ -236,6 +274,17 @@ bool GeometryObjectManipulator::isVisible()
 	return _dragger->getNodeMask() == 0x4 ? true : false;
 }
 
+
+bool GeometryObjectManipulator::isAttchingLight()
+{
+	return _attachingLight;
+}
+
+Light *GeometryObjectManipulator::getAttachedLight()
+{
+	return _attachedLight;
+}
+
 osg::ref_ptr<osgManipulator::TrackballDragger> GeometryObjectManipulator::_trackBallDragger = NULL;
 osg::ref_ptr<osgManipulator::TranslateAxisDragger> GeometryObjectManipulator::_translateAxisDragger = NULL;
 osg::ref_ptr<osgManipulator::TabBoxDragger> GeometryObjectManipulator::_tabBoxDragger = NULL;
@@ -244,3 +293,6 @@ osg::observer_ptr<osgManipulator::Dragger> GeometryObjectManipulator::_dragger =
 osg::observer_ptr<osg::Group> GeometryObjectManipulator::_rootNode = NULL;
 osg::ref_ptr<osg::Depth> GeometryObjectManipulator::_depth = NULL;
 enum ManipulatorType GeometryObjectManipulator::_currType;
+osg::ref_ptr<osg::MatrixTransform> GeometryObjectManipulator::_lightManipulatorGhostObject = new osg::MatrixTransform;
+bool GeometryObjectManipulator::_attachingLight = false;
+Light *GeometryObjectManipulator::_attachedLight = NULL;

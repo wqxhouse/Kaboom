@@ -14,4 +14,5 @@ public:
 
 private:
 	std::string _geomName;
+	osg::observer_ptr<osg::MatrixTransform> _matTrans;
 };
