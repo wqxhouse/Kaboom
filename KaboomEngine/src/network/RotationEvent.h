@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <string>
 
 #include "Event.h"
 
@@ -9,15 +10,32 @@ public:
     RotationEvent(
             unsigned int entityId = 0,
             float yaw = 0.0f,
-            float pitch = 0.0f);
+            float pitch = 0.0f)
+            : Event(EVENT_ROTATION, sizeof(RotationEvent)),
+              entityId(entityId),
+              yaw(yaw),
+              pitch(pitch) {
+    }
 
-    unsigned int getEntityId() const;
+    inline unsigned int getEntityId() const {
+        return entityId;
+    }
 
-    float getYaw() const;
-    float getPitch() const;
+    inline float getYaw() const {
+        return yaw;
+    }
 
-    virtual void serialize(char *buf) const;
-    virtual void deserialize(char *buf);
+    inline float getPitch() const {
+        return pitch;
+    }
+
+    inline void serialize(char *buf) const {
+        memcpy(buf, this, sizeof(RotationEvent));
+    }
+
+    inline void deserialize(char *buf) {
+        memcpy(this, buf, sizeof(RotationEvent));
+    }
 
     friend std::ostream& operator<<(std::ostream &os, const RotationEvent &o) {
         os << "RotationEvent: {" << std::endl;
