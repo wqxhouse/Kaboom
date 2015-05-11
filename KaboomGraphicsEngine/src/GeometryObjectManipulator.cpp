@@ -2,6 +2,8 @@
 #include <osg/ComputeBoundsVisitor>
 #include "Core.h"
 
+DraggerUpdateCallback GeometryObjectManipulator::_draggerCB = DraggerUpdateCallback(NULL);
+
 void GeometryObjectManipulator::initWithRootNode(osg::Group *root)
 {
 	_rootNode = root;
@@ -22,12 +24,16 @@ enum ManipulatorType GeometryObjectManipulator::getCurrentManipulatorType()
 
 void GeometryObjectManipulator::detachManipulator()
 {
-	if (_rootNode != NULL && _currNode != NULL && _dragger != NULL)
+	if (_rootNode.valid() && _currNode.valid() && _dragger.valid())
 	{
 		_dragger->removeTransformUpdating(_currNode.get());
 		_dragger->setHandleEvents(false);
 		_rootNode->removeChild(_dragger.get());
 		_dragger = NULL;
+
+		// TODO: test if this crash the program
+		_currNode = NULL;
+		_currType = NONE;
 	}
 }
 
@@ -55,13 +61,13 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 {
 	if (Core::isInGameMode()) return;
 
-	if (node == NULL || _rootNode == NULL)
+	if (node == NULL || !_rootNode.valid())
 	{
 		return;
 	}
 
 	// unassign prev node dragger
-	if (_currNode != NULL && _dragger != NULL)
+	if (_currNode.valid()  && _dragger.valid())
 	{
 		// _currNode->removeChild(_dragger.get());
 		_dragger->removeTransformUpdating(_currNode.get());
@@ -71,6 +77,14 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 	}
 
 	_currNode = node;
+
+	osg::ComputeBoundsVisitor bound;
+	_currNode->accept(bound);
+
+	osg::BoundingBox bbox = bound.getBoundingBox();
+	float xscale = (bbox.xMax() - bbox.xMin());
+	float yscale = (bbox.yMax() - bbox.yMin());
+	float zscale = (bbox.zMax() - bbox.zMin());
 	
 	switch (type)
 	{
@@ -109,16 +123,15 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 
 		_tabBoxDragger->setNodeMask(0x4);
 
-		osg::ComputeBoundsVisitor bound;
-		_currNode->accept(bound);
+		osg::Vec3 pos, scale;
+		osg::Quat rot, so;
+		osg::Matrix rotMatrix;
 
-		osg::BoundingBox bbox = bound.getBoundingBox();
-		float xscale = (bbox.xMax() - bbox.xMin());
-		float yscale = (bbox.yMax() - bbox.yMin());
-		float zscale = (bbox.zMax() - bbox.zMin());
+		_currNode->getMatrix().decompose(pos, rot, scale, so);
+		rot.get(rotMatrix);
 
 		osg::Vec3f center = bbox.center();
-		_tabBoxDragger->setMatrix(osg::Matrix::scale(xscale, yscale, zscale) *
+		_tabBoxDragger->setMatrix(rotMatrix * osg::Matrix::scale(xscale, yscale, zscale) *
 			osg::Matrix::translate(center));
 
 		_dragger = _tabBoxDragger.get();
@@ -128,27 +141,78 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		OSG_WARN << "GeometryObjectManipulator: Dragger not implemented" << std::endl;
 	}
 
-	if (_dragger != NULL)
+	if (_dragger.valid())
 	{
 		_currType = type;
-		float scale = _currNode->getBound().radius();
+
 		if (type != TabBoxDragger)
 		{
-			if (type == TranslateAxisDragger) scale *= 1.6;
+			// Get biggest axis radius
+			float scale;				
+			scale = (xscale > yscale) ? xscale : yscale;
+			scale = (scale > zscale) ? scale : zscale;
+			scale /= 2.0f;
+
 			_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
 				osg::Matrix::translate(_currNode->getBound().center()));
 		}
 
 		_dragger->addTransformUpdating(_currNode.get());
 
+		_draggerCB.setNode(_currNode.get());
+		_dragger->addDraggerCallback(&_draggerCB);
+
 		_dragger->setHandleEvents(true);
 		_rootNode->addChild(_dragger.get());
 	}
 }
 
+osg::ref_ptr<osg::MatrixTransform> GeometryObjectManipulator::getCurrNode()
+{
+	return _currNode;
+}
+
+void GeometryObjectManipulator::updateBoundingBox() 
+{
+	if (!_currNode.valid()) return;
+	if (!_dragger.valid()) return;
+
+	osg::ComputeBoundsVisitor bound;
+	_currNode->accept(bound);
+
+	osg::BoundingBox bbox = bound.getBoundingBox();
+	float xscale = (bbox.xMax() - bbox.xMin());
+	float yscale = (bbox.yMax() - bbox.yMin());
+	float zscale = (bbox.zMax() - bbox.zMin());
+
+	osg::Vec3 pos, scale;
+	osg::Quat rot, so;
+	osg::Matrix rotMatrix;
+
+	_currNode->getMatrix().decompose(pos, rot, scale, so);
+	rot.get(rotMatrix);
+
+	if (_currType != TabBoxDragger)
+	{
+		// Get biggest axis radius
+		float scale;				
+		scale = (xscale > yscale) ? xscale : yscale;
+		scale = (scale > zscale) ? scale : zscale;
+		scale /= 2.0f;
+
+		_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
+			osg::Matrix::translate(_currNode->getBound().center()));
+	}
+	else {
+		osg::Vec3f center = bbox.center();
+		_dragger->setMatrix(rotMatrix * osg::Matrix::scale(xscale, yscale, zscale) *
+			osg::Matrix::translate(center));
+	}
+}
+
 bool GeometryObjectManipulator::setVisible(bool tf)
 {
-	if (_dragger != NULL)
+	if (_dragger.valid())
 	{
 		if (tf)
 		{
@@ -166,7 +230,7 @@ bool GeometryObjectManipulator::setVisible(bool tf)
 
 bool GeometryObjectManipulator::isVisible()
 {
-	if (_dragger == NULL) return false;
+	if (!_dragger.valid()) return false;
 	return _dragger->getNodeMask() == 0x4 ? true : false;
 }
 

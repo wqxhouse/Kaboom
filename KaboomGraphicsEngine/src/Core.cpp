@@ -9,11 +9,9 @@
 #include <osg/TexGen>
 #include <osg/Depth>
 #include <osgViewer/GraphicsWindow>
-//
-//#include "../osgLibRocket/FileInterface.h"
-//#include "../osgLibRocket/RenderInterface.h"
-//#include "../osgLibRocket/SystemInterface.h"
 
+#include "TypeIdLoader.h"
+#include "MaterialLoader.h"
 #include "World.h"
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
@@ -28,7 +26,7 @@
 // for debugging
 
 extern osg::ref_ptr<CompositorAnalysis> configureViewerForMode(osgViewer::Viewer& viewer, osgFX::EffectCompositor* compositor,
-		osg::Node* model, int displayMode);
+	osg::Node* model, int displayMode);
 
 void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath)
 {
@@ -40,6 +38,10 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	_winPos = osg::Vec2(winPosX, winPosY);
 	_sceneRoot = new osg::Group;
 	_gui = new TwGUIManager;
+
+	// let configLibRocketGUI create the instance
+	_libRocketInGameGUI = NULL;
+	_libRocketEditorGUI = NULL;
 	_skybox = new SkyBox;
 
 	_analysisHUD = NULL;
@@ -53,10 +55,25 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 
 	configSceneNode();
 	configPasses();
-	configViewer(); 
+	configViewer();
+
+	// need to do it before finalize(), since client needs this before running
+	configLibRocketGUI();
 
 	_sceneRoot->addChild(_passes);
 	_hasInit = true;
+}
+
+void Core::loadMaterialFile(const std::string &filePath)
+{
+	MaterialLoader loader = MaterialLoader(_world.getMaterialManager());
+	loader.loadXMLFile(filePath);
+}
+
+void Core::loadTypeIdFile(const std::string &filePath)
+{
+	TypeIdLoader loader;
+	loader.loadXMLFile(filePath);
 }
 
 void Core::loadWorldFile(const std::string &worldFilePath)
@@ -91,7 +108,7 @@ void Core::configFilePath()
 	std::string shaderConstantRelative = "Shaders\\constant.glsl";
 	std::string pipelinePath = rootPath + pipelineRelative;
 	std::string shaderConstantPath = rootPath + shaderConstantRelative;
-	
+
 	if (!osgDB::fileExists(pipelinePath))
 	{
 		fprintf(stderr, "Core::configFilePath: %s not found...\n", pipelinePath.c_str());
@@ -107,7 +124,7 @@ void Core::configFilePath()
 	if (osgDB::findDataFile(pipelineRelative).empty())
 	{
 		filePaths.push_back(rootPath);
-		
+
 		if (osgDB::findDataFile(pipelineRelative).empty())
 		{
 			fprintf(stderr, "Core::configFilePath:: %s exists, but relative path %s "
@@ -129,6 +146,8 @@ void Core::configPasses()
 
 	configGeometryPass();
 	configLightPass();
+
+	_passes->getOrCreateStateSet()->setMode(GL_TEXTURE_CUBE_MAP_SEAMLESS, osg::StateAttribute::ON);
 }
 
 void Core::configGeometryPass()
@@ -161,7 +180,7 @@ void Core::configLightPass()
 	if (lightPass.pass != NULL)
 	{
 		lightPass.pass->getOrCreateStateSet()->
-			setUpdateCallback(new LightPassCallback());
+			setUpdateCallback(new LightPassCallback(&_cubemapPreFilter));
 	}
 	else
 	{
@@ -176,6 +195,24 @@ void Core::configGeometryObjectManipulator()
 
 void Core::configCubemapPrefilterPass()
 {
+	osg::TextureCubeMap *cubemap = _skybox->getCubeMap();
+
+	// Get prefilter pass from _passes
+	//osgFX::EffectCompositor::PassData passData;
+	//_passes->getPassData("PreFilterCubeMapPass", passData);
+	//osg::Camera *cam = passData.pass;
+	//_cubemapPreFilter = CubeMapPreFilter(cam); // is there an elegant way?
+
+	_cubemapPreFilter.initWithCubeMap(cubemap);
+	osgFX::EffectCompositor::PassData lightPass;
+	_passes->getPassData("LightPass", lightPass);
+	osg::Camera *cam = lightPass.pass;
+	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_cubeMapTex", 4));
+	cam->getOrCreateStateSet()->setTextureAttributeAndModes(4, _cubemapPreFilter.getGeneratedSpecularCubemap());
+	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_cubeMapDiffuseTex", 5));
+	cam->getOrCreateStateSet()->setTextureAttributeAndModes(5, _cubemapPreFilter.getGeneratedDiffuseCubemap());
+
+	_passes->addChild(_cubemapPreFilter.getRoot());
 }
 
 void Core::configSceneNode()
@@ -194,6 +231,12 @@ void Core::configViewer()
 	// _viewer->addEventHandler(new osgViewer::StatsHandler);
 	_viewer->getCamera()->setFinalDrawCallback(_gui.get());
 
+	osg::Matrix defaultProjection;
+	
+	float fovy = Camera::fovXToY(90, _screenSize);
+	defaultProjection.makePerspective(fovy, _screenSize.x() / _screenSize.y(), 1, 500);
+	_viewer->getCamera()->setProjectionMatrix(defaultProjection);
+
 	_viewer->setUpViewInWindow(_winPos.x(), _winPos.y(), _screenSize.x(), _screenSize.y());
 	_viewer->setKeyEventSetsDone(0);
 
@@ -207,13 +250,27 @@ void Core::AdvanceFrame()
 		if (_isFirstFrame)
 		{
 			finalize();
-			_lastFrameStartTime = _frameStartTime 
+			_lastFrameStartTime = _frameStartTime
 				= osg::Timer::instance()->getStartTick();
-			
+
 			_isFirstFrame = false;
 		}
 
+		if (_requestPrefilterCubeMap)
+		{
+			_cubemapPreFilter.enableCompute();
+			_requestPrefilterCubeMap = false;
+		}
 		_viewer->frame();
+
+		// _cubemapPreFilter.saveImagesToFile("C:\\3DEngine\\temp");
+		_cubemapPreFilter.disableCompute();
+		_passes->setPassActivated("SpecularLutPass", false);
+
+		// handle mouse over of libRocket
+		// TODO: is it proper to place it here???
+		freezeCameraOnGUIDemand();
+
 		_lastFrameStartTime = _frameStartTime;
 		_frameStartTime = osg::Timer::instance()->tick();
 	}
@@ -229,23 +286,43 @@ bool Core::isViewerClosed()
 	return _viewer->done();
 }
 
+void Core::freezeCameraOnGUIDemand()
+{
+	if (_gui->isMouseOver() || _libRocketEditorGUI->isMouseOver())
+	{
+		disableCameraManipulator();
+	}
+	else
+	{
+		// preserve the GUI cam lock setting
+		if (_gui->isCamControlOn())
+		{
+			enableCameraManipulator();
+		}
+	}
+}
+
 void Core::finalize()
 {
 	if (!_hasInit)
 	{
 		return;
 	}
-	
+
 	// TODO: add console output : initializing GUI
 	_gui->initializeTwGUI();
-	
+
 	// skybox
-	if (_hasEnvMap)
+	if (!_hasEnvMap)
 	{
+		OSG_WARN << "Must setup a cubemap, loading default cubemap" << std::endl;
+		setEnvironmentMapVerticalCross("DefaultAssets/Cubemap/Sky.hdr");
 		configSkyBox();
+		configCubemapPrefilterPass();
+		configSpecularIBLLutPass();
+		_hasEnvMap = true;
 	}
 
-	configInGameGUI();
 	configGeometryObjectManipulator();
 	configAxisVisualizer();
 
@@ -253,25 +330,18 @@ void Core::finalize()
 	_analysisHUD->toggleHelper(); // disabled by default
 
 	//_viewer->run();
-	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
+	CustomFirstPersonManipulator *fpsManipulator = new CustomFirstPersonManipulator;
+	fpsManipulator->setHomePosition(osg::Vec3(0, 0, 10), osg::Vec3(0, 1, 10), osg::Vec3(0, 0, 1));
+	fpsManipulator->setAllowThrow(false);
+	_viewer->setCameraManipulator(fpsManipulator);
 	_viewer->getCamera()->setUpdateCallback(new MainCameraCallback);
+	_currCamManipulatorType = Core::FIRSTPERSON;
 
+	// TODO: keep it single threaded for now.
+	// I just notice our Core and all shared static classes are not thread-safe
+	// so that it will result in crashes or unexpected behaviors, such as dead-lock of a cameramanipulator enable/disable;
+	_viewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
 	_viewer->realize();
-	//while (!_viewer->done())
-	//{
-	//	if (_camCallback != NULL)
-	//	{
-	//		_camCallback(&_cam);
-	//	}
-
-	//	Camera &c = getMainCamera();
-	//	//std::cout << "Before: " << c.getLookAt() << std::endl;
-	//	const osg::Vec3 &cc = osg::Vec3(100, 100, 100);
-	//	//c.setLookAtAndUpdate(cc);
-	//	//std::cout << "After1 : " << c.getLookAt() << std::endl;
-	//	
-	//	_viewer->frame();
-	//}
 }
 
 Camera &Core::getMainCamera()
@@ -282,21 +352,23 @@ Camera &Core::getMainCamera()
 // Used in GUI focus
 void Core::disableCameraManipulator()
 {
+	// std::cout << "disableCam" << std::endl;
 	if (_viewer->getCameraManipulator() != NULL)
 	{
 		_camManipulatorTemp = _viewer->getCameraManipulator();
 		_savedManipulatorCam = _cam;
-		std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
+		// std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
 		_viewer->setCameraManipulator(NULL);
-
-		_gui->setCameraManipulatorActive(false);
 	}
 }
 
 void Core::enableCameraManipulator()
 {
-	std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
-	_camManipulatorTemp->setHomePosition(_savedManipulatorCam.getEyePosition(), 
+	// std::cout << "enableCam" << std::endl;
+	if (_camManipulatorTemp == NULL) return;
+	// std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
+
+	_camManipulatorTemp->setHomePosition(_savedManipulatorCam.getEyePosition(),
 		_savedManipulatorCam.getLookAt(), _savedManipulatorCam.getUp());
 	_viewer->getCamera()->setProjectionMatrix(_savedManipulatorCam.getProjectionMatrix());
 	_viewer->setCameraManipulator(_camManipulatorTemp);
@@ -304,9 +376,50 @@ void Core::enableCameraManipulator()
 	_savedManipulatorCam = Camera();
 	_camManipulatorTemp = NULL;
 
-	_gui->setCameraManipulatorActive(true);
+	// TODO: test if this will crash the program!
+	GeometryObjectManipulator::detachManipulator();
 }
 
+void Core::switchToFirstPersonCamManipulator()
+{
+	CustomFirstPersonManipulator *firstPersonCam = new CustomFirstPersonManipulator;
+	firstPersonCam->setAllowThrow(false);
+	firstPersonCam->setHomePosition(_cam.getEyePosition(),
+		_cam.getLookAt(), osg::Vec3(0, 0, 1));
+	_viewer->setCameraManipulator(firstPersonCam);
+	_currCamManipulatorType = Core::FIRSTPERSON;
+}
+
+void Core::switchToTrackBallCamManipulator()
+{
+	osgGA::TrackballManipulator *trackBallCam = new osgGA::TrackballManipulator;
+	trackBallCam->setHomePosition(_cam.getEyePosition(),
+		_cam.getLookAt(), _cam.getUp());
+	_viewer->setCameraManipulator(trackBallCam);
+	_currCamManipulatorType = Core::TRACKBALL;
+}
+
+void Core::setCurrentCameraManipulatorHomePosition(const osg::Vec3 &eye, const osg::Vec3 &lookAt, const osg::Vec3 &up)
+{
+	osgGA::CameraManipulator *cam;
+	if ((cam = _viewer->getCameraManipulator()) != NULL)
+	{
+		cam->setHomePosition(eye, lookAt, up);
+	}
+	else
+	{
+		// temporoary enable it without detaching the node
+		_camManipulatorTemp->setHomePosition(eye, lookAt, up);
+		_viewer->getCamera()->setProjectionMatrix(_savedManipulatorCam.getProjectionMatrix());
+		_viewer->setCameraManipulator(_camManipulatorTemp);
+
+		_savedManipulatorCam = Camera();
+		_camManipulatorTemp = NULL;
+
+		// disable after changing the position
+		disableCameraManipulator();
+	}
+}
 
 void Core::enableGeometryObjectManipulator()
 {
@@ -330,21 +443,6 @@ void Core::configSkyBox()
 	_passes->addChild(_skybox);
 }
 
-void Core::configInGameGUI()
-{
-	//	osgLibRocket::FileInterface* file_interface = new osgLibRocket::FileInterface();
-	//	Rocket::Core::SetFileInterface(file_interface);
-	//
-	//	// create and set libRocket to OSG interfaces
-	//	osgLibRocket::RenderInterface* renderer = new osgLibRocket::RenderInterface();
-	//	Rocket::Core::SetRenderInterface(renderer);
-	//
-	//	osgLibRocket::SystemInterface* system_interface = new osgLibRocket::SystemInterface();
-	//	Rocket::Core::SetSystemInterface(system_interface);
-	//
-	//	Rocket::Core::Initialise();
-	//}
-}
 void Core::setEnvironmentMap(
 	const std::string &posX,
 	const std::string &negX,
@@ -365,6 +463,7 @@ void Core::setEnvironmentMapVerticalCross(const std::string &cubemap)
 {
 	CubemapUtil ut;
 	bool res = ut.loadVerticalCross(cubemap);
+	// ut.saveImageToFile("C:\\3DEngine\\temp\\cubemap");
 	if (res)
 	{
 		_skybox->setEnvironmentMap(0,
@@ -401,7 +500,7 @@ void Core::enablePassDataDisplay()
 	}
 }
 
-void Core::enableGUI()
+void Core::enableTwGUI()
 {
 	if (!_guiEnabled && !_gameMode)
 	{
@@ -411,7 +510,7 @@ void Core::enableGUI()
 	}
 }
 
-void Core::disableGUI()
+void Core::disableTwGUI()
 {
 	if (_guiEnabled)
 	{
@@ -429,8 +528,14 @@ void Core::enableGameMode()
 
 		disablePassDataDisplay();
 		disableCameraManipulator();
-		disableGUI();
+		disableTwGUI();
 		disableGeometryObjectManipulator();
+
+		_libRocketEditorGUI->disableGUI();
+		_libRocketInGameGUI->enableGUI();
+
+		LibRocketGUIManager::bindDebugWindow(_libRocketInGameGUI);
+
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
 	}
@@ -442,9 +547,13 @@ void Core::disableGameMode()
 	{
 		_gameMode = false;
 
-		enableGUI();
+		enableTwGUI();
 		enableCameraManipulator();
 		enableGeometryObjectManipulator();
+
+		_libRocketEditorGUI->enableGUI();
+		_libRocketInGameGUI->disableGUI();
+		LibRocketGUIManager::bindDebugWindow(_libRocketEditorGUI);
 
 		//// TODO: change back to editor key bindings
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
@@ -483,8 +592,129 @@ bool Core::isInGameMode()
 
 void Core::configAxisVisualizer()
 {
+	_axisVisualizer.init();
 	_axisVisualizer.setPosition(osg::Vec3());
 	_passes->addChild(_axisVisualizer.getRoot());
+}
+
+void Core::requestPrefilterCubeMap()
+{
+	_requestPrefilterCubeMap = true;
+
+	// TODO: add support of different cubemaps
+	_cubemapPreFilter.changeCubeMap(_skybox->getCubeMap());
+}
+
+void Core::requestPrefilterCubeMapWithCubeMap(osg::TextureCubeMap *cubemap)
+{
+	_requestPrefilterCubeMap = true;
+	_cubemapPreFilter.changeCubeMap(cubemap);
+}
+
+void Core::configSpecularIBLLutPass()
+{
+	osgFX::EffectCompositor::PassData pd;
+	_passes->getPassData("SpecularLutPass", pd);
+	osg::ref_ptr<osg::Camera> cam = pd.pass;
+	auto buffer = (*cam->getBufferAttachmentMap().begin()).second._texture;
+	osg::ref_ptr<osg::Texture> lutTex = static_cast<osg::Texture *>(buffer);
+
+	// TODO: since same across different cubemaps
+	// consider save it to hard drive 
+	// feed the lut_texture to lightpass
+
+	osgFX::EffectCompositor::PassData lightPass;
+	_passes->getPassData("LightPass", lightPass);
+	osg::ref_ptr<osg::Camera> lightPassCam = lightPass.pass;
+	lightPassCam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_lutTex", 6));
+	lightPassCam->getOrCreateStateSet()->setTextureAttributeAndModes(6, lutTex);
+}
+
+void Core::configLibRocketGUI()
+{
+	osgViewer::ViewerBase::Views views;
+	_viewer->getViews(views);
+	osg::GraphicsContext* gc = _viewer->getCamera()->getGraphicsContext();
+
+	std::string guiPath = _mediaPath + "DefaultAssets\\LibRocketGUI\\";
+	_libRocketEditorGUI = new LibRocketGUIManager(guiPath, gc);
+	_libRocketInGameGUI = new LibRocketGUIManager(guiPath, gc);
+	_libRocketInGameGUI->disableGUI();
+	
+	// Create Editor GUI 
+	std::string testWindowPath = guiPath + "InEditor\\setNameWindow.rml";
+	_libRocketEditorGUI->addWindow(testWindowPath, true);
+
+	_viewer->addEventHandler(_libRocketEditorGUI);
+	_sceneRoot->addChild(_libRocketEditorGUI->getRoot());
+	_viewer->addEventHandler(_libRocketInGameGUI);
+	_sceneRoot->addChild(_libRocketInGameGUI->getRoot());
+}
+
+bool Core::isCamLocked()
+{
+	// TODO: this is a hack
+	return _camManipulatorTemp != NULL ? true : false;
+}
+
+enum Core::CamManipulatorType Core::getCurrCamManipulatorType()
+{
+	return _currCamManipulatorType;
+}
+
+void Core::setEditorFPSCamWalkingSpeed(float metersPerSec)
+{
+	if (_currCamManipulatorType == FIRSTPERSON && _viewer->getCameraManipulator() != NULL)
+	{
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_viewer->getCameraManipulator());
+		m->setWalkingSpeed(metersPerSec);
+	}
+	else
+	{
+		if (_camManipulatorTemp == NULL) return;
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_camManipulatorTemp.get());
+		m->setWalkingSpeed(metersPerSec);
+	}
+}
+
+float Core::getEditorFPSCamWalkingSpeed()
+{
+	if (_currCamManipulatorType == FIRSTPERSON && _viewer->getCameraManipulator() != NULL)
+	{
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_viewer->getCameraManipulator());
+		return m->getWalkingSpeed();
+	}
+	else
+	{ 
+		if (_camManipulatorTemp == NULL) return 0.0;
+		CustomFirstPersonManipulator *m = static_cast<CustomFirstPersonManipulator *>(_camManipulatorTemp.get());
+		return m->getWalkingSpeed();
+	}
+}
+
+
+void Core::enableLibRocketInEditorGUI()
+{
+	if (_libRocketEditorGUI == NULL) return;
+	_libRocketEditorGUI->enableGUI();
+}
+
+void Core::disableLibRocketInEditorGUI()
+{
+	if (_libRocketEditorGUI == NULL) return;
+	_libRocketEditorGUI->disableGUI();
+}
+
+bool Core::isLibRocketInEditorGUIEnabled()
+{
+	if (_libRocketEditorGUI == NULL) return false;
+	return _libRocketEditorGUI->isGUIEnabled();
+}
+
+
+osg::ref_ptr<LibRocketGUIManager> Core::getInGameLibRocketGUIManager()
+{
+	return _libRocketInGameGUI;
 }
 
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
@@ -504,6 +734,9 @@ Camera Core::_cam;
 Camera Core::_savedManipulatorCam;
 
 osg::ref_ptr<TwGUIManager> Core::_gui;
+osg::ref_ptr<LibRocketGUIManager> Core::_libRocketEditorGUI;
+osg::ref_ptr<LibRocketGUIManager> Core::_libRocketInGameGUI;
+
 osg::ref_ptr<SkyBox> Core::_skybox;
 std::string Core::_mediaPath;
 osg::ref_ptr<CompositorAnalysis> Core::_analysisHUD;
@@ -515,8 +748,13 @@ bool Core::_manipulatorEnabled;
 
 bool Core::_isFirstFrame;
 bool Core::_allowEditorChangeProjection;
+bool Core::_requestPrefilterCubeMap = false;
 
-osg::Timer_t Core::_lastFrameStartTime; 
-osg::Timer_t Core::_frameStartTime; 
+osg::Timer_t Core::_lastFrameStartTime;
+osg::Timer_t Core::_frameStartTime;
 
 AxisVisualizer Core::_axisVisualizer;
+
+CubeMapPreFilter Core::_cubemapPreFilter;
+
+enum Core::CamManipulatorType Core::_currCamManipulatorType;

@@ -2,41 +2,27 @@
 
 #include <unordered_map>
 
-#include <util/XMLLoader.h>
-
-#include "BombType.h"
-
 class Entity;
+enum EntityType;
 class EntityManager;
 
 class BombFactory {
 public:
-	BombFactory(EntityManager *entityManager);
-	~BombFactory();
+    BombFactory(EntityManager &entityManager);
 
-    Entity *createBomb(const BombType &type) const;
-    Entity *createBomb(const BombType &type, float x, float y, float z) const;
-    Entity *createBomb(const BombType &type, float x, float y, float z, float vx, float vy, float vz) const;
+    Entity *createBomb(
+            const EntityType &type,
+            float x = 0.0f,
+            float y = 0.0f,
+            float z = 0.0f,
+            float vx = 0.0f,
+            float vy = 0.0f,
+            float vz = 0.0f) const;
 
 private:
-    struct BombData {
-        unsigned int id;
-        std::string name;
-        float size;
-        float mass;
-    };
+    EntityManager &entityManager;
 
-    class BombDataLookup : public XMLLoader {
-    public:
-        BombDataLookup(const std::string &filename);
-        const BombData &operator[](const BombType &type) const;
-    protected:
-        virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
-    private:
-        std::unordered_map<BombType, BombData> bombs;
-    };
-
-    static BombDataLookup lookup;
-
-	EntityManager *entityManager;
+    void createBase(Entity *entity, float x, float y, float z, float vx, float vy, float vz) const;
+    void createKaboomV2(Entity *entity) const;
+    void createTimeBomb(Entity *entity) const;
 };

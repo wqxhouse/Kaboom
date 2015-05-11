@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<bombs>
+    <bomb>
+        <id type="uint">131073</id>
+        <name type="string">Kaboom 2.0</name>
+        <size type="float">0.1</size>
+        <mass type="float">1.0</mass>
+        <explosion-radius type="float">2.0</explosion-radius>
+        <cooldown type="int">500</cooldown>
+        <launch-speed type="float">5.0</launch-speed>
+        <capacity type="int">20</capacity>
+        <knockback-amount type="float">5.0</knockback-amount>
+        <knockback-duration type="int">250</knockback-duration>
+        <max-damage type="int">80</max-damage>
+        <min-damage type="int">20</min-damage>
+    </bomb>
+    <bomb>
+        <id type="uint">131074</id>
+        <name type="string">Time Bomb</name>
+        <size type="float">0.1</size>
+        <mass type="float">1.0</mass>
+        <explosion-radius type="float">2.0</explosion-radius>
+        <cooldown type="int">500</cooldown>
+        <launch-speed type="float">5.0</launch-speed>
+        <capacity type="int">20</capacity>
+        <knockback-amount type="float">5.0</knockback-amount>
+        <knockback-duration type="int">250</knockback-duration>
+        <max-damage type="int">80</max-damage>
+        <min-damage type="int">20</min-damage>
+        <delay type="int">3000</delay>
+    </bomb>
+    <bomb>
+        <id type="uint">131075</id>
+        <name type="string">Remote Detonator</name>
+        <size type="float">0.1</size>
+        <mass type="float">1.0</mass>
+        <explosion-radius type="float">2.0</explosion-radius>
+        <cooldown type="int">500</cooldown>
+        <launch-speed type="float">5.0</launch-speed>
+        <capacity type="int">20</capacity>
+        <knockback-amount type="float">5.0</knockback-amount>
+        <knockback-duration type="int">250</knockback-duration>
+        <max-damage type="int">80</max-damage>
+        <min-damage type="int">20</min-damage>
+    </bomb>
+</bombs>

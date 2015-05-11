@@ -18,7 +18,6 @@ public:
     ConfigSettings * config;
 
     ServerNetwork(ConfigSettings *);
-    ~ServerNetwork(void);
 
     // Socket to listen for new connections
     SOCKET ListenSocket;
@@ -36,7 +35,7 @@ public:
     void send(char *packet, int size, int clientId);
 
     void removeDisconnectedClients();
-
+	std::unordered_set<unsigned int> disconnectedClients;
 private:
-    std::unordered_set<unsigned int> disconnectedClients;
+    
 };

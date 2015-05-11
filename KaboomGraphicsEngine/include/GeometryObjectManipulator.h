@@ -16,6 +16,7 @@
 #include <osgManipulator/Selection>
 #include <osg/MatrixTransform>
 #include <osg/Depth>
+#include "DraggerUpdateCallback.h"
 
 enum ManipulatorType
 {
@@ -35,6 +36,9 @@ public:
 	static void detachManipulator();
 	static enum ManipulatorType getCurrentManipulatorType();
 
+	static osg::ref_ptr<osg::MatrixTransform> getCurrNode();
+	static void updateBoundingBox();
+
 	static bool setVisible(bool tf);
 	static bool isVisible();
 
@@ -49,4 +53,6 @@ private:
 
 	static osg::observer_ptr<osg::Group> _rootNode;
 	static osg::ref_ptr<osg::Depth> _depth;
+
+	static DraggerUpdateCallback _draggerCB;
 };

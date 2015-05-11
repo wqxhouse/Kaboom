@@ -6,7 +6,6 @@
 bool GeometryPicker::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
 {
 	if (Core::isInGameMode()) return false;
-
 	osgViewer::View* view = dynamic_cast<osgViewer::View*> (&aa);
 	if (NULL == view)
 	{
@@ -26,19 +25,31 @@ bool GeometryPicker::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAd
 	{
 		if (ea.getX() == _mX && ea.getY() == _mY)
 		{
-			pick(ea, aa);
+			if (Core::isCamLocked())
+			{
+				pick(ea, aa);
+			}
 		}
 	}
 		break;
 
-	//case osgGA::GUIEventAdapter::KEYDOWN:
-	//{
-	//	if (ea.getKey() == 'd')
-	//	{
-	//		mEnableDragger = !mEnableDragger;
-	//	}
-	//}
-	//	break;
+	case osgGA::GUIEventAdapter::KEYDOWN:
+		if (Core::isCamLocked())
+		{
+			if (ea.getKey() == 'g')
+			{
+				GeometryObjectManipulator::changeCurrentManipulatorType(TranslateAxisDragger);
+			}
+			else if (ea.getKey() == 'r')
+			{
+				GeometryObjectManipulator::changeCurrentManipulatorType(TrackballDragger);
+			}
+			else if (ea.getKey() == 's')
+			{
+				GeometryObjectManipulator::changeCurrentManipulatorType(TabBoxDragger);
+			}
+		}
+		break;
 
 	default:
 		break;
@@ -76,6 +87,13 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 				if (name.substr(0, 9) == "Transform")
 				{
 					objectName = name.substr(10, name.size() - 1);
+
+					// For unpickable/unmovable objects
+					if (objectName.substr(0, 1) == "*") {
+						objectName = "";
+						continue;
+					}
+
 					if (temp->asTransform() == NULL || temp->asTransform()->asMatrixTransform() == NULL)
 					{
 						OSG_WARN << "GeometryPicker : node " << temp->getName() << " is not a MatrixTransform" << std::endl;

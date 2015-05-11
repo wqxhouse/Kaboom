@@ -1,0 +1,1 @@
+This folder and subfolders should keep empty when being uploaded to the github. Currently handled in .gitignore.

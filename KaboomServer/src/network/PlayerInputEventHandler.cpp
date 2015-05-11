@@ -1,18 +1,15 @@
 #include "PlayerInputEventHandler.h"
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 #include <network/PlayerInputEvent.h>
 
 #include "../core/Game.h"
-#include "../core/InputComponent.h"
+#include "../components/InputComponent.h"
 
 PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
         : game(game) {
-}
-
-PlayerInputEventHandler::~PlayerInputEventHandler() {
 }
 
 void PlayerInputEventHandler::handle(const Event &e) const {
@@ -20,15 +17,16 @@ void PlayerInputEventHandler::handle(const Event &e) const {
 
     Entity *player = game->getEntityManager().getEntity(evt.getPlayerId());
 
-    InputComponent *inputCom = player->getComponent<InputComponent>();
-    inputCom->setMovingForward(evt.isMovingForward());
-    inputCom->setMovingBackward(evt.isMovingBackward());
-    inputCom->setMovingLeft(evt.isMovingLeft());
-    inputCom->setMovingRight(evt.isMovingRight());
-    inputCom->setJumping(evt.isJumping());
-    inputCom->setFiring(evt.isFiring());
+    InputComponent *inputComp = player->getComponent<InputComponent>();
+    inputComp->setMovingForward(evt.isMovingForward());
+    inputComp->setMovingBackward(evt.isMovingBackward());
+    inputComp->setMovingLeft(evt.isMovingLeft());
+    inputComp->setMovingRight(evt.isMovingRight());
+    inputComp->setJumping(evt.isJumping());
+    inputComp->setAttacking1(evt.isAttacking1());
+    inputComp->setAttacking2(evt.isAttacking2());
 
-    RotationComponent *rotCom = player->getComponent<RotationComponent>();
-    rotCom->setYaw(evt.getYaw());
-    rotCom->setPitch(evt.getPitch());
+    RotationComponent *rotComp = player->getComponent<RotationComponent>();
+    rotComp->setYaw(evt.getYaw());
+    rotComp->setPitch(evt.getPitch());
 }

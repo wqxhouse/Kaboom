@@ -1,21 +1,63 @@
 Unresolved:
-1. Point Light Tile culling fails to handle edges of geometry. 
-	- create a point light not entirely covering the geometry. 
-	  tile artifact will show on the edge
 
 2. Press ESC will crash the program. Whereas click to close will not carsh the program.
-3. Currently mouse over gui cannot be detected. Thus, control on gui will disable the manipulator.
-4. setting position from GUI doesn't update the manipulator;
-5. Geometry picker bug, crash the program: (randomly, wtf!) 
-	- reproduce: pick an object, click on a different manipulator type. 
-	- ! Question is: change mode by key press 'g' 'r' 's' does not crash the program!!!!!!! (wtf!)
 
-6. Linked to 1) due to osgCameraManipulator, managing projection matrix is very tricky. I added
+4. Linked to 1) due to osgCameraManipulator, managing projection matrix is very tricky. I added
    allow modify camera project mode in the gui editor. When enabled, the compute_near_far is disabled 
    But even though the near far value did not change, the light culling artifact will appear, meaning that
    1) in inheritedly linked to project matrices and near far plane. 
 
-7. BUG: need to delete bullet collision shape after client disconnect from server
+5. After removing the geometry, if the manipulator is still active it will show on the screen. 
+And this happens randomly
+(Currently there is a bug involved with detachManipulator() )
+
+6. BUG: need to delete bullet collision shape after client disconnect from server
+7. glValidation error in LightPass saying different samplers use the same texture (happens on HD4400, not on GTX580)
+	(when turning on the OSG_NOTIFY_LEVEL=DEBUG / INFO)
+
+8. Manipulator and cameramanipulator checkbox conflict
+9. Loading a rotated model from XML does not rotate the bounding box.
+10. If no env map, won't draw anything - partially fixed by enforcing cubemap load
+
+11. mipmap cannot reach 1x1 when roughness = 1.0, metallic = 0.0
+12. roughness 0 metallic 1 will have ugly edges (bright). Probably normal floating point precision issue.
+13. Sometimes, the first time cubemap is prefiltered(after the program start, at the first frame), the result seems to be different 
+	if you load the same cubemap and convolve it again.
+
+15. after 'fitToScreen' then unlock camera does not preserve position
+16. Directional light dirToWorld ARROW a little weird on the GUI (direction wrong)
+
+17. rotate and axis manipulator scale wrong
+18. add model from file doesn't appear on the editor anymore
+19.  In draggerupdatecallback, _geomObj will be dangling pointer after the actual geomObj is freed. 
+Thus your null check in the receive will not work.
+robin [3:48 AM]
+1) pick geom 
+2) delete geom( with a chance of not removing the manipulator)
+3) try drag the manipulator
+4) crash, pointing to DraggerUpdateCallback::receive. 
+At this point the _geomObj still has its address but an invalid one, since geommanager already had it deleted.
+20.sometimes the dragger paddle are also get scaled
+21.not sure why but it seems after rotating the geom, the tabbox bound is not rotated according to the rotation.
+
+22. first person maniupulator moving while dragging and mouse over and then off the gui will make the camera shifting automatically. 
+23. Mouse over gui can move object (triggered the manipulator, since the cam locked on mouse over)
+24. scrolling (scaling) on fps camera for some reason comes back... bad..
+
+25. change camera type will reset the fps camera walking speed
+26. change to trackball manipulator will make walking speed display 0.0;
+
+Should be fixed, but need more tests:
+1. Geometry picker bug, crash the program: (randomly, wtf!) 
+	- reproduce: pick an object, click on a different manipulator type. 
+	- ! Question is: change mode by key press 'g' 'r' 's' does not crash the program!!!!!!! (wtf!)
+
+2. press 's' for a while will crash the program. (scale key for triggering the tabboxmanipulator)
+3. Point Light Tile culling fails to handle edges of geometry. 
+	- create a point light not entirely covering the geometry. 
+	  tile artifact will show on the edge
+
+
 
 Fixed:
 1. Scrolling will crash the program (TwGUI)
@@ -25,5 +67,9 @@ Fixed:
    Fixed by add an option in EffectCompositor to not presering near and far plane
    for skybox.
 3. After pressing playgame, the object is still draggable and resizable;
+4. setting position from GUI doesn't update the manipulator;
+5. Duplicate names of nodes. Managers cannot tell them apart.
+6. Currently mouse over gui cannot be detected. Thus, control on gui will disable the manipulator.
 
 TODO: click close renderer needs to close the game entirely.
+TODO: refactor lightUtil.glsl to reuse NxV NxH ... across a single fragment

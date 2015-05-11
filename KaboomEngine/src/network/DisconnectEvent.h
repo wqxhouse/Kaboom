@@ -6,12 +6,10 @@
 
 class DisconnectEvent : public Event {
 public:
-    DisconnectEvent(unsigned int playerId);
-    ~DisconnectEvent();
-    DisconnectEvent();
+    DisconnectEvent(unsigned int playerId = 0);
 
-    const unsigned int &getPlayerId() const;
-    void setPlayerId(const unsigned int &playerId);
+    unsigned int getPlayerId() const;
+    void setPlayerId(unsigned int playerId);
 
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);

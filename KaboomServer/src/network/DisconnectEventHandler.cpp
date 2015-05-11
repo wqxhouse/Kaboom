@@ -9,9 +9,6 @@ DisconnectEventHandler::DisconnectEventHandler(Game *game)
         : game(game) {
 }
 
-DisconnectEventHandler::~DisconnectEventHandler() {
-}
-
 void DisconnectEventHandler::handle(const Event &e) const {
     const DisconnectEvent &evt = static_cast<const DisconnectEvent &>(e);
 
@@ -20,8 +17,5 @@ void DisconnectEventHandler::handle(const Event &e) const {
 
     game->getGameServer().sendDisconnectEvent(player);
 
-    PhysicsComponent *physComp = player->getComponent<PhysicsComponent>();
-    game->getWorld().removeRigidBody(physComp->getRigidBody());
-
-    game->getEntityManager().destroyEntity(player->getId());
+    game->removeEntity(player);
 }

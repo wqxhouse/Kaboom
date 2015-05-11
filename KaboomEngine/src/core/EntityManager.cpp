@@ -1,16 +1,12 @@
 #include "EntityManager.h"
 
-#include <stdexcept>
+#include <iostream>
 #include <sstream>
 
 #include "Entity.h"
-#include "CharacteristicComponent.h"
 
 EntityManager::EntityManager()
         : nextId(0) {
-}
-
-EntityManager::~EntityManager() {
 }
 
 unsigned int EntityManager::generateId() {
@@ -21,22 +17,22 @@ unsigned int EntityManager::generateId() {
     return nextId;
 }
 
-Entity *EntityManager::createEntity() {
-	// TODO: figure out the logic here if createEntity() returns NULL
-    return createEntity(generateId());
+Entity *EntityManager::createEntity(const EntityType &type) {
+    return createEntity(generateId(), type);
 }
 
-Entity *EntityManager::createEntity(unsigned int id) {
+Entity *EntityManager::createEntity(unsigned int id, const EntityType &type) {
     if (isEntityAlive(id)) {
         std::ostringstream error;
         error << "Unable to create entity with ID " << id << "." << std::endl;
-        error << "Entity with this ID is already alive." << std::endl;
+        error << "Entity with this ID is already alive.";
 
-        // throw std::runtime_error(error.str());
-		return NULL;
+        std::cerr << error.str() << std::endl;
+
+		return nullptr;
     }
 
-    Entity *entity = new Entity(id);
+    Entity *entity = new Entity(id, type);
 
     entities[id] = entity;
 
@@ -54,10 +50,11 @@ Entity *EntityManager::getEntity(unsigned int id) const {
     if (!isEntityAlive(id)) {
         std::ostringstream error;
         error << "Unable to retrieve entity with ID " << id << "." << std::endl;
-        error << "Entity with this ID is not alive." << std::endl;
+        error << "Entity with this ID is not alive.";
 
-        // throw std::runtime_error(error.str());
-		return NULL;
+        std::cerr << error.str() << std::endl;
+
+        return nullptr;
     }
 
     return entities.at(id);
@@ -69,35 +66,9 @@ bool EntityManager::isEntityAlive(unsigned int id) const {
 
 std::vector<Entity *> EntityManager::getEntityList() const {
 	std::vector<Entity *> list;
-	for (auto kv : entities){
+
+	for (auto kv : entities) {
 		list.push_back(kv.second);
-	}
-	return list;
-};
-
-std::vector<Entity *> EntityManager::getPlayerList() const {
-	std::vector<Entity *> list;
-
-	for (auto kv : entities) {
-		CharacteristicComponent *charCom = kv.second->getComponent<CharacteristicComponent>();
-
-        if (charCom->getType() == PLAYER) {
-			list.push_back(kv.second);
-		}
-	}
-
-	return list;
-};
-
-std::vector<Entity *> EntityManager::getBombList() const {
-	std::vector<Entity *> list;
-
-	for (auto kv : entities) {
-        CharacteristicComponent *charCom = kv.second->getComponent<CharacteristicComponent>();
-
-        if (charCom->getType() == BOMB) {
-			list.push_back(kv.second);
-		}
 	}
 
 	return list;

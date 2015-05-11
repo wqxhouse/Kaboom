@@ -1,50 +1,51 @@
 #pragma once
 
-#include <vector>
-
-#include <btBulletDynamicsCommon.h>
-
 #include <core/EntityManager.h>
-#include <util/ConfigSettings.h>
+#include <util/Configuration.h>
 
 #include "BombFactory.h"
-#include "InputSystem.h"
-#include "PlayerFactory.h"
 #include "World.h"
+#include "CharacterFactory.h"
+#include "PickupFactory.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
+#include "../systems/SystemManager.h"
+
+class ConfigSettings;
 
 class Game {
 public:
-    std::vector<Entity *> players;
-	std::vector<Entity *> bombs;
-
-    Game(ConfigSettings *config);
+    Game(ConfigSettings *configSettings);
     ~Game();
 
-    void update(float timestep);
+    void update(float timeStep, int maxSubSteps);
 
-    void addEntityToWorld(Entity *entity);
+    void addEntity(Entity *entity);
+    void removeEntity(Entity *entity);
+
+    Configuration &getConfiguration();
 
     EntityManager &getEntityManager();
-    const PlayerFactory &getPlayerFactory() const;
+    const CharacterFactory &getCharacterFactory() const;
     const BombFactory &getBombFactory() const;
 
     const GameServer &getGameServer() const;
 
-    World &getWorld();
-
+	const World & getWorld() const;
 private:
-    ConfigSettings *config;
+    Configuration config;
 
     EntityManager entityManager;
-    PlayerFactory playerFactory;
-    BombFactory bombFactory;
+    SystemManager systemManager;
 
-    InputSystem inputSystem;
+    CharacterFactory characterFactory;
+    BombFactory bombFactory;
+    PickupFactory pickupFactory;
 
     ServerEventHandlerLookup eventHandlerLookup;
     GameServer server;
 
     World world;
+
+    void stepSimulation(float timeStep, int maxSubSteps);
 };

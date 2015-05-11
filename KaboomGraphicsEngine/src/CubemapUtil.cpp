@@ -88,6 +88,8 @@ bool CubemapUtil::loadVerticalCross(const std::string &path)
 		if (i == 0 || i == 1)
 		{
 			img = createSubImage(cubemap, left, top, right, bottom, true);
+			if (img == NULL) return false;
+
 			if (i == 0)
 			{
 				img->flipHorizontal();
@@ -122,7 +124,7 @@ void CubemapUtil::saveImageToFile(const std::string &path)
 {
 	for (int i = 0; i < 6; i++)
 	{
-		std::string filePath = path + "\\map_" + std::to_string(i) + ".png";
+		std::string filePath = path + "\\map_" + std::to_string(i) + ".tga";
 		std::cout << "CubemapUtil: Writing file " + path << "...  ";
 		bool res = osgDB::writeImageFile(*_cubeMapImages[i], filePath);
 		if (res) std::cout << " successfully" << std::endl;
@@ -130,7 +132,150 @@ void CubemapUtil::saveImageToFile(const std::string &path)
 	}
 }
 
-//http://www.jotschi.de/Technik/2009/10/18/openscenegraph-osgimage-getting-a-subimage-from-an-image.html
+unsigned char *CubemapUtil::createImageBuffer(GLenum internalFormat, int subImageWidth, int subImageHeight)
+{
+	unsigned char *targetData = NULL;
+	switch (internalFormat)
+	{
+	case GL_RGB:
+		targetData = (unsigned char *)new struct pixelStructRGB[subImageWidth * subImageHeight];
+		break;
+	case GL_RGBA:
+		targetData = (unsigned char *)new struct pixelStructRGBA[subImageWidth * subImageHeight];
+		break;
+	case GL_RGB16F_ARB:
+		targetData = (unsigned char *)new struct pixelStructRGB16[subImageWidth * subImageHeight];
+		break;
+	case GL_RGB32F_ARB:
+		targetData = (unsigned char *)new struct pixelStructRGB32[subImageWidth * subImageHeight];
+		break;
+	case GL_RGBA16F_ARB:
+		targetData = (unsigned char *)new struct pixelStructRGBA16[subImageWidth * subImageHeight];
+		break;
+	case GL_RGBA32F_ARB:
+		targetData = (unsigned char *)new struct pixelStructRGBA32[subImageWidth * subImageHeight];
+		break;
+	default:
+		std::cout << internalFormat << " unsupported" << std::endl;
+		return NULL;
+	}
+
+	return targetData;
+}
+
+void CubemapUtil::copyPixel(GLenum internalFormat , unsigned char *srcBuffer, unsigned char *dstBuffer,
+	int currX, int currY, int subX, int subY, int subImgWidth, int subImgHeight, int srcImgWidth, bool rotate)
+{
+	switch (internalFormat)
+	{
+	case GL_RGB:
+	{
+		struct pixelStructRGB *srcBuf = (pixelStructRGB *)srcBuffer;
+		struct pixelStructRGB *dstBuf = (pixelStructRGB *)dstBuffer;
+		struct pixelStructRGB *psrc = &srcBuf[currY * srcImgWidth + currX];
+		struct pixelStructRGB *pdst;
+		if (rotate)
+		{
+			pdst = &dstBuf[subX * subImgHeight + subY];
+		}
+		else
+		{
+			pdst = &dstBuf[subY * subImgWidth + subX];
+		}
+		*pdst = *psrc;
+		break;
+	}
+	case GL_RGBA:
+	{
+		struct pixelStructRGBA *srcBuf = (pixelStructRGBA *)srcBuffer;
+		struct pixelStructRGBA *dstBuf = (pixelStructRGBA *)dstBuffer;
+		struct pixelStructRGBA *psrc = &srcBuf[currY * srcImgWidth + currX];
+		struct pixelStructRGBA *pdst;
+		if (rotate)
+		{
+			pdst = &dstBuf[subX * subImgHeight + subY];
+		}
+		else
+		{
+			pdst = &dstBuf[subY * subImgWidth + subX];
+		}
+		*pdst = *psrc;
+		break;
+	}
+	case GL_RGB16F_ARB:
+	{
+		struct pixelStructRGB16 *srcBuf = (pixelStructRGB16 *)srcBuffer;
+		struct pixelStructRGB16 *dstBuf = (pixelStructRGB16 *)dstBuffer;
+		struct pixelStructRGB16 *psrc = &srcBuf[currY * srcImgWidth + currX];
+		struct pixelStructRGB16 *pdst;
+		if (rotate)
+		{
+			pdst = &dstBuf[subX * subImgHeight + subY];
+		}
+		else
+		{
+			pdst = &dstBuf[subY * subImgWidth + subX];
+		}
+		*pdst = *psrc;
+		break;
+	}
+	case GL_RGB32F_ARB:
+	{
+		struct pixelStructRGB32 *srcBuf = (pixelStructRGB32 *)srcBuffer;
+		struct pixelStructRGB32 *dstBuf = (pixelStructRGB32 *)dstBuffer;
+		struct pixelStructRGB32 *psrc = &srcBuf[currY * srcImgWidth + currX];
+		struct pixelStructRGB32 *pdst;
+		if (rotate)
+		{
+			pdst = &dstBuf[subX * subImgHeight + subY];
+		}
+		else
+		{
+			pdst = &dstBuf[subY * subImgWidth + subX];
+		}
+		*pdst = *psrc;
+		break;
+	}
+	case GL_RGBA16F_ARB:
+	{
+		struct pixelStructRGBA16 *srcBuf = (pixelStructRGBA16 *)srcBuffer;
+		struct pixelStructRGBA16 *dstBuf = (pixelStructRGBA16 *)dstBuffer;
+		struct pixelStructRGBA16 *psrc = &srcBuf[currY * srcImgWidth + currX];
+		struct pixelStructRGBA16 *pdst;
+		if (rotate)
+		{
+			pdst = &dstBuf[subX * subImgHeight + subY];
+		}
+		else
+		{
+			pdst = &dstBuf[subY * subImgWidth + subX];
+		}
+		*pdst = *psrc;
+		break;
+	}
+	case GL_RGBA32F_ARB:
+	{
+		struct pixelStructRGBA32 *srcBuf = (pixelStructRGBA32 *)srcBuffer;
+		struct pixelStructRGBA32 *dstBuf = (pixelStructRGBA32 *)dstBuffer;
+		struct pixelStructRGBA32 *psrc = &srcBuf[currY * srcImgWidth + currX];
+		struct pixelStructRGBA32 *pdst;
+		if (rotate)
+		{
+			pdst = &dstBuf[subX * subImgHeight + subY];
+		}
+		else
+		{
+			pdst = &dstBuf[subY * subImgWidth + subX];
+		}
+		*pdst = *psrc;
+		break;
+	}
+	default:
+		std::cout << internalFormat << " unsupported" << std::endl;
+		break;
+	}
+}
+
 osg::ref_ptr<osg::Image> CubemapUtil::createSubImage(osg::Image *sourceImage, int startX, int startY, int stopX, int stopY, bool rotate)
 {
 	int subImageWidth = stopX - startX;
@@ -145,23 +290,20 @@ osg::ref_ptr<osg::Image> CubemapUtil::createSubImage(osg::Image *sourceImage, in
 		<< std::endl;
 	std::cout << "SubImageSize: " << subImageWidth << "x" << subImageHeight
 		<< std::endl;
-	std::cout << "Channels: " << sourceImage->r() << std::endl;
 
-	const unsigned char *sourceData = sourceImage->data();
-	struct pixelStruct {
-		unsigned char r, g, b;
-	};
+	GLenum internalFormat = sourceImage->getInternalTextureFormat();
+	std::cout << "Image internal format " << sourceImage->getInternalTextureFormat() << std::endl;
 
-	osg::Image* subImage = new osg::Image();
+	unsigned char *sourceData = sourceImage->data();
+
+	osg::ref_ptr<osg::Image> subImage = new osg::Image();
 
 	// allocate memory for image data
-	const unsigned char *targetData = new unsigned char[subImageWidth
-		* subImageHeight * 3];
-
-	struct pixelStruct *pPixelSource = (struct pixelStruct*) (sourceData);
-	struct pixelStruct *pPixelTarget = (struct pixelStruct*) (targetData);
-	struct pixelStruct *pCurrentPixelSource = NULL;
-	struct pixelStruct *pCurrentPixelTarget = NULL;
+	unsigned char *targetData = createImageBuffer(internalFormat, subImageWidth, subImageHeight);
+	if (targetData == NULL)
+	{
+		return NULL;
+	}
 
 	int subX = 0;
 	int subY = 0;
@@ -170,27 +312,31 @@ osg::ref_ptr<osg::Image> CubemapUtil::createSubImage(osg::Image *sourceImage, in
 			/*std::cout << "Source Pixel [" << x << "][" << y << "]" << std::endl;
 			std::cout << "Target Pixel [" << subX << "][" << subY << "]"
 			<< std::endl;*/
-			pCurrentPixelSource = &pPixelSource[y * sourceImage->s() + x];
-			if (rotate)
-			{
-				pCurrentPixelTarget = &pPixelTarget[subX * subImageHeight + subY];
-			}
-			else
-			{
-				pCurrentPixelTarget = &pPixelTarget[subY * subImageWidth + subX];
-			}
-			pCurrentPixelTarget->r = pCurrentPixelSource->r;
-			pCurrentPixelTarget->g = pCurrentPixelSource->g;
-			pCurrentPixelTarget->b = pCurrentPixelSource->b;
+
+			//pCurrentPixelSource = &pPixelSource[y * sourceImage->s() + x];
+			//if (rotate)
+			//{
+			//	pCurrentPixelTarget = &pPixelTarget[subX * subImageHeight + subY];
+			//}
+			//else
+			//{
+			//	pCurrentPixelTarget = &pPixelTarget[subY * subImageWidth + subX];
+			//}
+			//pCurrentPixelTarget->r = pCurrentPixelSource->r;
+			//pCurrentPixelTarget->g = pCurrentPixelSource->g;
+			//pCurrentPixelTarget->b = pCurrentPixelSource->b;
+			copyPixel(internalFormat, sourceData, targetData, x, y, subX, subY, 
+				subImageWidth, subImageHeight, sourceImage->s(), rotate);
 			subY++;
 		}
 		subY = 0;
 		subX++;
 	}
 
+	GLenum dataType = sourceImage->getDataType();
 	subImage->setImage(subImageWidth, subImageHeight, sourceImage->r(),
 		sourceImage->getInternalTextureFormat(),
-		sourceImage->getPixelFormat(), 5121, (unsigned char*)targetData,
+		sourceImage->getPixelFormat(), dataType, (unsigned char*)targetData,
 		osg::Image::NO_DELETE);
 
 	return subImage;

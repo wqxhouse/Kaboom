@@ -13,8 +13,14 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "GeometryObjectManipulator.h"
+#include <osg/ComputeBoundsVisitor>
+
+const float PI_F = 3.14159265358979f;
 
 int TwGUIManager::_index = 0;
+std::vector<ModelMatrix*> TwGUIManager::_undos = std::vector<ModelMatrix*>();
+std::vector<ModelMatrix*> TwGUIManager::_redos = std::vector<ModelMatrix*>();
+ModelMatrix* TwGUIManager::_currChange = NULL;
 
 TwGUIManager::TwGUIManager()
 // Note, this flag assumes that you do not touch viewer manipulator settings
@@ -23,6 +29,9 @@ TwGUIManager::TwGUIManager()
 	_gm = Core::getWorldRef().getGeometryManager();
 	_lm = Core::getWorldRef().getLightManager();
 	_mm = Core::getWorldRef().getMaterialManager();
+	_freezeGUI = false;
+
+	nameToCopy = "";
 
 	TwInit(TW_OPENGL, NULL);
 }
@@ -34,7 +43,8 @@ void TwGUIManager::initializeTwGUI()
 
 	initMainBar();
 	initManipuatorSelectorBar();
-	initAddBar();
+	initMaterialBar();
+	initAddBar();				// should be done last
 }
 
 void TwGUIManager::initMainBar()
@@ -48,6 +58,21 @@ void TwGUIManager::initMainBar()
 	}, NULL, " label='--> Run Game :)' ");
 
 	TwAddSeparator(g_twBar, NULL, NULL);
+
+	TwAddVarCB(g_twBar, "Show LibRocketGUI", TW_TYPE_BOOL8,
+		[](const void *data, void *clientData) {
+		bool tick = *(bool *)data;
+		if (tick)
+		{
+			Core::enableLibRocketInEditorGUI();
+		}
+		else
+		{
+			Core::disableLibRocketInEditorGUI();
+		}
+	}, [](void *data, void *clientData) {
+		*(bool *)data = Core::isLibRocketInEditorGUIEnabled();
+	}, NULL, NULL);
 
 	// Add option to disable/enable camera manipulator
 	// I did not find a way to intercept the hover event to make
@@ -73,6 +98,30 @@ void TwGUIManager::initMainBar()
 		*(bool *)value = *(bool *)clientData;
 	},
 		&this->_cameraManipulatorActive, NULL);
+
+	TwAddVarCB(g_twBar, "FPS Cam", TW_TYPE_BOOL8, 
+		[](const void *data, void *cliantData) {
+		bool isFps = *static_cast<const bool *>(data);
+		if (isFps) Core::switchToFirstPersonCamManipulator();
+		else Core::switchToTrackBallCamManipulator();
+		}, 
+		[](void *data, void *clientData) {
+			if (Core::getCurrCamManipulatorType() == Core::TRACKBALL)
+			{
+				*(bool *)data = false;
+			}
+			else
+			{
+				*(bool *)data = true;
+			}
+		}, NULL, NULL);
+
+	TwAddVarCB(g_twBar, "FPS Cam Speed", TW_TYPE_FLOAT, 
+		[](const void *data, void *clientData) {
+		Core::setEditorFPSCamWalkingSpeed(*(float *)data);
+	}, [](void *data, void *clientData) {
+		*(float *)data = Core::getEditorFPSCamWalkingSpeed();
+	}, NULL, "step=1.0 min=0.0 max=100.0");
 
 	TwAddVarCB(g_twBar, "Change Projection", TW_TYPE_BOOL8, 
 		[](const void *data, void *clientData) {
@@ -208,7 +257,7 @@ void TwGUIManager::initManipuatorSelectorBar()
 void TwGUIManager::initAddBar()
 {
 	g_addBar = TwNewBar("Add");
-	TwDefine(" Add size='150 10' color='216 96 224' position='1000 40'");
+	TwDefine(" Add size='250 100' color='216 96 224' position='1025 16'");
 
 	// 'Add model' button
 	TwAddButton(g_addBar, "Add model",
@@ -232,16 +281,28 @@ void TwGUIManager::initAddBar()
 			std::string str_mediaPath = "";
 			config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
 
-			// Append the file name to the destination path -> new file location
-			strToWCchar(toPath, str_mediaPath);
-			strToWCchar(newFile, fileName);
-			wcscat_s(toPath, newFile);
+			std::string geomAssetPath = str_mediaPath + "Assets/GeometryObject/";
 
-			bool didCopy = CopyFile(fromPath, toPath, FALSE);
-			DWORD dw = GetLastError();							// [Debug] Should be 0
+			//// Append the file name to the destination path -> new file location
+			//strToWCchar(toPath, str_mediaPath);
+			//strToWCchar(newFile, fileName);
+			//wcscat_s(toPath, newFile);
+
+			//CopyFile(fromPath, toPath, FALSE);
+			//DWORD dw = GetLastError();							// [Debug] Should be 0
 
 			// Add model to geometry manager
+			OSG_WARN << "Loading geometry object... " << fileName;
 			osg::Node *model = osgDB::readNodeFile(fileName);
+			if (model != NULL)
+			{
+				OSG_WARN << "Successfully! " << std::endl;
+			}
+			else
+			{
+				OSG_WARN << "Failed ! May crash the program..." << std::endl;
+			}
+
 			GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
 
 			// Get the input name
@@ -249,38 +310,140 @@ void TwGUIManager::initAddBar()
 			std::cout << "Enter model name: ";
 			std::cin >> modelName;
 
-			gm->addGeometry(modelName, model, fileName);
+			std::string objAssetFullPath = geomAssetPath + modelName + "/";
 
-			// [Note: Does not handle duplicate names]
-			GeometryObject* geom = gm->getGeometryObject(modelName);
+			// Append the file name to the destination path -> new file location
+			strToWCchar(toPath, objAssetFullPath);
+			strToWCchar(newFile, fileName);
 
-			addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
+			CreateDirectory(toPath, NULL);
+
+			wcscat_s(toPath, newFile);
+			CopyFile(fromPath, toPath, FALSE);
+			DWORD dw = GetLastError();							// [Debug] Should be 0
+
+			if (gm->addGeometry(modelName, model, fileName)) {
+				GeometryObject* geom = gm->getGeometryObject(modelName);
+
+
+				addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
+			}
 		}
 	},
 		g_twBar, NULL);
 
-	//// 'Add point light' button
-	//TwAddButton(g_addBar, "Add point light",
-	//	[](void *clientData) {
+	// 'Add point light' button
+	TwAddButton(g_addBar, "Add point light",
+		[](void *clientData) {
 
-	//	
-	//	// Add model to geometry manager
-	//	osg::Node *model = osgDB::readNodeFile(fileName);
-	//	GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		// Light default properties
+		osg::Vec3 color;
+		osg::Vec3 position;
+		float radius = 100.0f;		// Not sure if this is a good value
+		bool doShadow = false;
 
-	//	// Get the input name
-	//	std::string modelName;
-	//	std::cout << "Enter model name: ";
-	//	std::cin >> modelName;
+		// Add light to light manager
+		LightManager* lm = Core::getWorldRef().getLightManager();
 
-	//	gm->addGeometry(modelName, model, fileName);
+		// Get the input name
+		std::string lightName;
+		std::cout << "Enter point light name: ";
+		std::cin >> lightName;
 
-	//	// [Note: Does not handle duplicate names]
-	//	GeometryObject* geom = gm->getGeometryObject(modelName);
+		if (lm->addPointLight(lightName, position, color, radius, doShadow)) {
+			Light* lt = lm->getLight(lightName);
 
-	//	addLightToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
-	//},
-	//	g_twBar, NULL);
+			addLightToGUI((TwBar*)clientData, lt, LIGHT_GROUP_NAME, _index);
+		}
+	},
+		g_twBar, NULL);
+
+	// 'Add material' button
+	TwAddButton(g_addBar, "Add material",
+		[](void *clientData) {
+
+		// TODO: Find out which default values to use
+		// Material default properties
+		osg::Vec3 albedoColor;
+		float roughness = 0.0f;
+		float specular = 0.0f;
+		float metallic = 0.0f;
+
+		// Add material to material manager
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+		// Get the input name
+		std::string matName;
+		std::cout << "Enter material name: ";
+		std::cin >> matName;
+
+		if (mm->createPlainMaterial(matName, albedoColor, roughness, specular, metallic)) {
+			Material* mat = mm->getMaterial(matName);
+
+			addMaterialToGUI((TwBar*)clientData, mat, MATERIAL_GROUP_NAME, _index);
+		}
+	},
+		g_materialBar, NULL);
+
+	// 'Change cubemap' button
+	TwAddButton(g_addBar, "Change cubemap",
+		[](void *clientData) {
+
+		// For Windows functions
+		const size_t newsize = 4096;
+		wchar_t fromPath[newsize];
+		wchar_t toPath[newsize];
+		wchar_t newFile[newsize];
+
+		std::string filePath = "";
+		bool validFile = openFile(filePath);
+
+		if (validFile) {
+			std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+			strToWCchar(fromPath, filePath);
+
+			// Get the destination path
+			ConfigSettings* config = ConfigSettings::config;
+			std::string str_mediaPath = "";
+			config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+
+			str_mediaPath += "Assets/EnvironmentMap/";
+
+			// Append the file name to the destination path -> new file location
+			strToWCchar(toPath, str_mediaPath);
+			strToWCchar(newFile, fileName);
+			wcscat_s(toPath, newFile);
+
+			CopyFile(fromPath, toPath, FALSE);
+			DWORD dw = GetLastError();							// [Debug] Should be 0
+
+			Core::setEnvironmentMapVerticalCross(fileName);
+			Core::requestPrefilterCubeMap();
+		}
+	},
+		NULL, NULL);
+}
+
+void TwGUIManager::initMaterialBar()
+{
+
+	g_materialBar = TwNewBar("Materials");
+	TwDefine(" Materials label='Materials' size='250 540' color='96 216 96' position='1025 120' valueswidth=100");
+
+	// Process materials
+	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
+	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMap.begin();
+		it != mmMap.end(); ++it)
+	{
+		const std::string &name = it->first;
+		Material *mat = it->second;
+
+		if (mat->getUseTexture()) continue;
+		
+		// Moved code to a function
+		addMaterialToGUI(g_materialBar, mat, MATERIAL_GROUP_NAME, _index);
+	}
+
 }
 
 void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index) {
@@ -293,14 +456,103 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string posYVarName = POS_Y_LABEL + indexStr;
 	std::string posZVarName = POS_Z_LABEL + indexStr;
 
+	std::string scaleXVarName = SCALE_X_LABEL + indexStr;
+	std::string scaleYVarName = SCALE_Y_LABEL + indexStr;
+	std::string scaleZVarName = SCALE_Z_LABEL + indexStr;
+	std::string scaleUniformVarName = SCALE_UNIFORM_LABEL + indexStr;
+
+	std::string rotXVarName = ROT_X_LABEL + indexStr;
+	std::string rotYVarName = ROT_Y_LABEL + indexStr;
+	std::string rotZVarName = ROT_Z_LABEL + indexStr;
+
+	std::string scaleLimitVal = " step=0.05";
+
+	BarItem* item = new BarItem();
+	item->bar = bar;
+	item->name = name;
+
+
+	std::string removeDef = nameGroupDef + " label='" + REMOVE_LABEL + "'";
+	TwAddButton(bar, removeDef.c_str(),
+		[](void *clientData) {
+		BarItem* item = (BarItem*)clientData;
+		std::string name = item->name;
+
+		// Have to detach before deleting the geometry
+		GeometryObjectManipulator::detachManipulator();
+
+		Core::getWorldRef().getGeometryManager()->deleteGeometry(name);
+
+		TwRemoveVar(item->bar, name.c_str());
+
+	},
+		item, removeDef.c_str());
+
+	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
+	TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
+		[](const void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string oldName = item->name;
+
+		const std::string *newName = static_cast<const std::string*>(value);
+
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+
+		// Only rename if the name does not already exists
+		if (gm->renameGeometry(oldName, *newName)) {
+			GeometryObject* geom = gm->getGeometryObject(*newName);
+
+			TwRemoveVar(item->bar, oldName.c_str());
+			addModelToGUI(item->bar, geom, GEOM_GROUP_NAME, _index);
+		}
+	},
+		[](void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string* showName = static_cast<std::string*>(value);
+		TwCopyStdStringToLibrary(*showName, item->name);
+	},
+		item, editNameDef.c_str());
+
+	//std::string materialVarName = "material" + indexStr;
+	std::string materialDef = nameGroupDef + " label='Set Material'";
+	TwAddButton(bar, materialDef.c_str(),
+		[](void *clientData) {
+		BarItem* item = (BarItem*)clientData;
+		std::string name = item->name;
+
+		// Get the material name
+		std::string matName;
+		std::cout << "Set material name: ";
+		std::cin >> matName;
+
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+		Material* mat = mm->getMaterial(matName);
+		if (!mat) {
+			std::cout << "Material not found" << std::endl;
+		}
+		else {
+			GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+
+			gm->getGeometryObject(name)->setMaterial(mat);
+		}
+	},
+		item, materialDef.c_str());
+
+
+
 	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 	TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float posX = *(const float *)value;
 		osg::Vec3 oldPos = obj->getTranslate();
 		osg::Vec3 newPos = osg::Vec3(posX, oldPos.y(), oldPos.z());
 		obj->setTranslate(newPos);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -315,10 +567,15 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, posYVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float posY = *(const float *)value;
 		osg::Vec3 oldPos = obj->getTranslate();
 		osg::Vec3 newPos = osg::Vec3(oldPos.x(), posY, oldPos.z());
 		obj->setTranslate(newPos);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -333,10 +590,15 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	TwAddVarCB(bar, posZVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
 		float posZ = *(const float *)value;
 		osg::Vec3 oldPos = obj->getTranslate();
 		osg::Vec3 newPos = osg::Vec3(oldPos.x(), oldPos.y(), posZ);
 		obj->setTranslate(newPos);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -347,7 +609,189 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, posZDef.c_str());
 
-	std::string rotationVarName = "rotation" + std::to_string(index);
+
+	std::string scaleXDef = nameGroupDef + " label='" + SCALE_X_LABEL + "'" + scaleLimitVal;
+	TwAddVarCB(bar, scaleXVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
+		float scaleX = *(const float *)value;
+		osg::Vec3 oldScale = obj->getScale();
+		osg::Vec3 newScale = osg::Vec3(scaleX, oldScale.y(), oldScale.z());
+		obj->setScale(newScale);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *scaleX = static_cast<float *>(value);
+
+		osg::Vec3 scale = obj->getScale();
+		*scaleX = scale.x();
+	},
+		geom, scaleXDef.c_str());
+
+	std::string scaleYDef = nameGroupDef + " label='" + SCALE_Y_LABEL + "'" + scaleLimitVal;
+	TwAddVarCB(bar, scaleYVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
+		float scaleY = *(const float *)value;
+		osg::Vec3 oldScale = obj->getScale();
+		osg::Vec3 newScale = osg::Vec3(oldScale.x(), scaleY, oldScale.z());
+		obj->setScale(newScale);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *scaleY = static_cast<float *>(value);
+
+		osg::Vec3 scale = obj->getScale();
+		*scaleY = scale.y();
+	},
+		geom, scaleYDef.c_str());
+
+	std::string scaleZDef = nameGroupDef + " label='" + SCALE_Z_LABEL + "'" + scaleLimitVal;
+	TwAddVarCB(bar, scaleZVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
+		float scaleZ = *(const float *)value;
+		osg::Vec3 oldScale = obj->getScale();
+		osg::Vec3 newScale = osg::Vec3(oldScale.x(), oldScale.y(), scaleZ);
+		obj->setScale(newScale);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *scaleZ = static_cast<float *>(value);
+
+		osg::Vec3 scale = obj->getScale();
+		*scaleZ = scale.z();
+	},
+		geom, scaleZDef.c_str());
+
+	std::string scaleUniformDef= nameGroupDef + " label='" + SCALE_UNIFORM_LABEL + "'" + scaleLimitVal;
+	TwAddVarCB(bar, scaleUniformVarName.c_str(), TW_TYPE_FLOAT,
+			   [](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
+		float scaleUniform = *(const float *)value;
+		osg::Vec3 oldScale = obj->getScale();
+		osg::Vec3 newScale = osg::Vec3(scaleUniform, scaleUniform, scaleUniform);
+		obj->setScale(newScale);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *scaleUniform = static_cast<float *>(value);
+
+		osg::Vec3 scale = obj->getScale();
+		*scaleUniform = scale.x();
+	},
+		geom, scaleUniformDef.c_str());
+
+	std::string rotXDef = nameGroupDef + " label='" + ROT_X_LABEL + "'";
+	TwAddVarCB(bar, rotXVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
+		float rotX = *(const float *)value;			// Range is -pi to pi
+
+		rotX *= PI_F / 180.0f;
+
+		osg::Vec3 oldRot = obj->getEulerRotation();
+		osg::Vec3 newRot = osg::Vec3(rotX, oldRot.y(), oldRot.z());
+		obj->setRotation(newRot);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *rotX = static_cast<float *>(value);
+
+		osg::Vec3 rot = obj->getEulerRotation();
+		*rotX = rot.x() * 180.0f / PI_F;
+	},
+		geom, rotXDef.c_str());
+
+	std::string rotYDef = nameGroupDef + " label='" + ROT_Y_LABEL + "'";
+	TwAddVarCB(bar, rotYVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
+		float rotY = *(const float *)value;			// Range is -pi/2 to pi/2
+
+		rotY /= 2.0f;
+		rotY *= PI_F / 180.0f;
+		/*
+		float bounds = PI_F / 2.0f;
+
+		if (rotY > bounds) {
+			rotY = -bounds + (rotY - bounds);
+		}
+		else if (rotY < -bounds) {
+			rotY = bounds + (rotY - bounds);
+		}*/
+
+		osg::Vec3 oldRot = obj->getEulerRotation();
+		osg::Vec3 newRot = osg::Vec3(oldRot.x(), rotY, oldRot.z());
+
+		obj->setRotation(newRot);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *rotY = static_cast<float *>(value);
+
+		osg::Vec3 rot = obj->getEulerRotation();
+		*rotY = rot.y() * 2.0f * 180.0f / PI_F;
+	},
+		geom, rotYDef.c_str());
+
+	std::string rotZDef = nameGroupDef + " label='" + ROT_Z_LABEL + "'";
+	TwAddVarCB(bar, rotZVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		addGeomToUndo(obj);
+
+		float rotZ = *(const float *)value;			// Range is -pi to pi
+
+		rotZ *= PI_F / 180.0f;
+
+		osg::Vec3 oldRot = obj->getEulerRotation();
+		osg::Vec3 newRot = osg::Vec3(oldRot.x(), oldRot.y(), rotZ);
+		obj->setRotation(newRot);
+
+		_currChange = makeModelMatrix(obj);
+		GeometryObjectManipulator::updateBoundingBox();
+	},
+		[](void *value, void *clientData) {
+		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
+		float *rotZ = static_cast<float *>(value);
+
+		osg::Vec3 rot = obj->getEulerRotation();
+		*rotZ = rot.z() * 180.0f / PI_F;
+	},
+		geom, rotZDef.c_str());
+
+	std::string rotationVarName = "rotation" + indexStr;
 	std::string rotationDef = nameGroupDef + " label='rotation'";
 	TwAddVarCB(bar, rotationVarName.c_str(), TW_TYPE_QUAT4F,
 		[](const void *value, void *clientData) {
@@ -358,6 +802,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		// so that the following is safe
 		osg::Quat newRot = osg::Quat(rotArr[0], rotArr[1], rotArr[2], rotArr[3]);
 		obj->setRotation(newRot);
+
+		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -393,7 +839,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		DirectionalLight *dl = l->asDirectionalLight();
 
 		// lightDir ( to light, not from light ) 
-		std::string dirToWorldVarName = "dirToWorld" + std::to_string(index);
+		std::string dirToWorldVarName = "dirToWorld" + indexStr;
 		std::string dirToWorldDef = nameGroupDef + " label='dirToWorld'";
 		TwAddVarCB(bar, dirToWorldVarName.c_str(), TW_TYPE_DIR3F,
 			[](const void *value, void *clientData) {
@@ -412,9 +858,9 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 
 		// TODO: color, later.... Too tired
 		// TW_TYPE_COLOR3F
-		std::string dirLightColorVarName = "Color" + std::to_string(index);
-		std::string dirLightColorDef = nameGroupDef + " label='Color'";
-		TwAddVarCB(bar, dirLightColorVarName.c_str(), TW_TYPE_COLOR3F,
+		std::string colorVarName = COLOR_LABEL + indexStr;
+		std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+		TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
 			[](const void *value, void *clientData) {
 			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
 			const float *arr = static_cast<const float *>(value);
@@ -426,11 +872,51 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			const osg::Vec3 &color = dl->getColor();
 			float *arr = static_cast<float *>(value);
 			arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
-		}, dl, dirLightColorDef.c_str());
+		}, dl, colorDef.c_str());
 	}
 	else if (l->getLightType() == POINTLIGHT)
 	{
 		PointLight *pl = l->asPointLight();
+
+		BarItem* item = new BarItem();
+		item->bar = bar;
+		item->name = name;
+
+		std::string removeDef = nameGroupDef + " label='" + REMOVE_LABEL + "'";
+		TwAddButton(bar, removeDef.c_str(),
+			[](void *clientData) {
+			BarItem* item = (BarItem*)clientData;
+			std::string name = item->name;
+			Core::getWorldRef().getLightManager()->deleteLight(name);
+
+			TwRemoveVar(item->bar, name.c_str());
+		},
+			item, removeDef.c_str());
+
+		std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
+		TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
+			[](const void *value, void *clientData) {
+			BarItem* item = static_cast<BarItem*>(clientData);
+			std::string oldName = item->name;
+
+			const std::string *newName = static_cast<const std::string*>(value);
+
+			LightManager* lm = Core::getWorldRef().getLightManager();
+
+			// Only rename if the name does not already exists
+			if (lm->renameLight(oldName, *newName)) {
+				Light* light = lm->getLight(*newName);
+
+				TwRemoveVar(item->bar, oldName.c_str());
+				addLightToGUI(item->bar, light, LIGHT_GROUP_NAME, _index);
+			}
+		},
+			[](void *value, void *clientData) {
+			BarItem* item = static_cast<BarItem*>(clientData);
+			std::string* showName = static_cast<std::string*>(value);
+			TwCopyStdStringToLibrary(*showName, item->name);
+		},
+			item, editNameDef.c_str());
 
 		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
@@ -501,9 +987,9 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		// TODO: add color ..
 		// TODO: color, later.... Too tired
 		// TW_TYPE_COLOR3F
-		std::string ptLightColorVarName = "Color" + std::to_string(index);
-		std::string ptLightColorDef = nameGroupDef + " label='Color'";
-		TwAddVarCB(bar, ptLightColorVarName.c_str(), TW_TYPE_COLOR3F,
+		std::string colorVarName = COLOR_LABEL + indexStr;
+		std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+		TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
 			[](const void *value, void *clientData) {
 			PointLight *pl = static_cast<PointLight *>(clientData);
 			const float *arr = static_cast<const float *>(value);
@@ -515,10 +1001,120 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			const osg::Vec3 &color = pl->getColor();
 			float *arr = static_cast<float *>(value);
 			arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
-		}, pl, ptLightColorDef.c_str());
+		}, pl, colorDef.c_str());
 	}
 
 	std::string moveStr = " Main/" + name + " group='" + group + "'";
+	TwDefine(moveStr.c_str());
+
+	index++;
+}
+
+void TwGUIManager::addMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index)
+{
+	std::string name = mat->getName();
+	std::string nameGroupDef = " group='" + name + "' ";
+
+	std::string indexStr = std::to_string(index);
+	std::string limitVal = " min=0 max=1 step=0.01";
+
+	BarItem* item = new BarItem();
+	item->bar = bar;
+	item->name = name;
+
+	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
+	TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
+		[](const void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string oldName = item->name;
+
+		const std::string *newName = static_cast<const std::string*>(value);
+
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+		// Only rename if the name does not already exists
+		if (mm->renameMaterial(oldName, *newName)) {
+			Material* mat = mm->getMaterial(*newName);
+
+			TwRemoveVar(item->bar, oldName.c_str());
+			addMaterialToGUI(item->bar, mat, MATERIAL_GROUP_NAME, _index);
+		}
+	},
+		[](void *value, void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string* showName = static_cast<std::string*>(value);
+		TwCopyStdStringToLibrary(*showName, item->name);
+	},
+		item, editNameDef.c_str());
+
+	std::string colorVarName = COLOR_LABEL + indexStr;
+	std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+	TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const float *arr = static_cast<const float *>(value);
+		osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
+		mat->setAlbedo(color);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const osg::Vec3 &color = mat->getAlbedo();
+		float *arr = static_cast<float *>(value);
+		arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
+	}, mat, colorDef.c_str());
+
+	std::string roughnessVarName = ROUGHNESS_LABEL + indexStr;
+	std::string roughnessDef = nameGroupDef + " label='" + ROUGHNESS_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, roughnessVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setRoughness(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getRoughness();
+		*showVal = val;
+	},
+		mat, roughnessDef.c_str());
+
+	std::string specularVarName = SPECULAR_LABEL + indexStr;
+	std::string specularDef = nameGroupDef + " label='" + SPECULAR_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, specularVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setSpecular(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getSpecular();
+		*showVal = val;
+	},
+		mat, specularDef.c_str());
+
+	std::string metallicVarName = METALLIC_LABEL + indexStr;
+	std::string metallicDef = nameGroupDef + " label='" + METALLIC_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, metallicVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setMetallic(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getMetallic();
+		*showVal = val;
+	},
+		mat, metallicDef.c_str());
+
+	std::string moveStr = " Materials/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
 
 	index++;
@@ -536,7 +1132,67 @@ void TW_CALL TwGUIManager::loadModelFunc(void* clientData)
 	// TODO: implement
 }
 
-// TODO: bug, scrolling frequently will crash the program
+ModelMatrix* TwGUIManager::makeModelMatrix(GeometryObject* geom)
+{
+	ModelMatrix* item = new ModelMatrix();
+	item->name = geom->getName();
+	item->matrix = geom->getMatrix();
+	return item;
+}
+
+void TwGUIManager::addGeomToUndo(GeometryObject* geom)
+{
+	ModelMatrix* item = makeModelMatrix(geom);
+
+	_undos.push_back(item);
+	clearRedoList();
+}
+
+void TwGUIManager::clearRedoList() 
+{
+	int size = _redos.size();
+	for (int i = 0; i < size; i++) {
+		ModelMatrix* item = _redos.back();
+		_redos.pop_back();
+		delete item;
+	}
+}
+
+void TwGUIManager::doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<ModelMatrix*> &dest)
+{
+	if (from.size() > 0) {
+		ModelMatrix* oldChange = _currChange;		// before the changes	
+
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		bool didChange = false;
+
+		// Loop b/c previous geoms may have been deleted/renamed
+		while (from.size() > 0) {
+			_currChange = from.back();
+			from.pop_back();
+
+			// Apply undo
+			GeometryObject* geom = gm->getGeometryObject(_currChange->name);
+			if (geom != NULL) {
+				geom->setMatrix(_currChange->matrix);
+				didChange = true;
+				break;
+			}
+			else {
+				delete _currChange;
+			}
+		}
+
+		// Only add to redo stack if we did undo something
+		if (didChange && (oldChange != NULL)) {
+			dest.push_back(oldChange);
+		}
+
+		GeometryObjectManipulator::updateBoundingBox();
+	}
+}
+
+
 // TODO: anttweakbar by default uses opengl convention for world coordinates on widgets(arrow)
 // Need to change them to conform to osg convention
 void TwGUIManager::updateEvents() const
@@ -555,13 +1211,26 @@ void TwGUIManager::updateEvents() const
 		case TranslateAxisDragger:
 			*(int *)&_manipulatorBits = 0x4;
 			break;
+		default:
+			*(int *)&_manipulatorBits = 0x0;
 		}
+	}
+	else
+	{
+		*(int *)&_manipulatorBits = 0x0;
 	}
 
 	unsigned int size = _eventsToHandle.size();
 	for (unsigned int i = 0; i < size; ++i)
 	{
-		if (_eventsToHandle.front() == NULL) return; // attemps to fix crashing; but reason of NULL events unknown
+		// attemps to fix crashing; but reason of NULL events unknown
+		// actually reminds me of CSE131 return ErrorSTO back
+		if (_eventsToHandle.front() == NULL)
+		{
+			const_cast<TwGUIManager*>(this)->_eventsToHandle.pop();
+			continue;
+		} 
+
 		const osgGA::GUIEventAdapter& ea = *(_eventsToHandle.front());
 		float x = ea.getX(), y = ea.getWindowHeight() - ea.getY();
 		switch (ea.getEventType())
@@ -576,8 +1245,10 @@ void TwGUIManager::updateEvents() const
 			break;
 		case osgGA::GUIEventAdapter::DRAG:
 		case osgGA::GUIEventAdapter::MOVE:
-			TwMouseMotion(x, y);
+		{
+			*(bool *)&_isMouseOver = (bool)TwMouseMotion(x, y);
 			break;
+		}
 		case osgGA::GUIEventAdapter::KEYDOWN:
 		{
 			bool useCtrl = false;
@@ -585,18 +1256,76 @@ void TwGUIManager::updateEvents() const
 			{
 				useCtrl = true;
 			}
-			else if (ea.getKey() == 'g')
+			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_Tab)
 			{
-				GeometryObjectManipulator::changeCurrentManipulatorType(TranslateAxisDragger);
+				if (_cameraManipulatorActive)
+				{
+					Core::disableCameraManipulator();
+					*(bool *)&_cameraManipulatorActive = false;
+				}
+				else
+				{
+					Core::enableCameraManipulator();
+					*(bool *)&_cameraManipulatorActive = true;
+				}
 			}
-			else if (ea.getKey() == 'r')
+			else if (ea.getKey() == 'p')
 			{
-				GeometryObjectManipulator::changeCurrentManipulatorType(TrackballDragger);
+				osg::MatrixTransform *mt = NULL;
+				if ((mt = GeometryObjectManipulator::getCurrNode()) != NULL)
+				{
+					osg::BoundingSphere bs = mt->getBound();
+					osg::Vec3 center = bs.center();
+					float radius = bs.radius();
+					osg::Vec3 eyePos = Core::getMainCamera().getEyePosition();
+					osg::Vec3 dirVec = eyePos - center;
+					osg::Vec3 fromObjToEyeScale = dirVec;
+					fromObjToEyeScale.normalize();
+					fromObjToEyeScale *= radius * 1.5;
+					osg::Vec3 fromEyeToScalePoint = -dirVec + fromObjToEyeScale;
+					osg::Vec3 newEyePos = eyePos + fromEyeToScalePoint;
+					Core::setCurrentCameraManipulatorHomePosition(newEyePos, center, osg::Vec3(0, 0, 1));
+				}
 			}
-			else if (ea.getKey() == 's')
+			else if (ea.getKey() == 'c')
 			{
-				GeometryObjectManipulator::changeCurrentManipulatorType(TabBoxDragger);
+				osg::ref_ptr<osg::MatrixTransform> obj = GeometryObjectManipulator::getCurrNode();
+				if (obj != NULL) {
+					std::string nodeName = obj->getName();
+					std::string prefix("Transform_");
 
+					*(std::string *)&nameToCopy = nodeName.substr(prefix.length());
+				}
+			}
+			else if (ea.getKey() == 'v')
+			{
+				if (nameToCopy != "") {
+					GeometryObject* newGeom = _gm->copyGeometry(nameToCopy);
+
+					if (newGeom != NULL) {
+						addModelToGUI(g_twBar, newGeom, GEOM_GROUP_NAME, _index);
+					}
+				}
+			}
+			else if (ea.getKey() == 'z')
+			{
+				doUndoRedo(_undos, _redos);
+			}
+			else if (ea.getKey() == 'y')
+			{
+				doUndoRedo(_redos, _undos);
+			}
+			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F8)
+			{
+				Core::enableGameMode();
+			}
+			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F9)
+			{
+				Core::enablePassDataDisplay();
+			}
+			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F10)
+			{
+				Core::disablePassDataDisplay();
 			}
 			TwKeyPressed(getTwKey(ea.getKey(), useCtrl), getTwModKeyMask(ea.getModKeyMask()));
 		}
@@ -612,19 +1341,16 @@ bool TwGUIManager::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdap
 	// TODO: have some bugs, some times insert some null events, making program crash 
 	switch (ea.getEventType())
 	{
-	case osgGA::GUIEventAdapter::FRAME:  // Update transform values
-		/*if (_scene.valid())
-		{
-		osg::Vec3 pos(position[0], position[1], position[2]);
-		osg::Quat quat(rotation[0], rotation[1], rotation[2], rotation[3]);
-		_scene->setMatrix(osg::Matrix::rotate(quat) * osg::Matrix::translate(pos));
-		}*/
+	case osgGA::GUIEventAdapter::FRAME:  
 		return false;
 	}
 
 	// As AntTweakBar handle all events within the OpenGL context, we have to record the event here
 	// and process it later in the draw callback
-	_eventsToHandle.push(&ea);
+	if (!_freezeGUI)
+	{
+		_eventsToHandle.push(&ea);
+	}
 	return false;
 }
 
@@ -632,8 +1358,19 @@ void TwGUIManager::operator()(osg::RenderInfo& renderInfo) const
 {
 	osg::Viewport* viewport = renderInfo.getCurrentCamera()->getViewport();
 	if (viewport) TwWindowSize(viewport->width(), viewport->height());
+
 	updateEvents();
 	TwDraw();
+}
+
+void TwGUIManager::requestFreeze()
+{
+	_freezeGUI = true;;
+}
+
+void TwGUIManager::requestUnFreeze()
+{
+	_freezeGUI = false;
 }
 
 TwMouseButtonID TwGUIManager::getTwButton(int button) const
@@ -808,21 +1545,46 @@ std::string TwGUIManager::tagify(std::string tag, osg::Vec4 &v)
 	return addTags(tag, ret);
 }
 
+std::string TwGUIManager::tagify(std::string tag, osg::Quat &q)
+{
+	std::string ret = "";
+
+	for (int i = 0; i < 4; i++) {
+		ret = ret + std::to_string(q[i]);
+
+		if (i < 3) {
+			ret = ret + " ";
+		}
+	}
+
+	return addTags(tag, ret);
+}
+
 void TwGUIManager::exportXML()
 {
 	// Might wanna move this code somewhere else
 	ConfigSettings* config = ConfigSettings::config;
-	std::string str_export_xml = "";
+	std::string str_export_material_xml = "";
+	std::string str_export_world_xml = "";
 	std::string str_mediaPath = "";
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-	config->getValue(ConfigSettings::str_export_xml, str_export_xml);
+	config->getValue(ConfigSettings::str_material_xml, str_export_material_xml);
+	config->getValue(ConfigSettings::str_export_xml, str_export_world_xml);
 
-	std::string exportPath = str_mediaPath + str_export_xml;
+	// TODO: support custom file names
+	std::string exportWorldPath = str_mediaPath + str_export_world_xml;
+	std::string exportMaterialPath = str_mediaPath + str_export_material_xml;
 
+	exportWorldXML(exportWorldPath);
+	exportMaterialXML(exportMaterialPath);
+}
+
+void TwGUIManager::exportWorldXML(std::string &path)
+{
 	// Open file to write
 	int tabs = 0;
 	std::ofstream f;
-	f.open(str_export_xml);
+	f.open(path);
 
 	// Headers
 	write(f, tabs, "<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
@@ -832,49 +1594,6 @@ void TwGUIManager::exportXML()
 	MaterialManager* mm = Core::getWorldRef().getMaterialManager();
 	GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
 	LightManager* lm = Core::getWorldRef().getLightManager();
-
-	// FOR MATERIALS
-	const std::unordered_map<std::string, Material *> &mmMatMap = mm->getMaterialMapRef();
-	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMatMap.begin();
-		it != mmMatMap.end(); ++it)
-	{
-		const std::string &name = it->first;
-		Material *mat = it->second;			// Get Material object
-
-		std::string type = (mat->getUseTexture()) ? "textured" : "plain";
-		std::string matHeader = "<material name=\"" + name + "\" type=\"" + type + "\">";
-
-		write(f, tabs, matHeader);
-		tabs++;
-
-		// For plain materials
-		if (type == "plain") {
-			osg::Vec3 alb = mat->getAlbedo();
-			float rough = mat->getRoughness();
-			float specular = mat->getSpecular();
-			float metallic = mat->getMetallic();
-
-			write(f, tabs, tagify("albedo", alb));
-			write(f, tabs, tagify("roughness", rough));
-			write(f, tabs, tagify("specular", specular));
-			write(f, tabs, tagify("metallic", metallic));
-		}
-		// For textured materials
-		else if (type == "textured") {
-			std::string albPath = mat->getAlbedoTexturePath();
-			std::string roughPath = mat->getRoughnessTexturePath();
-			std::string metallicPath = mat->getMetallicTexturePath();
-			std::string normalPath = mat->getNormalMapTexturePath();
-
-			write(f, tabs, tagify("albedoTex", albPath));
-			write(f, tabs, tagify("roughnessTex", roughPath));
-			write(f, tabs, tagify("metallicTex", metallicPath));
-			write(f, tabs, tagify("normalPath", normalPath));
-		}
-
-		tabs--;
-		write(f, tabs, "</material>\n");
-	}
 
 	// FOR GEOMETRY OBJECTS
 	const std::unordered_map<std::string, GeometryObject *> &gmMap = gm->getGeometryObjectMapRef();
@@ -892,9 +1611,12 @@ void TwGUIManager::exportXML()
 		// Geometry properties
 		std::string file = geom->getFileName();
 		std::string mat = geom->getMaterial()->getName();
-		osg::Vec3 pos = geom->getTranslate();
-		osg::Vec4 rot = geom->getRotation().asVec4();
+
+		osg::Vec3 pos, scale;
+		osg::Quat rot, so;
 		// TODO: collider
+
+		geom->decompose(pos, rot, scale, so);
 
 		std::string matTag = "<material name=\"" + mat + "\" />";
 
@@ -902,6 +1624,7 @@ void TwGUIManager::exportXML()
 		write(f, tabs, matTag);
 		write(f, tabs, tagify("position", pos));
 		write(f, tabs, tagify("orientation", rot));
+		write(f, tabs, tagify("scale", scale));
 		//write(f, tabs, tagify("collider", ));
 
 		tabs--;
@@ -960,5 +1683,68 @@ void TwGUIManager::exportXML()
 	// Footers
 	tabs--;
 	write(f, tabs, "</world>");
+	f.close();			// Close file
+}
+
+void TwGUIManager::exportMaterialXML(std::string &path)
+{
+	// Open file to write
+	int tabs = 0;
+	std::ofstream f;
+	f.open(path);
+
+	// Headers
+	write(f, tabs, "<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
+	write(f, tabs, "<materialList>");
+	tabs++;
+
+	MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+	// FOR MATERIALS
+	const std::unordered_map<std::string, Material *> &mmMatMap = mm->getMaterialMapRef();
+	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMatMap.begin();
+		it != mmMatMap.end(); ++it)
+	{
+		const std::string &name = it->first;
+		Material *mat = it->second;			// Get Material object
+
+		std::string type = (mat->getUseTexture()) ? "textured" : "plain";
+		std::string matHeader = "<material name=\"" + name + "\" type=\"" + type + "\">";
+
+		write(f, tabs, matHeader);
+		tabs++;
+
+		// For plain materials
+		if (type == "plain") {
+			osg::Vec3 alb = mat->getAlbedo();
+			float rough = mat->getRoughness();
+			float specular = mat->getSpecular();
+			float metallic = mat->getMetallic();
+
+			write(f, tabs, tagify("albedo", alb));
+			write(f, tabs, tagify("roughness", rough));
+			write(f, tabs, tagify("specular", specular));
+			write(f, tabs, tagify("metallic", metallic));
+		}
+		// For textured materials
+		else if (type == "textured") {
+			std::string albPath = mat->getAlbedoTexturePath();
+			std::string roughPath = mat->getRoughnessTexturePath();
+			std::string metallicPath = mat->getMetallicTexturePath();
+			std::string normalPath = mat->getNormalMapTexturePath();
+
+			write(f, tabs, tagify("albedoTex", albPath));
+			write(f, tabs, tagify("roughnessTex", roughPath));
+			write(f, tabs, tagify("metallicTex", metallicPath));
+			write(f, tabs, tagify("normalPath", normalPath));
+		}
+
+		tabs--;
+		write(f, tabs, "</material>\n");
+	}
+
+	// Footers
+	tabs--;
+	write(f, tabs, "</materialList>");
 	f.close();			// Close file
 }

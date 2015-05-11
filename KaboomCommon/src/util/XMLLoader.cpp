@@ -18,6 +18,7 @@ void XMLLoader::loadXMLFile(const std::string &filePath)
 	else
 	{
 		// TODO : output to console bad xml
+		OSG_WARN << "Bad xml at " << filePath << std::endl;
 	}
 }
 
@@ -59,8 +60,7 @@ void XMLLoader::loadBool(osgDB::XmlNode* xmlNode, bool& b) {
 }
 
 void XMLLoader::loadString(osgDB::XmlNode* xmlNode, std::string& s) {
-	std::stringstream ss; ss << xmlNode->getTrimmedContents();
-	ss >> s;
+	s = xmlNode->contents;
 }
 
 void XMLLoader::loadVec3(osgDB::XmlNode* xmlNode, osg::Vec3& vec) {

@@ -134,16 +134,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\util\ConfigSettings.h" />
+    <ClInclude Include="src\util\Configuration.h" />
     <ClInclude Include="src\util\XMLLoader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\util\ConfigSettings.cpp" />
+    <ClCompile Include="src\util\Configuration.cpp" />
     <ClCompile Include="src\util\XMLLoader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\BugList.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

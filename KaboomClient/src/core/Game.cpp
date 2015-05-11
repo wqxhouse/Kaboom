@@ -1,30 +1,30 @@
 #include "Game.h"
 
 #include <iostream>
+
 #include <osg/Group>
+#include <osgAudio/FileStream.h>
 
 #include <Core.h>
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
-
+#include <components/PositionComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
 
-#include "../Global.h"
-#include "SceneNodeComponent.h"
 #include "../Scene.h"
+#include "../GameGUI.h"
+#include "../components/SceneNodeComponent.h"
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 
 Game::Game(ConfigSettings *config)
-    : config(config),
-      playerFactory(entityManager),
-      bombFactory(entityManager),
-      eventHandlerLookup(this),
-      client(eventHandlerLookup), 
-	  _camera(Core::getMainCamera()) {
-
+        : config(config),
+          characterFactory(entityManager),
+          bombFactory(entityManager),
+          eventHandlerLookup(this),
+          client(eventHandlerLookup), 
+	      _camera(Core::getMainCamera()) {
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
     config->getValue(ConfigSettings::str_screenPosX, screenPosXStr);
@@ -40,29 +40,66 @@ Game::Game(ConfigSettings *config)
     int bufferH = atoi(renbufferHStr.c_str());
     int screenW = atoi(screenWStr.c_str());
     int screenH = atoi(screenHStr.c_str());
+	sounds = new std::unordered_map<SOUNDS, osg::ref_ptr<Sample> >();
 
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
-    setupScene();
+	setupScene();
+	setupGUI();
 
-	/* For testing in-game editor *
+	/* For testing in-game editor */
+	
 	std::string str_mediaPath = "";
+	std::string str_material_xml = "";
 	std::string str_world_xml = "";
+
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+	config->getValue(ConfigSettings::str_material_xml, str_material_xml);
 	config->getValue(ConfigSettings::str_world_xml, str_world_xml);
 
 	str_world_xml = str_mediaPath + str_world_xml;
+	str_material_xml = str_mediaPath + str_material_xml;
 
+	Core::loadMaterialFile(str_material_xml);
 	Core::loadWorldFile(str_world_xml);
-	* End testing code */
+	/* End testing code */
 
     inputManager = new InputManager(client);
     inputManager->loadConfig();
-
+	
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
     Core::addEventHandler(&inputManager->getMouseEventHandler());
 
 	_geometryManager = Core::getWorldRef().getGeometryManager();
 	_materialManager = Core::getWorldRef().getMaterialManager();
+	source = new Source;
+	
+	printf("check for sound errors\n");
+	sample = new Sample("sounds\\a.wav");
+	soundManager.addToMap(KABOOM_EXPLODE,"sounds\\a.wav");
+	source->setSound(sample.get());
+	source->setGain(1);
+	source->setLooping(false);
+	printf("Adding KABOOM_EXPLODE TO MAP\n");
+	sounds->insert(std::make_pair(KABOOM_EXPLODE,sample));
+	//sounds->at(KABOOM_EXPLODE)=sample;
+	printf("Added KABOOM_EXPLODE TO MAP\n");
+	sample = new Sample("sounds\\a.wav");
+	printf("Adding KABOOM_FIRE TO MAP\n");
+	sounds->insert(std::make_pair(KABOOM_FIRE, sample));
+	printf("Added KABOOM_FIRE TO MAP\n");
+	sample = new Sample("sounds\\a.wav");
+	printf("Adding BASIC TO MAP\n");
+	sounds->insert(std::make_pair(BASIC, sample));
+	printf("Added BASIC TO MAP\n");
+	/*sample = new Sample("C:\\Users\\melapier\\Downloads\\djsona.wav");
+	backgroundMusic = new Source;
+	backgroundMusic->setSound(sample.get());
+	backgroundMusic->setGain(1);
+	backgroundMusic->setLooping(true);
+	backgroundMusic->play();*/
+	//delete source;
+	printf("finished check sound errors");
+	
 }
 
 Game::~Game() {
@@ -107,7 +144,8 @@ void Game::run() {
 			// TODO: the following doesn't need to be updated for every event
 			// but need to set as soon as the game mode is on
 			// TODO: put this two as initial values in the config file
-			Core::getMainCamera().setFovYAndUpdate(89);
+			
+			Core::getMainCamera().setFovXAndUpdate(90);
 			Core::getMainCamera().setNearAndFarAndUpdate(1, 500);
 
 			// TODO: Robin: need to check this.
@@ -117,7 +155,7 @@ void Game::run() {
 			// E.g: close the server whlie running the game 
             client.receive();
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
-				removeAllDynamicEntity(); //remove all entity created dynamically when connected to the client
+				removeAllEntities(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;
 			}
 			break;
@@ -130,39 +168,61 @@ void Game::run() {
         Core::AdvanceFrame();
     }
 }
-void Game::removeAllDynamicEntity() {
-	for (auto it : entityManager.getEntityList()) {
-		//remove from graphics
-		getGeometryManager()->deleteGeometry(std::to_string(static_cast<int>(it->getId())));
 
-		//remove from entity system
-		entityManager.destroyEntity(it->getId());
-	}
+void Game::addEntity(Entity *entity) {
+    auto *posComp = entity->getComponent<PositionComponent>();
+    auto *sceneNodeComp = entity->getComponent<SceneNodeComponent>();
+
+    if (posComp == nullptr || sceneNodeComp == nullptr) {
+        return;
+    }
+
+    if (sceneNodeComp != nullptr) {
+        const auto name = std::to_string(entity->getId());
+        const auto pos = osg::Vec3(posComp->getX(), posComp->getY(), posComp->getZ());
+
+        getGeometryManager()->addGeometry(name, sceneNodeComp->getNode(), pos);
+    }
 }
-const GameClient &Game::getGameClient() const{
-	return client;
+
+void Game::removeEntity(Entity *entity) {
+    getGeometryManager()->deleteGeometry(std::to_string(entity->getId()));
+    entityManager.destroyEntity(entity->getId());
+}
+
+void Game::removeAllEntities() {
+	for (auto it : entityManager.getEntityList()) {
+        removeEntity(it);
+	}
 }
 
 EntityManager &Game::getEntityManager() {
     return entityManager;
 }
+SoundManager &Game::getSoundManager() {
+	return soundManager;
+}
 
-const PlayerFactory &Game::getPlayerFactory() const {
-    return playerFactory;
+const CharacterFactory &Game::getCharacterFactory() const {
+    return characterFactory;
 }
 
 const BombFactory &Game::getBombFactory() const {
     return bombFactory;
 }
 
+const GameClient &Game::getGameClient() const {
+    return client;
+}
+
 GeometryObjectManager * Game::getGeometryManager() {
 	return _geometryManager;
 }
 
-MaterialManager * Game::getMaterialManager() {
+MaterialManager *Game::getMaterialManager() {
 	return _materialManager;
 }
 
-Camera &Game::getCamera(){
+Camera &Game::getCamera() {
 	return _camera;
 }

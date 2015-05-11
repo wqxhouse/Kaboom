@@ -2,47 +2,68 @@
 
 #include <core/EntityType.h>
 #include <network/SpawnEvent.h>
-#include <osg/Group>
+#include <components/PositionComponent.h>
 #include "../core/Game.h"
-#include "../core/SceneNodeComponent.h"
 
 SpawnEventHandler::SpawnEventHandler(Game *game)
-    : game(game) {
-} 
-
-SpawnEventHandler::~SpawnEventHandler() {
+        : game(game) {
 }
 
 void SpawnEventHandler::handle(const Event &e) const {
     const SpawnEvent &evt = static_cast<const SpawnEvent &>(e);
-	Entity * entity;
-	SceneNodeComponent * sceneNode;
-	switch (evt.getType()) {
-	case EntityType::PLAYER:
-		printf("begin creation of player\n");
-		std::cout << evt << std::endl;
+	EntityManager &entityManager = game->getEntityManager();
+    EntityType type = evt.getType();
+    Entity *entity = nullptr;
+	
+	
+	
+    if ((type & CAT_MASK) == CAT_CHARACTER) {
+        entity = game->getCharacterFactory().createCharacter(
+                evt.getEntityId(),
+                evt.getType(),
+                evt.getX(),
+                evt.getY(),
+                evt.getZ(),
+                evt.getYaw(),
+                evt.getPitch());
+    } else if ((type & CAT_MASK) == CAT_BOMB) {
+        entity = game->getBombFactory().createBomb(
+                evt.getEntityId(),
+                evt.getType(),
+                evt.getX(),
+                evt.getY(),
+                evt.getZ(),
+                evt.getYaw(),
+                evt.getPitch());
+		game->source = new Source;
+		Entity *player = entityManager.getEntity(game->getGameClient().getCurrentPlayerEntityId());
+		if (player != nullptr){
 
 
-		entity = game->getPlayerFactory().createPlayer(evt.getEntityId(), evt.getX(), evt.getY(), evt.getZ());
-		
-		sceneNode = entity->getComponent<SceneNodeComponent>();
-		game->getGeometryManager()->addGeometry(std::to_string(static_cast<int>(entity->getId())),
-												sceneNode->getNode(),
-												osg::Vec3(evt.getX(), evt.getY(), evt.getZ()));
+			PositionComponent *playerPos = player->getComponent<PositionComponent>();
+			PositionComponent *pos = entity->getComponent<PositionComponent>();
+			double x = (double)(-playerPos->getX() + pos->getX());
+			double y = (double)(-playerPos->getY() + pos->getY());
+			double z = (double)(-playerPos->getZ() + pos->getZ());
 
-		printf("done with creation of player");
-		break;
-	case EntityType::BOMB:
+			switch (type&(~CAT_BOMB)){
+			case KABOOM_V2:
+				game->source->setSound(game->sounds->at(KABOOM_FIRE).get());
+				break;
+			default:
+				game->source->setSound(game->sounds->at(BASIC).get());
+				printf("unknown bomb type gets no sound\n");
+				break;
+			}
+			game->source->setRolloffFactor(sqrt(x*x + y*y + z*z));
+			game->source->setGain(1);
+			game->source->setLooping(false);
+			osgAudio::AudioEnvironment::instance()->update();
+			game->source->play();
+		}
+    }
 
-		entity = game->getBombFactory().createBomb(evt.getEntityId(), evt.getX(), evt.getY(), evt.getZ());
-		sceneNode = entity->getComponent<SceneNodeComponent>();
-		game->getGeometryManager()->addGeometry(std::to_string(static_cast<int>(entity->getId())),
-			sceneNode->getNode(),
-			osg::Vec3(evt.getX(), evt.getY(), evt.getZ()));
-		printf("Creating a bomb");
-		break;
-	case EntityType::UNINITIATED:
-		printf("Error in entity type");
-		break;
-	}
+    if (entity != nullptr) {
+        game->addEntity(entity);
+    }
 }

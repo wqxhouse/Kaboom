@@ -63,6 +63,7 @@ void SkyBox::setEnvironmentMap( unsigned int unit, osg::Image* posX, osg::Image*
 		cubemap->setFilter( osg::Texture::MIN_FILTER, osg::Texture::LINEAR_MIPMAP_LINEAR );
 		cubemap->setFilter( osg::Texture::MAG_FILTER, osg::Texture::LINEAR );
         cubemap->setResizeNonPowerOfTwoHint( false );
+		_textureCubeMap = cubemap;
         getOrCreateStateSet()->setTextureAttributeAndModes( unit, cubemap.get() );
     }
 

@@ -60,6 +60,11 @@ public:
 		return _name;
 	}
 
+	inline void setName(std::string name)
+	{
+		_name = name;
+	}
+
 	virtual DirectionalLight *asDirectionalLight();
 	virtual PointLight *asPointLight();
 

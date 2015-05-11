@@ -218,8 +218,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(SolutionDir);$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -235,29 +235,38 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OSG_LIB_PATH);$(SolutionDir)\3rdParty\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;osg.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;osgViewer.lib;osgManipulator.lib;AntTweakBar64.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib</AdditionalDependencies>
+      <AdditionalDependencies>osgAudio.lib;ws2_32.lib;osg.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;osgViewer.lib;osgManipulator.lib;AntTweakBar64.lib;shell.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib</AdditionalDependencies>
       <AdditionalOptions>
       </AdditionalOptions>
       <SubSystem>Console</SubSystem>
       <LinkTimeCodeGeneration />
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)\KaboomClient\config.ini" "$(TargetDir)" /y</Command>
+      <Command>xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(ProjectDir)" /D /I /Y
+xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(TargetDir)" /D /I /Y
+xcopy "$(SolutionDir)3rdparty\bin\*.dll" "$(TargetDir)" /D /I /Y
+xcopy "$(ProjectDir)\data-client" "$(TargetDir)\data-client" /D /I /Y
+xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
       <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\SceneNodeComponent.cpp" />
+    <ClCompile Include="src\core\BombDataLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
-    <ClCompile Include="src\core\PlayerFactory.cpp" />
-    <ClCompile Include="src\core\SceneNodeComponent.cpp" />
+    <ClCompile Include="src\core\CharacterFactory.cpp" />
+    <ClCompile Include="src\core\SoundManager.cpp" />
+    <ClCompile Include="src\GameGUI.cpp" />
     <ClCompile Include="src\input\InputEventHandler.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
     <ClCompile Include="src\input\MouseEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\network\ClientEventHandlerLookup.cpp" />
+    <ClCompile Include="src\network\DestroyEventHandler.cpp" />
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
+    <ClCompile Include="src\network\ExplosionEventHandler.cpp" />
     <ClCompile Include="src\network\RotationEventHandler.cpp" />
     <ClCompile Include="src\network\SpawnEventHandler.cpp" />
     <ClCompile Include="src\network\GameClient.cpp" />
@@ -270,17 +279,22 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\SceneNodeComponent.h" />
+    <ClInclude Include="src\core\BombData.h" />
+    <ClInclude Include="src\core\BombDataLookup.h" />
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\core\PlayerFactory.h" />
-    <ClInclude Include="src\core\SceneNodeComponent.h" />
-    <ClInclude Include="src\Global.h" />
+    <ClInclude Include="src\core\CharacterFactory.h" />
+    <ClInclude Include="src\core\SoundManager.h" />
+    <ClInclude Include="src\GameGUI.h" />
     <ClInclude Include="src\input\InputEventHandler.h" />
     <ClInclude Include="src\input\InputManager.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
     <ClInclude Include="src\input\MouseEventHandler.h" />
     <ClInclude Include="src\network\ClientEventHandlerLookup.h" />
+    <ClInclude Include="src\network\DestroyEventHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
+    <ClInclude Include="src\network\ExplosionEventHandler.h" />
     <ClInclude Include="src\network\RotationEventHandler.h" />
     <ClInclude Include="src\network\SpawnEventHandler.h" />
     <ClInclude Include="src\network\GameClient.h" />
@@ -289,9 +303,6 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="src\network\PositionEventHandler.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="stdafx.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Config.ini" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KaboomCommon\KaboomCommon.vcxproj">
@@ -303,6 +314,15 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ProjectReference Include="..\KaboomGraphicsEngine\KaboomGraphicsEngine.vcxproj">
       <Project>{e24d41a4-8d90-45ff-9c55-6466187744ad}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="data-client\bombs.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\SharedConfig\Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\BugList.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

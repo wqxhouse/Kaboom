@@ -5,6 +5,7 @@ class Visualizer
 {
 public:	
 	Visualizer();
+	Visualizer(const osg::Vec3 &pos);
 	void setPosition(const osg::Vec3 &pos);
 
 	inline osg::ref_ptr<osg::MatrixTransform> getRoot()

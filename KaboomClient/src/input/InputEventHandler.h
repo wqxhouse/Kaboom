@@ -5,7 +5,6 @@ class GameClient;
 class InputEventHandler {
 public:
     InputEventHandler(GameClient &client);
-    ~InputEventHandler();
 
     void onMoveForwardDown();
     void onMoveForwardUp();
@@ -17,14 +16,16 @@ public:
     void onMoveRightUp();
     void onJumpDown();
     void onJumpUp();
-    void onFireDown();
-    void onFireUp();
+    void onAttack1Down();
+    void onAttack1Up();
+    void onAttack2Down();
+    void onAttack2Up();
     void onLook(float yaw, float pitch);
 
-	void enterGameMode();
-	void quitGameMode();
-	void showDebugAnalysis();
-	void hideDebugAnalysis();
+    // void enterGameMode();
+    void quitGameMode();
+    // void showDebugAnalysis();
+    // void hideDebugAnalysis();
 
 private:
     GameClient &client;
@@ -34,15 +35,10 @@ private:
     bool movingLeft;
     bool movingRight;
     bool jumping;
-    bool firing;
+    bool attacking1;
+    bool attacking2;
     float yaw;
     float pitch;
 
-	//osg::Vec3 _velocity;
-	//const float _kSpeed = 100;
-
     void sendPlayerInputEvent();
-	// void updateLocalCamera();
-
-    //static void resetCamera();
 };

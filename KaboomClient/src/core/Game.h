@@ -7,19 +7,20 @@
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
 
+#include "CharacterFactory.h"
 #include "BombFactory.h"
-#include "PlayerFactory.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 
+#include <osgAudio/Source.h>
+#include <osgAudio/AudioEnvironment.h>
+#include <osgAudio/Sample.h>
+#include "SoundManager.h"
+
+using namespace osgAudio;
+
 class InputManager;
 
-enum GameStateMachine {
-	EDITOR_MODE,
-	CONNECT_TO_SERVER,
-	GAME_MODE,
-	DISCONNECT_TO_SERVER
-};
 
 class Game {
 public:
@@ -28,27 +29,40 @@ public:
 
     void run();
 
-	const GameClient &getGameClient() const;
-    //bool addSceneNodeEntity(Entity *entity);
+    void addEntity(Entity *entity);
+    void removeEntity(Entity *entity);
+    void removeAllEntities();
 
     EntityManager &getEntityManager();
+	SoundManager &getSoundManager();
+    const CharacterFactory &getCharacterFactory() const;
+    const BombFactory &getBombFactory() const;
 
-    const PlayerFactory &getPlayerFactory() const;
-	const BombFactory &getBombFactory() const;
+    const GameClient &getGameClient() const;
 
-	GeometryObjectManager* getGeometryManager();
-	MaterialManager* getMaterialManager();
-	
-	Camera &getCamera();
+    GeometryObjectManager* getGeometryManager();
+    MaterialManager* getMaterialManager();
 
-	void removeAllDynamicEntity();
+    Camera &getCamera();
+	osg::ref_ptr<Source> source;
+	osg::ref_ptr<Source> backgroundMusic;
+	osg::ref_ptr<Sample> sample;
+	std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
 
 private:
+    enum GameStateMachine {
+        EDITOR_MODE,
+        CONNECT_TO_SERVER,
+        GAME_MODE,
+        DISCONNECT_TO_SERVER
+    };
+
     ConfigSettings *config;
     InputManager *inputManager;
 
     EntityManager entityManager;
-    PlayerFactory playerFactory;
+	SoundManager soundManager;
+    CharacterFactory characterFactory;
 	BombFactory bombFactory;
 
     ClientEventHandlerLookup eventHandlerLookup;
@@ -58,7 +72,4 @@ private:
 	MaterialManager * _materialManager;
 
 	Camera &_camera;
-    // osgViewer::Viewer viewer;
-    // osg::Group *rootNode;
-    // void setupCamera();
 };

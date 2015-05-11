@@ -3,12 +3,9 @@
 #include "../network/GameClient.h"
 
 InputManager::InputManager(GameClient &client)
-    : inputEventHandler(client),
-    keyboardEventHandler(inputEventHandler),
-    mouseEventHandler(inputEventHandler) {
-}
-
-InputManager::~InputManager() {
+        : inputEventHandler(client),
+          keyboardEventHandler(inputEventHandler),
+          mouseEventHandler(inputEventHandler) {
 }
 
 void InputManager::loadConfig() {
@@ -22,14 +19,16 @@ void InputManager::loadConfig() {
     keyboardEventHandler.bindKey('d', KeyboardEventHandler::KEY_UP, &InputEventHandler::onMoveRightUp);
     keyboardEventHandler.bindKey(' ', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onJumpDown);
     keyboardEventHandler.bindKey(' ', KeyboardEventHandler::KEY_UP, &InputEventHandler::onJumpUp);
-    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_DOWN, &InputEventHandler::onFireDown);
-    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_UP, &InputEventHandler::onFireUp);
+    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_DOWN, &InputEventHandler::onAttack1Down);
+    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_UP, &InputEventHandler::onAttack1Up);
+    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON, MouseEventHandler::KEY_DOWN, &InputEventHandler::onAttack2Down);
+    mouseEventHandler.bindKey(osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON, MouseEventHandler::KEY_UP, &InputEventHandler::onAttack2Up);
+	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_Escape, KeyboardEventHandler::KEY_UP, &InputEventHandler::quitGameMode);
 
 	// editor related
-	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F8, KeyboardEventHandler::KEY_UP, &InputEventHandler::enterGameMode);
-	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_Escape, KeyboardEventHandler::KEY_UP, &InputEventHandler::quitGameMode);
-	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F9, KeyboardEventHandler::KEY_UP, &InputEventHandler::showDebugAnalysis);
-	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F10, KeyboardEventHandler::KEY_UP, &InputEventHandler::hideDebugAnalysis);
+	//keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F8, KeyboardEventHandler::KEY_UP, &InputEventHandler::enterGameMode);
+	//keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F9, KeyboardEventHandler::KEY_UP, &InputEventHandler::showDebugAnalysis);
+	//keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F10, KeyboardEventHandler::KEY_UP, &InputEventHandler::hideDebugAnalysis);
 }
 
 KeyboardEventHandler &InputManager::getKeyboardEventHandler() {
