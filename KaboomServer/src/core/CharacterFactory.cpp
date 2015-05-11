@@ -13,9 +13,12 @@
 #include "common.h"
 #include "EntityConfigLookup.h"
 #include "../components/InputComponent.h"
+#include "../components/MessageHandlerComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
 #include "../components/JumpComponent.h"
+#include "../messaging/DefaultCharacterMessageHandler.h"
+#include "../messaging/MessageHandlerChain.h"
 
 CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
@@ -78,6 +81,8 @@ void CharacterFactory::createBase(
         inventory[kv.first] = { kv.second, Timer(cooldown) };
     }
 
+    MessageHandlerChain *chain = new MessageHandlerChain();
+
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent(yaw, pitch));
@@ -85,10 +90,17 @@ void CharacterFactory::createBase(
     entity->attachComponent(new BombContainerComponent(inventory));
     entity->attachComponent(new PlayerStatusComponent());
     entity->attachComponent(new HealthComponent(healthStart, healthCap));
-	entity->attachComponent(new JumpComponent);
+    entity->attachComponent(new JumpComponent);
+    entity->attachComponent(new MessageHandlerComponent(chain));
 }
 
 void CharacterFactory::createDefaultCharacter(Entity *entity) const {
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    static DefaultCharacterMessageHandler defaultCharHandler;
+    chain->addHandler(&defaultCharHandler);
+
     entity->attachComponent(new JetpackComponent());
     entity->attachComponent(new EquipmentComponent(KABOOM_V2));
 }
