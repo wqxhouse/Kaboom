@@ -324,9 +324,9 @@ void Core::finalize()
 		_hasEnvMap = true;
 	}
 
-	configGeometryObjectManipulator();
 	configAxisVisualizer();
 	configLightVisualizer();
+	configGeometryObjectManipulator();
 
 	_analysisHUD = configureViewerForMode(*_viewer, _passes, NULL, 1);
 	_analysisHUD->toggleHelper(); // disabled by default
