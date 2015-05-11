@@ -38,7 +38,7 @@ void FiringSystem::processEntity(Entity *entity) {
     InputComponent* inputComp = entity->getComponent<InputComponent>();
     DetonatorComponent *detonatorComp = entity->getComponent<DetonatorComponent>();
 
-    if (!inputComp->isFiring() || inputComp->getFireMode() == NOT_FIRING) {
+    if (!inputComp->isAttacking1() && inputComp->isAttacking2()) {
         if (detonatorComp != nullptr) {
             if (detonatorComp->isDetonated()) {
                 entity->detachComponent<DetonatorComponent>();
@@ -53,7 +53,7 @@ void FiringSystem::processEntity(Entity *entity) {
 
     const EntityType &bombType = equipComp->getEquipmentType();
 
-    if (inputComp->getFireMode() == FireMode::LEFT_CLICK) {
+    if (inputComp->isAttacking1()) {
         const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
 
         if (invComp->hasBomb(bombType)) {
@@ -99,7 +99,7 @@ void FiringSystem::processEntity(Entity *entity) {
             }
 
         }
-    } else if (inputComp->getFireMode() == FireMode::RIGHT_CLICK) {
+    } else if (inputComp->isAttacking2()) {
         // TODO
     }
 }

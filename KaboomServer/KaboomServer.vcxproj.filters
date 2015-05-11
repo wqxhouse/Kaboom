@@ -115,9 +115,6 @@
     <ClCompile Include="src\core\CharacterFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\InputComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\components\JetpackComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
