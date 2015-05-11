@@ -30,7 +30,11 @@ public:
     bool bindKey(int key, Function func);
     bool bindKey(int key, KeyState state, Function func);
 
-    virtual bool handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &aa);
+    virtual bool handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
+    bool handleMouseDown(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
+    bool handleMouseUp(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
+    bool handleMouseMove(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
+
     virtual void accept(osgGA::GUIEventHandlerVisitor &v);
 
 private:
