@@ -1,100 +1,121 @@
 #include "BombFactory.h"
 
-#include <stdexcept>
-
 #include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <osgDB/XmlParser>
 
-#include <core/CharacteristicComponent.h>
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/EntityManager.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 #include <util/XMLLoader.h>
 
-#include "PhysicsComponent.h"
+#include "EntityConfigLookup.h"
+#include "../components/CollisionComponent.h"
+#include "../components/ExplosionComponent.h"
+#include "../components/MessageHandlerComponent.h"
+#include "../components/PhysicsComponent.h"
+#include "../components/TimerComponent.h"
+#include "../components/TriggerComponent.h"
+#include "../messaging/DefaultExplosionMessageHandler.h"
+#include "../messaging/KaboomV2MessageHandler.h"
+#include "../messaging/MessageHandlerChain.h"
+#include "../messaging/TimeBombMessageHandler.h"
 
-BombFactory::BombDataLookup BombFactory::lookup("data/bombs.xml");
-
-BombFactory::BombFactory(EntityManager *entityManager)
+BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
-BombFactory::~BombFactory() {
-}
+Entity *BombFactory::createBomb(
+        const EntityType &type,
+        float x,
+        float y,
+        float z,
+        float vx,
+        float vy,
+        float vz) const {
+    Entity *entity = entityManager.createEntity(type);
 
-Entity *BombFactory::createBomb(const BombType &type) const {
-	return createBomb(type, 0.0f, 0.0f, 0.0f);
-}
+    createBase(entity, x, y, z, vx, vy, vz);
 
-Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z) const {
-    return createBomb(type, x, y, z, 0.0f, 0.0f, 0.0f);
-}
-
-Entity *BombFactory::createBomb(const BombType &type, float x, float y, float z, float vx, float vy, float vz) const {
-    const BombData &data = lookup[type];
-
-    btTransform startTrans = btTransform::getIdentity();
-    startTrans.setOrigin(btVector3(x, y, z));
-
-    btMotionState *motionState = new btDefaultMotionState(startTrans);
-    btCollisionShape *collisionShape = new btSphereShape(data.size);
-
-    btRigidBody *rigidBody = new btRigidBody(data.mass, motionState, collisionShape, btVector3(0, 0, 0));
-    rigidBody->setLinearVelocity(btVector3(vx, vy, vz));
-
-    Entity *entity = entityManager->createEntity();
-    entity->attachComponent(new CharacteristicComponent(BOMB, 0, 0));
-    entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent());
-    entity->attachComponent(new PhysicsComponent(rigidBody));
+    switch (type) {
+        case KABOOM_V2: {
+            createKaboomV2(entity);
+            break;
+        }
+        case TIME_BOMB: {
+            createTimeBomb(entity);
+            break;
+        }
+    }
 
     return entity;
 }
 
-BombFactory::BombDataLookup::BombDataLookup(const std::string &filename) {
-    loadXMLFile(filename);
+void BombFactory::createBase(
+        Entity *entity,
+        float x,
+        float y,
+        float z,
+        float vx,
+        float vy,
+        float vz) const {
+    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+
+    float size = config.getFloat("size");
+    float mass = config.getFloat("mass");
+    float explosionRadius = config.getFloat("explosion-radius");
+
+    btTransform worldTrans;
+    worldTrans.setIdentity();
+    worldTrans.setOrigin(btVector3(x, y, z));
+
+    btMotionState *motionState = new btDefaultMotionState(worldTrans);
+    btCollisionShape *collisionShape = new btSphereShape(size);
+
+    btVector3 localInertia;
+    collisionShape->calculateLocalInertia(mass, localInertia);
+
+    btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, localInertia);
+    rigidBody->setLinearVelocity(btVector3(vx, vy, vz));
+    rigidBody->setUserPointer(entity);
+
+    btGhostObject *ghostObject = new btGhostObject();
+    ghostObject->setCollisionShape(new btSphereShape(explosionRadius));
+    ghostObject->setWorldTransform(worldTrans);
+    ghostObject->setUserPointer(entity);
+
+    static DefaultExplosionMessageHandler explosionHandler;
+
+    MessageHandlerChain *chain = new MessageHandlerChain();
+    chain->addHandler(&explosionHandler);
+
+    entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new RotationComponent());
+    entity->attachComponent(new PhysicsComponent(rigidBody));
+    entity->attachComponent(new TriggerComponent(ghostObject));
+    entity->attachComponent(new MessageHandlerComponent(chain));
 }
 
-void BombFactory::BombDataLookup::loadXMLNode(osgDB::XmlNode *xmlRoot) {
-    if (xmlRoot->type == osgDB::XmlNode::ROOT) {
-        for (auto child : xmlRoot->children) {
-            if (child->name == "bombs") {
-                return loadXMLNode(child);
-            }
-        }
+void BombFactory::createKaboomV2(Entity *entity) const {
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
-        return;
-    }
+    static KaboomV2MessageHandler kaboomV2Handler;
+    chain->addHandler(&kaboomV2Handler);
 
-    std::unordered_map<unsigned int, BombType> types = {
-        { 0, BombType::BOM_BOM }
-    };
-
-    for (auto bombNode : xmlRoot->children) {
-        if (bombNode->name != "bomb") {
-            continue;
-        }
-
-        BombData data;
-        memset(&data, 0, sizeof(BombData));
-
-        for (auto dataNode : bombNode->children) {
-            if (dataNode->name == "id") {
-                loadUint(dataNode, data.id);
-            } else if (dataNode->name == "name") {
-                loadString(dataNode, data.name);
-            } else if (dataNode->name == "size") {
-                loadFloat(dataNode, data.size);
-            } else if (dataNode->name == "mass") {
-                loadFloat(dataNode, data.mass);
-            }
-        }
-
-        bombs[types[data.id]] = data;
-    }
+    entity->attachComponent(new CollisionComponent());
 }
 
-const BombFactory::BombData &BombFactory::BombDataLookup::operator[](const BombType &type) const {
-    return bombs.at(type);
+void BombFactory::createTimeBomb(Entity *entity) const {
+    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    static TimeBombMessageHandler timeBombHandler;
+    chain->addHandler(&timeBombHandler);
+
+    int delay = config.getInt("delay");
+    
+    entity->attachComponent(new TimerComponent(new Timer(delay)));
 }

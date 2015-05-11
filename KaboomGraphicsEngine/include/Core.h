@@ -2,15 +2,21 @@
 
 #include <osgViewer/Viewer>
 
-//#include "../osgLibRocket/GuiNode.h"
-
 #include "EffectCompositor.h"
 #include "CompositorAnalysis.h"
 #include "World.h"
 #include "Camera.h"
-#include "TwGUIManager.h"
 #include "SkyBox.h"
 #include "AxisVisualizer.h"
+#include "CubeMapPreFilter.h"
+
+#include "TwGUIManager.h"
+#include "LibRocketGUIManager.h"
+
+namespace osgLibRocket
+{
+	class GuiNode;
+}
 
 class Core
 {
@@ -19,6 +25,8 @@ public:
 
 	static osg::Vec2 getScreenSize();
 
+	static void loadMaterialFile(const std::string &filePath);
+	static void loadTypeIdFile(const std::string &filePath);
 	static void loadWorldFile(const std::string &worldFilePath);
 	static World &getWorldRef();
 
@@ -30,6 +38,7 @@ public:
 	static void setEnvironmentMap(
 		const std::string &posX,
 		const std::string &negX,
+
 		const std::string &posY,
 		const std::string &negY,
 		const std::string &posZ, 
@@ -39,12 +48,22 @@ public:
 
 	static void enableCameraManipulator();
 	static void disableCameraManipulator();
+	static void switchToTrackBallCamManipulator();
+	static void switchToFirstPersonCamManipulator();
+	static void setCurrentCameraManipulatorHomePosition(const osg::Vec3 &eye,  
+													   const osg::Vec3 &lookAt, 
+													   const osg::Vec3 &up);
 
 	static void enablePassDataDisplay();
 	static void disablePassDataDisplay();
 
-	static void enableGUI();
-	static void disableGUI();
+	static void enableTwGUI();
+	static void disableTwGUI();
+
+	static void enableLibRocketInEditorGUI();
+	static void disableLibRocketInEditorGUI();
+	static bool isLibRocketInEditorGUIEnabled();
+	static osg::ref_ptr<LibRocketGUIManager> getInGameLibRocketGUIManager();
 
 	static void enableGameMode();
 	static void disableGameMode();
@@ -52,7 +71,11 @@ public:
 	static void enableGeometryObjectManipulator();
 	static void disableGeometryObjectManipulator();
 
+	static void setEditorFPSCamWalkingSpeed(float metersPerSec);
+	static float getEditorFPSCamWalkingSpeed();
+
 	static bool isInGameMode();
+	static bool isCamLocked();
 	static double getLastFrameDuration();
 	static bool isViewerClosed();
 
@@ -61,7 +84,18 @@ public:
 	static void setAllowChangeEditorProjection(bool tf);
 	static bool allowChangeEditorProjection();
 
+	static void requestPrefilterCubeMap();
+	static void requestPrefilterCubeMapWithCubeMap(osg::TextureCubeMap *cubemap);
+
 	// static void run();
+
+	enum CamManipulatorType
+	{
+		TRACKBALL,
+		FIRSTPERSON
+	};
+
+	static enum Core::CamManipulatorType getCurrCamManipulatorType();
 
 private:
 	static void configPasses();
@@ -71,12 +105,16 @@ private:
 	static void configGeometryObjectManipulator();
 
 	static void configCubemapPrefilterPass();
+	static void configSpecularIBLLutPass();
 	static void configGeometryPass();
 	static void configLightPass();
 
 	static void configFilePath();
-	static void configInGameGUI();
 	static void configAxisVisualizer();
+
+	static void configLibRocketGUI();
+
+	static void freezeCameraOnGUIDemand();
 
 	static std::string _mediaPath;
 		
@@ -92,7 +130,6 @@ private:
 	static osg::Vec2 _renderResolution;
 	static osg::Vec2 _winPos;
 
-
 	static World _world;
 	static bool _hasInit;
 	static bool _hasEnvMap;
@@ -102,6 +139,8 @@ private:
 	static Camera _cam;
 
 	static osg::ref_ptr<TwGUIManager> _gui;
+	static osg::ref_ptr<LibRocketGUIManager> _libRocketEditorGUI;
+	static osg::ref_ptr<LibRocketGUIManager> _libRocketInGameGUI;
 
 	// use as a temp for temporarily remove the manipulator when out of focus
 	// CAUTIOUS: when enabled, this variable is NULL
@@ -109,6 +148,7 @@ private:
 	static Camera _savedManipulatorCam;
 
 	static osg::ref_ptr<CompositorAnalysis> _analysisHUD;
+	static enum CamManipulatorType _currCamManipulatorType;
 
 	// on screen flags
 	static bool _gameMode;
@@ -119,11 +159,13 @@ private:
 	static bool _isFirstFrame;
 
 	static bool _allowEditorChangeProjection;
+	static bool _requestPrefilterCubeMap;
 
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 
 
 	static AxisVisualizer _axisVisualizer;
+	static CubeMapPreFilter _cubemapPreFilter;
 };
 
 class MainCameraCallback : public osg::NodeCallback

@@ -1,12 +1,13 @@
 #include "GameServer.h"
 
-#include <core/CharacteristicComponent.h>
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 #include <network/AssignEvent.h>
+#include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
+#include <network/ExplosionEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
@@ -15,7 +16,9 @@
 #include "../core/Game.h"
 
 GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &eventHandlerLookup)
-    : eventHandlerLookup(eventHandlerLookup) {
+        : eventHandlerLookup(eventHandlerLookup),
+	      nextClientId(0),
+	      currClientId(0) {
     printf("<Server> Creating a Network Server\n");
     // set up the server network to listen 
     network = new ServerNetwork(config);
@@ -25,13 +28,11 @@ GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &
     config->getValue(ConfigSettings::str_max_client, maxPlayers);
 }
 
-GameServer::~GameServer() {
-}
-
 bool GameServer::acceptNewClient(unsigned int entity_id) {
-    if (network->acceptNewClient(entity_id)) {
-        printf("<Server> Client %d has connected to the server\n", entity_id);
-
+	if (network->acceptNewClient(nextClientId)) {
+		printf("<Server> Client %d has connected to the server, with entitiy id %d\n", nextClientId, entity_id);
+		clientIdToEntityId[nextClientId] = entity_id;
+		currClientId = nextClientId++;
         return true;
     }
 
@@ -46,42 +47,34 @@ void GameServer::receive(Game *game) {
             break;
         }
 
-        int id = it.first;
+        int client_id = it.first;
         int len = network->receive(it.first, network_data);
-
-        if (len == 0) {
-            DisconnectEvent disconnectEvent(id);
-            eventHandlerLookup.find(disconnectEvent.getOpcode())->handle(disconnectEvent);
-        }
 
         if (len <= 0) {
             continue;
         }
 
+		EmptyEvent emptyEvent;
+		PlayerInputEvent playerInputEvent;
         bool receivedPlayerInputEvent = false;
 
         unsigned int i = 0;
         while (i < (unsigned int)len) {
-            EmptyEvent emptyEvent;
             emptyEvent.deserialize(&network_data[i]);
 
             switch (emptyEvent.getOpcode()) {
-                case EventOpcode::DISCONNECT: {
+                case EVENT_DISCONNECT: {
                     DisconnectEvent disconnectEvent;
                     disconnectEvent.deserialize(&network_data[i]);
-                    disconnectEvent.setPlayerId(id); // Prevent hacking from client impersonating as other clients
+					disconnectEvent.setPlayerId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
 
                     eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
                 }
-                case EventOpcode::PLAYER_INPUT: {
-                    PlayerInputEvent playerInputEvent;
+                case EVENT_PLAYER_INPUT: {
                     playerInputEvent.deserialize(&network_data[i]);
-                    playerInputEvent.setPlayerId(it.first); // Prevent hacking from client impersonating as other clients
+                    playerInputEvent.setPlayerId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
 
-                    if (!receivedPlayerInputEvent) {
-                        eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
-                        receivedPlayerInputEvent = true;
-                    }
+                    receivedPlayerInputEvent = true;
 
                     break;
                 }
@@ -92,8 +85,18 @@ void GameServer::receive(Game *game) {
             }
 
             i += emptyEvent.getByteSize();
-        }
+		}
+
+		if (receivedPlayerInputEvent) {
+			eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
+		}
     }
+
+	for (auto id : network->disconnectedClients) {
+		DisconnectEvent disconnectEvent(clientIdToEntityId[id]);
+		eventHandlerLookup.find(disconnectEvent.getOpcode())->handle(disconnectEvent);
+		clientIdToEntityId.erase(id);
+	}
 
     network->removeDisconnectedClients();
 }
@@ -120,7 +123,7 @@ void GameServer::sendEvent(const Event &evt, const unsigned int &clientId) const
 
 void GameServer::sendAssignEvent(const unsigned int &entityId) const {
     AssignEvent assignEvent(entityId);
-    sendEvent(assignEvent, entityId);
+	sendEvent(assignEvent, currClientId);
 }
 
 void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *> &entities) const {
@@ -130,20 +133,17 @@ void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *>
         }
 
         PositionComponent *posComp = entity->getComponent<PositionComponent>();
-        CharacteristicComponent *charComp = entity->getComponent<CharacteristicComponent>();
-
-        if (posComp == nullptr || charComp == nullptr) {
-            return;
-        }
+        RotationComponent *rotComp = entity->getComponent<RotationComponent>();
 
         SpawnEvent spawnEvent(
-            entity->getId(),
-            posComp->getX(),
-            posComp->getY(),
-            posComp->getZ(),
-            charComp->getType(),
-            0);
-        sendEvent(spawnEvent, player->getId());
+                entity->getId(),
+                entity->getType(),
+                posComp->getX(),
+                posComp->getY(),
+                posComp->getZ(),
+                rotComp->getYaw(),
+                rotComp->getPitch());
+        sendEvent(spawnEvent, currClientId);
     }
 }
 
@@ -157,6 +157,26 @@ void GameServer::sendGameStatePackets(const std::vector<Entity *> &entities) con
         sendPositionEvent(entity);
         sendRotationEvent(entity);
     }
+}
+
+void GameServer::sendSpawnEvent(Entity *entity) const {
+    PositionComponent *posComp = entity->getComponent<PositionComponent>();
+    RotationComponent *rotComp = entity->getComponent<RotationComponent>();
+
+    SpawnEvent spawnEvent(
+            entity->getId(),
+            entity->getType(),
+            posComp->getX(),
+            posComp->getY(),
+            posComp->getZ(),
+            rotComp->getYaw(),
+            rotComp->getPitch());
+    sendEvent(spawnEvent);
+}
+
+void GameServer::sendDestroyEvent(Entity *entity) const {
+    DestroyEvent evt(entity->getId());
+    sendEvent(evt);
 }
 
 void GameServer::sendPositionEvent(Entity *entity) const {
@@ -181,14 +201,7 @@ void GameServer::sendRotationEvent(Entity *entity) const {
     sendEvent(rotEvent);
 }
 
-void GameServer::sendSpawnEvent(Entity *entity) const {
-    PositionComponent *posComp = entity->getComponent<PositionComponent>();
-    CharacteristicComponent *charComp = entity->getComponent<CharacteristicComponent>();
-
-    if (posComp == nullptr || charComp == nullptr) {
-        return;
-    }
-
-    SpawnEvent spawnEvent(entity->getId(), posComp->getX(), posComp->getY(), posComp->getZ(), charComp->getType(), 0);
-    sendEvent(spawnEvent);
+void GameServer::sendExplosionEvent(Entity *bomb) const {
+    ExplosionEvent expEvent(bomb->getId());
+    sendEvent(expEvent);
 }

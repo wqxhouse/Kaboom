@@ -125,9 +125,9 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	}
 
 	// update mvp 
-	ss->getUniform("u_viewMat")->set(osg::Matrixf(Core::getMainCamera().getViewMatrix()));
+	//ss->getUniform("u_viewMat")->set(osg::Matrixf(Core::getMainCamera().getViewMatrix()));
 	ss->getUniform("u_projMat")->set(osg::Matrixf(Core::getMainCamera().getClampedProjectionMatrix()));
-	ss->getUniform("u_viewProjMat")->set(osg::Matrixf(Core::getMainCamera().getClampedViewProjectionMatrix()));
+	//ss->getUniform("u_viewProjMat")->set(osg::Matrixf(Core::getMainCamera().getClampedViewProjectionMatrix()));
 
 	//ss->getUniform("u_viewProjMat")->set(osg::Matrixf(Core::getMainCamera().getViewMatrix()) * osg::Matrixf(Core::getMainCamera().getProjectionMatrix()));
 }

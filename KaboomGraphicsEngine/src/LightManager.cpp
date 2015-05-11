@@ -19,11 +19,17 @@ LightManager::~LightManager()
 	_lightsMap.clear();
 }
 
-void LightManager::addDirectionalLight(const std::string &name,
+bool LightManager::addDirectionalLight(const std::string &name,
 	const osg::Vec3 &dirToWorld,
 	const osg::Vec3 &color,
 	bool castShadow)
 {
+	// Handle duplicated (name) geoms
+	if (doesNameExist(name)) {
+		std::cout << "Name already exists: " << name << std::endl;
+		return false;
+	}
+
 	DirectionalLight *dirLight = new DirectionalLight(name);
 	dirLight->setColor(color);
 	dirLight->setLightToWorldDirection(dirToWorld);
@@ -32,14 +38,22 @@ void LightManager::addDirectionalLight(const std::string &name,
 	_lightsMap.insert(std::make_pair(name, dirLight));
 	_lights.push_back(dirLight);
 	++_numLights;
+
+	return true;
 }
 
-void LightManager::addPointLight(const std::string &name,
+bool LightManager::addPointLight(const std::string &name,
 	const osg::Vec3 &position,
 	const osg::Vec3 &color,
 	float radius, 
 	bool castShadow)
 {
+	// Handle duplicated (name) geoms
+	if (doesNameExist(name)) {
+		std::cout << "Name already exists: " << name << std::endl;
+		return false;
+	}
+
 	PointLight *pointLight = new PointLight(name);
 	pointLight->setPosition(position);
 	pointLight->setColor(color);
@@ -49,6 +63,48 @@ void LightManager::addPointLight(const std::string &name,
 	_lightsMap.insert(std::make_pair(name, pointLight));
 	_lights.push_back(pointLight);
 	++_numLights;
+
+	return true;
+}
+
+void LightManager::deleteLight(const std::string &name)
+{
+	Light *light = _lightsMap[name];
+
+	_lightsMap.erase(name);
+	_lights.erase(std::remove(_lights.begin(), _lights.end(), light), _lights.end());
+
+	delete light;
+
+	--_numLights;
+}
+
+bool LightManager::renameLight(const std::string &oldName, const std::string &newName)
+{	
+	// Handle duplicated (name) geoms
+	if (doesNameExist(newName)) {
+		std::cout << "Name already exists: " << newName << std::endl;
+		return false;
+	}
+
+	Light *light = _lightsMap[oldName];
+	_lightsMap.erase(oldName);
+
+	light->setName(newName);
+	_lightsMap.insert(std::make_pair(newName, light));
+	return true;
+}
+
+bool LightManager::doesNameExist(const std::string &name)
+{
+	std::unordered_map<std::string, Light *>::const_iterator got =
+		_lightsMap.find(name);
+
+	// If the name already exists
+	if (got != _lightsMap.end()) {
+		return true;
+	}
+	return false;
 }
 
 Light *LightManager::getLight(const std::string &name)

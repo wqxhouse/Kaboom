@@ -1,12 +1,14 @@
 #include "GameClient.h"
 
+#include <network/AssignEvent.h>
+#include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
+#include <network/ExplosionEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/SpawnEvent.h>
-#include <network/AssignEvent.h>
 
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
@@ -15,9 +17,6 @@ GameClient::GameClient(const ClientEventHandlerLookup &eventHandlerLookup)
         : eventHandlerLookup(eventHandlerLookup),
           currentPlayerEntityId(0),
           assignedEntity(false) {
-}
-
-GameClient::~GameClient() {
 }
 
 bool GameClient::connectToServer(const std::string &serverAddress, const int serverPort) {
@@ -55,7 +54,7 @@ void GameClient::receive() {
         //printf("byteSize is %d\n", emptyEvent.getByteSize());
 
         switch (emptyEvent.getOpcode()) {
-            case EventOpcode::ASSIGN_ENTITY: {
+            case EVENT_ASSIGN: {
                 AssignEvent assignEvent;
                 assignEvent.deserialize(&networkData[i]);
 
@@ -66,33 +65,46 @@ void GameClient::receive() {
 
                 break;
             }
-            case EventOpcode::DISCONNECT: {
+            case EVENT_DISCONNECT: {
                 DisconnectEvent disconnectEvent;
                 disconnectEvent.deserialize(&networkData[i]);
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
                 break;
             }
-            case EventOpcode::POSITION: {
-                PositionEvent positionEvent;
-                positionEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(positionEvent);
-                break;
-            }
-            case EventOpcode::ROTATION: {
-                RotationEvent rotationEvent;
-                rotationEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(rotationEvent);
-                break;
-            }
-            case EventOpcode::ENTITY_SPAWN: {
+            case EVENT_SPAWN: {
                 SpawnEvent spawnEvent;
                 spawnEvent.deserialize(&networkData[i]);
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
                 break;
             }
-            default:
+            case EVENT_DESTROY: {
+                DestroyEvent destroyEvent;
+                destroyEvent.deserialize(&networkData[i]);
+                eventHandlerLookup.find(destroyEvent.getOpcode())->handle(destroyEvent);
+                break;
+            }
+            case EVENT_POSITION: {
+                PositionEvent positionEvent;
+                positionEvent.deserialize(&networkData[i]);
+                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(positionEvent);
+                break;
+            }
+            case EVENT_ROTATION: {
+                RotationEvent rotationEvent;
+                rotationEvent.deserialize(&networkData[i]);
+                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(rotationEvent);
+                break;
+            }
+            case EVENT_EXPLOSION: {
+                ExplosionEvent explosionEvent;
+                explosionEvent.deserialize(&networkData[i]);
+                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(explosionEvent);
+                break;
+            }
+            default: {
                 printf("error in packet event types\n");
                 return;
+            }
         }
 
         i += emptyEvent.getByteSize();

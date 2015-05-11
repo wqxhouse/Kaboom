@@ -23,17 +23,22 @@ public:
 		return _materialMap;
 	}
 
-	void createPlainMaterial(const std::string &name,
+	bool createPlainMaterial(const std::string &name,
 		const osg::Vec3 albedoColor,
 		float roughness,
 		float specular,
 		float metallic);
 
-	void createTextureMaterial(const std::string &name,
+	bool createTextureMaterial(const std::string &name,
 		const std::string &albedoPath,
 		const std::string &roughnessPath,
 		const std::string &metallicPath, 
-		const std::string &normalMapPath);
+		const std::string &normalMapPath, 
+		osg::Texture::WrapMode mode=osg::Texture::CLAMP_TO_EDGE);
+
+	bool renameMaterial(const std::string &oldName, const std::string &newName);
+
+	bool doesNameExist(const std::string &name);
 
 	Material *getMaterial(const std::string &name);
 	Material *getBuiltInMaterial(enum MaterialBuiltIn type);
@@ -47,7 +52,7 @@ private:
 	void createBuiltInMaterials();
 
 	// update texture cache	and associated geometry object binding
-	static void onTexturePathChange(const std::string &texturePath);
+	static void onTexturePathChange(const std::string &texturePath, osg::Texture::WrapMode mode);
 	static MaterialManager *_weakMaterialManagerPtr;
 
 	// TODO: separate textured material and plain material,

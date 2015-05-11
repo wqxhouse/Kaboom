@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<bombs>
+    <bomb>
+        <id>131073</id>
+        <name>Kaboom 2.0</name>
+        <size>0.1</size>
+    </bomb>
+    <bomb>
+        <id>131074</id>
+        <name>Time Bomb</name>
+        <size>0.1</size>
+    </bomb>
+    <bomb>
+        <id>131075</id>
+        <name>Remote Detonator</name>
+        <size>0.1</size>
+    </bomb>
+</bombs>

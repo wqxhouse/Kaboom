@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<compositor>
+  <!--<buffer name="b_cubemap" type="cubemap" width="512" height="512">
+    --><!-- 16bits to support HDR --><!--
+    <internal_format>rgba16f</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>float</source_type>
+    <filter param="mag_filter">linear</filter>
+    <filter param="min_filter">linear_mipmap_linear</filter>
+    <wrap param="s">clamp_to_edge</wrap>
+    <wrap param="t">clamp_to_edge</wrap>
+    <wrap param="r">clamp_to_edge</wrap>
+  </buffer>-->
+
+  <!--<shader name="cubemap_prefilter_vs" type="vertex">
+    <version>120</version>
+    <file>Shaders/cubemapPreFilter.vert</file>
+  </shader>
+
+  <shader name="cubemap_prefilter_fs" type="fragment">
+    <version>400</version>
+    <file>Shaders/cubemapPreFilter.frag</file>
+  </shader>-->
+  
+</compositor>

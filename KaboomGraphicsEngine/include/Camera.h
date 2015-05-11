@@ -58,13 +58,19 @@ public:
 	{
 		return _fovy;
 	}
+
+	inline float getFovX() const
+	{
+		return fovYToX(_fovy, _screenSize);
+	}
 		
 	// Setters : should only be called from the input manager of the client
 	void setEyePositionAndUpdate(const osg::Vec3 &eye);
 	void setLookAtAndUpdate(const osg::Vec3 &lookAt);
 	void setUpAndUpdate(const osg::Vec3 &up);
 	void setViewAndUpdate(const osg::Vec3 &eye, const osg::Vec3 &lookAt, const osg::Vec3 &up);
-	void setFovYAndUpdate(float fov);
+	void setFovYAndUpdate(float fovY);
+	void setFovXAndUpdate(float fovX);
 	void setNearAndFarAndUpdate(float near, float far);
 	void setNearAndUpdate(float near);
 	void setFarAndUpdate(float far);
@@ -72,6 +78,8 @@ public:
 	void setFpsEyePositionAndUpdate(const osg::Vec3 &eye);
 
 	static osg::Quat eulerToQuat(float yaw, float pitch);
+	static float fovXToY(float fovx, const osg::Vec2 screenSize);
+	static float fovYToX(float fovy, const osg::Vec2 screenSize);
 
 private:
 	friend class osgFX::EffectCompositor;

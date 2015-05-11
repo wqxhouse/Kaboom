@@ -1,36 +1,92 @@
 #include "Game.h"
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
-#include <core/PositionComponent.h>
-#include <core/RotationComponent.h>
 
-#include "InputComponent.h"
-#include "PhysicsComponent.h"
+#include "../components/CollisionComponent.h"
+#include "../components/InputComponent.h"
+#include "../components/PhysicsComponent.h"
+#include "../components/TriggerComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
+#include "../systems/FiringSystem.h"
+#include "../systems/CollisionSystem.h"
+#include "../systems/ExplosionSystem.h"
+#include "../systems/InitializationSystem.h"
+#include "../systems/InputSystem.h"
+#include "../systems/PhysicsSystem.h"
+#include "../systems/PickupSystem.h"
+#include "../systems/TimerSystem.h"
 
-Game::Game(ConfigSettings *config)
-	    : config(config),
-	      playerFactory(&entityManager),
-	      bombFactory(&entityManager),
-	      inputSystem(this),
+Game::Game(ConfigSettings *configSettings)
+        : characterFactory(entityManager),
+          bombFactory(entityManager),
+          pickupFactory(entityManager),
 	      eventHandlerLookup(this),
-	      server(config, eventHandlerLookup) {
-    world.loadMap();
+          server(configSettings, eventHandlerLookup), 
+		  world(configSettings){
+
+    //world.loadMap();
+	std::string str_mediaPath = "";
+	std::string str_world_xml = "";
+
+	configSettings->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+	configSettings->getValue(ConfigSettings::str_world_xml, str_world_xml);
+
+	str_world_xml = str_mediaPath + str_world_xml;
+
+	std::cout << str_world_xml << std::endl;
+	world.loadMapFromXML(str_world_xml);
+
+
+    systemManager.addSystem(new InitializationSystem(this));
+    systemManager.addSystem(new InputSystem(this));
+    systemManager.addSystem(new FiringSystem(this));
+    systemManager.addSystem(new PhysicsSystem(this, world));
+    systemManager.addSystem(new CollisionSystem(this));
+    systemManager.addSystem(new TimerSystem(this));
+    systemManager.addSystem(new PickupSystem(this));
+    systemManager.addSystem(new ExplosionSystem(this));
+
+	//TODO Wai Ho problems with pickup being of class bomb which causes some problems in logic commented it out for now. 
+    addEntity(pickupFactory.createPickup(KABOOM_V2, 5, 5, -5, 3)); // Spawn five Kaboom 2.0 at origin
 }
 
 Game::~Game() {
 }
 
-void Game::addEntityToWorld(Entity *entity) {
-    PhysicsComponent *physicsCom = entity->getComponent<PhysicsComponent>();
+void Game::addEntity(Entity *entity) {
+    PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
-    if (physicsCom != nullptr) {
-        world.addRigidBody(physicsCom->getRigidBody());
+    if (physicsComp != nullptr) {
+        world.addRigidBodyAndConvertToOSG(physicsComp->getRigidBody());
+    }
+
+    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
+
+    if (triggerComp != nullptr) {
+        world.addTrigger(triggerComp->getGhostObject());
     }
 }
 
-void Game::update(float timeStep) {
+void Game::removeEntity(Entity *entity) {
+    PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
+
+    if (physicsComp != nullptr) {
+        world.removeRigidBody(physicsComp->getRigidBody());
+    }
+
+    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
+
+    if (triggerComp != nullptr) {
+        world.removeTrigger(triggerComp->getGhostObject());
+    }
+
+    entityManager.destroyEntity(entity->getId());
+}
+
+void Game::update(float timeStep, int maxSubSteps) {
 
 	//HERE is where the client first connect to server,
     //we want to have client load the gameworld first,
@@ -38,9 +94,8 @@ void Game::update(float timeStep) {
 	if (server.acceptNewClient(entityManager.generateId())) {
 
 		//now we create a new player
-        Entity *player = playerFactory.createPlayer(0, -5, 5);
-        players.push_back(player);
-        addEntityToWorld(player);
+        Entity *player = characterFactory.createCharacter(DEFAULT_CHARACTER, 0.0f, -5.0f, 5.0f);
+        addEntity(player);
 
         //first notify the new client what entityId it should keep track of
         server.sendAssignEvent(player->getId());
@@ -57,35 +112,24 @@ void Game::update(float timeStep) {
 
     server.receive(this);
 
-    // Handle game logic here
-    inputSystem.update(timeStep);
-
-	for (Entity *entity : entityManager.getEntityList())
-	{
-		entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
-	}
-
-    world.stepSimulation(timeStep);
-
-    for (Entity *entity : entityManager.getEntityList()) {
-        PositionComponent *posCom = entity->getComponent<PositionComponent>();
-        PhysicsComponent *physCom = entity->getComponent<PhysicsComponent>();
-
-        const btTransform &worldTrans = physCom->getRigidBody()->getWorldTransform();
-        const btVector3 &pos = worldTrans.getOrigin();
-        
-        posCom->setPosition(pos.getX(), pos.getY(), pos.getZ());
-    }
+    systemManager.processSystems(this);
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
+
+	//TODO put an on/off switch here
+	world.renderDebugFrame();
+}
+
+Configuration &Game::getConfiguration() {
+    return config;
 }
 
 EntityManager &Game::getEntityManager() {
     return entityManager;
 }
 
-const PlayerFactory &Game::getPlayerFactory() const {
-    return playerFactory;
+const CharacterFactory &Game::getCharacterFactory() const {
+    return characterFactory;
 }
 
 const BombFactory &Game::getBombFactory() const {
@@ -96,6 +140,6 @@ const GameServer &Game::getGameServer() const {
     return server;
 }
 
-World &Game::getWorld() {
-    return world;
+const World &Game::getWorld() const{
+	return world;
 }

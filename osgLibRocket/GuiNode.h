@@ -51,7 +51,7 @@ namespace osgLibRocket
      * @param renderer Access to renderer interface singleton
      * @param debug Set to true to add libRocket debug gui
      */
-    GuiNode(const std::string& contextname, bool debug = false);
+    GuiNode(const std::string& contextname);
     ~GuiNode();
 
     /**
@@ -88,6 +88,8 @@ namespace osgLibRocket
       * Set this if libRocket gui should render to a fullscreen camera.
       */
     void setCamera(osg::Camera* cam);
+
+	bool isMouseOver();
 
     osgGA::GUIEventHandler* GetGUIEventHandler() const { return mGUIEventHandler; }
 

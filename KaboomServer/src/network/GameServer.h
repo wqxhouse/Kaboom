@@ -1,11 +1,12 @@
 #pragma once
 
+#include <components/BombContainerComponent.h>
 #include <network/NetworkData.h>
-#include <core/BombContainerComponent.h>
+
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 #include "NetworkServices.h"
-#include "../core/PhysicsComponent.h"
+#include "../components/PhysicsComponent.h"
 
 class Entity;
 class Game;
@@ -13,7 +14,6 @@ class Game;
 class GameServer {
 public:
     GameServer(ConfigSettings *, const ServerEventHandlerLookup &eventHandlerLookup);
-    ~GameServer();
 
     bool acceptNewClient(unsigned int);
 
@@ -27,12 +27,19 @@ public:
     void sendDisconnectEvent(Entity *entity) const;
 
     void sendGameStatePackets(const std::vector<Entity *> &entities) const;
+
+    void sendSpawnEvent(Entity *entity) const;
+    void sendDestroyEvent(Entity *entity) const;
+
     void sendPositionEvent(Entity *entity) const;
     void sendRotationEvent(Entity *entity) const;
-    void sendSpawnEvent(Entity *entity) const;
+    void sendExplosionEvent(Entity *bomb) const;
 
 private:
     const ServerEventHandlerLookup &eventHandlerLookup;
+	unsigned int nextClientId;
+	unsigned int currClientId;
+	std::unordered_map<unsigned int, unsigned int> clientIdToEntityId;
 
     ServerNetwork* network;
 };

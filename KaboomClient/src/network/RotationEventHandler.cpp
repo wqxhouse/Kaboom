@@ -1,17 +1,14 @@
 #include "RotationEventHandler.h"
 
 #include <GeometryObject.h>
+#include <components/RotationComponent.h>
 #include <core/EntityManager.h>
-#include <core/RotationComponent.h>
 #include <network/RotationEvent.h>
 
 #include "../core/Game.h"
 
 RotationEventHandler::RotationEventHandler(Game *game)
         : game(game) {
-}
-
-RotationEventHandler::~RotationEventHandler() {
 }
 
 void RotationEventHandler::handle(const Event &e) const {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<compositor>
+  <buffer name="b_lut" type="2d" width="256" height="256">
+    <internal_format>rgba32f</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>float</source_type>
+    <filter param="min_filter">nearest</filter>
+    <filter param="mag_filter">nearest</filter>
+  </buffer>
+
+  <shader name="spec_lut_vs" type="vertex">
+    <version>120</version>
+    <file>Shaders/defaultQuad.vert</file>
+  </shader>
+  
+  <shader name="spec_lut_ps" type="fragment">
+    <version>420</version>
+    <file>Shaders/iblLut.frag</file>
+  </shader>
+
+
+</compositor>

@@ -6,32 +6,33 @@
 
 class PlayerInputEvent : public Event {
 public:
-    PlayerInputEvent();
-    PlayerInputEvent(unsigned int playerId,
-            bool movingForward,
-            bool movingBackward,
-            bool movingLeft,
-            bool movingRight,
-            bool jumping,
-            bool firing,
-            float yaw,
-            float pitch);
-    ~PlayerInputEvent();
+    PlayerInputEvent(
+            unsigned int playerId = 0,
+            bool movingForward = false,
+            bool movingBackward = false,
+            bool movingLeft = false,
+            bool movingRight = false,
+            bool jumping = false,
+            bool attacking1 = false,
+            bool attacking2 = false,
+            float yaw = 0.0f,
+            float pitch = 0.0f);
 
-    const unsigned int &getPlayerId() const;
-    void setPlayerId(const unsigned int &playerId);
+    unsigned int getPlayerId() const;
+    void setPlayerId(unsigned int playerId);
 
-    const bool &isMovingForward() const;
-    const bool &isMovingBackward() const;
-    const bool &isMovingLeft() const;
-    const bool &isMovingRight() const;
+    bool isMovingForward() const;
+    bool isMovingBackward() const;
+    bool isMovingLeft() const;
+    bool isMovingRight() const;
 
-    const bool &isJumping() const;
+    bool isJumping() const;
 
-    const bool &isFiring() const;
+    bool isAttacking1() const;
+    bool isAttacking2() const;
 
-    const float &getYaw() const;
-    const float &getPitch() const;
+    float getYaw() const;
+    float getPitch() const;
 
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);
@@ -44,7 +45,8 @@ public:
         os << "    movingLeft: " << o.movingLeft << std::endl;
         os << "    movingRight: " << o.movingRight << std::endl;
         os << "    jumping: " << o.jumping << std::endl;
-        os << "    firing: " << o.firing << std::endl;
+        os << "    attacking1: " << o.attacking1 << std::endl;
+        os << "    attacking2: " << o.attacking2 << std::endl;
         os << "    yaw: " << o.yaw << std::endl;
         os << "    pitch: " << o.pitch << std::endl;
         os << "}";
@@ -62,7 +64,8 @@ private:
 
     bool jumping;
 
-    bool firing;
+    bool attacking1;
+    bool attacking2;
 
     float yaw;
     float pitch;

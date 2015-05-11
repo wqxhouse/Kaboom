@@ -90,9 +90,6 @@
     <ClInclude Include="include\TwGUIManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\CompositorAnalysis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -113,6 +110,27 @@
     </ClInclude>
     <ClInclude Include="include\Model.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CubeMapPreFilter.h">
+      <Filter>Header Files\CubemapUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MaterialLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DraggerUpdateCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TypeIdLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LibRocketGUIManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LightVisualizer.h">
+      <Filter>Header Files\Visualizer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -167,12 +185,6 @@
     <ClCompile Include="src\SkyBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\TwGUIManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -196,6 +208,30 @@
     </ClCompile>
     <ClCompile Include="src\Model.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CubemapPreFilter.cpp">
+      <Filter>Source Files\CubemapUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TwGUIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MaterialLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DraggerUpdateCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TypeIdLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LibRocketGUIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightVisualizer.cpp">
+      <Filter>Source Files\Visualizer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,7 +259,15 @@
     <Xml Include="..\Media\EffectFiles\TestWorld.xml">
       <Filter>Media\EffectFiles</Filter>
     </Xml>
-    <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
+    <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\Materials.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\TypeId.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Media\Shaders\constant.glsl">
@@ -289,6 +333,21 @@
     </None>
     <None Include="..\Media\Shaders\SMAA\neighborhood.vert">
       <Filter>Media\Shaders\smaa</Filter>
+    </None>
+    <None Include="..\Media\Shaders\cubemapPrefilter.vert">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\importanceSampling.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\iblLut.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\cubemapSpecularPreFilter.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\cubemapDiffusePreFilter.frag">
+      <Filter>Media\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

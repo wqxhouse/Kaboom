@@ -223,10 +223,10 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -238,9 +238,10 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)\3rdParty\bin\*.dll" "$(TargetDir)" /y
-xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
-      <Message>Copying 3rdParty dlls and config files to the executable's directory</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PostBuildEvent>
     <Lib>
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
@@ -252,25 +253,31 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\CompositorAnalysis.h" />
     <ClInclude Include="include\Core.h" />
+    <ClInclude Include="include\CubeMapPreFilter.h" />
     <ClInclude Include="include\CubemapUtil.h" />
     <ClInclude Include="include\CustomFirstPersonManipulator.h" />
     <ClInclude Include="include\DirectionalLight.h" />
+    <ClInclude Include="include\DraggerUpdateCallback.h" />
     <ClInclude Include="include\EffectCompositor.h" />
     <ClInclude Include="include\GeometryObject.h" />
     <ClInclude Include="include\GeometryObjectManager.h" />
     <ClInclude Include="include\GeometryObjectManipulator.h" />
     <ClInclude Include="include\GeometryPicker.h" />
+    <ClInclude Include="include\LibRocketGUIManager.h" />
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\LightBound.h" />
     <ClInclude Include="include\LightManager.h" />
     <ClInclude Include="include\LightPassCallback.h" />
     <ClInclude Include="include\LightPrePassCallback.h" />
+    <ClInclude Include="include\LightVisualizer.h" />
     <ClInclude Include="include\Material.h" />
+    <ClInclude Include="include\MaterialLoader.h" />
     <ClInclude Include="include\MaterialManager.h" />
     <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\PointLight.h" />
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\TwGUIManager.h" />
+    <ClInclude Include="include\TypeIdLoader.h" />
     <ClInclude Include="include\Visualizer.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="stdafx.h" />
@@ -279,9 +286,11 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\AxisVisualizer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Core.cpp" />
+    <ClCompile Include="src\CubemapPreFilter.cpp" />
     <ClCompile Include="src\CubemapUtil.cpp" />
     <ClCompile Include="src\CustomFirstPersonManipulator.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
+    <ClCompile Include="src\DraggerUpdateCallback.cpp" />
     <ClCompile Include="src\EffectAnalysisHelper.cpp" />
     <ClCompile Include="src\EffectCompositor.cpp" />
     <ClCompile Include="src\EffectCompositorXML.cpp" />
@@ -289,17 +298,21 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\GeometryObjectManager.cpp" />
     <ClCompile Include="src\GeometryObjectManipulator.cpp" />
     <ClCompile Include="src\GeometryPicker.cpp" />
+    <ClCompile Include="src\LibRocketGUIManager.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\LightBound.cpp" />
     <ClCompile Include="src\LightManager.cpp" />
     <ClCompile Include="src\LightPassCallback.cpp" />
     <ClCompile Include="src\LightPrePassCallback.cpp" />
+    <ClCompile Include="src\LightVisualizer.cpp" />
     <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\MaterialLoader.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\TwGUIManager.cpp" />
+    <ClCompile Include="src\TypeIdLoader.cpp" />
     <ClCompile Include="src\Visualizer.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -311,22 +324,31 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <Xml Include="..\Media\EffectFiles\GeometryPassPlain.xml" />
     <Xml Include="..\Media\EffectFiles\LightPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\LightPrePassConfig.xml" />
-    <Xml Include="..\Media\EffectFiles\Pipeline.xml" />
+    <Xml Include="..\Media\EffectFiles\Materials.xml" />
+    <Xml Include="..\Media\EffectFiles\Pipeline.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\template.xml" />
     <Xml Include="..\Media\EffectFiles\Test.xml" />
     <Xml Include="..\Media\EffectFiles\TestWorld.xml" />
-    <Xml Include="..\Media\EffectFiles\TestWorld1.xml" />
+    <Xml Include="..\Media\EffectFiles\TypeId.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\BugList.txt" />
     <None Include="..\Media\EffectFiles\smaa.xml" />
     <None Include="..\Media\Shaders\constant.glsl" />
+    <None Include="..\Media\Shaders\cubemapDiffusePreFilter.frag" />
+    <None Include="..\Media\Shaders\cubemapSpecularPreFilter.frag" />
+    <None Include="..\Media\Shaders\cubemapPrefilter.vert" />
     <None Include="..\Media\Shaders\defaultQuad.vert" />
     <None Include="..\Media\Shaders\gbufferUtil.glsl" />
     <None Include="..\Media\Shaders\gbuffer_plain.frag" />
     <None Include="..\Media\Shaders\gbuffer_plain.vert" />
     <None Include="..\Media\Shaders\gbuffer_textured.frag" />
     <None Include="..\Media\Shaders\gbuffer_textured.vert" />
+    <None Include="..\Media\Shaders\iblLut.frag" />
+    <None Include="..\Media\Shaders\importanceSampling.glsl" />
     <None Include="..\Media\Shaders\lightCulling.glsl" />
     <None Include="..\Media\Shaders\lightPass.frag" />
     <None Include="..\Media\Shaders\lightPassQuad.vert" />
@@ -344,6 +366,9 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
   <ItemGroup>
     <ProjectReference Include="..\KaboomCommon\KaboomCommon.vcxproj">
       <Project>{1608d432-d1e3-4cac-ab94-4cf307a6d9aa}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\osgLibRocket\osgLibRocket.vcxproj">
+      <Project>{a1ff5fd6-d463-4b85-899b-278229c4aa04}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

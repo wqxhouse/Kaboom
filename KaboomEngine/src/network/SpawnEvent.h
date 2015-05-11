@@ -7,18 +7,24 @@
 
 class SpawnEvent : public Event {
 public:
-    SpawnEvent();
-    SpawnEvent(unsigned int entityId, float x, float y, float z, EntityType type, int feature);
-    ~SpawnEvent();
+    SpawnEvent(
+            unsigned int entityId = 0,
+            EntityType type = NONE,
+            float x = 0.0f,
+            float y = 0.0f,
+            float z = 0.0f,
+            float yaw = 0.0f,
+            float pitch = 0.0f);
 
-    const unsigned int &getEntityId() const;
+    unsigned int getEntityId() const;
+    const EntityType &getType() const;
 
-    const float &getX() const;
-    const float &getY() const;
-    const float &getZ() const;
+    float getX() const;
+    float getY() const;
+    float getZ() const;
 
-	const EntityType &getType() const;
-	const int &getFeature() const;
+    float getYaw() const;
+    float getPitch() const;
 
     virtual void serialize(char *buf) const;
     virtual void deserialize(char *buf);
@@ -26,11 +32,12 @@ public:
 	friend std::ostream& operator<<(std::ostream &os, const SpawnEvent &o) {
         os << "EntitySpawnEvent: {" << std::endl;
         os << "    entityId: " << o.entityId << std::endl;
+        os << "    type: " << o.type << std::endl;
         os << "    x: " << o.x << std::endl;
         os << "    y: " << o.y << std::endl;
         os << "    z: " << o.z << std::endl;
-		os << "    type: " << o.type << std::endl;
-		os << "    feature: " << o.feature << std::endl;
+        os << "    yaw: " << o.yaw << std::endl;
+        os << "    pitch: " << o.pitch << std::endl;
         os << "}";
 
         return os;
@@ -38,11 +45,12 @@ public:
 
 private:
     unsigned int entityId;
+    EntityType type;
 
     float x;
     float y;
     float z;
 
-	EntityType type;
-	int feature;
+    float yaw;
+    float pitch;
 };
