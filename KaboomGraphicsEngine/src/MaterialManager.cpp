@@ -112,6 +112,7 @@ bool MaterialManager::createTextureMaterial(const std::string &name,
 	// above unnecessary since set..Texture handles them
 	Material *mat = new Material(name, onTexturePathChange);
 	mat->setUseTexture(true);
+	mat->setMode(mode);
 	mat->setAlbedoTexturePath(albedoPath, mode);
 	mat->setMetallicMapPath(metallicPath, mode);
 	mat->setRoughnessMapPath(roughnessPath, mode);

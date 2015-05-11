@@ -33,6 +33,16 @@ public:
 		_useTexture = tf;
 	}
 
+	inline osg::Texture::WrapMode getMode()
+	{
+		return _mode;
+	}
+
+	inline void setMode(osg::Texture::WrapMode mode)
+	{
+		_mode = mode;
+	}
+
 	inline void setPlainParameter(const osg::Vec3 &albedo, float roughness, float metallic, float specular)
 	{
 		_albedo = albedo;
@@ -134,6 +144,7 @@ private:
 	// TODO: support mixed mode later
 	// since it is hard to support uber shader now
 	bool _useTexture;
+	osg::Texture::WrapMode _mode;
 
 	// 6 * 4 = 24 bytes
 	float _roughness;
