@@ -1,0 +1,28 @@
+<template name="start_screen" content="content">
+<head>
+	<link type="text/rcss" href="rkt.rcss"/>
+	<link type="text/rcss" href="invader-m.rcss"/>
+  <style>
+    div#title{
+      position:absolute;
+      left:40%;
+      font-size:600%;
+      color: #EEAA88;
+    }
+    button#startgame{
+      position:absolute;
+      left: 45%;
+      top : 50%;
+    }
+    table{
+      background-color: black;
+    }
+    
+  </style>
+</head>
+<body class="start_screen">
+  <div id="title">Kaboom!</div>
+  <button id="startgame" onclick="load_game">Start Game you pleeb</button>
+  <!--<handle size_target="#document" style="position: absolute; width: 16px; height: 16px; bottom: 0px; right: 0px;"></handle>-->
+</body>
+</template>

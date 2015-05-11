@@ -1,20 +1,43 @@
 <template name="window" content="content">
 <head>
 	<link type="text/rcss" href="rkt.rcss"/>
-	<link type="text/rcss" href="invader.rcss"/>
+	<link type="text/rcss" href="invader-m.rcss"/>
+  <style>
+   table#health_bar{
+    background-color:orange;
+    position: absolute;
+    left : 90%;
+    top :4%;
+    }
+    td#1{
+    background-color: red;
+    }
+    table#ammo_counter{
+    //background-color: red;
+    position: absolute;
+    top: 4%;
+    }
+  </style>
 </head>
 <body class="window">
-	<!--<div id="title_bar">
-		<handle move_target="#document">
-			<div id="icon"></div>
-			<span id="title">Title</span>
-		</handle>
-	</div>-->
-	<div id="window">
-		<!--<div id="content">
-      donkey buttt
-		</div>-->
-	</div>
+  <table id="health_bar">
+    <tr>
+      <td id="1">one</td>
+      <td id="2a">two</td>
+      <td id="3">three</td>
+      <td id="4">four</td>
+      <td id="5">five</td>
+    </tr>
+  </table>
+  <table id="ammo_counter">
+    <tr>
+      <td id="1">one</td>
+      <td id="2">two</td>
+      <td id="3">three</td>
+      <td id="4">four</td>
+      <td id="5">five</td>
+    </tr>
+  </table>
 	<handle size_target="#document" style="position: absolute; width: 16px; height: 16px; bottom: 0px; right: 0px;"></handle>
 </body>
 </template>

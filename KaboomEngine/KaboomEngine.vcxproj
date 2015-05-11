@@ -201,6 +201,7 @@
     <ClInclude Include="src\network\EventHandlerLookup.h" />
     <ClInclude Include="src\network\EventOpcode.h" />
     <ClInclude Include="src\network\ExplosionEvent.h" />
+    <ClInclude Include="src\network\HealthEvent.h" />
     <ClInclude Include="src\network\NetworkData.h" />
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="src\network\Event.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ExplosionEvent.cpp" />
+    <ClCompile Include="src\network\HealthEvent.cpp" />
     <ClCompile Include="src\network\PlayerInputEvent.cpp" />
     <ClCompile Include="src\network\PositionEvent.cpp" />
     <ClCompile Include="src\network\RotationEvent.cpp" />

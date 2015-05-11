@@ -18,6 +18,7 @@ namespace osgLibRocket
 	class GuiNode;
 }
 
+
 class Core
 {
 public:
