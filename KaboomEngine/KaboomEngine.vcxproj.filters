@@ -141,9 +141,6 @@
     <ClCompile Include="src\network\EventHandlerLookup.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\Event.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="src\util\Timer.cpp">
       <Filter>Source Files\Util</Filter>
