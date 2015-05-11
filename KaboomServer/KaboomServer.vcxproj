@@ -305,7 +305,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(OSG_INCLUDE_PATH);$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(OSG_INCLUDE_PATH);$(OSGBULLET_INCLUDE_PATH);$(OSGWORKS_INCLUDE_PATH);$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -320,7 +320,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(OSG_LIB_PATH);$(BULLET_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BULLET_LIB_PATH);$(OSG_LIB_PATH);$(OSGBULLET_LIB_PATH);$(OSGWORKS_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ws2_32.lib;osg.lib;osgDB.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;osgbDynamics.lib;osgbCollision.lib;osgwTools.lib;osgbInteraction.lib;osgViewer.lib;osgGA.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
