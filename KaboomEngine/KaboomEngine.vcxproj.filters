@@ -130,6 +130,9 @@
     <ClInclude Include="src\systems\EntitySystem.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\DestroyEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">

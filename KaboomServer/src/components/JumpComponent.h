@@ -2,16 +2,20 @@
 
 #include <components/Component.h>
 
-class Entity;
-
-class JumpComponent: public Component {
+class JumpComponent : public Component {
 public:
-	JumpComponent();
-	~JumpComponent();
+    JumpComponent(bool jumping = false)
+            : jumping(jumping) {
+    }
 
-	void setJumping(bool tf);
-	bool isJumping();
+    inline bool isJumping() const {
+        return jumping;
+    }
+
+    inline void setJumping(bool jumping) {
+        this->jumping = jumping;
+    }
 
 private:
-	bool _isJumping;
+    bool jumping;
 };

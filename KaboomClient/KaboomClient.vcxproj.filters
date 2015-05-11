@@ -112,6 +112,9 @@
     <ClCompile Include="src\GameGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\DestroyEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
@@ -180,6 +183,9 @@
     </ClInclude>
     <ClInclude Include="src\GameGUI.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\DestroyEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

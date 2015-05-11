@@ -27,9 +27,12 @@ public:
     void sendDisconnectEvent(Entity *entity) const;
 
     void sendGameStatePackets(const std::vector<Entity *> &entities) const;
+
+    void sendSpawnEvent(Entity *entity) const;
+    void sendDestroyEvent(Entity *entity) const;
+
     void sendPositionEvent(Entity *entity) const;
     void sendRotationEvent(Entity *entity) const;
-    void sendSpawnEvent(Entity *entity) const;
     void sendExplosionEvent(Entity *bomb) const;
 
 private:

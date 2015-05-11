@@ -10,15 +10,29 @@ class Entity;
 
 class TriggerComponent : public Component {
 public:
-    TriggerComponent(btGhostObject *ghostObject);
+    TriggerComponent(btGhostObject *ghostObject)
+            : ghostObject(ghostObject) {
+    }
 
-    btGhostObject *getGhostObject() const;
+    inline void addTriggerEntity(Entity *entity) {
+        triggerEntities.insert(entity);
+    }
 
-    void addTriggerEntity(Entity *entity);
-    void removeTriggerEntity(Entity *entity);
-    void clearTriggerEntities();
+    inline void removeTriggerEntity(Entity *entity) {
+        triggerEntities.erase(entity);
+    }
 
-    const std::unordered_set<Entity *> &getTriggerEntities() const;
+    inline void clearTriggerEntities() {
+        triggerEntities.clear();
+    }
+
+    inline btGhostObject *getGhostObject() const {
+        return ghostObject;
+    }
+
+    inline const std::unordered_set<Entity *> &getTriggerEntities() const {
+        return triggerEntities;
+    }
 
 private:
     btGhostObject *ghostObject;

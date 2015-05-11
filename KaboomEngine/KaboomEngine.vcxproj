@@ -195,6 +195,7 @@
     <ClInclude Include="src\network\AssignEvent.h" />
     <ClInclude Include="src\network\DisconnectEvent.h" />
     <ClInclude Include="src\network\EmptyEvent.h" />
+    <ClInclude Include="src\network\DestroyEvent.h" />
     <ClInclude Include="src\network\Event.h" />
     <ClInclude Include="src\network\EventHandler.h" />
     <ClInclude Include="src\network\EventHandlerLookup.h" />

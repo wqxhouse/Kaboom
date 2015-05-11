@@ -12,9 +12,9 @@ bool KaboomV2MessageHandler::handle(const Message &message) const {
         return false;
     }
 
-    auto msg = static_cast<const CollisionMessage &>(message);
+    auto &msg = static_cast<const CollisionMessage &>(message);
 
     msg.getEntity()->attachComponent(new ExplosionComponent());
 
-    return false;
+    return true;
 }

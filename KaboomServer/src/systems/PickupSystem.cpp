@@ -45,8 +45,7 @@ void PickupSystem::processEntity(Entity *entity) {
 
         invComp->addToInventory(bombType, amount);
 
+        game->getGameServer().sendDestroyEvent(entity);
         game->removeEntity(entity);
-
-        // TODO: Send remove pickup event to clients
     }
 }

@@ -59,13 +59,23 @@ void InputEventHandler::onJumpUp() {
     sendPlayerInputEvent();
 }
 
-void InputEventHandler::onFireDown() {
-    firing = true;
+void InputEventHandler::onAttack1Down() {
+    attacking1 = true;
     sendPlayerInputEvent();
 }
 
-void InputEventHandler::onFireUp() {
-    firing = false;
+void InputEventHandler::onAttack1Up() {
+    attacking1 = false;
+    sendPlayerInputEvent();
+}
+
+void InputEventHandler::onAttack2Down() {
+    attacking2 = true;
+    sendPlayerInputEvent();
+}
+
+void InputEventHandler::onAttack2Up() {
+    attacking2 = false;
     sendPlayerInputEvent();
 }
 
@@ -87,15 +97,17 @@ void InputEventHandler::onLook(float delta_yaw, float delta_pitch) {
 }
 
 void InputEventHandler::sendPlayerInputEvent() {
-    PlayerInputEvent evt(0,
-        movingForward,
-        movingBackward,
-        movingLeft,
-        movingRight,
-        jumping,
-        firing,
-        yaw,
-        pitch);
+    PlayerInputEvent evt(
+            0,
+            movingForward,
+            movingBackward,
+            movingLeft,
+            movingRight,
+            jumping,
+            attacking1,
+            attacking2,
+            yaw,
+            pitch);
 
     client.sendMessage(evt);
 }
