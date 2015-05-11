@@ -72,6 +72,9 @@ public:
 	static void enableGeometryObjectManipulator();
 	static void disableGeometryObjectManipulator();
 
+	static void enableLightVisualizer();
+	static void disableLightVisualizer();
+
 	static void setEditorFPSCamWalkingSpeed(float metersPerSec);
 	static float getEditorFPSCamWalkingSpeed();
 
