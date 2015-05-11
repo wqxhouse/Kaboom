@@ -18,8 +18,7 @@ LibRocketGUIManager::LibRocketGUIManager(const std::string &guiResourcePath, osg
 	{
 		_guiCounter = 0;
 		// create and set libRocket to OSG interfaces
-		osgLibRocket::RenderInterface* renderer = new osgLibRocket::RenderInterface();
-		Rocket::Core::SetRenderInterface(renderer);
+
 
 		osgLibRocket::SystemInterface* system_interface = new osgLibRocket::SystemInterface();
 		Rocket::Core::SetSystemInterface(system_interface);
