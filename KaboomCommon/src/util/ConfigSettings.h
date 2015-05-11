@@ -69,6 +69,7 @@ public:
 	static std::string str_channel;
 	static std::string str_incoming_bandwidth;
 	static std::string str_outgoing_bandwidth;
+	static std::string str_server_debug_mode;
 
 public:
 	static ConfigSettings * config; // Use this static reference instead of your own call to the constructor

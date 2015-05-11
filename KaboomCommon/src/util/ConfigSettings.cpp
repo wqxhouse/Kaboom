@@ -37,6 +37,7 @@ std::string ConfigSettings::str_max_client = "MaxClient";
 std::string ConfigSettings::str_channel = "Channel";
 std::string ConfigSettings::str_incoming_bandwidth = "IncomingBandwidth";
 std::string ConfigSettings::str_outgoing_bandwidth = "OutgoingBandwidth";
+std::string ConfigSettings::str_server_debug_mode = "ServerDebugMode";
 
 
 typedef std::pair <std::string, std::string> String_Pair;

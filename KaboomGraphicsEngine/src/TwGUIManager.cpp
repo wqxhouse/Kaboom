@@ -1564,18 +1564,27 @@ void TwGUIManager::exportXML()
 {
 	// Might wanna move this code somewhere else
 	ConfigSettings* config = ConfigSettings::config;
-	std::string str_export_xml = "";
+	std::string str_export_material_xml = "";
+	std::string str_export_world_xml = "";
 	std::string str_mediaPath = "";
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-	config->getValue(ConfigSettings::str_export_xml, str_export_xml);
+	config->getValue(ConfigSettings::str_material_xml, str_export_material_xml);
+	config->getValue(ConfigSettings::str_export_xml, str_export_world_xml);
 
 	// TODO: support custom file names
-	std::string exportPath = str_mediaPath + "Assets/World/export.xml";
+	std::string exportWorldPath = str_mediaPath + str_export_world_xml;
+	std::string exportMaterialPath = str_mediaPath + str_export_material_xml;
 
+	exportWorldXML(exportWorldPath);
+	exportMaterialXML(exportMaterialPath);
+}
+
+void TwGUIManager::exportWorldXML(std::string &path)
+{
 	// Open file to write
 	int tabs = 0;
 	std::ofstream f;
-	f.open(exportPath);
+	f.open(path);
 
 	// Headers
 	write(f, tabs, "<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
@@ -1585,49 +1594,6 @@ void TwGUIManager::exportXML()
 	MaterialManager* mm = Core::getWorldRef().getMaterialManager();
 	GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
 	LightManager* lm = Core::getWorldRef().getLightManager();
-
-	// FOR MATERIALS
-	const std::unordered_map<std::string, Material *> &mmMatMap = mm->getMaterialMapRef();
-	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMatMap.begin();
-		it != mmMatMap.end(); ++it)
-	{
-		const std::string &name = it->first;
-		Material *mat = it->second;			// Get Material object
-
-		std::string type = (mat->getUseTexture()) ? "textured" : "plain";
-		std::string matHeader = "<material name=\"" + name + "\" type=\"" + type + "\">";
-
-		write(f, tabs, matHeader);
-		tabs++;
-
-		// For plain materials
-		if (type == "plain") {
-			osg::Vec3 alb = mat->getAlbedo();
-			float rough = mat->getRoughness();
-			float specular = mat->getSpecular();
-			float metallic = mat->getMetallic();
-
-			write(f, tabs, tagify("albedo", alb));
-			write(f, tabs, tagify("roughness", rough));
-			write(f, tabs, tagify("specular", specular));
-			write(f, tabs, tagify("metallic", metallic));
-		}
-		// For textured materials
-		else if (type == "textured") {
-			std::string albPath = mat->getAlbedoTexturePath();
-			std::string roughPath = mat->getRoughnessTexturePath();
-			std::string metallicPath = mat->getMetallicTexturePath();
-			std::string normalPath = mat->getNormalMapTexturePath();
-
-			write(f, tabs, tagify("albedoTex", albPath));
-			write(f, tabs, tagify("roughnessTex", roughPath));
-			write(f, tabs, tagify("metallicTex", metallicPath));
-			write(f, tabs, tagify("normalPath", normalPath));
-		}
-
-		tabs--;
-		write(f, tabs, "</material>\n");
-	}
 
 	// FOR GEOMETRY OBJECTS
 	const std::unordered_map<std::string, GeometryObject *> &gmMap = gm->getGeometryObjectMapRef();
@@ -1717,5 +1683,68 @@ void TwGUIManager::exportXML()
 	// Footers
 	tabs--;
 	write(f, tabs, "</world>");
+	f.close();			// Close file
+}
+
+void TwGUIManager::exportMaterialXML(std::string &path)
+{
+	// Open file to write
+	int tabs = 0;
+	std::ofstream f;
+	f.open(path);
+
+	// Headers
+	write(f, tabs, "<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
+	write(f, tabs, "<materialList>");
+	tabs++;
+
+	MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+	// FOR MATERIALS
+	const std::unordered_map<std::string, Material *> &mmMatMap = mm->getMaterialMapRef();
+	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMatMap.begin();
+		it != mmMatMap.end(); ++it)
+	{
+		const std::string &name = it->first;
+		Material *mat = it->second;			// Get Material object
+
+		std::string type = (mat->getUseTexture()) ? "textured" : "plain";
+		std::string matHeader = "<material name=\"" + name + "\" type=\"" + type + "\">";
+
+		write(f, tabs, matHeader);
+		tabs++;
+
+		// For plain materials
+		if (type == "plain") {
+			osg::Vec3 alb = mat->getAlbedo();
+			float rough = mat->getRoughness();
+			float specular = mat->getSpecular();
+			float metallic = mat->getMetallic();
+
+			write(f, tabs, tagify("albedo", alb));
+			write(f, tabs, tagify("roughness", rough));
+			write(f, tabs, tagify("specular", specular));
+			write(f, tabs, tagify("metallic", metallic));
+		}
+		// For textured materials
+		else if (type == "textured") {
+			std::string albPath = mat->getAlbedoTexturePath();
+			std::string roughPath = mat->getRoughnessTexturePath();
+			std::string metallicPath = mat->getMetallicTexturePath();
+			std::string normalPath = mat->getNormalMapTexturePath();
+
+			write(f, tabs, tagify("albedoTex", albPath));
+			write(f, tabs, tagify("roughnessTex", roughPath));
+			write(f, tabs, tagify("metallicTex", metallicPath));
+			write(f, tabs, tagify("normalPath", normalPath));
+		}
+
+		tabs--;
+		write(f, tabs, "</material>\n");
+	}
+
+	// Footers
+	tabs--;
+	write(f, tabs, "</materialList>");
 	f.close();			// Close file
 }
