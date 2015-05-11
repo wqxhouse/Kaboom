@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <osg/Vec3>
 
+class LightVisualizer;
 class Light;
 class LightManager
 {
@@ -36,6 +37,7 @@ public:
 		return _numLights;
 	}
 
+	osg::ref_ptr<osg::MatrixTransform> getVisualizerRoot();
 	Light *getLight(const std::string &name);
 	Light *getLight(int index);
 
@@ -44,5 +46,6 @@ private:
 	std::vector<Light *> _lights;
 	int _numLights;
 
+	LightVisualizer *_visualizer;
 };
 

@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "SkyBox.h"
 #include "AxisVisualizer.h"
+#include "LightVisualizer.h"
 #include "CubeMapPreFilter.h"
 
 #include "TwGUIManager.h"
@@ -111,6 +112,7 @@ private:
 
 	static void configFilePath();
 	static void configAxisVisualizer();
+	static void configLightVisualizer();
 
 	static void configLibRocketGUI();
 

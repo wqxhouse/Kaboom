@@ -103,6 +103,12 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 					foundNode = true;
 					break;
 				}
+				else if (name == "__LightVisualizerBillBoard")
+				{
+					// TODO: 
+					osg::Drawable *drawable = nearIntersection.drawable;
+					drawable->dirtyBound();
+				}
 				else if (name.substr(0, 6) == "Skybox")
 				{
 					clickedOnSkyBox = true;

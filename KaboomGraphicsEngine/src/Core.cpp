@@ -303,6 +303,7 @@ void Core::freezeCameraOnGUIDemand()
 }
 
 void Core::finalize()
+
 {
 	if (!_hasInit)
 	{
@@ -325,6 +326,7 @@ void Core::finalize()
 
 	configGeometryObjectManipulator();
 	configAxisVisualizer();
+	configLightVisualizer();
 
 	_analysisHUD = configureViewerForMode(*_viewer, _passes, NULL, 1);
 	_analysisHUD->toggleHelper(); // disabled by default
@@ -595,6 +597,12 @@ void Core::configAxisVisualizer()
 	_axisVisualizer.init();
 	_axisVisualizer.setPosition(osg::Vec3());
 	_passes->addChild(_axisVisualizer.getRoot());
+}
+
+
+void Core::configLightVisualizer()
+{
+	_passes->addChild(_world.getLightManager()->getVisualizerRoot());
 }
 
 void Core::requestPrefilterCubeMap()
