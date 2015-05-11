@@ -86,6 +86,8 @@ public:
 	static float fovXToY(float fovx, const osg::Vec2 screenSize);
 	static float fovYToX(float fovy, const osg::Vec2 screenSize);
 
+	osg::Vec3 getScreenCenterCoord(float z);
+
 private:
 	friend class osgFX::EffectCompositor;
 	osg::Matrix _viewMatrix;
