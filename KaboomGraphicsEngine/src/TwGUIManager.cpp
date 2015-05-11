@@ -326,6 +326,10 @@ void TwGUIManager::initAddBar()
 			if (gm->addGeometry(modelName, model, fileName)) {
 				GeometryObject* geom = gm->getGeometryObject(modelName);
 
+				// Calculate light position relative to center of screen
+				Camera cam = Core::getMainCamera();
+				osg::Vec3 position = cam.getScreenCenterCoord(0.3f);
+				geom->setTranslate(position);
 
 				addModelToGUI((TwBar*)clientData, geom, GEOM_GROUP_NAME, _index);
 			}
@@ -350,6 +354,10 @@ void TwGUIManager::initAddBar()
 		std::string lightName;
 		std::cout << "Enter point light name: ";
 		std::cin >> lightName;
+
+		// Calculate light position relative to center of screen
+		Camera cam = Core::getMainCamera();
+		position = cam.getScreenCenterCoord(0.1f);
 
 		if (lm->addPointLight(lightName, position, color, radius, doShadow)) {
 			Light* lt = lm->getLight(lightName);
