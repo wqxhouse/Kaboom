@@ -161,9 +161,6 @@ void World::onTick(btScalar timeStep) {
         const btCollisionObject *collisionObjB = static_cast<const btCollisionObject *>(manifold->getBody1());
 
 		btManifoldPoint contactPoint = manifold->getContactPoint(0);
-		std::cout << "a: " << contactPoint.m_normalWorldOnB.getX() << " " <<
-			contactPoint.m_normalWorldOnB.getY() << " " <<
-			contactPoint.m_normalWorldOnB.getZ() << " " << std::endl;
 
         // Ignore ghost objects.
         if (!collisionObjA->hasContactResponse() || !collisionObjB->hasContactResponse()) {
