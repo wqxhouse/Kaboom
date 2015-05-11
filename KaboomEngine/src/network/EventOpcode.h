@@ -9,4 +9,5 @@ enum EventOpcode {
     EVENT_DISCONNECT = 5,
     EVENT_ASSIGN = 6,
     EVENT_EXPLOSION = 7,
+    EVENT_DESTROY = 8,
 };
