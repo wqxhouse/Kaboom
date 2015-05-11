@@ -16,5 +16,5 @@ bool KaboomV2MessageHandler::handle(const Message &message) const {
 
     msg.getEntity()->attachComponent(new ExplosionComponent());
 
-    return false;
+    return true;
 }
