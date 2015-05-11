@@ -1,6 +1,7 @@
 #include "GameClient.h"
 
 #include <network/AssignEvent.h>
+#include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
 #include <network/ExplosionEvent.h>
@@ -70,6 +71,18 @@ void GameClient::receive() {
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
                 break;
             }
+            case EVENT_SPAWN: {
+                SpawnEvent spawnEvent;
+                spawnEvent.deserialize(&networkData[i]);
+                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
+                break;
+            }
+            case EVENT_DESTROY: {
+                DestroyEvent destroyEvent;
+                destroyEvent.deserialize(&networkData[i]);
+                eventHandlerLookup.find(destroyEvent.getOpcode())->handle(destroyEvent);
+                break;
+            }
             case EVENT_POSITION: {
                 PositionEvent positionEvent;
                 positionEvent.deserialize(&networkData[i]);
@@ -80,12 +93,6 @@ void GameClient::receive() {
                 RotationEvent rotationEvent;
                 rotationEvent.deserialize(&networkData[i]);
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(rotationEvent);
-                break;
-            }
-            case EVENT_SPAWN: {
-                SpawnEvent spawnEvent;
-                spawnEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
                 break;
             }
             case EVENT_EXPLOSION: {

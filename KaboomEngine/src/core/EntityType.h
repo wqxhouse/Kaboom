@@ -1,6 +1,7 @@
 #pragma once
 
 enum EntityCategory {
+    CAT_MASK = 15 << 16,
     CAT_CHARACTER = 1 << 16,
     CAT_BOMB = 2 << 16,
     CAT_POWERUP = 3 << 16

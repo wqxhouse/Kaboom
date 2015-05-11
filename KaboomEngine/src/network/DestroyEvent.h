@@ -11,6 +11,10 @@ public:
               entityId(entityId) {
     }
 
+    inline unsigned int getEntityId() const {
+        return entityId;
+    }
+
     inline virtual void serialize(char *buf) const {
         memcpy(buf, this, sizeof(DestroyEvent));
     }
