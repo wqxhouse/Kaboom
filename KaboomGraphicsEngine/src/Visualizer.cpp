@@ -12,6 +12,12 @@ Visualizer::Visualizer()
 	_matTrans->setCullingActive(false);
 }
 
+Visualizer::Visualizer(const osg::Vec3 &pos)
+: Visualizer()
+{
+	setPosition(pos);
+}
+
 void Visualizer::setPosition(const osg::Vec3 &pos)
 {
 	osg::Matrix trans;

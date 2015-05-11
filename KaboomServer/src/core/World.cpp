@@ -30,10 +30,17 @@ World::World(ConfigSettings * configSettings)
     broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new TriggerCallback());
     world.setInternalTickCallback(onTickCallback, this);
 
-	//TODO make an on off switch here to disable debugViewer
-	debugViewer = new OsgBulletDebugViewer(config);
-	debugViewer->init();
-	world.setDebugDrawer(debugViewer->getDbgDraw());
+
+	std::string debug;
+	config->getValue(ConfigSettings::str_server_debug_mode, debug);
+	debugMode = debug == "true" ? true : false;
+
+	
+	if (debugMode) {
+		debugViewer = new OsgBulletDebugViewer(config);
+		debugViewer->init();
+		world.setDebugDrawer(debugViewer->getDbgDraw());
+	}
 }
 
 World::~World() {
@@ -86,44 +93,10 @@ void World::loadMapFromXML(const std::string &mapXMLFile){
 		btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(0, motion, collisionShape, btVector3(0, 0, 0));
 		btRigidBody * rigidbody = new btRigidBody(rigidBodyCI);
 		addRigidBody(rigidbody);
-		
-		debugViewer->addNode(transfromNode);
 
-
-
-		/*osg::MatrixTransform* node = osgObjectConfig.getPointer<osg::MatrixTransform *>("node");
-
-		osgbDynamics::MotionState * motion = new osgbDynamics::MotionState;
-		motion->setTransform(node);
-
-		btCollisionShape * collisionShape = osgbCollision::btTriMeshCollisionShapeFromOSG(node);
-
-		btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(0, motion, collisionShape, btVector3(0, 0, 0));
-		btRigidBody * rigidbody = new btRigidBody(rigidBodyCI);
-		addRigidBody(rigidbody);
-
-		debugViewer->addNode(node);*/
-		//osg::ref_ptr<osg::Node> debugNode = osgbCollision::osgNodeFromBtCollisionShape(rigidbody->getCollisionShape());//osgbCollision::osgNodeFromBtCollisionShape(rigidBody->getCollisionShape());
-		//debugViewer->addNode(debugNode);
-		//TODO what happen then to the MatrixTransform????
-
-		//osg::Node* debugNode = osgbCollision::osgNodeFromBtCollisionShape(collisionShape);
-		//debugViewer->addNodeWireFrame(debugNode);
-
-
-		// Create an OSG representation of the Bullet shape and attach it.
-		// This is mainly for debugging.
-		//osg::Node* debugNode = osgbCollision::osgNodeFromBtCollisionShape(collision);
-		//node->addChild(debugNode);
-
-
-		// Set debug node state.
-		//osg::StateSet* state = debugNode->getOrCreateStateSet();
-		//osg::PolygonMode* pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE);
-		//state->setAttributeAndModes(pm);
-		//osg::PolygonOffset* po = new osg::PolygonOffset(-1, -1);
-		//state->setAttributeAndModes(po);
-		//state->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+		if (debugMode) {
+			debugViewer->addNode(transfromNode);
+		}
 
 	}
 }
@@ -133,10 +106,11 @@ void World::stepSimulation(float timeStep, int maxSubSteps) {
 
     world.stepSimulation(timeStep, maxSubSteps);
 
-	debugViewer->getDbgDraw()->BeginDraw();
-	world.debugDrawWorld();
-	debugViewer->getDbgDraw()->EndDraw();
-	
+	if (debugMode) {
+		debugViewer->getDbgDraw()->BeginDraw();
+		world.debugDrawWorld();
+		debugViewer->getDbgDraw()->EndDraw();
+	}
 }
 
 void World::addRigidBody(btRigidBody *rigidBody) {
@@ -144,8 +118,10 @@ void World::addRigidBody(btRigidBody *rigidBody) {
 }
 
 void World::addRigidBodyAndConvertToOSG(btRigidBody *rigidBody){
-	osg::ref_ptr<osg::Node> node = osgbCollision::osgNodeFromBtCollisionShape(rigidBody->getCollisionShape());
-	debugViewer->addNode(node);
+	if (debugMode) {
+		osg::ref_ptr<osg::Node> node = osgbCollision::osgNodeFromBtCollisionShape(rigidBody->getCollisionShape());
+		debugViewer->addNode(node);
+	}
 
 	world.addRigidBody(rigidBody);
 }
@@ -267,13 +243,9 @@ bool World::isCollidingGround(const btManifoldPoint &contactPoint) const
 }
 
 void World::renderDebugFrame() {
-
-	debugViewer->renderFrame();
-
-}
-
-OsgBulletDebugViewer * World::getDebugViewer(){
-	return debugViewer;
+	if (debugMode) {
+		debugViewer->renderFrame();
+	}
 }
 
 void World::debugDrawWorld() {

@@ -61,7 +61,7 @@ void OsgBulletDebugViewer::addNodeWireFrame(osg::Node * node) {
 }
 
 void OsgBulletDebugViewer::renderFrame() {
-	//viewer.frame();
+	viewer.frame();
 }
 
 osgbCollision::GLDebugDrawer* OsgBulletDebugViewer::getDbgDraw(){

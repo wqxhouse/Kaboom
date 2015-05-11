@@ -169,6 +169,9 @@ protected:
 	static std::string tagify(std::string tag, osg::Vec4 &v);
 	static std::string tagify(std::string tag, osg::Quat &v);
 
+	static void exportWorldXML(std::string &path);
+	static void exportMaterialXML(std::string &path);
+
 	LightManager *_lm;
 	GeometryObjectManager *_gm;
 	MaterialManager *_mm;
