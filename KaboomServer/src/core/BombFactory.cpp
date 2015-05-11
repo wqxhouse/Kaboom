@@ -102,8 +102,9 @@ void BombFactory::createKaboomV2(Entity *entity) const {
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
     static KaboomV2MessageHandler kaboomV2Handler;
-
     chain->addHandler(&kaboomV2Handler);
+
+    entity->attachComponent(new CollisionComponent());
 }
 
 void BombFactory::createTimeBomb(Entity *entity) const {

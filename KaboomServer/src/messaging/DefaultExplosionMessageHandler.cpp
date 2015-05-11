@@ -12,6 +12,7 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../core/EntityConfigLookup.h"
+#include "../core/Game.h"
 
 bool DefaultExplosionMessageHandler::handle(const Message &message) const {
     if (message.getType() != MessageType::EXPLOSION) {
@@ -79,6 +80,9 @@ bool DefaultExplosionMessageHandler::handle(const Message &message) const {
         charStatusComp->setIsDamaged(true);
         printf("new Player Health: %d \n", charHealthComp->getHealthAmount());
     }
+
+    msg.getGame()->getGameServer().sendExplosionEvent(entity);
+    msg.getGame()->removeEntity(entity);
 
     return true;
 }
