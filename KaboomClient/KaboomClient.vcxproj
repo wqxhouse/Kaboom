@@ -264,6 +264,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\input\MouseEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\network\ClientEventHandlerLookup.cpp" />
+    <ClCompile Include="src\network\DestroyEventHandler.cpp" />
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
     <ClCompile Include="src\network\ExplosionEventHandler.cpp" />
     <ClCompile Include="src\network\RotationEventHandler.cpp" />
@@ -291,6 +292,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
     <ClInclude Include="src\input\MouseEventHandler.h" />
     <ClInclude Include="src\network\ClientEventHandlerLookup.h" />
+    <ClInclude Include="src\network\DestroyEventHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
     <ClInclude Include="src\network\ExplosionEventHandler.h" />
     <ClInclude Include="src\network\RotationEventHandler.h" />

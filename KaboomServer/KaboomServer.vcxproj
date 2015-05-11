@@ -27,14 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\CollisionComponent.cpp" />
-    <ClCompile Include="src\components\DetonatorComponent.cpp" />
-    <ClCompile Include="src\components\InputComponent.cpp" />
     <ClCompile Include="src\components\JetpackComponent.cpp" />
-    <ClCompile Include="src\components\JumpComponent.cpp" />
-    <ClCompile Include="src\components\PhysicsComponent.cpp" />
-    <ClCompile Include="src\components\TimerComponent.cpp" />
-    <ClCompile Include="src\components\TriggerComponent.cpp" />
     <ClCompile Include="src\core\BombConfigLoader.cpp" />
     <ClCompile Include="src\core\EntityConfigLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
@@ -47,6 +40,7 @@
     <ClCompile Include="src\core\World.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\util.cpp" />
+    <ClCompile Include="src\messaging\DefaultCharacterMessageHandler.cpp" />
     <ClCompile Include="src\messaging\DefaultExplosionMessageHandler.cpp" />
     <ClCompile Include="src\messaging\KaboomV2MessageHandler.cpp" />
     <ClCompile Include="src\messaging\MessageHandlerChain.cpp" />
@@ -93,7 +87,10 @@
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\World.h" />
     <ClInclude Include="src\math\util.h" />
+    <ClInclude Include="src\messaging\Attack1Message.h" />
+    <ClInclude Include="src\messaging\Attack2Message.h" />
     <ClInclude Include="src\messaging\CollisionMessage.h" />
+    <ClInclude Include="src\messaging\DefaultCharacterMessageHandler.h" />
     <ClInclude Include="src\messaging\DefaultExplosionMessageHandler.h" />
     <ClInclude Include="src\messaging\ExplosionMessage.h" />
     <ClInclude Include="src\messaging\KaboomV2MessageHandler.h" />
@@ -101,6 +98,7 @@
     <ClInclude Include="src\messaging\MessageHandler.h" />
     <ClInclude Include="src\messaging\MessageHandlerChain.h" />
     <ClInclude Include="src\messaging\MessageType.h" />
+    <ClInclude Include="src\messaging\NoAttackMessage.h" />
     <ClInclude Include="src\messaging\TimerExpiredMessage.h" />
     <ClInclude Include="src\messaging\TimeBombMessageHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
@@ -305,7 +303,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(OSG_INCLUDE_PATH);$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(OSG_INCLUDE_PATH);$(OSGBULLET_INCLUDE_PATH);$(OSGWORKS_INCLUDE_PATH);$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -320,7 +318,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(OSG_LIB_PATH);$(BULLET_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BULLET_LIB_PATH);$(OSG_LIB_PATH);$(OSGBULLET_LIB_PATH);$(OSGWORKS_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ws2_32.lib;osg.lib;osgDB.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;osgbDynamics.lib;osgbCollision.lib;osgwTools.lib;osgbInteraction.lib;osgViewer.lib;osgGA.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>

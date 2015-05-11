@@ -1,7 +1,5 @@
 #include "BombFactory.h"
 
-#include <stdexcept>
-
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
@@ -54,7 +52,8 @@ Entity *BombFactory::createBomb(
     return entity;
 }
 
-void BombFactory::createBase(Entity *entity,
+void BombFactory::createBase(
+        Entity *entity,
         float x,
         float y,
         float z,
@@ -103,8 +102,9 @@ void BombFactory::createKaboomV2(Entity *entity) const {
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
     static KaboomV2MessageHandler kaboomV2Handler;
-
     chain->addHandler(&kaboomV2Handler);
+
+    entity->attachComponent(new CollisionComponent());
 }
 
 void BombFactory::createTimeBomb(Entity *entity) const {

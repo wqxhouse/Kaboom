@@ -5,9 +5,13 @@
 
 class TimerComponent : public Component {
 public:
-    TimerComponent(Timer *timer);
+    TimerComponent(Timer *timer)
+            : timer(timer) {
+    }
 
-    Timer *getTimer();
+    inline Timer *getTimer() {
+        return timer;
+    }
 
 private:
     Timer *timer;

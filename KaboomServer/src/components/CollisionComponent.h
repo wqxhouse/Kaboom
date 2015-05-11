@@ -8,13 +8,25 @@ class Entity;
 
 class CollisionComponent : public Component {
 public:
-    void addContactEntity(Entity *entity);
-    void clearContactEntities();
+    inline void addContactEntity(Entity *entity) {
+        contactEntities.insert(entity);
+    }
 
-    const bool &isCollided() const;
-    void setCollided(bool collided);
+    inline void clearContactEntities() {
+        contactEntities.clear();
+    }
 
-    const std::unordered_set<Entity *> &getContactEntities() const;
+    inline bool isCollided() const {
+        return collided;
+    }
+
+    inline void setCollided(bool collided) {
+        this->collided = collided;
+    }
+
+    inline const std::unordered_set<Entity *> &getContactEntities() const {
+        return contactEntities;
+    }
 
 private:
     bool collided;

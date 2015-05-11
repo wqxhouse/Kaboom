@@ -23,7 +23,6 @@ class Entity;
 class World {
 public:
     World(ConfigSettings * );
-    ~World();
 
     void loadMap();
 

@@ -6,14 +6,29 @@ class Entity;
 
 class DetonatorComponent : public Component {
 public:
-    DetonatorComponent(Entity *bomb);
+    DetonatorComponent(Entity *bomb)
+            : bomb(bomb) {
+    }
 
-    Entity *getBomb() const;
-    bool isReady() const;
-    bool isDetonated() const;
+    inline Entity *getBomb() const {
+        return bomb;
+    }
 
-    void setReady(bool ready);
-    void setDetonated(bool detonated);
+    inline bool isReady() const {
+        return ready;
+    }
+
+    inline bool isDetonated() const {
+        return detonated;
+    }
+
+    inline void setReady(bool ready) {
+        this->ready = ready;
+    }
+
+    inline void setDetonated(bool detonated) {
+        this->detonated = detonated;
+    }
 
 private:
     Entity *bomb;

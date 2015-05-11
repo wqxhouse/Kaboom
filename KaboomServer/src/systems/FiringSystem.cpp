@@ -11,9 +11,13 @@
 #include "../components/DetonatorComponent.h"
 #include "../components/ExplosionComponent.h"
 #include "../components/InputComponent.h"
+#include "../components/MessageHandlerComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
+#include "../messaging/Attack1Message.h"
+#include "../messaging/Attack2Message.h"
+#include "../messaging/NoAttackMessage.h"
 
 #define VELOCITYCAP 2
 #define VELOCTIYACCELERATION .1
@@ -23,83 +27,26 @@ FiringSystem::FiringSystem(Game *game)
 }
 
 bool FiringSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<PositionComponent>() &&
-            entity->hasComponent<RotationComponent>() &&
-            entity->hasComponent<BombContainerComponent>() &&
-            entity->hasComponent<EquipmentComponent>() &&
-            entity->hasComponent<InputComponent>();
+    return entity->hasComponent<InputComponent>() &&
+            entity->hasComponent<MessageHandlerComponent>();
 }
 
 void FiringSystem::processEntity(Entity *entity) {
-    PositionComponent* posComp = entity->getComponent<PositionComponent>();
-    RotationComponent* rotComp = entity->getComponent<RotationComponent>();
-    BombContainerComponent* invComp = entity->getComponent<BombContainerComponent>();
-    EquipmentComponent *equipComp = entity->getComponent<EquipmentComponent>();
     InputComponent* inputComp = entity->getComponent<InputComponent>();
-    DetonatorComponent *detonatorComp = entity->getComponent<DetonatorComponent>();
+    MessageHandlerComponent *handlerComp = entity->getComponent<MessageHandlerComponent>();
 
-    if (!inputComp->isFiring() || inputComp->getFireMode() == NOT_FIRING) {
-        if (detonatorComp != nullptr) {
-            if (detonatorComp->isDetonated()) {
-                entity->detachComponent<DetonatorComponent>();
-                delete detonatorComp;
-            } else {
-                detonatorComp->setReady(true);
-            }
+    if (!inputComp->isAttacking1() && !inputComp->isAttacking2()) {
+        NoAttackMessage message(game, entity);
+        handlerComp->getHandler()->handle(message);
+    } else {
+        if (inputComp->isAttacking1()) {
+            Attack1Message message(game, entity);
+            handlerComp->getHandler()->handle(message);
         }
 
-        return;
-    }
-
-    const EntityType &bombType = equipComp->getEquipmentType();
-
-    if (inputComp->getFireMode() == FireMode::LEFT_CLICK) {
-        const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
-
-        if (invComp->hasBomb(bombType)) {
-            if (detonatorComp != nullptr) {
-                if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {
-                    detonatorComp->getBomb()->attachComponent(new ExplosionComponent());
-                    detonatorComp->setDetonated(true);
-                }
-            } else {
-                Timer &timer = invComp->getTimer(bombType);
-
-                if (invComp->getAmount(bombType) > 0 && timer.isExpired()) {
-                    invComp->removeFromInventory(bombType);
-                    timer.start();
-
-                    btVector3 viewDir = getViewDirection(
-                            posComp->getX(),
-                            posComp->getY(),
-                            posComp->getZ(),
-                            rotComp->getYaw(),
-                            rotComp->getPitch());
-
-                    float launchSpeed = bombConfig.getFloat("launch-speed");
-
-                    Entity* bombEntity = game->getBombFactory().createBomb(
-                            bombType,
-                            posComp->getX() + viewDir.getX(),
-                            posComp->getY() + viewDir.getY(),
-                            posComp->getZ() + viewDir.getZ(),
-                            viewDir.getX() * launchSpeed,
-                            viewDir.getY() * launchSpeed,
-                            viewDir.getZ() * launchSpeed);
-
-                    if (bombType == REMOTE_DETONATOR) {
-                        entity->attachComponent(new DetonatorComponent(bombEntity));
-                    }
-
-                    invComp->addToActiveBomb(bombEntity);
-
-                    game->addEntity(bombEntity);
-                    game->getGameServer().sendSpawnEvent(bombEntity);
-                }
-            }
-
+        if (inputComp->isAttacking2()) {
+            Attack2Message message(game, entity);
+            handlerComp->getHandler()->handle(message);
         }
-    } else if (inputComp->getFireMode() == FireMode::RIGHT_CLICK) {
-        // TODO
     }
 }
