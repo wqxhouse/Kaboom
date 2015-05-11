@@ -17,7 +17,7 @@ void SpawnEventHandler::handle(const Event &e) const {
 	
 	
 	
-    if ((type & CAT_CHARACTER) == CAT_CHARACTER) {
+    if ((type & CAT_MASK) == CAT_CHARACTER) {
         entity = game->getCharacterFactory().createCharacter(
                 evt.getEntityId(),
                 evt.getType(),
@@ -26,7 +26,7 @@ void SpawnEventHandler::handle(const Event &e) const {
                 evt.getZ(),
                 evt.getYaw(),
                 evt.getPitch());
-    } else if ((type & CAT_BOMB) == CAT_BOMB) {
+    } else if ((type & CAT_MASK) == CAT_BOMB) {
         entity = game->getBombFactory().createBomb(
                 evt.getEntityId(),
                 evt.getType(),
