@@ -17,6 +17,14 @@ public:
               pitch(pitch) {
     }
 
+    inline virtual void serialize(char *buf) const {
+        memcpy(buf, this, sizeof(RotationEvent));
+    }
+
+    inline virtual void deserialize(char *buf) {
+        memcpy(this, buf, sizeof(RotationEvent));
+    }
+
     inline unsigned int getEntityId() const {
         return entityId;
     }
@@ -27,14 +35,6 @@ public:
 
     inline float getPitch() const {
         return pitch;
-    }
-
-    inline void serialize(char *buf) const {
-        memcpy(buf, this, sizeof(RotationEvent));
-    }
-
-    inline void deserialize(char *buf) {
-        memcpy(this, buf, sizeof(RotationEvent));
     }
 
     friend std::ostream& operator<<(std::ostream &os, const RotationEvent &o) {
