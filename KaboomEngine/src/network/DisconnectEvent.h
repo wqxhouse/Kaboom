@@ -6,13 +6,26 @@
 
 class DisconnectEvent : public Event {
 public:
-    DisconnectEvent(unsigned int playerId = 0);
+    DisconnectEvent(unsigned int playerId = 0)
+            : Event(EVENT_DISCONNECT, sizeof(DisconnectEvent)),
+              playerId(playerId) {
+    }
 
-    unsigned int getPlayerId() const;
-    void setPlayerId(unsigned int playerId);
+    inline virtual void serialize(char *buf) const {
+        memcpy(buf, this, sizeof(DisconnectEvent));
+    }
 
-    virtual void serialize(char *buf) const;
-    virtual void deserialize(char *buf);
+    inline virtual void deserialize(char *buf) {
+        memcpy(this, buf, sizeof(DisconnectEvent));
+    }
+
+    inline unsigned int getPlayerId() const {
+        return playerId;
+    }
+
+    inline void setPlayerId(unsigned int playerId) {
+        this->playerId = playerId;
+    }
 
     friend std::ostream& operator<<(std::ostream &os, const DisconnectEvent &o) {
         os << "DisconnectEvent: {" << std::endl;

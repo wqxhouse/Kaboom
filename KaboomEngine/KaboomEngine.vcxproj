@@ -220,16 +220,7 @@
     <ClCompile Include="src\components\WeaponPickupComponent.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
-    <ClCompile Include="src\network\AssignEvent.cpp" />
-    <ClCompile Include="src\network\DisconnectEvent.cpp" />
-    <ClCompile Include="src\network\EmptyEvent.cpp" />
-    <ClCompile Include="src\network\Event.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />
-    <ClCompile Include="src\network\ExplosionEvent.cpp" />
-    <ClCompile Include="src\network\PlayerInputEvent.cpp" />
-    <ClCompile Include="src\network\PositionEvent.cpp" />
-    <ClCompile Include="src\network\RotationEvent.cpp" />
-    <ClCompile Include="src\network\SpawnEvent.cpp" />
     <ClCompile Include="src\systems\EntitySystem.cpp" />
     <ClCompile Include="src\util\Timer.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -29,3 +29,11 @@ btVector3 getImpulseVector(btVector3 pointA, btVector3 pointB, btScalar knockBac
 	return impulseVec;
 
 }
+
+float getDistance(float x1, float y1, float z1, float x2, float y2, float z2) {
+    const float dx = x1 - x2;
+    const float dy = y1 - y2;
+    const float dz = z1 - z2;
+
+    return sqrt(dx * dx + dy * dy + dz * dz);
+}
