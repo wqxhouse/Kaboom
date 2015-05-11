@@ -7,6 +7,7 @@ HealthComponent::HealthComponent(int _healthAmoumt, int _healthCap)
 	shieldCap(0){
 }
 
+
 HealthComponent::~HealthComponent() {
 }
 

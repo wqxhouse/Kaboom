@@ -16,6 +16,7 @@
 #include <osgAudio/AudioEnvironment.h>
 #include <osgAudio/Sample.h>
 #include "SoundManager.h"
+#include "LibRocketGUIManager.h"
 
 using namespace osgAudio;
 
@@ -50,15 +51,31 @@ public:
 	std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
 
 private:
+
+
     enum GameStateMachine {
         EDITOR_MODE,
         CONNECT_TO_SERVER,
         GAME_MODE,
         DISCONNECT_TO_SERVER
     };
-
+	/*class onClickListener : public Rocket::Core::EventListener
+	{
+	public:
+		GameStateMachine *gsm;
+		onClickListener(GameStateMachine gsm){
+			this->gsm = &gsm;
+		}
+		void ProcessEvent(Rocket::Core::Event& event)
+		{
+			*gsm= CONNECT_TO_SERVER;
+			std::cout << "marty was clicked" << std::endl;
+		}
+	};*/
+	GameStateMachine gsm = EDITOR_MODE;
     ConfigSettings *config;
     InputManager *inputManager;
+	osg::ref_ptr<LibRocketGUIManager> libRocketInGameManager;
 
     EntityManager entityManager;
 	SoundManager soundManager;
