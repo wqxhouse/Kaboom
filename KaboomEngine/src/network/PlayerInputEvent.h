@@ -13,7 +13,8 @@ public:
             bool movingLeft = false,
             bool movingRight = false,
             bool jumping = false,
-            bool firing = false,
+            bool attacking1 = false,
+            bool attacking2 = false,
             float yaw = 0.0f,
             float pitch = 0.0f);
 
@@ -27,7 +28,8 @@ public:
 
     bool isJumping() const;
 
-    bool isFiring() const;
+    bool isAttacking1() const;
+    bool isAttacking2() const;
 
     float getYaw() const;
     float getPitch() const;
@@ -43,7 +45,8 @@ public:
         os << "    movingLeft: " << o.movingLeft << std::endl;
         os << "    movingRight: " << o.movingRight << std::endl;
         os << "    jumping: " << o.jumping << std::endl;
-        os << "    firing: " << o.firing << std::endl;
+        os << "    attacking1: " << o.attacking1 << std::endl;
+        os << "    attacking2: " << o.attacking2 << std::endl;
         os << "    yaw: " << o.yaw << std::endl;
         os << "    pitch: " << o.pitch << std::endl;
         os << "}";
@@ -61,7 +64,8 @@ private:
 
     bool jumping;
 
-    bool firing;
+    bool attacking1;
+    bool attacking2;
 
     float yaw;
     float pitch;
