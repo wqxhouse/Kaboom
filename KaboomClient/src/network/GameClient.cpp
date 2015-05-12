@@ -50,7 +50,7 @@ void GameClient::receive() {
         EmptyEvent emptyEvent;
         emptyEvent.deserialize(&networkData[i]);
 
-        printf("eventType is %d\n", emptyEvent.getOpcode());
+       // printf("eventType is %d\n", emptyEvent.getOpcode());
         //printf("byteSize is %d\n", emptyEvent.getByteSize());
 
         switch (emptyEvent.getOpcode()) {
@@ -106,6 +106,10 @@ void GameClient::receive() {
 				healthEvent.deserialize(&networkData[i]);
 				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(healthEvent);
 				//printf("\nhello world\n");
+				break;
+			}
+			case EVENT_AMMO_COUNT:{
+				
 				break;
 			}
             default: {

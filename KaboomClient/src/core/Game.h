@@ -43,6 +43,7 @@ public:
 
     GeometryObjectManager* getGeometryManager();
     MaterialManager* getMaterialManager();
+	osg::ref_ptr<LibRocketGUIManager> getLibRocket();
 
     Camera &getCamera();
 	osg::ref_ptr<Source> source;
@@ -59,7 +60,7 @@ private:
         GAME_MODE,
         DISCONNECT_TO_SERVER
     };
-	/*class onClickListener : public Rocket::Core::EventListener
+	class onClickListener : public Rocket::Core::EventListener
 	{
 	public:
 		GameStateMachine *gsm;
@@ -71,7 +72,7 @@ private:
 			*gsm= CONNECT_TO_SERVER;
 			std::cout << "marty was clicked" << std::endl;
 		}
-	};*/
+	};
 	GameStateMachine gsm = EDITOR_MODE;
     ConfigSettings *config;
     InputManager *inputManager;

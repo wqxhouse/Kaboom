@@ -14,10 +14,12 @@ void setupGUI()
 	std::string guiPath = mediaPath + "DefaultAssets\\LibRocketGUI\\InGame\\";
 	/*int window_id = manager->addWindow(guiPath + "demo.rml", true);*/
 
-	manager->addWindow(guiPath + "marty.rml", true);
+	//manager->addWindow(guiPath + "marty.rml", true);
+	manager->addWindow(guiPath + "window_rocket.rml", true);
+	int i=manager->addWindow(guiPath + "window_start_screen.rml", true);
 	/*int i = _libRocketInGameGUI->addWindow(guiPath + "InGame\\marty.rml", true);
-	_libRocketInGameGUI->getWindow(i - 1)->Hide();
-	_libRocketInGameGUI->getWindow(i)->Hide();*/
+	_libRocketInGameGUI->getWindow(i - 1)->Hide();*/
+	manager->getWindow(i)->Hide();
 
 	// get the window
 	//Rocket::Core::ElementDocument *window1 = manager->getWindow(window_id);

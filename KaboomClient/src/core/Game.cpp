@@ -104,8 +104,8 @@ Game::Game(ConfigSettings *config)
 
 
 	Rocket::Core::EventListenerInstancer;
-	//Rocket::Core::EventListener * startGameListener = new onClickListener(gsm);
-	//marty->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
+	Rocket::Core::EventListener * startGameListener = new onClickListener(gsm);
+	marty->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
 
 	
 }
@@ -234,4 +234,7 @@ MaterialManager *Game::getMaterialManager() {
 
 Camera &Game::getCamera() {
 	return _camera;
+}
+osg::ref_ptr<LibRocketGUIManager> Game::getLibRocket(){
+	return libRocketInGameManager;
 }
