@@ -1,6 +1,6 @@
 <template name="start_screen" content="content">
 <head>
-	<link type="text/rcss" href="rkt.rcss"/>
+	<link type="text/rcss" href="rkt_new.rcss"/>
 	<link type="text/rcss" href="invader-m.rcss"/>
   <style>
     div#title{
