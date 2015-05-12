@@ -102,5 +102,5 @@ void CharacterFactory::createDefaultCharacter(Entity *entity) const {
     chain->addHandler(&defaultCharHandler);
 
     entity->attachComponent(new JetpackComponent());
-    entity->attachComponent(new EquipmentComponent(TIME_BOMB));
+    entity->attachComponent(new EquipmentComponent(KABOOM_V2));
 }

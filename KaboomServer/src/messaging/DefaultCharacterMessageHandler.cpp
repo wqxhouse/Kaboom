@@ -76,7 +76,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                     bombType,
                     posComp->getX() + viewDir.getX(),
                     posComp->getY() + viewDir.getY(),
-                    posComp->getZ() + viewDir.getZ(),
+                    posComp->getZ() + 1 + viewDir.getZ(),
                     viewDir.getX() * launchSpeed,
                     viewDir.getY() * launchSpeed,
                     viewDir.getZ() * launchSpeed);
