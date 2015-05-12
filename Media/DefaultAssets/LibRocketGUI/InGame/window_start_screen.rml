@@ -4,20 +4,20 @@
 	<link type="text/rcss" href="invader-m.rcss"/>
   <style>
     div#title{
-      position:absolute;
-      left:40%;
-      font-size:600%;
-      color: #EEAA88;
+    position:absolute;
+    left:40%;
+    font-size:600%;
+    color: #BA55D3;
     }
     button#startgame{
-      position:absolute;
-      left: 45%;
-      top : 50%;
+    position:absolute;
+    left: 45%;
+    top : 50%;
     }
     table{
-      background-color: black;
+    background-color: black;
     }
-    
+
   </style>
 </head>
 <body class="start_screen">
