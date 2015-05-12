@@ -28,6 +28,7 @@
         <max-damage type="int">80</max-damage>
         <min-damage type="int">20</min-damage>
         <delay type="int">3000</delay>
+        <restitution type="float">0.8</restitution>
     </bomb>
     <bomb>
         <id type="uint">131075</id>
