@@ -23,6 +23,9 @@ void InputManager::loadConfig() {
     mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_UP, &InputEventHandler::onAttack1Up);
     mouseEventHandler.bindKey(osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON, MouseEventHandler::KEY_DOWN, &InputEventHandler::onAttack2Down);
     mouseEventHandler.bindKey(osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON, MouseEventHandler::KEY_UP, &InputEventHandler::onAttack2Up);
+    keyboardEventHandler.bindKey('1', &InputEventHandler::onEquip1);
+    keyboardEventHandler.bindKey('2', &InputEventHandler::onEquip2);
+    keyboardEventHandler.bindKey('3', &InputEventHandler::onEquip3);
 	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_Escape, KeyboardEventHandler::KEY_UP, &InputEventHandler::quitGameMode);
 
 	// editor related

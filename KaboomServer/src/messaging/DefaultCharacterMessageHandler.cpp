@@ -45,11 +45,12 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
     auto rotComp = entity->getComponent<RotationComponent>();
 
     const EntityType &bombType = equipComp->getEquipmentType();
-    const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
 
     if (!invComp->hasBomb(bombType)) {
         return true;
     }
+
+    const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
 
     if (detonatorComp != nullptr) {
         if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {

@@ -21,6 +21,9 @@ public:
     void onAttack2Down();
     void onAttack2Up();
     void onLook(float yaw, float pitch);
+    void onEquip1();
+    void onEquip2();
+    void onEquip3();
 
     // void enterGameMode();
     void quitGameMode();
