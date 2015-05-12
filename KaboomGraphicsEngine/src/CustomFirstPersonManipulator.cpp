@@ -32,6 +32,17 @@ float CustomFirstPersonManipulator::getWalkingSpeed()
 	return _metersPerSec;
 }
 
+bool CustomFirstPersonManipulator::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us)
+{
+	// disable scrolling for scaling
+	if (ea.getEventType() == GUIEventAdapter::SCROLL)
+	{
+		return true;
+	}
+
+	return StandardManipulator::handle(ea, us);
+}
+
 bool CustomFirstPersonManipulator::handleFrame(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us)
 {
 	double spf = Core::getLastFrameDuration();
