@@ -3,6 +3,8 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 
+#include "../components/CollisionComponent.h"
+#include "../components/StickComponent.h"
 #include "../core/Game.h"
 
 PhysicsSystem::PhysicsSystem(Game *game, World &world)
@@ -23,21 +25,30 @@ bool PhysicsSystem::checkEntity(Entity *entity) {
 }
 
 void PhysicsSystem::processEntity(Entity *entity) {
-    PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
+    auto physComp = entity->getComponent<PhysicsComponent>();
+    auto posComp = entity->getComponent<PositionComponent>();
+    auto colComp = entity->getComponent<CollisionComponent>();
 
-    const btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
-
-    PositionComponent *posComp = entity->getComponent<PositionComponent>();
+    btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
+    bool sticked = colComp != nullptr && colComp->isCollided() && entity->hasComponent<StickComponent>();
 
     if (posComp != nullptr) {
-        const btVector3 &pos = worldTrans.getOrigin();
-        posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
+        if (sticked) {
+            worldTrans.setOrigin(btVector3(posComp->getX(), posComp->getY(), posComp->getZ()));
+        } else {
+            const btVector3 &pos = worldTrans.getOrigin();
+            posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
+        }
     }
 
     RotationComponent *rotComp = entity->getComponent<RotationComponent>();
 
     if (rotComp != nullptr) {
-        btQuaternion rot = worldTrans.getRotation();
-        // TODO: Set rotComp
+        if (sticked) {
+            // TODO: Set rotation
+        } else {
+            btQuaternion rot = worldTrans.getRotation();
+            // TODO: Set rotComp
+        }
     }
 }
