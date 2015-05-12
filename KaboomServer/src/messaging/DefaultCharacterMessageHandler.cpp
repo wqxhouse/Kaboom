@@ -52,7 +52,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
 
     const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
 
-    if (detonatorComp != nullptr) {
+    if (bombType == REMOTE_DETONATOR && detonatorComp != nullptr) {
         if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {
             detonatorComp->getBomb()->attachComponent(new ExplosionComponent());
             detonatorComp->setDetonated(true);
