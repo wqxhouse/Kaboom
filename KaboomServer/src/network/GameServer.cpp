@@ -213,6 +213,9 @@ void GameServer::sendHealthEvent(Entity *entity) const{
 	if (health == nullptr){
 		return;
 	}
+	/*if (health->getHealthAmount() !=  100){
+		exit(1);
+	}*/
 	HealthEvent sendHealth(health->getHealthAmount());
 	sendEvent(sendHealth,entityIdToClientId.at(entity->getId()));
 }

@@ -192,6 +192,7 @@
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\EntityType.h" />
     <ClInclude Include="src\core\FireMode.h" />
+    <ClInclude Include="src\network\AmmoAmountEvent.h" />
     <ClInclude Include="src\network\AssignEvent.h" />
     <ClInclude Include="src\network\DisconnectEvent.h" />
     <ClInclude Include="src\network\EmptyEvent.h" />

@@ -133,6 +133,9 @@
     <ClInclude Include="src\network\HealthEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\AmmoAmountEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">

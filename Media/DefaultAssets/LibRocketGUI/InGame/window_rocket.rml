@@ -1,22 +1,33 @@
-<template name="window" content="content">
+<!--<template name="window" content="content">-->
+<rml>
 <head>
 
 	<link type="text/rcss" href="rkt_new.rcss"/>
 	<link type="text/rcss" href="invader-m.rcss"/>
   <style>
-   table#health_bar{
+    table#health_bar{
     background-color:orange;
     position: absolute;
     left : 90%;
-    top :4%;
+    top :90%;
     }
     td#1{
     background-color: red;
     }
-    table#ammo_counter{
+    table#bomb_counter{
     //background-color: red;
     position: absolute;
-    top: 4%;
+    top: 90%;
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    }
+    body
+    {
+    width: 100%;
+    height: 100%;
+
+    margin: auto;
     }
   </style>
 
@@ -31,7 +42,7 @@
       <td id="5">five</td>
     </tr>
   </table>
-  <table id="ammo_counter">
+  <table id="bomb_counter">
     <tr>
       <td id="1">one</td>
       <td id="2">two</td>
@@ -42,4 +53,5 @@
   </table>
 	<handle size_target="#document" style="position: absolute; width: 16px; height: 16px; bottom: 0px; right: 0px;"></handle>
 </body>
-</template>
+<!--</template>-->
+  </rml>

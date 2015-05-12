@@ -21,4 +21,16 @@ void HealthEventHandler::handle(const Event &e) const {
 	Entity *player = game->getEntityManager().getEntity((game->getGameClient().getCurrentPlayerEntityId()));
 	HealthComponent *health = player->getComponent<HealthComponent>();
 	health->setHealthAmount(evt.getHealthAmount());
+	Rocket::Core::ElementDocument *window1 = game->getLibRocket()->getWindow(0);
+	Rocket::Core::Element * table = window1->GetFirstChild();
+	Rocket::Core::Element *tr = table->GetFirstChild();
+	for (int i = 0; i < tr->GetNumChildren(); i++){
+		printf("\nthe health is at %d\n", health->getHealthAmount());
+		if (health->getHealthAmount() / 20 <= i){
+			tr->GetChild(i)->SetProperty("background-color", "blue");
+			continue;
+		}
+		tr->GetChild(i)->SetProperty("background-color","red");
+	}
+	//win->GetChild(1);
 }
