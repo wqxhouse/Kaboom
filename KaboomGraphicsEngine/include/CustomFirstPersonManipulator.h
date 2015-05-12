@@ -23,6 +23,7 @@ public:
 	float getWalkingSpeed();
 
 protected:
+	virtual bool handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
 	virtual bool handleFrame(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
 	virtual bool handleKeyDown(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
 	virtual bool handleKeyUp(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
