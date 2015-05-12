@@ -2,6 +2,8 @@
 #include <osg/Shape>
 #include <osg/Depth>
 #include <osg/AlphaFunc>
+#include <osg/BlendFunc>
+#include <osg/BlendEquation>
 #include <osgDB/ReadFile>
 
 #include <Core.h>
@@ -13,6 +15,11 @@ LightVisualizer::LightVisualizer()
 {
 	init();
 	_matTrans->addChild(_lightBillBoard);
+	_quadColorArr = new osg::Vec4Array;
+	_quadColorArr->push_back(osg::Vec4(1, 1, 1, 0.5));
+	_quadColorArr->push_back(osg::Vec4(1, 1, 1, 0.5));
+	_quadColorArr->push_back(osg::Vec4(1, 1, 1, 0.5));
+	_quadColorArr->push_back(osg::Vec4(1, 1, 1, 0.5));
 }
 
 
@@ -23,6 +30,9 @@ osg::Geometry *LightVisualizer::createPointLightTexturedQuad()
 		osg::Vec3(-0.5f, 0.0f, -0.5f),
 		osg::Vec3(1.0f, 0.0f, 0.0f),
 		osg::Vec3(0.0f, 0.0f, 1.0f));
+
+	quad->setColorArray(_quadColorArr, osg::Array::BIND_PER_VERTEX);
+
 	osg::StateSet* ss = quad->getOrCreateStateSet();
 	ss->setTextureAttributeAndModes(0, _pointLightTex.get());
 	return quad.release();
@@ -88,6 +98,8 @@ void LightVisualizer::init()
 	_lightBillBoard = new osg::Billboard;
 	_lightBillBoard->setName("__LightVisualizerBillBoard");
 	_lightBillBoard->setMode(osg::Billboard::POINT_ROT_EYE);
+	_lightBillBoard->setUserData(new LightVisualizerWrapper(this));
+
 	osg::StateSet *bss = _lightBillBoard->getOrCreateStateSet();
 	bss->setMode(GL_DEPTH_TEST, osg::StateAttribute::OFF);
 	bss->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
@@ -95,13 +107,24 @@ void LightVisualizer::init()
 	depth->setWriteMask(false);
 	bss->setAttribute(depth);
 	bss->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
-	osg::AlphaFunc* alphaFunction = new osg::AlphaFunc;
+	osg::AlphaFunc *alphaFunction = new osg::AlphaFunc;
 	alphaFunction->setFunction(osg::AlphaFunc::GEQUAL, 0.05f);
 	bss->setAttributeAndModes(alphaFunction, osg::StateAttribute::ON);
+	osg::BlendFunc *blendFunc = new osg::BlendFunc;
+	blendFunc->setFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	osg::BlendEquation *blendEquation = new osg::BlendEquation;
+	blendEquation->setEquation(osg::BlendEquation::FUNC_ADD);
+	bss->setAttributeAndModes(blendFunc);
+	bss->setAttributeAndModes(blendEquation);
 
 	_lightBillBoard->setUpdateCallback(new LightVisualizerCallback(_lightPtrs));
+}
 
-	
+Light *LightVisualizer::getLightFromDrawable(osg::Drawable *lightDrawable)
+{
+	int index = _lightBillBoard->getDrawableIndex(lightDrawable);
+	Light *light = _lightPtrs[index];
+	return light;
 }
 
 LightVisualizerCallback::LightVisualizerCallback(std::vector<Light *> &lightPtrs)

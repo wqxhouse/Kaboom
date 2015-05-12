@@ -25,11 +25,11 @@ public:
               pitch(pitch) {
     }
 
-    inline void serialize(char *buf) const {
+    inline virtual void serialize(char *buf) const {
         memcpy(buf, this, sizeof(SpawnEvent));
     }
 
-    inline void deserialize(char *buf) {
+    inline virtual void deserialize(char *buf) {
         memcpy(this, buf, sizeof(SpawnEvent));
     }
 
@@ -62,7 +62,7 @@ public:
     }
 
 	friend std::ostream& operator<<(std::ostream &os, const SpawnEvent &o) {
-        os << "EntitySpawnEvent: {" << std::endl;
+        os << "SpawnEvent: {" << std::endl;
         os << "    entityId: " << o.entityId << std::endl;
         os << "    type: " << o.type << std::endl;
         os << "    x: " << o.x << std::endl;

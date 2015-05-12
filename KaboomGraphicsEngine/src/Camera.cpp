@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include <util/ConfigSettings.h>
+
 Camera::Camera()
 {
 	_eye = osg::Vec3(0, 0, 0);
@@ -127,4 +129,21 @@ float Camera::fovYToX(float fovy, const osg::Vec2 screenSize)
 	float fovyRad = osg::DegreesToRadians(fovy);
 	float fovx = osg::RadiansToDegrees(2 * atan(tan(fovyRad / 2) * (screenSize.x() / screenSize.y())));
 	return fovx;
+}
+
+osg::Vec3 Camera::getScreenCenterCoord(float z)
+{
+	// Calculate position relative to center of screen
+	osg::Matrix invProj = osg::Matrix::inverse(_projMatrix);
+	osg::Matrix invView = osg::Matrix::inverse(_viewMatrix);
+
+	ConfigSettings* config = ConfigSettings::config;
+	float screen_width = 0.0f;
+	float screen_height = 0.0f;
+	config->getValue(ConfigSettings::str_screen_width, screen_width);
+	config->getValue(ConfigSettings::str_screen_height, screen_height);
+
+	osg::Vec3 screenPos = osg::Vec3(1.0f / screen_height, 1.0f / screen_width, z);
+
+	return screenPos * invProj * invView;
 }

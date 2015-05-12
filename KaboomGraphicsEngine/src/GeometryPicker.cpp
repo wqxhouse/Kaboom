@@ -107,7 +107,10 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 				{
 					// TODO: 
 					osg::Drawable *drawable = nearIntersection.drawable;
-					drawable->dirtyBound();
+					osg::Node *billboard = drawable->getParent(0);
+					auto visualizer = static_cast<LightVisualizerWrapper *>(billboard->getUserData())->getLightVisualizer();
+					Light *light = visualizer->getLightFromDrawable(drawable);
+					GeometryObjectManipulator::attachLight(light);
 				}
 				else if (name.substr(0, 6) == "Skybox")
 				{
@@ -128,7 +131,7 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 			{ 
 					std::cout << "Picking object : " << objectName << std::endl;
 					GeometryObjectManipulator::
-						changeCurrentNode(objectNode);
+						attachTransformNode(objectNode);
 			}
 		}
 	}
