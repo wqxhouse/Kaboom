@@ -93,6 +93,7 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		{
 			_trackBallDragger = new osgManipulator::TrackballDragger;
 			_trackBallDragger->setupDefaultGeometry();
+			_trackBallDragger->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 			_trackBallDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
 		}
 		_trackBallDragger->setNodeMask(0x4);
@@ -105,6 +106,7 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 		{
 			_translateAxisDragger = new osgManipulator::TranslateAxisDragger;
 			_translateAxisDragger->setupDefaultGeometry();
+			_translateAxisDragger->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 			_translateAxisDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
 		}
 

@@ -18,25 +18,31 @@
 
 const std::string GEOM_GROUP_NAME = "Edit GeometryObject";
 const std::string LIGHT_GROUP_NAME = "Edit Light";
-const std::string MATERIAL_GROUP_NAME = "Edit Material";
+const std::string PLAIN_MATERIAL_GROUP_NAME = "Edit Plain Material";
+const std::string TEXTURED_MATERIAL_GROUP_NAME = "Edit Textured Material";
 
-const std::string POS_X_LABEL = "posX";
-const std::string POS_Y_LABEL = "posY";
-const std::string POS_Z_LABEL = "posZ";
+const std::string POS_X_LABEL = "PosX";
+const std::string POS_Y_LABEL = "PosY";
+const std::string POS_Z_LABEL = "PosZ";
 
-const std::string SCALE_X_LABEL = "scaleX";
-const std::string SCALE_Y_LABEL = "scaleY";
-const std::string SCALE_Z_LABEL = "scaleZ";
-const std::string SCALE_UNIFORM_LABEL = "scale uniform";
+const std::string SCALE_X_LABEL = "ScaleX";
+const std::string SCALE_Y_LABEL = "ScaleY";
+const std::string SCALE_Z_LABEL = "ScaleZ";
+const std::string SCALE_UNIFORM_LABEL = "Scale uniform";
 
-const std::string ROT_X_LABEL = "rotX";
-const std::string ROT_Y_LABEL = "rotY";
-const std::string ROT_Z_LABEL = "rotZ";
+const std::string ROT_X_LABEL = "RotX";
+const std::string ROT_Y_LABEL = "RotY";
+const std::string ROT_Z_LABEL = "RotZ";
 
-const std::string COLOR_LABEL = "color";
-const std::string ROUGHNESS_LABEL = "roughness";
-const std::string SPECULAR_LABEL = "specular";
-const std::string METALLIC_LABEL = "metallic";
+const std::string COLOR_LABEL = "Color";
+const std::string ROUGHNESS_LABEL = "Roughness";
+const std::string SPECULAR_LABEL = "Specular";
+const std::string METALLIC_LABEL = "Metallic";
+
+const std::string ALBEDO_PATH_LABEL = "Albedo path";
+const std::string ROUGHNESS_PATH_LABEL = "Roughness path";
+const std::string METALLIC_PATH_LABEL = "Metallic path";
+const std::string NORMAL_MAP_PATH_LABEL = "Normal map path";
 
 const std::string REMOVE_LABEL = "Remove";
 const std::string EDIT_NAME_LABEL = "Edit name";
@@ -99,7 +105,8 @@ public:
 	static void exportXML();
 	static void addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index);
 	static void addLightToGUI(TwBar* bar, Light* geom, std::string group, int& index);
-	static void addMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
+	static void addPlainMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
+	static void addTexturedMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
 
 	static ModelMatrix* makeModelMatrix(GeometryObject* geom);
 	static void addGeomToUndo(GeometryObject* geom);
@@ -125,7 +132,8 @@ protected:
 		g_twBar = NULL;
 		g_manipulatorSelectorBar = NULL;
 		g_addBar = NULL;
-		g_materialBar = NULL;
+		g_plainMaterialBar = NULL;
+		g_texturedMaterialBar = NULL;
 
 		for (int i = 0; i < _undos.size(); i++) {
 			delete _undos[i];
@@ -144,7 +152,8 @@ protected:
 	void initMainBar();
 	void initManipuatorSelectorBar();
 	void initAddBar();
-	void initMaterialBar();
+	void initPlainMaterialBar();
+	void initTexturedMaterialBar();
 
 	static void doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<ModelMatrix*> &dest);
 
@@ -152,7 +161,8 @@ protected:
 	TwBar *g_twBar;
 	TwBar *g_manipulatorSelectorBar;
 	TwBar *g_addBar;
-	TwBar *g_materialBar;
+	TwBar *g_plainMaterialBar;
+	TwBar *g_texturedMaterialBar;
 	char g_fileName[256]; // TODO: this is a hack, fix it
 
 	static bool openFile(std::string &s);

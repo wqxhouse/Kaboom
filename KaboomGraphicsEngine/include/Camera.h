@@ -63,6 +63,11 @@ public:
 	{
 		return fovYToX(_fovy, _screenSize);
 	}
+
+	inline osg::Vec2 getScreenSize() const
+	{
+		return _screenSize;
+	}
 		
 	// Setters : should only be called from the input manager of the client
 	void setEyePositionAndUpdate(const osg::Vec3 &eye);

@@ -1,17 +1,28 @@
 #pragma once
 
 #include <ostream>
+#include <string>
 
 #include "Event.h"
 
 class ExplosionEvent : public Event {
 public:
-    ExplosionEvent(unsigned int bombId = 0);
+    ExplosionEvent(unsigned int bombId = 0)
+            : Event(EVENT_EXPLOSION, sizeof(ExplosionEvent)),
+              bombId(bombId) {
+    }
 
-    unsigned int getBombId() const;
+    inline void serialize(char *buf) const {
+        memcpy(buf, this, sizeof(ExplosionEvent));
+    }
 
-    virtual void serialize(char *buf) const;
-    virtual void deserialize(char *buf);
+    inline void deserialize(char *buf) {
+        memcpy(this, buf, sizeof(ExplosionEvent));
+    }
+
+    inline unsigned int getBombId() const {
+        return bombId;
+    }
 
     friend std::ostream& operator<<(std::ostream &os, const ExplosionEvent &o) {
         os << "ExplosionEvent: {" << std::endl;

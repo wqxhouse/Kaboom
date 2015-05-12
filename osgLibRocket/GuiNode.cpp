@@ -102,9 +102,15 @@ namespace osgLibRocket
 
 	{
 		_renderer = dynamic_cast<osgLibRocket::RenderInterface*>(Rocket::Core::GetRenderInterface());
+		bool hasGlobalRenderer = true;
 		if (_renderer == NULL)
 		{
-			OSG_FATAL << "Please set libRocket render interface!\n";
+			//OSG_FATAL << "Please set libRocket render interface!\n";
+			OSG_WARN << "GuiNode:: No global rendering interface. Creating custom rendering interface for context: " << contextname << std::endl;
+			osgLibRocket::RenderInterface* renderer = new osgLibRocket::RenderInterface();
+			renderer->setContextName(contextname);
+			_renderer = renderer;
+			hasGlobalRenderer = false;
 		}
 
 		setDataVariance(osg::Object::STATIC);
@@ -117,9 +123,15 @@ namespace osgLibRocket
 		// register for update traversal
 		//setNumChildrenRequiringEventTraversal(getNumChildrenRequiringEventTraversal() + 1);
 
-
 		// create libRocket context for this gui
-		_context = Rocket::Core::CreateContext(contextname.c_str(), Rocket::Core::Vector2i(1024, 768));
+		if (hasGlobalRenderer)
+		{
+			_context = Rocket::Core::CreateContext(contextname.c_str(), Rocket::Core::Vector2i(1024, 768));
+		}
+		else
+		{
+			_context = Rocket::Core::CreateContext(contextname.c_str(), Rocket::Core::Vector2i(1024, 768), _renderer);
+		}
 		if (_context != NULL)
 		{
 			_contextEventListener = new EventListener(_context->GetRootElement());
