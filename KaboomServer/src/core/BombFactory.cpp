@@ -109,6 +109,7 @@ void BombFactory::createKaboomV2(Entity *entity) const {
 
 void BombFactory::createTimeBomb(Entity *entity) const {
     const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+    auto physComp = entity->getComponent<PhysicsComponent>();
     auto handlerComp = entity->getComponent<MessageHandlerComponent>();
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
@@ -116,6 +117,8 @@ void BombFactory::createTimeBomb(Entity *entity) const {
     chain->addHandler(&timeBombHandler);
 
     int delay = config.getInt("delay");
-    
     entity->attachComponent(new TimerComponent(new Timer(delay)));
+
+    int restitution = config.getFloat("restitution");
+	physComp->getRigidBody()->setRestitution(restitution);
 }
