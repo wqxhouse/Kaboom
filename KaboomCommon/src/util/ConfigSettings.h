@@ -60,6 +60,8 @@ public:
 	static std::string str_export_xml;
 	static std::string str_typeid_xml;
 
+	static std::string str_char_model;
+
 	// server and client shared vars
 	static std::string str_server_address;
 	static std::string str_server_port;
