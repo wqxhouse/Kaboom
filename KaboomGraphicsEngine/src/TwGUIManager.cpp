@@ -311,7 +311,7 @@ void TwGUIManager::initAddBar()
 			std::cout << "Enter model name: ";
 			std::cin >> modelName;
 
-			std::string objAssetFullPath = geomAssetPath + modelName + "/";
+			std::string objAssetFullPath = geomAssetPath + "/";
 
 			// Append the file name to the destination path -> new file location
 			strToWCchar(toPath, objAssetFullPath);
