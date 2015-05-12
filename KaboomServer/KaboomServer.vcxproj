@@ -47,6 +47,7 @@
     <ClCompile Include="src\messaging\MessageHandlerChain.cpp" />
     <ClCompile Include="src\messaging\TimeBombMessageHandler.cpp" />
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
+    <ClCompile Include="src\network\EquipEventHandler.cpp" />
     <ClCompile Include="src\network\GameServer.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="src\messaging\TimerExpiredMessage.h" />
     <ClInclude Include="src\messaging\TimeBombMessageHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
+    <ClInclude Include="src\network\EquipEventHandler.h" />
     <ClInclude Include="src\network\GameServer.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
