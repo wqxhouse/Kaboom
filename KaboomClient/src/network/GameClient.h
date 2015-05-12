@@ -1,6 +1,7 @@
 #pragma once
 
 #include <network/Event.h>
+#include <network/HealthEvent.h>
 #include <network/NetworkData.h>
 #include "ClientNetwork.h"
 

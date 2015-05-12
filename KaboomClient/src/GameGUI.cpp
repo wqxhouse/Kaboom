@@ -14,6 +14,10 @@ void setupGUI()
 	std::string guiPath = mediaPath + "DefaultAssets\\LibRocketGUI\\InGame\\";
 	int window_id = manager->addWindow(guiPath + "demo.rml", true);
 
+	/*int i = _libRocketInGameGUI->addWindow(guiPath + "InGame\\marty.rml", true);
+	_libRocketInGameGUI->getWindow(i - 1)->Hide();
+	_libRocketInGameGUI->getWindow(i)->Hide();*/
+
 	// get the window
 	Rocket::Core::ElementDocument *window1 = manager->getWindow(window_id);
 	Rocket::Core::Element * win = window1->GetFirstChild();
@@ -28,7 +32,7 @@ void setupGUI()
 		newElement->RemoveReference();
 		return;
 	}
-	newElement->AppendChild(new_text_element);
-	win->AppendChild(newElement);
+	//AppendChild->newElement(new_text_element);
+	//win->AppendChild(newElement);
 	std::cout << "after: " << win->GetNumChildren() << std::endl;
 }

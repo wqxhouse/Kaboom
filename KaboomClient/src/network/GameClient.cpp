@@ -50,7 +50,7 @@ void GameClient::receive() {
         EmptyEvent emptyEvent;
         emptyEvent.deserialize(&networkData[i]);
 
-        //printf("eventType is %d\n", emptyEvent.getOpcode());
+        printf("eventType is %d\n", emptyEvent.getOpcode());
         //printf("byteSize is %d\n", emptyEvent.getByteSize());
 
         switch (emptyEvent.getOpcode()) {
@@ -101,6 +101,13 @@ void GameClient::receive() {
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(explosionEvent);
                 break;
             }
+			case EVENT_HEALTH:{
+			    HealthEvent healthEvent;
+				healthEvent.deserialize(&networkData[i]);
+				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(healthEvent);
+				//printf("\nhello world\n");
+				break;
+			}
             default: {
                 printf("error in packet event types\n");
                 return;
