@@ -32,6 +32,7 @@ bool GameServer::acceptNewClient(unsigned int entity_id) {
 	if (network->acceptNewClient(nextClientId)) {
 		printf("<Server> Client %d has connected to the server, with entitiy id %d\n", nextClientId, entity_id);
 		clientIdToEntityId[nextClientId] = entity_id;
+		entityIdToClientId[entity_id] = nextClientId;
 		currClientId = nextClientId++;
         return true;
     }
@@ -95,6 +96,7 @@ void GameServer::receive(Game *game) {
 	for (auto id : network->disconnectedClients) {
 		DisconnectEvent disconnectEvent(clientIdToEntityId[id]);
 		eventHandlerLookup.find(disconnectEvent.getOpcode())->handle(disconnectEvent);
+		entityIdToClientId.erase(clientIdToEntityId.at(id));
 		clientIdToEntityId.erase(id);
 	}
 
@@ -156,6 +158,7 @@ void GameServer::sendGameStatePackets(const std::vector<Entity *> &entities) con
     for (Entity *entity : entities) {
         sendPositionEvent(entity);
         sendRotationEvent(entity);
+		sendHealthEvent(entity);
     }
 }
 
@@ -204,4 +207,15 @@ void GameServer::sendRotationEvent(Entity *entity) const {
 void GameServer::sendExplosionEvent(Entity *bomb) const {
     ExplosionEvent expEvent(bomb->getId());
     sendEvent(expEvent);
+}
+void GameServer::sendHealthEvent(Entity *entity) const{
+	HealthComponent *health = entity->getComponent<HealthComponent>();
+	if (health == nullptr){
+		return;
+	}
+	HealthEvent sendHealth(health->getHealthAmount());
+	sendEvent(sendHealth,entityIdToClientId.at(entity->getId()));
+}
+void GameServer::sendAmmoEvent(Entity *entity) const{
+
 }

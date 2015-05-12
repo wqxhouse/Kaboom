@@ -2,7 +2,8 @@
 
 #include <components/BombContainerComponent.h>
 #include <network/NetworkData.h>
-
+#include <components/HealthComponent.h>
+#include <network/HealthEvent.h>
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 #include "NetworkServices.h"
@@ -34,12 +35,15 @@ public:
     void sendPositionEvent(Entity *entity) const;
     void sendRotationEvent(Entity *entity) const;
     void sendExplosionEvent(Entity *bomb) const;
+	void sendHealthEvent(Entity *entity) const;
+	void sendAmmoEvent(Entity *entity) const;
 
 private:
     const ServerEventHandlerLookup &eventHandlerLookup;
 	unsigned int nextClientId;
 	unsigned int currClientId;
 	std::unordered_map<unsigned int, unsigned int> clientIdToEntityId;
+	std::unordered_map<unsigned int, unsigned int> entityIdToClientId;
 
     ServerNetwork* network;
 };

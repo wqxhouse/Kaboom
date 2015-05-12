@@ -130,6 +130,9 @@
     <ClInclude Include="src\network\DestroyEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\HealthEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
@@ -168,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="src\systems\EntitySystem.cpp">
       <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\HealthEvent.cpp">
+      <Filter>Source Files\Network\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

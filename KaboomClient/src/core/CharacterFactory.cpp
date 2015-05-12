@@ -4,7 +4,7 @@
 #include <osg/MatrixTransform>
 #include <osg/Shape>
 #include <osg/ShapeDrawable>
-
+#include <components/HealthComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
@@ -38,6 +38,7 @@ Entity *CharacterFactory::createCharacter(
     entity->attachComponent(new SceneNodeComponent(playerNode));
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent(yaw, pitch));
+	entity->attachComponent(new HealthComponent(100,100));
 
     return entity;
 }

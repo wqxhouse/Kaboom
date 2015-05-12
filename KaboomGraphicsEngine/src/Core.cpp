@@ -656,6 +656,7 @@ void Core::configSpecularIBLLutPass()
 	lightPassCam->getOrCreateStateSet()->setTextureAttributeAndModes(6, lutTex);
 }
 
+
 void Core::configLibRocketGUI()
 {
 	osgViewer::ViewerBase::Views views;
@@ -668,8 +669,10 @@ void Core::configLibRocketGUI()
 	_libRocketInGameGUI->disableGUI();
 	
 	// Create Editor GUI 
-	std::string testWindowPath = guiPath + "InEditor\\setNameWindow.rml";
-	_libRocketEditorGUI->addWindow(testWindowPath, true);
+	//std::string testWindowPath = guiPath + "InEditor\\demo.rml";
+	//_libRocketEditorGUI->addWindow(testWindowPath, true);
+	int i = _libRocketEditorGUI->addWindow(guiPath + "InGame\\marty.rml", true);
+	
 
 	_viewer->addEventHandler(_libRocketEditorGUI);
 	_sceneRoot->addChild(_libRocketEditorGUI->getRoot());

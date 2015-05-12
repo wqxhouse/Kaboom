@@ -45,7 +45,7 @@ Game::Game(ConfigSettings *config)
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
 	setupScene();
 	setupGUI();
-
+	
 	/* For testing in-game editor */
 	
 	std::string str_mediaPath = "";
@@ -99,6 +99,14 @@ Game::Game(ConfigSettings *config)
 	backgroundMusic->play();*/
 	//delete source;
 	printf("finished check sound errors");
+	libRocketInGameManager=Core::getInGameLibRocketGUIManager();
+	Rocket::Core::ElementDocument* marty = libRocketInGameManager->getWindow(1);
+
+
+	Rocket::Core::EventListenerInstancer;
+	//Rocket::Core::EventListener * startGameListener = new onClickListener(gsm);
+	//marty->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
+
 	
 }
 
@@ -109,7 +117,7 @@ Game::~Game() {
 void Game::run() {
     //static bool connected = false;
 	
-	GameStateMachine gsm = EDITOR_MODE; //start with EDITOR_MODE
+	 //start with EDITOR_MODE
 
 	std::string serverAddress;
 	int serverPort;
@@ -154,6 +162,7 @@ void Game::run() {
 			// Thus, we want to check if receive fails. If fails, since we are disconnected, should fall back to editor state.
 			// E.g: close the server whlie running the game 
             client.receive();
+
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
 				removeAllEntities(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;

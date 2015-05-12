@@ -24,6 +24,10 @@ public:
 	void enableGUI();
 	void disableGUI();
 
+	void changeHealth();
+	void changeAmmo();
+
+
 	inline bool isGUIEnabled()
 	{
 		return _isGUIEnabled;
