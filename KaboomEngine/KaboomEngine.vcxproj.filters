@@ -173,7 +173,7 @@
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
     <ClCompile Include="src\network\HealthEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
