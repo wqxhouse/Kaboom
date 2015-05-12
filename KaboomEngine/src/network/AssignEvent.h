@@ -12,11 +12,11 @@ public:
               entityId(entityId) {
     }
 
-    inline void serialize(char *buf) const {
+    inline virtual void serialize(char *buf) const {
         memcpy(buf, this, sizeof(AssignEvent));
     }
 
-    inline void deserialize(char *buf) {
+    inline virtual void deserialize(char *buf) {
         memcpy(this, buf, sizeof(AssignEvent));
     }
 

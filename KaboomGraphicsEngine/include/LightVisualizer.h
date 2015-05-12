@@ -25,6 +25,7 @@ private:
 
 	osg::ref_ptr<osg::Texture2D> _pointLightTex;
 	osg::ref_ptr<osg::Billboard> _lightBillBoard;
+	osg::ref_ptr<osg::Vec4Array> _quadColorArr;
 };
 
 class LightVisualizerCallback : public osg::NodeCallback
@@ -35,4 +36,19 @@ public:
 
 private:
 	std::vector<Light *> & _lightPtrsRef;
+};
+
+class LightVisualizerWrapper : public osg::Referenced
+{
+public:
+	LightVisualizerWrapper(LightVisualizer *visualizer)
+		: _lightVisualizer(visualizer) {};
+
+	inline LightVisualizer *getLightVisualizer()
+	{
+		return _lightVisualizer;
+	}
+
+private:
+	LightVisualizer *_lightVisualizer;
 };
