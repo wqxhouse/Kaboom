@@ -7,4 +7,5 @@ enum class MessageType {
     ATTACK1,
     ATTACK2,
     NO_ATTACK,
+    PICKUP,
 };

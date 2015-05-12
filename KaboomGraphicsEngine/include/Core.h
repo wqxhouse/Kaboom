@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "SkyBox.h"
 #include "AxisVisualizer.h"
+#include "LightVisualizer.h"
 #include "CubeMapPreFilter.h"
 
 #include "TwGUIManager.h"
@@ -72,6 +73,9 @@ public:
 	static void enableGeometryObjectManipulator();
 	static void disableGeometryObjectManipulator();
 
+	static void enableLightVisualizer();
+	static void disableLightVisualizer();
+
 	static void setEditorFPSCamWalkingSpeed(float metersPerSec);
 	static float getEditorFPSCamWalkingSpeed();
 
@@ -112,6 +116,7 @@ private:
 
 	static void configFilePath();
 	static void configAxisVisualizer();
+	static void configLightVisualizer();
 
 	static void configLibRocketGUI();
 

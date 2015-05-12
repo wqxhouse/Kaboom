@@ -70,6 +70,11 @@ namespace osgLibRocket
 
 		virtual void Release();
 
+		inline void setContextName(const std::string &contextName)
+		{
+			_contextName = contextName;
+		}
+
 	private:
 
 		osg::Object* createGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture, bool useDisplayList);
@@ -87,5 +92,8 @@ namespace osgLibRocket
 		int _screenHeight;
       bool _fullScreen;
       osg::ref_ptr<osg::Geode> _geode;
+
+	  // debug
+	  std::string _contextName;
 	};
 }

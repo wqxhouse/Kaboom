@@ -303,6 +303,7 @@ void Core::freezeCameraOnGUIDemand()
 }
 
 void Core::finalize()
+
 {
 	if (!_hasInit)
 	{
@@ -325,6 +326,7 @@ void Core::finalize()
 
 	configGeometryObjectManipulator();
 	configAxisVisualizer();
+	configLightVisualizer();
 
 	_analysisHUD = configureViewerForMode(*_viewer, _passes, NULL, 1);
 	_analysisHUD->toggleHelper(); // disabled by default
@@ -436,6 +438,22 @@ void Core::disableGeometryObjectManipulator()
 	GeometryObjectManipulator::setVisible(false);
 }
 
+void Core::enableLightVisualizer()
+{
+	bool enabled = _passes->containsNode(_world.getLightManager()->getVisualizerRoot());
+	if (enabled) return;
+
+	_passes->addChild(_world.getLightManager()->getVisualizerRoot());
+}
+
+void Core::disableLightVisualizer()
+{
+	bool disabled = !_passes->containsNode(_world.getLightManager()->getVisualizerRoot());
+	if (disabled) return;
+
+	_passes->removeChild(_world.getLightManager()->getVisualizerRoot());
+}
+
 void Core::configSkyBox()
 {
 	_skybox->setNodeMask(0x2);
@@ -530,6 +548,7 @@ void Core::enableGameMode()
 		disableCameraManipulator();
 		disableTwGUI();
 		disableGeometryObjectManipulator();
+		disableLightVisualizer();
 
 		_libRocketEditorGUI->disableGUI();
 		_libRocketInGameGUI->enableGUI();
@@ -550,6 +569,7 @@ void Core::disableGameMode()
 		enableTwGUI();
 		enableCameraManipulator();
 		enableGeometryObjectManipulator();
+		enableLightVisualizer();
 
 		_libRocketEditorGUI->enableGUI();
 		_libRocketInGameGUI->disableGUI();
@@ -595,6 +615,12 @@ void Core::configAxisVisualizer()
 	_axisVisualizer.init();
 	_axisVisualizer.setPosition(osg::Vec3());
 	_passes->addChild(_axisVisualizer.getRoot());
+}
+
+
+void Core::configLightVisualizer()
+{
+	_passes->addChild(_world.getLightManager()->getVisualizerRoot());
 }
 
 void Core::requestPrefilterCubeMap()

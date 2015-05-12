@@ -1,17 +1,28 @@
 #pragma once
 
 #include <ostream>
+#include <string>
 
 #include "Event.h"
 
 class AssignEvent : public Event {
 public:
-	AssignEvent(unsigned int entityId = 0);
+    AssignEvent(unsigned int entityId = 0)
+            : Event(EVENT_ASSIGN, sizeof(AssignEvent)),
+              entityId(entityId) {
+    }
 
-    unsigned int getEntityId() const;
+    inline void serialize(char *buf) const {
+        memcpy(buf, this, sizeof(AssignEvent));
+    }
 
-    virtual void serialize(char *buf) const;
-    virtual void deserialize(char *buf);
+    inline void deserialize(char *buf) {
+        memcpy(this, buf, sizeof(AssignEvent));
+    }
+
+    inline unsigned int getEntityId() const {
+        return entityId;
+    }
 
 	friend std::ostream &operator<<(std::ostream &os, const AssignEvent &o) {
         os << "AssignEvent: {" << std::endl;

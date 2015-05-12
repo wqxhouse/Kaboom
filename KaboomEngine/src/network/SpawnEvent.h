@@ -14,20 +14,52 @@ public:
             float y = 0.0f,
             float z = 0.0f,
             float yaw = 0.0f,
-            float pitch = 0.0f);
+            float pitch = 0.0f)
+            : Event(EVENT_SPAWN, sizeof(SpawnEvent)),
+              entityId(entityId),
+              type(type),
+              x(x),
+              y(y),
+              z(z),
+              yaw(yaw),
+              pitch(pitch) {
+    }
 
-    unsigned int getEntityId() const;
-    const EntityType &getType() const;
+    inline void serialize(char *buf) const {
+        memcpy(buf, this, sizeof(SpawnEvent));
+    }
 
-    float getX() const;
-    float getY() const;
-    float getZ() const;
+    inline void deserialize(char *buf) {
+        memcpy(this, buf, sizeof(SpawnEvent));
+    }
 
-    float getYaw() const;
-    float getPitch() const;
+    inline unsigned int getEntityId() const {
+        return entityId;
+    }
 
-    virtual void serialize(char *buf) const;
-    virtual void deserialize(char *buf);
+    inline EntityType getType() const {
+        return type;
+    }
+
+    inline float getX() const {
+        return x;
+    }
+
+    inline float getY() const {
+        return y;
+    }
+
+    inline float getZ() const {
+        return z;
+    }
+
+    inline float getYaw() const {
+        return yaw;
+    }
+
+    inline float getPitch() const {
+        return pitch;
+    }
 
 	friend std::ostream& operator<<(std::ostream &os, const SpawnEvent &o) {
         os << "EntitySpawnEvent: {" << std::endl;

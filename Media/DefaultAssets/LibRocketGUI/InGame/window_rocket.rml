@@ -1,5 +1,6 @@
 <template name="window" content="content">
 <head>
+<<<<<<< HEAD
 	<link type="text/rcss" href="rkt.rcss"/>
 	<link type="text/rcss" href="invader-m.rcss"/>
   <style>
@@ -18,6 +19,10 @@
     top: 4%;
     }
   </style>
+=======
+	<link type="text/rcss" href="./rkt_new.rcss"/>
+	<link type="text/rcss" href="./invader_new.rcss"/>
+>>>>>>> dc8cadfc3d84d3ea7529c18f99b74346b7cd22b9
 </head>
 <body class="window">
   <table id="health_bar">

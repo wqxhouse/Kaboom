@@ -3,11 +3,12 @@
 #include "LightManager.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "LightVisualizer.h"
 
 LightManager::LightManager()
 {
+	_visualizer = new LightVisualizer();
 }
-
 
 LightManager::~LightManager()
 {
@@ -17,6 +18,8 @@ LightManager::~LightManager()
 		delete it->second;
 	}
 	_lightsMap.clear();
+
+	delete _visualizer;
 }
 
 bool LightManager::addDirectionalLight(const std::string &name,
@@ -60,6 +63,8 @@ bool LightManager::addPointLight(const std::string &name,
 	pointLight->setRadius(radius);
 	pointLight->setCastShadow(castShadow);
 
+	_visualizer->addLight(pointLight);
+
 	_lightsMap.insert(std::make_pair(name, pointLight));
 	_lights.push_back(pointLight);
 	++_numLights;
@@ -73,6 +78,8 @@ void LightManager::deleteLight(const std::string &name)
 
 	_lightsMap.erase(name);
 	_lights.erase(std::remove(_lights.begin(), _lights.end(), light), _lights.end());
+
+	_visualizer->removeLight(light);
 
 	delete light;
 
@@ -105,6 +112,11 @@ bool LightManager::doesNameExist(const std::string &name)
 		return true;
 	}
 	return false;
+}
+
+osg::ref_ptr<osg::MatrixTransform> LightManager::getVisualizerRoot()
+{
+	return _visualizer->getRoot();
 }
 
 Light *LightManager::getLight(const std::string &name)
