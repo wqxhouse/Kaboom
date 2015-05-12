@@ -200,11 +200,9 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\SharedConfig\Config.ini">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="..\BugList.txt" />
+    <Text Include="..\SharedConfig\Config.ini">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

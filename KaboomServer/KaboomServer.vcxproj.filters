@@ -354,10 +354,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\BugList.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\SharedConfig\Config.ini">
+    <Text Include="..\SharedConfig\Config.ini">
       <Filter>Resource Files</Filter>
-    </None>
+    </Text>
   </ItemGroup>
 </Project>

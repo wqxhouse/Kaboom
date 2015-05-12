@@ -242,8 +242,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <LinkTimeCodeGeneration />
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(ProjectDir)" /D /I /Y
-xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(TargetDir)" /D /I /Y
+      <Command>xcopy "$(SolutionDir)SharedConfig\Config.ini" "$(ProjectDir)" /D /I /Y
+xcopy "$(SolutionDir)SharedConfig\Config.ini" "$(TargetDir)" /D /I /Y
 xcopy "$(SolutionDir)3rdparty\bin\*.dll" "$(TargetDir)" /D /I /Y
 xcopy "$(ProjectDir)\data-client" "$(TargetDir)\data-client" /D /I /Y
 xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
@@ -321,7 +321,9 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <Xml Include="data-client\bombs.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\SharedConfig\Config.ini" />
+    <Text Include="..\SharedConfig\Config.ini">
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\BugList.txt" />
