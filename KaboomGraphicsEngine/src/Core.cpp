@@ -669,11 +669,6 @@ void Core::configLibRocketGUI()
 	_libRocketInGameGUI->disableGUI();
 
 	// Create Editor GUI 
-
-	/*std::string testWindowPath = guiPath + "InEditor\\demo.rml";
-	_libRocketEditorGUI->addWindow(testWindowPath, true);*/
-	//int i = _libRocketEditorGUI->addWindow(guiPath + "InGame\\marty.rml", true);
-	
 	std::string testWindowPath = guiPath + "InEditor\\setNameWindow.rml";
 	_libRocketEditorGUI->addWindow(testWindowPath, true);
 
