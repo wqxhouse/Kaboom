@@ -1485,6 +1485,17 @@ void TwGUIManager::updateEvents() const
 			TwMouseMotion(x, y);
 			TwMouseButton(TW_MOUSE_PRESSED, getTwButton(ea.getButton()));
 			break;
+
+		case osgGA::GUIEventAdapter::SCROLL:
+			// int pos = ea.getScrollingDeltaY();
+		{
+			std::cout << ea.getScrollingDeltaX() << std::endl;
+			//static int pos = 0;
+			//pos++;
+			//TwMouseWheel(pos);
+			break;
+		}
+
 		case osgGA::GUIEventAdapter::RELEASE:
 			TwMouseMotion(x, y);
 			TwMouseButton(TW_MOUSE_RELEASED, getTwButton(ea.getButton()));

@@ -238,10 +238,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
-      <Message>
-      </Message>
+      <Command>xcopy "$(SolutionDir)SharedConfig\Config.ini" "$(ProjectDir)" /D /I /Y</Command>
+      <Message>Copy config.ini to GraphicsEngine</Message>
     </PostBuildEvent>
     <Lib>
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>

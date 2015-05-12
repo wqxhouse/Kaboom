@@ -667,17 +667,22 @@ void Core::configLibRocketGUI()
 	_libRocketEditorGUI = new LibRocketGUIManager(guiPath, gc);
 	_libRocketInGameGUI = new LibRocketGUIManager(guiPath, gc);
 	_libRocketInGameGUI->disableGUI();
-	
+
 	// Create Editor GUI 
+<<<<<<< HEAD
 	/*std::string testWindowPath = guiPath + "InEditor\\demo.rml";
 	_libRocketEditorGUI->addWindow(testWindowPath, true);*/
 	int i = _libRocketEditorGUI->addWindow(guiPath + "InGame\\marty.rml", true);
 	
+=======
+	std::string testWindowPath = guiPath + "InEditor\\setNameWindow.rml";
+	_libRocketEditorGUI->addWindow(testWindowPath, true);
+>>>>>>> origin/develop
 
 	_viewer->addEventHandler(_libRocketEditorGUI);
 	_sceneRoot->addChild(_libRocketEditorGUI->getRoot());
 	_viewer->addEventHandler(_libRocketInGameGUI);
-	_sceneRoot->addChild(_libRocketInGameGUI->getRoot());
+	_sceneRoot->addChild(_libRocketInGameGUI->getRoot());;
 }
 
 bool Core::isCamLocked()
