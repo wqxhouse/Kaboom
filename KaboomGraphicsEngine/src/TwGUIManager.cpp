@@ -30,6 +30,7 @@ TwGUIManager::TwGUIManager()
 	_lm = Core::getWorldRef().getLightManager();
 	_mm = Core::getWorldRef().getMaterialManager();
 	_freezeGUI = false;
+	_scrollPos = 0;
 
 	nameToCopy = "";
 
@@ -1498,12 +1499,16 @@ void TwGUIManager::updateEvents() const
 			break;
 
 		case osgGA::GUIEventAdapter::SCROLL:
-			// int pos = ea.getScrollingDeltaY();
 		{
-			std::cout << ea.getScrollingDeltaX() << std::endl;
-			//static int pos = 0;
-			//pos++;
-			//TwMouseWheel(pos);
+			if (ea.getScrollingMotion() == osgGA::GUIEventAdapter::SCROLL_UP)
+			{
+				(*(int *)&_scrollPos) += 3;
+			}
+			else if (ea.getScrollingMotion() == osgGA::GUIEventAdapter::SCROLL_DOWN)
+			{
+				(*(int *)&_scrollPos) -= 3;
+			}
+			TwMouseWheel(_scrollPos);
 			break;
 		}
 

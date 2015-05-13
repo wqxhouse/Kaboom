@@ -37,7 +37,7 @@ bool CustomFirstPersonManipulator::handle(const osgGA::GUIEventAdapter &ea, osgG
 	// disable scrolling for scaling
 	if (ea.getEventType() == GUIEventAdapter::SCROLL)
 	{
-		return true;
+		return false;
 	}
 
 	return StandardManipulator::handle(ea, us);
