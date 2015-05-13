@@ -527,6 +527,17 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	item->bar = bar;
 	item->name = name;
 
+	std::string fitToScreenDef = nameGroupDef + " label='" + FIT_TO_SCREEN_LABEL + "'";
+	TwAddButton(bar, fitToScreenDef.c_str(),
+		[](void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string name = item->name;
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		GeometryObject *obj = gm->getGeometryObject(name);
+		osg::MatrixTransform *geomRoot = obj->getRoot();
+		fitObjectToScreen(geomRoot);
+	}, item, fitToScreenDef.c_str());
+
 	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
 	TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
 		[](const void *value, void *clientData) {
@@ -576,7 +587,6 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		}
 	},
 		item, materialDef.c_str());
-
 
 
 	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
