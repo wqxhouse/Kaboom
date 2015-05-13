@@ -119,10 +119,13 @@ void GeometryObjectManipulator::assignManipulatorToGeometryTransformNode
 	case TranslateAxisDragger:
 		if (_translateAxisDragger == NULL)
 		{
-			_translateAxisDragger = new osgManipulator::TranslateAxisDragger;
+			_translateAxisDragger = new osgManipulator::CustomTranslateAxisDragger;
 			_translateAxisDragger->setupDefaultGeometry();
 			_translateAxisDragger->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 			_translateAxisDragger->getOrCreateStateSet()->setAttributeAndModes(_depth, osg::StateAttribute::ON);
+			_translateAxisDragger->setAxisLineWidth(10.0);
+			_translateAxisDragger->setConeHeight(0.5);
+			_translateAxisDragger->setPickCylinderRadius(0.5);
 		}
 
 		_translateAxisDragger->setNodeMask(0x4);
@@ -286,7 +289,7 @@ Light *GeometryObjectManipulator::getAttachedLight()
 }
 
 osg::ref_ptr<osgManipulator::TrackballDragger> GeometryObjectManipulator::_trackBallDragger = NULL;
-osg::ref_ptr<osgManipulator::TranslateAxisDragger> GeometryObjectManipulator::_translateAxisDragger = NULL;
+osg::ref_ptr<osgManipulator::CustomTranslateAxisDragger> GeometryObjectManipulator::_translateAxisDragger = NULL;
 osg::ref_ptr<osgManipulator::TabBoxDragger> GeometryObjectManipulator::_tabBoxDragger = NULL;
 osg::observer_ptr<osg::MatrixTransform> GeometryObjectManipulator::_currNode = NULL;
 osg::observer_ptr<osgManipulator::Dragger> GeometryObjectManipulator::_dragger = NULL;

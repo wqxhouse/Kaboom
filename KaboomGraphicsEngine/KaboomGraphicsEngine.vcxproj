@@ -257,6 +257,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\CubeMapPreFilter.h" />
     <ClInclude Include="include\CubemapUtil.h" />
     <ClInclude Include="include\CustomFirstPersonManipulator.h" />
+    <ClInclude Include="include\CustomTranslateAxisDragger.h" />
     <ClInclude Include="include\DirectionalLight.h" />
     <ClInclude Include="include\DraggerUpdateCallback.h" />
     <ClInclude Include="include\EffectCompositor.h" />
@@ -290,6 +291,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\CubemapPreFilter.cpp" />
     <ClCompile Include="src\CubemapUtil.cpp" />
     <ClCompile Include="src\CustomFirstPersonManipulator.cpp" />
+    <ClCompile Include="src\CustomTranslateAxisDragger.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
     <ClCompile Include="src\DraggerUpdateCallback.cpp" />
     <ClCompile Include="src\EffectAnalysisHelper.cpp" />
