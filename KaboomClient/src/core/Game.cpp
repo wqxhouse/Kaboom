@@ -12,7 +12,7 @@
 #include <core/Entity.h>
 
 #include "../Scene.h"
-#include "../GameGUI.h"
+#include "../gui/GameGUI.h"
 #include "../components/SceneNodeComponent.h"
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
@@ -24,7 +24,9 @@ Game::Game(ConfigSettings *config)
           bombFactory(entityManager),
           eventHandlerLookup(this),
           client(eventHandlerLookup), 
-	      _camera(Core::getMainCamera()) {
+	      _camera(Core::getMainCamera()), 
+		  _guiEventHandler(this) {
+
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
     config->getValue(ConfigSettings::str_screenPosX, screenPosXStr);
@@ -44,7 +46,7 @@ Game::Game(ConfigSettings *config)
 
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
 	setupScene();
-	setupGUI();
+	setupGUIDocuments(this);
 	
 	/* For testing in-game editor */
 	
@@ -99,15 +101,6 @@ Game::Game(ConfigSettings *config)
 	backgroundMusic->play();*/
 	//delete source;
 	printf("finished check sound errors");
-	libRocketInGameManager=Core::getInGameLibRocketGUIManager();
-	Rocket::Core::ElementDocument* marty = libRocketInGameManager->getWindow(1);
-
-
-	Rocket::Core::EventListenerInstancer;
-	Rocket::Core::EventListener * startGameListener = new onClickListener(gsm);
-	marty->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
-
-	
 }
 
 Game::~Game() {
@@ -235,6 +228,8 @@ MaterialManager *Game::getMaterialManager() {
 Camera &Game::getCamera() {
 	return _camera;
 }
-osg::ref_ptr<LibRocketGUIManager> Game::getLibRocket(){
-	return libRocketInGameManager;
+
+const GameGUIEventHandler &Game::getGameGUIEventHandler() const
+{
+	return _guiEventHandler;
 }

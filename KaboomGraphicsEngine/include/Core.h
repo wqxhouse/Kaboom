@@ -92,6 +92,8 @@ public:
 	static void requestPrefilterCubeMap();
 	static void requestPrefilterCubeMapWithCubeMap(osg::TextureCubeMap *cubemap);
 
+	static void requestDisableCameraManipulator();
+
 	// static void run();
 
 	enum CamManipulatorType
@@ -166,6 +168,7 @@ private:
 
 	static bool _allowEditorChangeProjection;
 	static bool _requestPrefilterCubeMap;
+	static bool _requestDisableCameraManipulator;
 
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 

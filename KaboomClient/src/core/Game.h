@@ -11,12 +11,15 @@
 #include "BombFactory.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
+#include "../gui/GameGUIEventHandler.h"
+#include "../gui/GameGUIListener.h"
 
 #include <osgAudio/Source.h>
 #include <osgAudio/AudioEnvironment.h>
 #include <osgAudio/Sample.h>
 #include "SoundManager.h"
 #include "LibRocketGUIManager.h"
+#include "GameStateMachine.h"
 
 using namespace osgAudio;
 
@@ -43,7 +46,12 @@ public:
 
     GeometryObjectManager* getGeometryManager();
     MaterialManager* getMaterialManager();
-	osg::ref_ptr<LibRocketGUIManager> getLibRocket();
+
+	const GameGUIEventHandler &getGameGUIEventHandler() const;
+	inline const GameStateMachine getCurrentGameState() const
+	{
+		return gsm;
+	}
 
     Camera &getCamera();
 	osg::ref_ptr<Source> source;
@@ -52,31 +60,11 @@ public:
 	std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
 
 private:
-
-
-    enum GameStateMachine {
-        EDITOR_MODE,
-        CONNECT_TO_SERVER,
-        GAME_MODE,
-        DISCONNECT_TO_SERVER
-    };
-	class onClickListener : public Rocket::Core::EventListener
-	{
-	public:
-		GameStateMachine *gsm;
-		onClickListener(GameStateMachine gsm){
-			this->gsm = &gsm;
-		}
-		void ProcessEvent(Rocket::Core::Event& event)
-		{
-			*gsm= CONNECT_TO_SERVER;
-			std::cout << "marty was clicked" << std::endl;
-		}
-	};
+	friend void GameGUIListener::setGameState(GameStateMachine state);
+	
 	GameStateMachine gsm = EDITOR_MODE;
     ConfigSettings *config;
     InputManager *inputManager;
-	osg::ref_ptr<LibRocketGUIManager> libRocketInGameManager;
 
     EntityManager entityManager;
 	SoundManager soundManager;
@@ -90,4 +78,5 @@ private:
 	MaterialManager * _materialManager;
 
 	Camera &_camera;
+	GameGUIEventHandler _guiEventHandler;
 };

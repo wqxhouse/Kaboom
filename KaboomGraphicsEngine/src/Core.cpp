@@ -261,7 +261,21 @@ void Core::AdvanceFrame()
 			_cubemapPreFilter.enableCompute();
 			_requestPrefilterCubeMap = false;
 		}
+
 		_viewer->frame();
+
+		// Currently a work around for making fit object to screen work in 
+		// single threaded context
+		// Since it depends on the setHomePosition and disableCameraManiuplator
+		// but if disable the camera before the next frame is called
+		// the setHomePosition will not take effect. 
+		// For more: see setCurrentCameraManipulatorHomePosition() 
+		if (_requestDisableCameraManipulator)
+		{
+			_viewer->frame();
+			disableCameraManipulator();
+			_requestDisableCameraManipulator = false;
+		}
 
 		// _cubemapPreFilter.saveImagesToFile("C:\\3DEngine\\temp");
 		_cubemapPreFilter.disableCompute();
@@ -373,7 +387,7 @@ void Core::enableCameraManipulator()
 	_camManipulatorTemp->setHomePosition(_savedManipulatorCam.getEyePosition(),
 		_savedManipulatorCam.getLookAt(), _savedManipulatorCam.getUp());
 	_viewer->getCamera()->setProjectionMatrix(_savedManipulatorCam.getProjectionMatrix());
-	_viewer->setCameraManipulator(_camManipulatorTemp);
+	_viewer->setCameraManipulator(_camManipulatorTemp); // this implies _viewer->home();
 
 	_savedManipulatorCam = Camera();
 	_camManipulatorTemp = NULL;
@@ -407,6 +421,7 @@ void Core::setCurrentCameraManipulatorHomePosition(const osg::Vec3 &eye, const o
 	if ((cam = _viewer->getCameraManipulator()) != NULL)
 	{
 		cam->setHomePosition(eye, lookAt, up);
+		_viewer->home();
 	}
 	else
 	{
@@ -414,12 +429,14 @@ void Core::setCurrentCameraManipulatorHomePosition(const osg::Vec3 &eye, const o
 		_camManipulatorTemp->setHomePosition(eye, lookAt, up);
 		_viewer->getCamera()->setProjectionMatrix(_savedManipulatorCam.getProjectionMatrix());
 		_viewer->setCameraManipulator(_camManipulatorTemp);
+		_viewer->home();
 
 		_savedManipulatorCam = Camera();
 		_camManipulatorTemp = NULL;
 
 		// disable after changing the position
-		disableCameraManipulator();
+		// disableCameraManipulator();
+		requestDisableCameraManipulator();
 	}
 }
 
@@ -637,6 +654,12 @@ void Core::requestPrefilterCubeMapWithCubeMap(osg::TextureCubeMap *cubemap)
 	_cubemapPreFilter.changeCubeMap(cubemap);
 }
 
+
+void Core::requestDisableCameraManipulator()
+{
+	_requestDisableCameraManipulator = true;
+}
+
 void Core::configSpecularIBLLutPass()
 {
 	osgFX::EffectCompositor::PassData pd;
@@ -776,6 +799,7 @@ bool Core::_manipulatorEnabled;
 bool Core::_isFirstFrame;
 bool Core::_allowEditorChangeProjection;
 bool Core::_requestPrefilterCubeMap = false;
+bool Core::_requestDisableCameraManipulator = false;
 
 osg::Timer_t Core::_lastFrameStartTime;
 osg::Timer_t Core::_frameStartTime;
