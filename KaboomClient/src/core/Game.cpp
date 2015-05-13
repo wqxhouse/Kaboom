@@ -24,8 +24,7 @@ Game::Game(ConfigSettings *config)
           bombFactory(entityManager),
           eventHandlerLookup(this),
           client(eventHandlerLookup), 
-	      _camera(Core::getMainCamera()), 
-		  _guiEventHandler(this) {
+	      _camera(Core::getMainCamera()) {
 
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
@@ -45,6 +44,9 @@ Game::Game(ConfigSettings *config)
 	sounds = new std::unordered_map<SOUNDS, osg::ref_ptr<Sample> >();
 
     Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
+	// init gui handler after Core::init() is called, so that it gets the intialized in game gui 
+	_guiEventHandler = new GameGUIEventHandler(this);
+
 	setupScene();
 	setupGUIDocuments(this);
 	
@@ -105,6 +107,7 @@ Game::Game(ConfigSettings *config)
 
 Game::~Game() {
     delete inputManager;
+	delete _guiEventHandler;
 }
 
 void Game::run() {
@@ -116,8 +119,9 @@ void Game::run() {
 	int serverPort;
 
 	//Grab the doucment from libRocketInGameMangaer
-	Rocket::Core::ElementDocument* in_game_screen_ui = libRocketInGameManager->getWindow(0);
-	Rocket::Core::ElementDocument* start_screen_ui = libRocketInGameManager->getWindow(1);
+	LibRocketGUIManager *guiManager = Core::getInGameLibRocketGUIManager();
+	Rocket::Core::ElementDocument* in_game_screen_ui = guiManager->getWindow(0);
+	Rocket::Core::ElementDocument* start_screen_ui = guiManager->getWindow(1);
 
     //while (!Core::isViewerClosed()) { // TODO: buggy right now
     while (true) {
@@ -242,7 +246,7 @@ Camera &Game::getCamera() {
 	return _camera;
 }
 
-const GameGUIEventHandler &Game::getGameGUIEventHandler() const
+const GameGUIEventHandler *Game::getGameGUIEventHandler() const
 {
 	return _guiEventHandler;
 }

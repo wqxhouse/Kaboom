@@ -47,7 +47,7 @@ public:
     GeometryObjectManager* getGeometryManager();
     MaterialManager* getMaterialManager();
 
-	const GameGUIEventHandler &getGameGUIEventHandler() const;
+	const GameGUIEventHandler *getGameGUIEventHandler() const;
 	inline const GameStateMachine getCurrentGameState() const
 	{
 		return gsm;
@@ -79,5 +79,5 @@ private:
 	MaterialManager * _materialManager;
 
 	Camera &_camera;
-	GameGUIEventHandler _guiEventHandler;
+	GameGUIEventHandler *_guiEventHandler;
 };
