@@ -13,6 +13,7 @@
 
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
+#include "PointLight.h"
 #include "MaterialManager.h"
 #include <fstream>
 
@@ -158,6 +159,7 @@ protected:
 	void initTexturedMaterialBar();
 
 	static void fitObjectToScreen(osg::MatrixTransform *mt);
+	static void fitPointLightToScreen(PointLight *l);
 	static void doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<ModelMatrix*> &dest);
 
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;

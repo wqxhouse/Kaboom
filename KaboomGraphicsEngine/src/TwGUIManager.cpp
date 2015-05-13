@@ -958,6 +958,16 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		item->bar = bar;
 		item->name = name;
 
+		std::string fitToScreenDef = nameGroupDef + " label='" + FIT_TO_SCREEN_LABEL + "'";
+		TwAddButton(bar, fitToScreenDef.c_str(), 
+			[](void *clientData) {
+			BarItem* item = static_cast<BarItem*>(clientData);
+			std::string name = item->name;
+			LightManager* lm = Core::getWorldRef().getLightManager();
+			PointLight *l = static_cast<PointLight *>(lm->getLight(name));
+			fitPointLightToScreen(l);
+		}, item, fitToScreenDef.c_str());
+
 		std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
 		TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
 			[](const void *value, void *clientData) {
@@ -1783,6 +1793,21 @@ std::string TwGUIManager::tagify(std::string tag, osg::Quat &q)
 	}
 
 	return addTags(tag, ret);
+}
+
+void TwGUIManager::fitPointLightToScreen(PointLight *l)
+{
+	// TODO: support fit to internal area size when area point light is implemented
+	osg::Vec3 center = l->getPosition();
+	float radius = 5;
+	osg::Vec3 eyePos = Core::getMainCamera().getEyePosition();
+	osg::Vec3 dirVec = eyePos - center;
+	osg::Vec3 fromObjToEyeScale = dirVec;
+	fromObjToEyeScale.normalize();
+	fromObjToEyeScale *= radius;
+	osg::Vec3 fromEyeToScalePoint = -dirVec + fromObjToEyeScale;
+	osg::Vec3 newEyePos = eyePos + fromEyeToScalePoint;
+	Core::setCurrentCameraManipulatorHomePosition(newEyePos, center, osg::Vec3(0, 0, 1));
 }
 
 void TwGUIManager::fitObjectToScreen(osg::MatrixTransform *mt)
