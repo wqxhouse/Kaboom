@@ -58,7 +58,8 @@ private:
         EDITOR_MODE,
         CONNECT_TO_SERVER,
         GAME_MODE,
-        DISCONNECT_TO_SERVER
+        DISCONNECT_TO_SERVER,
+		START_SCREEN_MODE
     };
 	class onClickListener : public Rocket::Core::EventListener
 	{
