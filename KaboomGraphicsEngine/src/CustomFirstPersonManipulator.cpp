@@ -15,6 +15,7 @@ CustomFirstPersonManipulator::CustomFirstPersonManipulator(int flag)
 {
 	_movingForward = _movingBackward = _movingLeft = _movingRight = false;
 	_metersPerSec = 10.0;
+	_isDragging = false;
 }
 
 CustomFirstPersonManipulator::~CustomFirstPersonManipulator()
