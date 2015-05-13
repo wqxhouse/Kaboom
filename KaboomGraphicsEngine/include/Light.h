@@ -65,6 +65,16 @@ public:
 		_name = name;
 	}
 
+	inline float getIntensity()
+	{
+		return _intensity;
+	}
+
+	inline void setIntensity(float intensity)
+	{
+		_intensity = intensity;
+	}
+
 	virtual DirectionalLight *asDirectionalLight();
 	virtual PointLight *asPointLight();
 
@@ -78,5 +88,6 @@ protected:
 	bool _needUpdate;
 	bool _castShadow;
 
+	float _intensity;
 };
 

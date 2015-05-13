@@ -3,7 +3,7 @@
 #include "Light.h"
 
 Light::Light(const std::string &name)
-	: _name(name)
+	: _name(name), _intensity(1.0)
 {
 }
 

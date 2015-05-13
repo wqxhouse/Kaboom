@@ -374,10 +374,10 @@ void TwGUIManager::initAddBar()
 
 		// TODO: Find out which default values to use
 		// Material default properties
-		osg::Vec3 albedoColor;
-		float roughness = 0.0f;
-		float specular = 0.0f;
-		float metallic = 0.0f;
+		osg::Vec3 albedoColor = osg::Vec3(0.3, 0.3, 0.7);
+		float roughness = 0.4f;
+		float specular = 0.5f;
+		float metallic = 0.2f;
 
 		// Add material to material manager
 		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
@@ -972,6 +972,16 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			TwCopyStdStringToLibrary(*showName, item->name);
 		},
 			item, editNameDef.c_str());
+
+		std::string intensityNameDef = nameGroupDef + " label='" + INTENSITY_LABEL + "' max=30.0 min=0.0 step=0.1";
+		TwAddVarCB(bar, intensityNameDef.c_str(), TW_TYPE_FLOAT, 
+			[](const void *data, void *clientData) {
+			Light *l = (Light *)clientData;
+			l->setIntensity(*(float *)data);
+		}, [](void *data, void *clientData) {
+			Light *l = (Light *)clientData;
+			*(float *)data = l->getIntensity();
+		}, pl, intensityNameDef.c_str());
 
 		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,

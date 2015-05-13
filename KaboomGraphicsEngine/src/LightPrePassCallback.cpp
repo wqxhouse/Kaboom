@@ -58,7 +58,9 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		// std::cout << position << std::endl;
 
 		// osg::Vec3 position = l->getPosition();
-		osg::Vec3 color = l->getColor();
+
+		// Here color is multiplied with intensity
+		osg::Vec3 color = l->getColor() * l->getIntensity();
 		osg::Vec3 dirFromLight = osg::Vec3();
 		float radius = 0.0f;
 
