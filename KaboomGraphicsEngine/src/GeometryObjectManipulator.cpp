@@ -53,15 +53,17 @@ void GeometryObjectManipulator::changeCurrentNode(osg::MatrixTransform *node)
 	}
 	else
 	{
-		assignManipulatorToGeometryTransformNode(node, TabBoxDragger);
-		if (_attachedLight)
-		{
-			_currType = TranslateAxisDragger;
-		}
-		else
-		{
-			_currType = TabBoxDragger;
-		}
+		assignManipulatorToGeometryTransformNode(node, TranslateAxisDragger);
+		_currType = TranslateAxisDragger;
+		//assignManipulatorToGeometryTransformNode(node, TabBoxDragger);
+		//if (_attachedLight)
+		//{
+		//	_currType = TranslateAxisDragger;
+		//}
+		//else
+		//{
+		//	_currType = TabBoxDragger;
+		//}
 	}
 }
 
