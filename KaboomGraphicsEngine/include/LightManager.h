@@ -20,7 +20,8 @@ public:
 		const osg::Vec3 &position,
 		const osg::Vec3 &color,
 		float radius, 
-		bool castShadow);
+		bool castShadow,
+		float intensity = 1.0f);
 
 	void deleteLight(const std::string &name);
 	bool renameLight(const std::string &oldName, const std::string &newName);
