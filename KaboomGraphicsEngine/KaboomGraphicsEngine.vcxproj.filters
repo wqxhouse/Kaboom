@@ -36,6 +36,12 @@
     <Filter Include="Source Files\CubemapUtil">
       <UniqueIdentifier>{04ab4550-9c88-456b-ac43-7f3d4a68e834}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Manipulator">
+      <UniqueIdentifier>{cb4e69dc-9d35-4ac2-a1ec-e539d538dc50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Manipulator">
+      <UniqueIdentifier>{f5228322-a4f8-4285-9a2b-570c89b86a11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -96,9 +102,6 @@
     <ClInclude Include="include\GeometryPicker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GeometryObjectManipulator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Visualizer.h">
       <Filter>Header Files\Visualizer</Filter>
     </ClInclude>
@@ -131,6 +134,12 @@
     </ClInclude>
     <ClInclude Include="include\LightVisualizer.h">
       <Filter>Header Files\Visualizer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryObjectManipulator.h">
+      <Filter>Header Files\Manipulator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomTranslateAxisDragger.h">
+      <Filter>Header Files\Manipulator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -191,9 +200,6 @@
     <ClCompile Include="src\GeometryPicker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GeometryObjectManipulator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -232,6 +238,12 @@
     </ClCompile>
     <ClCompile Include="src\LightVisualizer.cpp">
       <Filter>Source Files\Visualizer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryObjectManipulator.cpp">
+      <Filter>Source Files\Manipulator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CustomTranslateAxisDragger.cpp">
+      <Filter>Source Files\Manipulator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

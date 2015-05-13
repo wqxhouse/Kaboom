@@ -9,7 +9,8 @@
 #include <osgManipulator/TrackballDragger>
 #include <osgManipulator/Translate1DDragger>
 #include <osgManipulator/Translate2DDragger>
-#include <osgManipulator/TranslateAxisDragger>
+//#include <osgManipulator/TranslateAxisDragger>
+#include "CustomTranslateAxisDragger.h"
 #include <osgManipulator/TranslatePlaneDragger>
 #include <osgManipulator/RotateCylinderDragger>
 
@@ -51,7 +52,7 @@ public:
 
 private:
 	static osg::ref_ptr<osgManipulator::TrackballDragger> _trackBallDragger;
-	static osg::ref_ptr<osgManipulator::TranslateAxisDragger> _translateAxisDragger;
+	static osg::ref_ptr<osgManipulator::CustomTranslateAxisDragger> _translateAxisDragger;
 	static osg::ref_ptr<osgManipulator::TabBoxDragger> _tabBoxDragger;
 
 	static osg::observer_ptr<osg::MatrixTransform> _currNode;
