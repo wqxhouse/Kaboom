@@ -30,25 +30,16 @@ void PhysicsSystem::processEntity(Entity *entity) {
     auto colComp = entity->getComponent<CollisionComponent>();
 
     btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
-    bool sticked = colComp != nullptr && colComp->isCollided() && entity->hasComponent<StickComponent>();
 
     if (posComp != nullptr) {
-        if (sticked) {
-            worldTrans.setOrigin(btVector3(posComp->getX(), posComp->getY(), posComp->getZ()));
-        } else {
-            const btVector3 &pos = worldTrans.getOrigin();
-            posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
-        }
+        const btVector3 &pos = worldTrans.getOrigin();
+        posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
     }
 
     RotationComponent *rotComp = entity->getComponent<RotationComponent>();
 
     if (rotComp != nullptr) {
-        if (sticked) {
-            // TODO: Set rotation
-        } else {
-            btQuaternion rot = worldTrans.getRotation();
-            // TODO: Set rotComp
-        }
+        btQuaternion rot = worldTrans.getRotation();
+        // TODO: Set rotComp
     }
 }
