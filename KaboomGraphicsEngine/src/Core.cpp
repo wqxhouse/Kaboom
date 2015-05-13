@@ -715,7 +715,8 @@ void Core::configLibRocketGUI()
 
 	// Create Editor GUI 
 	std::string testWindowPath = guiPath + "InEditor\\setNameWindow.rml";
-	_libRocketEditorGUI->addWindow(testWindowPath, true);
+	int id = _libRocketEditorGUI->addWindow(testWindowPath, true);
+	_libRocketEditorGUI->getWindow(id)->Hide();
 
 	_viewer->addEventHandler(_libRocketEditorGUI);
 	_sceneRoot->addChild(_libRocketEditorGUI->getRoot());
