@@ -6,8 +6,10 @@
 
 #include "Message.h"
 #include "MessageType.h"
+#include "../components/DetonatorComponent.h"
+#include "../components/ExplosionComponent.h"
+#include "../components/OwnerComponent.h"
 #include "../components/PhysicsComponent.h"
-#include "../components/StickComponent.h"
 #include "../messaging/CollisionMessage.h"
 
 bool RemoteDetonatorMessageHandler::handle(const Message &message) const {
@@ -24,14 +26,16 @@ bool RemoteDetonatorMessageHandler::handle(const CollisionMessage &message) cons
     Entity *entity = message.getEntity();
     auto &contactEntities = message.getContactEntities();
     auto physComp = entity->getComponent<PhysicsComponent>();
-    auto stickComp = entity->getComponent<StickComponent>();
+    auto ownerComp = entity->getComponent<OwnerComponent>();
+    Entity *owner = ownerComp->getEntity();
 
-    physComp->getRigidBody()->setMassProps(0.0f, btVector3(0.0f, 0.0f, 0.0f));
-
-    stickComp->setAttached(true);
-
-    if (!contactEntities.empty()) {
-        stickComp->setAttachedEntity(*contactEntities.begin());
+    if (contactEntities.empty()) {
+        physComp->getRigidBody()->setMassProps(0.0f, btVector3(0.0f, 0.0f, 0.0f));
+    } else {
+        entity->attachComponent(new ExplosionComponent());
+        auto ownerDetonatorComp = owner->getComponent<DetonatorComponent>();
+        owner->detachComponent<DetonatorComponent>();
+        delete ownerDetonatorComp;
     }
 
     return true;
