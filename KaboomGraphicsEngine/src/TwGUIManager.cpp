@@ -1539,7 +1539,7 @@ void TwGUIManager::updateEvents() const
 					osg::Vec3 dirVec = eyePos - center;
 					osg::Vec3 fromObjToEyeScale = dirVec;
 					fromObjToEyeScale.normalize();
-					fromObjToEyeScale *= radius * 1.5;
+					fromObjToEyeScale *= radius * 2.0;
 					osg::Vec3 fromEyeToScalePoint = -dirVec + fromObjToEyeScale;
 					osg::Vec3 newEyePos = eyePos + fromEyeToScalePoint;
 					Core::setCurrentCameraManipulatorHomePosition(newEyePos, center, osg::Vec3(0, 0, 1));
