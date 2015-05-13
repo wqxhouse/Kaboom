@@ -181,9 +181,9 @@ void GeometryObject::setScale(const osg::Vec3 &scale)
 	mat.makeTranslate(pos);
 	mat.preMult(osg::Matrix::rotate(rot));
 
-	std::cout << mat << std::endl;
+	//std::cout << mat << std::endl;
 	mat.preMult(osg::Matrix::scale(scale));
-	std::cout << mat << std::endl;
+	//std::cout << mat << std::endl;
 
 	_objRoot->setMatrix(mat);
 }
