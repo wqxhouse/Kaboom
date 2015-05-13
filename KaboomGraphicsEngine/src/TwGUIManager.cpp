@@ -895,6 +895,16 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 	{
 		DirectionalLight *dl = l->asDirectionalLight();
 
+		std::string intensityNameDef = nameGroupDef + " label='" + INTENSITY_LABEL + "' max=30.0 min=0.0 step=0.1";
+		TwAddVarCB(bar, intensityNameDef.c_str(), TW_TYPE_FLOAT,
+			[](const void *data, void *clientData) {
+			Light *l = (Light *)clientData;
+			l->setIntensity(*(float *)data);
+		}, [](void *data, void *clientData) {
+			Light *l = (Light *)clientData;
+			*(float *)data = l->getIntensity();
+		}, dl, intensityNameDef.c_str());
+
 		// lightDir ( to light, not from light ) 
 		std::string dirToWorldVarName = "dirToWorld" + indexStr;
 		std::string dirToWorldDef = nameGroupDef + " label='dirToWorld'";
