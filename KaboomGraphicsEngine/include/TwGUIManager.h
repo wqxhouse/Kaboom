@@ -198,4 +198,5 @@ protected:
 	static std::vector<ModelMatrix*> _redos;
 
 	bool _isMouseOver;
+	int _scrollPos;
 };
