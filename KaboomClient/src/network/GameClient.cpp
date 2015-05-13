@@ -4,6 +4,7 @@
 #include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
+#include <network/EquipEvent.h>
 #include <network/ExplosionEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
@@ -140,6 +141,12 @@ void GameClient::sendMessage(const Event &evt) const {
 
     delete[] data;
 }
+
+void GameClient::sendEquipEvent(EntityType type) const {
+    EquipEvent evt(0, type);
+    sendMessage(evt);
+}
+
 
 bool GameClient::getIsConnectedToServer() const {
     return network.isConnected();

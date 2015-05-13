@@ -1,6 +1,7 @@
 #include "InputEventHandler.h"
 
 #include <Core.h>
+#include <core/EntityType.h>
 #include <network/PlayerInputEvent.h>
 
 #include "../network/GameClient.h"
@@ -94,6 +95,18 @@ void InputEventHandler::onLook(float delta_yaw, float delta_pitch) {
     sendPlayerInputEvent();
 
     Core::getMainCamera().setYawAndPitchAndUpdate(yaw, pitch);
+}
+
+void InputEventHandler::onEquip1() {
+    client.sendEquipEvent(KABOOM_V2);
+}
+
+void InputEventHandler::onEquip2() {
+    client.sendEquipEvent(TIME_BOMB);
+}
+
+void InputEventHandler::onEquip3() {
+    client.sendEquipEvent(REMOTE_DETONATOR);
 }
 
 void InputEventHandler::sendPlayerInputEvent() {
