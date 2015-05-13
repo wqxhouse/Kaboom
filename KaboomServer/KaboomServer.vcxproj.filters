@@ -185,7 +185,7 @@
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
     <ClCompile Include="src\messaging\RemoteDetonatorMessageHandler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Messaging\Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
