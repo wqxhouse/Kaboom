@@ -15,15 +15,19 @@
 #include "../core/Game.h"
 
 bool DefaultExplosionMessageHandler::handle(const Message &message) const {
-    if (message.getType() != MessageType::EXPLOSION) {
-        return false;
+    switch (message.getType()) {
+        case MessageType::EXPLOSION: {
+            return handle(static_cast<const ExplosionMessage &>(message));
+        }
     }
 
-    auto &msg = static_cast<const ExplosionMessage &>(message);
+    return false;
+}
 
-    Game *game = msg.getGame();
-    Entity *entity = msg.getEntity();
-    const std::unordered_set<Entity *> &nearbyEntities = msg.getNearbyEntities();
+bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) const {
+    Game *game = message.getGame();
+    Entity *entity = message.getEntity();
+    auto &nearbyEntities = message.getNearbyEntities();
 
     auto bombTriggerComp = entity->getComponent<TriggerComponent>();
 
@@ -81,8 +85,8 @@ bool DefaultExplosionMessageHandler::handle(const Message &message) const {
         printf("new Player Health: %d \n", charHealthComp->getHealthAmount());
     }
 
-    msg.getGame()->getGameServer().sendExplosionEvent(entity);
-    msg.getGame()->removeEntity(entity);
+    message.getGame()->getGameServer().sendExplosionEvent(entity);
+    message.getGame()->removeEntity(entity);
 
     return true;
 }

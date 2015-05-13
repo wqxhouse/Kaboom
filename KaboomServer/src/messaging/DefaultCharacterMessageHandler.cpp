@@ -22,12 +22,10 @@
 bool DefaultCharacterMessageHandler::handle(const Message &message) const {
     switch (message.getType()) {
         case MessageType::ATTACK1: {
-            auto &msg = static_cast<const Attack1Message &>(message);
-            return handle(msg);
+            return handle(static_cast<const Attack1Message &>(message));
         }
         case MessageType::NO_ATTACK: {
-            auto &msg = static_cast<const NoAttackMessage &>(message);
-            return handle(msg);
+            return handle(static_cast<const NoAttackMessage &>(message));
         }
     }
 
