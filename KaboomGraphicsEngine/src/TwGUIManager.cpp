@@ -60,6 +60,13 @@ void TwGUIManager::initMainBar()
 		Core::enableGameMode();
 	}, NULL, " label='--> Run Game :)' ");
 
+	// 'Export to XML' button
+	TwAddButton(g_twBar, "Export to XML",
+		[](void *clientData) {
+		exportXML();
+	},
+		NULL, NULL);
+
 	TwAddSeparator(g_twBar, NULL, NULL);
 
 	TwAddVarCB(g_twBar, "Show LibRocketGUI", TW_TYPE_BOOL8,
@@ -77,9 +84,8 @@ void TwGUIManager::initMainBar()
 		*(bool *)data = Core::isLibRocketInEditorGUIEnabled();
 	}, NULL, NULL);
 
-	// Add option to disable/enable camera manipulator
-	// I did not find a way to intercept the hover event to make
-	// this automatic
+	std::string camGroupDef = " group='Cam Settings' ";
+
 	TwAddVarCB(g_twBar, "Cam Control", TW_TYPE_BOOL8,
 		[](const void *value, void *clientData) {
 		bool active = *static_cast<const bool *>(value);
@@ -100,7 +106,7 @@ void TwGUIManager::initMainBar()
 		[](void *value, void *clientData) {
 		*(bool *)value = *(bool *)clientData;
 	},
-		&this->_cameraManipulatorActive, NULL);
+		&this->_cameraManipulatorActive, camGroupDef.c_str());
 
 	TwAddVarCB(g_twBar, "FPS Cam", TW_TYPE_BOOL8, 
 		[](const void *data, void *cliantData) {
@@ -117,14 +123,14 @@ void TwGUIManager::initMainBar()
 			{
 				*(bool *)data = true;
 			}
-		}, NULL, NULL);
+		}, NULL, camGroupDef.c_str());
 
 	TwAddVarCB(g_twBar, "FPS Cam Speed", TW_TYPE_FLOAT, 
 		[](const void *data, void *clientData) {
 		Core::setEditorFPSCamWalkingSpeed(*(float *)data);
 	}, [](void *data, void *clientData) {
 		*(float *)data = Core::getEditorFPSCamWalkingSpeed();
-	}, NULL, "step=1.0 min=0.0 max=100.0");
+	}, NULL, (camGroupDef + "step=1.0 min=0.0 max=100.0").c_str());
 
 	TwAddVarCB(g_twBar, "Change Projection", TW_TYPE_BOOL8, 
 		[](const void *data, void *clientData) {
@@ -133,7 +139,7 @@ void TwGUIManager::initMainBar()
 	}, [](void *data, void *clientData) {
 		bool b = Core::allowChangeEditorProjection();
 		*(bool *)data = b;
-	}, NULL, NULL);
+	}, NULL, camGroupDef.c_str());
 
 	TwAddVarCB(g_twBar, "Camera Fovy", TW_TYPE_FLOAT, 
 		[](const void *data, void *clientData) {
@@ -142,7 +148,7 @@ void TwGUIManager::initMainBar()
 	}, [](void *data, void *clientData) {
 		float fov = Core::getMainCamera().getFovY();
 		*(float *)data = fov;
-	}, NULL, " min=20 max=140 ");
+	}, NULL, (camGroupDef + " min=20 max=140 ").c_str());
 
 	TwAddVarCB(g_twBar, "Camera Near Plane", TW_TYPE_FLOAT,
 		[](const void *data, void *clientData) {
@@ -151,7 +157,7 @@ void TwGUIManager::initMainBar()
 	}, [](void *data, void *clientData) {
 		float fov = Core::getMainCamera().getNearPlane();
 		*(float *)data = fov;
-	}, NULL, " min=0.1 max=10000");
+	}, NULL, (camGroupDef + " min=0.1 max=10000").c_str());
 
 	TwAddVarCB(g_twBar, "Camera Far Plane", TW_TYPE_FLOAT,
 		[](const void *data, void *clientData) {
@@ -160,16 +166,10 @@ void TwGUIManager::initMainBar()
 	}, [](void *data, void *clientData) {
 		float fov = Core::getMainCamera().getFarPlane();
 		*(float *)data = fov;
-	}, NULL, " min=0.1 max=10000");
+	}, NULL, (camGroupDef + " min=0.1 max=10000").c_str());
 
-	TwAddSeparator(g_twBar, NULL, NULL);
-
-	// 'Export to XML' button
-	TwAddButton(g_twBar, "Export to XML",
-		[](void *clientData) {
-		exportXML();
-	},
-		NULL, NULL);
+	std::string foldedStr = " Main/'Cam Settings' opened=false ";
+	TwDefine(foldedStr.c_str());
 
 	TwAddSeparator(g_twBar, NULL, NULL);
 
