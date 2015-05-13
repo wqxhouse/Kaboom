@@ -311,23 +311,6 @@ void Core::freezeCameraOnGUIDemand()
 	if (isMouseOverAnyEditor() && !isDragging)
 	{
 		disableCameraManipulator();
-		
-		// The following intends to fix the bug that, when mouse over the gui while moving followed by 
-		// a mouse left gui, the camera will move itself in the direction you pressed before you do the 
-		// mouse over the gui. 
-		// The reason is that when you are moving, the moving bits are active in the fps camera. 
-		// However, disabling camera upon mouse over gui will block the handle() function in the fps camera, 
-		// making it not detecting keyboard release, thus not clearing the movement. Therefore, when your mouse
-		// left the gui, the camera will be active, but with the moving bits on, thus moving by itself.
-		// The fix is just to manually clear the movement after the mouse over.
-		if (_currCamManipulatorType == FIRSTPERSON)
-		{
-			// TODO: this only account for the case of mouse over the gui. Think about other corner cases
-			// where disableCameraManipulator does not clear the movement. (there are actually plenty, but 
-			// most of them are rarely going to happen, or does not cause noticable problems. such as 
-			// moving while 
-			static_cast<CustomFirstPersonManipulator *>(_camManipulatorTemp.get())->clearMovement();
-		}
 	}
 	else
 	{
@@ -398,6 +381,22 @@ void Core::disableCameraManipulator()
 		_savedManipulatorCam = _cam;
 		// std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
 		_viewer->setCameraManipulator(NULL);
+
+		// The following intends to fix the bug that, when mouse over the gui while moving followed by 
+		// a mouse left gui, the camera will move itself in the direction you pressed before you do the 
+		// mouse over the gui. 
+		// The reason is that when you are moving, the moving bits are active in the fps camera. 
+		// However, disabling camera upon mouse over gui will block the handle() function in the fps camera, 
+		// making it not detecting keyboard release, thus not clearing the movement. Therefore, when your mouse
+		// left the gui, the camera will be active, but with the moving bits on, thus moving by itself.
+		// The fix is just to manually clear the movement after the mouse over.
+		// Update: decided to put this in the generic disableManiuplator for all cases. 
+		// Certainly there are other cases such as when moving the camera, you press 'tab' to lock the camera
+		// It is the same effect as the one written above.
+		if (_currCamManipulatorType == FIRSTPERSON)
+		{
+			static_cast<CustomFirstPersonManipulator *>(_camManipulatorTemp.get())->clearMovement();
+		}
 	}
 }
 
