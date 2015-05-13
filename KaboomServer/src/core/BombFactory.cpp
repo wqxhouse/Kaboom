@@ -15,7 +15,6 @@
 #include "../components/ExplosionComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../components/PhysicsComponent.h"
-#include "../components/StickComponent.h"
 #include "../components/TimerComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../messaging/DefaultExplosionMessageHandler.h"
@@ -134,7 +133,6 @@ void BombFactory::createRemoteDetonator(Entity *entity) const {
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
     entity->attachComponent(new CollisionComponent());
-    entity->attachComponent(new StickComponent());
 
     static RemoteDetonatorMessageHandler remoteDetonatorHandler;
     chain->addHandler(&remoteDetonatorHandler);

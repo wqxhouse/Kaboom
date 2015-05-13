@@ -15,6 +15,7 @@
 #include "NoAttackMessage.h"
 #include "../components/DetonatorComponent.h"
 #include "../components/ExplosionComponent.h"
+#include "../components/OwnerComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
@@ -79,6 +80,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                     viewDir.getX() * launchSpeed,
                     viewDir.getY() * launchSpeed,
                     viewDir.getZ() * launchSpeed);
+            bombEntity->attachComponent(new OwnerComponent(entity));
 
             if (bombType == REMOTE_DETONATOR) {
                 entity->attachComponent(new DetonatorComponent(bombEntity));
