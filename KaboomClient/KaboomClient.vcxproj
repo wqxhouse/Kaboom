@@ -257,7 +257,10 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\SoundManager.cpp" />
-    <ClCompile Include="src\GameGUI.cpp" />
+    <ClCompile Include="src\gui\GameGUI.cpp" />
+    <ClCompile Include="src\gui\GameGUIEventHandler.cpp" />
+    <ClCompile Include="src\gui\GameGUIListener.cpp" />
+    <ClCompile Include="src\gui\OnClickListener.cpp" />
     <ClCompile Include="src\input\InputEventHandler.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
@@ -286,8 +289,12 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
+    <ClInclude Include="src\Core\GameStateMachine.h" />
     <ClInclude Include="src\core\SoundManager.h" />
-    <ClInclude Include="src\GameGUI.h" />
+    <ClInclude Include="src\gui\GameGUI.h" />
+    <ClInclude Include="src\gui\GameGUIEventHandler.h" />
+    <ClInclude Include="src\gui\GameGUIListener.h" />
+    <ClInclude Include="src\gui\OnClickListener.h" />
     <ClInclude Include="src\input\InputEventHandler.h" />
     <ClInclude Include="src\input\InputManager.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
