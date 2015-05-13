@@ -302,7 +302,13 @@ bool Core::isViewerClosed()
 
 void Core::freezeCameraOnGUIDemand()
 {
-	if (isMouseOverAnyEditor())
+	bool isDragging = false;
+	if (!isCamLocked() && _currCamManipulatorType == FIRSTPERSON)
+	{
+		isDragging = static_cast<CustomFirstPersonManipulator *>(_viewer->getCameraManipulator())->isDragging();
+	}
+
+	if (isMouseOverAnyEditor() && !isDragging)
 	{
 		disableCameraManipulator();
 	}

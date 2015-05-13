@@ -43,6 +43,23 @@ bool CustomFirstPersonManipulator::handle(const osgGA::GUIEventAdapter &ea, osgG
 	return StandardManipulator::handle(ea, us);
 }
 
+bool CustomFirstPersonManipulator::handleMouseDrag(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
+{
+	_isDragging = true;
+	return StandardManipulator::handleMouseDrag(ea, us);
+}
+
+bool CustomFirstPersonManipulator::handleMouseRelease(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
+{
+	_isDragging = false;
+	return StandardManipulator::handleMouseRelease(ea, us);
+}
+
+bool CustomFirstPersonManipulator::isDragging()
+{
+	return _isDragging;
+}
+
 bool CustomFirstPersonManipulator::handleFrame(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us)
 {
 	double spf = Core::getLastFrameDuration();
@@ -119,4 +136,12 @@ bool CustomFirstPersonManipulator::handleKeyUp(const osgGA::GUIEventAdapter &ea,
 	}
 
 	return StandardManipulator::handleKeyUp(ea, us);
+}
+
+void CustomFirstPersonManipulator::clearMovement()
+{
+	_movingLeft = false;
+	_movingRight = false;
+	_movingForward = false;
+	_movingBackward = false;
 }
