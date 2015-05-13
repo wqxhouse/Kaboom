@@ -102,8 +102,6 @@ Game::Game(ConfigSettings *config)
 	libRocketInGameManager=Core::getInGameLibRocketGUIManager();
 	Rocket::Core::ElementDocument* marty = libRocketInGameManager->getWindow(1);
 
-
-	Rocket::Core::EventListenerInstancer;
 	Rocket::Core::EventListener * startGameListener = new onClickListener(gsm);
 	marty->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
 
@@ -122,6 +120,10 @@ void Game::run() {
 	std::string serverAddress;
 	int serverPort;
 
+	//Grab the doucment from libRocketInGameMangaer
+	Rocket::Core::ElementDocument* in_game_screen_ui = libRocketInGameManager->getWindow(0);
+	Rocket::Core::ElementDocument* start_screen_ui = libRocketInGameManager->getWindow(1);
+
     //while (!Core::isViewerClosed()) { // TODO: buggy right now
     while (true) {
 		// printf("duration: %lf\n", Core::getLastFrameDuration());
@@ -129,12 +131,21 @@ void Game::run() {
 		case EDITOR_MODE:
 			if (Core::isInGameMode()) { //pressed the PlayGame Button
 				gsm = CONNECT_TO_SERVER;
+				//gsm = START_SCREEN_MODE;
 			}
 			break;
+		case START_SCREEN_MODE:
+		{
+			in_game_screen_ui->Hide();
+			start_screen_ui->Show();
+			break;
+		}
 		case CONNECT_TO_SERVER:
 		{
 			config->getValue(ConfigSettings::str_server_address, serverAddress);
 			config->getValue(ConfigSettings::str_server_port, serverPort);
+			in_game_screen_ui->Show();
+			start_screen_ui->Hide();
 
             bool res = client.connectToServer(serverAddress, serverPort);
 			if (res)
