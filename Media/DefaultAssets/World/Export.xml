@@ -1,33 +1,5 @@
 <?xml version="1.0" encoding="utf - 8"?>
 <world>
-	<material name="__floorMat" type="textured">
-		<albedoTex>C:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_baseColor.png</albedoTex>
-		<roughnessTex>C:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_roughness.png</roughnessTex>
-		<metallicTex>C:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_metallic.png</metallicTex>
-		<normalPath>C:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_normal.tga</normalPath>
-	</material>
-
-	<material name="SphereMat" type="plain">
-		<albedo>0.300000 0.300000 0.300000</albedo>
-		<roughness>0.100000</roughness>
-		<specular>0.500000</specular>
-		<metallic>1.000000</metallic>
-	</material>
-
-	<material name="roundGroundMat" type="plain">
-		<albedo>0.913726 0.137255 0.784314</albedo>
-		<roughness>0.460000</roughness>
-		<specular>0.500000</specular>
-		<metallic>0.000000</metallic>
-	</material>
-
-	<material name="brick1Mat" type="plain">
-		<albedo>1.000000 0.980392 0.184314</albedo>
-		<roughness>0.350000</roughness>
-		<specular>0.500000</specular>
-		<metallic>0.490000</metallic>
-	</material>
-
 	<model name="*__Huge_floor">
 		<file></file>
 		<material name="__floorMat" />
@@ -38,7 +10,7 @@
 
 	<model name="sphere">
 		<file></file>
-		<material name="SphereMat" />
+		<material name="____builtInDefault" />
 		<position>0.000000 20.000000 1.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
 		<scale>1.000000 1.000000 1.000000</scale>
