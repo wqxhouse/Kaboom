@@ -12,13 +12,13 @@ void setupGUIDocuments(Game *game)
 	std::string mediaPath;
 	ConfigSettings::config->getValue("MediaPath", mediaPath);
 
-	//std::string guiPath = mediaPath + "DefaultAssets\\LibRocketGUI\\InGame\\";
-	//manager->addWindow(guiPath + "window_rocket.rml", true);
-	//int i=manager->addWindow(guiPath + "window_start_screen.rml", true);
-	//manager->getWindow(i)->Hide();
+	std::string guiPath = mediaPath + "DefaultAssets\\LibRocketGUI\\InGame\\";
+	manager->addWindow(guiPath + "window_rocket.rml", true);
+	int i=manager->addWindow(guiPath + "window_start_screen.rml", true);
+	manager->getWindow(i)->Hide();
 
-	//Rocket::Core::ElementDocument* marty = manager->getWindow(1);
-	//Rocket::Core::EventListenerInstancer;
-	//Rocket::Core::EventListener * startGameListener = new OnClickListener(game);
-	//marty->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
+	Rocket::Core::ElementDocument* marty = manager->getWindow(1);
+	Rocket::Core::EventListenerInstancer;
+	Rocket::Core::EventListener * startGameListener = new OnClickListener(game);
+	marty->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
 }
