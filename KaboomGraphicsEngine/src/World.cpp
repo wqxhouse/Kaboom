@@ -165,6 +165,6 @@ void World::createLightFromXML(osgDB::XmlNode* xmlNode)
 		_lightManager->addPointLight(name, position, color, radius, doShadow, intensity);
 	}
 	else if (type == "directional") {
-		_lightManager->addDirectionalLight(name, direction, color, doShadow);
+		_lightManager->addDirectionalLight(name, direction, color, doShadow, intensity);
 	}
 }
