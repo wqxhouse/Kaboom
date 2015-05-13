@@ -184,6 +184,9 @@
     <ClCompile Include="src\network\EquipEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\messaging\RemoteDetonatorMessageHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -351,6 +354,9 @@
     </ClInclude>
     <ClInclude Include="src\network\EquipEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\RemoteDetonatorMessageHandler.h">
+      <Filter>Header Files\Messaging\Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
