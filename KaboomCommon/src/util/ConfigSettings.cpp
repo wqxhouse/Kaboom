@@ -28,6 +28,8 @@ std::string ConfigSettings::str_world_xml = "WorldXML";
 std::string ConfigSettings::str_export_xml = "ExportXML";
 std::string ConfigSettings::str_typeid_xml = "TypeIdXML";
 
+std::string ConfigSettings::str_char_model = "CharacterModel";
+
 // server and client shared vars
 std::string ConfigSettings::str_server_port = "ServerPort";
 std::string ConfigSettings::str_server_address = "ServerAddress";

@@ -3,6 +3,8 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 
+#include "../components/CollisionComponent.h"
+#include "../components/StickComponent.h"
 #include "../core/Game.h"
 
 PhysicsSystem::PhysicsSystem(Game *game, World &world)
@@ -23,11 +25,11 @@ bool PhysicsSystem::checkEntity(Entity *entity) {
 }
 
 void PhysicsSystem::processEntity(Entity *entity) {
-    PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
+    auto physComp = entity->getComponent<PhysicsComponent>();
+    auto posComp = entity->getComponent<PositionComponent>();
+    auto colComp = entity->getComponent<CollisionComponent>();
 
-    const btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
-
-    PositionComponent *posComp = entity->getComponent<PositionComponent>();
+    btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
 
     if (posComp != nullptr) {
         const btVector3 &pos = worldTrans.getOrigin();
