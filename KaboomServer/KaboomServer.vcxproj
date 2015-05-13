@@ -63,6 +63,7 @@
     <ClCompile Include="src\systems\PickupSystem.cpp" />
     <ClCompile Include="src\systems\SystemManager.cpp" />
     <ClCompile Include="src\systems\TimerSystem.cpp" />
+    <ClCompile Include="src\systems\VoidSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -124,6 +125,7 @@
     <ClInclude Include="src\systems\PickupSystem.h" />
     <ClInclude Include="src\systems\SystemManager.h" />
     <ClInclude Include="src\systems\TimerSystem.h" />
+    <ClInclude Include="src\systems\VoidSystem.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

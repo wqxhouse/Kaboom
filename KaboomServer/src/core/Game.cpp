@@ -18,6 +18,7 @@
 #include "../systems/PhysicsSystem.h"
 #include "../systems/PickupSystem.h"
 #include "../systems/TimerSystem.h"
+#include "../systems/VoidSystem.h"
 
 Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
@@ -44,6 +45,7 @@ Game::Game(ConfigSettings *configSettings)
     systemManager.addSystem(new InputSystem(this));
     systemManager.addSystem(new FiringSystem(this));
     systemManager.addSystem(new PhysicsSystem(this, world));
+    systemManager.addSystem(new VoidSystem());
     systemManager.addSystem(new CollisionSystem(this));
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
