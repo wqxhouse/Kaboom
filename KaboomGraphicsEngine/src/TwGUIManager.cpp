@@ -68,7 +68,7 @@ void TwGUIManager::initMainBar()
 		NULL, NULL);
 
 	TwAddSeparator(g_twBar, NULL, NULL);
-
+/*
 	TwAddVarCB(g_twBar, "Show LibRocketGUI", TW_TYPE_BOOL8,
 		[](const void *data, void *clientData) {
 		bool tick = *(bool *)data;
@@ -82,7 +82,7 @@ void TwGUIManager::initMainBar()
 		}
 	}, [](void *data, void *clientData) {
 		*(bool *)data = Core::isLibRocketInEditorGUIEnabled();
-	}, NULL, NULL);
+	}, NULL, NULL)*/;
 
 	std::string camGroupDef = " group='Cam Settings' ";
 
