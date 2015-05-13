@@ -1929,19 +1929,19 @@ void TwGUIManager::exportWorldXML(std::string &path)
 
 		osg::Vec3 color = light->getColor();
 		bool shadow = light->getCastShadow();
+		float intensity = light->getIntensity();
 
 		write(f, tabs, tagify("color", color));
 		write(f, tabs, tagify("castShadow", shadow));
+		write(f, tabs, tagify("intensity", intensity));
 
 		// Light properties
 		if (type == "point") {
 			osg::Vec3 pos = light->getPosition();
 			float radius = ((PointLight *)light)->getRadius();
-			float intensity = ((PointLight *)light)->getIntensity();
 
 			write(f, tabs, tagify("position", pos));
 			write(f, tabs, tagify("radius", radius));
-			write(f, tabs, tagify("intensity", intensity));
 		}
 		// For textured materials
 		else if (type == "directional") {

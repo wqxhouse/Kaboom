@@ -25,7 +25,8 @@ LightManager::~LightManager()
 bool LightManager::addDirectionalLight(const std::string &name,
 	const osg::Vec3 &dirToWorld,
 	const osg::Vec3 &color,
-	bool castShadow)
+	bool castShadow,
+	float intensity)
 {
 	// Handle duplicated (name) geoms
 	if (doesNameExist(name)) {
@@ -37,6 +38,7 @@ bool LightManager::addDirectionalLight(const std::string &name,
 	dirLight->setColor(color);
 	dirLight->setLightToWorldDirection(dirToWorld);
 	dirLight->setCastShadow(castShadow);
+	dirLight->setIntensity(intensity);
 
 	_lightsMap.insert(std::make_pair(name, dirLight));
 	_lights.push_back(dirLight);

@@ -14,7 +14,8 @@ public:
 	bool addDirectionalLight(const std::string &name,
 		const osg::Vec3 &dirToWorld,
 		const osg::Vec3 &color,
-		bool castShadow);
+		bool castShadow,
+		float intensity = 1.0f);
 
 	bool addPointLight(const std::string &name,
 		const osg::Vec3 &position,
