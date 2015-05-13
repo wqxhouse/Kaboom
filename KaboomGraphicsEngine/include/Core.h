@@ -19,7 +19,6 @@ namespace osgLibRocket
 	class GuiNode;
 }
 
-
 class Core
 {
 public:
@@ -81,9 +80,10 @@ public:
 
 	static bool isInGameMode();
 	static bool isCamLocked();
-	static double getLastFrameDuration();
 	static bool isViewerClosed();
+	static bool isMouseOverAnyEditor();
 
+	static double getLastFrameDuration();
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 
 	static void setAllowChangeEditorProjection(bool tf);

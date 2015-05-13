@@ -302,7 +302,7 @@ bool Core::isViewerClosed()
 
 void Core::freezeCameraOnGUIDemand()
 {
-	if (_gui->isMouseOver() || _libRocketEditorGUI->isMouseOver())
+	if (isMouseOverAnyEditor())
 	{
 		disableCameraManipulator();
 	}
@@ -761,6 +761,10 @@ bool Core::isLibRocketInEditorGUIEnabled()
 	return _libRocketEditorGUI->isGUIEnabled();
 }
 
+bool Core::isMouseOverAnyEditor()
+{
+	return _gui->isMouseOver() || _libRocketEditorGUI->isMouseOver();
+}
 
 osg::ref_ptr<LibRocketGUIManager> Core::getInGameLibRocketGUIManager()
 {

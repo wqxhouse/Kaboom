@@ -199,6 +199,7 @@ void GeometryObjectManipulator::attachLight(Light *light)
 	std::cout << "Attaching light " << light->getName() << std::endl;
 	_attachingLight = true;
 	_attachedLight = light;
+
 	_lightManipulatorGhostObject->setMatrix(osg::Matrix::translate(light->getPosition()));
 
 	osg::Geode *geode = new osg::Geode;
