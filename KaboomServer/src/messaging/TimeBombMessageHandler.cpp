@@ -8,13 +8,16 @@
 #include "../components/ExplosionComponent.h"
 
 bool TimeBombMessageHandler::handle(const Message &message) const {
-    if (message.getType() != MessageType::TIMER_EXPIRED) {
-        return false;
+    switch (message.getType()) {
+        case MessageType::TIMER_EXPIRED: {
+            return handle(static_cast<const TimerExpiredMessage &>(message));
+        }
     }
 
-    auto &msg = static_cast<const TimerExpiredMessage &>(message);
+    return false;
+}
 
-    msg.getEntity()->attachComponent(new ExplosionComponent());
-
+bool TimeBombMessageHandler::handle(const TimerExpiredMessage &message) const {
+    message.getEntity()->attachComponent(new ExplosionComponent());
     return true;
 }
