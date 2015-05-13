@@ -157,6 +157,7 @@ protected:
 	void initAddBar();
 	void initPlainMaterialBar();
 	void initTexturedMaterialBar();
+	void initLightBar();
 
 	static void fitObjectToScreen(osg::MatrixTransform *mt);
 	static void fitPointLightToScreen(PointLight *l);
@@ -168,6 +169,7 @@ protected:
 	TwBar *g_addBar;
 	TwBar *g_plainMaterialBar;
 	TwBar *g_texturedMaterialBar;
+	TwBar *g_lightBar;
 	char g_fileName[256]; // TODO: this is a hack, fix it
 
 	static bool openFile(std::string &s);

@@ -43,6 +43,7 @@ void TwGUIManager::initializeTwGUI()
 	_index = 0;
 
 	initMainBar();
+	initLightBar();
 	initManipuatorSelectorBar();
 	initPlainMaterialBar();
 	initTexturedMaterialBar();
@@ -52,7 +53,7 @@ void TwGUIManager::initializeTwGUI()
 void TwGUIManager::initMainBar()
 {
 	g_twBar = TwNewBar("Main");
-	TwDefine(" Main label='Kaboom Game Editor' size='300 600' color='96 216 224' position='16 110' valueswidth=140");
+	TwDefine(" Main label='Kaboom Game Editor' size='300 400' color='96 216 224' position='16 110' valueswidth=140");
 
 	TwAddButton(g_twBar, "Run Game",
 		[](void *clientData) {
@@ -185,6 +186,12 @@ void TwGUIManager::initMainBar()
 	}
 
 	//index = 0;
+}
+
+void TwGUIManager::initLightBar()
+{
+	g_lightBar = TwNewBar("Lights");
+	TwDefine(" Lights label='Lights' size='300 180' color='185 185 50' position='16 515'");
 
 	// process lights
 	for (int i = 0; i < _lm->getNumLights(); i++)
@@ -192,7 +199,7 @@ void TwGUIManager::initMainBar()
 		Light *l = _lm->getLight(i);
 
 		// Moved code to a function
-		addLightToGUI(g_twBar, l, LIGHT_GROUP_NAME, _index);
+		addLightToGUI(g_lightBar, l, LIGHT_GROUP_NAME, _index);
 	}
 }
 
@@ -1100,9 +1107,9 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			item, removeDef.c_str());
 	}
 
-	std::string moveStr = " Main/" + name + " group='" + group + "'";
+	std::string moveStr = " Lights/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
-	std::string foldedStr = " Main/" + name + " opened=false ";
+	std::string foldedStr = " Lights/" + name + " opened=false ";
 	TwDefine(foldedStr.c_str());
 
 	index++;
