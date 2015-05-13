@@ -25,7 +25,7 @@ bool GeometryPicker::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAd
 	{
 		if (ea.getX() == _mX && ea.getY() == _mY)
 		{
-			if (Core::isCamLocked())
+			if (Core::isCamLocked() && !Core::isMouseOverAnyEditor())
 			{
 				pick(ea, aa);
 			}
