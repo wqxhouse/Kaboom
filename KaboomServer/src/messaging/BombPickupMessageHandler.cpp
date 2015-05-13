@@ -16,8 +16,7 @@
 
 bool BombPickupMessageHandler::handle(const Message &message) const {
     if (message.getType() == MessageType::PICKUP) {
-        auto &msg = static_cast<const PickupMessage &>(message);
-        return handle(msg);
+        return handle(static_cast<const PickupMessage &>(message));
     }
 
     return false;

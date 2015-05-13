@@ -4,7 +4,7 @@
 
 class CollisionMessage;
 
-class KaboomV2MessageHandler : public MessageHandler {
+class RemoteDetonatorMessageHandler : public MessageHandler {
 public:
     virtual bool handle(const Message &message) const;
 

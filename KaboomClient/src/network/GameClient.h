@@ -6,6 +6,7 @@
 #include "ClientNetwork.h"
 
 class ClientEventHandlerLookup;
+enum EntityType;
 
 class GameClient {
 public:
@@ -16,6 +17,7 @@ public:
 	bool disconnectFromServer();
 
     void sendMessage(const Event &evt) const;
+    void sendEquipEvent(EntityType type) const;
 
 	unsigned int getCurrentPlayerEntityId() const;
 

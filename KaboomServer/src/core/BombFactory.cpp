@@ -15,11 +15,13 @@
 #include "../components/ExplosionComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../components/PhysicsComponent.h"
+#include "../components/StickComponent.h"
 #include "../components/TimerComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../messaging/DefaultExplosionMessageHandler.h"
 #include "../messaging/KaboomV2MessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
+#include "../messaging/RemoteDetonatorMessageHandler.h"
 #include "../messaging/TimeBombMessageHandler.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
@@ -45,6 +47,10 @@ Entity *BombFactory::createBomb(
         }
         case TIME_BOMB: {
             createTimeBomb(entity);
+            break;
+        }
+        case REMOTE_DETONATOR: {
+            createRemoteDetonator(entity);
             break;
         }
     }
@@ -109,6 +115,7 @@ void BombFactory::createKaboomV2(Entity *entity) const {
 
 void BombFactory::createTimeBomb(Entity *entity) const {
     const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+    auto physComp = entity->getComponent<PhysicsComponent>();
     auto handlerComp = entity->getComponent<MessageHandlerComponent>();
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
@@ -116,6 +123,19 @@ void BombFactory::createTimeBomb(Entity *entity) const {
     chain->addHandler(&timeBombHandler);
 
     int delay = config.getInt("delay");
-    
     entity->attachComponent(new TimerComponent(new Timer(delay)));
+
+    int restitution = config.getFloat("restitution");
+	physComp->getRigidBody()->setRestitution(restitution);
+}
+
+void BombFactory::createRemoteDetonator(Entity *entity) const {
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    entity->attachComponent(new CollisionComponent());
+    entity->attachComponent(new StickComponent());
+
+    static RemoteDetonatorMessageHandler remoteDetonatorHandler;
+    chain->addHandler(&remoteDetonatorHandler);
 }

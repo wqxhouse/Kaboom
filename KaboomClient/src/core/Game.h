@@ -66,6 +66,7 @@ private:
     ConfigSettings *config;
     InputManager *inputManager;
 
+
     EntityManager entityManager;
 	SoundManager soundManager;
     CharacterFactory characterFactory;

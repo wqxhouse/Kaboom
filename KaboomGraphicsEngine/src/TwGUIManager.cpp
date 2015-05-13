@@ -302,6 +302,7 @@ void TwGUIManager::initAddBar()
 			else
 			{
 				OSG_WARN << "Failed ! May crash the program..." << std::endl;
+				return;
 			}
 
 			GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();

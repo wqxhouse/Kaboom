@@ -16,10 +16,10 @@ void GameGUIEventHandler::handle(const HealthEvent &e, HealthComponent *healthCo
 	for (int i = 0; i < tr->GetNumChildren(); i++){
 		printf("\nthe health is at %d\n", healthComponent->getHealthAmount());
 		if (healthComponent->getHealthAmount() / 20.0 <= i){
-			tr->GetChild(i)->SetProperty("background-color", "blue");
+			tr->GetChild(i)->SetProperty("background-color", "red");
 			continue;
 		}
-		tr->GetChild(i)->SetProperty("background-color", "red");
+		tr->GetChild(i)->SetProperty("background-color", "green");
 	}
 	//win->GetChild(1);			
 }
