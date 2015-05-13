@@ -83,6 +83,8 @@ void World::loadMapFromXML(const std::string &mapXMLFile) {
 
         btCollisionShape * collisionShape = osgbCollision::btTriMeshCollisionShapeFromOSG(transfromNode);
         btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(0, motion, collisionShape, btVector3(0, 0, 0));
+        rigidBodyCI.m_restitution = 1.0f;
+
         btRigidBody * rigidbody = new btRigidBody(rigidBodyCI);
         addRigidBody(rigidbody);
 

@@ -7,7 +7,7 @@
         <mass type="float">1.0</mass>
         <explosion-radius type="float">2.0</explosion-radius>
         <cooldown type="int">500</cooldown>
-        <launch-speed type="float">5.0</launch-speed>
+        <launch-speed type="float">10.0</launch-speed>
         <capacity type="int">20</capacity>
         <knockback-amount type="float">5.0</knockback-amount>
         <knockback-duration type="int">250</knockback-duration>
@@ -28,6 +28,7 @@
         <max-damage type="int">80</max-damage>
         <min-damage type="int">20</min-damage>
         <delay type="int">3000</delay>
+        <restitution type="float">0.8</restitution>
     </bomb>
     <bomb>
         <id type="uint">131075</id>

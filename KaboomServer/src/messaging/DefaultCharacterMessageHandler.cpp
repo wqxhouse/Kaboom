@@ -22,12 +22,10 @@
 bool DefaultCharacterMessageHandler::handle(const Message &message) const {
     switch (message.getType()) {
         case MessageType::ATTACK1: {
-            auto &msg = static_cast<const Attack1Message &>(message);
-            return handle(msg);
+            return handle(static_cast<const Attack1Message &>(message));
         }
         case MessageType::NO_ATTACK: {
-            auto &msg = static_cast<const NoAttackMessage &>(message);
-            return handle(msg);
+            return handle(static_cast<const NoAttackMessage &>(message));
         }
     }
 
@@ -45,13 +43,14 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
     auto rotComp = entity->getComponent<RotationComponent>();
 
     const EntityType &bombType = equipComp->getEquipmentType();
-    const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
 
     if (!invComp->hasBomb(bombType)) {
         return true;
     }
 
-    if (detonatorComp != nullptr) {
+    const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
+
+    if (bombType == REMOTE_DETONATOR && detonatorComp != nullptr) {
         if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {
             detonatorComp->getBomb()->attachComponent(new ExplosionComponent());
             detonatorComp->setDetonated(true);
@@ -76,7 +75,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                     bombType,
                     posComp->getX() + viewDir.getX(),
                     posComp->getY() + viewDir.getY(),
-                    posComp->getZ() + viewDir.getZ(),
+                    posComp->getZ() + 1 + viewDir.getZ(),
                     viewDir.getX() * launchSpeed,
                     viewDir.getY() * launchSpeed,
                     viewDir.getZ() * launchSpeed);

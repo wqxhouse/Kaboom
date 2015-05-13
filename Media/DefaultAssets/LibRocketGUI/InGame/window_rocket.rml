@@ -1,34 +1,41 @@
-<!--<template name="window" content="content">-->
+
 <rml>
 <head>
-
 	<link type="text/rcss" href="rkt_new.rcss"/>
 	<link type="text/rcss" href="invader-m.rcss"/>
   <style>
     table#health_bar{
-    background-color:orange;
+    //background-color:orange;
     position: absolute;
-    left : 90%;
     top :90%;
     }
-    td#1{
-    background-color: red;
+    td{
+    //background-color: red;
+    margin: 4px 4px 4px 4px;
     }
     table#bomb_counter{
     //background-color: red;
     position: absolute;
     top: 90%;
-    -moz-border-radius: 50px/50px;
-    -webkit-border-radius: 50px 50px;
-    border-radius: 50px/50px;
+    left : 60%;
     }
     body
     {
     width: 100%;
     height: 100%;
-
     margin: auto;
     }
+    img{
+    width: 100px;
+    height: 100px;
+    }
+    div.circle{
+    background-decorator: image;
+    background-image: boomb.tga;
+    //background-image: url("boomb.jpeg");
+    }
+
+    .circle{width:100px;height:100px;border-radius:50px;font-size:20px;color:#ffffff;line-height:100px;text-align:center;background:#000;}
   </style>
 
 </head>
@@ -43,15 +50,16 @@
     </tr>
   </table>
   <table id="bomb_counter">
-    <tr>
-      <td id="1">one</td>
-      <td id="2">two</td>
-      <td id="3">three</td>
-      <td id="4">four</td>
-      <td id="5">five</td>
+    <tr id ="bombs">
+      <td id="b1">Kaboom 2.0</td>
+      <td id="b2">Timer Bomb</td>
+      <td id="b3">Remote Bomb</td>
+      <td id="b4">Salt Marty Bomb</td>
+      <td id="b5">Fake Bomb</td>
     </tr>
   </table>
-	<handle size_target="#document" style="position: absolute; width: 16px; height: 16px; bottom: 0px; right: 0px;"></handle>
+  <div class="circle">Hello</div>
+	<!--<handle size_target="#document" style="position: absolute; width: 16px; height: 16px; bottom: 0px; right: 0px;"></handle>-->
 </body>
-<!--</template>-->
-  </rml>
+
+</rml>

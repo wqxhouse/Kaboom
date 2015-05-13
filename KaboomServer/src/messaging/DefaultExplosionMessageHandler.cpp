@@ -15,15 +15,19 @@
 #include "../core/Game.h"
 
 bool DefaultExplosionMessageHandler::handle(const Message &message) const {
-    if (message.getType() != MessageType::EXPLOSION) {
-        return false;
+    switch (message.getType()) {
+        case MessageType::EXPLOSION: {
+            return handle(static_cast<const ExplosionMessage &>(message));
+        }
     }
 
-    auto &msg = static_cast<const ExplosionMessage &>(message);
+    return false;
+}
 
-    Game *game = msg.getGame();
-    Entity *entity = msg.getEntity();
-    const std::unordered_set<Entity *> &nearbyEntities = msg.getNearbyEntities();
+bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) const {
+    Game *game = message.getGame();
+    Entity *entity = message.getEntity();
+    auto &nearbyEntities = message.getNearbyEntities();
 
     auto bombTriggerComp = entity->getComponent<TriggerComponent>();
 
@@ -44,7 +48,7 @@ bool DefaultExplosionMessageHandler::handle(const Message &message) const {
 
         btVector3 dirVec = btVector3(playerPos - explosionPos);
         dirVec.normalize();
-
+	
         btScalar playerDistanceFromExplosion = playerPos.distance(explosionPos);
 
         auto &bombConfig = EntityConfigLookup::instance()[entity->getType()];
@@ -52,17 +56,18 @@ bool DefaultExplosionMessageHandler::handle(const Message &message) const {
 
         float explosionRadius = bombConfig.getFloat("explosion-radius");
         float knockbackAmount = bombConfig.getFloat("knockback-amount");
-        float knockbackDuration = bombConfig.getFloat("knockback-duration");
-        float maxDamage = bombConfig.getFloat("max-damage");
-        float minDamage = bombConfig.getFloat("min-damage");
+        int knockbackDuration = bombConfig.getInt("knockback-duration");
+        int maxDamage = bombConfig.getInt("max-damage");
+        int minDamage = bombConfig.getInt("min-damage");
         float collisionRadius = charConfig.getFloat("collision-radius");
 
-        float maxDistancePossible = explosionRadius + (collisionRadius * 2);
+        float maxDistancePossible = explosionRadius + (collisionRadius + 0.3f); //0.3f is hard code fix
         float distancePercentAway = (maxDistancePossible - playerDistanceFromExplosion) / maxDistancePossible;
         btVector3 impulseVec = (knockbackAmount * distancePercentAway) * dirVec; // linear equation
         printf("playerDistanceFromExplosion : %f\n", playerDistanceFromExplosion);
         printf("maxDistancePossible : %f\n", maxDistancePossible);
         printf("distancePercentAway : %f\n", distancePercentAway);
+		printf("impulseVec-> x : %f, y :%f, z :%f\n", impulseVec.getX(), impulseVec.getY(), impulseVec.getZ());
 
         charPhysicsComp->getRigidBody()->applyCentralImpulse(impulseVec);
 
@@ -81,8 +86,8 @@ bool DefaultExplosionMessageHandler::handle(const Message &message) const {
         printf("new Player Health: %d \n", charHealthComp->getHealthAmount());
     }
 
-    msg.getGame()->getGameServer().sendExplosionEvent(entity);
-    msg.getGame()->removeEntity(entity);
+    message.getGame()->getGameServer().sendExplosionEvent(entity);
+    message.getGame()->removeEntity(entity);
 
     return true;
 }

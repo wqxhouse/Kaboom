@@ -7,6 +7,7 @@
 #include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
+#include <network/EquipEvent.h>
 #include <network/ExplosionEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
@@ -77,6 +78,13 @@ void GameServer::receive(Game *game) {
 
                     receivedPlayerInputEvent = true;
 
+                    break;
+                }
+                case EVENT_EQUIP: {
+                    EquipEvent equipEvent;
+                    equipEvent.deserialize(&network_data[i]);
+                    equipEvent.setEntityId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
+                    eventHandlerLookup.find(emptyEvent.getOpcode())->handle(equipEvent);
                     break;
                 }
                 default: {
