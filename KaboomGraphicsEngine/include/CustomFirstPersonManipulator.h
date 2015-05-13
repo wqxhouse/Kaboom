@@ -21,17 +21,24 @@ public:
 
 	void setWalkingSpeed(float metersPerSec);
 	float getWalkingSpeed();
+	bool isDragging();
 
 protected:
 	virtual bool handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
 	virtual bool handleFrame(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
 	virtual bool handleKeyDown(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
 	virtual bool handleKeyUp(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
+	virtual bool handleMouseDrag(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us);
+	virtual bool handleMouseRelease(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us);
+
+	void clearMovement();
 
 	bool _movingForward;
 	bool _movingBackward;
 	bool _movingLeft;
 	bool _movingRight;
+
+	bool _isDragging;
 
 	float _metersPerSec;
 };
