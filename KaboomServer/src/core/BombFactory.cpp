@@ -125,7 +125,7 @@ void BombFactory::createTimeBomb(Entity *entity) const {
     int delay = config.getInt("delay");
     entity->attachComponent(new TimerComponent(new Timer(delay)));
 
-    int restitution = config.getFloat("restitution");
+    float restitution = config.getFloat("restitution");
 	physComp->getRigidBody()->setRestitution(restitution);
 }
 
