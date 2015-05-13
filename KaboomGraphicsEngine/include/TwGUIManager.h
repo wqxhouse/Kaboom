@@ -47,6 +47,7 @@ const std::string NORMAL_MAP_PATH_LABEL = "Normal map path";
 const std::string REMOVE_LABEL = "Remove";
 const std::string EDIT_NAME_LABEL = "Edit name";
 const std::string INTENSITY_LABEL = "Intensity";
+const std::string FIT_TO_SCREEN_LABEL = "Fit To Screen";
 
 struct BarItem {
 	TwBar* bar;
