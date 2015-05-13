@@ -875,6 +875,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 
 	std::string moveStr = " Main/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
+	std::string foldedStr = " Main/" + name + " opened=false ";
+	TwDefine(foldedStr.c_str());
 
 	index++;
 }
@@ -1072,6 +1074,8 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 
 	std::string moveStr = " Main/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
+	std::string foldedStr = " Main/" + name + " opened=false ";
+	TwDefine(foldedStr.c_str());
 
 	index++;
 }
@@ -1182,6 +1186,8 @@ void TwGUIManager::addPlainMaterialToGUI(TwBar* bar, Material* mat, std::string 
 
 	std::string moveStr = " Plain_Materials/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
+	std::string foldedStr = " Plain_Materials/" + name + " opened=false ";
+	TwDefine(foldedStr.c_str());
 
 	index++;
 }
@@ -1307,73 +1313,11 @@ void TwGUIManager::addTexturedMaterialToGUI(TwBar* bar, Material* mat, std::stri
 	},
 		mat, normalMapPathDef.c_str());
 
-	/*TwAddVarCB(bar, albedoPathVarName.c_str(), TW_TYPE_COLOR3F,
-		[](const void *value, void *clientData) {
-		Material *mat = static_cast<Material *>(clientData);
-		const float *arr = static_cast<const float *>(value);
-		osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
-		mat->setAlbedo(color);
-	},
-		[](void *value, void *clientData) {
-		Material *mat = static_cast<Material *>(clientData);
-		const osg::Vec3 &color = mat->getAlbedo();
-		float *arr = static_cast<float *>(value);
-		arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
-	}, mat, colorDef.c_str());
-
-	std::string roughnessVarName = ROUGHNESS_LABEL + indexStr;
-	std::string roughnessDef = nameGroupDef + " label='" + ROUGHNESS_LABEL + "'" + limitVal;
-	TwAddVarCB(bar, roughnessVarName.c_str(), TW_TYPE_FLOAT,
-		[](const void *value, void *clientData) {
-		Material *mat = static_cast<Material *>(clientData);
-		float val = *(const float *)value;
-		mat->setRoughness(val);
-	},
-		[](void *value, void *clientData) {
-		Material *mat = static_cast<Material *>(clientData);
-		float *showVal = static_cast<float *>(value);
-
-		float val = mat->getRoughness();
-		*showVal = val;
-	},
-		mat, roughnessDef.c_str());
-
-	std::string specularVarName = SPECULAR_LABEL + indexStr;
-	std::string specularDef = nameGroupDef + " label='" + SPECULAR_LABEL + "'" + limitVal;
-	TwAddVarCB(bar, specularVarName.c_str(), TW_TYPE_FLOAT,
-		[](const void *value, void *clientData) {
-		Material *mat = static_cast<Material *>(clientData);
-		float val = *(const float *)value;
-		mat->setSpecular(val);
-	},
-		[](void *value, void *clientData) {
-		Material *mat = static_cast<Material *>(clientData);
-		float *showVal = static_cast<float *>(value);
-
-		float val = mat->getSpecular();
-		*showVal = val;
-	},
-		mat, specularDef.c_str());
-
-	std::string metallicVarName = METALLIC_LABEL + indexStr;
-	std::string metallicDef = nameGroupDef + " label='" + METALLIC_LABEL + "'" + limitVal;
-	TwAddVarCB(bar, metallicVarName.c_str(), TW_TYPE_FLOAT,
-		[](const void *value, void *clientData) {
-		Material *mat = static_cast<Material *>(clientData);
-		float val = *(const float *)value;
-		mat->setMetallic(val);
-	},
-		[](void *value, void *clientData) {
-		Material *mat = static_cast<Material *>(clientData);
-		float *showVal = static_cast<float *>(value);
-
-		float val = mat->getMetallic();
-		*showVal = val;
-	},
-		mat, metallicDef.c_str());
-*/
 	std::string moveStr = " Textured_Materials/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
+	std::string foldedStr = " Textured_Materials/" + name + " opened=false ";
+	TwDefine(foldedStr.c_str());
+
 
 	index++;
 }
