@@ -1,4 +1,5 @@
-<template name="start_screen" content="content">
+<!--<template name="start_screen" content="content">-->
+<rml>
 <head>
 	<link type="text/rcss" href="rkt_new.rcss"/>
 	<link type="text/rcss" href="invader-m.rcss"/>
@@ -14,10 +15,12 @@
     left: 45%;
     top : 50%;
     }
-    table{
-    background-color: black;
+    button#startgame:hover{
+    border:4px double #bbb;
+    color:#aaa;
+    text-decoration:none;
+    background:#e6e6e6;
     }
-
     body
     {
     width: 100%;
@@ -27,9 +30,11 @@
     }
   </style>
 </head>
-<body class="start_screen">
+<body>
+<!--<body class="start_screen">-->
   <div id="title">Kaboom!</div>
   <button id="startgame" onclick="load_game">Start Game you pleeb</button>
   <!--<handle size_target="#document" style="position: absolute; width: 16px; height: 16px; bottom: 0px; right: 0px;"></handle>-->
 </body>
-</template>
+<!--</template>-->
+</rml>
