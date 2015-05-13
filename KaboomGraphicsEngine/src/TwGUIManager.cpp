@@ -1491,17 +1491,7 @@ void TwGUIManager::updateEvents() const
 				osg::MatrixTransform *mt = NULL;
 				if ((mt = GeometryObjectManipulator::getCurrNode()) != NULL)
 				{
-					osg::BoundingSphere bs = mt->getBound();
-					osg::Vec3 center = bs.center();
-					float radius = bs.radius();
-					osg::Vec3 eyePos = Core::getMainCamera().getEyePosition();
-					osg::Vec3 dirVec = eyePos - center;
-					osg::Vec3 fromObjToEyeScale = dirVec;
-					fromObjToEyeScale.normalize();
-					fromObjToEyeScale *= radius * 2.0;
-					osg::Vec3 fromEyeToScalePoint = -dirVec + fromObjToEyeScale;
-					osg::Vec3 newEyePos = eyePos + fromEyeToScalePoint;
-					Core::setCurrentCameraManipulatorHomePosition(newEyePos, center, osg::Vec3(0, 0, 1));
+					fitObjectToScreen(mt);
 				}
 			}
 			else if (ea.getKey() == 'c')
@@ -1775,6 +1765,21 @@ std::string TwGUIManager::tagify(std::string tag, osg::Quat &q)
 	}
 
 	return addTags(tag, ret);
+}
+
+void TwGUIManager::fitObjectToScreen(osg::MatrixTransform *mt)
+{
+	osg::BoundingSphere bs = mt->getBound();
+	osg::Vec3 center = bs.center();
+	float radius = bs.radius();
+	osg::Vec3 eyePos = Core::getMainCamera().getEyePosition();
+	osg::Vec3 dirVec = eyePos - center;
+	osg::Vec3 fromObjToEyeScale = dirVec;
+	fromObjToEyeScale.normalize();
+	fromObjToEyeScale *= radius * 2.0;
+	osg::Vec3 fromEyeToScalePoint = -dirVec + fromObjToEyeScale;
+	osg::Vec3 newEyePos = eyePos + fromEyeToScalePoint;
+	Core::setCurrentCameraManipulatorHomePosition(newEyePos, center, osg::Vec3(0, 0, 1));
 }
 
 void TwGUIManager::exportXML()

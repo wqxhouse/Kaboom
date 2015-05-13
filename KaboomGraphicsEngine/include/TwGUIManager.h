@@ -156,6 +156,7 @@ protected:
 	void initPlainMaterialBar();
 	void initTexturedMaterialBar();
 
+	static void fitObjectToScreen(osg::MatrixTransform *mt);
 	static void doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<ModelMatrix*> &dest);
 
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;
