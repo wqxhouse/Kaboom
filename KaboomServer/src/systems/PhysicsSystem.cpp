@@ -3,6 +3,7 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 
+#include "../components/CharacterRotationComponent.h"
 #include "../components/CollisionComponent.h"
 #include "../core/Game.h"
 
@@ -37,7 +38,7 @@ void PhysicsSystem::processEntity(Entity *entity) {
 
     RotationComponent *rotComp = entity->getComponent<RotationComponent>();
 
-    if (rotComp != nullptr) {
+    if (rotComp != nullptr && !entity->hasComponent<CharacterRotationComponent>()) {
         btQuaternion rot = worldTrans.getRotation();
         rotComp->setRotation(Quat(rot.getX(), rot.getY(), rot.getZ(), rot.getW()));
     }
