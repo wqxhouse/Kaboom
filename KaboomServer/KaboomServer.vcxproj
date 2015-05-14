@@ -69,6 +69,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\CharacterRotationComponent.h" />
     <ClInclude Include="src\components\CollisionComponent.h" />
     <ClInclude Include="src\components\DetonatorComponent.h" />
     <ClInclude Include="src\components\ExplosionComponent.h" />

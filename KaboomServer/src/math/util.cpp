@@ -22,7 +22,6 @@ btVector3 getViewDirection(float x, float y, float z, Quat rotation) {
     return dir;
 }
 
-
 btVector3 getImpulseVector(btVector3 pointA, btVector3 pointB, btScalar knockBackRatio) {
 	btVector3 dirVec = btVector3(pointB - pointA);
 	dirVec.normalize();
