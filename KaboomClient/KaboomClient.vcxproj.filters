@@ -49,6 +49,12 @@
     <Filter Include="Header Files\GUI">
       <UniqueIdentifier>{7938b713-998e-41da-8e50-ad8a8a268bdb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Configurations">
+      <UniqueIdentifier>{36876bb9-665f-420d-b730-d769576527d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Configurations">
+      <UniqueIdentifier>{751106d8-70a7-48b9-90ce-f48b88757249}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -106,9 +112,6 @@
     <ClCompile Include="src\core\CharacterFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\BombDataLookup.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\components\SceneNodeComponent.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
@@ -132,6 +135,12 @@
     </ClCompile>
     <ClCompile Include="src\gui\OnClickListener.cpp">
       <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\BombConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\EntityConfigLookup.cpp">
+      <Filter>Source Files\Configurations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,12 +196,6 @@
     <ClInclude Include="src\core\CharacterFactory.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\BombData.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\BombDataLookup.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\components\SceneNodeComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
@@ -219,6 +222,12 @@
     </ClInclude>
     <ClInclude Include="src\gui\OnClickListener.h">
       <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\BombConfigLoader.h">
+      <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\EntityConfigLookup.h">
+      <Filter>Header Files\Configurations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
