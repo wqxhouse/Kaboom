@@ -29,8 +29,8 @@ void PlayerInputEventHandler::handle(const Event &e) const {
     inputComp->setAttacking2(evt.isAttacking2());
 
     RotationComponent *rotComp = player->getComponent<RotationComponent>();
-    rotComp->setRotation(euler2Quat(evt.getYaw(), evt.getPitch(), 0.0f));
+    rotComp->setRotation(euler2Quat(evt.getYaw(), 0.0f, 0.0f));
 
     CharacterRotationComponent *charRotComp = player->getComponent<CharacterRotationComponent>();
-    charRotComp->setRotation(euler2Quat(evt.getYaw(), 0.0f, 0.0f));
+    charRotComp->setRotation(euler2Quat(evt.getYaw(), evt.getPitch(), 0.0f));
 }
