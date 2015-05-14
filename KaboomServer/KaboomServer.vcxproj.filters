@@ -370,9 +370,6 @@
     <ClInclude Include="src\components\SpawnComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\components\StickComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\MapConfigLoader.h">
       <Filter>Header Files\Configurations</Filter>
     </ClInclude>

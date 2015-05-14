@@ -12,6 +12,7 @@
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
+#include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
 
 #include "../core/Game.h"
@@ -200,6 +201,11 @@ void GameServer::sendHealthEvent(Entity *entity) const {
 
 void GameServer::sendAmmoEvent(Entity *entity) const{
 
+}
+
+void GameServer::sendScoreEvent(int kills, int deaths) const {
+    ScoreEvent scoreEvent(kills, deaths);
+    sendEvent(scoreEvent);
 }
 
 void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *> &entities) const {

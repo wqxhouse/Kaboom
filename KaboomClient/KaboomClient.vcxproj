@@ -251,7 +251,6 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\SceneNodeComponent.cpp" />
     <ClCompile Include="src\core\BombConfigLoader.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\CharacterConfigLoader.cpp" />
@@ -274,6 +273,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\network\ExplosionEventHandler.cpp" />
     <ClCompile Include="src\network\HealthEventHandler.cpp" />
     <ClCompile Include="src\network\RotationEventHandler.cpp" />
+    <ClCompile Include="src\network\ScoreEventHandler.cpp" />
     <ClCompile Include="src\network\SpawnEventHandler.cpp" />
     <ClCompile Include="src\network\GameClient.cpp" />
     <ClCompile Include="src\network\ClientNetwork.cpp" />
@@ -308,6 +308,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\network\ExplosionEventHandler.h" />
     <ClInclude Include="src\network\HealthEventHandler.h" />
     <ClInclude Include="src\network\RotationEventHandler.h" />
+    <ClInclude Include="src\network\ScoreEventHandler.h" />
     <ClInclude Include="src\network\SpawnEventHandler.h" />
     <ClInclude Include="src\network\GameClient.h" />
     <ClInclude Include="src\network\ClientNetwork.h" />

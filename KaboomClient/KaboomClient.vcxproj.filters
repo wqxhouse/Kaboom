@@ -31,9 +31,6 @@
     <Filter Include="Header Files\Entity Component System">
       <UniqueIdentifier>{4b7d1707-0d09-4c94-bef4-96ef5fbb5675}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entity Component System">
-      <UniqueIdentifier>{21015047-422f-4c01-ba3d-42dd0c311a62}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{30bea1d4-743e-4674-9a1e-6612af111809}</UniqueIdentifier>
     </Filter>
@@ -112,9 +109,6 @@
     <ClCompile Include="src\core\CharacterFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\SceneNodeComponent.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\SoundManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -144,6 +138,9 @@
     </ClCompile>
     <ClCompile Include="src\core\CharacterConfigLoader.cpp">
       <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\ScoreEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +231,9 @@
     </ClInclude>
     <ClInclude Include="src\core\CharacterConfigLoader.h">
       <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ScoreEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

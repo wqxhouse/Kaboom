@@ -32,6 +32,7 @@ public:
     void sendExplosionEvent(Entity *bomb) const;
 	void sendHealthEvent(Entity *entity) const;
     void sendAmmoEvent(Entity *entity) const;
+    void sendScoreEvent(int kills, int deaths) const;
 
     void sendInitializeEvent(Entity* player, const std::vector<Entity *> &entities) const;
     void sendGameStatePackets(const std::vector<Entity *> &entities) const;
