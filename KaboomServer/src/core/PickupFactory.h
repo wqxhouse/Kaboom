@@ -11,6 +11,7 @@ public:
     Entity *createPickup(
             EntityType type,
             int amount = 1,
+			float radius = 1.0,
             float x = 0.0f,
             float y = 0.0f,
             float z = 0.0f) const;
@@ -18,6 +19,6 @@ public:
 private:
     EntityManager &entityManager;
 
-    void createBase(Entity *entity, int amount, float x, float y, float z) const;
+    void createBase(Entity *entity, int amount, float radius, float x, float y, float z) const;
     void createBombPickup(Entity *entity) const;
 };
