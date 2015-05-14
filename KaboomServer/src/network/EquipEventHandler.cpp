@@ -19,6 +19,6 @@ void EquipEventHandler::handle(const Event &e) const {
     auto equipComp = entity->getComponent<EquipmentComponent>();
 
     if (equipComp != nullptr) {
-        equipComp->setEquipmentType(evt.getType());
+        equipComp->setType(evt.getType());
     }
 }

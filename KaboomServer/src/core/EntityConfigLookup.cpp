@@ -3,7 +3,7 @@
 #include "BombConfigLoader.h"
 #include "CharacterConfigLoader.h"
 
-const EntityConfigLookup& EntityConfigLookup::instance() {
+const EntityConfigLookup &EntityConfigLookup::instance() {
     static bool initialized = false;
     static EntityConfigLookup instance;
 

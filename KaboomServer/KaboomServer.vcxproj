@@ -27,7 +27,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\JetpackComponent.cpp" />
     <ClCompile Include="src\core\BombConfigLoader.cpp" />
     <ClCompile Include="src\core\EntityConfigLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />

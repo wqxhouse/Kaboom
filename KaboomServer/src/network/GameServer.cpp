@@ -136,37 +136,9 @@ void GameServer::sendAssignEvent(const unsigned int &entityId) const {
 	sendEvent(assignEvent, currClientId);
 }
 
-void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *> &entities) const {
-    for (auto entity : entities) {
-        if (entity->getId() == player->getId()) {
-            continue;
-        }
-
-        PositionComponent *posComp = entity->getComponent<PositionComponent>();
-        RotationComponent *rotComp = entity->getComponent<RotationComponent>();
-
-        SpawnEvent spawnEvent(
-                entity->getId(),
-                entity->getType(),
-                posComp->getX(),
-                posComp->getY(),
-                posComp->getZ(),
-                rotComp->getRotation());
-        sendEvent(spawnEvent, currClientId);
-    }
-}
-
 void GameServer::sendDisconnectEvent(Entity *entity) const {
     DisconnectEvent disconnectEvent(entity->getId());
     sendEvent(disconnectEvent);
-}
-
-void GameServer::sendGameStatePackets(const std::vector<Entity *> &entities) const {
-    for (Entity *entity : entities) {
-        sendPositionEvent(entity);
-        sendRotationEvent(entity);
-		sendHealthEvent(entity);
-    }
 }
 
 void GameServer::sendSpawnEvent(Entity *entity) const {
@@ -214,17 +186,46 @@ void GameServer::sendExplosionEvent(Entity *bomb) const {
     ExplosionEvent expEvent(bomb->getId());
     sendEvent(expEvent);
 }
-void GameServer::sendHealthEvent(Entity *entity) const{
-	HealthComponent *health = entity->getComponent<HealthComponent>();
-	if (health == nullptr){
-		return;
-	}
-	/*if (health->getHealthAmount() !=  100){
-		exit(1);
-	}*/
-	HealthEvent sendHealth(health->getAmount());
-	sendEvent(sendHealth,entityIdToClientId.at(entity->getId()));
+
+void GameServer::sendHealthEvent(Entity *entity) const {
+    HealthComponent *healthComp = entity->getComponent<HealthComponent>();
+
+    if (healthComp == nullptr) {
+        return;
+    }
+
+    HealthEvent healthEvent(healthComp->getAmount());
+    sendEvent(healthEvent, entityIdToClientId.at(entity->getId()));
 }
+
 void GameServer::sendAmmoEvent(Entity *entity) const{
 
+}
+
+void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *> &entities) const {
+    for (auto entity : entities) {
+        if (entity->getId() == player->getId()) {
+            continue;
+        }
+
+        PositionComponent *posComp = entity->getComponent<PositionComponent>();
+        RotationComponent *rotComp = entity->getComponent<RotationComponent>();
+
+        SpawnEvent spawnEvent(
+                entity->getId(),
+                entity->getType(),
+                posComp->getX(),
+                posComp->getY(),
+                posComp->getZ(),
+                rotComp->getRotation());
+        sendEvent(spawnEvent, currClientId);
+    }
+}
+
+void GameServer::sendGameStatePackets(const std::vector<Entity *> &entities) const {
+    for (Entity *entity : entities) {
+        sendPositionEvent(entity);
+        sendRotationEvent(entity);
+        sendHealthEvent(entity);
+    }
 }

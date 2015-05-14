@@ -24,19 +24,17 @@ public:
     void sendEvent(const Event &evt, const unsigned int &clientId) const;
 
     void sendAssignEvent(const unsigned int &entityId) const;
-    void sendInitializeEvent(Entity* player, const std::vector<Entity *> &entities) const;
     void sendDisconnectEvent(Entity *entity) const;
-
-    void sendGameStatePackets(const std::vector<Entity *> &entities) const;
-
     void sendSpawnEvent(Entity *entity) const;
     void sendDestroyEvent(Entity *entity) const;
-
     void sendPositionEvent(Entity *entity) const;
     void sendRotationEvent(Entity *entity) const;
     void sendExplosionEvent(Entity *bomb) const;
 	void sendHealthEvent(Entity *entity) const;
-	void sendAmmoEvent(Entity *entity) const;
+    void sendAmmoEvent(Entity *entity) const;
+
+    void sendInitializeEvent(Entity* player, const std::vector<Entity *> &entities) const;
+    void sendGameStatePackets(const std::vector<Entity *> &entities) const;
 
 private:
     const ServerEventHandlerLookup &eventHandlerLookup;
