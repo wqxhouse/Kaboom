@@ -13,6 +13,7 @@
 #include "Message.h"
 #include "MessageType.h"
 #include "NoAttackMessage.h"
+#include "../components/CharacterRotationComponent.h"
 #include "../components/DetonatorComponent.h"
 #include "../components/ExplosionComponent.h"
 #include "../components/OwnerComponent.h"
@@ -41,7 +42,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
     auto detonatorComp = entity->getComponent<DetonatorComponent>();
     auto invComp = entity->getComponent<BombContainerComponent>();
     auto posComp = entity->getComponent<PositionComponent>();
-    auto rotComp = entity->getComponent<RotationComponent>();
+    auto charRotComp = entity->getComponent<CharacterRotationComponent>();
 
     EntityType bombType = equipComp->getType();
 
@@ -67,7 +68,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                     posComp->getX(),
                     posComp->getY(),
                     posComp->getZ(),
-                    rotComp->getRotation());
+                    charRotComp->getRotation());
 
             float launchSpeed = bombConfig.getFloat("launch-speed");
 

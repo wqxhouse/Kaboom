@@ -35,13 +35,9 @@ void InitializationSystem::processEntity(Entity *entity) {
         rigidBody->activate(true);
 
         // Update rotation
-        CharacterRotationComponent *charRotComp = entity->getComponent<CharacterRotationComponent>();
         RotationComponent *rotComp = entity->getComponent<RotationComponent>();
         
-        if (charRotComp != nullptr) {
-            Quat rot = charRotComp->getRotation();
-            rigidBody->getWorldTransform().setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
-        } else if (rotComp != nullptr) {
+        if (rotComp != nullptr) {
             Quat rot = rotComp->getRotation();
             rigidBody->getWorldTransform().setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
         }

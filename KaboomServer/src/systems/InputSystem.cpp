@@ -4,9 +4,9 @@
 
 #include <components/PositionComponent.h>
 #include <components/PlayerStatusComponent.h>
+#include <components/RotationComponent.h>
 #include <core/EntityManager.h>
 
-#include "../components/CharacterRotationComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
@@ -23,7 +23,7 @@ InputSystem::InputSystem(Game *game)
 
 bool InputSystem::checkEntity(Entity *entity) {
     return entity->hasComponent<PositionComponent>() &&
-            entity->hasComponent<CharacterRotationComponent>() &&
+            entity->hasComponent<RotationComponent>() &&
             entity->hasComponent<PhysicsComponent>() &&
             entity->hasComponent<InputComponent>() &&
             entity->hasComponent<PlayerStatusComponent>();
@@ -32,7 +32,7 @@ bool InputSystem::checkEntity(Entity *entity) {
 void InputSystem::processEntity(Entity *entity) {
     auto inputComp = entity->getComponent<InputComponent>();
     auto posComp = entity->getComponent<PositionComponent>();
-    auto charRotComp = entity->getComponent<CharacterRotationComponent>();
+    auto rotComp = entity->getComponent<RotationComponent>();
     auto physComp = entity->getComponent<PhysicsComponent>();
     auto playerStatusComp = entity->getComponent<PlayerStatusComponent>();
 
@@ -47,7 +47,7 @@ void InputSystem::processEntity(Entity *entity) {
             posComp->getX(),
             posComp->getY(),
             posComp->getZ(),
-            charRotComp->getRotation());
+            rotComp->getRotation());
 
     // construct local coordinate system
     btVector3 front = walkDir;
