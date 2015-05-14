@@ -40,6 +40,23 @@ bool DraggerUpdateCallback::receive(const osgManipulator::MotionCommand & cmd)
 			Light *light = GeometryObjectManipulator::getAttachedLight();
 			light->setPosition(new_position);
 		}
+
+		Light *light = nullptr;
+		switch (cmd.getStage())
+		{
+		case osgManipulator::MotionCommand::START:
+			light = GeometryObjectManipulator::getAttachedLight();
+			if (light != NULL) {
+				TwGUIManager::addLightToUndo(light);
+			}
+			break;
+		case osgManipulator::MotionCommand::FINISH:
+			light = GeometryObjectManipulator::getAttachedLight();
+			if (light != NULL) {
+				TwGUIManager::_currChange = TwGUIManager::makeUndoRedoNode(light);
+			}
+			break;
+		}
 	}
 	else
 	{
