@@ -142,6 +142,9 @@
     <ClCompile Include="src\core\EntityConfigLookup.cpp">
       <Filter>Source Files\Configurations</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\CharacterConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
@@ -229,9 +232,15 @@
     <ClInclude Include="src\core\EntityConfigLookup.h">
       <Filter>Header Files\Configurations</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\CharacterConfigLoader.h">
+      <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-client\bombs.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="data-client\characters.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>

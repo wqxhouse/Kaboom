@@ -254,6 +254,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\components\SceneNodeComponent.cpp" />
     <ClCompile Include="src\core\BombConfigLoader.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
+    <ClCompile Include="src\core\CharacterConfigLoader.cpp" />
     <ClCompile Include="src\core\EntityConfigLookup.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
@@ -287,6 +288,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\components\SceneNodeComponent.h" />
     <ClInclude Include="src\core\BombConfigLoader.h" />
     <ClInclude Include="src\core\BombFactory.h" />
+    <ClInclude Include="src\core\CharacterConfigLoader.h" />
     <ClInclude Include="src\core\EntityConfigLookup.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
@@ -327,6 +329,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-client\bombs.xml" />
+    <Xml Include="data-client\characters.xml" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\SharedConfig\Config.ini">
