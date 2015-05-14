@@ -83,7 +83,7 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
         charStatusComp->getDamageTimer().setDuration(250); // TODO: this should be global
         charStatusComp->getDamageTimer().start();
         charStatusComp->setIsDamaged(true);
-        printf("new Player Health: %d \n", charHealthComp->getHealthAmount());
+        printf("new Player Health: %d \n", charHealthComp->getAmount());
     }
 
     message.getGame()->getGameServer().sendExplosionEvent(entity);

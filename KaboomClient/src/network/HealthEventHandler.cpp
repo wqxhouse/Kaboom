@@ -20,6 +20,6 @@ void HealthEventHandler::handle(const Event &e) const {
 
 	Entity *player = game->getEntityManager().getEntity((game->getGameClient().getCurrentPlayerEntityId()));
 	HealthComponent *health = player->getComponent<HealthComponent>();
-	health->setHealthAmount(evt.getHealthAmount());
+	health->setHealthAmount(evt.getAmount());
 	game->getGameGUIEventHandler()->handle(evt, health);
 }

@@ -166,26 +166,11 @@
     <ClCompile Include="src\components\BombContainerComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\EquipmentComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\HealthComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\components\PlayerStatusComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\PositionComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\WeaponPickupComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\systems\EntitySystem.cpp">
       <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\HealthEvent.cpp">
-      <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

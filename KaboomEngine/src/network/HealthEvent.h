@@ -6,22 +6,30 @@
 
 class HealthEvent : public Event {
 public:
-	HealthEvent(unsigned int healthAmount);
-	HealthEvent();
+    HealthEvent(int amount = 100)
+            : Event(EVENT_HEALTH, sizeof(HealthEvent)) {
+    }
 
-    unsigned int getHealthAmount() const;
+    inline virtual void serialize(char *buf) const {
+        memcpy(buf, this, sizeof(HealthEvent));
+    }
 
-    virtual void serialize(char *buf) const;
-    virtual void deserialize(char *buf);
+    inline virtual void deserialize(char *buf) {
+        memcpy(this, buf, sizeof(HealthEvent));
+    }
+
+    inline int getAmount() const {
+        return amount;
+    }
 
 	friend std::ostream &operator<<(std::ostream &os, const HealthEvent &o) {
         os << "HealthEvent: {" << std::endl;
-        os << "    healthAmount: " << o.healthAmount << std::endl;
+        os << "    amount: " << o.amount << std::endl;
         os << "}";
 
         return os;
     }
 
 private:
-    unsigned int healthAmount;
+    int amount;
 };
