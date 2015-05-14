@@ -9,7 +9,7 @@
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
 
-#include "BombDataLookup.h"
+#include "EntityConfigLookup.h"
 #include "../components/SceneNodeComponent.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
@@ -23,12 +23,12 @@ Entity *BombFactory::createBomb(
         float y,
         float z,
         Quat rotation) const {
-    const BombData &bombData = BombDataLookup::instance[bombType];
+    auto &config= EntityConfigLookup::instance()[bombType];
 
     Entity *entity = entityManager.createEntity(id, bombType);
 
     osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere();
-    sphere->setRadius(bombData.size);
+    sphere->setRadius(config.getFloat("size"));
     osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(sphere);
     osg::ref_ptr<osg::Geode> model = new osg::Geode;
     model->addDrawable(drawable);

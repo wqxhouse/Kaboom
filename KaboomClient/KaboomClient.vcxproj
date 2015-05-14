@@ -252,8 +252,9 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\components\SceneNodeComponent.cpp" />
-    <ClCompile Include="src\core\BombDataLookup.cpp" />
+    <ClCompile Include="src\core\BombConfigLoader.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
+    <ClCompile Include="src\core\EntityConfigLookup.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\SoundManager.cpp" />
@@ -284,9 +285,9 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\SceneNodeComponent.h" />
-    <ClInclude Include="src\core\BombData.h" />
-    <ClInclude Include="src\core\BombDataLookup.h" />
+    <ClInclude Include="src\core\BombConfigLoader.h" />
     <ClInclude Include="src\core\BombFactory.h" />
+    <ClInclude Include="src\core\EntityConfigLookup.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\Core\GameStateMachine.h" />
