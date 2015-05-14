@@ -75,7 +75,7 @@ void Game::addEntity(Entity *entity) {
 }
 
 void Game::removeEntity(Entity *entity) {
-	
+	server.sendDestroyEvent(entity);
 
     PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
@@ -89,7 +89,7 @@ void Game::removeEntity(Entity *entity) {
         world.removeTrigger(triggerComp->getGhostObject());
     }
 
-	server.sendDestroyEvent(entity);
+	
     entityManager.destroyEntity(entity->getId());
 }
 
