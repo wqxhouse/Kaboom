@@ -88,7 +88,6 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
             invComp->addToActiveBomb(bombEntity);
 
             game->addEntity(bombEntity);
-            game->getGameServer().sendSpawnEvent(bombEntity);
         }
     }
 
