@@ -9,7 +9,7 @@ enum EntityType;
 
 class EntityConfigLookup {
 public:
-    static const EntityConfigLookup& instance();
+    static const EntityConfigLookup &instance();
 
     void load(const std::string &filename);
 

@@ -16,7 +16,7 @@ public:
         return type;
     }
 
-    inline void setEquipmentType(EntityType type) {
+    inline void setType(EntityType type) {
         this->type = type;
     }
 
