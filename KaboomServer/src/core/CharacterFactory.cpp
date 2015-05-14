@@ -31,7 +31,7 @@ Entity *CharacterFactory::createCharacter(
         float y,
         float z,
         Quat rotation) const {
-    const Configuration &charConfig = EntityConfigLookup::instance()[characterType];
+    auto &charConfig = EntityConfigLookup::get(characterType);
 
     Entity *entity = entityManager.createEntity(characterType);
 
@@ -53,7 +53,7 @@ void CharacterFactory::createBase(
         float y,
         float z,
         Quat rotation) const {
-    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+    auto &config = EntityConfigLookup::get(entity->getType());
 
     float collisionRadius = config.getFloat("collision-radius");
     float collisionHeight = config.getFloat("collision-height");
@@ -76,7 +76,7 @@ void CharacterFactory::createBase(
     BombContainerComponent::InventoryType inventory;
 
     for (auto kv : *startingInventory) {
-        int cooldown = EntityConfigLookup::instance()[kv.first].getInt("cooldown");
+        int cooldown = EntityConfigLookup::get(kv.first).getInt("cooldown");
         inventory[kv.first] = { kv.second, Timer(cooldown) };
     }
 

@@ -65,7 +65,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
 
         // TODO: Detect and handle maximum number of bombs a character can hold
 
-        const int capacity = EntityConfigLookup::instance()[bombType].getInt("capacity");
+        const int capacity = EntityConfigLookup::get(bombType).getInt("capacity");
         const int invAmount = invComp->getAmount(bombType);
         const int pickupAmount = weaponPickupComp->getAmount();
 

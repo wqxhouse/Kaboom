@@ -23,7 +23,7 @@ Entity *BombFactory::createBomb(
         float y,
         float z,
         Quat rotation) const {
-    auto &config= EntityConfigLookup::instance()[bombType];
+    auto &config= EntityConfigLookup::get(bombType);
 
     Entity *entity = entityManager.createEntity(id, bombType);
 

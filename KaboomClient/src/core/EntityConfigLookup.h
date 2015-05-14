@@ -9,15 +9,17 @@ enum EntityType;
 
 class EntityConfigLookup {
 public:
-    static const EntityConfigLookup &instance();
-
-    void load(const std::string &filename);
-
-    const Configuration &operator[](EntityType type) const;
+    static const Configuration &get(EntityType type);
 
 private:
-    EntityConfigLookup() {
-    }
+    static bool initialized;
+    static EntityConfigLookup instance;
+
+    static void initialize();
 
     std::unordered_map<EntityType, Configuration> config;
+
+    EntityConfigLookup() {}
+
+    void loadBombConfig(const std::string &filename);
 };

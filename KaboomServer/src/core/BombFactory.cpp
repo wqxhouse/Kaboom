@@ -66,7 +66,7 @@ void BombFactory::createBase(
         float vx,
         float vy,
         float vz) const {
-    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+    auto &config = EntityConfigLookup::get(entity->getType());
 
     float size = config.getFloat("size");
     float mass = config.getFloat("mass");
@@ -114,7 +114,7 @@ void BombFactory::createKaboomV2(Entity *entity) const {
 }
 
 void BombFactory::createTimeBomb(Entity *entity) const {
-    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+    auto &config = EntityConfigLookup::get(entity->getType());
     auto physComp = entity->getComponent<PhysicsComponent>();
     auto handlerComp = entity->getComponent<MessageHandlerComponent>();
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
