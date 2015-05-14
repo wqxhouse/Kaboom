@@ -66,5 +66,5 @@ void ExplosionEventHandler::handle(const Event &e) const {
 		std::cerr << e << "\n";
 	}
 
-    game->removeEntity(bomb);
+    //game->removeEntity(bomb); TODO we dont remove the bomb here, destory event will be in another event
 }
