@@ -22,4 +22,5 @@ private:
     EntityConfigLookup() {}
 
     void loadBombConfig(const std::string &filename);
+    void loadCharacterConfig(const std::string &filename);
 };

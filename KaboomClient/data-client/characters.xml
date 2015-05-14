@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<characters>
+    <character>
+        <id type="uint">65537</id>
+        <name type="string">Default Character</name>
+    </character>
+</characters>

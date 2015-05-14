@@ -1,17 +1,17 @@
-#include "BombConfigLoader.h"
+#include "CharacterConfigLoader.h"
 
-BombConfigLoader::BombConfigLoader(std::unordered_map<EntityType, Configuration> &config)
+CharacterConfigLoader::CharacterConfigLoader(std::unordered_map<EntityType, Configuration> &config)
         : config(config) {
 }
 
-void BombConfigLoader::load(const std::string &filename) {
+void CharacterConfigLoader::load(const std::string &filename) {
     loadXMLFile(filename);
 }
 
-void BombConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
+void CharacterConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
     if (xmlRoot->type == osgDB::XmlNode::ROOT) {
         for (auto child : xmlRoot->children) {
-            if (child->name == "bombs") {
+            if (child->name == "characters") {
                 return loadXMLNode(child);
             }
         }
@@ -19,14 +19,14 @@ void BombConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
         return;
     }
 
-    for (auto bombNode : xmlRoot->children) {
-        if (bombNode->name != "bomb") {
+    for (auto characterNode : xmlRoot->children) {
+        if (characterNode->name != "character") {
             continue;
         }
 
         EntityType type = NONE;
 
-        for (auto dataNode : bombNode->children) {
+        for (auto dataNode : characterNode->children) {
             const std::string &valueType = dataNode->properties["type"];
 
             if (dataNode->name == "id") {
@@ -40,7 +40,7 @@ void BombConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
     }
 }
 
-void BombConfigLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string &valueType, EntityType type) {
+void CharacterConfigLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string &valueType, EntityType type) {
     if (valueType == "int") {
         int val;
         loadInt(xmlNode, val);
