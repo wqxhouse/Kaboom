@@ -33,6 +33,7 @@
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\CharacterConfigLoader.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\MapConfigLoader.cpp" />
     <ClCompile Include="src\core\OsgBulletDebugViewer.cpp" />
     <ClCompile Include="src\core\OsgObjectConfigLoader.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
@@ -61,6 +62,7 @@
     <ClCompile Include="src\systems\InputSystem.cpp" />
     <ClCompile Include="src\systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\systems\PickupSystem.cpp" />
+    <ClCompile Include="src\systems\SpawnSystem.cpp" />
     <ClCompile Include="src\systems\SystemManager.cpp" />
     <ClCompile Include="src\systems\TimerSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -76,6 +78,7 @@
     <ClInclude Include="src\components\JumpComponent.h" />
     <ClInclude Include="src\components\MessageHandlerComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
+    <ClInclude Include="src\components\SpawnComponent.h" />
     <ClInclude Include="src\components\StickComponent.h" />
     <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
@@ -85,6 +88,7 @@
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\CharacterConfigLoader.h" />
     <ClInclude Include="src\core\Game.h" />
+    <ClInclude Include="src\core\MapConfigLoader.h" />
     <ClInclude Include="src\core\OsgBulletDebugViewer.h" />
     <ClInclude Include="src\core\OsgObjectConfigLoader.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
@@ -137,6 +141,9 @@
   <ItemGroup>
     <Xml Include="data-server\bombs.xml" />
     <Xml Include="data-server\characters.xml" />
+    <Xml Include="data-server\map.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\BugList.txt" />

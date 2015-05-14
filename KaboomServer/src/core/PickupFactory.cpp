@@ -8,6 +8,7 @@
 #include <core/Entity.h>
 #include <core/EntityManager.h>
 
+#include "../components/SpawnComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../messaging/BombPickupMessageHandler.h"
@@ -20,13 +21,14 @@ PickupFactory::PickupFactory(EntityManager &entityManager)
 Entity *PickupFactory::createPickup(
         EntityType type,
         int amount,
+		float radius,
         float x,
         float y,
         float z) const {
 
     Entity *entity = entityManager.createEntity(type);
 
-    createBase(entity, amount, x, y, z);
+    createBase(entity, amount, radius, x, y, z);
 
     if ((type & CAT_MASK) == CAT_BOMB) {
         createBombPickup(entity);
@@ -35,17 +37,15 @@ Entity *PickupFactory::createPickup(
     return entity;
 }
 
-void PickupFactory::createBase(Entity *entity, int amount, float x, float y, float z) const {
+void PickupFactory::createBase(Entity *entity, int amount, float radius, float x, float y, float z) const {
     const EntityType type = entity->getType();
-
-    const float PICKUP_RADIUS = 1.0f; // TODO: Extract this to XML
 
     btTransform worldTrans;
     worldTrans.setIdentity();
     worldTrans.setOrigin(btVector3(x, y, z));
 
     btGhostObject *ghostObject = new btGhostObject();
-    ghostObject->setCollisionShape(new btSphereShape(PICKUP_RADIUS));
+    ghostObject->setCollisionShape(new btSphereShape(radius));
     ghostObject->setUserPointer(entity);
     ghostObject->setWorldTransform(worldTrans);
 
