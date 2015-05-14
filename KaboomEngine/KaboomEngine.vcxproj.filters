@@ -43,6 +43,9 @@
     <Filter Include="Source Files\Util">
       <UniqueIdentifier>{4de75734-e00b-47d2-a0a2-84e3806bee01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{4cf63092-f8cd-4cba-8041-a7b952f92699}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Entity.h">
@@ -139,6 +142,12 @@
     <ClInclude Include="src\network\EquipEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\Vec3.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\Quat.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
@@ -167,9 +176,6 @@
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\components\PositionComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\RotationComponent.cpp">
       <Filter>Source Files\Entity Component System\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\components\WeaponPickupComponent.cpp">

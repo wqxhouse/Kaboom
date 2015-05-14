@@ -2,7 +2,11 @@
 
 #include <btBulletDynamicsCommon.h>
 
-btVector3 getViewDirection(float x, float y, float z, float yaw, float pitch);
+#include <math/Quat.h>
+
+Quat euler2Quat(float yaw, float pitch, float roll);
+
+btVector3 getViewDirection(float x, float y, float z, Quat rotation);
 
 btVector3 getImpulseVector(btVector3 pointA, btVector3 pointB, btScalar knockBackRatio);
 

@@ -67,8 +67,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                     posComp->getX(),
                     posComp->getY(),
                     posComp->getZ(),
-                    rotComp->getYaw(),
-                    rotComp->getPitch());
+                    rotComp->getRotation());
 
             float launchSpeed = bombConfig.getFloat("launch-speed");
 

@@ -8,6 +8,7 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
+#include <math/Quat.h>
 #include <util/XMLLoader.h>
 
 #include "EntityConfigLookup.h"

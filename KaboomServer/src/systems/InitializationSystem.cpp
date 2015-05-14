@@ -30,14 +30,23 @@ void InitializationSystem::processEntity(Entity *entity) {
     PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
 
     if (physComp != nullptr) {
-        entity->getComponent<PhysicsComponent>()->getRigidBody()->activate(true);
+        btRigidBody *rigidBody = entity->getComponent<PhysicsComponent>()->getRigidBody();
+        rigidBody->activate(true);
+
+        // Update rotation
+        RotationComponent *rotComp = entity->getComponent<RotationComponent>();
+        
+        if (rotComp != nullptr) {
+            Quat rot = rotComp->getRotation();
+            rigidBody->getWorldTransform().setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
+        }
     }
 
-    // Update trigger position and rotation
+    // Update trigger position
     TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
 
     if (triggerComp != nullptr) {
-        btTransform worldTrans;
+        btTransform worldTrans = btTransform::getIdentity();
 
         if (physComp != nullptr) {
             worldTrans = physComp->getRigidBody()->getWorldTransform();
@@ -47,15 +56,8 @@ void InitializationSystem::processEntity(Entity *entity) {
             if (posComp != nullptr) {
                 worldTrans.setOrigin(btVector3(posComp->getX(), posComp->getY(), posComp->getZ()));
             }
-
-            RotationComponent *rotComp = entity->getComponent<RotationComponent>();
-
-            if (rotComp != nullptr) {
-                // TODO: set rotation
-            }
         }
 
         triggerComp->getGhostObject()->setWorldTransform(worldTrans);
     }
 }
-

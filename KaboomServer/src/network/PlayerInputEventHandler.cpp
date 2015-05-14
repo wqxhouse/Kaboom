@@ -7,6 +7,7 @@
 
 #include "../core/Game.h"
 #include "../components/InputComponent.h"
+#include "../math/util.h"
 
 PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
         : game(game) {
@@ -27,6 +28,5 @@ void PlayerInputEventHandler::handle(const Event &e) const {
     inputComp->setAttacking2(evt.isAttacking2());
 
     RotationComponent *rotComp = player->getComponent<RotationComponent>();
-    rotComp->setYaw(evt.getYaw());
-    rotComp->setPitch(evt.getPitch());
+    rotComp->setRotation(euler2Quat(evt.getYaw(), evt.getPitch(), 0.0f));
 }

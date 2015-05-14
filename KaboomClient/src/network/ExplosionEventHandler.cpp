@@ -27,8 +27,8 @@ void ExplosionEventHandler::handle(const Event &e) const {
 	try{
 		PositionComponent *pos = bomb->getComponent<PositionComponent>();
 		RotationComponent *ro = player->getComponent<RotationComponent>();
-		float yaw=ro->getYaw();
-		float pitch=ro->getPitch();
+//		float yaw=ro->getYaw();
+//		float pitch=ro->getPitch();
 		PositionComponent *playerPos = player->getComponent<PositionComponent>();
 		double x =(double) (-playerPos->getX() + pos->getX());
 		double y = (double)(-playerPos->getY() + pos->getY());
@@ -46,19 +46,19 @@ void ExplosionEventHandler::handle(const Event &e) const {
 		y = y / mag;
 		z = z / mag;
 		float p = 1;
-		float phi=pitch;
-		float theta=yaw;
-		float x2 = p*sin(phi)*cos(theta);
-		float y2 = p*sin(phi)*sin(theta);
-		float z2 = p*cos(phi);
-		float mag2 = sqrt(x2*x2+y2*y2+z2*z2);
+//		float phi=pitch;
+//		float theta=yaw;
+//		float x2 = p*sin(phi)*cos(theta);
+//		float y2 = p*sin(phi)*sin(theta);
+//		float z2 = p*cos(phi);
+//		float mag2 = sqrt(x2*x2+y2*y2+z2*z2);
 		mag = sqrt(x*x + y*y + z*z);
-		float radian = (x*x2 + y*y2 + z*z2) / (mag*mag2);
-		printf("before acos %f \n", radian);
-		radian = acos(radian);
+//		float radian = (x*x2 + y*y2 + z*z2) / (mag*mag2);
+//		printf("before acos %f \n", radian);
+//		radian = acos(radian);
 		//game->source->setPosition(cos(radian), 0, sin(radian));
-		std::cout << " x2 " << x2 << " y2 " << y2 << " z2 " << z2 << std::endl;
-		printf("radian is %f \n",radian);
+//		std::cout << " x2 " << x2 << " y2 " << y2 << " z2 " << z2 << std::endl;
+//		printf("radian is %f \n",radian);
 		osgAudio::AudioEnvironment::instance()->update();
 		game->source->play();
 	}
