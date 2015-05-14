@@ -12,7 +12,7 @@ public:
 
     Entity *createBomb(
             unsigned int id,
-            EntityType bombType,
+            EntityType type,
             float x,
             float y,
             float z,
@@ -20,4 +20,9 @@ public:
 
 private:
     EntityManager &entityManager;
+
+    void createBase(Entity *entity, float x, float y, float z, Quat rotation) const;
+    void createKaboomV2(Entity *entity) const;
+    void createTimeBomb(Entity *entity) const;
+    void createRemoteDetonator(Entity *entity) const;
 };

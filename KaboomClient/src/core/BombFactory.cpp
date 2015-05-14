@@ -18,14 +18,38 @@ BombFactory::BombFactory(EntityManager &entityManager)
 
 Entity *BombFactory::createBomb(
         unsigned int id,
-        EntityType bombType,
+        EntityType type,
         float x,
         float y,
         float z,
         Quat rotation) const {
-    auto &config= EntityConfigLookup::get(bombType);
+    Entity *entity = entityManager.createEntity(id, type);
 
-    Entity *entity = entityManager.createEntity(id, bombType);
+    createBase(entity, x, y, z, rotation);
+
+    switch (type) {
+        case KABOOM_V2: {
+            createKaboomV2(entity);
+            break;
+        }
+        case TIME_BOMB: {
+            createTimeBomb(entity);
+            break;
+        }
+        case REMOTE_DETONATOR: {
+            createRemoteDetonator(entity);
+            break;
+        }
+    }
+
+    return entity;
+}
+
+void BombFactory::createBase(Entity *entity, float x, float y, float z, Quat rotation) const {
+    entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new RotationComponent(rotation));
+
+    auto &config = EntityConfigLookup::get(entity->getType());
 
     osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere();
     sphere->setRadius(config.getFloat("size"));
@@ -38,11 +62,16 @@ Entity *BombFactory::createBomb(
 
     osg::ref_ptr<osg::Group> bombNode = new osg::Group;
 
-	bombNode->addChild(transformation);
+    bombNode->addChild(transformation);
 
-	entity->attachComponent(new SceneNodeComponent(bombNode));
-    entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent(rotation));
+    entity->attachComponent(new SceneNodeComponent(bombNode));
+}
 
-    return entity;
+void BombFactory::createKaboomV2(Entity *entity) const {
+}
+
+void BombFactory::createTimeBomb(Entity *entity) const {
+}
+
+void BombFactory::createRemoteDetonator(Entity *entity) const {
 }
