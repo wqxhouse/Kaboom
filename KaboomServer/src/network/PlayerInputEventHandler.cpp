@@ -5,8 +5,9 @@
 #include <core/Entity.h>
 #include <network/PlayerInputEvent.h>
 
-#include "../core/Game.h"
+#include "../components/CharacterRotationComponent.h"
 #include "../components/InputComponent.h"
+#include "../core/Game.h"
 #include "../math/util.h"
 
 PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
@@ -29,4 +30,7 @@ void PlayerInputEventHandler::handle(const Event &e) const {
 
     RotationComponent *rotComp = player->getComponent<RotationComponent>();
     rotComp->setRotation(euler2Quat(evt.getYaw(), evt.getPitch(), 0.0f));
+
+    CharacterRotationComponent *charRotComp = player->getComponent<CharacterRotationComponent>();
+    charRotComp->setRotation(euler2Quat(evt.getYaw(), 0.0f, 0.0f));
 }

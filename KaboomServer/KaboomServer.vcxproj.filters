@@ -364,6 +364,9 @@
     <ClInclude Include="src\systems\VoidSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\CharacterRotationComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-server\bombs.xml">

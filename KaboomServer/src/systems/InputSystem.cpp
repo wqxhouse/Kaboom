@@ -3,10 +3,10 @@
 #include <btBulletDynamicsCommon.h>
 
 #include <components/PositionComponent.h>
-#include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
 #include <core/EntityManager.h>
 
+#include "../components/CharacterRotationComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
@@ -23,18 +23,18 @@ InputSystem::InputSystem(Game *game)
 
 bool InputSystem::checkEntity(Entity *entity) {
     return entity->hasComponent<PositionComponent>() &&
-            entity->hasComponent<RotationComponent>() &&
+            entity->hasComponent<CharacterRotationComponent>() &&
             entity->hasComponent<PhysicsComponent>() &&
             entity->hasComponent<InputComponent>() &&
             entity->hasComponent<PlayerStatusComponent>();
 }
 
 void InputSystem::processEntity(Entity *entity) {
-    InputComponent *inputComp = entity->getComponent<InputComponent>();
-    PositionComponent *posComp = entity->getComponent<PositionComponent>();
-    RotationComponent *rotComp = entity->getComponent<RotationComponent>();
-    PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
-    PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
+    auto inputComp = entity->getComponent<InputComponent>();
+    auto posComp = entity->getComponent<PositionComponent>();
+    auto charRotComp = entity->getComponent<CharacterRotationComponent>();
+    auto physComp = entity->getComponent<PhysicsComponent>();
+    auto playerStatusComp = entity->getComponent<PlayerStatusComponent>();
 
     btRigidBody *rigidBody = physComp->getRigidBody();
     btVector3 velocity = rigidBody->getLinearVelocity();
@@ -47,7 +47,7 @@ void InputSystem::processEntity(Entity *entity) {
             posComp->getX(),
             posComp->getY(),
             posComp->getZ(),
-            rotComp->getRotation());
+            charRotComp->getRotation());
 
     // construct local coordinate system
     btVector3 front = walkDir;

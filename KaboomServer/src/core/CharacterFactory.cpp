@@ -12,6 +12,7 @@
 
 #include "common.h"
 #include "EntityConfigLookup.h"
+#include "../components/CharacterRotationComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../components/PhysicsComponent.h"
@@ -84,6 +85,7 @@ void CharacterFactory::createBase(
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent(rotation));
+    entity->attachComponent(new CharacterRotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new BombContainerComponent(inventory));
     entity->attachComponent(new PlayerStatusComponent());

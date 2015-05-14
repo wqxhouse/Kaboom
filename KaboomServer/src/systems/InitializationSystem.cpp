@@ -4,6 +4,7 @@
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
 
+#include "../components/CharacterRotationComponent.h"
 #include "../components/CollisionComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/TriggerComponent.h"
@@ -34,9 +35,13 @@ void InitializationSystem::processEntity(Entity *entity) {
         rigidBody->activate(true);
 
         // Update rotation
+        CharacterRotationComponent *charRotComp = entity->getComponent<CharacterRotationComponent>();
         RotationComponent *rotComp = entity->getComponent<RotationComponent>();
         
-        if (rotComp != nullptr) {
+        if (charRotComp != nullptr) {
+            Quat rot = charRotComp->getRotation();
+            rigidBody->getWorldTransform().setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
+        } else if (rotComp != nullptr) {
             Quat rot = rotComp->getRotation();
             rigidBody->getWorldTransform().setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
         }
