@@ -28,10 +28,14 @@ public:
     EntityManager &getEntityManager();
     const CharacterFactory &getCharacterFactory() const;
     const BombFactory &getBombFactory() const;
+	const PickupFactory & getPickupFactory() const;
 
     const GameServer &getGameServer() const;
 
 	const World & getWorld() const;
+
+	std::unordered_map<std::string, Timer> & getPickupSpawnPointTimerMap();
+
 private:
     Configuration config;
 
@@ -47,5 +51,7 @@ private:
 
     World world;
 
+	std::unordered_map<std::string, Timer> pickupSpawnPointTimerMap;
+	
     void stepSimulation(float timeStep, int maxSubSteps);
 };
