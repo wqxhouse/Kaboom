@@ -4,6 +4,7 @@
 
 #include "Event.h"
 #include "../core/EntityType.h"
+#include "../math/Quat.h"
 
 class SpawnEvent : public Event {
 public:
@@ -13,16 +14,14 @@ public:
             float x = 0.0f,
             float y = 0.0f,
             float z = 0.0f,
-            float yaw = 0.0f,
-            float pitch = 0.0f)
+            Quat rotation = Quat())
             : Event(EVENT_SPAWN, sizeof(SpawnEvent)),
               entityId(entityId),
               type(type),
               x(x),
               y(y),
               z(z),
-              yaw(yaw),
-              pitch(pitch) {
+              rotation(rotation) {
     }
 
     inline virtual void serialize(char *buf) const {
@@ -53,12 +52,8 @@ public:
         return z;
     }
 
-    inline float getYaw() const {
-        return yaw;
-    }
-
-    inline float getPitch() const {
-        return pitch;
+    inline Quat getRotation() const {
+        return rotation;
     }
 
 	friend std::ostream& operator<<(std::ostream &os, const SpawnEvent &o) {
@@ -68,8 +63,6 @@ public:
         os << "    x: " << o.x << std::endl;
         os << "    y: " << o.y << std::endl;
         os << "    z: " << o.z << std::endl;
-        os << "    yaw: " << o.yaw << std::endl;
-        os << "    pitch: " << o.pitch << std::endl;
         os << "}";
 
         return os;
@@ -83,6 +76,5 @@ private:
     float y;
     float z;
 
-    float yaw;
-    float pitch;
+    Quat rotation;
 };

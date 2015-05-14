@@ -17,10 +17,10 @@ void RotationEventHandler::handle(const Event &e) const {
     Entity *entity = game->getEntityManager().getEntity(evt.getEntityId());
 
     RotationComponent *rotComp = entity->getComponent<RotationComponent>();
-    rotComp->setYaw(evt.getYaw());
-    rotComp->setPitch(evt.getPitch());
+    rotComp->setRotation(evt.getRotation());
 
-    osg::Quat quat = game->getCamera().eulerToQuat(evt.getYaw(), 0.0f);
+    Quat rot = rotComp->getRotation();
+    osg::Quat quat(rot.x, rot.y, rot.z, rot.w);
 
     GeometryObject *geometryObj = game->getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
     geometryObj->setRotation(quat);

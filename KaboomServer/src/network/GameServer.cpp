@@ -151,8 +151,7 @@ void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *>
                 posComp->getX(),
                 posComp->getY(),
                 posComp->getZ(),
-                rotComp->getYaw(),
-                rotComp->getPitch());
+                rotComp->getRotation());
         sendEvent(spawnEvent, currClientId);
     }
 }
@@ -180,8 +179,7 @@ void GameServer::sendSpawnEvent(Entity *entity) const {
             posComp->getX(),
             posComp->getY(),
             posComp->getZ(),
-            rotComp->getYaw(),
-            rotComp->getPitch());
+            rotComp->getRotation());
     sendEvent(spawnEvent);
 }
 
@@ -208,7 +206,7 @@ void GameServer::sendRotationEvent(Entity *entity) const {
         return;
     }
 
-    RotationEvent rotEvent(entity->getId(), rotComp->getYaw(), rotComp->getPitch());
+    RotationEvent rotEvent(entity->getId(), rotComp->getRotation());
     sendEvent(rotEvent);
 }
 

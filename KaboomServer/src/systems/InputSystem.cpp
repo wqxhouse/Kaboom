@@ -47,8 +47,7 @@ void InputSystem::processEntity(Entity *entity) {
             posComp->getX(),
             posComp->getY(),
             posComp->getZ(),
-            rotComp->getYaw(),
-            0);
+            rotComp->getRotation());
 
     // construct local coordinate system
     btVector3 front = walkDir;

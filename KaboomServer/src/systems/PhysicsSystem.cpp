@@ -28,7 +28,7 @@ void PhysicsSystem::processEntity(Entity *entity) {
     auto posComp = entity->getComponent<PositionComponent>();
     auto colComp = entity->getComponent<CollisionComponent>();
 
-    btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
+    btTransform worldTrans = physComp->getRigidBody()->getWorldTransform();
 
     if (posComp != nullptr) {
         const btVector3 &pos = worldTrans.getOrigin();
@@ -39,6 +39,6 @@ void PhysicsSystem::processEntity(Entity *entity) {
 
     if (rotComp != nullptr) {
         btQuaternion rot = worldTrans.getRotation();
-        // TODO: Set rotComp
+        rotComp->setRotation(Quat(rot.getX(), rot.getY(), rot.getZ(), rot.getW()));
     }
 }

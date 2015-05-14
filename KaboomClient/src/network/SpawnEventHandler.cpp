@@ -24,8 +24,7 @@ void SpawnEventHandler::handle(const Event &e) const {
                 evt.getX(),
                 evt.getY(),
                 evt.getZ(),
-                evt.getYaw(),
-                evt.getPitch());
+                evt.getRotation());
     } else if ((type & CAT_MASK) == CAT_BOMB) {
         entity = game->getBombFactory().createBomb(
                 evt.getEntityId(),
@@ -33,8 +32,7 @@ void SpawnEventHandler::handle(const Event &e) const {
                 evt.getX(),
                 evt.getY(),
                 evt.getZ(),
-                evt.getYaw(),
-                evt.getPitch());
+                evt.getRotation());
 		game->source = new Source;
 		Entity *player = entityManager.getEntity(game->getGameClient().getCurrentPlayerEntityId());
 		if (player != nullptr){

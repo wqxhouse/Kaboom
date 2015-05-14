@@ -22,8 +22,7 @@ Entity *BombFactory::createBomb(
         float x,
         float y,
         float z,
-        float yaw,
-        float pitch) const {
+        Quat rotation) const {
     const BombData &bombData = BombDataLookup::instance[bombType];
 
     Entity *entity = entityManager.createEntity(id, bombType);
@@ -43,7 +42,7 @@ Entity *BombFactory::createBomb(
 
 	entity->attachComponent(new SceneNodeComponent(bombNode));
     entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent(yaw, pitch));
+    entity->attachComponent(new RotationComponent(rotation));
 
     return entity;
 }

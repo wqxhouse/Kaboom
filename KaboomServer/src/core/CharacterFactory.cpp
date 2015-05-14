@@ -29,13 +29,12 @@ Entity *CharacterFactory::createCharacter(
         float x,
         float y,
         float z,
-        float yaw,
-        float pitch) const {
+        Quat rotation) const {
     const Configuration &charConfig = EntityConfigLookup::instance()[characterType];
 
     Entity *entity = entityManager.createEntity(characterType);
 
-    createBase(entity, x, y, z, yaw, pitch);
+    createBase(entity, x, y, z, rotation);
 
     switch (characterType) {
         case DEFAULT_CHARACTER: {
@@ -52,8 +51,7 @@ void CharacterFactory::createBase(
         float x,
         float y,
         float z,
-        float yaw,
-        float pitch) const {
+        Quat rotation) const {
     const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
 
     float collisionRadius = config.getFloat("collision-radius");
@@ -85,7 +83,7 @@ void CharacterFactory::createBase(
 
     entity->attachComponent(new InputComponent());
     entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent(yaw, pitch));
+    entity->attachComponent(new RotationComponent(rotation));
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new BombContainerComponent(inventory));
     entity->attachComponent(new PlayerStatusComponent());

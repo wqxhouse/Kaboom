@@ -4,17 +4,14 @@
 #include <string>
 
 #include "Event.h"
+#include "../math/Quat.h"
 
 class RotationEvent : public Event {
 public:
-    RotationEvent(
-            unsigned int entityId = 0,
-            float yaw = 0.0f,
-            float pitch = 0.0f)
+    RotationEvent(unsigned int entityId = 0, Quat rotation = Quat())
             : Event(EVENT_ROTATION, sizeof(RotationEvent)),
               entityId(entityId),
-              yaw(yaw),
-              pitch(pitch) {
+              rotation(rotation) {
     }
 
     inline virtual void serialize(char *buf) const {
@@ -29,19 +26,17 @@ public:
         return entityId;
     }
 
-    inline float getYaw() const {
-        return yaw;
-    }
-
-    inline float getPitch() const {
-        return pitch;
+    inline Quat getRotation() const {
+        return rotation;
     }
 
     friend std::ostream& operator<<(std::ostream &os, const RotationEvent &o) {
         os << "RotationEvent: {" << std::endl;
         os << "    entityId: " << o.entityId << std::endl;
-        os << "    yaw: " << o.yaw << std::endl;
-        os << "    pitch: " << o.pitch << std::endl;
+        os << "    x: " << o.rotation.x << std::endl;
+        os << "    y: " << o.rotation.y << std::endl;
+        os << "    z: " << o.rotation.z << std::endl;
+        os << "    w: " << o.rotation.w << std::endl;
         os << "}";
 
         return os;
@@ -50,6 +45,5 @@ public:
 private:
     unsigned int entityId;
 
-    float yaw;
-    float pitch;
+    Quat rotation;
 };

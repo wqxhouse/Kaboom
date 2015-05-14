@@ -1,5 +1,7 @@
 #pragma once
 
+#include <math/Quat.h>
+
 class Entity;
 enum EntityType;
 class EntityManager;
@@ -14,8 +16,7 @@ public:
             float x,
             float y,
             float z,
-            float yaw,
-            float pitch) const;
+            Quat rotation) const;
 
 private:
     EntityManager &entityManager;

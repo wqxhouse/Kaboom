@@ -192,6 +192,8 @@
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\EntityType.h" />
     <ClInclude Include="src\core\FireMode.h" />
+    <ClInclude Include="src\math\Vec3.h" />
+    <ClInclude Include="src\math\Quat.h" />
     <ClInclude Include="src\network\AmmoAmountEvent.h" />
     <ClInclude Include="src\network\AssignEvent.h" />
     <ClInclude Include="src\network\DisconnectEvent.h" />
@@ -219,7 +221,6 @@
     <ClCompile Include="src\components\HealthComponent.cpp" />
     <ClCompile Include="src\components\PlayerStatusComponent.cpp" />
     <ClCompile Include="src\components\PositionComponent.cpp" />
-    <ClCompile Include="src\components\RotationComponent.cpp" />
     <ClCompile Include="src\components\WeaponPickupComponent.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
