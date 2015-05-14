@@ -12,19 +12,44 @@ class BombContainerComponent : public Component {
 public:
     typedef std::unordered_map<EntityType, std::pair<unsigned int, Timer>> InventoryType;
 
-    BombContainerComponent(const InventoryType &inventory = InventoryType());
+    BombContainerComponent(const InventoryType &inventory = InventoryType())
+        : capacity(0),
+          inventory(inventory) {
+    }
 
-    void addToInventory(const EntityType &bombType, int amount = 1);
-    void removeFromInventory(const EntityType &bombType, int amount = 1);
+    inline void addToInventory(EntityType bombType, int amount = 1) {
+        inventory[bombType].first += amount;
+    }
 
-    bool hasBomb(const EntityType &bombType) const;
-    int getAmount(const EntityType &bombType) const;
-    Timer &getTimer(const EntityType &bombType);
+    inline void removeFromInventory(const EntityType &bombType, int amount = 1) {
+        if (inventory[bombType].first - amount < 0) {
+            inventory.erase(bombType);
+        } else {
+            inventory[bombType].first -= amount;
+        }
+    }
 
-	void addToActiveBomb(Entity *bomb);
-	void removeFromActiveBomb(Entity *bomb);
+    inline bool hasBomb(EntityType bombType) const {
+        return inventory.count(bombType) > 0;
+    }
 
-	friend std::ostream &operator<<(std::ostream &os, const BombContainerComponent &o) {//TODO update this
+    inline int getAmount(EntityType bombType) const {
+        return inventory.at(bombType).first;
+    }
+
+    inline Timer &getTimer(EntityType bombType) {
+        return inventory.at(bombType).second;
+    }
+
+    inline void addToActiveBomb(Entity *bomb) {
+        activeBombs.push_back(bomb);
+    }
+
+    inline void removeFromActiveBomb(Entity *bomb) {
+        activeBombs.erase(std::find(activeBombs.begin(), activeBombs.end(), bomb));
+    }
+
+	friend std::ostream &operator<<(std::ostream &os, const BombContainerComponent &o) {
         os << "BombContainerComponent: {" << std::endl;
         os << "    capacity: " << o.capacity << std::endl;
 		os << "    inventory: { " << std::endl;
