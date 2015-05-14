@@ -9,6 +9,7 @@
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
+#include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
 
 #include "NetworkServices.h"
@@ -108,11 +109,17 @@ void GameClient::receive() {
 				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(healthEvent);
 				//printf("\nhello world\n");
 				break;
-			}
-			case EVENT_AMMO_COUNT:{
-				
-				break;
-			}
+            }
+            case EVENT_AMMO_COUNT:{
+
+                break;
+            }
+            case EVENT_SCORE:{
+                ScoreEvent scoreEvent;
+                scoreEvent.deserialize(&networkData[i]);
+                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(scoreEvent);
+                break;
+            }
             default: {
                 printf("error in packet event types\n");
                 return;

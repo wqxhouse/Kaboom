@@ -139,6 +139,9 @@
     <ClInclude Include="src\math\Quat.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\ScoreEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">

@@ -14,4 +14,5 @@ enum EventOpcode {
 	EVENT_HEALTH = 10,
 	EVENT_AMMO_COUNT = 11,
     EVENT_EQUIP = 12,
+    EVENT_SCORE = 13,
 };

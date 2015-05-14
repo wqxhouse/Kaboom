@@ -81,7 +81,6 @@
     <ClInclude Include="src\components\OwnerComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
     <ClInclude Include="src\components\SpawnComponent.h" />
-    <ClInclude Include="src\components\StickComponent.h" />
     <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
     <ClInclude Include="src\core\BombConfigLoader.h" />
