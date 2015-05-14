@@ -191,7 +191,6 @@
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\EntityType.h" />
-    <ClInclude Include="src\core\FireMode.h" />
     <ClInclude Include="src\math\Vec3.h" />
     <ClInclude Include="src\math\Quat.h" />
     <ClInclude Include="src\network\AmmoAmountEvent.h" />
@@ -216,8 +215,6 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\BombContainerComponent.cpp" />
-    <ClCompile Include="src\components\PlayerStatusComponent.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />
