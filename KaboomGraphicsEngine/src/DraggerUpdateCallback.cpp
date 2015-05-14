@@ -55,7 +55,7 @@ bool DraggerUpdateCallback::receive(const osgManipulator::MotionCommand & cmd)
 			break;
 		case osgManipulator::MotionCommand::FINISH:
 			if (geomObj != NULL) {
-				TwGUIManager::_currChange = TwGUIManager::makeModelMatrix(geomObj);
+				TwGUIManager::_currChange = TwGUIManager::makeUndoRedoNode(geomObj);
 			}
 			break;
 		}
