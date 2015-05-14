@@ -60,7 +60,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
         auto weaponPickupComp = pickup->getComponent<WeaponPickupComponent>();
         auto invComp = closestEntity->getComponent<BombContainerComponent>();
 
-        const EntityType &bombType = weaponPickupComp->getBombType();
+        EntityType bombType = weaponPickupComp->getType();
 
         // TODO: Detect and handle maximum number of bombs a character can hold
 

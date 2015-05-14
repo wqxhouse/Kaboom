@@ -222,7 +222,7 @@ void GameServer::sendHealthEvent(Entity *entity) const{
 	/*if (health->getHealthAmount() !=  100){
 		exit(1);
 	}*/
-	HealthEvent sendHealth(health->getHealthAmount());
+	HealthEvent sendHealth(health->getAmount());
 	sendEvent(sendHealth,entityIdToClientId.at(entity->getId()));
 }
 void GameServer::sendAmmoEvent(Entity *entity) const{

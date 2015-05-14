@@ -43,7 +43,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
     auto posComp = entity->getComponent<PositionComponent>();
     auto rotComp = entity->getComponent<RotationComponent>();
 
-    const EntityType &bombType = equipComp->getEquipmentType();
+    EntityType bombType = equipComp->getType();
 
     if (!invComp->hasBomb(bombType)) {
         return true;
