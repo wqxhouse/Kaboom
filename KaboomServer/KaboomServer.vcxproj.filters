@@ -187,6 +187,12 @@
     <ClCompile Include="src\messaging\RemoteDetonatorMessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\systems\SpawnSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\MapConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -358,12 +364,21 @@
     <ClInclude Include="src\messaging\RemoteDetonatorMessageHandler.h">
       <Filter>Header Files\Messaging\Handlers</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\MapConfigLoader.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\SpawnComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-server\bombs.xml">
       <Filter>Resource Files</Filter>
     </Xml>
     <Xml Include="data-server\characters.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="data-server\map.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>
