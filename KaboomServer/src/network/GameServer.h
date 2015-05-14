@@ -1,13 +1,19 @@
 #pragma once
 
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <components/BombContainerComponent.h>
-#include <network/NetworkData.h>
 #include <components/HealthComponent.h>
+#include <components/PlayerStatusComponent.h>
+
 #include <network/HealthEvent.h>
+#include <network/NetworkData.h>
+
+#include "../components/PhysicsComponent.h"
+
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 #include "NetworkServices.h"
-#include "../components/PhysicsComponent.h"
 
 class Entity;
 class Game;
@@ -32,6 +38,7 @@ public:
     void sendExplosionEvent(Entity *bomb) const;
 	void sendHealthEvent(Entity *entity) const;
     void sendAmmoEvent(Entity *entity) const;
+	void sendPlayerStatusEvent(Entity *entity) const;
 
     void sendInitializeEvent(Entity* player, const std::vector<Entity *> &entities) const;
     void sendGameStatePackets(const std::vector<Entity *> &entities) const;

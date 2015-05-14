@@ -7,6 +7,7 @@
 #include <components/HealthComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
+#include <components/PlayerStatusComponent.h>
 #include <core/EntityManager.h>
 #include "../components/SceneNodeComponent.h"
 #include "Model.h"
@@ -59,6 +60,7 @@ Entity *CharacterFactory::createCharacter(
     entity->attachComponent(new PositionComponent(x, y, z));
     entity->attachComponent(new RotationComponent(rotation));
 	entity->attachComponent(new HealthComponent(100,100));
+	entity->attachComponent(new PlayerStatusComponent());
 
     return entity;
 }

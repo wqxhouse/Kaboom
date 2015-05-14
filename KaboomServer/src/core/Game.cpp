@@ -152,7 +152,7 @@ const GameServer &Game::getGameServer() const {
     return server;
 }
 
-const World &Game::getWorld() const{
+World &Game::getWorld(){
 	return world;
 }
 

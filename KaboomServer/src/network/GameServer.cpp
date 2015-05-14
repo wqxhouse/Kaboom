@@ -1,7 +1,6 @@
 #include "GameServer.h"
 
-#include <components/PositionComponent.h>
-#include <components/RotationComponent.h>
+
 #include <core/Entity.h>
 #include <network/AssignEvent.h>
 #include <network/DestroyEvent.h>
@@ -10,6 +9,7 @@
 #include <network/EquipEvent.h>
 #include <network/ExplosionEvent.h>
 #include <network/PlayerInputEvent.h>
+#include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/SpawnEvent.h>
@@ -202,6 +202,17 @@ void GameServer::sendAmmoEvent(Entity *entity) const{
 
 }
 
+void GameServer::sendPlayerStatusEvent(Entity *entity) const{
+	PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
+
+	if (playerStatusComp == nullptr){
+		return;
+	}
+
+	PlayerStatusEvent playerStatusEvent(playerStatusComp->getIsKnockBacked(), playerStatusComp->getIsStaggered(), playerStatusComp->getIsDamaged(), playerStatusComp->getIsAlive());
+	sendEvent(playerStatusEvent, entityIdToClientId.at(entity->getId()));
+}
+
 void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *> &entities) const {
     for (auto entity : entities) {
         if (entity->getId() == player->getId()) {
@@ -227,5 +238,6 @@ void GameServer::sendGameStatePackets(const std::vector<Entity *> &entities) con
         sendPositionEvent(entity);
         sendRotationEvent(entity);
         sendHealthEvent(entity);
+		sendPlayerStatusEvent(entity);
     }
 }

@@ -17,10 +17,12 @@ public:
 	bool getIsKnockBacked() const;
 	bool getIsStaggered() const;
 	bool getIsDamaged() const;
+	bool getIsAlive() const;
 
 	void setIsKnockBacked(bool);
 	void setIsStaggered(bool);
 	void setIsDamaged(bool);
+	void setIsAlive(bool);
 
 	Timer &getKnockBackTimer();
 	Timer &getStaggerTimer();
@@ -30,6 +32,7 @@ private:
 	bool isKnockBacked;
 	bool isStaggered;
 	bool isDamaged;
+	bool isAlive;
 
 	Timer knockBackTimer;
 	Timer staggerTimer;

@@ -55,6 +55,7 @@
     <ClCompile Include="src\network\ServerEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ServerNetwork.cpp" />
     <ClCompile Include="src\systems\CollisionSystem.cpp" />
+    <ClCompile Include="src\systems\DeathSystem.cpp" />
     <ClCompile Include="src\systems\ExplosionSystem.cpp" />
     <ClCompile Include="src\systems\FiringSystem.cpp" />
     <ClCompile Include="src\systems\InitializationSystem.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="src\network\ServerEventHandlerLookup.h" />
     <ClInclude Include="src\network\ServerNetwork.h" />
     <ClInclude Include="src\systems\CollisionSystem.h" />
+    <ClInclude Include="src\systems\DeathSystem.h" />
     <ClInclude Include="src\systems\ExplosionSystem.h" />
     <ClInclude Include="src\systems\FiringSystem.h" />
     <ClInclude Include="src\systems\InitializationSystem.h" />
