@@ -50,7 +50,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
         return true;
     }
 
-    const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
+    auto &bombConfig = EntityConfigLookup::get(bombType);
 
     if (bombType == REMOTE_DETONATOR && detonatorComp != nullptr) {
         if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {

@@ -2,24 +2,25 @@
 
 #include "BombConfigLoader.h"
 
-const EntityConfigLookup &EntityConfigLookup::instance() {
-    static bool initialized = false;
-    static EntityConfigLookup instance;
+bool EntityConfigLookup::initialized = false;
+EntityConfigLookup EntityConfigLookup::instance;
 
+const Configuration &EntityConfigLookup::get(EntityType type) {
     if (!initialized) {
-        instance.load("data-client/bombs.xml");
-
-        initialized = true;
+        initialize();
     }
 
-    return instance;
+    return instance.config.at(type);
 }
 
-void EntityConfigLookup::load(const std::string &filename) {
-    BombConfigLoader bombConfigLoader(config);
-    bombConfigLoader.load(filename);
+void EntityConfigLookup::initialize() {
+    if (!initialized) {
+        initialized = true;
+        instance.loadBombConfig("data-client/bombs.xml");
+    }
 }
 
-const Configuration &EntityConfigLookup::operator[](EntityType type) const {
-    return config.at(type);
+void EntityConfigLookup::loadBombConfig(const std::string &filename) {
+    BombConfigLoader loader(config);
+    loader.load(filename);
 }

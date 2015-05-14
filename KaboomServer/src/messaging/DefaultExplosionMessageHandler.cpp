@@ -51,8 +51,8 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
 	
         btScalar playerDistanceFromExplosion = playerPos.distance(explosionPos);
 
-        auto &bombConfig = EntityConfigLookup::instance()[entity->getType()];
-        auto &charConfig = EntityConfigLookup::instance()[nearbyEntity->getType()];
+        auto &bombConfig = EntityConfigLookup::get(entity->getType());
+        auto &charConfig = EntityConfigLookup::get(nearbyEntity->getType());
 
         float explosionRadius = bombConfig.getFloat("explosion-radius");
         float knockbackAmount = bombConfig.getFloat("knockback-amount");
