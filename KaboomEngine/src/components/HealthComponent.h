@@ -13,11 +13,11 @@ public:
         return amount;
     }
 
-    inline void setHealthAmount(int amount) {
+    inline void setAmount(int amount) {
         this->amount = amount;
     }
 
-    inline void addToHealthAmount(int amount) {
+    inline void addAmount(int amount) {
         if (this->amount + amount > capacity) {
             this->amount = capacity;
         } else {
@@ -25,7 +25,7 @@ public:
         }
     }
 
-    inline void subtractFromHealthAmount(int amount) {
+    inline void subtractAmount(int amount) {
         if (this->amount - amount < 0) {
             this->amount = 0;
         } else {

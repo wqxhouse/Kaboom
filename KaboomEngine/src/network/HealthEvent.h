@@ -7,7 +7,8 @@
 class HealthEvent : public Event {
 public:
     HealthEvent(int amount = 100)
-            : Event(EVENT_HEALTH, sizeof(HealthEvent)) {
+            : Event(EVENT_HEALTH, sizeof(HealthEvent)),
+              amount(amount) {
     }
 
     inline virtual void serialize(char *buf) const {
