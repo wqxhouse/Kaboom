@@ -4,15 +4,14 @@ PlayerStatusComponent::PlayerStatusComponent()
 	: isKnockBacked(false),
 	  isStaggered(false),
 	  isDamaged(false),
+	  isAlive(true),
 	  knockBackTimer(0),
 	  staggerTimer(0),
 	  damageTimer(0){
 }
+PlayerStatusComponent::~PlayerStatusComponent(){
 
-PlayerStatusComponent::~PlayerStatusComponent() {
 }
-
-
 bool PlayerStatusComponent::checkIsKnockBacked() {
 	if (isKnockBacked) {
 		if (knockBackTimer.isExpired()) {
@@ -38,6 +37,7 @@ bool PlayerStatusComponent::checkIsDamaged() {
 	return isDamaged;
 }
 
+
 bool PlayerStatusComponent::getIsKnockBacked() const{
 	return isKnockBacked;
 }
@@ -46,6 +46,9 @@ bool PlayerStatusComponent::getIsStaggered() const{
 }
 bool PlayerStatusComponent::getIsDamaged() const {
 	return isDamaged;
+}
+bool PlayerStatusComponent::getIsAlive() const {
+	return isAlive;
 }
 
 
@@ -58,6 +61,10 @@ void PlayerStatusComponent::setIsStaggered(bool isStaggered) {
 void PlayerStatusComponent::setIsDamaged(bool isDamaged) {
 	this->isDamaged = isDamaged;
 }
+void PlayerStatusComponent::setIsAlive(bool isAlive) {
+	this->isAlive = isAlive;
+}
+
 
 
 Timer &PlayerStatusComponent::getKnockBackTimer() {

@@ -190,6 +190,9 @@
     <ClCompile Include="src\core\MapConfigLoader.cpp">
       <Filter>Source Files\Configurations</Filter>
     </ClCompile>
+    <ClCompile Include="src\systems\DeathSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -375,6 +378,9 @@
     </ClInclude>
     <ClInclude Include="src\core\MapConfigLoader.h">
       <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\DeathSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

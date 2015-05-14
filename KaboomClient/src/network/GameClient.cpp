@@ -7,6 +7,7 @@
 #include <network/EquipEvent.h>
 #include <network/ExplosionEvent.h>
 #include <network/PlayerInputEvent.h>
+#include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/SpawnEvent.h>
@@ -105,12 +106,20 @@ void GameClient::receive() {
 			case EVENT_HEALTH:{
 			    HealthEvent healthEvent;
 				healthEvent.deserialize(&networkData[i]);
+				std::cout << healthEvent << std::endl;
 				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(healthEvent);
 				//printf("\nhello world\n");
 				break;
 			}
 			case EVENT_AMMO_COUNT:{
 				
+				break;
+			}
+			case EVENT_PLAYER_STATUS:{
+				PlayerStatusEvent playerStatusEvent;
+				playerStatusEvent.deserialize(&networkData[i]);
+				//std::cout << playerStatusEvent << std::endl;
+				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerStatusEvent);
 				break;
 			}
             default: {

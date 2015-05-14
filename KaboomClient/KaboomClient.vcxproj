@@ -271,6 +271,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
     <ClCompile Include="src\network\ExplosionEventHandler.cpp" />
     <ClCompile Include="src\network\HealthEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerStatusEventHandler.cpp" />
     <ClCompile Include="src\network\RotationEventHandler.cpp" />
     <ClCompile Include="src\network\SpawnEventHandler.cpp" />
     <ClCompile Include="src\network\GameClient.cpp" />
@@ -304,6 +305,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
     <ClInclude Include="src\network\ExplosionEventHandler.h" />
     <ClInclude Include="src\network\HealthEventHandler.h" />
+    <ClInclude Include="src\network\PlayerStatusEventHandler.h" />
     <ClInclude Include="src\network\RotationEventHandler.h" />
     <ClInclude Include="src\network\SpawnEventHandler.h" />
     <ClInclude Include="src\network\GameClient.h" />
