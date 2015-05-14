@@ -59,8 +59,8 @@ void CharacterFactory::createBase(
     float collisionHeight = config.getFloat("collision-height");
     float mass = config.getFloat("mass");
     InventoryType *startingInventory = config.getPointer<InventoryType *>("starting-inventory");
-    float healthStart = config.getInt("health-start");
-    float healthCap = config.getInt("health-cap");
+    int healthStart = config.getInt("health-start");
+    int healthCap = config.getInt("health-cap");
 
     btTransform worldTrans;
     worldTrans.setIdentity();

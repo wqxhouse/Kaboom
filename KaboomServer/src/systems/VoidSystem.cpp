@@ -13,7 +13,7 @@ void VoidSystem::processEntity(Entity *entity) {
     auto posComp = entity->getComponent<PositionComponent>();
     auto healthComp = entity->getComponent<HealthComponent>();
 
-    if (posComp->getZ() < -100) {
-        healthComp->setHealthAmount(0);
+    if (posComp->getZ() < -100) { // TODO: Extract constant to XML
+        healthComp->setAmount(0);
     }
 }

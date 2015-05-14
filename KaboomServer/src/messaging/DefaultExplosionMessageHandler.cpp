@@ -79,7 +79,7 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
         int damage = int(distancePercentAway * (maxDamage - minDamage) + minDamage);
         printf("damage taken: %d \n", damage);
 
-        charHealthComp->subtractFromHealthAmount(damage);
+        charHealthComp->subtractAmount(damage);
         charStatusComp->getDamageTimer().setDuration(250); // TODO: this should be global
         charStatusComp->getDamageTimer().start();
         charStatusComp->setIsDamaged(true);
