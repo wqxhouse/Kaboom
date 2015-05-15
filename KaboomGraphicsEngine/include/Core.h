@@ -65,6 +65,7 @@ public:
 	static void disableLibRocketInEditorGUI();
 	static bool isLibRocketInEditorGUIEnabled();
 	static osg::ref_ptr<LibRocketGUIManager> getInGameLibRocketGUIManager();
+	static osg::ref_ptr<LibRocketGUIManager> getInEditorLibRocketGUIManager();
 
 	static void enableGameMode();
 	static void disableGameMode();
@@ -115,6 +116,7 @@ private:
 	static void configSpecularIBLLutPass();
 	static void configGeometryPass();
 	static void configLightPass();
+	static void configParticlePass();
 
 	static void configFilePath();
 	static void configAxisVisualizer();

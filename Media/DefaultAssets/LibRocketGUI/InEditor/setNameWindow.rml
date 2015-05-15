@@ -22,7 +22,10 @@
 			}
 		</style>
 	</head>
-	<body template="window" onresize="println('RESIZE!!!' + this)">
-		This window is supposed show the set name prompt for naming geometry objects and materials.
+	<body template="window">
+    This window is supposed show the set name prompt for naming geometry objects and materials.
+    <form>
+    <input type="text" name="test" />
+  </form>
 	</body>
 </rml>

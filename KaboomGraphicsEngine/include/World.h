@@ -14,6 +14,7 @@
 class LightManager;
 class MaterialManager;
 class GeometryObjectManager;
+class ParticleEffectManager;
 class World : public XMLLoader
 {
 public:
@@ -38,13 +39,18 @@ public:
 		return _lightManager;
 	}
 
+	inline ParticleEffectManager *getParticleEffectManager()
+	{
+		return _particleEffectManager;
+	}
+
 protected:
 	virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 
 private:
-		
 	GeometryObjectManager *_geomManager;
 	MaterialManager *_materialManager;
 	LightManager *_lightManager;
+	ParticleEffectManager *_particleEffectManager;
 };
 
