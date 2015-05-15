@@ -106,7 +106,7 @@ void GameClient::receive() {
 			case EVENT_HEALTH:{
 			    HealthEvent healthEvent;
 				healthEvent.deserialize(&networkData[i]);
-				std::cout << healthEvent << std::endl;
+				//std::cout << healthEvent << std::endl;
 				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(healthEvent);
 				//printf("\nhello world\n");
 				break;
@@ -118,7 +118,7 @@ void GameClient::receive() {
 			case EVENT_PLAYER_STATUS:{
 				PlayerStatusEvent playerStatusEvent;
 				playerStatusEvent.deserialize(&networkData[i]);
-				//std::cout << playerStatusEvent << std::endl;
+				std::cout << playerStatusEvent << std::endl;
 				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerStatusEvent);
 				break;
 			}
