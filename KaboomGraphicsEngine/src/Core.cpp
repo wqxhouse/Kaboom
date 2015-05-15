@@ -15,6 +15,7 @@
 #include "World.h"
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
+#include "ParticleEffectManager.h"
 #include "LightPrePassCallback.h"
 #include "LightPassCallback.h"
 #include "CustomFirstPersonManipulator.h"
@@ -56,6 +57,9 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	configSceneNode();
 	configPasses();
 	configViewer();
+
+	// need to config after config viewer
+	configParticlePass();
 
 	// need to do it before finalize(), since client needs this before running
 	configLibRocketGUI();
@@ -186,6 +190,13 @@ void Core::configLightPass()
 	{
 		OSG_WARN << "Light pass not defined in the pipeline, check the xml file " << std::endl;
 	}
+}
+
+void Core::configParticlePass()
+{
+	ParticleEffectManager *manager = _world.getParticleEffectManager();
+	_passes->addChild(manager->getRoot());
+	_viewer->addEventHandler(manager->getParticleUpdateHandler());
 }
 
 void Core::configGeometryObjectManipulator()
@@ -814,6 +825,11 @@ bool Core::isMouseOverAnyEditor()
 osg::ref_ptr<LibRocketGUIManager> Core::getInGameLibRocketGUIManager()
 {
 	return _libRocketInGameGUI;
+}
+
+osg::ref_ptr<LibRocketGUIManager> Core::getInEditorLibRocketGUIManager()
+{
+	return _libRocketEditorGUI;
 }
 
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;

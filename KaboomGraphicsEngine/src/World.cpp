@@ -12,12 +12,14 @@
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
 #include "MaterialManager.h"
+#include "ParticleEffectManager.h"
 
 World::World()
 {
 	_geomManager = new GeometryObjectManager;
 	_materialManager = new MaterialManager;
 	_lightManager = new LightManager;
+	_particleEffectManager = new ParticleEffectManager;
 }
 
 World::~World()
@@ -25,6 +27,7 @@ World::~World()
 	delete _geomManager;
 	delete _materialManager;
 	delete _lightManager;
+	delete _particleEffectManager;
 }
 
 void World::loadXMLNode(osgDB::XmlNode *xmlRoot)

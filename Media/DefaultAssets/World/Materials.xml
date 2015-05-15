@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf - 8"?>
 <materialList>
 	<material name="__floorMat" type="textured">
-		<albedoTex>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_baseColor.png</albedoTex>
-		<roughnessTex>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_roughness.png</roughnessTex>
-		<metallicTex>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_metallic.png</metallicTex>
-		<normalPath>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_normal.tga</normalPath>
+		<albedoTex>C:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_baseColor.png</albedoTex>
+		<roughnessTex>C:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_roughness.png</roughnessTex>
+		<metallicTex>C:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_metallic.png</metallicTex>
+		<normalPath>C:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_normal.tga</normalPath>
 	</material>
 
 	<material name="SphereMat" type="plain">

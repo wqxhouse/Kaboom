@@ -1,4 +1,5 @@
 #pragma once
+#include <osg/Vec3>
 
 class Vec3 {
 public:
@@ -11,4 +12,9 @@ public:
     Vec3(float x, float y, float z)
             : x(x), y(y), z(z) {
     }
+
+	inline osg::Vec3 getOsgVec3() const
+	{
+		return osg::Vec3(x, y, z);
+	}
 };
