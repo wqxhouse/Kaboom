@@ -6,6 +6,7 @@
 #include <Camera.h>
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
+#include <ParticleEffectManager.h>
 
 #include "CharacterFactory.h"
 #include "BombFactory.h"
@@ -44,8 +45,9 @@ public:
 
     const GameClient &getGameClient() const;
 
-    GeometryObjectManager* getGeometryManager();
-    MaterialManager* getMaterialManager();
+    GeometryObjectManager *getGeometryManager();
+    MaterialManager *getMaterialManager();
+	ParticleEffectManager *getParticleEffectManager();
 
 	const GameGUIEventHandler *getGameGUIEventHandler() const;
 	inline const GameStateMachine getCurrentGameState() const
@@ -75,8 +77,9 @@ private:
     ClientEventHandlerLookup eventHandlerLookup;
     GameClient client;
 
-	GeometryObjectManager * _geometryManager;
-	MaterialManager * _materialManager;
+	GeometryObjectManager *_geometryManager;
+	MaterialManager *_materialManager;
+	ParticleEffectManager *_particleEffectManager;
 
 	Camera &_camera;
 	GameGUIEventHandler *_guiEventHandler;

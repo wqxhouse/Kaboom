@@ -117,6 +117,15 @@
       <output_buffer>b_shading</output_buffer>
     </forward_pass>
 
+    <forward_pass name="ParticleEffectPass">
+      <clear_mask>0</clear_mask>
+      <culling mask="0x10"></culling>
+      <near_far preserve="0" />
+      <!-- TODO: make sure depth write is disabled -->
+      <output_buffer target="depth">debugDepth</output_buffer>
+      <output_buffer>b_shading</output_buffer>
+    </forward_pass>
+
     <!-- SMAA -->
     <!--<deferred_pass name="SMAA_EdgeDetection">
       <input_buffer unit="0" varname="sceneTex">b_shading</input_buffer>
