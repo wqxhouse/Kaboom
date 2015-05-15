@@ -14,13 +14,15 @@ public:
 	bool addDirectionalLight(const std::string &name,
 		const osg::Vec3 &dirToWorld,
 		const osg::Vec3 &color,
-		bool castShadow);
+		bool castShadow,
+		float intensity = 1.0f);
 
 	bool addPointLight(const std::string &name,
 		const osg::Vec3 &position,
 		const osg::Vec3 &color,
 		float radius, 
-		bool castShadow);
+		bool castShadow,
+		float intensity = 1.0f);
 
 	void deleteLight(const std::string &name);
 	bool renameLight(const std::string &oldName, const std::string &newName);

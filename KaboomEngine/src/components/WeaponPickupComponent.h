@@ -8,18 +8,31 @@
 class WeaponPickupComponent : public Component {
 public:
     WeaponPickupComponent(
-            const EntityType &type = KABOOM_V2,
-            int amount = 1);
+            EntityType type = KABOOM_V2,
+            int amount = 1)
+            : type(type),
+              amount(amount) {
+    }
 
-    const EntityType &getBombType() const;
-    int getAmount() const;
+    inline EntityType getType() const {
+        return type;
+    }
 
-    void setBombType(const EntityType &type);
-    void setAmount(int amount);
+    inline int getAmount() const {
+        return amount;
+    }
+
+    inline void setBombType(EntityType type) {
+        this->type = type;
+    }
+
+    inline void setAmount(int amount) {
+        this->amount = amount;
+    }
 
     friend std::ostream &operator<<(std::ostream &os, const WeaponPickupComponent &o) {
         os << "WeaponPickupComponent: {" << std::endl;
-        os << "    bombType: " << o.bombType << std::endl;
+        os << "    type: " << o.type << std::endl;
         os << "    amount:   " << o.amount << std::endl;
         os << "}";
 
@@ -27,6 +40,6 @@ public:
     }
 
 private:
-    EntityType bombType;
+    EntityType type;
     int amount;
 };

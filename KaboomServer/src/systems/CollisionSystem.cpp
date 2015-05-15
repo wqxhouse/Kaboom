@@ -5,6 +5,7 @@
 #include "../components/CollisionComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../messaging/CollisionMessage.h"
+#include "../messaging/MessageHandler.h"
 
 CollisionSystem::CollisionSystem(Game *game)
         : game(game) {

@@ -169,6 +169,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -191,7 +192,8 @@
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\EntityType.h" />
-    <ClInclude Include="src\core\FireMode.h" />
+    <ClInclude Include="src\math\Vec3.h" />
+    <ClInclude Include="src\math\Quat.h" />
     <ClInclude Include="src\network\AmmoAmountEvent.h" />
     <ClInclude Include="src\network\AssignEvent.h" />
     <ClInclude Include="src\network\DisconnectEvent.h" />
@@ -208,23 +210,16 @@
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
     <ClInclude Include="src\network\RotationEvent.h" />
+    <ClInclude Include="src\network\ScoreEvent.h" />
     <ClInclude Include="src\network\SpawnEvent.h" />
     <ClInclude Include="src\systems\EntitySystem.h" />
     <ClInclude Include="src\util\Timer.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\BombContainerComponent.cpp" />
-    <ClCompile Include="src\components\EquipmentComponent.cpp" />
-    <ClCompile Include="src\components\HealthComponent.cpp" />
-    <ClCompile Include="src\components\PlayerStatusComponent.cpp" />
-    <ClCompile Include="src\components\PositionComponent.cpp" />
-    <ClCompile Include="src\components\RotationComponent.cpp" />
-    <ClCompile Include="src\components\WeaponPickupComponent.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />
-    <ClCompile Include="src\network\HealthEvent.cpp" />
     <ClCompile Include="src\systems\EntitySystem.cpp" />
     <ClCompile Include="src\util\Timer.cpp" />
     <ClCompile Include="stdafx.cpp">

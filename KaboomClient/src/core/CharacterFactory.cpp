@@ -19,11 +19,8 @@ CharacterFactory::CharacterFactory(EntityManager &entityManager)
 Entity *CharacterFactory::createCharacter(
         unsigned int id,
         EntityType characterType,
-        float x,
-        float y,
-        float z,
-        float yaw,
-        float pitch) const {
+        const Vec3 &position,
+        Quat rotation) const {
     Entity *entity = entityManager.createEntity(id, characterType);
 	/*osg::ref_ptr<osg::Capsule> capsule = new osg::Capsule(osg::Vec3(), 0.5f, 1.0f);
 	osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(capsule);
@@ -57,8 +54,8 @@ Entity *CharacterFactory::createCharacter(
 	model->getRootNode()->setMatrix(transformMat);
 
 	entity->attachComponent(new SceneNodeComponent(model->getRootNode()));
-    entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent(yaw, pitch));
+    entity->attachComponent(new PositionComponent(position));
+    entity->attachComponent(new RotationComponent(rotation));
 	entity->attachComponent(new HealthComponent(100,100));
 
     return entity;

@@ -13,6 +13,7 @@
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
+#include "../components/SpawnComponent.h"
 
 bool BombPickupMessageHandler::handle(const Message &message) const {
     if (message.getType() == MessageType::PICKUP) {
@@ -25,10 +26,6 @@ bool BombPickupMessageHandler::handle(const Message &message) const {
 bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
     Entity *pickup = message.getEntity();
     auto posComp = pickup->getComponent<PositionComponent>();
-
-    const float pickupPosX = posComp->getX();
-    const float pickupPosY = posComp->getY();
-    const float pickupPosZ = posComp->getZ();
 
     Entity *closestEntity = nullptr;
     float minDistance = FLT_MAX;
@@ -43,11 +40,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
             continue;
         }
 
-        const float charPosX = charPosComp->getX();
-        const float charPosY = charPosComp->getY();
-        const float charPosZ = charPosComp->getZ();
-
-        const float distance = getDistance(pickupPosX, pickupPosY, pickupPosZ, charPosX, charPosY, charPosZ);
+        const float distance = getDistance(posComp->getPosition(), charPosComp->getPosition());
 
         if (distance < minDistance) {
             closestEntity = character;
@@ -60,11 +53,11 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
         auto weaponPickupComp = pickup->getComponent<WeaponPickupComponent>();
         auto invComp = closestEntity->getComponent<BombContainerComponent>();
 
-        const EntityType &bombType = weaponPickupComp->getBombType();
+        EntityType bombType = weaponPickupComp->getType();
 
         // TODO: Detect and handle maximum number of bombs a character can hold
 
-        const int capacity = EntityConfigLookup::instance()[bombType].getInt("capacity");
+        const int capacity = EntityConfigLookup::get(bombType).getInt("capacity");
         const int invAmount = invComp->getAmount(bombType);
         const int pickupAmount = weaponPickupComp->getAmount();
 
@@ -77,7 +70,16 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
         invComp->addToInventory(bombType, amount);
 
         Game *game = message.getGame();
-        game->getGameServer().sendDestroyEvent(pickup);
+
+
+		//if the pickup has a spawn component, meaning it is a pickup that respawn over time, 
+		//add it to the pickupSpawnTimer maps, for requesting a respawn, later in the future
+		if (pickup->hasComponent<SpawnComponent>()) {
+			SpawnComponent* spawnComp = pickup->getComponent<SpawnComponent>();
+			game->getPickupSpawnPointTimerMap().insert(std::make_pair(spawnComp->getSpawnPointName(), Timer(spawnComp->getDuration())));
+		}
+
+		//now remove the pickup
         game->removeEntity(pickup);
     }
 

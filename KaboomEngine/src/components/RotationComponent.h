@@ -3,29 +3,31 @@
 #include <ostream>
 
 #include "Component.h"
+#include "../math/Quat.h"
 
 class RotationComponent : public Component {
 public:
-    RotationComponent(float yaw = 0.0f, float pitch = 0.0f);
+    RotationComponent(Quat rotation = Quat()) {}
 
-    float getYaw() const;
-    float getPitch() const;
+    inline Quat getRotation() const {
+        return rotation;
+    }
 
-    void setYaw(float yaw);
-    void setPitch(float pitch);
-
-    void setRotation(float yaw, float pitch);
+    inline void setRotation(Quat rotation) {
+        this->rotation = rotation;
+    }
 
     friend std::ostream &operator<<(std::ostream &os, const RotationComponent &o) {
         os << "RotationComponent: {" << std::endl;
-        os << "    yaw: " << o.yaw << std::endl;
-        os << "    pitch: " << o.pitch << std::endl;
+        os << "    x: " << o.rotation.x << std::endl;
+        os << "    y: " << o.rotation.y << std::endl;
+        os << "    z: " << o.rotation.z << std::endl;
+        os << "    w: " << o.rotation.w << std::endl;
         os << "}";
 
         return os;
     }
 
 private:
-    float yaw;
-    float pitch;
+    Quat rotation;
 };

@@ -55,9 +55,35 @@ struct BarItem {
 	std::string name;
 };
 
-struct ModelMatrix {
+// FOR UNDO/REDO
+enum UndoRedoType { MODEL, LIGHT };
+
+struct ModelInfo {
 	std::string name;
 	osg::Matrix matrix;
+};
+
+struct LightInfo {
+	std::string name;
+	osg::Vec3 posDir;
+	osg::Vec3 color;
+	float radius;
+	bool shadow;
+	float intensity;
+};
+
+union UndoRedoValue {
+	struct {
+		ModelInfo model;
+	};
+	struct {
+		LightInfo light;
+	};
+};
+
+struct UndoRedoNode {
+	UndoRedoType type;
+	UndoRedoValue value;
 };
 
 class Core;
@@ -111,11 +137,13 @@ public:
 	static void addPlainMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
 	static void addTexturedMaterialToGUI(TwBar* bar, Material* mat, std::string group, int& index);
 
-	static ModelMatrix* makeModelMatrix(GeometryObject* geom);
+	static UndoRedoNode* makeUndoRedoNode(GeometryObject* geom);
+	static UndoRedoNode* makeUndoRedoNode(Light* light);
 	static void addGeomToUndo(GeometryObject* geom);
+	static void addLightToUndo(Light* light);
 	static void clearRedoList();
 
-	static ModelMatrix* _currChange;
+	static UndoRedoNode* _currChange;
 
 protected:
 	struct Position
@@ -161,7 +189,7 @@ protected:
 
 	static void fitObjectToScreen(osg::MatrixTransform *mt);
 	static void fitPointLightToScreen(PointLight *l);
-	static void doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<ModelMatrix*> &dest);
+	static void doUndoRedo(std::vector<UndoRedoNode*> &from, std::vector<UndoRedoNode*> &dest);
 
 	std::queue< osg::ref_ptr<const osgGA::GUIEventAdapter> > _eventsToHandle;
 	TwBar *g_twBar;
@@ -200,8 +228,8 @@ protected:
 	std::string nameToCopy;
 	static int _index;
 
-	static std::vector<ModelMatrix*> _undos;
-	static std::vector<ModelMatrix*> _redos;
+	static std::vector<UndoRedoNode*> _undos;
+	static std::vector<UndoRedoNode*> _redos;
 
 	bool _isMouseOver;
 	int _scrollPos;

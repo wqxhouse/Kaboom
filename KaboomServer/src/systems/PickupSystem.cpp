@@ -4,6 +4,7 @@
 
 #include "../components/MessageHandlerComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../messaging/MessageHandler.h"
 #include "../messaging/PickupMessage.h"
 
 class WeaponPickupComponent;

@@ -3,33 +3,32 @@
 #include <ostream>
 
 #include "Component.h"
+#include "../math/Vec3.h"
 
 class PositionComponent : public Component {
 public:
-    PositionComponent(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+    PositionComponent(const Vec3 &position)
+            : position(position) {
+    }
 
-    float getX() const;
-    float getY() const;
-    float getZ() const;
+    inline const Vec3 &getPosition() const {
+        return position;
+    }
 
-    void setX(float x);
-    void setY(float y);
-    void setZ(float z);
-
-    void setPosition(float x, float y, float z);
+    inline void setPosition(const Vec3 &position) {
+        this->position = position;
+    }
 
     friend std::ostream &operator<<(std::ostream &os, const PositionComponent &o) {
         os << "PositionComponent: {" << std::endl;
-        os << "    x: " << o.x << std::endl;
-        os << "    y: " << o.y << std::endl;
-        os << "    z: " << o.z << std::endl;
+        os << "    x: " << o.position.x << std::endl;
+        os << "    y: " << o.position.y << std::endl;
+        os << "    z: " << o.position.z << std::endl;
         os << "}";
 
         return os;
     }
 
 private:
-    float x;
-    float y;
-    float z;
+    Vec3 position;
 };

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <components/Component.h>
-#include <util/Timer.h>
+
+class Timer;
 
 class TimerComponent : public Component {
 public:

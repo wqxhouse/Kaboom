@@ -1,5 +1,7 @@
 #include <ctime>
 
+#include <util/ConfigSettings.h>
+
 #include "core/Game.h"
 
 int main() {

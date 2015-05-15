@@ -1,5 +1,8 @@
 #include "CharacterConfigLoader.h"
 
+#include <core/EntityType.h>
+#include <util/Configuration.h>
+
 #include "common.h"
 
 CharacterConfigLoader::CharacterConfigLoader(std::unordered_map<EntityType, Configuration> &config)

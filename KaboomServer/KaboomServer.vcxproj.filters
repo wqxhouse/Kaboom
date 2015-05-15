@@ -37,9 +37,6 @@
     <Filter Include="Source Files\Network\Event Handlers">
       <UniqueIdentifier>{ffdfb9c0-917b-4b73-abe7-00699f14f478}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entity Component System\Components">
-      <UniqueIdentifier>{0e6b8dba-50df-4f76-a3bb-c5ab0926e30c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Entity Component System\Systems">
       <UniqueIdentifier>{7b03626b-4581-4cfe-ba7f-99df1fbd57e2}</UniqueIdentifier>
     </Filter>
@@ -115,9 +112,6 @@
     <ClCompile Include="src\core\CharacterFactory.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\JetpackComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\systems\CollisionSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
@@ -186,6 +180,15 @@
     </ClCompile>
     <ClCompile Include="src\messaging\RemoteDetonatorMessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\VoidSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\SpawnSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\MapConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -349,14 +352,26 @@
     <ClInclude Include="src\messaging\BombPickupMessageHandler.h">
       <Filter>Header Files\Messaging\Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="src\components\StickComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\EquipEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\messaging\RemoteDetonatorMessageHandler.h">
       <Filter>Header Files\Messaging\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\OwnerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\VoidSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\CharacterRotationComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\SpawnComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\MapConfigLoader.h">
+      <Filter>Header Files\Configurations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -364,6 +379,9 @@
       <Filter>Resource Files</Filter>
     </Xml>
     <Xml Include="data-server\characters.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="data-server\map.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>

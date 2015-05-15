@@ -7,7 +7,9 @@ class Entity;
 class DetonatorComponent : public Component {
 public:
     DetonatorComponent(Entity *bomb)
-            : bomb(bomb) {
+            : bomb(bomb),
+              ready(false),
+              detonated(false) {
     }
 
     inline Entity *getBomb() const {

@@ -51,8 +51,8 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
 	
         btScalar playerDistanceFromExplosion = playerPos.distance(explosionPos);
 
-        auto &bombConfig = EntityConfigLookup::instance()[entity->getType()];
-        auto &charConfig = EntityConfigLookup::instance()[nearbyEntity->getType()];
+        auto &bombConfig = EntityConfigLookup::get(entity->getType());
+        auto &charConfig = EntityConfigLookup::get(nearbyEntity->getType());
 
         float explosionRadius = bombConfig.getFloat("explosion-radius");
         float knockbackAmount = bombConfig.getFloat("knockback-amount");
@@ -79,11 +79,11 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
         int damage = int(distancePercentAway * (maxDamage - minDamage) + minDamage);
         printf("damage taken: %d \n", damage);
 
-        charHealthComp->subtractFromHealthAmount(damage);
+        charHealthComp->subtractAmount(damage);
         charStatusComp->getDamageTimer().setDuration(250); // TODO: this should be global
         charStatusComp->getDamageTimer().start();
         charStatusComp->setIsDamaged(true);
-        printf("new Player Health: %d \n", charHealthComp->getHealthAmount());
+        printf("new Player Health: %d \n", charHealthComp->getAmount());
     }
 
     message.getGame()->getGameServer().sendExplosionEvent(entity);

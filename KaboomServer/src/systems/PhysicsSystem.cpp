@@ -3,8 +3,9 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 
+#include "../components/CharacterRotationComponent.h"
 #include "../components/CollisionComponent.h"
-#include "../components/StickComponent.h"
+#include "../components/PhysicsComponent.h"
 #include "../core/Game.h"
 
 PhysicsSystem::PhysicsSystem(Game *game, World &world)
@@ -29,17 +30,17 @@ void PhysicsSystem::processEntity(Entity *entity) {
     auto posComp = entity->getComponent<PositionComponent>();
     auto colComp = entity->getComponent<CollisionComponent>();
 
-    btTransform &worldTrans = physComp->getRigidBody()->getWorldTransform();
+    btTransform worldTrans = physComp->getRigidBody()->getWorldTransform();
 
     if (posComp != nullptr) {
         const btVector3 &pos = worldTrans.getOrigin();
-        posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
+        posComp->setPosition(Vec3(pos.getX(), pos.getY(), pos.getZ()));
     }
 
     RotationComponent *rotComp = entity->getComponent<RotationComponent>();
 
-    if (rotComp != nullptr) {
+    if (rotComp != nullptr && !entity->hasComponent<CharacterRotationComponent>()) {
         btQuaternion rot = worldTrans.getRotation();
-        // TODO: Set rotComp
+        rotComp->setRotation(Quat(rot.getX(), rot.getY(), rot.getZ(), rot.getW()));
     }
 }
