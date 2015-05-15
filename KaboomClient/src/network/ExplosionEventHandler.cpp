@@ -5,6 +5,7 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <network/ExplosionEvent.h>
+#include <ParticleEffectManager.h>
 
 #include "../core/Game.h"
 
@@ -63,6 +64,13 @@ void ExplosionEventHandler::handle(const Event &e) const {
 //		printf("radian is %f \n",radian);
 		osgAudio::AudioEnvironment::instance()->update();
 		game->source->play();
+
+		// TODO: need to refactor the code above... probably abstract out a sound manager
+		// trigger explosion particle effect
+		ParticleEffect *explosionEffect = 
+			game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION);
+		// TODO: can add some randomness by applying a random quat
+		explosionEffect->run(bombPos.getOsgVec3());
 	}
 	catch (Error e) {
 		std::cerr << e << "\n";

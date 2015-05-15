@@ -75,6 +75,8 @@ Game::Game(ConfigSettings *config)
 
 	_geometryManager = Core::getWorldRef().getGeometryManager();
 	_materialManager = Core::getWorldRef().getMaterialManager();
+	_particleEffectManager = Core::getWorldRef().getParticleEffectManager();
+
 	source = new Source;
 	
 	printf("check for sound errors\n");
@@ -248,6 +250,11 @@ GeometryObjectManager * Game::getGeometryManager() {
 
 MaterialManager *Game::getMaterialManager() {
 	return _materialManager;
+}
+
+
+ParticleEffectManager *Game::getParticleEffectManager() {
+	return _particleEffectManager;
 }
 
 Camera &Game::getCamera() {
