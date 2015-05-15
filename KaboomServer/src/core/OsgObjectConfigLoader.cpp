@@ -1,5 +1,7 @@
 #include "OsgObjectConfigLoader.h"
 
+#include <util/Configuration.h>
+
 #include "common.h"
 
 OsgObjectConfigLoader::OsgObjectConfigLoader(std::unordered_map<std::string, Configuration> &config)

@@ -3,6 +3,7 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
+#include <util/ConfigSettings.h>
 
 #include "../components/CollisionComponent.h"
 #include "../components/InputComponent.h"
@@ -18,6 +19,8 @@
 #include "../systems/PhysicsSystem.h"
 #include "../systems/PickupSystem.h"
 #include "../systems/TimerSystem.h"
+#include "../systems/VoidSystem.h"
+#include "../systems/SpawnSystem.h"
 
 Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
@@ -39,18 +42,16 @@ Game::Game(ConfigSettings *configSettings)
 	std::cout << str_world_xml << std::endl;
 	world.loadMapFromXML(str_world_xml);
 
-
     systemManager.addSystem(new InitializationSystem(this));
+	systemManager.addSystem(new SpawnSystem(this));
     systemManager.addSystem(new InputSystem(this));
     systemManager.addSystem(new FiringSystem(this));
     systemManager.addSystem(new PhysicsSystem(this, world));
+    systemManager.addSystem(new VoidSystem());
     systemManager.addSystem(new CollisionSystem(this));
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
     systemManager.addSystem(new ExplosionSystem(this));
-
-	//TODO Wai Ho problems with pickup being of class bomb which causes some problems in logic commented it out for now. 
-    addEntity(pickupFactory.createPickup(KABOOM_V2, 5, 5, -5, 3)); // Spawn five Kaboom 2.0 at origin
 }
 
 Game::~Game() {
@@ -68,9 +69,13 @@ void Game::addEntity(Entity *entity) {
     if (triggerComp != nullptr) {
         world.addTrigger(triggerComp->getGhostObject());
     }
+
+	server.sendSpawnEvent(entity);
 }
 
 void Game::removeEntity(Entity *entity) {
+	server.sendDestroyEvent(entity);
+
     PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
     if (physicsComp != nullptr) {
@@ -82,7 +87,7 @@ void Game::removeEntity(Entity *entity) {
     if (triggerComp != nullptr) {
         world.removeTrigger(triggerComp->getGhostObject());
     }
-
+	
     entityManager.destroyEntity(entity->getId());
 }
 
@@ -94,17 +99,16 @@ void Game::update(float timeStep, int maxSubSteps) {
 	if (server.acceptNewClient(entityManager.generateId())) {
 
 		//now we create a new player
-        Entity *player = characterFactory.createCharacter(DEFAULT_CHARACTER, 0.0f, -5.0f, 5.0f);
-        addEntity(player);
+        Entity *player = characterFactory.createCharacter(DEFAULT_CHARACTER, Vec3(0.0f, -5.0f, 5.0f));
+        
+		//first notify the new client what entityId it should keep track of
+		server.sendAssignEvent(player->getId());
 
-        //first notify the new client what entityId it should keep track of
-        server.sendAssignEvent(player->getId());
+		//send the new spawn player entity to all the clients
+		addEntity(player);
 
         //second send the new client about all the exisiting entities
         server.sendInitializeEvent(player, entityManager.getEntityList());
-
-        //then send the new spawn player entity to all the clients
-        server.sendSpawnEvent(player);
 
         //lastly send the game state for each entity
         server.sendGameStatePackets(getEntityManager().getEntityList());
@@ -136,10 +140,18 @@ const BombFactory &Game::getBombFactory() const {
     return bombFactory;
 }
 
+const PickupFactory &Game::getPickupFactory() const {
+	return pickupFactory;
+}
+
 const GameServer &Game::getGameServer() const {
     return server;
 }
 
 const World &Game::getWorld() const{
 	return world;
+}
+
+std::unordered_map<std::string, Timer> & Game::getPickupSpawnPointTimerMap() {
+	return pickupSpawnPointTimerMap;
 }

@@ -2,9 +2,9 @@
 
 #include <unordered_map>
 
-#include <core/EntityType.h>
-#include <util/Configuration.h>
 #include <util/XMLLoader.h>
+
+class Configuration;
 
 class OsgObjectConfigLoader : public XMLLoader {
 public:

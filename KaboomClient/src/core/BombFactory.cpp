@@ -9,7 +9,7 @@
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
 
-#include "BombDataLookup.h"
+#include "EntityConfigLookup.h"
 #include "../components/SceneNodeComponent.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
@@ -18,18 +18,39 @@ BombFactory::BombFactory(EntityManager &entityManager)
 
 Entity *BombFactory::createBomb(
         unsigned int id,
-        EntityType bombType,
-        float x,
-        float y,
-        float z,
-        float yaw,
-        float pitch) const {
-    const BombData &bombData = BombDataLookup::instance[bombType];
+        EntityType type,
+        const Vec3 &position,
+        Quat rotation) const {
+    Entity *entity = entityManager.createEntity(id, type);
 
-    Entity *entity = entityManager.createEntity(id, bombType);
+    createBase(entity, position, rotation);
+
+    switch (type) {
+        case KABOOM_V2: {
+            createKaboomV2(entity);
+            break;
+        }
+        case TIME_BOMB: {
+            createTimeBomb(entity);
+            break;
+        }
+        case REMOTE_DETONATOR: {
+            createRemoteDetonator(entity);
+            break;
+        }
+    }
+
+    return entity;
+}
+
+void BombFactory::createBase(Entity *entity, const Vec3 &position, Quat rotation) const {
+    entity->attachComponent(new PositionComponent(position));
+    entity->attachComponent(new RotationComponent(rotation));
+
+    auto &config = EntityConfigLookup::get(entity->getType());
 
     osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere();
-    sphere->setRadius(bombData.size);
+    sphere->setRadius(config.getFloat("size"));
     osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(sphere);
     osg::ref_ptr<osg::Geode> model = new osg::Geode;
     model->addDrawable(drawable);
@@ -39,11 +60,16 @@ Entity *BombFactory::createBomb(
 
     osg::ref_ptr<osg::Group> bombNode = new osg::Group;
 
-	bombNode->addChild(transformation);
+    bombNode->addChild(transformation);
 
-	entity->attachComponent(new SceneNodeComponent(bombNode));
-    entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent(yaw, pitch));
+    entity->attachComponent(new SceneNodeComponent(bombNode));
+}
 
-    return entity;
+void BombFactory::createKaboomV2(Entity *entity) const {
+}
+
+void BombFactory::createTimeBomb(Entity *entity) const {
+}
+
+void BombFactory::createRemoteDetonator(Entity *entity) const {
 }

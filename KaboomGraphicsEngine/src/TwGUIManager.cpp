@@ -18,9 +18,9 @@
 const float PI_F = 3.14159265358979f;
 
 int TwGUIManager::_index = 0;
-std::vector<ModelMatrix*> TwGUIManager::_undos = std::vector<ModelMatrix*>();
-std::vector<ModelMatrix*> TwGUIManager::_redos = std::vector<ModelMatrix*>();
-ModelMatrix* TwGUIManager::_currChange = NULL;
+std::vector<UndoRedoNode*> TwGUIManager::_undos = std::vector<UndoRedoNode*>();
+std::vector<UndoRedoNode*> TwGUIManager::_redos = std::vector<UndoRedoNode*>();
+UndoRedoNode* TwGUIManager::_currChange = NULL;
 
 TwGUIManager::TwGUIManager()
 // Note, this flag assumes that you do not touch viewer manipulator settings
@@ -607,7 +607,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newPos = osg::Vec3(posX, oldPos.y(), oldPos.z());
 		obj->setTranslate(newPos);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -630,7 +630,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newPos = osg::Vec3(oldPos.x(), posY, oldPos.z());
 		obj->setTranslate(newPos);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -653,7 +653,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newPos = osg::Vec3(oldPos.x(), oldPos.y(), posZ);
 		obj->setTranslate(newPos);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -677,7 +677,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newScale = osg::Vec3(scaleX, oldScale.y(), oldScale.z());
 		obj->setScale(newScale);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -700,7 +700,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newScale = osg::Vec3(oldScale.x(), scaleY, oldScale.z());
 		obj->setScale(newScale);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -723,7 +723,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newScale = osg::Vec3(oldScale.x(), oldScale.y(), scaleZ);
 		obj->setScale(newScale);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -746,7 +746,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newScale = osg::Vec3(scaleUniform, scaleUniform, scaleUniform);
 		obj->setScale(newScale);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -772,7 +772,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newRot = osg::Vec3(rotX, oldRot.y(), oldRot.z());
 		obj->setRotation(newRot);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -809,7 +809,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 
 		obj->setRotation(newRot);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -835,7 +835,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::Vec3 newRot = osg::Vec3(oldRot.x(), oldRot.y(), rotZ);
 		obj->setRotation(newRot);
 
-		_currChange = makeModelMatrix(obj);
+		_currChange = makeUndoRedoNode(obj);
 		GeometryObjectManipulator::updateBoundingBox();
 	},
 		[](void *value, void *clientData) {
@@ -916,7 +916,11 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		TwAddVarCB(bar, intensityNameDef.c_str(), TW_TYPE_FLOAT,
 			[](const void *data, void *clientData) {
 			Light *l = (Light *)clientData;
+			addLightToUndo(l);
+
 			l->setIntensity(*(float *)data);
+
+			_currChange = makeUndoRedoNode(l);
 		}, [](void *data, void *clientData) {
 			Light *l = (Light *)clientData;
 			*(float *)data = l->getIntensity();
@@ -928,9 +932,13 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		TwAddVarCB(bar, dirToWorldVarName.c_str(), TW_TYPE_DIR3F,
 			[](const void *value, void *clientData) {
 			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+			addLightToUndo(dl);
+
 			const float *arr = static_cast<const float *>(value);
 			osg::Vec3 dir = osg::Vec3(arr[0], arr[1], arr[2]);
 			dl->setLightToWorldDirection(dir);
+
+			_currChange = makeUndoRedoNode(dl);
 		},
 			[](void *value, void *clientData) {
 			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
@@ -946,9 +954,13 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
 			[](const void *value, void *clientData) {
 			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
+			addLightToUndo(dl);
+
 			const float *arr = static_cast<const float *>(value);
 			osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
 			dl->setColor(color);
+
+			_currChange = makeUndoRedoNode(dl);
 		},
 			[](void *value, void *clientData) {
 			DirectionalLight *dl = static_cast<DirectionalLight *>(clientData);
@@ -1004,7 +1016,11 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		TwAddVarCB(bar, intensityNameDef.c_str(), TW_TYPE_FLOAT, 
 			[](const void *data, void *clientData) {
 			Light *l = (Light *)clientData;
+			addLightToUndo(l);
+
 			l->setIntensity(*(float *)data);
+
+			_currChange = makeUndoRedoNode(l);
 		}, [](void *data, void *clientData) {
 			Light *l = (Light *)clientData;
 			*(float *)data = l->getIntensity();
@@ -1015,8 +1031,12 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			[](const void *value, void *clientData) {
 			float posX = *(const float *)value;
 			PointLight *pl = static_cast<PointLight *>(clientData);
+			addLightToUndo(pl);
+
 			const osg::Vec3 &oldPos = pl->getPosition();
 			pl->setPosition(osg::Vec3(posX, oldPos.y(), oldPos.z()));
+
+			_currChange = makeUndoRedoNode(pl);
 		},
 			[](void *value, void *clientData) {
 			float *posX = static_cast<float *>(value);
@@ -1031,9 +1051,12 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			[](const void *value, void *clientData) {
 			float posY = *(const float *)value;
 			PointLight *pl = static_cast<PointLight *>(clientData);
-			const osg::Vec3 &oldPos = pl->getPosition();
+			addLightToUndo(pl);
 
+			const osg::Vec3 &oldPos = pl->getPosition();
 			pl->setPosition(osg::Vec3(oldPos.x(), posY, oldPos.z()));
+
+			_currChange = makeUndoRedoNode(pl);
 		},
 			[](void *value, void *clientData) {
 			float *posY = static_cast<float *>(value);
@@ -1048,8 +1071,12 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			[](const void *value, void *clientData) {
 			float posZ = *(const float *)value;
 			PointLight *pl = static_cast<PointLight *>(clientData);
+			addLightToUndo(pl);
+
 			const osg::Vec3 &oldPos = pl->getPosition();
 			pl->setPosition(osg::Vec3(oldPos.x(), oldPos.y(), posZ));
+
+			_currChange = makeUndoRedoNode(pl);
 		},
 			[](void *value, void *clientData) {
 			float *posZ = static_cast<float *>(value);
@@ -1066,7 +1093,11 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			[](const void *value, void *clientData) {
 			float rad = *static_cast<const float *>(value);
 			PointLight *pl = static_cast<PointLight *>(clientData);
+			addLightToUndo(pl);
+
 			pl->setRadius(rad);
+
+			_currChange = makeUndoRedoNode(pl);
 		},
 			[](void *value, void *clientData)
 		{
@@ -1084,9 +1115,13 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
 			[](const void *value, void *clientData) {
 			PointLight *pl = static_cast<PointLight *>(clientData);
+			addLightToUndo(pl);
+
 			const float *arr = static_cast<const float *>(value);
 			osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
 			pl->setColor(color);
+
+			_currChange = makeUndoRedoNode(pl);
 		},
 			[](void *value, void *clientData) {
 			PointLight *pl = static_cast<PointLight *>(clientData);
@@ -1369,17 +1404,61 @@ void TW_CALL TwGUIManager::loadModelFunc(void* clientData)
 	// TODO: implement
 }
 
-ModelMatrix* TwGUIManager::makeModelMatrix(GeometryObject* geom)
+UndoRedoNode* TwGUIManager::makeUndoRedoNode(GeometryObject* geom)
 {
-	ModelMatrix* item = new ModelMatrix();
-	item->name = geom->getName();
-	item->matrix = geom->getMatrix();
+	ModelInfo info = ModelInfo();
+	info.name = geom->getName();
+	info.matrix = geom->getMatrix();
+
+	UndoRedoValue value = UndoRedoValue();
+	value.model = info;
+
+	UndoRedoNode* item = new UndoRedoNode();
+	item->type = UndoRedoType::MODEL;
+	item->value = value;
+
+	return item;
+}
+
+UndoRedoNode* TwGUIManager::makeUndoRedoNode(Light* light)
+{
+	LightInfo info = LightInfo();
+	info.name = light->getName();
+	info.color = light->getColor();
+	info.shadow = light->getCastShadow();
+	info.intensity = light->getIntensity();
+	
+	switch (light->getLightType()) {
+		case LightType::POINTLIGHT:
+			info.posDir = light->asPointLight()->getPosition();
+			info.radius = light->asPointLight()->getRadius();
+			break;
+		case LightType::DIRECTIONAL:
+			info.posDir = light->asDirectionalLight()->getLightToWorldDirection();
+			break;
+	}
+
+	UndoRedoValue value = UndoRedoValue();
+	value.light = info;
+
+	UndoRedoNode* item = new UndoRedoNode();
+	item->type = UndoRedoType::LIGHT;
+	item->value = value;
+
 	return item;
 }
 
 void TwGUIManager::addGeomToUndo(GeometryObject* geom)
 {
-	ModelMatrix* item = makeModelMatrix(geom);
+	UndoRedoNode* item = makeUndoRedoNode(geom);
+
+	_undos.push_back(item);
+	clearRedoList();
+}
+
+void TwGUIManager::addLightToUndo(Light* light)
+{
+	UndoRedoNode* item = makeUndoRedoNode(light);
 
 	_undos.push_back(item);
 	clearRedoList();
@@ -1389,18 +1468,19 @@ void TwGUIManager::clearRedoList()
 {
 	int size = _redos.size();
 	for (int i = 0; i < size; i++) {
-		ModelMatrix* item = _redos.back();
+		UndoRedoNode* item = _redos.back();
 		_redos.pop_back();
 		delete item;
 	}
 }
 
-void TwGUIManager::doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<ModelMatrix*> &dest)
+void TwGUIManager::doUndoRedo(std::vector<UndoRedoNode*> &from, std::vector<UndoRedoNode*> &dest)
 {
 	if (from.size() > 0) {
-		ModelMatrix* oldChange = _currChange;		// before the changes	
+		UndoRedoNode* oldChange = _currChange;		// before the changes	
 
 		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		LightManager* lm = Core::getWorldRef().getLightManager();
 		bool didChange = false;
 
 		// Loop b/c previous geoms may have been deleted/renamed
@@ -1408,16 +1488,54 @@ void TwGUIManager::doUndoRedo(std::vector<ModelMatrix*> &from, std::vector<Model
 			_currChange = from.back();
 			from.pop_back();
 
-			// Apply undo
-			GeometryObject* geom = gm->getGeometryObject(_currChange->name);
-			if (geom != NULL) {
-				geom->setMatrix(_currChange->matrix);
-				didChange = true;
+			// Check type to apply appropriate undo
+			ModelInfo m_info; LightInfo l_info;
+			GeometryObject* geom = NULL;
+			Light* light = NULL;
+
+			switch (_currChange->type) {
+				case UndoRedoType::MODEL:
+					m_info = _currChange->value.model;
+					geom = gm->getGeometryObject(m_info.name);
+
+					if (geom != NULL) {
+						geom->setMatrix(m_info.matrix);
+						didChange = true;
+					}
+					else {
+						delete _currChange;
+					}
+
+					break;
+				case UndoRedoType::LIGHT:
+					l_info = _currChange->value.light;
+					light = lm->getLight(l_info.name);
+
+					if (light != NULL) {
+						light->setColor(l_info.color);
+						light->setCastShadow(l_info.shadow);
+						light->setIntensity(l_info.intensity);
+
+						switch (light->getLightType()) {
+							case LightType::POINTLIGHT:
+								light->asPointLight()->setPosition(l_info.posDir);
+								light->asPointLight()->setRadius(l_info.radius);
+								break;
+							case LightType::DIRECTIONAL:
+								light->asDirectionalLight()->setLightToWorldDirection(l_info.posDir);
+								break;
+							}
+						didChange = true;
+					}
+					else {
+						delete _currChange;
+					}
+
+					break;
+			}
+
+			if (didChange)
 				break;
-			}
-			else {
-				delete _currChange;
-			}
 		}
 
 		// Only add to redo stack if we did undo something
@@ -1929,9 +2047,11 @@ void TwGUIManager::exportWorldXML(std::string &path)
 
 		osg::Vec3 color = light->getColor();
 		bool shadow = light->getCastShadow();
+		float intensity = light->getIntensity();
 
 		write(f, tabs, tagify("color", color));
 		write(f, tabs, tagify("castShadow", shadow));
+		write(f, tabs, tagify("intensity", intensity));
 
 		// Light properties
 		if (type == "point") {

@@ -134,7 +134,7 @@ void World::createLightFromXML(osgDB::XmlNode* xmlNode)
 	std::string name = xmlNode->properties["name"];
 	std::string type = xmlNode->properties["type"];
 	osg::Vec3 color, position, direction;
-	float radius;
+	float radius, intensity = 1.0f;
 	bool doShadow;
 
 	for (unsigned int i = 0; i < xmlNode->children.size(); ++i)
@@ -153,6 +153,9 @@ void World::createLightFromXML(osgDB::XmlNode* xmlNode)
 		else if (childName == "direction") {
 			loadVec3(xmlChild, direction);
 		}
+		else if (childName == "intensity") {
+			loadFloat(xmlChild, intensity);
+		}
 		else if (childName == "radius") {
 			loadFloat(xmlChild, radius);
 		}
@@ -162,9 +165,9 @@ void World::createLightFromXML(osgDB::XmlNode* xmlNode)
 	}
 
 	if (type == "point") {
-		_lightManager->addPointLight(name, position, color, radius, doShadow);
+		_lightManager->addPointLight(name, position, color, radius, doShadow, intensity);
 	}
 	else if (type == "directional") {
-		_lightManager->addDirectionalLight(name, direction, color, doShadow);
+		_lightManager->addDirectionalLight(name, direction, color, doShadow, intensity);
 	}
 }

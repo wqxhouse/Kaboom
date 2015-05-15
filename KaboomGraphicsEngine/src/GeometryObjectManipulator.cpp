@@ -246,13 +246,25 @@ void GeometryObjectManipulator::updateBoundingBox()
 		scale = (scale > zscale) ? scale : zscale;
 		// scale /= 2.0f;
 
-		_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
-			osg::Matrix::translate(_currNode->getBound().center()));
+		if (_attachingLight) {
+			_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
+				osg::Matrix::translate(_attachedLight->getPosition()));
+		}
+		else {
+			_dragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
+				osg::Matrix::translate(_currNode->getBound().center()));
+		}
 	}
 	else {
-		osg::Vec3f center = bbox.center();
-		_dragger->setMatrix(rotMatrix * osg::Matrix::scale(xscale, yscale, zscale) *
-			osg::Matrix::translate(center));
+		if (_attachingLight) {
+			_dragger->setMatrix(rotMatrix * osg::Matrix::scale(xscale, yscale, zscale) *
+				osg::Matrix::translate(_attachedLight->getPosition()));
+		}
+		else {
+			osg::Vec3f center = bbox.center();
+			_dragger->setMatrix(rotMatrix * osg::Matrix::scale(xscale, yscale, zscale) *
+				osg::Matrix::translate(center));
+		}
 	}
 }
 

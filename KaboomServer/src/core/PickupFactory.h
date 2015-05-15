@@ -1,8 +1,10 @@
 #pragma once
 
+#include <math/Vec3.h>
+
 class Entity;
-enum EntityType;
 class EntityManager;
+enum EntityType;
 
 class PickupFactory {
 public:
@@ -10,14 +12,13 @@ public:
 
     Entity *createPickup(
             EntityType type,
+            const Vec3 &position,
             int amount = 1,
-            float x = 0.0f,
-            float y = 0.0f,
-            float z = 0.0f) const;
+			float radius = 1.0) const;
 
 private:
     EntityManager &entityManager;
 
-    void createBase(Entity *entity, int amount, float x, float y, float z) const;
+    void createBase(Entity *entity, const Vec3 &position, int amount, float radius) const;
     void createBombPickup(Entity *entity) const;
 };

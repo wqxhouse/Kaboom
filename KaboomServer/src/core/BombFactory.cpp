@@ -8,6 +8,8 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
+#include <util/Configuration.h>
+#include <util/Timer.h>
 #include <util/XMLLoader.h>
 
 #include "EntityConfigLookup.h"
@@ -15,7 +17,6 @@
 #include "../components/ExplosionComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../components/PhysicsComponent.h"
-#include "../components/StickComponent.h"
 #include "../components/TimerComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../messaging/DefaultExplosionMessageHandler.h"
@@ -29,16 +30,12 @@ BombFactory::BombFactory(EntityManager &entityManager)
 }
 
 Entity *BombFactory::createBomb(
-        const EntityType &type,
-        float x,
-        float y,
-        float z,
-        float vx,
-        float vy,
-        float vz) const {
+        EntityType type,
+        const Vec3 &position,
+        const Vec3 &velocity) const {
     Entity *entity = entityManager.createEntity(type);
 
-    createBase(entity, x, y, z, vx, vy, vz);
+    createBase(entity, position, velocity);
 
     switch (type) {
         case KABOOM_V2: {
@@ -60,13 +57,9 @@ Entity *BombFactory::createBomb(
 
 void BombFactory::createBase(
         Entity *entity,
-        float x,
-        float y,
-        float z,
-        float vx,
-        float vy,
-        float vz) const {
-    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+        const Vec3 &position,
+        const Vec3 &velocity) const {
+    auto &config = EntityConfigLookup::get(entity->getType());
 
     float size = config.getFloat("size");
     float mass = config.getFloat("mass");
@@ -74,7 +67,7 @@ void BombFactory::createBase(
 
     btTransform worldTrans;
     worldTrans.setIdentity();
-    worldTrans.setOrigin(btVector3(x, y, z));
+    worldTrans.setOrigin(btVector3(position.x, position.y, position.z));
 
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
     btCollisionShape *collisionShape = new btSphereShape(size);
@@ -83,7 +76,7 @@ void BombFactory::createBase(
     collisionShape->calculateLocalInertia(mass, localInertia);
 
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, localInertia);
-    rigidBody->setLinearVelocity(btVector3(vx, vy, vz));
+    rigidBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
     rigidBody->setUserPointer(entity);
 
     btGhostObject *ghostObject = new btGhostObject();
@@ -96,7 +89,7 @@ void BombFactory::createBase(
     MessageHandlerChain *chain = new MessageHandlerChain();
     chain->addHandler(&explosionHandler);
 
-    entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new PositionComponent(position));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new TriggerComponent(ghostObject));
@@ -114,7 +107,7 @@ void BombFactory::createKaboomV2(Entity *entity) const {
 }
 
 void BombFactory::createTimeBomb(Entity *entity) const {
-    const Configuration &config = EntityConfigLookup::instance()[entity->getType()];
+    auto &config = EntityConfigLookup::get(entity->getType());
     auto physComp = entity->getComponent<PhysicsComponent>();
     auto handlerComp = entity->getComponent<MessageHandlerComponent>();
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
@@ -125,7 +118,7 @@ void BombFactory::createTimeBomb(Entity *entity) const {
     int delay = config.getInt("delay");
     entity->attachComponent(new TimerComponent(new Timer(delay)));
 
-    int restitution = config.getFloat("restitution");
+    float restitution = config.getFloat("restitution");
 	physComp->getRigidBody()->setRestitution(restitution);
 }
 
@@ -134,7 +127,6 @@ void BombFactory::createRemoteDetonator(Entity *entity) const {
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
     entity->attachComponent(new CollisionComponent());
-    entity->attachComponent(new StickComponent());
 
     static RemoteDetonatorMessageHandler remoteDetonatorHandler;
     chain->addHandler(&remoteDetonatorHandler);

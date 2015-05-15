@@ -7,14 +7,17 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
+#include <math/Vec3.h>
 #include <util/Configuration.h>
 
 #include "Attack1Message.h"
 #include "Message.h"
 #include "MessageType.h"
 #include "NoAttackMessage.h"
+#include "../components/CharacterRotationComponent.h"
 #include "../components/DetonatorComponent.h"
 #include "../components/ExplosionComponent.h"
+#include "../components/OwnerComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
@@ -40,15 +43,15 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
     auto detonatorComp = entity->getComponent<DetonatorComponent>();
     auto invComp = entity->getComponent<BombContainerComponent>();
     auto posComp = entity->getComponent<PositionComponent>();
-    auto rotComp = entity->getComponent<RotationComponent>();
+    auto charRotComp = entity->getComponent<CharacterRotationComponent>();
 
-    const EntityType &bombType = equipComp->getEquipmentType();
+    EntityType bombType = equipComp->getType();
 
     if (!invComp->hasBomb(bombType)) {
         return true;
     }
 
-    const Configuration &bombConfig = EntityConfigLookup::instance()[bombType];
+    auto &bombConfig = EntityConfigLookup::get(bombType);
 
     if (bombType == REMOTE_DETONATOR && detonatorComp != nullptr) {
         if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {
@@ -62,23 +65,16 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
             invComp->removeFromInventory(bombType);
             timer.start();
 
-            btVector3 viewDir = getViewDirection(
-                    posComp->getX(),
-                    posComp->getY(),
-                    posComp->getZ(),
-                    rotComp->getYaw(),
-                    rotComp->getPitch());
+            btVector3 viewDir = getViewDirection(charRotComp->getRotation());
 
             float launchSpeed = bombConfig.getFloat("launch-speed");
+            const Vec3 &pos = posComp->getPosition();
 
             Entity* bombEntity = game->getBombFactory().createBomb(
                     bombType,
-                    posComp->getX() + viewDir.getX(),
-                    posComp->getY() + viewDir.getY(),
-                    posComp->getZ() + 1 + viewDir.getZ(),
-                    viewDir.getX() * launchSpeed,
-                    viewDir.getY() * launchSpeed,
-                    viewDir.getZ() * launchSpeed);
+                    Vec3(pos.x + viewDir.getX(), pos.y + viewDir.getY(), pos.z + 1 + viewDir.getZ()),
+                    Vec3(viewDir.getX() * launchSpeed, viewDir.getY() * launchSpeed, viewDir.getZ() * launchSpeed));
+            bombEntity->attachComponent(new OwnerComponent(entity));
 
             if (bombType == REMOTE_DETONATOR) {
                 entity->attachComponent(new DetonatorComponent(bombEntity));
@@ -87,7 +83,6 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
             invComp->addToActiveBomb(bombEntity);
 
             game->addEntity(bombEntity);
-            game->getGameServer().sendSpawnEvent(bombEntity);
         }
     }
 

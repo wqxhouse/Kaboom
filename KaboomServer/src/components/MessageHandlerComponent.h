@@ -2,7 +2,7 @@
 
 #include <components/Component.h>
 
-#include "../messaging/MessageHandler.h"
+class MessageHandler;
 
 class MessageHandlerComponent : public Component {
 public:

@@ -1,9 +1,11 @@
 #include "TimerSystem.h"
 
 #include <core/Entity.h>
+#include <util/Timer.h>
 
 #include "../components/MessageHandlerComponent.h"
 #include "../components/TimerComponent.h"
+#include "../messaging/MessageHandler.h"
 #include "../messaging/TimerExpiredMessage.h"
 
 TimerSystem::TimerSystem(Game *game)
