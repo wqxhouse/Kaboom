@@ -14,7 +14,7 @@ void GameGUIEventHandler::handle(const HealthEvent &e, HealthComponent *healthCo
 	Rocket::Core::Element * table = window1->GetFirstChild();
 	Rocket::Core::Element *tr = table->GetFirstChild();
 	for (int i = 0; i < tr->GetNumChildren(); i++){
-		printf("\nthe health is at %d\n", healthComponent->getAmount());
+		//printf("\nthe health is at %d\n", healthComponent->getAmount());
 		if (healthComponent->getAmount() / 20.0 <= i){
 			tr->GetChild(i)->SetProperty("background-color", "red");
 			continue;

@@ -1,5 +1,6 @@
 #include "SpawnSystem.h"
 
+#include <components/PlayerStatusComponent.h>
 #include <components/WeaponPickupComponent.h>
 #include <core/EntityManager.h>
 
@@ -48,40 +49,19 @@ void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
 }
 
 bool SpawnSystem::checkEntity(Entity *entity) {
-    return true;
+    return entity->hasComponent<PlayerStatusComponent>();
 }
 
 
 //for pickups, a global list of Timer, with string maps to timer
 void SpawnSystem::processEntity(Entity *entity) {
+	auto* playerStatusComponent = entity->getComponent<PlayerStatusComponent>();
+	
+	if (playerStatusComponent->getIsAlive() == false){ //respawn the player here
 
-	////For weapon pickup
-	//WeaponPickupComponent* weaponPickupComp = entity->getComponent<WeaponPickupComponent>();
-	//TimerComponent* timerComp = entity->getComponent<TimerComponent>();
-	//SpawnComponent* spawnComp = entity->getComponent<SpawnComponent>();
-
-	//if (weaponPickupComp == nullptr || timerComp == nullptr || spawnComp == nullptr){
-	//	return;
-	//}
-
-	////now check if the component is ready to spawn
-	//if (timerComp->getTimer()->isExpired()){
-	//	const float PICKUP_RADIUS = 1.0f; // TODO: Extract this to XML
-
-	//	btTransform worldTrans;
-	//	worldTrans.setIdentity();
-	//	worldTrans.setOrigin(spawnComp->getSpawnLocationVec()); //we reuse the same spot here
-
-	//	btGhostObject *ghostObject = new btGhostObject();
-	//	ghostObject->setCollisionShape(new btSphereShape(PICKUP_RADIUS));
-	//	ghostObject->setUserPointer(entity);
-	//	ghostObject->setWorldTransform(worldTrans);
-
-	//	//place the new weapon pickup here
-	//	entity->attachComponent(new TriggerComponent(ghostObject));
-
-	//	entity->detachComponent<TimerComponent>();
-	//}
+		
+	}
+	
 }
 
 std::unordered_map<std::string, Configuration> & SpawnSystem::getSpawnConfigMap() {
