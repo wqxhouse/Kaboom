@@ -40,7 +40,7 @@ Game::Game(ConfigSettings *configSettings)
 	str_world_xml = str_mediaPath + str_world_xml;
 
 	std::cout << str_world_xml << std::endl;
-	world.loadMapFromXML(str_world_xml);
+	world.load(str_world_xml);
 
     systemManager.addSystem(new InitializationSystem(this));
 	systemManager.addSystem(new SpawnSystem(this));
@@ -61,7 +61,7 @@ void Game::addEntity(Entity *entity) {
     PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
     if (physicsComp != nullptr) {
-        world.addRigidBodyAndConvertToOSG(physicsComp->getRigidBody());
+        world.addRigidBody(physicsComp->getRigidBody());
     }
 
     TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();

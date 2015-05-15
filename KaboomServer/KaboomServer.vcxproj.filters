@@ -73,6 +73,12 @@
     <Filter Include="Header Files\Messaging\Handlers">
       <UniqueIdentifier>{b7c43108-cad9-412e-a545-5f21e254292a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Debug">
+      <UniqueIdentifier>{79409668-b2a3-480c-b574-73dd171dff31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Debug">
+      <UniqueIdentifier>{4197f8e7-55cd-4b99-8aa0-7ffcb6f64000}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -151,12 +157,6 @@
     <ClCompile Include="src\math\util.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\OsgBulletDebugViewer.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\OsgObjectConfigLoader.cpp">
-      <Filter>Source Files\Configurations</Filter>
-    </ClCompile>
     <ClCompile Include="src\messaging\KaboomV2MessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
     </ClCompile>
@@ -189,6 +189,12 @@
     </ClCompile>
     <ClCompile Include="src\core\MapConfigLoader.cpp">
       <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\debug\OsgBulletDebugViewer.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\debug\OsgObjectConfigLoader.cpp">
+      <Filter>Source Files\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -289,12 +295,6 @@
     <ClInclude Include="src\math\util.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\OsgBulletDebugViewer.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\OsgObjectConfigLoader.h">
-      <Filter>Header Files\Configurations</Filter>
-    </ClInclude>
     <ClInclude Include="src\components\DetonatorComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
@@ -372,6 +372,12 @@
     </ClInclude>
     <ClInclude Include="src\core\MapConfigLoader.h">
       <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\debug\OsgBulletDebugViewer.h">
+      <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\debug\OsgObjectConfigLoader.h">
+      <Filter>Header Files\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

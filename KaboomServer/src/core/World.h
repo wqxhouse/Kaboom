@@ -10,7 +10,7 @@
 #include <osgbCollision/GLDebugDrawer.h>
 #include <osgDB/XmlParser>
 
-#include "OsgBulletDebugViewer.h"
+#include "../debug/OsgBulletDebugViewer.h"
 
 class ConfigSettings;
 class Configuration;
@@ -20,19 +20,14 @@ class World {
 public:
     World(ConfigSettings *);
 
-    void loadMap();
-
-    void loadMapFromXML(const std::string &mapXMLFile);
+    void load(const std::string &mapXMLFile);
 
     void stepSimulation(float timeStep, int maxSubSteps);
 
     void addRigidBody(btRigidBody *rigidBody);
-
-    void addRigidBodyAndConvertToOSG(btRigidBody *rigidBody);
+    void addTrigger(btGhostObject *ghostObject);
 
     void removeRigidBody(btRigidBody *rigidBody);
-
-    void addTrigger(btGhostObject *ghostObject);
     void removeTrigger(btGhostObject *ghostObject);
 
     void setGravity(float gravity);
