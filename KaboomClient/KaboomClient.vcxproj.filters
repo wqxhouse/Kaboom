@@ -142,6 +142,9 @@
     <ClCompile Include="src\network\ScoreEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\gui\OnClickEndGameListener.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
@@ -234,6 +237,9 @@
     </ClInclude>
     <ClInclude Include="src\network\ScoreEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\OnClickEndGameListener.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

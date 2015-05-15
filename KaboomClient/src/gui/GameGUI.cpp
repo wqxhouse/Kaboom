@@ -5,6 +5,7 @@
 #include <LibRocketGUIManager.h>
 #include <util/ConfigSettings.h>
 #include "OnClickListener.h"
+#include "OnClickEndGameListener.h"
 
 void setupGUIDocuments(Game *game)
 {
@@ -20,5 +21,7 @@ void setupGUIDocuments(Game *game)
 	Rocket::Core::ElementDocument* marty = manager->getWindow(1);
 	Rocket::Core::EventListenerInstancer;
 	Rocket::Core::EventListener * startGameListener = new OnClickListener(game);
+	Rocket::Core::EventListener * endGameListener = new OnClickEndGameListener(game);
 	marty->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
+	marty->GetFirstChild()->GetElementById("exitgame")->AddEventListener("click", endGameListener);
 }

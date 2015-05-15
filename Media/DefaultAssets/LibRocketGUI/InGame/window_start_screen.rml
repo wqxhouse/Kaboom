@@ -10,16 +10,10 @@
     font-size:600%;
     color: #BA55D3;
     }
-    button#startgame{
-    position:absolute;
+    button{
+    position:relative;
     left: 45%;
     top : 50%;
-    }
-    button#startgame:hover{
-    border:4px double #bbb;
-    color:#aaa;
-    text-decoration:none;
-    background:#e6e6e6;
     }
     body
     {
@@ -33,7 +27,11 @@
 <body>
 <!--<body class="start_screen">-->
   <div id="title">Kaboom!</div>
-  <button id="startgame" onclick="load_game">Start Game you pleeb</button>
+  <button id="startgame" onclick="load_game">
+    <text>Start Game you pleeb</text>
+  </button>
+  <p></p>
+  <button id="exitgame">Exit game</button>
   <!--<handle size_target="#document" style="position: absolute; width: 16px; height: 16px; bottom: 0px; right: 0px;"></handle>-->
 </body>
 <!--</template>-->
