@@ -8,7 +8,6 @@
 #include "../messaging/Attack2Message.h"
 #include "../messaging/MessageHandler.h"
 #include "../messaging/NoAttackMessage.h"
-#include "../messaging/MessageHandler.h"
 
 FiringSystem::FiringSystem(Game *game)
         : game(game) {
