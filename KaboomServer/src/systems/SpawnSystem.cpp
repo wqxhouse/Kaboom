@@ -7,6 +7,7 @@
 #include "../components/TimerComponent.h"
 #include "../components/SpawnComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../components/PhysicsComponent.h"
 
 #include "../core/Game.h"
 
@@ -21,15 +22,13 @@ SpawnSystem::SpawnSystem(Game *game)
 		if (spawnConfig.second.getString("entity-type") == "Pickup") {
 			game->getPickupSpawnPointTimerMap().insert(std::make_pair(spawnConfig.first, Timer(0)));//duration is Zero at first, so we will spawn that right away
 		} else if (spawnConfig.second.getString("entity-type") == "Player") {
-
+			game->getPlayerSpawnPointList().push_back(spawnConfig.first);
 		}
-
 	}
 }
 
-void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
-	
-	//handle spawning and respawning of pickups
+//handle spawning of weapon pickups
+void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {	
 	for (auto spawnPointTimerIt = game->getPickupSpawnPointTimerMap().begin(); spawnPointTimerIt != game->getPickupSpawnPointTimerMap().end();) {
 		if (spawnPointTimerIt->second.isExpired()) {
 			const std::string spawnPointName = spawnPointTimerIt->first;//name of the spawn we need to load
@@ -54,17 +53,24 @@ void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
 }
 
 bool SpawnSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<PlayerStatusComponent>();
+    return entity->hasComponent<PlayerStatusComponent>() &&
+		   entity->hasComponent<SpawnComponent>();
 }
 
 
-//for pickups, a global list of Timer, with string maps to timer
+//Handling respawning of players
 void SpawnSystem::processEntity(Entity *entity) {
 	auto* playerStatusComponent = entity->getComponent<PlayerStatusComponent>();
-	
-	if (playerStatusComponent->getIsAlive() == false){ //respawn the player here
+	auto* spawnComponent = entity->getComponent<SpawnComponent>();
 
-		
+	if (playerStatusComponent->getIsAlive() == false ){ //respawn the player here
+		std::string spawnPointName = game->getPlayerSpawnPointList()[rand() % game->getPlayerSpawnPointList().size()]; //randomly pick a spawn point spot
+
+		Configuration spawnConfig = spawnConfigMap[spawnPointName];
+		osg::Vec3 posVec3 = spawnConfig.getVec3("position");
+
+		game->getCharacterFactory().resetCharacter(entity, Vec3(posVec3.x(), posVec3.y(), posVec3.z()));
+		game->getWorld().addRigidBody(entity->getComponent<PhysicsComponent>()->getRigidBody());
 	}
 	
 }

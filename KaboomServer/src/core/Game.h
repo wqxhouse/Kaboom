@@ -36,6 +36,7 @@ public:
 	World & getWorld();
 
 	std::unordered_map<std::string, Timer> & getPickupSpawnPointTimerMap();
+	std::vector<std::string> & getPlayerSpawnPointList();
 
 private:
     Configuration config;
@@ -53,6 +54,7 @@ private:
     World world;
 
 	std::unordered_map<std::string, Timer> pickupSpawnPointTimerMap;
-	
+	std::vector<std::string> playerSpawnPointList;
+
     void stepSimulation(float timeStep, int maxSubSteps);
 };

@@ -6,6 +6,8 @@
 
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
+#include "../components/SpawnComponent.h"
+
 #include <core/Entity.h>
 
 DeathSystem::DeathSystem(Game * game) 
@@ -28,6 +30,8 @@ void DeathSystem::processEntity(Entity *entity) {
 		//game->getGameServer().sendPlayerStatusEvent(entity);
 		game->getWorld().removeRigidBody(physicComp->getRigidBody());
 		entity->detachComponent<PhysicsComponent>(); //just remove the physicsComponent for now, we might want to attach a spectator component, or local camera on the client
-		//entity->detachComponent<InputComponent>();
+		entity->detachComponent<InputComponent>();
+		
+		entity->attachComponent(new SpawnComponent(500));
 	}
 }

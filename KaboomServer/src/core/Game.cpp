@@ -161,3 +161,7 @@ World &Game::getWorld(){
 std::unordered_map<std::string, Timer> & Game::getPickupSpawnPointTimerMap() {
 	return pickupSpawnPointTimerMap;
 }
+
+std::vector<std::string> & Game::getPlayerSpawnPointList(){
+	return playerSpawnPointList;
+}
