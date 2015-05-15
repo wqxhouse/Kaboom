@@ -33,7 +33,7 @@ public:
 
     const GameServer &getGameServer() const;
 
-	const World & getWorld() const;
+	World & getWorld();
 
 	std::unordered_map<std::string, Timer> & getPickupSpawnPointTimerMap();
 
