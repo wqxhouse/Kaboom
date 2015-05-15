@@ -130,15 +130,20 @@ void Game::run() {
 		// printf("duration: %lf\n", Core::getLastFrameDuration());
 		switch (gsm) {
 		case EDITOR_MODE:
-			if (Core::isInGameMode()) { //pressed the PlayGame Button
-				gsm = CONNECT_TO_SERVER;
-				//gsm = START_SCREEN_MODE;
+			if (Core::isInStartScreenMode()) { //pressed the PlayGame Button
+				gsm = START_SCREEN_MODE;
 			}
 			break;
 		case START_SCREEN_MODE:
 		{
 			in_game_screen_ui->Hide();
 			start_screen_ui->Show();
+			break;
+		}
+		case EXIT_START_SCREEN_MODE:
+		{
+			gsm = EDITOR_MODE;
+			Core::disableStartScreen();
 			break;
 		}
 		case CONNECT_TO_SERVER:
@@ -152,11 +157,12 @@ void Game::run() {
 			if (res)
 			{
 				gsm = GAME_MODE;
+				Core::enableGameMode();
 			}
 			else
 			{
-				gsm = EDITOR_MODE;
-				Core::disableGameMode();
+				gsm = START_SCREEN_MODE;
+				//Core::disableGameMode();
 			}
 			break;
 		}
@@ -183,7 +189,7 @@ void Game::run() {
 		case DISCONNECT_TO_SERVER:
 			//TODO: need to remove all the dynamically genereated objects! otherwise we still see them the next time we reconnect
 			client.disconnectFromServer();
-			gsm = EDITOR_MODE;
+			gsm = START_SCREEN_MODE;
 			break;
 		}
         Core::AdvanceFrame();
