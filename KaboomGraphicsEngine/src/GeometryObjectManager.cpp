@@ -81,10 +81,11 @@ bool GeometryObjectManager::addGeometryByTypeId(const std::string &name, const i
 void GeometryObjectManager::deleteGeometry(const std::string &name)
 {
 	GeometryObject *geomObj = _geomObjMap[name];
-	
-	_geomObjMap.erase(name);
-	_geomRoot->removeChild(geomObj->getRoot());
-	delete geomObj;
+	if (_geomObjMap.find(name) != _geomObjMap.end()){
+		_geomObjMap.erase(name);
+		_geomRoot->removeChild(geomObj->getRoot());
+		delete geomObj;
+	}
 }
 
 bool GeometryObjectManager::renameGeometry(const std::string &oldName, const std::string newName)

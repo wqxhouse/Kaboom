@@ -13,6 +13,7 @@ void DestroyEventHandler::handle(const Event &e) const {
 
     EntityManager &entityManager = game->getEntityManager();
     Entity *entity = entityManager.getEntity(evt.getEntityId());
-
-    game->removeEntity(entity);
+	if (entity != nullptr){
+		game->removeEntity(entity);
+	}
 }

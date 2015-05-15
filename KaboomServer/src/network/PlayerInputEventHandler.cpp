@@ -20,14 +20,15 @@ void PlayerInputEventHandler::handle(const Event &e) const {
     Entity *player = game->getEntityManager().getEntity(evt.getPlayerId());
 
     InputComponent *inputComp = player->getComponent<InputComponent>();
-    inputComp->setMovingForward(evt.isMovingForward());
-    inputComp->setMovingBackward(evt.isMovingBackward());
-    inputComp->setMovingLeft(evt.isMovingLeft());
-    inputComp->setMovingRight(evt.isMovingRight());
-    inputComp->setJumping(evt.isJumping());
-    inputComp->setAttacking1(evt.isAttacking1());
-    inputComp->setAttacking2(evt.isAttacking2());
-
+	if (inputComp != nullptr){
+		inputComp->setMovingForward(evt.isMovingForward());
+		inputComp->setMovingBackward(evt.isMovingBackward());
+		inputComp->setMovingLeft(evt.isMovingLeft());
+		inputComp->setMovingRight(evt.isMovingRight());
+		inputComp->setJumping(evt.isJumping());
+		inputComp->setAttacking1(evt.isAttacking1());
+		inputComp->setAttacking2(evt.isAttacking2());
+	}
     RotationComponent *rotComp = player->getComponent<RotationComponent>();
     rotComp->setRotation(euler2Quat(evt.getYaw(), 0.0f, 0.0f));
 
