@@ -9,5 +9,9 @@
       <radius type="float">0.5</radius>
       <position type="vector3">-5.0 -5.0 3.0</position>
     </pickup-spawn>
+    <player-spawn>
+      <position type="vector3">5.0 -5.0 3.0</position>
+      <!-- Do we want yaw, pitch here, or manually hard code quats? <orientation type=""></orientation> -->
+    </player-spawn>
   </spawn-points>
 </map>
