@@ -2,10 +2,8 @@
 
 #include <util/Configuration.h>
 
-#include "common.h"
-
 OsgObjectConfigLoader::OsgObjectConfigLoader(std::unordered_map<std::string, Configuration> &config)
-    : config(config) {
+        : config(config) {
 }
 
 void OsgObjectConfigLoader::load(const std::string &filename) {

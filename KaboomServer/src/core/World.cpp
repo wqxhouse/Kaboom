@@ -13,7 +13,7 @@
 #include "../components/CollisionComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../components/JumpComponent.h"
-#include "../core/OsgObjectConfigLoader.h"
+#include "../debug/OsgObjectConfigLoader.h"
 
 void onTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     World *w = static_cast<World *>(world->getWorldUserInfo());
@@ -41,21 +41,7 @@ World::World(ConfigSettings * configSettings)
     }
 }
 
-void World::loadMap() {
-    addStaticPlane(btVector3(0, 0, 0), btVector3(0, 0, 1));//floor
-    addStaticPlane(btVector3(0, -10, 0), btVector3(0, 1, 0));//back wall
-    addStaticPlane(btVector3(0, 10, 0), btVector3(0, -1, 0));//front wall
-    addStaticPlane(btVector3(-10, 0, 0), btVector3(1, 0, 0));//left wall
-    addStaticPlane(btVector3(10, 0, 0), btVector3(-1, 0, 0));//right wall
-
-    //add a ramp
-    btQuaternion quat;
-    quat.setRotation(btVector3(0, 1, 0), btRadians(btScalar(30)));
-    addStaticPlane(btVector3(-5, 0, 0), btVector3(0, 0, 1), quat);
-}
-
-void World::loadMapFromXML(const std::string &mapXMLFile) {
-
+void World::load(const std::string &mapXMLFile) {
     OsgObjectConfigLoader osgObjectConfigLoader(osgNodeConfigMap);
     osgObjectConfigLoader.load(mapXMLFile);
 
@@ -87,7 +73,7 @@ void World::loadMapFromXML(const std::string &mapXMLFile) {
         rigidBodyCI.m_restitution = 1.0f;
 
         btRigidBody * rigidbody = new btRigidBody(rigidBodyCI);
-        addRigidBody(rigidbody);
+        world.addRigidBody(rigidbody);
 
         if (debugMode) {
             debugViewer->addNode(transfromNode);
@@ -106,10 +92,6 @@ void World::stepSimulation(float timeStep, int maxSubSteps) {
 }
 
 void World::addRigidBody(btRigidBody *rigidBody) {
-    world.addRigidBody(rigidBody);
-}
-
-void World::addRigidBodyAndConvertToOSG(btRigidBody *rigidBody) {
     if (debugMode) {
         osg::ref_ptr<osg::Node> node = osgbCollision::osgNodeFromBtCollisionShape(rigidBody->getCollisionShape());
         debugViewer->addNode(node);
@@ -117,6 +99,7 @@ void World::addRigidBodyAndConvertToOSG(btRigidBody *rigidBody) {
 
     world.addRigidBody(rigidBody);
 }
+
 void World::removeRigidBody(btRigidBody *rigidBody) {
     world.removeRigidBody(rigidBody);
 }
