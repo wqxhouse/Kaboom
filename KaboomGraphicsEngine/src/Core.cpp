@@ -577,11 +577,11 @@ void Core::disableTwGUI()
 	}
 }
 
-void Core::enableGameMode()
+void Core::enableStartScreen()
 {
-	if (!_gameMode)
+	if (!_startScreenMode)
 	{
-		_gameMode = true;
+		_startScreenMode = true;
 
 		disablePassDataDisplay();
 		disableCameraManipulator();
@@ -593,6 +593,32 @@ void Core::enableGameMode()
 		_libRocketInGameGUI->enableGUI();
 
 		LibRocketGUIManager::bindDebugWindow(_libRocketInGameGUI);
+	}
+
+}
+
+void Core::disableStartScreen()
+{
+	if (_startScreenMode)
+	{
+		_startScreenMode = false;
+
+		enableTwGUI();
+		enableCameraManipulator();
+		enableGeometryObjectManipulator();
+		enableLightVisualizer();
+
+		_libRocketEditorGUI->enableGUI();
+		_libRocketInGameGUI->disableGUI();
+		LibRocketGUIManager::bindDebugWindow(_libRocketEditorGUI);
+	}
+}
+
+void Core::enableGameMode()
+{
+	if (!_gameMode)
+	{
+		_gameMode = true;
 
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
@@ -604,15 +630,6 @@ void Core::disableGameMode()
 	if (_gameMode)
 	{
 		_gameMode = false;
-
-		enableTwGUI();
-		enableCameraManipulator();
-		enableGeometryObjectManipulator();
-		enableLightVisualizer();
-
-		_libRocketEditorGUI->enableGUI();
-		_libRocketInGameGUI->disableGUI();
-		LibRocketGUIManager::bindDebugWindow(_libRocketEditorGUI);
 
 		//// TODO: change back to editor key bindings
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
@@ -642,6 +659,11 @@ void Core::addEventHandler(osgGA::GUIEventHandler *handler)
 {
 	if (_viewer == NULL) return;
 	_viewer->addEventHandler(handler);
+}
+
+bool Core::isInStartScreenMode()
+{
+	return _startScreenMode ? true : false;
 }
 
 bool Core::isInGameMode()
@@ -818,6 +840,7 @@ osg::ref_ptr<SkyBox> Core::_skybox;
 std::string Core::_mediaPath;
 osg::ref_ptr<CompositorAnalysis> Core::_analysisHUD;
 
+bool Core::_startScreenMode;
 bool Core::_gameMode;
 bool Core::_passDataDisplay;
 bool Core::_guiEnabled;
