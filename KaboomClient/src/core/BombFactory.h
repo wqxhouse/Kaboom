@@ -5,6 +5,7 @@
 class Entity;
 enum EntityType;
 class EntityManager;
+class Vec3;
 
 class BombFactory {
 public:
@@ -13,15 +14,13 @@ public:
     Entity *createBomb(
             unsigned int id,
             EntityType type,
-            float x,
-            float y,
-            float z,
+            const Vec3 &position,
             Quat rotation) const;
 
 private:
     EntityManager &entityManager;
 
-    void createBase(Entity *entity, float x, float y, float z, Quat rotation) const;
+    void createBase(Entity *entity, const Vec3 &position, Quat rotation) const;
     void createKaboomV2(Entity *entity) const;
     void createTimeBomb(Entity *entity) const;
     void createRemoteDetonator(Entity *entity) const;

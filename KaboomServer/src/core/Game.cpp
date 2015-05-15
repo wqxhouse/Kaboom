@@ -103,7 +103,7 @@ void Game::update(float timeStep, int maxSubSteps) {
 	if (server.acceptNewClient(entityManager.generateId())) {
 
 		//now we create a new player
-        Entity *player = characterFactory.createCharacter(DEFAULT_CHARACTER, 0.0f, -5.0f, 5.0f);
+        Entity *player = characterFactory.createCharacter(DEFAULT_CHARACTER, Vec3(0.0f, -5.0f, 5.0f));
         
 		//first notify the new client what entityId it should keep track of
 		server.sendAssignEvent(player->getId());

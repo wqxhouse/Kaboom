@@ -26,16 +26,14 @@ CharacterFactory::CharacterFactory(EntityManager &entityManager)
 }
 
 Entity *CharacterFactory::createCharacter(
-        const EntityType &characterType,
-        float x,
-        float y,
-        float z,
+        EntityType characterType,
+        const Vec3 &position,
         Quat rotation) const {
     auto &charConfig = EntityConfigLookup::get(characterType);
 
     Entity *entity = entityManager.createEntity(characterType);
 
-    createBase(entity, x, y, z, rotation);
+    createBase(entity, position, rotation);
 
     switch (characterType) {
         case DEFAULT_CHARACTER: {
@@ -49,9 +47,7 @@ Entity *CharacterFactory::createCharacter(
 
 void CharacterFactory::createBase(
         Entity *entity,
-        float x,
-        float y,
-        float z,
+        const Vec3 &position,
         Quat rotation) const {
     auto &config = EntityConfigLookup::get(entity->getType());
 
@@ -64,7 +60,7 @@ void CharacterFactory::createBase(
 
     btTransform worldTrans;
     worldTrans.setIdentity();
-    worldTrans.setOrigin(btVector3(x, y, z));
+    worldTrans.setOrigin(btVector3(position.x, position.y, position.z));
 
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
 	btCollisionShape *collisionShape = new btCapsuleShapeZ(btScalar(collisionRadius), btScalar(collisionHeight));
@@ -83,7 +79,7 @@ void CharacterFactory::createBase(
     MessageHandlerChain *chain = new MessageHandlerChain();
 
     entity->attachComponent(new InputComponent());
-    entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new PositionComponent(position));
     entity->attachComponent(new RotationComponent(rotation));
     entity->attachComponent(new CharacterRotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));

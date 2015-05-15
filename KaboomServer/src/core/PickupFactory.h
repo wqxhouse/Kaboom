@@ -1,5 +1,7 @@
 #pragma once
 
+#include <math/Vec3.h>
+
 class Entity;
 enum EntityType;
 class EntityManager;
@@ -12,13 +14,11 @@ public:
             EntityType type,
             int amount = 1,
 			float radius = 1.0,
-            float x = 0.0f,
-            float y = 0.0f,
-            float z = 0.0f) const;
+            const Vec3 &position = Vec3()) const;
 
 private:
     EntityManager &entityManager;
 
-    void createBase(Entity *entity, int amount, float radius, float x, float y, float z) const;
+    void createBase(Entity *entity, int amount, float radius, const Vec3 &position) const;
     void createBombPickup(Entity *entity) const;
 };

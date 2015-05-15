@@ -19,13 +19,11 @@ BombFactory::BombFactory(EntityManager &entityManager)
 Entity *BombFactory::createBomb(
         unsigned int id,
         EntityType type,
-        float x,
-        float y,
-        float z,
+        const Vec3 &position,
         Quat rotation) const {
     Entity *entity = entityManager.createEntity(id, type);
 
-    createBase(entity, x, y, z, rotation);
+    createBase(entity, position, rotation);
 
     switch (type) {
         case KABOOM_V2: {
@@ -45,8 +43,8 @@ Entity *BombFactory::createBomb(
     return entity;
 }
 
-void BombFactory::createBase(Entity *entity, float x, float y, float z, Quat rotation) const {
-    entity->attachComponent(new PositionComponent(x, y, z));
+void BombFactory::createBase(Entity *entity, const Vec3 &position, Quat rotation) const {
+    entity->attachComponent(new PositionComponent(position));
     entity->attachComponent(new RotationComponent(rotation));
 
     auto &config = EntityConfigLookup::get(entity->getType());

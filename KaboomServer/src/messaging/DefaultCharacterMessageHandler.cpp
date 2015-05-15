@@ -7,6 +7,7 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
+#include <math/Vec3.h>
 #include <util/Configuration.h>
 
 #include "Attack1Message.h"
@@ -64,22 +65,15 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
             invComp->removeFromInventory(bombType);
             timer.start();
 
-            btVector3 viewDir = getViewDirection(
-                    posComp->getX(),
-                    posComp->getY(),
-                    posComp->getZ(),
-                    charRotComp->getRotation());
+            btVector3 viewDir = getViewDirection(charRotComp->getRotation());
 
             float launchSpeed = bombConfig.getFloat("launch-speed");
+            const Vec3 &pos = posComp->getPosition();
 
             Entity* bombEntity = game->getBombFactory().createBomb(
                     bombType,
-                    posComp->getX() + viewDir.getX(),
-                    posComp->getY() + viewDir.getY(),
-                    posComp->getZ() + 1 + viewDir.getZ(),
-                    viewDir.getX() * launchSpeed,
-                    viewDir.getY() * launchSpeed,
-                    viewDir.getZ() * launchSpeed);
+                    Vec3(pos.x + viewDir.getX(), pos.y + viewDir.getY(), pos.z + 1 + viewDir.getZ()),
+                    Vec3(viewDir.getX() * launchSpeed, viewDir.getY() * launchSpeed, viewDir.getZ() * launchSpeed));
             bombEntity->attachComponent(new OwnerComponent(entity));
 
             if (bombType == REMOTE_DETONATOR) {

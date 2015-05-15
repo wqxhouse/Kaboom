@@ -5,22 +5,19 @@
 #include "Event.h"
 #include "../core/EntityType.h"
 #include "../math/Quat.h"
+#include "../math/Vec3.h"
 
 class SpawnEvent : public Event {
 public:
     SpawnEvent(
             unsigned int entityId = 0,
             EntityType type = NONE,
-            float x = 0.0f,
-            float y = 0.0f,
-            float z = 0.0f,
+            const Vec3 &position = Vec3(),
             Quat rotation = Quat())
             : Event(EVENT_SPAWN, sizeof(SpawnEvent)),
               entityId(entityId),
               type(type),
-              x(x),
-              y(y),
-              z(z),
+              position(position),
               rotation(rotation) {
     }
 
@@ -40,16 +37,8 @@ public:
         return type;
     }
 
-    inline float getX() const {
-        return x;
-    }
-
-    inline float getY() const {
-        return y;
-    }
-
-    inline float getZ() const {
-        return z;
+    inline const Vec3 &getPosition() const {
+        return position;
     }
 
     inline Quat getRotation() const {
@@ -60,9 +49,9 @@ public:
         os << "SpawnEvent: {" << std::endl;
         os << "    entityId: " << o.entityId << std::endl;
         os << "    type: " << o.type << std::endl;
-        os << "    x: " << o.x << std::endl;
-        os << "    y: " << o.y << std::endl;
-        os << "    z: " << o.z << std::endl;
+        os << "    x: " << o.position.x << std::endl;
+        os << "    y: " << o.position.y << std::endl;
+        os << "    z: " << o.position.z << std::endl;
         os << "}";
 
         return os;
@@ -72,9 +61,6 @@ private:
     unsigned int entityId;
     EntityType type;
 
-    float x;
-    float y;
-    float z;
-
+    Vec3 position;
     Quat rotation;
 };

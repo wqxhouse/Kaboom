@@ -33,7 +33,7 @@ void PhysicsSystem::processEntity(Entity *entity) {
 
     if (posComp != nullptr) {
         const btVector3 &pos = worldTrans.getOrigin();
-        posComp->setPosition(pos.getX(), pos.getY(), pos.getZ());
+        posComp->setPosition(Vec3(pos.getX(), pos.getY(), pos.getZ()));
     }
 
     RotationComponent *rotComp = entity->getComponent<RotationComponent>();
