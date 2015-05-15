@@ -24,8 +24,8 @@ void DeathSystem::processEntity(Entity *entity) {
 
 	if (healthComp->getAmount() == 0){
 		playerStatusComp->setIsAlive(false);
-
-		game->getWorld().removeRigidBody(physicComp->getRigidBody());
-		entity->detachComponent<PhysicsComponent>(); //just remove the physicsComponent for now, we might want to attach a spectator component, or local camera on the client
+		//game->getGameServer().sendPlayerStatusEvent(entity);
+		//game->getWorld().removeRigidBody(physicComp->getRigidBody());
+		//entity->detachComponent<PhysicsComponent>(); //just remove the physicsComponent for now, we might want to attach a spectator component, or local camera on the client
 	}
 }

@@ -20,6 +20,7 @@
 #include "../systems/TimerSystem.h"
 #include "../systems/VoidSystem.h"
 #include "../systems/SpawnSystem.h"
+#include "../systems/DeathSystem.h"
 
 Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
@@ -52,6 +53,7 @@ Game::Game(ConfigSettings *configSettings)
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
     systemManager.addSystem(new ExplosionSystem(this));
+	systemManager.addSystem(new DeathSystem(this));
 
 	//TODO Wai Ho problems with pickup being of class bomb which causes some problems in logic commented it out for now. 
    // addEntity(pickupFactory.createPickup(KABOOM_V2, 5, 1 ,5, -5, 3)); // Spawn five Kaboom 2.0 at origin

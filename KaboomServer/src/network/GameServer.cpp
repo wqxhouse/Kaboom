@@ -209,7 +209,7 @@ void GameServer::sendPlayerStatusEvent(Entity *entity) const{
 		return;
 	}
 
-	PlayerStatusEvent playerStatusEvent(playerStatusComp->getIsKnockBacked(), playerStatusComp->getIsStaggered(), playerStatusComp->getIsDamaged(), playerStatusComp->getIsAlive());
+	PlayerStatusEvent playerStatusEvent(playerStatusComp->checkIsKnockBacked(), playerStatusComp->checkIsStaggered(), playerStatusComp->checkIsDamaged(), playerStatusComp->getIsAlive());
 	sendEvent(playerStatusEvent, entityIdToClientId.at(entity->getId()));
 }
 
