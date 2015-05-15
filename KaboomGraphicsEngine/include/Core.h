@@ -66,6 +66,8 @@ public:
 	static bool isLibRocketInEditorGUIEnabled();
 	static osg::ref_ptr<LibRocketGUIManager> getInGameLibRocketGUIManager();
 
+	static void enableStartScreen();
+	static void disableStartScreen();
 	static void enableGameMode();
 	static void disableGameMode();
 
@@ -78,6 +80,7 @@ public:
 	static void setEditorFPSCamWalkingSpeed(float metersPerSec);
 	static float getEditorFPSCamWalkingSpeed();
 
+	static bool isInStartScreenMode();
 	static bool isInGameMode();
 	static bool isCamLocked();
 	static bool isViewerClosed();
@@ -159,6 +162,7 @@ private:
 	static enum CamManipulatorType _currCamManipulatorType;
 
 	// on screen flags
+	static bool _startScreenMode;
 	static bool _gameMode;
 	static bool _passDataDisplay;
 	static bool _guiEnabled;
