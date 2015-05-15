@@ -1,5 +1,5 @@
 #pragma once
-#include "C:\Users\xlunardragoonx\Documents\GitHub\Kaboom\KaboomClient\src\gui\GameGUIListener.h"
+#include "GameGUIListener.h"
 class OnClickEndGameListener :
 	public GameGUIListener
 {
