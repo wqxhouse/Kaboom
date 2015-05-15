@@ -18,7 +18,12 @@ SpawnSystem::SpawnSystem(Game *game)
 
 	game->getPickupSpawnPointTimerMap().clear();
 	for (auto spawnConfig : spawnConfigMap) {
-		game->getPickupSpawnPointTimerMap().insert(std::make_pair(spawnConfig.first, Timer(0)));//duration is Zero at first, so we will spawn that right away
+		if (spawnConfig.second.getString("entity-type") == "Pickup") {
+			game->getPickupSpawnPointTimerMap().insert(std::make_pair(spawnConfig.first, Timer(0)));//duration is Zero at first, so we will spawn that right away
+		} else if (spawnConfig.second.getString("entity-type") == "Player") {
+
+		}
+
 	}
 }
 

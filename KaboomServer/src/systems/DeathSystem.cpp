@@ -4,6 +4,7 @@
 #include <components/PositionComponent.h>
 #include <components/PlayerStatusComponent.h>
 
+#include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include <core/Entity.h>
 
@@ -25,7 +26,8 @@ void DeathSystem::processEntity(Entity *entity) {
 	if (healthComp->getAmount() == 0){
 		playerStatusComp->setIsAlive(false);
 		//game->getGameServer().sendPlayerStatusEvent(entity);
-		//game->getWorld().removeRigidBody(physicComp->getRigidBody());
-		//entity->detachComponent<PhysicsComponent>(); //just remove the physicsComponent for now, we might want to attach a spectator component, or local camera on the client
+		game->getWorld().removeRigidBody(physicComp->getRigidBody());
+		entity->detachComponent<PhysicsComponent>(); //just remove the physicsComponent for now, we might want to attach a spectator component, or local camera on the client
+		//entity->detachComponent<InputComponent>();
 	}
 }

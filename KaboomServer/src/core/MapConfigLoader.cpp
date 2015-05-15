@@ -33,7 +33,7 @@ void MapConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 
 		for (auto spawnNode : spawnsNode->children) {
 
-			if (spawnNode->name == "pickup-spawn" || spawnNode->name == "player-spawn"){
+			if (spawnNode->name == "spawn-point"){
 				std::string id = spawnNode->name + std::to_string(uniqueId++);
 				for (auto dataNode : spawnNode->children) {
 					loadValue(dataNode, dataNode->properties["type"], id);
