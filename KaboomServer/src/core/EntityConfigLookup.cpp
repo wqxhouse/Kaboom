@@ -1,5 +1,7 @@
 #include "EntityConfigLookup.h"
 
+#include <util/Configuration.h>
+
 #include "BombConfigLoader.h"
 #include "CharacterConfigLoader.h"
 

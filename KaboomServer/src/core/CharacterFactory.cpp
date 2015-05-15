@@ -9,6 +9,7 @@
 #include <components/PlayerStatusComponent.h>
 #include <components/HealthComponent.h>
 #include <core/EntityManager.h>
+#include <util/Configuration.h>
 
 #include "common.h"
 #include "EntityConfigLookup.h"
@@ -28,7 +29,7 @@ CharacterFactory::CharacterFactory(EntityManager &entityManager)
 Entity *CharacterFactory::createCharacter(
         EntityType characterType,
         const Vec3 &position,
-        Quat rotation) const {
+        const Quat &rotation) const {
     auto &charConfig = EntityConfigLookup::get(characterType);
 
     Entity *entity = entityManager.createEntity(characterType);
@@ -48,7 +49,7 @@ Entity *CharacterFactory::createCharacter(
 void CharacterFactory::createBase(
         Entity *entity,
         const Vec3 &position,
-        Quat rotation) const {
+        const Quat &rotation) const {
     auto &config = EntityConfigLookup::get(entity->getType());
 
     float collisionRadius = config.getFloat("collision-radius");

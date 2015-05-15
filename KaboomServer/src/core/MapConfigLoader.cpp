@@ -1,5 +1,8 @@
 #include "MapConfigLoader.h"
 
+#include <core/EntityType.h>
+#include <util/Configuration.h>
+
 MapConfigLoader::MapConfigLoader(std::unordered_map<std::string, Configuration> &config)
         : config(config),
 		  uniqueId(0)   

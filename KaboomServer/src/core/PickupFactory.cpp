@@ -20,13 +20,13 @@ PickupFactory::PickupFactory(EntityManager &entityManager)
 
 Entity *PickupFactory::createPickup(
         EntityType type,
+        const Vec3 &position,
         int amount,
-		float radius,
-        const Vec3 &position) const {
+		float radius) const {
 
     Entity *entity = entityManager.createEntity(type);
 
-    createBase(entity, amount, radius, position);
+    createBase(entity, position, amount, radius);
 
     if ((type & CAT_MASK) == CAT_BOMB) {
         createBombPickup(entity);
@@ -35,7 +35,7 @@ Entity *PickupFactory::createPickup(
     return entity;
 }
 
-void PickupFactory::createBase(Entity *entity, int amount, float radius, const Vec3 &position) const {
+void PickupFactory::createBase(Entity *entity, const Vec3 &position, int amount, float radius) const {
     const EntityType type = entity->getType();
 
     btTransform worldTrans;

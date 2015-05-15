@@ -35,7 +35,7 @@ void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
 			float radius = spawnConfig.getFloat("radius");
 			osg::Vec3 posVec = osg::Vec3(spawnConfig.getVec3("position"));
 
-			Entity* pickupEntity = game->getPickupFactory().createPickup(entityType, amount, radius, Vec3(posVec.x(), posVec.y(), posVec.z()));
+            Entity* pickupEntity = game->getPickupFactory().createPickup(entityType, Vec3(posVec.x(), posVec.y(), posVec.z()), amount, radius);
 			//attach a special spawn component to the pickup to indicate that it will respawn over time, and contain information about the spawn
 			pickupEntity->attachComponent(new SpawnComponent(duration, spawnPointName));
 			game->addEntity(pickupEntity);

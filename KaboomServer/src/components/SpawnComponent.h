@@ -1,7 +1,8 @@
 #pragma once
 
-#include <components/Component.h>
 #include <btBulletDynamicsCommon.h>
+
+#include <components/Component.h>
 
 class SpawnComponent : public Component {
 public:

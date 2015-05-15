@@ -1,5 +1,8 @@
 #include "BombConfigLoader.h"
 
+#include <core/EntityType.h>
+#include <util/Configuration.h>
+
 BombConfigLoader::BombConfigLoader(std::unordered_map<EntityType, Configuration> &config)
         : config(config) {
 }

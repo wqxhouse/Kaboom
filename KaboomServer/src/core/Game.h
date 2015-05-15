@@ -2,6 +2,7 @@
 
 #include <core/EntityManager.h>
 #include <util/Configuration.h>
+#include <util/Timer.h>
 
 #include "BombFactory.h"
 #include "World.h"

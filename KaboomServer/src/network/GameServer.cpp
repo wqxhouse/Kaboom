@@ -1,5 +1,7 @@
 #include "GameServer.h"
 
+#include <components/BombContainerComponent.h>
+#include <components/HealthComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
@@ -9,12 +11,17 @@
 #include <network/EmptyEvent.h>
 #include <network/EquipEvent.h>
 #include <network/ExplosionEvent.h>
+#include <network/HealthEvent.h>
+#include <network/NetworkData.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
 
+#include "NetworkServices.h"
+#include "ServerEventHandlerLookup.h"
+#include "ServerNetwork.h"
 #include "../core/Game.h"
 
 GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &eventHandlerLookup)
@@ -122,7 +129,7 @@ void GameServer::sendEvent(const Event &evt) const {
     delete[] data;
 }
 
-void GameServer::sendEvent(const Event &evt, const unsigned int &clientId) const {
+void GameServer::sendEvent(const Event &evt, unsigned int clientId) const {
     const int size = evt.getByteSize();
     char *data = new char[size];
 
@@ -132,7 +139,7 @@ void GameServer::sendEvent(const Event &evt, const unsigned int &clientId) const
     delete[] data;
 }
 
-void GameServer::sendAssignEvent(const unsigned int &entityId) const {
+void GameServer::sendAssignEvent(unsigned int entityId) const {
     AssignEvent assignEvent(entityId);
 	sendEvent(assignEvent, currClientId);
 }

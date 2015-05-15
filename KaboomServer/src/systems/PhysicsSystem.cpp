@@ -5,6 +5,7 @@
 
 #include "../components/CharacterRotationComponent.h"
 #include "../components/CollisionComponent.h"
+#include "../components/PhysicsComponent.h"
 #include "../core/Game.h"
 
 PhysicsSystem::PhysicsSystem(Game *game, World &world)
