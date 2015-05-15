@@ -6,6 +6,7 @@
 #include "../components/MessageHandlerComponent.h"
 #include "../messaging/Attack1Message.h"
 #include "../messaging/Attack2Message.h"
+#include "../messaging/MessageHandler.h"
 #include "../messaging/NoAttackMessage.h"
 
 FiringSystem::FiringSystem(Game *game)
