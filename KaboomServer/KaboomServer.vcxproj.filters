@@ -196,6 +196,9 @@
     <ClCompile Include="src\debug\OsgObjectConfigLoader.cpp">
       <Filter>Source Files\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="src\systems\DeathSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -378,6 +381,9 @@
     </ClInclude>
     <ClInclude Include="src\debug\OsgObjectConfigLoader.h">
       <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\DeathSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

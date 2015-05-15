@@ -15,4 +15,5 @@ enum EventOpcode {
 	EVENT_AMMO_COUNT = 11,
     EVENT_EQUIP = 12,
     EVENT_SCORE = 13,
+	EVENT_PLAYER_STATUS = 14
 };
