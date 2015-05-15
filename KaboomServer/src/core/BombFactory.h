@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 
+#include <math/Vec3.h>
+
 class Entity;
 enum EntityType;
 class EntityManager;
@@ -11,18 +13,14 @@ public:
     BombFactory(EntityManager &entityManager);
 
     Entity *createBomb(
-            const EntityType &type,
-            float x = 0.0f,
-            float y = 0.0f,
-            float z = 0.0f,
-            float vx = 0.0f,
-            float vy = 0.0f,
-            float vz = 0.0f) const;
+            EntityType type,
+            const Vec3 &position,
+            const Vec3 &rotation) const;
 
 private:
     EntityManager &entityManager;
 
-    void createBase(Entity *entity, float x, float y, float z, float vx, float vy, float vz) const;
+    void createBase(Entity *entity, const Vec3 &position, const Vec3 &rotation) const;
     void createKaboomV2(Entity *entity) const;
     void createTimeBomb(Entity *entity) const;
     void createRemoteDetonator(Entity *entity) const;

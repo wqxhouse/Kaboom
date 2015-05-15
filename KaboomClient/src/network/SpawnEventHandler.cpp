@@ -21,28 +21,27 @@ void SpawnEventHandler::handle(const Event &e) const {
         entity = game->getCharacterFactory().createCharacter(
                 evt.getEntityId(),
                 evt.getType(),
-                evt.getX(),
-                evt.getY(),
-                evt.getZ(),
+                evt.getPosition(),
                 evt.getRotation());
     } else if ((type & CAT_MASK) == CAT_BOMB) {
         entity = game->getBombFactory().createBomb(
                 evt.getEntityId(),
                 evt.getType(),
-                evt.getX(),
-                evt.getY(),
-                evt.getZ(),
+                evt.getPosition(),
                 evt.getRotation());
 		game->source = new Source;
 		Entity *player = entityManager.getEntity(game->getGameClient().getCurrentPlayerEntityId());
 		if (player != nullptr){
 
 
-			PositionComponent *playerPos = player->getComponent<PositionComponent>();
-			PositionComponent *pos = entity->getComponent<PositionComponent>();
-			double x = (double)(-playerPos->getX() + pos->getX());
-			double y = (double)(-playerPos->getY() + pos->getY());
-			double z = (double)(-playerPos->getZ() + pos->getZ());
+			PositionComponent *playerPosComp = player->getComponent<PositionComponent>();
+			PositionComponent *entityPosComp = entity->getComponent<PositionComponent>();
+            const Vec3 &playerPos = playerPosComp->getPosition();
+            const Vec3 &entityPos = entityPosComp->getPosition();
+
+            double x = (double)(-playerPos.x + entityPos.x);
+            double y = (double)(-playerPos.y + entityPos.y);
+            double z = (double)(-playerPos.z + entityPos.z);
 
 			switch (type&(~CAT_BOMB)){
 			case KABOOM_V2:

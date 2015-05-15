@@ -7,9 +7,9 @@
 
 class EventHandlerLookup {
 public:
-    void addHandler(const EventOpcode &opcode, EventHandler *handler);
+    void addHandler(EventOpcode opcode, EventHandler *handler);
 
-    EventHandler *find(const EventOpcode &opcode) const;
+    EventHandler *find(EventOpcode opcode) const;
 
 private:
     std::unordered_map<EventOpcode, EventHandler *> handlers;

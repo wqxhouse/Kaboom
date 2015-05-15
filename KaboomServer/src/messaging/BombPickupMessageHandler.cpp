@@ -27,10 +27,6 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
     Entity *pickup = message.getEntity();
     auto posComp = pickup->getComponent<PositionComponent>();
 
-    const float pickupPosX = posComp->getX();
-    const float pickupPosY = posComp->getY();
-    const float pickupPosZ = posComp->getZ();
-
     Entity *closestEntity = nullptr;
     float minDistance = FLT_MAX;
 
@@ -44,11 +40,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
             continue;
         }
 
-        const float charPosX = charPosComp->getX();
-        const float charPosY = charPosComp->getY();
-        const float charPosZ = charPosComp->getZ();
-
-        const float distance = getDistance(pickupPosX, pickupPosY, pickupPosZ, charPosX, charPosY, charPosZ);
+        const float distance = getDistance(posComp->getPosition(), charPosComp->getPosition());
 
         if (distance < minDistance) {
             closestEntity = character;

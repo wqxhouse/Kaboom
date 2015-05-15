@@ -55,7 +55,8 @@ void InitializationSystem::processEntity(Entity *entity) {
             PositionComponent *posComp = entity->getComponent<PositionComponent>();
 
             if (posComp != nullptr) {
-                worldTrans.setOrigin(btVector3(posComp->getX(), posComp->getY(), posComp->getZ()));
+                const Vec3 &pos = posComp->getPosition();
+                worldTrans.setOrigin(btVector3(pos.x, pos.y, pos.z));
             }
         }
 

@@ -15,7 +15,7 @@ Quat euler2Quat(float yaw, float pitch, float roll) {
     return Quat(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
 }
 
-btVector3 getViewDirection(float x, float y, float z, Quat rotation) {
+btVector3 getViewDirection(Quat rotation) {
     btVector3 dir = quatRotate(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w), btVector3(0.0f, 1.0f, 0.0f));
     dir.normalize();
 
@@ -33,10 +33,10 @@ btVector3 getImpulseVector(btVector3 pointA, btVector3 pointB, btScalar knockBac
 
 }
 
-float getDistance(float x1, float y1, float z1, float x2, float y2, float z2) {
-    const float dx = x1 - x2;
-    const float dy = y1 - y2;
-    const float dz = z1 - z2;
+float getDistance(const Vec3 &pos1, const Vec3 &pos2) {
+    const float dx = pos1.x - pos2.x;
+    const float dy = pos1.y - pos2.y;
+    const float dz = pos1.z - pos2.z;
 
     return sqrt(dx * dx + dy * dy + dz * dz);
 }

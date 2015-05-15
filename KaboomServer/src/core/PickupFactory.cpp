@@ -22,13 +22,11 @@ Entity *PickupFactory::createPickup(
         EntityType type,
         int amount,
 		float radius,
-        float x,
-        float y,
-        float z) const {
+        const Vec3 &position) const {
 
     Entity *entity = entityManager.createEntity(type);
 
-    createBase(entity, amount, radius, x, y, z);
+    createBase(entity, amount, radius, position);
 
     if ((type & CAT_MASK) == CAT_BOMB) {
         createBombPickup(entity);
@@ -37,12 +35,12 @@ Entity *PickupFactory::createPickup(
     return entity;
 }
 
-void PickupFactory::createBase(Entity *entity, int amount, float radius, float x, float y, float z) const {
+void PickupFactory::createBase(Entity *entity, int amount, float radius, const Vec3 &position) const {
     const EntityType type = entity->getType();
 
     btTransform worldTrans;
     worldTrans.setIdentity();
-    worldTrans.setOrigin(btVector3(x, y, z));
+    worldTrans.setOrigin(btVector3(position.x, position.y, position.z));
 
     btGhostObject *ghostObject = new btGhostObject();
     ghostObject->setCollisionShape(new btSphereShape(radius));
@@ -51,7 +49,7 @@ void PickupFactory::createBase(Entity *entity, int amount, float radius, float x
 
     MessageHandlerChain *chain = new MessageHandlerChain();
 
-    entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new PositionComponent(position));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new TriggerComponent(ghostObject));
     entity->attachComponent(new WeaponPickupComponent(type, amount));

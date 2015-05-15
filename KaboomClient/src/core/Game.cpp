@@ -197,10 +197,12 @@ void Game::addEntity(Entity *entity) {
     }
 
     if (sceneNodeComp != nullptr) {
-        const auto name = std::to_string(entity->getId());
-        const auto pos = osg::Vec3(posComp->getX(), posComp->getY(), posComp->getZ());
+        const Vec3 &pos = posComp->getPosition();
 
-        getGeometryManager()->addGeometry(name, sceneNodeComp->getNode(), pos);
+        const auto name = std::to_string(entity->getId());
+        const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);
+
+        getGeometryManager()->addGeometry(name, sceneNodeComp->getNode(), osgPos);
     }
 }
 

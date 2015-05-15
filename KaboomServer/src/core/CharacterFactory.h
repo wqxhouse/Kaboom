@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math/Quat.h>
+#include <math/Vec3.h>
 
 class Entity;
 enum EntityType;
@@ -11,15 +12,13 @@ public:
     CharacterFactory(EntityManager &entityManager);
 
     Entity *createCharacter(
-            const EntityType &characterType,
-            float x = 0.0f,
-            float y = 0.0f,
-            float z = 0.0f,
+            EntityType characterType,
+            const Vec3 &position = Vec3(),
             Quat rotation = Quat()) const;
 
 private:
     EntityManager &entityManager;
 
-    void createBase(Entity *entity, float x, float y, float z, Quat rotation) const;
+    void createBase(Entity *entity, const Vec3 &position, Quat rotation) const;
     void createDefaultCharacter(Entity *entity) const;
 };

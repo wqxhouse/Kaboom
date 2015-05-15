@@ -25,14 +25,16 @@ void ExplosionEventHandler::handle(const Event &e) const {
 
     // TODO: Handle explosion effect.
 	try{
-		PositionComponent *pos = bomb->getComponent<PositionComponent>();
+		PositionComponent *bombPosComp = bomb->getComponent<PositionComponent>();
 		RotationComponent *ro = player->getComponent<RotationComponent>();
 //		float yaw=ro->getYaw();
 //		float pitch=ro->getPitch();
-		PositionComponent *playerPos = player->getComponent<PositionComponent>();
-		double x =(double) (-playerPos->getX() + pos->getX());
-		double y = (double)(-playerPos->getY() + pos->getY());
-		double z =(double) (-playerPos->getZ() + pos->getZ());
+        PositionComponent *playerPosComp = player->getComponent<PositionComponent>();
+        const Vec3 &playerPos = playerPosComp->getPosition();
+        const Vec3 &bombPos = bombPosComp->getPosition();
+        double x = (double)(-playerPos.x + bombPos.x);
+        double y = (double)(-playerPos.y + bombPos.y);
+        double z = (double)(-playerPos.z + bombPos.z);
 		std::cout << " x " << x << " y " << y << " z " << z << std::endl;
 		//game->source->rewind();
 		game->source=new Source;

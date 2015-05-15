@@ -29,16 +29,12 @@ BombFactory::BombFactory(EntityManager &entityManager)
 }
 
 Entity *BombFactory::createBomb(
-        const EntityType &type,
-        float x,
-        float y,
-        float z,
-        float vx,
-        float vy,
-        float vz) const {
+        EntityType type,
+        const Vec3 &position,
+        const Vec3 &velocity) const {
     Entity *entity = entityManager.createEntity(type);
 
-    createBase(entity, x, y, z, vx, vy, vz);
+    createBase(entity, position, velocity);
 
     switch (type) {
         case KABOOM_V2: {
@@ -60,12 +56,8 @@ Entity *BombFactory::createBomb(
 
 void BombFactory::createBase(
         Entity *entity,
-        float x,
-        float y,
-        float z,
-        float vx,
-        float vy,
-        float vz) const {
+        const Vec3 &position,
+        const Vec3 &velocity) const {
     auto &config = EntityConfigLookup::get(entity->getType());
 
     float size = config.getFloat("size");
@@ -74,7 +66,7 @@ void BombFactory::createBase(
 
     btTransform worldTrans;
     worldTrans.setIdentity();
-    worldTrans.setOrigin(btVector3(x, y, z));
+    worldTrans.setOrigin(btVector3(position.x, position.y, position.z));
 
     btMotionState *motionState = new btDefaultMotionState(worldTrans);
     btCollisionShape *collisionShape = new btSphereShape(size);
@@ -83,7 +75,7 @@ void BombFactory::createBase(
     collisionShape->calculateLocalInertia(mass, localInertia);
 
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, localInertia);
-    rigidBody->setLinearVelocity(btVector3(vx, vy, vz));
+    rigidBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
     rigidBody->setUserPointer(entity);
 
     btGhostObject *ghostObject = new btGhostObject();
@@ -96,7 +88,7 @@ void BombFactory::createBase(
     MessageHandlerChain *chain = new MessageHandlerChain();
     chain->addHandler(&explosionHandler);
 
-    entity->attachComponent(new PositionComponent(x, y, z));
+    entity->attachComponent(new PositionComponent(position));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
     entity->attachComponent(new TriggerComponent(ghostObject));
