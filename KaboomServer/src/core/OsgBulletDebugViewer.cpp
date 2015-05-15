@@ -1,6 +1,16 @@
 #include "OsgBulletDebugViewer.h"
 
+#include <osgDB/ReadFile>
+#include <osgDB/FileUtils>
+#include <osg/ShapeDrawable>
+#include <osg/Geode>
+#include <osg/AnimationPath>
+#include <osg/PolygonMode>
+#include <osg/PolygonOffset>
+
 #include <osgViewer/ViewerEventHandlers>
+
+#include <util/ConfigSettings.h>
 
 OsgBulletDebugViewer::OsgBulletDebugViewer(ConfigSettings * configSettings)
 	: config(configSettings){

@@ -1,16 +1,13 @@
 #pragma once
 
-#include <components/BombContainerComponent.h>
-#include <network/NetworkData.h>
-#include <components/HealthComponent.h>
-#include <network/HealthEvent.h>
-#include "ServerEventHandlerLookup.h"
-#include "ServerNetwork.h"
-#include "NetworkServices.h"
-#include "../components/PhysicsComponent.h"
+#include <unordered_map>
 
+class ConfigSettings;
 class Entity;
+class Event;
 class Game;
+class ServerEventHandlerLookup;
+class ServerNetwork;
 
 class GameServer {
 public:
@@ -21,9 +18,9 @@ public:
     void receive(Game *game);
 
     void sendEvent(const Event &evt) const;
-    void sendEvent(const Event &evt, const unsigned int &clientId) const;
+    void sendEvent(const Event &evt, unsigned int clientId) const;
 
-    void sendAssignEvent(const unsigned int &entityId) const;
+    void sendAssignEvent(unsigned int entityId) const;
     void sendDisconnectEvent(Entity *entity) const;
     void sendSpawnEvent(Entity *entity) const;
     void sendDestroyEvent(Entity *entity) const;

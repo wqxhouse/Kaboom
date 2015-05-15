@@ -3,6 +3,7 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
+#include <util/ConfigSettings.h>
 
 #include "../components/CollisionComponent.h"
 #include "../components/InputComponent.h"
@@ -41,7 +42,6 @@ Game::Game(ConfigSettings *configSettings)
 	std::cout << str_world_xml << std::endl;
 	world.loadMapFromXML(str_world_xml);
 
-
     systemManager.addSystem(new InitializationSystem(this));
 	systemManager.addSystem(new SpawnSystem(this));
     systemManager.addSystem(new InputSystem(this));
@@ -52,9 +52,6 @@ Game::Game(ConfigSettings *configSettings)
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
     systemManager.addSystem(new ExplosionSystem(this));
-
-	//TODO Wai Ho problems with pickup being of class bomb which causes some problems in logic commented it out for now. 
-   // addEntity(pickupFactory.createPickup(KABOOM_V2, 5, 1 ,5, -5, 3)); // Spawn five Kaboom 2.0 at origin
 }
 
 Game::~Game() {
@@ -90,7 +87,6 @@ void Game::removeEntity(Entity *entity) {
     if (triggerComp != nullptr) {
         world.removeTrigger(triggerComp->getGhostObject());
     }
-
 	
     entityManager.destroyEntity(entity->getId());
 }

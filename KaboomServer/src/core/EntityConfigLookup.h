@@ -3,8 +3,7 @@
 #include <string>
 #include <unordered_map>
 
-#include <util/Configuration.h>
-
+class Configuration;
 enum EntityType;
 
 class EntityConfigLookup {

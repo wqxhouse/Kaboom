@@ -5,6 +5,7 @@
 #include "../components/MessageHandlerComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../messaging/ExplosionMessage.h"
+#include "../messaging/MessageHandler.h"
 
 class ExplosionComponent;
 

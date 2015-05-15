@@ -2,9 +2,10 @@
 
 #include <unordered_map>
 
-#include <core/EntityType.h>
-#include <util/Configuration.h>
 #include <util/XMLLoader.h>
+
+class Configuration;
+enum EntityType;
 
 class CharacterConfigLoader : public XMLLoader {
 public:

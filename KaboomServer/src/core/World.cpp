@@ -1,18 +1,19 @@
 #include "World.h"
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
+#include <osgDB/ReadFile>
+#include <osgbCollision/CollisionShapes.h>
+#include <osgbDynamics/MotionState.h>
 
 #include <core/Entity.h>
 #include <core/EntityType.h>
+#include <util/ConfigSettings.h>
+#include <util/Configuration.h>
 
-#include <osgbDynamics/MotionState.h>
-#include <osgbCollision/CollisionShapes.h>
-
-
-#include "../core/OsgObjectConfigLoader.h"
 #include "../components/CollisionComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../components/JumpComponent.h"
+#include "../core/OsgObjectConfigLoader.h"
 
 void onTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     World *w = static_cast<World *>(world->getWorldUserInfo());
