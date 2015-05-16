@@ -8,8 +8,8 @@
 
 #include <util/Configuration.h>
 
+#include "OsgObjectConfigLoader.h"
 #include "World.h"
-#include "../debug/OsgObjectConfigLoader.h"
 
 WorldLoader::WorldLoader(World &world)
         : world(world) {
