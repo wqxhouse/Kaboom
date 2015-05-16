@@ -199,6 +199,12 @@
     <ClCompile Include="src\systems\DeathSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\WorldLoader.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\debug\DebugWorld.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -384,6 +390,12 @@
     </ClInclude>
     <ClInclude Include="src\systems\DeathSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\WorldLoader.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\debug\DebugWorld.h">
+      <Filter>Header Files\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

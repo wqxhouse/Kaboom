@@ -126,7 +126,6 @@ void Game::update(float timeStep, int maxSubSteps) {
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
 
-	//TODO put an on/off switch here
 	world.renderDebugFrame();
 }
 
@@ -154,7 +153,7 @@ const GameServer &Game::getGameServer() const {
     return server;
 }
 
-World &Game::getWorld(){
+DebugWorld &Game::getWorld() {
 	return world;
 }
 
