@@ -12,6 +12,7 @@
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
+#include <network/AmmoAmountEvent.h>
 
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
@@ -113,7 +114,9 @@ void GameClient::receive() {
 				break;
             }
             case EVENT_AMMO_COUNT:{
-
+				AmmoAmountEvent ammoAmountEvent;
+				ammoAmountEvent.deserialize(&networkData[i]);
+				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(ammoAmountEvent);
                 break;
             }
             case EVENT_SCORE:{

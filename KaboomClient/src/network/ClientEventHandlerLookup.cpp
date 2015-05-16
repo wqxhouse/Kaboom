@@ -9,6 +9,7 @@
 #include "ScoreEventHandler.h"
 #include "SpawnEventHandler.h"
 #include "PlayerStatusEventHandler.h"
+#include "AmmoAmountEventHandler.h"
 
 ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
     addHandler(EVENT_DISCONNECT, new DisconnectEventHandler(game));
@@ -18,6 +19,7 @@ ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
     addHandler(EVENT_ROTATION, new RotationEventHandler(game));
     addHandler(EVENT_EXPLOSION, new ExplosionEventHandler(game));
     addHandler(EVENT_HEALTH, new HealthEventHandler(game));
+	addHandler(EVENT_AMMO_COUNT, new AmmoAmountEventHandler(game));
     addHandler(EVENT_SCORE, new ScoreEventHandler(game));
 	addHandler(EVENT_PLAYER_STATUS, new PlayerStatusEventHandler(game));
 }
