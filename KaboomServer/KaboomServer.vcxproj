@@ -36,6 +36,8 @@
     <ClCompile Include="src\core\PickupFactory.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\World.cpp" />
+    <ClCompile Include="src\core\WorldLoader.cpp" />
+    <ClCompile Include="src\debug\DebugWorld.cpp" />
     <ClCompile Include="src\debug\OsgBulletDebugViewer.cpp" />
     <ClCompile Include="src\debug\OsgObjectConfigLoader.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -94,6 +96,8 @@
     <ClInclude Include="src\core\PickupFactory.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\World.h" />
+    <ClInclude Include="src\core\WorldLoader.h" />
+    <ClInclude Include="src\debug\DebugWorld.h" />
     <ClInclude Include="src\debug\OsgBulletDebugViewer.h" />
     <ClInclude Include="src\debug\OsgObjectConfigLoader.h" />
     <ClInclude Include="src\math\util.h" />

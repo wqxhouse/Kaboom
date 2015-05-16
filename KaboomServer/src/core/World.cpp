@@ -1,102 +1,44 @@
 #include "World.h"
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
-#include <osgDB/ReadFile>
-#include <osgbCollision/CollisionShapes.h>
-#include <osgbDynamics/MotionState.h>
 
 #include <core/Entity.h>
 #include <core/EntityType.h>
 #include <util/ConfigSettings.h>
 #include <util/Configuration.h>
 
+#include "WorldLoader.h"
 #include "../components/CollisionComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../components/JumpComponent.h"
-#include "../debug/OsgObjectConfigLoader.h"
 
 void onTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     World *w = static_cast<World *>(world->getWorldUserInfo());
     w->onTick(timeStep);
 }
 
-World::World(ConfigSettings * configSettings)
-        : dispatcher(&collisionConfiguration),
-          world(&dispatcher, &broadphase, &solver, &collisionConfiguration),
-          config(configSettings) {
-    config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
-
+World::World(ConfigSettings* configSettings)
+        : configSettings(configSettings),
+          dispatcher(&collisionConfiguration),
+          world(&dispatcher, &broadphase, &solver, &collisionConfiguration) {
     setGravity(9.8f);
     broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new TriggerCallback());
     world.setInternalTickCallback(onTickCallback, this);
-
-    std::string debug;
-    config->getValue(ConfigSettings::str_server_debug_mode, debug);
-    debugMode = debug == "true" ? true : false;
-
-    if (debugMode) {
-        debugViewer = new OsgBulletDebugViewer(config);
-        debugViewer->init();
-        world.setDebugDrawer(debugViewer->getDbgDraw());
-    }
 }
 
 void World::load(const std::string &mapXMLFile) {
-    OsgObjectConfigLoader osgObjectConfigLoader(osgNodeConfigMap);
-    osgObjectConfigLoader.load(mapXMLFile);
+    std::string mediaPath;
+    configSettings->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
 
-    for (auto it = osgNodeConfigMap.begin(); it != osgNodeConfigMap.end(); ++it) {
-        Configuration osgObjectConfig = it->second;
-
-        std::string filePath = osgObjectConfig.getString("file");
-        osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(mediaPath + filePath);
-        osg::ref_ptr<osg::MatrixTransform> transfromNode = new osg::MatrixTransform;
-        transfromNode->addChild(node);
-
-        osg::Matrix mat;
-
-        osg::Vec3 pos, scale;
-        osg::Quat rot, so;
-        mat.decompose(pos, rot, scale, so);
-
-        mat.makeTranslate(osgObjectConfig.getVec3("position"));
-        mat.preMult(osg::Matrix::rotate(osg::Quat(osgObjectConfig.getVec4("orientation"))));
-        mat.preMult(osg::Matrix::scale(osgObjectConfig.getVec3("scale")));
-
-        transfromNode->setMatrix(mat);
-
-        osgbDynamics::MotionState * motion = new osgbDynamics::MotionState;
-        motion->setTransform(transfromNode);
-
-        btCollisionShape * collisionShape = osgbCollision::btTriMeshCollisionShapeFromOSG(transfromNode);
-        btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(0, motion, collisionShape, btVector3(0, 0, 0));
-        rigidBodyCI.m_restitution = 1.0f;
-
-        btRigidBody * rigidbody = new btRigidBody(rigidBodyCI);
-        world.addRigidBody(rigidbody);
-
-        if (debugMode) {
-            debugViewer->addNode(transfromNode);
-        }
-    }
+    WorldLoader loader(*this);
+    loader.load(mapXMLFile, mediaPath);
 }
 
 void World::stepSimulation(float timeStep, int maxSubSteps) {
     world.stepSimulation(timeStep, maxSubSteps);
-
-    if (debugMode) {
-        debugViewer->getDbgDraw()->BeginDraw();
-        world.debugDrawWorld();
-        debugViewer->getDbgDraw()->EndDraw();
-    }
 }
 
 void World::addRigidBody(btRigidBody *rigidBody) {
-    if (debugMode) {
-        osg::ref_ptr<osg::Node> node = osgbCollision::osgNodeFromBtCollisionShape(rigidBody->getCollisionShape());
-        debugViewer->addNode(node);
-    }
-
     world.addRigidBody(rigidBody);
 }
 
@@ -107,9 +49,9 @@ void World::removeRigidBody(btRigidBody *rigidBody) {
 void World::addTrigger(btGhostObject *ghostObject) {
     ghostObject->setCollisionFlags(ghostObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
     world.addCollisionObject(
-            ghostObject,
-            btBroadphaseProxy::SensorTrigger,
-            btBroadphaseProxy::AllFilter ^ btBroadphaseProxy::SensorTrigger ^ btBroadphaseProxy::StaticFilter);
+        ghostObject,
+        btBroadphaseProxy::SensorTrigger,
+        btBroadphaseProxy::AllFilter ^ btBroadphaseProxy::SensorTrigger ^ btBroadphaseProxy::StaticFilter);
 }
 
 void World::removeTrigger(btGhostObject *ghostObject) {
@@ -167,8 +109,6 @@ void World::addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rota
     btCollisionShape *groundShape = new btStaticPlaneShape(normal, 0);
     btDefaultMotionState *groundMotionState = new btDefaultMotionState(startTrans);
 
-    //mass, motionshape, collisionShape, localInertia
-    //mass = 0, means static objects!
     btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
     btRigidBody *groundRigidBody = new btRigidBody(groundRigidBodyCI);
 
@@ -207,22 +147,12 @@ bool World::isCollidingGround(const btManifoldPoint &contactPoint) const {
     return dot > 0.05 ? true : false;
 }
 
-void World::renderDebugFrame() {
-    if (debugMode) {
-        debugViewer->renderFrame();
-    }
-}
-
-void World::debugDrawWorld() {
-    world.debugDrawWorld();
-}
-
 btBroadphasePair *World::TriggerCallback::addOverlappingPair(btBroadphaseProxy *proxy0, btBroadphaseProxy *proxy1) {
-    btCollisionObject *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
-    btCollisionObject *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
+    auto *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
+    auto *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
 
-    Entity *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
-    Entity *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
+    auto *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
+    auto *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
 
     addTriggerEntity(entity0, entity1);
     addTriggerEntity(entity1, entity0);
@@ -231,11 +161,11 @@ btBroadphasePair *World::TriggerCallback::addOverlappingPair(btBroadphaseProxy *
 }
 
 void *World::TriggerCallback::removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher) {
-    btCollisionObject *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
-    btCollisionObject *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
+    auto *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
+    auto *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
 
-    Entity *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
-    Entity *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
+    auto *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
+    auto *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
 
     removeTriggerEntity(entity0, entity1);
     removeTriggerEntity(entity1, entity0);
@@ -245,7 +175,7 @@ void *World::TriggerCallback::removeOverlappingPair(btBroadphaseProxy* proxy0, b
 
 void World::TriggerCallback::addTriggerEntity(Entity *entityA, Entity *entityB) const {
     if (entityA != nullptr) {
-        TriggerComponent *triggerComp = entityA->getComponent<TriggerComponent>();
+        auto *triggerComp = entityA->getComponent<TriggerComponent>();
 
         if (triggerComp != nullptr && entityB != nullptr) {
             triggerComp->addTriggerEntity(entityB);
@@ -255,7 +185,7 @@ void World::TriggerCallback::addTriggerEntity(Entity *entityA, Entity *entityB) 
 
 void World::TriggerCallback::removeTriggerEntity(Entity *entityA, Entity *entityB) const {
     if (entityA != nullptr) {
-        TriggerComponent *triggerComp = entityA->getComponent<TriggerComponent>();
+        auto *triggerComp = entityA->getComponent<TriggerComponent>();
 
         if (triggerComp != nullptr && entityB != nullptr) {
             triggerComp->removeTriggerEntity(entityB);

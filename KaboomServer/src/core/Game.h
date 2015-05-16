@@ -5,9 +5,9 @@
 #include <util/Timer.h>
 
 #include "BombFactory.h"
-#include "World.h"
 #include "CharacterFactory.h"
 #include "PickupFactory.h"
+#include "../debug/DebugWorld.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
 #include "../systems/SystemManager.h"
@@ -33,7 +33,7 @@ public:
 
     const GameServer &getGameServer() const;
 
-	World & getWorld();
+	DebugWorld &getWorld();
 
 	std::unordered_map<std::string, Timer> & getPickupSpawnPointTimerMap();
 	std::vector<std::string> & getPlayerSpawnPointList();
@@ -51,7 +51,7 @@ private:
     ServerEventHandlerLookup eventHandlerLookup;
     GameServer server;
 
-    World world;
+    DebugWorld world;
 
 	std::unordered_map<std::string, Timer> pickupSpawnPointTimerMap;
 	std::vector<std::string> playerSpawnPointList;
