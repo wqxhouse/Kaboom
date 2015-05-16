@@ -24,23 +24,39 @@ public:
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
 
-    Configuration &getConfiguration();
+    inline EntityManager &getEntityManager() {
+        return entityManager;
+    }
 
-    EntityManager &getEntityManager();
-    const CharacterFactory &getCharacterFactory() const;
-    const BombFactory &getBombFactory() const;
-	const PickupFactory & getPickupFactory() const;
+    inline const CharacterFactory &getCharacterFactory() const {
+        return characterFactory;
+    }
 
-    const GameServer &getGameServer() const;
+    inline const BombFactory &getBombFactory() const {
+        return bombFactory;
+    }
 
-	DebugWorld &getWorld();
+    inline const PickupFactory & getPickupFactory() const {
+        return pickupFactory;
+    }
 
-	std::unordered_map<std::string, Timer> & getPickupSpawnPointTimerMap();
-	std::vector<std::string> & getPlayerSpawnPointList();
+    inline const GameServer &getGameServer() const {
+        return server;
+    }
+
+    inline DebugWorld &getWorld() {
+        return world;
+    }
+
+    inline std::unordered_map<std::string, Timer> & getPickupSpawnPointTimerMap() {
+        return pickupSpawnPointTimerMap;
+    }
+
+    inline std::vector<std::string> & getPlayerSpawnPointList() {
+        return playerSpawnPointList;
+    }
 
 private:
-    Configuration config;
-
     EntityManager entityManager;
     SystemManager systemManager;
 

@@ -193,9 +193,6 @@
     <ClCompile Include="src\debug\OsgBulletDebugViewer.cpp">
       <Filter>Source Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\debug\OsgObjectConfigLoader.cpp">
-      <Filter>Source Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="src\systems\DeathSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
@@ -204,6 +201,9 @@
     </ClCompile>
     <ClCompile Include="src\debug\DebugWorld.cpp">
       <Filter>Source Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\OsgObjectConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -385,9 +385,6 @@
     <ClInclude Include="src\debug\OsgBulletDebugViewer.h">
       <Filter>Header Files\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\debug\OsgObjectConfigLoader.h">
-      <Filter>Header Files\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="src\systems\DeathSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
@@ -396,6 +393,9 @@
     </ClInclude>
     <ClInclude Include="src\debug\DebugWorld.h">
       <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\OsgObjectConfigLoader.h">
+      <Filter>Header Files\Configurations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

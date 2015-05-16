@@ -5,7 +5,7 @@
 
 #include <util/ConfigSettings.h>
 
-#include "../debug/OsgBulletDebugViewer.h"
+#include "OsgBulletDebugViewer.h"
 
 DebugWorld::DebugWorld(ConfigSettings *configSettings)
         : World(configSettings),
