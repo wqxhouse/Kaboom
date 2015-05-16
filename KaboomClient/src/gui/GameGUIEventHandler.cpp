@@ -11,15 +11,29 @@ GameGUIEventHandler::GameGUIEventHandler(Game *game)
 void GameGUIEventHandler::handle(const HealthEvent &e, HealthComponent *healthComponent) const
 {
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
-	Rocket::Core::Element * table = window1->GetFirstChild();
-	Rocket::Core::Element *tr = table->GetFirstChild();
-	for (int i = 0; i < tr->GetNumChildren(); i++){
+	Rocket::Core::Element * body = window1->GetFirstChild();
+	Rocket::Core::Element *healthTable = body->GetFirstChild();
+	for (int i = 0; i < healthTable->GetNumChildren(); i++){
 		//printf("\nthe health is at %d\n", healthComponent->getAmount());
 		if (healthComponent->getAmount() / 20.0 <= i){
-			tr->GetChild(i)->SetProperty("background-color", "red");
+			healthTable->GetChild(i)->SetProperty("background-color", "red");
 			continue;
 		}
-		tr->GetChild(i)->SetProperty("background-color", "green");
+		healthTable->GetChild(i)->SetProperty("background-color", "green");
 	}
 	//win->GetChild(1);			
+}
+
+void GameGUIEventHandler::handle(const AmmoAmountEvent &e, BombContainerComponent *bombConCom) const
+{
+	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
+	Rocket::Core::Element * body = window1->GetChild(1);
+	Rocket::Core::Element *ammoTable = body->GetFirstChild();
+
+	//hardcode the number amount of bomb; currently there are 3 bombs
+	for (int i = 0; i < 3; i++)
+	{
+		int temp = e.getAmmoAmount(i);
+		ammoTable->GetChild(i)->SetInnerRML(std::to_string(temp).c_str());
+	}
 }
