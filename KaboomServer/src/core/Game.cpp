@@ -21,29 +21,28 @@
 #include "../systems/TimerSystem.h"
 #include "../systems/VoidSystem.h"
 #include "../systems/SpawnSystem.h"
+#include "../systems/DeathSystem.h"
 
 Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
           bombFactory(entityManager),
           pickupFactory(entityManager),
-	      eventHandlerLookup(this),
-          server(configSettings, eventHandlerLookup), 
-		  world(configSettings){
+          eventHandlerLookup(this),
+          server(configSettings, eventHandlerLookup),
+          world(configSettings) {
+    std::string str_mediaPath = "";
+    std::string str_world_xml = "";
 
-    //world.loadMap();
-	std::string str_mediaPath = "";
-	std::string str_world_xml = "";
+    configSettings->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+    configSettings->getValue(ConfigSettings::str_world_xml, str_world_xml);
 
-	configSettings->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-	configSettings->getValue(ConfigSettings::str_world_xml, str_world_xml);
+    str_world_xml = str_mediaPath + str_world_xml;
 
-	str_world_xml = str_mediaPath + str_world_xml;
-
-	std::cout << str_world_xml << std::endl;
-	world.loadMapFromXML(str_world_xml);
+    std::cout << str_world_xml << std::endl;
+    world.load(str_world_xml);
 
     systemManager.addSystem(new InitializationSystem(this));
-	systemManager.addSystem(new SpawnSystem(this));
+    systemManager.addSystem(new SpawnSystem(this));
     systemManager.addSystem(new InputSystem(this));
     systemManager.addSystem(new FiringSystem(this));
     systemManager.addSystem(new PhysicsSystem(this, world));
@@ -52,6 +51,7 @@ Game::Game(ConfigSettings *configSettings)
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
     systemManager.addSystem(new ExplosionSystem(this));
+    systemManager.addSystem(new DeathSystem(this));
 }
 
 Game::~Game() {
@@ -61,7 +61,7 @@ void Game::addEntity(Entity *entity) {
     PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
     if (physicsComp != nullptr) {
-        world.addRigidBodyAndConvertToOSG(physicsComp->getRigidBody());
+        world.addRigidBody(physicsComp->getRigidBody());
     }
 
     TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
@@ -70,11 +70,11 @@ void Game::addEntity(Entity *entity) {
         world.addTrigger(triggerComp->getGhostObject());
     }
 
-	server.sendSpawnEvent(entity);
+    server.sendSpawnEvent(entity);
 }
 
 void Game::removeEntity(Entity *entity) {
-	server.sendDestroyEvent(entity);
+    server.sendDestroyEvent(entity);
 
     PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
@@ -87,25 +87,25 @@ void Game::removeEntity(Entity *entity) {
     if (triggerComp != nullptr) {
         world.removeTrigger(triggerComp->getGhostObject());
     }
-	
+
     entityManager.destroyEntity(entity->getId());
 }
 
 void Game::update(float timeStep, int maxSubSteps) {
 
-	//HERE is where the client first connect to server,
+    //HERE is where the client first connect to server,
     //we want to have client load the gameworld first,
     //then create the player, and send the spawn player event to client
-	if (server.acceptNewClient(entityManager.generateId())) {
+    if (server.acceptNewClient(entityManager.generateId())) {
 
-		//now we create a new player
+        //now we create a new player
         Entity *player = characterFactory.createCharacter(DEFAULT_CHARACTER, Vec3(0.0f, -5.0f, 5.0f));
-        
-		//first notify the new client what entityId it should keep track of
-		server.sendAssignEvent(player->getId());
 
-		//send the new spawn player entity to all the clients
-		addEntity(player);
+        //first notify the new client what entityId it should keep track of
+        server.sendAssignEvent(player->getId());
+
+        //send the new spawn player entity to all the clients
+        addEntity(player);
 
         //second send the new client about all the exisiting entities
         server.sendInitializeEvent(player, entityManager.getEntityList());
@@ -120,38 +120,5 @@ void Game::update(float timeStep, int maxSubSteps) {
 
     server.sendGameStatePackets(getEntityManager().getEntityList());
 
-	//TODO put an on/off switch here
-	world.renderDebugFrame();
-}
-
-Configuration &Game::getConfiguration() {
-    return config;
-}
-
-EntityManager &Game::getEntityManager() {
-    return entityManager;
-}
-
-const CharacterFactory &Game::getCharacterFactory() const {
-    return characterFactory;
-}
-
-const BombFactory &Game::getBombFactory() const {
-    return bombFactory;
-}
-
-const PickupFactory &Game::getPickupFactory() const {
-	return pickupFactory;
-}
-
-const GameServer &Game::getGameServer() const {
-    return server;
-}
-
-const World &Game::getWorld() const{
-	return world;
-}
-
-std::unordered_map<std::string, Timer> & Game::getPickupSpawnPointTimerMap() {
-	return pickupSpawnPointTimerMap;
+    world.renderDebugFrame();
 }

@@ -9,6 +9,7 @@ public:
             : isKnockBacked(false),
               isStaggered(false),
               isDamaged(false),
+              isAlive(true),
               knockBackTimer(0),
               staggerTimer(0),
               damageTimer(0) {
@@ -57,6 +58,10 @@ public:
         return isDamaged;
     }
 
+    inline bool getIsAlive() const {
+        return isAlive;
+    }
+
     inline void setIsKnockBacked(bool isKnockBacked) {
         this->isKnockBacked = isKnockBacked;
     }
@@ -67,6 +72,10 @@ public:
 
     inline void setIsDamaged(bool isDamaged) {
         this->isDamaged = isDamaged;
+    }
+
+    inline void setIsAlive(bool isAlive){
+        this->isAlive = isAlive;
     }
 
     inline Timer &getKnockBackTimer() {
@@ -85,6 +94,7 @@ private:
 	bool isKnockBacked;
 	bool isStaggered;
 	bool isDamaged;
+	bool isAlive;
 
 	Timer knockBackTimer;
 	Timer staggerTimer;

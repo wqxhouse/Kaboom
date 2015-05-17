@@ -3,36 +3,24 @@
 #include <string>
 #include <unordered_map>
 
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <btBulletDynamicsCommon.h>
-#include <osg/MatrixTransform>
-#include <osg/Node>
-#include <osgbCollision/GLDebugDrawer.h>
-#include <osgDB/XmlParser>
-
-#include "OsgBulletDebugViewer.h"
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 class ConfigSettings;
-class Configuration;
 class Entity;
 
 class World {
 public:
-    World(ConfigSettings *);
+    World(ConfigSettings* configSettings);
 
-    void loadMap();
+    void load(const std::string &mapXMLFile);
 
-    void loadMapFromXML(const std::string &mapXMLFile);
+    virtual void stepSimulation(float timeStep, int maxSubSteps);
 
-    void stepSimulation(float timeStep, int maxSubSteps);
-
-    void addRigidBody(btRigidBody *rigidBody);
-
-    void addRigidBodyAndConvertToOSG(btRigidBody *rigidBody);
-
-    void removeRigidBody(btRigidBody *rigidBody);
-
+    virtual void addRigidBody(btRigidBody *rigidBody);
     void addTrigger(btGhostObject *ghostObject);
+
+    virtual void removeRigidBody(btRigidBody *rigidBody);
     void removeTrigger(btGhostObject *ghostObject);
 
     void setGravity(float gravity);
@@ -41,29 +29,18 @@ public:
 
     const btCollisionDispatcher &getDispatcher() const;
 
-    void renderDebugFrame();
-
-    void debugDrawWorld(); //use for updating the debug world frame
-
-private:
-    class TriggerCallback;
-
-    std::string mediaPath;
-
-    bool debugMode;
-
-    std::unordered_map<std::string, Configuration> osgNodeConfigMap;
-
-    OsgBulletDebugViewer* debugViewer;
-
-    ConfigSettings* config;
-
+protected:
     btDbvtBroadphase broadphase;
     btDefaultCollisionConfiguration collisionConfiguration;
     btCollisionDispatcher dispatcher;
     btSequentialImpulseConstraintSolver solver;
 
     btDiscreteDynamicsWorld world;
+
+private:
+    class TriggerCallback;
+
+    ConfigSettings* configSettings;
 
     void addStaticPlane(btVector3 origin, btVector3 normal);
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);

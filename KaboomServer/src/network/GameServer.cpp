@@ -4,6 +4,8 @@
 #include <components/HealthComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
+#include <components/PlayerStatusComponent.h>
+
 #include <core/Entity.h>
 #include <network/AssignEvent.h>
 #include <network/DestroyEvent.h>
@@ -14,10 +16,12 @@
 #include <network/HealthEvent.h>
 #include <network/NetworkData.h>
 #include <network/PlayerInputEvent.h>
+#include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
+#include <network/AmmoAmountEvent.h>
 
 #include "NetworkServices.h"
 #include "ServerEventHandlerLookup.h"
@@ -205,12 +209,42 @@ void GameServer::sendHealthEvent(Entity *entity) const {
 }
 
 void GameServer::sendAmmoEvent(Entity *entity) const{
+	BombContainerComponent *bombConCom = entity->getComponent<BombContainerComponent>();
 
+	if (bombConCom == nullptr){
+		return;
+	}
+
+	//Hardcode the amount of bomb
+	//when we add more bomb type, we need to modify this
+	int kaboom_ammo = bombConCom->getAmount(KABOOM_V2);
+	int time_ammo = bombConCom->getAmount(TIME_BOMB);
+	int remote_ammo = bombConCom->getAmount(REMOTE_DETONATOR);
+
+	//make sure its 0 or greater
+	kaboom_ammo = (kaboom_ammo > 0) ? kaboom_ammo : 0;
+	time_ammo = (time_ammo > 0) ? time_ammo : 0;
+	remote_ammo = (remote_ammo > 0) ? remote_ammo : 0;
+
+	AmmoAmountEvent ammoAmountEvent(kaboom_ammo, time_ammo, remote_ammo);
+	sendEvent(ammoAmountEvent, entityIdToClientId.at(entity->getId()));
 }
 
 void GameServer::sendScoreEvent(int kills, int deaths) const {
-    ScoreEvent scoreEvent(kills, deaths);
-    sendEvent(scoreEvent);
+	ScoreEvent scoreEvent(kills, deaths);
+	sendEvent(scoreEvent);
+}
+
+void GameServer::sendPlayerStatusEvent(Entity *entity) const{
+	PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
+
+	if (playerStatusComp == nullptr){
+		return;
+	}
+
+	PlayerStatusEvent playerStatusEvent(playerStatusComp->checkIsKnockBacked(), playerStatusComp->checkIsStaggered(), playerStatusComp->checkIsDamaged(), playerStatusComp->getIsAlive());
+	sendEvent(playerStatusEvent, entityIdToClientId.at(entity->getId()));
+
 }
 
 void GameServer::sendInitializeEvent(Entity *player, const std::vector<Entity *> &entities) const {
@@ -236,5 +270,7 @@ void GameServer::sendGameStatePackets(const std::vector<Entity *> &entities) con
         sendPositionEvent(entity);
         sendRotationEvent(entity);
         sendHealthEvent(entity);
+		sendPlayerStatusEvent(entity);
+		sendAmmoEvent(entity);
     }
 }
