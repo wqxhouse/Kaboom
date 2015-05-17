@@ -57,7 +57,7 @@ void TwGUIManager::initMainBar()
 
 	TwAddButton(g_twBar, "Run Game",
 		[](void *clientData) {
-		Core::enableGameMode();
+		Core::enableStartScreen();
 	}, NULL, " label='--> Run Game :)' ");
 
 	// 'Export to XML' button

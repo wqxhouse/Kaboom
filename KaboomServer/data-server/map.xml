@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <map>
-    <spawn-points>
-        <pickup-spawn>
-            <id type="uint">131073</id>
-            <name type="string">Kaboom 2.0</name>
-            <amount type="int">5</amount>
-            <duration type="int">5000</duration>
-            <radius type="float">0.5</radius>
-            <position type="vector3">-5.0 -5.0 3.0</position>
-        </pickup-spawn>
-    </spawn-points>
+  <spawn-points>
+    <spawn-point>
+      <entity-type type="string">Pickup</entity-type>
+      <id type="uint">131073</id>
+      <name type="string">Kaboom 2.0</name>
+      <amount type="int">5</amount>
+      <duration type="int">5000</duration>
+      <radius type="float">0.5</radius>
+      <position type="vector3">-5.0 -5.0 3.0</position>
+    </spawn-point>
+    <spawn-point>
+      <entity-type type="string">Player</entity-type>
+      <position type="vector3">5.0 -5.0 3.0</position>
+      <!-- Do we want yaw, pitch here, or manually hard code the quats? <orientation type=""></orientation> -->
+    </spawn-point>
+  </spawn-points>
 </map>

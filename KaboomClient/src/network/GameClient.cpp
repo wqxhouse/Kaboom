@@ -7,10 +7,12 @@
 #include <network/EquipEvent.h>
 #include <network/ExplosionEvent.h>
 #include <network/PlayerInputEvent.h>
+#include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
+#include <network/AmmoAmountEvent.h>
 
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
@@ -106,12 +108,15 @@ void GameClient::receive() {
 			case EVENT_HEALTH:{
 			    HealthEvent healthEvent;
 				healthEvent.deserialize(&networkData[i]);
+				//std::cout << healthEvent << std::endl;
 				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(healthEvent);
 				//printf("\nhello world\n");
 				break;
             }
             case EVENT_AMMO_COUNT:{
-
+				AmmoAmountEvent ammoAmountEvent;
+				ammoAmountEvent.deserialize(&networkData[i]);
+				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(ammoAmountEvent);
                 break;
             }
             case EVENT_SCORE:{
@@ -120,6 +125,13 @@ void GameClient::receive() {
                 eventHandlerLookup.find(emptyEvent.getOpcode())->handle(scoreEvent);
                 break;
             }
+			case EVENT_PLAYER_STATUS:{
+				PlayerStatusEvent playerStatusEvent;
+				playerStatusEvent.deserialize(&networkData[i]);
+				std::cout << playerStatusEvent << std::endl;
+				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerStatusEvent);
+				break;
+			}
             default: {
                 printf("error in packet event types\n");
                 return;

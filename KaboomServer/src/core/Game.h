@@ -5,9 +5,9 @@
 #include <util/Timer.h>
 
 #include "BombFactory.h"
-#include "World.h"
 #include "CharacterFactory.h"
 #include "PickupFactory.h"
+#include "../debug/DebugWorld.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
 #include "../systems/SystemManager.h"
@@ -24,22 +24,39 @@ public:
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
 
-    Configuration &getConfiguration();
+    inline EntityManager &getEntityManager() {
+        return entityManager;
+    }
 
-    EntityManager &getEntityManager();
-    const CharacterFactory &getCharacterFactory() const;
-    const BombFactory &getBombFactory() const;
-	const PickupFactory & getPickupFactory() const;
+    inline const CharacterFactory &getCharacterFactory() const {
+        return characterFactory;
+    }
 
-    const GameServer &getGameServer() const;
+    inline const BombFactory &getBombFactory() const {
+        return bombFactory;
+    }
 
-	const World & getWorld() const;
+    inline const PickupFactory & getPickupFactory() const {
+        return pickupFactory;
+    }
 
-	std::unordered_map<std::string, Timer> & getPickupSpawnPointTimerMap();
+    inline const GameServer &getGameServer() const {
+        return server;
+    }
+
+    inline DebugWorld &getWorld() {
+        return world;
+    }
+
+    inline std::unordered_map<std::string, Timer> & getPickupSpawnPointTimerMap() {
+        return pickupSpawnPointTimerMap;
+    }
+
+    inline std::vector<std::string> & getPlayerSpawnPointList() {
+        return playerSpawnPointList;
+    }
 
 private:
-    Configuration config;
-
     EntityManager entityManager;
     SystemManager systemManager;
 
@@ -50,9 +67,10 @@ private:
     ServerEventHandlerLookup eventHandlerLookup;
     GameServer server;
 
-    World world;
+    DebugWorld world;
 
 	std::unordered_map<std::string, Timer> pickupSpawnPointTimerMap;
-	
+	std::vector<std::string> playerSpawnPointList;
+
     void stepSimulation(float timeStep, int maxSubSteps);
 };

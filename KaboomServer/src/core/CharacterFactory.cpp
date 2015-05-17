@@ -101,3 +101,18 @@ void CharacterFactory::createDefaultCharacter(Entity *entity) const {
     entity->attachComponent(new JetpackComponent());
     entity->attachComponent(new EquipmentComponent(KABOOM_V2));
 }
+
+void CharacterFactory::resetCharacter(Entity *entity, const Vec3 &position, const Quat &rotation) const {
+
+	entity->detachAllComponent();
+
+	auto &charConfig = EntityConfigLookup::get(entity->getType());
+	createBase(entity, position, rotation);
+
+	switch (entity->getType()) {
+		case DEFAULT_CHARACTER: {
+			createDefaultCharacter(entity);
+			break;
+		}
+	}
+}

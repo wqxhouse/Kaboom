@@ -1,11 +1,13 @@
 #include "SpawnSystem.h"
 
+#include <components/PlayerStatusComponent.h>
 #include <components/WeaponPickupComponent.h>
 #include <core/EntityManager.h>
 
 #include "../components/TimerComponent.h"
 #include "../components/SpawnComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../components/PhysicsComponent.h"
 
 #include "../core/Game.h"
 
@@ -17,13 +19,16 @@ SpawnSystem::SpawnSystem(Game *game)
 
 	game->getPickupSpawnPointTimerMap().clear();
 	for (auto spawnConfig : spawnConfigMap) {
-		game->getPickupSpawnPointTimerMap().insert(std::make_pair(spawnConfig.first, Timer(0)));//duration is Zero at first, so we will spawn that right away
+		if (spawnConfig.second.getString("entity-type") == "Pickup") {
+			game->getPickupSpawnPointTimerMap().insert(std::make_pair(spawnConfig.first, Timer(0)));//duration is Zero at first, so we will spawn that right away
+		} else if (spawnConfig.second.getString("entity-type") == "Player") {
+			game->getPlayerSpawnPointList().push_back(spawnConfig.first);
+		}
 	}
 }
 
-void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
-	
-	//handle spawning and respawning of pickups
+//handle spawning of weapon pickups
+void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {	
 	for (auto spawnPointTimerIt = game->getPickupSpawnPointTimerMap().begin(); spawnPointTimerIt != game->getPickupSpawnPointTimerMap().end();) {
 		if (spawnPointTimerIt->second.isExpired()) {
 			const std::string spawnPointName = spawnPointTimerIt->first;//name of the spawn we need to load
@@ -48,40 +53,26 @@ void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
 }
 
 bool SpawnSystem::checkEntity(Entity *entity) {
-    return true;
+    return entity->hasComponent<PlayerStatusComponent>() &&
+		   entity->hasComponent<SpawnComponent>();
 }
 
 
-//for pickups, a global list of Timer, with string maps to timer
+//Handling respawning of players
 void SpawnSystem::processEntity(Entity *entity) {
+	auto* playerStatusComponent = entity->getComponent<PlayerStatusComponent>();
+	auto* spawnComponent = entity->getComponent<SpawnComponent>();
 
-	////For weapon pickup
-	//WeaponPickupComponent* weaponPickupComp = entity->getComponent<WeaponPickupComponent>();
-	//TimerComponent* timerComp = entity->getComponent<TimerComponent>();
-	//SpawnComponent* spawnComp = entity->getComponent<SpawnComponent>();
+	if (playerStatusComponent->getIsAlive() == false ){ //respawn the player here
+		std::string spawnPointName = game->getPlayerSpawnPointList()[rand() % game->getPlayerSpawnPointList().size()]; //randomly pick a spawn point spot
 
-	//if (weaponPickupComp == nullptr || timerComp == nullptr || spawnComp == nullptr){
-	//	return;
-	//}
+		Configuration spawnConfig = spawnConfigMap[spawnPointName];
+		osg::Vec3 posVec3 = spawnConfig.getVec3("position");
 
-	////now check if the component is ready to spawn
-	//if (timerComp->getTimer()->isExpired()){
-	//	const float PICKUP_RADIUS = 1.0f; // TODO: Extract this to XML
-
-	//	btTransform worldTrans;
-	//	worldTrans.setIdentity();
-	//	worldTrans.setOrigin(spawnComp->getSpawnLocationVec()); //we reuse the same spot here
-
-	//	btGhostObject *ghostObject = new btGhostObject();
-	//	ghostObject->setCollisionShape(new btSphereShape(PICKUP_RADIUS));
-	//	ghostObject->setUserPointer(entity);
-	//	ghostObject->setWorldTransform(worldTrans);
-
-	//	//place the new weapon pickup here
-	//	entity->attachComponent(new TriggerComponent(ghostObject));
-
-	//	entity->detachComponent<TimerComponent>();
-	//}
+		game->getCharacterFactory().resetCharacter(entity, Vec3(posVec3.x(), posVec3.y(), posVec3.z()));
+		game->getWorld().addRigidBody(entity->getComponent<PhysicsComponent>()->getRigidBody());
+	}
+	
 }
 
 std::unordered_map<std::string, Configuration> & SpawnSystem::getSpawnConfigMap() {
