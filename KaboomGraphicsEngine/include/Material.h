@@ -135,6 +135,46 @@ public:
 		return _normalMapPath;
 	}
 
+	inline float getAlbedoTexLerp()
+	{
+		return _albedoTexLerp;
+	}
+
+	inline void setAlbedoTexLerp(float alpha)
+	{
+		_albedoTexLerp = alpha;
+	}
+
+	inline float getRoughnessTexLerp()
+	{
+		return _roughnessTexLerp;
+	}
+
+	inline void setRoughnessTexLerp(float alpha)
+	{
+		_roughnessTexLerp = alpha;
+	}
+
+	inline float getMetallicTexLerp()
+	{
+		return _metallicTexLerp;
+	}
+
+	inline void setMetallicTexLerp(float alpha)
+	{
+		_metallicTexLerp = alpha;
+	}
+
+	inline float getNormalMapMapLerp()
+	{
+		return _normalMapLerp;
+	}
+
+	inline void setNormalMapLerp(float alpha)
+	{
+		_normalMapLerp = alpha;
+	}
+
 private:
 
 	TextureChangeCallback _onTextureChangeFunc;
@@ -156,5 +196,10 @@ private:
 	std::string _metallicMapPath;
 	std::string _albedoMapPath;
 	std::string _normalMapPath;
+
+	float _albedoTexLerp;
+	float _roughnessTexLerp;
+	float _metallicTexLerp;
+	float _normalMapLerp;
 };
 
