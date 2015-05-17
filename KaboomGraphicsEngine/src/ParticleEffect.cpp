@@ -1,4 +1,6 @@
 #include "ParticleEffect.h"
+
+#include <osg/Geode>
 #include "ParticleEffectManager.h"
 
 ParticleEffect::ParticleEffect(ParticleEffectManager *manager)

@@ -2,9 +2,11 @@
 #include <osgDB/ReadFile>
 
 #include "ExplosionEffect.h"
+#include "TrailingEffect.h"
 
 ParticleEffectManager::ParticleEffectManager()
-	: _builtInExplsionEffectStr("__explosionEffect")
+	: _builtInExplsionEffectStr("__explosionEffect"), 
+	  _builtInTrailingEffectStr("__trailingEffect")
 {
 	// TODO: make sure depth write is disabled 
 	// Since, currently depth write is not managed by osg states
@@ -12,7 +14,7 @@ ParticleEffectManager::ParticleEffectManager()
 	_particleGroup->setNodeMask(0x10);
 
 	_particleUpdateHandler = new SparkUpdatingHandler;
-	createBuiltInExplosionEffect();
+	createBuiltInParticleEffects();
 }
 
 ParticleEffectManager::~ParticleEffectManager()
@@ -37,6 +39,7 @@ ParticleEffectManager::~ParticleEffectManager()
 void ParticleEffectManager::createBuiltInParticleEffects()
 {
 	createBuiltInExplosionEffect();
+	createBuiltInTrailingEffect();
 }
 
 void ParticleEffectManager::createBuiltInExplosionEffect()
@@ -48,12 +51,23 @@ void ParticleEffectManager::createBuiltInExplosionEffect()
 	_particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(explosion->getRoot()->getDrawable(0)));
 }
 
+void ParticleEffectManager::createBuiltInTrailingEffect()
+{
+	TrailingEffect *trailingEffect = new TrailingEffect(this, _particleUpdateHandler);
+	_particleEffects.insert(std::make_pair(_builtInTrailingEffectStr, trailingEffect));
+	_particleGroup->addChild(trailingEffect->getRoot());
+	_particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(trailingEffect->getRoot()->getDrawable(0)));
+}
+
 ParticleEffect *ParticleEffectManager::getParticleEffect(enum BuiltInParticleEffect effect)
 {
 	switch (effect)
 	{
 	case EXPLOSION:
 		return _particleEffects[_builtInExplsionEffectStr];
+		break;
+	case TRAILING:
+		return _particleEffects[_builtInTrailingEffectStr];
 		break;
 	default:
 		OSG_WARN << "ParticleEffectManager:: invalid enum" << std::endl;

@@ -17,6 +17,8 @@ uniform sampler2D u_metallicTex;
 uniform sampler2D u_normalMapTex;
 // uniform sampler2D u_translucentTex;
 
+uniform mat4 osg_ViewMatrix;
+
 void main()
 {
 	vec3 albedo = texture(u_albedoTex, v_geomTexCoord).rgb;
@@ -27,19 +29,17 @@ void main()
 	vec3 ws_vertex = v_ws_vertex;
 	vec3 ws_tangent;
 	vec3 ws_binormal;
+	
+	// TODO: benchmark which method is faster
+	// reconstructTanBin(ws_vertex, ws_normal, v_geomTexCoord, ws_tangent, ws_binormal); 
+	//vec3 mixedNormal = normalize(
+	//	ws_tangent * normalMap.x + 
+	//	ws_binormal * normalMap.y + 
+	//	ws_normal * normalMap.z
+	//);
 
-	reconstructTanBin(ws_vertex, ws_normal, v_geomTexCoord, ws_tangent, ws_binormal); 
-
-	vec3 mixedNormal = normalize(
-		ws_tangent * normalMap.x + 
-		ws_binormal * normalMap.y + 
-		ws_normal * normalMap.z
-	);
-
-	// TODO: check if necessary to normalize
-	mixedNormal = normalize(mixedNormal);
-
-	vec3 view_normal = gl_NormalMatrix * mixedNormal;
+	vec3 mixedNormal = blendNormals( ws_normal, normalMap );
+	vec3 view_normal = normalize(osg_ViewMatrix * vec4(mixedNormal, 0)).xyz;
 
 	float roughness = texture(u_roughnessTex, v_geomTexCoord).r;
 	float metallic = texture(u_metallicTex, v_geomTexCoord).r;

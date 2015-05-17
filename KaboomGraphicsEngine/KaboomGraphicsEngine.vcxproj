@@ -284,6 +284,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\SparkDrawable.h" />
     <ClInclude Include="include\SparkUpdatingHandler.h" />
+    <ClInclude Include="include\TrailingEffect.h" />
     <ClInclude Include="include\TwGUIManager.h" />
     <ClInclude Include="include\TypeIdLoader.h" />
     <ClInclude Include="include\Visualizer.h" />
@@ -326,6 +327,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\SparkDrawable.cpp" />
     <ClCompile Include="src\SparkUpdatingHandler.cpp" />
+    <ClCompile Include="src\TrailingEffect.cpp" />
     <ClCompile Include="src\TwGUIManager.cpp" />
     <ClCompile Include="src\TypeIdLoader.cpp" />
     <ClCompile Include="src\Visualizer.cpp" />

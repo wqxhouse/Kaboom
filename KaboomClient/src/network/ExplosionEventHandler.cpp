@@ -6,6 +6,7 @@
 #include <components/RotationComponent.h>
 #include <network/ExplosionEvent.h>
 #include <ParticleEffectManager.h>
+#include <ExplosionEffect.h>
 
 #include "../core/Game.h"
 
@@ -67,9 +68,11 @@ void ExplosionEventHandler::handle(const Event &e) const {
 
 		// TODO: need to refactor the code above... probably abstract out a sound manager
 		// trigger explosion particle effect
-		ParticleEffect *explosionEffect = 
-			game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION);
+		ExplosionEffect *explosionEffect = 
+			static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION));
 		// TODO: can add some randomness by applying a random quat
+		// explosionEffect->setExplosionRadius(2);
+		osg::Vec3 bombPosVec = bombPos.getOsgVec3();
 		explosionEffect->run(bombPos.getOsgVec3());
 	}
 	catch (Error e) {

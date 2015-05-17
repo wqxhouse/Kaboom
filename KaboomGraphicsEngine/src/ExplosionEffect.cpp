@@ -13,6 +13,8 @@
 ExplosionEffect::ExplosionEffect(ParticleEffectManager *manager)
 	: ParticleEffect(manager)
 {
+	_name = "Explosion";
+
 	ConfigSettings *config = ConfigSettings::config;
 	std::string mediaPath;
 	config->getValue("MediaPath", mediaPath);
@@ -34,6 +36,11 @@ ExplosionEffect::ExplosionEffect(ParticleEffectManager *manager)
 	_particleDrawable->setSortParticles(true);
 	_particleDrawable->setBaseSystemCreator(createExplosionEffect);
 }
+
+//void ExplosionEffect::setExplosionRadius(float radius)
+//{ 
+//
+//}
 
 SPK::SPK_ID ExplosionEffect::createExplosionEffect(
 	const SparkDrawable::TextureIDMap& textureIDMap,

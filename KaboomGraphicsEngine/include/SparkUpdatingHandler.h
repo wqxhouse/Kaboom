@@ -21,6 +21,8 @@ public:
 		if (i < _sparks.size()) _sparks.erase(_sparks.begin() + i);
 	}
 
+	int getSparkIndex(SparkDrawable *spark);
+
 	void setTrackee(unsigned int i, osg::Transform* t)
 	{
 		_sparks[i]._trackee = t; _sparks[i]._dirtyMatrix = true;

@@ -10,6 +10,8 @@ varying vec4 v_position;
 varying float v_depth;
 varying vec2 v_geomTexCoord;
 
+varying mat3 v_normalMat;
+
 uniform float u_farPlane;
 
 uniform mat4 osg_ViewMatrixInverse;

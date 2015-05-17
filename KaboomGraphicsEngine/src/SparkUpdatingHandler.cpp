@@ -38,6 +38,20 @@ bool SparkUpdatingHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAc
 	return false;
 }
 
+int SparkUpdatingHandler::getSparkIndex(SparkDrawable *spark)
+{
+	for (int i = 0; i < _sparks.size(); i++)
+	{
+		if (_sparks[i]._spark == spark)
+		{
+			return i;
+		}
+	}
+
+	OSG_WARN << "SparkUpdatingHandler:: spark not found " << std::endl;
+	return -1;
+}
+
 osg::Matrix SparkUpdatingHandler::computeTransformMatrix(SparkDrawable* spark, osg::Transform* trackee)
 {
 	osg::Node* sparkGeode = (spark->getNumParents() > 0 ? spark->getParent(0) : NULL);
@@ -49,7 +63,9 @@ osg::Matrix SparkUpdatingHandler::computeTransformMatrix(SparkDrawable* spark, o
 		return osg::Matrix::identity();
 
 	// Collect the parent paths, ignoring the last one (the spark/trackee itself)
-	osg::NodePath& sparkPath = sparkGeode->getParentalNodePaths()[0]; sparkPath.pop_back();
-	osg::NodePath& trackeePath = trackee->getParentalNodePaths()[0];  trackeePath.pop_back();
+	osg::NodePath& sparkPath = sparkGeode->getParentalNodePaths()[0]; 
+	sparkPath.pop_back();
+	osg::NodePath& trackeePath = trackee->getParentalNodePaths()[0];  
+	trackeePath.pop_back();
 	return computeLocalToWorld(trackeePath) * computeWorldToLocal(sparkPath);
 }

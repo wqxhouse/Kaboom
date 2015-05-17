@@ -30,5 +30,6 @@ protected:
 	osg::ref_ptr<osg::Geode> _particleRoot;
 	osg::ref_ptr<SparkDrawable> _particleDrawable;
 
+
 	ParticleEffectManager *_manager;
 };
