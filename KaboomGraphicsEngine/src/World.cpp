@@ -81,8 +81,13 @@ void World::createModelFromXML(osgDB::XmlNode* xmlNode)
 
 			model = osgDB::readNodeFile(file);
 			if (!_geomManager->addGeometry(name, model, file)) {
-				std::cout << "createModelFromXML(): " << name << " failed to create" << std::endl;
-				return;
+				std::cout << "createModelFromXML(): " << name << " failed to create, trying to find if it exists already..." << std::endl;
+				if (_geomManager->getGeometryObject(name) != NULL) {
+					std::cout << "  => found " + name + " in the GeometryObjectManager" << std::endl;
+					continue;
+				} else {
+					std::cout << "  => not found in GeometryObjectManager... break." << std::endl;
+				}
 			}
 		}
 		else if (childName == "material") {
