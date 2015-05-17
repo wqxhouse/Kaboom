@@ -5,7 +5,9 @@
 #include <string>
 #include <osg/Vec3>
 
+class Material;
 typedef void(*TextureChangeCallback)(const std::string &texturePath, osg::Texture::WrapMode mode);
+typedef void(*MaterialUpdateCallback)(Material *material);
 
 class Material
 {
@@ -126,6 +128,7 @@ public:
 	}
 
 	inline std::string getMetallicTexturePath()
+
 	{
 		return _metallicMapPath;
 	}
@@ -175,9 +178,57 @@ public:
 		_normalMapLerp = alpha;
 	}
 
+	inline void setTextureOffset(const osg::Vec2 &offset)
+	{
+		_textureOffset = offset;
+	}
+
+	inline void clearTextureOffset()
+	{
+		_textureOffset.x() = 0.0f;
+		_textureOffset.y() = 0.0f;
+	}
+
+	inline const osg::Vec2 &getTextureOffset()
+	{
+		return _textureOffset;
+	}
+
+	inline void enableMaterialUpdate()
+	{
+		_materialUpdateEnabled = true;
+	}
+
+	inline void disableMaterialUpdate()
+	{
+		_materialUpdateEnabled = false;
+	}
+
+	inline bool isMaterialUpdateEnabled()
+	{
+		return _materialUpdateEnabled;
+	}
+
+	inline void *getUserData()
+	{
+		return _userData;
+	}
+
+	inline MaterialUpdateCallback getUpdateCallback()
+	{
+		return _updateCallback;
+	}
+
+	inline bool hasUpdateCallback()
+	{
+		return _updateCallback != NULL ? true : false;
+	}
+
 private:
 
+	friend class MaterialManager;
 	TextureChangeCallback _onTextureChangeFunc;
+	MaterialUpdateCallback _updateCallback;
 
 	std::string _name;
 
@@ -201,5 +252,10 @@ private:
 	float _roughnessTexLerp;
 	float _metallicTexLerp;
 	float _normalMapLerp;
+
+	osg::Vec2 _textureOffset;
+	bool _materialUpdateEnabled;
+
+	void *_userData;
 };
 

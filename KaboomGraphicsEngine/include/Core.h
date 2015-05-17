@@ -89,6 +89,8 @@ public:
 	static bool isMouseOverAnyEditor();
 
 	static double getLastFrameDuration();
+	static double getTimeElaspedSec();
+
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 
 	static void setAllowChangeEditorProjection(bool tf);
@@ -179,6 +181,9 @@ private:
 
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 
+	static osg::Timer_t _firstFrameStartTime;
+
+	static int _currentFrameNum;
 
 	static AxisVisualizer _axisVisualizer;
 	static CubeMapPreFilter _cubemapPreFilter;

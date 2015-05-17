@@ -24,11 +24,14 @@ uniform float u_roughnessTexLerp;
 uniform float u_metallicTexLerp;
 uniform float u_normalMapLerp;
 
+uniform vec2 u_textureOffset;
+
 uniform mat4 osg_ViewMatrix;
 
 void main()
 {
-	vec3 normalMap = texture(u_normalMapTex, v_geomTexCoord).xyz;
+	vec2 texSampleCoord = v_geomTexCoord + u_textureOffset;
+	vec3 normalMap = texture(u_normalMapTex, texSampleCoord).xyz;
 	normalMap = normalMap * 2.0 - 1.0;
 
 	vec3 ws_normal = normalize(v_ws_normal);
@@ -36,7 +39,7 @@ void main()
 	//vec3 ws_vertex = v_ws_vertex;
 	//vec3 ws_tangent;
 	//vec3 ws_binormal;
-	// reconstructTanBin(ws_vertex, ws_normal, v_geomTexCoord, ws_tangent, ws_binormal); 
+	// reconstructTanBin(ws_vertex, ws_normal, texSampleCoord, ws_tangent, ws_binormal); 
 	//vec3 mixedNormal = normalize(
 	//	ws_tangent * normalMap.x + 
 	//	ws_binormal * normalMap.y + 
@@ -47,9 +50,9 @@ void main()
 	vec3 mixedNormal = blendNormals(ws_normal, normalLerp);
 	vec3 view_normal = normalize(osg_ViewMatrix * vec4(mixedNormal, 0)).xyz;
 
-	vec3 albedoTex = texture(u_albedoTex, v_geomTexCoord).rgb;
-	float roughnessTex = texture(u_roughnessTex, v_geomTexCoord).r;
-	float metallicTex = texture(u_metallicTex, v_geomTexCoord).r;
+	vec3 albedoTex = texture(u_albedoTex, texSampleCoord).rgb;
+	float roughnessTex = texture(u_roughnessTex, texSampleCoord).r;
+	float metallicTex = texture(u_metallicTex, texSampleCoord).r;
 
 	vec3 albedo = mix(u_albedo, albedoTex, u_albedoTexLerp);
 	float roughness = mix(u_roughness, roughnessTex, u_roughnessTexLerp);

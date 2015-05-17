@@ -274,6 +274,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\LightPrePassCallback.h" />
     <ClInclude Include="include\LightVisualizer.h" />
     <ClInclude Include="include\Material.h" />
+    <ClInclude Include="include\MaterialBuiltIn.h" />
     <ClInclude Include="include\MaterialLoader.h" />
     <ClInclude Include="include\MaterialManager.h" />
     <ClInclude Include="include\Model.h" />
@@ -284,6 +285,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\SparkDrawable.h" />
     <ClInclude Include="include\SparkUpdatingHandler.h" />
+    <ClInclude Include="include\TestMaterial.h" />
     <ClInclude Include="include\TrailingEffect.h" />
     <ClInclude Include="include\TwGUIManager.h" />
     <ClInclude Include="include\TypeIdLoader.h" />
@@ -292,6 +294,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\TestMaterial.cpp" />
     <ClCompile Include="src\AxisVisualizer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Core.cpp" />

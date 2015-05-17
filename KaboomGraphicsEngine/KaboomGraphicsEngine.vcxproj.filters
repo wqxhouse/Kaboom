@@ -51,6 +51,12 @@
     <Filter Include="Source Files\Particle">
       <UniqueIdentifier>{c9164d12-2056-40db-864f-d6360eed9b43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Materials">
+      <UniqueIdentifier>{2861d982-bd9a-4783-84de-94e1a31e3234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Materials">
+      <UniqueIdentifier>{84c3c9f8-9f4f-457b-9104-5a05ec2562c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -170,6 +176,12 @@
     </ClInclude>
     <ClInclude Include="include\TrailingEffect.h">
       <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MaterialBuiltIn.h">
+      <Filter>Header Files\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TestMaterial.h">
+      <Filter>Header Files\Materials</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="src\TrailingEffect.cpp">
       <Filter>Source Files\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="include\TestMaterial.cpp">
+      <Filter>Source Files\Materials</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

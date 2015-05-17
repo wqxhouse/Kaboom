@@ -56,7 +56,7 @@ void createInfinitePlane(GeometryObjectManager *manager, MaterialManager *matMan
 	ConfigSettings* config = ConfigSettings::config;
 	std::string str_mediaPath = "";
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-	matManager->createTextureMaterial("__floorMat",
+	matManager->createTexturedMaterial("__floorMat",
 		str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_baseColor.png",
 		str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_roughness.png",
 		str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_metallic.png",

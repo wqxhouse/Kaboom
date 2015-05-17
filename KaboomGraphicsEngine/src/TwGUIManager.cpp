@@ -443,7 +443,7 @@ void TwGUIManager::initAddBar()
 		std::cout << "Enter material name: ";
 		std::cin >> matName;
 
-		if (mm->createTextureMaterial(matName, albedoPath, roughnessPath, metallicPath, normalMapPat)) {
+		if (mm->createTexturedMaterial(matName, albedoPath, roughnessPath, metallicPath, normalMapPat)) {
 			Material* mat = mm->getMaterial(matName);
 
 			addTexturedMaterialToGUI((TwBar*)clientData, mat, TEXTURED_MATERIAL_GROUP_NAME, _index);
@@ -1183,6 +1183,20 @@ void TwGUIManager::addPlainMaterialToGUI(TwBar* bar, Material* mat, std::string 
 	BarItem* item = new BarItem();
 	item->bar = bar;
 	item->name = name;
+
+	std::string runMatUpdateCallbackDef = nameGroupDef + " label='" + RUN_MATERIAL_UPDATE_CALLBACK_LABEL + "'";
+	if (mat->hasUpdateCallback())
+	{
+		TwAddVarCB(bar, runMatUpdateCallbackDef.c_str(), TW_TYPE_BOOL8,
+			[](const void *value, void *clientData) {
+			Material *m = static_cast<Material *>(clientData);
+			bool res = *(bool *)value;
+			if (res) m->enableMaterialUpdate();
+			else m->disableMaterialUpdate();
+		}, [](void *value, void *clientData) {
+			*(bool *)value = static_cast<Material *>(clientData)->isMaterialUpdateEnabled();
+		}, mat, runMatUpdateCallbackDef.c_str());
+	}
 
 	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
 	TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,

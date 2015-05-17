@@ -269,6 +269,7 @@ void GeometryObject::setUpMaterialState()
 		ss->addUniform(new osg::Uniform("u_roughnessTexLerp", 0.0f));
 		ss->addUniform(new osg::Uniform("u_metallicTexLerp", 0.0f));
 		ss->addUniform(new osg::Uniform("u_normalMapLerp", 0.0f));
+		ss->addUniform(new osg::Uniform("u_textureOffset", osg::Vec2()));
 	}
 	else
 	{
@@ -283,6 +284,12 @@ void GeometryObject::setUpMaterialState()
 
 void GeometryObject::updateMaterialState()
 {
+	// Before uploading uniforms, run custom update callback to update properties
+	if (_material->hasUpdateCallback() && _material->isMaterialUpdateEnabled())
+	{
+		_material->getUpdateCallback()(_material);
+	}
+
 	// TODO: make sure pass (camera) is the correct node for forward shading
 	osg::ref_ptr<osg::StateSet> ss = _materialNode->getOrCreateStateSet();
 
@@ -309,6 +316,7 @@ void GeometryObject::updateMaterialState()
 		ss->getUniform("u_roughnessTexLerp")->set(_material->getRoughnessTexLerp());
 		ss->getUniform("u_metallicTexLerp")->set(_material->getMetallicTexLerp());
 		ss->getUniform("u_normalMapLerp")->set(_material->getNormalMapMapLerp());
+		ss->getUniform("u_textureOffset")->set(_material->getTextureOffset());
 	}
 }
 

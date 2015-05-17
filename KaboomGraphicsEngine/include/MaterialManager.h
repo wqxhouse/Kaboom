@@ -2,6 +2,7 @@
 #include <unordered_map> 
 #include <osg/Vec3>
 #include <osg/Texture>
+#include "Material.h"
 
 // TODO: built-in material
 enum MaterialBuiltIn
@@ -10,7 +11,6 @@ enum MaterialBuiltIn
 };
 
 class GeometryObject;
-class Material;
 class MaterialManager
 {
 public:
@@ -28,12 +28,14 @@ public:
 		float specular,
 		float metallic);
 
-	bool createTextureMaterial(const std::string &name,
+	bool createTexturedMaterial(const std::string &name,
 		const std::string &albedoPath,
 		const std::string &roughnessPath,
 		const std::string &metallicPath, 
 		const std::string &normalMapPath, 
 		osg::Texture::WrapMode mode=osg::Texture::CLAMP_TO_EDGE);
+
+	void setMaterialUpdateCallback(const std::string &name, MaterialUpdateCallback callback, void *userData = NULL);
 
 	bool renameMaterial(const std::string &oldName, const std::string &newName);
 
