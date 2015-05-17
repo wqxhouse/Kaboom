@@ -49,6 +49,11 @@ const std::string ROUGHNESS_PATH_LABEL = "Roughness path";
 const std::string METALLIC_PATH_LABEL = "Metallic path";
 const std::string NORMAL_MAP_PATH_LABEL = "Normal map path";
 
+const std::string ALBEDO_MAP_LERP_LABEL = "AlbedoTexLerp";
+const std::string METALLIC_MAP_LERP_LABEL = "MetallicTexLerp";
+const std::string ROUGHNESS_MAP_LERP_LABEL = "RoughnessTexLerp";
+const std::string NORMAL_MAP_LERP_LABEL = "NormalTexLerp";
+
 const std::string REMOVE_LABEL = "Remove";
 const std::string EDIT_NAME_LABEL = "Edit name";
 const std::string INTENSITY_LABEL = "Intensity";

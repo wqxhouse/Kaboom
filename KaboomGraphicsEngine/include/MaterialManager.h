@@ -17,7 +17,6 @@ public:
 	MaterialManager();
 	~MaterialManager();
 
-
 	inline const std::unordered_map<std::string, Material *> getMaterialMapRef() const
 	{
 		return _materialMap;
@@ -71,5 +70,10 @@ private:
 	std::unordered_map<std::string, GeometryObject *> _materialGeomBinding;
 
 	std::vector<Material *> _builtInMaterial;
+
+	std::string _emptyAlbedoMapPath;
+	std::string _emptyNormalMapPath;
+	std::string _emptyMetallicMapPath;
+	std::string _emptyRoughnessMapPath;
 };
 

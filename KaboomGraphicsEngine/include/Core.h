@@ -32,6 +32,7 @@ public:
 	static World &getWorldRef();
 
 	static Camera &getMainCamera();
+	static const std::string &getMediaPath();
 
 	static void AdvanceFrame();
 	static void finalize();
