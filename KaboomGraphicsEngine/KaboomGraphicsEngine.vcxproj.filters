@@ -168,6 +168,9 @@
     <ClInclude Include="include\ExplosionEffect.h">
       <Filter>Header Files\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="include\TrailingEffect.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -288,6 +291,9 @@
       <Filter>Source Files\Particle</Filter>
     </ClCompile>
     <ClCompile Include="src\ExplosionEffect.cpp">
+      <Filter>Source Files\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TrailingEffect.cpp">
       <Filter>Source Files\Particle</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,7 +3,12 @@
 #include <core/EntityType.h>
 #include <network/SpawnEvent.h>
 #include <components/PositionComponent.h>
+#include <ParticleEffectManager.h>
+#include <TrailingEffect.h>
+
 #include "../core/Game.h"
+#include "../components/SceneNodeComponent.h"
+#include <GeometryObject.h>
 
 SpawnEventHandler::SpawnEventHandler(Game *game)
         : game(game) {
@@ -14,7 +19,6 @@ void SpawnEventHandler::handle(const Event &e) const {
 	EntityManager &entityManager = game->getEntityManager();
     EntityType type = evt.getType();
     Entity *entity = nullptr;
-	
 	
 	
     if ((type & CAT_MASK) == CAT_CHARACTER) {
@@ -29,6 +33,7 @@ void SpawnEventHandler::handle(const Event &e) const {
                 evt.getType(),
                 evt.getPosition(),
                 evt.getRotation());
+
 		game->source = new Source;
 		Entity *player = entityManager.getEntity(game->getGameClient().getCurrentPlayerEntityId());
 		if (player != nullptr){
@@ -62,5 +67,17 @@ void SpawnEventHandler::handle(const Event &e) const {
 
     if (entity != nullptr) {
         game->addEntity(entity);
+
+		// TODO: refactor addEntity. or the following code must be called after addEntity
+		// handle particle effect of bomb spawning. 
+		//if ((type & CAT_MASK) == CAT_BOMB)
+		//{
+		//	TrailingEffect *trailingParticle = static_cast<TrailingEffect *>(
+		//		game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::TRAILING));
+
+		//	GeometryObject *geomObj = game->getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
+		//	trailingParticle->setTrailedObject(geomObj);
+		//	trailingParticle->run();
+		//}
     }
 }

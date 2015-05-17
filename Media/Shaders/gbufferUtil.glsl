@@ -39,6 +39,19 @@ vec3 getViewSpacePositionFromLinearZ(float linz, float farPlane, vec3 viewRay)
 	return viewRay * (-linz * farPlane);	
 }
 
+// http://blog.selfshadow.com/publications/blending-in-detail/
+vec3 blendNormals( vec3 baseNormal, vec3 detailsNormal )
+{
+	vec3 n1 = baseNormal;
+	vec3 n2 = detailsNormal;
+	mat3 nBasis = mat3(
+        vec3(n1.z, n1.y, -n1.x), // +90 degree rotation around y axis
+        vec3(n1.x, n1.z, -n1.y), // -90 degree rotation around x axis
+        vec3(n1.x, n1.y,  n1.z));
+	return normalize(n2.x*nBasis[0] + n2.y*nBasis[1] + n2.z*nBasis[2]);
+}
+
+
 void reconstructTanBin(vec3 position, vec3 normal, vec2 texcoord, out vec3 tangent, out vec3 binormal) 
 {
     //vec3 Q1 = dFdx(vOutput.positionWorld);
