@@ -832,6 +832,11 @@ osg::ref_ptr<LibRocketGUIManager> Core::getInEditorLibRocketGUIManager()
 	return _libRocketEditorGUI;
 }
 
+const std::string &Core::getMediaPath()
+{
+	return _mediaPath;
+}
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;

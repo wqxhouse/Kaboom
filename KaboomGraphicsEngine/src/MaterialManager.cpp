@@ -2,10 +2,19 @@
 #include "MaterialManager.h"
 #include "Material.h"
 
+#include <Core.h>
+
 MaterialManager *MaterialManager::_weakMaterialManagerPtr;
 MaterialManager::MaterialManager()
 {
 	_weakMaterialManagerPtr = this;
+
+	const std::string &mediaPath = Core::getMediaPath();
+	_emptyAlbedoMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\albedo.png";
+	_emptyRoughnessMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\roughness.png";
+	_emptyMetallicMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\metallic.png";
+	_emptyNormalMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\normal.png";
+
 	createBuiltInMaterials();
 }
 
@@ -87,11 +96,45 @@ bool MaterialManager::createTextureMaterial(const std::string &name,
 	mat->setUseTexture(true);
 	mat->setMode(mode);
 
-	
-	mat->setAlbedoTexturePath(albedoPath, mode);
-	mat->setMetallicMapPath(metallicPath, mode);
-	mat->setRoughnessMapPath(roughnessPath, mode);
-	mat->setNormalMapPath(normalMapPath, mode);
+	if (albedoPath.empty())
+	{
+		mat->setAlbedoTexturePath(_emptyAlbedoMapPath, mode);
+	}
+	else
+	{
+		mat->setAlbedoTexturePath(albedoPath, mode);
+		mat->setAlbedoTexLerp(1.0);
+	}
+
+	if (roughnessPath.empty())
+	{
+		mat->setRoughnessMapPath(_emptyRoughnessMapPath, mode);
+	}
+	else
+	{
+		mat->setRoughnessMapPath(roughnessPath, mode);
+		mat->setRoughnessTexLerp(1.0);
+	}
+
+	if (metallicPath.empty())
+	{
+		mat->setMetallicMapPath(_emptyMetallicMapPath, mode);
+	}
+	else
+	{
+		mat->setMetallicMapPath(metallicPath, mode);
+		mat->setMetallicTexLerp(1.0);
+	}
+
+	if (normalMapPath.empty())
+	{
+		mat->setNormalMapPath(_emptyNormalMapPath, mode);
+	}
+	else
+	{
+		mat->setNormalMapPath(normalMapPath, mode);
+		mat->setNormalMapLerp(1.0);
+	}
 
 	_materialMap.insert(std::make_pair(name, mat));
 

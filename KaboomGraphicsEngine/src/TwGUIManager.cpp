@@ -1321,7 +1321,125 @@ void TwGUIManager::addTexturedMaterialToGUI(TwBar* bar, Material* mat, std::stri
 	},
 		item, editNameDef.c_str());
 
-	//std::string albedoPathVarName = ALBEDO_PATH_LABEL + indexStr;
+
+	// Base material parameters
+	std::string colorVarName = COLOR_LABEL + indexStr;
+	std::string colorDef = nameGroupDef + " label='" + COLOR_LABEL + "'";
+	TwAddVarCB(bar, colorVarName.c_str(), TW_TYPE_COLOR3F,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const float *arr = static_cast<const float *>(value);
+		osg::Vec3 color = osg::Vec3(arr[0], arr[1], arr[2]);
+		mat->setAlbedo(color);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		const osg::Vec3 &color = mat->getAlbedo();
+		float *arr = static_cast<float *>(value);
+		arr[0] = color.x(); arr[1] = color.y(); arr[2] = color.z();
+	}, mat, colorDef.c_str());
+
+	std::string roughnessVarName = ROUGHNESS_LABEL + indexStr;
+	std::string roughnessDef = nameGroupDef + " label='" + ROUGHNESS_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, roughnessVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setRoughness(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getRoughness();
+		*showVal = val;
+	},
+		mat, roughnessDef.c_str());
+
+	std::string specularVarName = SPECULAR_LABEL + indexStr;
+	std::string specularDef = nameGroupDef + " label='" + SPECULAR_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, specularVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setSpecular(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getSpecular();
+		*showVal = val;
+	},
+		mat, specularDef.c_str());
+
+	std::string metallicVarName = METALLIC_LABEL + indexStr;
+	std::string metallicDef = nameGroupDef + " label='" + METALLIC_LABEL + "'" + limitVal;
+	TwAddVarCB(bar, metallicVarName.c_str(), TW_TYPE_FLOAT,
+		[](const void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float val = *(const float *)value;
+		mat->setMetallic(val);
+	},
+		[](void *value, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		float *showVal = static_cast<float *>(value);
+
+		float val = mat->getMetallic();
+		*showVal = val;
+	},
+		mat, metallicDef.c_str());
+
+	// interpolations
+	std::string lerpDef = " max=1.0 min=0.0 step=0.05";
+	std::string albedoLerpDef = nameGroupDef + " label='" + ALBEDO_MAP_LERP_LABEL + "'" + lerpDef;
+	TwAddVarCB(bar, albedoLerpDef.c_str(), TW_TYPE_FLOAT,
+		[](const void *data, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		mat->setAlbedoTexLerp(*(float *)data);
+	},
+		[](void *data, void *clientData) {
+		*(float *)data = static_cast<Material *>(clientData)->getAlbedoTexLerp();
+	},
+		mat, albedoLerpDef.c_str());
+
+	std::string roughnessLerpDef = nameGroupDef + " label='" + ROUGHNESS_MAP_LERP_LABEL + "'" + lerpDef;
+	TwAddVarCB(bar, roughnessLerpDef.c_str(), TW_TYPE_FLOAT,
+		[](const void *data, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		mat->setRoughnessTexLerp(*(float *)data);
+	},
+		[](void *data, void *clientData) {
+		*(float *)data = static_cast<Material *>(clientData)->getRoughnessTexLerp();
+	},
+		mat, roughnessLerpDef.c_str());
+
+	std::string metallicLerpDef = nameGroupDef + " label='" + METALLIC_MAP_LERP_LABEL + "'" + lerpDef;
+	TwAddVarCB(bar, metallicLerpDef.c_str(), TW_TYPE_FLOAT,
+		[](const void *data, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		mat->setMetallicTexLerp(*(float *)data);
+	},
+		[](void *data, void *clientData) {
+		*(float *)data = static_cast<Material *>(clientData)->getMetallicTexLerp();
+	},
+		mat, metallicLerpDef.c_str());
+
+
+	std::string normalMapLerpDef = nameGroupDef + " label='" + NORMAL_MAP_LERP_LABEL + "'" + lerpDef;
+	TwAddVarCB(bar, normalMapLerpDef.c_str(), TW_TYPE_FLOAT,
+		[](const void *data, void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+		mat->setNormalMapLerp(*(float *)data);
+	},
+		[](void *data, void *clientData) {
+		*(float *)data = static_cast<Material *>(clientData)->getNormalMapMapLerp();
+	},
+		mat, normalMapLerpDef.c_str());
+	
+	// Textures
+	 
+	// std::string albedoPathVarName = ALBEDO_PATH_LABEL + indexStr;
 	std::string albedoPathDef = nameGroupDef + " label='" + ALBEDO_PATH_LABEL + "'";
 	TwAddButton(bar, albedoPathDef.c_str(),
 		[](void *clientData) {
