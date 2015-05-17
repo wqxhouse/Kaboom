@@ -4,7 +4,7 @@
 //varying vec3 v_tangent;
 //varying vec3 v_binormal;
 varying vec3 v_ws_normal;
-varying vec3 v_ws_vertex;
+//varying vec3 v_ws_vertex;
 
 varying vec4 v_position;
 varying float v_depth;
@@ -31,7 +31,7 @@ void main()
 	// construct tangent space for normal mapping
 	// TODO: make sure need normalize here - extra operation ? 
 	mat4 modelToWorldMat = getModelToWorldMatrix();
-	v_ws_vertex = vec3(modelToWorldMat * gl_Vertex);
+	// v_ws_vertex = vec3(modelToWorldMat * gl_Vertex);
     v_ws_normal = normalize(modelToWorldMat * vec4(gl_Normal.xyz, 0)).xyz;
 	//vec3 ws_tangent;
 	//vec3 ws_binormal;

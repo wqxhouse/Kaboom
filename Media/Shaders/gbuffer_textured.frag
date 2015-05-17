@@ -5,7 +5,7 @@ varying vec4 v_position;
 varying float v_depth;
 varying vec2 v_geomTexCoord;
 
-varying vec3 v_ws_vertex;
+// varying vec3 v_ws_vertex;
 varying vec3 v_ws_normal;
 //varying vec3 v_tangent;
 //varying vec3 v_binormal;
@@ -26,11 +26,11 @@ void main()
 	normalMap = normalMap * 2.0 - 1.0;
 
 	vec3 ws_normal = normalize(v_ws_normal);
-	vec3 ws_vertex = v_ws_vertex;
-	vec3 ws_tangent;
-	vec3 ws_binormal;
-	
+
 	// TODO: benchmark which method is faster
+/*	vec3 ws_vertex = v_ws_vertex;
+	vec3 ws_tangent;
+	vec3 ws_binormal; */
 	// reconstructTanBin(ws_vertex, ws_normal, v_geomTexCoord, ws_tangent, ws_binormal); 
 	//vec3 mixedNormal = normalize(
 	//	ws_tangent * normalMap.x + 

@@ -30,6 +30,7 @@ TwGUIManager::TwGUIManager()
 	_lm = Core::getWorldRef().getLightManager();
 	_mm = Core::getWorldRef().getMaterialManager();
 	_freezeGUI = false;
+	_allBarMinimized = false;
 	_scrollPos = 0;
 
 	nameToCopy = "";
@@ -37,6 +38,27 @@ TwGUIManager::TwGUIManager()
 	TwInit(TW_OPENGL, NULL);
 }
 
+void TwGUIManager::minimizeAllBars()
+{
+	TwDefine(" Main iconified=true ");
+	TwDefine(" Lights iconified=true ");
+	TwDefine(" Manipulators iconified=true ");
+	TwDefine(" Add iconified=true ");
+	TwDefine(" Plain_Materials iconified=true ");
+	TwDefine(" Textured_Materials iconified=true ");
+	_allBarMinimized = true;
+}
+
+void TwGUIManager::maximizeAllBars()
+{
+	TwDefine(" Main iconified=false ");
+	TwDefine(" Lights iconified=false ");
+	TwDefine(" Manipulators iconified=false ");
+	TwDefine(" Add iconified=false ");
+	TwDefine(" Plain_Materials iconified=false ");
+	TwDefine(" Textured_Materials iconified=false ");
+	_allBarMinimized = false;
+}
 
 void TwGUIManager::initializeTwGUI()
 {
@@ -1675,6 +1697,18 @@ void TwGUIManager::updateEvents() const
 			{
 				doUndoRedo(_redos, _undos);
 			}
+			else if (ea.getKey() == '`')
+			{
+				// TODO: currently do not detect if maximize a single bar
+				if (_allBarMinimized)
+				{
+					maximizeAllBars();
+				}
+				else
+				{
+					minimizeAllBars();
+				}
+			}
 			else if (ea.getKey() == osgGA::GUIEventAdapter::KEY_F8)
 			{
 				Core::enableGameMode();
@@ -2140,3 +2174,5 @@ void TwGUIManager::exportMaterialXML(std::string &path)
 	write(f, tabs, "</materialList>");
 	f.close();			// Close file
 }
+
+bool TwGUIManager::_allBarMinimized = false;

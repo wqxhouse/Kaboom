@@ -83,36 +83,11 @@ bool MaterialManager::createTextureMaterial(const std::string &name,
 		return false;
 	}
 
-	//osg::Image *albedo = osgDB::readImageFile(albedoPath);
-	//osg::Image *specular = osgDB::readImageFile(specularPath);
-	//osg::Image *roughness = osgDB::readImageFile(roughnessPath);
-	//osg::Image *metallic = osgDB::readImageFile(metallicPath);
-	//osg::Image *normalMap = osgDB::readImageFile(normalMapPath);
-
-	//osg::Texture2D *albedoTex = new osg::Texture2D;
-	//albedoTex->setImage(albedo);
-	//_textureMap.insert(std::make_pair(albedoPath, albedoTex));
-
-	//osg::Texture2D *specularTex = new osg::Texture2D;
-	//specularTex->setImage(specular);
-	//_textureMap.insert(std::make_pair(specularPath, specularTex));
-
-	//osg::Texture2D *roughnessTex = new osg::Texture2D;
-	//roughnessTex->setImage(roughness);
-	//_textureMap.insert(std::make_pair(roughnessPath, roughnessTex));
-
-	//osg::Texture2D *metallicTex = new osg::Texture2D;
-	//metallicTex->setImage(metallic);
-	//_textureMap.insert(std::make_pair(metallicPath, metallicTex));
-
-	//osg::Texture2D *normalMapTex = new osg::Texture2D;
-	//normalMapTex->setImage(normalMap);
-	//_textureMap.insert(std::make_pair(normalMapPath, normalMapTex));
-
-	// above unnecessary since set..Texture handles them
 	Material *mat = new Material(name, onTexturePathChange);
 	mat->setUseTexture(true);
 	mat->setMode(mode);
+
+	
 	mat->setAlbedoTexturePath(albedoPath, mode);
 	mat->setMetallicMapPath(metallicPath, mode);
 	mat->setRoughnessMapPath(roughnessPath, mode);

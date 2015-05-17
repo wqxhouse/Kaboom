@@ -1,5 +1,9 @@
 #pragma once
 
+// TODO: Currently this class is a huge hack... mixed with 
+// both instance vars and static vars. 
+// Refactor...
+
 #include <osg/Texture2D>
 #include <osg/MatrixTransform>
 #include <osgDB/ReadFile>
@@ -131,6 +135,9 @@ public:
 	void requestFreeze();
 	void requestUnFreeze();
 
+	static void minimizeAllBars();
+	static void maximizeAllBars();
+
 	static void exportXML();
 	static void addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index);
 	static void addLightToGUI(TwBar* bar, Light* geom, std::string group, int& index);
@@ -233,4 +240,6 @@ protected:
 
 	bool _isMouseOver;
 	int _scrollPos;
+
+	static bool _allBarMinimized;
 };
