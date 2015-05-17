@@ -40,6 +40,8 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	_sceneRoot = new osg::Group;
 	_gui = new TwGUIManager;
 
+	_currentFrameNum = 0;
+
 	// let configLibRocketGUI create the instance
 	_libRocketInGameGUI = NULL;
 	_libRocketEditorGUI = NULL;
@@ -261,7 +263,7 @@ void Core::AdvanceFrame()
 		if (_isFirstFrame)
 		{
 			finalize();
-			_lastFrameStartTime = _frameStartTime
+			_firstFrameStartTime = _lastFrameStartTime = _frameStartTime
 				= osg::Timer::instance()->getStartTick();
 
 			_isFirstFrame = false;
@@ -273,6 +275,7 @@ void Core::AdvanceFrame()
 			_requestPrefilterCubeMap = false;
 		}
 
+		++_currentFrameNum;
 		_viewer->frame();
 
 		// Currently a work around for making fit object to screen work in 
@@ -304,6 +307,11 @@ void Core::AdvanceFrame()
 double Core::getLastFrameDuration()
 {
 	return osg::Timer::instance()->delta_s(_lastFrameStartTime, _frameStartTime);
+}
+
+double Core::getTimeElaspedSec()
+{
+	return osg::Timer::instance()->delta_s(_firstFrameStartTime, _frameStartTime);
 }
 
 bool Core::isViewerClosed()
@@ -874,6 +882,9 @@ bool Core::_requestDisableCameraManipulator = false;
 
 osg::Timer_t Core::_lastFrameStartTime;
 osg::Timer_t Core::_frameStartTime;
+osg::Timer_t Core::_firstFrameStartTime;
+
+int Core::_currentFrameNum;
 
 AxisVisualizer Core::_axisVisualizer;
 

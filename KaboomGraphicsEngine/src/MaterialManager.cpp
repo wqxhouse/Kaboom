@@ -1,6 +1,6 @@
 #include "stdafx.h" 
 #include "MaterialManager.h"
-#include "Material.h"
+#include "MaterialBuiltIn.h"
 
 #include <Core.h>
 
@@ -46,9 +46,16 @@ MaterialManager::~MaterialManager()
 
 void MaterialManager::createBuiltInMaterials()
 {
+	// TODO: make helper function
 	// default
-	Material *m = new Material("____builtInDefault", onTexturePathChange);
-	_builtInMaterial.push_back(m);
+	Material *default = new Material("____Default", onTexturePathChange);
+	_materialMap.insert(std::make_pair(default->getName(), default));
+	_builtInMaterial.push_back(default);
+
+	Material *builtIn1 = createTestMaterial(onTexturePathChange);
+	_materialMap.insert(std::make_pair(builtIn1->getName(), builtIn1));
+	setMaterialUpdateCallback(builtIn1->getName(), testMaterialCallback);
+	_builtInMaterial.push_back(builtIn1);
 }
 
 Material *MaterialManager::getBuiltInMaterial(enum MaterialBuiltIn type)
@@ -79,7 +86,7 @@ bool MaterialManager::createPlainMaterial(const std::string &name,
 	return true;
 }
 
-bool MaterialManager::createTextureMaterial(const std::string &name,
+bool MaterialManager::createTexturedMaterial(const std::string &name,
 	const std::string &albedoPath,
 	const std::string &roughnessPath,
 	const std::string &metallicPath,
@@ -139,6 +146,15 @@ bool MaterialManager::createTextureMaterial(const std::string &name,
 	_materialMap.insert(std::make_pair(name, mat));
 
 	return true;
+}
+
+void MaterialManager::setMaterialUpdateCallback(const std::string &name, MaterialUpdateCallback callback, void *userData)
+{
+	Material *m = getMaterial(name);
+	if (!m) return;
+
+	m->_updateCallback = callback;
+	m->_userData = userData;
 }
 
 bool MaterialManager::renameMaterial(const std::string &oldName, const std::string &newName)

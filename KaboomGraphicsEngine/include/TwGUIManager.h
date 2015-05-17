@@ -58,6 +58,7 @@ const std::string REMOVE_LABEL = "Remove";
 const std::string EDIT_NAME_LABEL = "Edit name";
 const std::string INTENSITY_LABEL = "Intensity";
 const std::string FIT_TO_SCREEN_LABEL = "Fit To Screen";
+const std::string RUN_MATERIAL_UPDATE_CALLBACK_LABEL = "Run";
 
 struct BarItem {
 	TwBar* bar;
