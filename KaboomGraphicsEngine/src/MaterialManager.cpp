@@ -46,8 +46,9 @@ MaterialManager::~MaterialManager()
 
 void MaterialManager::createBuiltInMaterials()
 {
-	// TODO: make helper function
-	// default
+	// TODO: make helper function, current design is too bad; 
+	// TODO: make editor display built in material differently, not mixing with standard ones
+
 	Material *default = new Material("____Default", onTexturePathChange);
 	_materialMap.insert(std::make_pair(default->getName(), default));
 	_builtInMaterial.push_back(default);
@@ -56,6 +57,11 @@ void MaterialManager::createBuiltInMaterials()
 	_materialMap.insert(std::make_pair(builtIn1->getName(), builtIn1));
 	setMaterialUpdateCallback(builtIn1->getName(), testMaterialCallback);
 	_builtInMaterial.push_back(builtIn1);
+
+	std::string test2Name = createTestMaterial2(onTexturePathChange, this);
+	Material *test2Mat = getMaterial(test2Name);
+	setMaterialUpdateCallback(test2Name, testMaterial2Callback);
+	_builtInMaterial.push_back(test2Mat);
 }
 
 Material *MaterialManager::getBuiltInMaterial(enum MaterialBuiltIn type)

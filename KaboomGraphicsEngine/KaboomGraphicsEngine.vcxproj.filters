@@ -183,6 +183,9 @@
     <ClInclude Include="include\TestMaterial.h">
       <Filter>Header Files\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="include\TestMaterial2.h">
+      <Filter>Header Files\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -309,6 +312,9 @@
       <Filter>Source Files\Particle</Filter>
     </ClCompile>
     <ClCompile Include="include\TestMaterial.cpp">
+      <Filter>Source Files\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestMaterial2.cpp">
       <Filter>Source Files\Materials</Filter>
     </ClCompile>
   </ItemGroup>

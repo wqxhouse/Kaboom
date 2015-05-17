@@ -8,6 +8,8 @@
 enum MaterialBuiltIn
 {
 	DEFAULT, 
+	TEST_MATERIAL1, 
+	TEST_MATERIAL2, // TODO: make this useful, consider refactoring
 };
 
 class GeometryObject;
