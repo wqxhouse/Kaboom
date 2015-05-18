@@ -186,6 +186,9 @@
     <ClInclude Include="include\TestMaterial2.h">
       <Filter>Header Files\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="include\GeometryCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -316,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="src\TestMaterial2.cpp">
       <Filter>Source Files\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryCache.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
