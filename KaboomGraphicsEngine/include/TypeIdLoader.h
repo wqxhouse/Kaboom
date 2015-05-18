@@ -6,6 +6,7 @@
 #include <osg/Node>
 #include <osgDB/XmlParser>
 #include <util/XMLLoader.h>
+#include "GeometryCache.h"
 
 //class MaterialManager;
 class TypeIdLoader : public XMLLoader
@@ -19,6 +20,5 @@ protected:
 	virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 
 private:
-
 	//MaterialManager *_materialManager;
 };

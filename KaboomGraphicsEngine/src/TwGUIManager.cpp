@@ -8,6 +8,7 @@
 
 #include "Core.h"
 #include "GeometryObject.h"
+#include "GeometryCache.h"
 #include "Material.h"
 #include "Light.h"
 #include "DirectionalLight.h"
@@ -324,7 +325,7 @@ void TwGUIManager::initAddBar()
 
 			// Add model to geometry manager
 			OSG_WARN << "Loading geometry object... " << fileName;
-			osg::Node *model = osgDB::readNodeFile(fileName);
+			osg::Node *model = Core::getWorldRef().getGeometryCache()->getNodeByFileName(fileName);
 			if (model != NULL)
 			{
 				OSG_WARN << "Successfully! " << std::endl;

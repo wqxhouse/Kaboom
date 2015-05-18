@@ -13,6 +13,7 @@
 
 class LightManager;
 class MaterialManager;
+class GeometryCache;
 class GeometryObjectManager;
 class ParticleEffectManager;
 class World : public XMLLoader
@@ -44,6 +45,11 @@ public:
 		return _particleEffectManager;
 	}
 
+	inline GeometryCache *getGeometryCache()
+	{
+		return _cache;
+	}
+	
 protected:
 	virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 
@@ -52,5 +58,7 @@ private:
 	MaterialManager *_materialManager;
 	LightManager *_lightManager;
 	ParticleEffectManager *_particleEffectManager;
+
+	GeometryCache *_cache;
 };
 

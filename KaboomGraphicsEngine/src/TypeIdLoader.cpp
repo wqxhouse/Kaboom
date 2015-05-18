@@ -69,10 +69,6 @@ void TypeIdLoader::createTypeFromXML(osgDB::XmlNode* xmlNode)
 	// Get the material
 	Material* mat = Core::getWorldRef().getMaterialManager()->getMaterial(materialName);
 
-	// Load the model
-	osg::Node *model = nullptr;
-	model = osgDB::readNodeFile(meshPath);
-
-	// Pre-load geometry to manager
-	Core::getWorldRef().getGeometryManager()->storeTypeIdGeometry(id, model, meshPath, mat);
+	// Pre-load model (not GeometryObject) to cache
+	Core::getWorldRef().getGeometryCache()->addTypeId(id, meshPath, mat);
 }
