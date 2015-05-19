@@ -2,6 +2,7 @@
 
 #include <core/Entity.h>
 
+#include "../components/DestroyComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../messaging/Attack1Message.h"
@@ -14,7 +15,8 @@ FiringSystem::FiringSystem(Game *game)
 }
 
 bool FiringSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<InputComponent>() &&
+    return !entity->hasComponent<DestroyComponent>() &&
+            entity->hasComponent<InputComponent>() &&
             entity->hasComponent<MessageHandlerComponent>();
 }
 
