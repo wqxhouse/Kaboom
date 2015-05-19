@@ -16,7 +16,7 @@ InitializationSystem::InitializationSystem(Game *game)
 }
 
 bool InitializationSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<DestroyComponent>();
+    return true;
 }
 
 void InitializationSystem::processEntity(Entity *entity) {
