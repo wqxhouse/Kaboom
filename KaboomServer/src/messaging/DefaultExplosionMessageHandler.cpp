@@ -9,6 +9,7 @@
 #include "ExplosionMessage.h"
 #include "Message.h"
 #include "MessageType.h"
+#include "../components/DestroyComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../core/EntityConfigLookup.h"
@@ -88,8 +89,8 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
 		//message.getGame()->getGameServer().sendPlayerStatusEvent(nearbyEntity);
     }
 	
-    message.getGame()->getGameServer().sendExplosionEvent(entity);
-    message.getGame()->removeEntity(entity);
+    game->getGameServer().sendExplosionEvent(entity);
+    entity->attachComponent(new DestroyComponent());
 
     return true;
 }

@@ -1,10 +1,13 @@
 #include "DeathSystem.h"
 
+#include <components/BombContainerComponent.h>
 #include <components/HealthComponent.h>
 #include <components/PlayerStatusComponent.h>
 #include <components/PositionComponent.h>
 #include <core/Entity.h>
 
+#include "../components/DestroyComponent.h"
+#include "../components/DetonatorComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/SpawnComponent.h"
@@ -14,7 +17,8 @@ DeathSystem::DeathSystem(Game * game)
 }
 
 bool DeathSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<HealthComponent>() &&
+    return !entity->hasComponent<DestroyComponent>() &&
+            entity->hasComponent<HealthComponent>() &&
             entity->hasComponent<PlayerStatusComponent>() &&
             entity->hasComponent<PhysicsComponent>(); //this is going to be removed, the first time the player dies.
 }
@@ -32,5 +36,12 @@ void DeathSystem::processEntity(Entity *entity) {
         entity->detachComponent<InputComponent>();
 
         entity->attachComponent(new SpawnComponent(500));
+
+        auto detonatorComp = entity->getComponent<DetonatorComponent>();
+
+        if (detonatorComp != nullptr) {
+            Entity *remoteDetonator = detonatorComp->getBomb();
+            remoteDetonator->attachComponent(new DestroyComponent());
+        }
     }
 }

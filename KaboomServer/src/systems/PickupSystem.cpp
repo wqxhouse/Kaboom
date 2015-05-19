@@ -2,6 +2,7 @@
 
 #include <core/Entity.h>
 
+#include "../components/DestroyComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../messaging/MessageHandler.h"
@@ -14,7 +15,8 @@ PickupSystem::PickupSystem(Game *game)
 }
 
 bool PickupSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<WeaponPickupComponent>() &&
+    return !entity->hasComponent<DestroyComponent>() && 
+            entity->hasComponent<WeaponPickupComponent>() &&
             entity->hasComponent<TriggerComponent>() &&
             entity->hasComponent<MessageHandlerComponent>();
 }
