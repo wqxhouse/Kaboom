@@ -13,27 +13,17 @@
 #include "../core/Game.h"
 
 SpawnSystem::SpawnSystem(Game *game)
-        : game(game),
-		  mapConfigLoader(spawnConfigMap){
-
-	mapConfigLoader.load("data-server/map.xml");
-
-	game->getPickupSpawnPointTimerMap().clear();
-	for (auto spawnConfig : spawnConfigMap) {
-		if (spawnConfig.second.getString("entity-type") == "Pickup") {
-			game->getPickupSpawnPointTimerMap().insert(std::make_pair(spawnConfig.first, Timer(0)));//duration is Zero at first, so we will spawn that right away
-		} else if (spawnConfig.second.getString("entity-type") == "Player") {
-			game->getPlayerSpawnPointList().push_back(spawnConfig.first);
-		}
-	}
+        : game(game){
 }
 
 //handle spawning of weapon pickups
 void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {	
+	//loop through the pickup spawn point and spawn them
 	for (auto spawnPointTimerIt = game->getPickupSpawnPointTimerMap().begin(); spawnPointTimerIt != game->getPickupSpawnPointTimerMap().end();) {
+		//check if the timer has expired, if so we want to spawn that pickup
 		if (spawnPointTimerIt->second.isExpired()) {
-			const std::string spawnPointName = spawnPointTimerIt->first;//name of the spawn we need to load
-			Configuration spawnConfig = spawnConfigMap[spawnPointName];
+			const std::string spawnPointName = spawnPointTimerIt->first;
+			Configuration spawnConfig = game->getMapConfigMap()[spawnPointName];
 
 			const EntityType entityType = static_cast<EntityType>(spawnConfig.getUint("id"));
 			int amount = spawnConfig.getInt("amount");
@@ -42,11 +32,12 @@ void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
 			osg::Vec3 posVec = osg::Vec3(spawnConfig.getVec3("position"));
 
             Entity* pickupEntity = game->getPickupFactory().createPickup(entityType, Vec3(posVec.x(), posVec.y(), posVec.z()), amount, radius);
-			//attach a special spawn component to the pickup to indicate that it will respawn over time, and contain information about the spawn
+			//attach a special spawn component to the pickup to indicate that it will respawn over time.
 			pickupEntity->attachComponent(new SpawnComponent(duration, spawnPointName));
 			game->addEntity(pickupEntity);
 
-			spawnPointTimerIt = game->getPickupSpawnPointTimerMap().erase(spawnPointTimerIt); //remove it from the map once we have finish the request
+			//remove it from the map once we have finish the request
+			spawnPointTimerIt = game->getPickupSpawnPointTimerMap().erase(spawnPointTimerIt); 
 		} else {
 			spawnPointTimerIt++;
 		}
@@ -68,7 +59,7 @@ void SpawnSystem::processEntity(Entity *entity) {
 	if (playerStatusComponent->getIsAlive() == false ){ //respawn the player here
 		std::string spawnPointName = game->getPlayerSpawnPointList()[rand() % game->getPlayerSpawnPointList().size()]; //randomly pick a spawn point spot
 
-		Configuration spawnConfig = spawnConfigMap[spawnPointName];
+		Configuration spawnConfig = game->getMapConfigMap()[spawnPointName];
 		osg::Vec3 posVec3 = spawnConfig.getVec3("position");
 
 		game->getCharacterFactory().resetCharacter(entity, Vec3(posVec3.x(), posVec3.y(), posVec3.z()));
@@ -76,8 +67,3 @@ void SpawnSystem::processEntity(Entity *entity) {
 	}
 	
 }
-
-std::unordered_map<std::string, Configuration> & SpawnSystem::getSpawnConfigMap() {
-	return spawnConfigMap;
-}
-

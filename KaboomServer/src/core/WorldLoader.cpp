@@ -9,6 +9,7 @@
 #include <util/Configuration.h>
 
 #include "OsgObjectConfigLoader.h"
+#include "MapConfigLoader.h"
 #include "World.h"
 
 WorldLoader::WorldLoader(World &world)

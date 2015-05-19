@@ -25,7 +25,7 @@ void MapConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 	}
 
 	for (auto spawnsNode : xmlRoot->children) {
-		if (spawnsNode->name != "spawn-points") {
+		if (spawnsNode->name != "objects") {
 			continue;
 		}
 
@@ -33,11 +33,9 @@ void MapConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 
 		for (auto spawnNode : spawnsNode->children) {
 
-			if (spawnNode->name == "spawn-point"){
-				std::string id = spawnNode->name + std::to_string(uniqueId++);
-				for (auto dataNode : spawnNode->children) {
-					loadValue(dataNode, dataNode->properties["type"], id);
-				}
+			std::string id = spawnNode->name + std::to_string(uniqueId++);
+			for (auto dataNode : spawnNode->children) {
+				loadValue(dataNode, dataNode->properties["type"], id);
 			}
 		}
 	}
