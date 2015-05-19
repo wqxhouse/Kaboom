@@ -282,6 +282,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\ParticleEffectManager.h" />
     <ClInclude Include="include\ParticleTexture.h" />
     <ClInclude Include="include\PointLight.h" />
+    <ClInclude Include="include\SAOPassCallback.h" />
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\SparkDrawable.h" />
     <ClInclude Include="include\SparkUpdatingHandler.h" />
@@ -328,6 +329,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\ParticleEffectManager.cpp" />
     <ClCompile Include="src\ParticleTexture.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
+    <ClCompile Include="src\SAOPassCallback.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\SparkDrawable.cpp" />
     <ClCompile Include="src\SparkUpdatingHandler.cpp" />
@@ -349,6 +351,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <Xml Include="..\Media\EffectFiles\Pipeline.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\Media\EffectFiles\SAOPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\template.xml" />
   </ItemGroup>
@@ -365,6 +368,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\cubemapSpecularPreFilter.frag" />
     <None Include="..\Media\Shaders\cubemapPrefilter.vert" />
     <None Include="..\Media\Shaders\defaultQuad.vert" />
+    <None Include="..\Media\Shaders\finalPass.frag" />
     <None Include="..\Media\Shaders\gbufferUtil.glsl" />
     <None Include="..\Media\Shaders\gbuffer_plain.frag" />
     <None Include="..\Media\Shaders\gbuffer_plain.vert" />
@@ -379,6 +383,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\lightTiling.frag" />
     <None Include="..\Media\Shaders\lightUtil.glsl" />
     <None Include="..\Media\Shaders\Material.glsl" />
+    <None Include="..\Media\Shaders\sao.frag" />
+    <None Include="..\Media\Shaders\saoBlur.frag" />
     <None Include="..\Media\Shaders\SMAA\blend.frag" />
     <None Include="..\Media\Shaders\SMAA\blend.vert" />
     <None Include="..\Media\Shaders\SMAA\edgedetection.frag" />

@@ -186,6 +186,9 @@
     <ClInclude Include="include\TestMaterial2.h">
       <Filter>Header Files\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="include\SAOPassCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -317,6 +320,9 @@
     <ClCompile Include="src\TestMaterial2.cpp">
       <Filter>Source Files\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="src\SAOPassCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">
@@ -338,6 +344,9 @@
       <Filter>Media\EffectFiles</Filter>
     </Xml>
     <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\SAOPassConfig.xml">
       <Filter>Media\EffectFiles</Filter>
     </Xml>
   </ItemGroup>
@@ -435,6 +444,15 @@
     </None>
     <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\window_rocket.rml">
       <Filter>Media\InEditorGUI</Filter>
+    </None>
+    <None Include="..\Media\Shaders\sao.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\saoBlur.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\finalPass.frag">
+      <Filter>Media\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>
