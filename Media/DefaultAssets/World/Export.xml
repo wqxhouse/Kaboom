@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <world>
-
   <model name="*__Huge_floor">
-		<file></file>
-		<material name="____Default" />
-		<position>0.000000 20.000000 1.000000</position>
-		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
-	</model>
+    <file></file>
+    <material name="____TestMaterial2" />
+    <position>0.000000 0.000000 0.000000</position>
+    <orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+    <scale>1.000000 1.000000 1.000000</scale>
+  </model>
 
   <model name="Bridge">
-    <file>DefaultAssets\GeometryObject\Bridge.FBX</file>
+    <file>Assets\GeometryObject\Bridge.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -18,7 +17,7 @@
   </model>
 
   <model name="CenterPlatform">
-    <file>DefaultAssets\GeometryObject\Platform.FBX</file>
+    <file>Assets\GeometryObject\Platform.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -26,7 +25,7 @@
   </model>
 
   <model name="OuterWall">
-    <file>DefaultAssets\GeometryObject\Wall.FBX</file>
+    <file>Assets\GeometryObject\Wall.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -34,7 +33,7 @@
   </model>
 
   <model name="Ground">
-    <file>DefaultAssets\GeometryObject\Ground.FBX</file>
+    <file>Assets\GeometryObject\Ground.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.100000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -42,7 +41,7 @@
   </model>
 
   <model name="SideWalls">
-    <file>DefaultAssets\GeometryObject\SideWalls.FBX</file>
+    <file>Assets\GeometryObject\SideWalls.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -50,102 +49,74 @@
   </model>
 
   <model name="Pillars">
-    <file>DefaultAssets\GeometryObject\Pillars.FBX</file>
+    <file>Assets\GeometryObject\Pillars.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
     <scale>0.120000 0.120000 0.120000</scale>
   </model>
-<!--
-	<model name="sphere">
-=======
-	<model name="*__Huge_floor">
->>>>>>> origin/develop
-		<file></file>
-		<material name="____TestMaterial2" />
-		<position>0.000000 0.000000 0.000000</position>
-		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
-	</model>
 
-	<model name="testBox">
-		<file>DefaultAssets\GeometryObject\3boxStack.dae</file>
-		<material name="brick1Mat" />
-		<position>0.000000 1.000000 1.000000</position>
-		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>0.250000 0.250000 0.250000</scale>
-	</model>
+  <light name="Sun" type="directional">
+    <color>0.700000 0.700000 0.700000</color>
+    <castShadow>0</castShadow>
+    <intensity>1.000000</intensity>
+    <direction>0.100201 -0.881765 -0.460923</direction>
+  </light>
 
-	<model name="platform">
-		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
-		<material name="____TestMaterial" />
-		<position>0.000000 0.000000 -1.000000</position>
-		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
-	</model>
--->
+  <light name="pt2" type="point">
+    <color>0.300000 0.700000 0.300000</color>
+    <castShadow>0</castShadow>
+    <intensity>1.000000</intensity>
+    <position>-7.000000 0.000000 0.000000</position>
+    <radius>100.000000</radius>
+  </light>
 
-	<light name="Sun" type="directional">
-		<color>0.700000 0.700000 0.700000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<direction>0.100201 -0.881765 -0.460923</direction>
-	</light>
+  <light name="debug" type="point">
+    <color>1.000000 0.160784 0.596078</color>
+    <castShadow>0</castShadow>
+    <intensity>1.000000</intensity>
+    <position>-9.000000 -5.000000 2.000000</position>
+    <radius>100.000000</radius>
+  </light>
 
-	<light name="pt2" type="point">
-		<color>0.300000 0.700000 0.300000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>-7.000000 0.000000 0.000000</position>
-		<radius>100.000000</radius>
-	</light>
+  <light name="debug1" type="point">
+    <color>0.000000 1.000000 0.000000</color>
+    <castShadow>0</castShadow>
+    <intensity>1.000000</intensity>
+    <position>0.000000 0.000000 2.000000</position>
+    <radius>100.000000</radius>
+  </light>
 
-	<light name="debug" type="point">
-		<color>1.000000 0.160784 0.596078</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>-9.000000 -5.000000 2.000000</position>
-		<radius>100.000000</radius>
-	</light>
+  <light name="pt4" type="point">
+    <color>0.300000 0.300000 0.700000</color>
+    <castShadow>0</castShadow>
+    <intensity>1.000000</intensity>
+    <position>0.000000 -7.000000 3.000000</position>
+    <radius>100.000000</radius>
+  </light>
 
-	<light name="debug1" type="point">
-		<color>0.000000 1.000000 0.000000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 0.000000 2.000000</position>
-		<radius>100.000000</radius>
-	</light>
+  <light name="debug2" type="point">
+    <color>0.000000 1.000000 0.000000</color>
+    <castShadow>0</castShadow>
+    <intensity>1.000000</intensity>
+    <position>0.000000 0.000000 2.000000</position>
+    <radius>100.000000</radius>
+  </light>
 
-	<light name="pt4" type="point">
-		<color>0.300000 0.300000 0.700000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 -7.000000 3.000000</position>
-		<radius>100.000000</radius>
-	</light>
+  <light name="pt1" type="point">
+    <color>0.700000 0.300000 0.300000</color>
+    <castShadow>0</castShadow>
+    <intensity>1.000000</intensity>
+    <position>7.000000 0.000000 3.000000</position>
+    <radius>100.000000</radius>
+  </light>
 
-	<light name="debug2" type="point">
-		<color>0.000000 1.000000 0.000000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 0.000000 2.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="pt1" type="point">
-		<color>0.700000 0.300000 0.300000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>7.000000 0.000000 3.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="pt3" type="point">
-		<color>0.700000 0.700000 0.300000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 7.000000 3.000000</position>
-		<radius>100.000000</radius>
-	</light>
+  <light name="pt3" type="point">
+    <color>0.700000 0.700000 0.300000</color>
+    <castShadow>0</castShadow>
+    <intensity>1.000000</intensity>
+    <position>0.000000 7.000000 3.000000</position>
+    <radius>100.000000</radius>
+  </light>
 
 </world>
