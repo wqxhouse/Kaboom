@@ -3,8 +3,8 @@
 
   <model name="*__Huge_floor">
 		<file></file>
-		<material name="____TestMaterial2" />
-		<position>0.000000 0.000000 0.000000</position>
+		<material name="____Default" />
+		<position>0.000000 20.000000 1.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
@@ -58,9 +58,12 @@
   </model>
 <!--
 	<model name="sphere">
+=======
+	<model name="*__Huge_floor">
+>>>>>>> origin/develop
 		<file></file>
-		<material name="____Default" />
-		<position>0.000000 20.000000 1.000000</position>
+		<material name="____TestMaterial2" />
+		<position>0.000000 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>

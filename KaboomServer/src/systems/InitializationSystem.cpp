@@ -6,6 +6,7 @@
 
 #include "../components/CharacterRotationComponent.h"
 #include "../components/CollisionComponent.h"
+#include "../components/DestroyComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../core/Game.h"
@@ -15,7 +16,7 @@ InitializationSystem::InitializationSystem(Game *game)
 }
 
 bool InitializationSystem::checkEntity(Entity *entity) {
-    return true;
+    return entity->hasComponent<DestroyComponent>();
 }
 
 void InitializationSystem::processEntity(Entity *entity) {

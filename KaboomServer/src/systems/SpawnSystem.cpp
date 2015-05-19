@@ -4,6 +4,7 @@
 #include <components/WeaponPickupComponent.h>
 #include <core/EntityManager.h>
 
+#include "../components/DestroyComponent.h"
 #include "../components/TimerComponent.h"
 #include "../components/SpawnComponent.h"
 #include "../components/TriggerComponent.h"
@@ -53,8 +54,9 @@ void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
 }
 
 bool SpawnSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<PlayerStatusComponent>() &&
-		   entity->hasComponent<SpawnComponent>();
+    return !entity->hasComponent<DestroyComponent>() && 
+            entity->hasComponent<PlayerStatusComponent>() &&
+            entity->hasComponent<SpawnComponent>();
 }
 
 

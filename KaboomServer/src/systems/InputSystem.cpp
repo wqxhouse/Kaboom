@@ -7,6 +7,7 @@
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
 
+#include "../components/DestroyComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
@@ -23,7 +24,8 @@ InputSystem::InputSystem(Game *game)
 }
 
 bool InputSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<PositionComponent>() &&
+    return !entity->hasComponent<DestroyComponent>() &&
+            entity->hasComponent<PositionComponent>() &&
             entity->hasComponent<RotationComponent>() &&
             entity->hasComponent<PhysicsComponent>() &&
             entity->hasComponent<InputComponent>() &&

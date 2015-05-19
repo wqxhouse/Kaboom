@@ -13,6 +13,7 @@ public:
 	GameGUIEventHandler(Game *game);
 	void handle(const HealthEvent &e, HealthComponent *healthComponent) const;
 	void handle(const AmmoAmountEvent &e, BombContainerComponent *bombConCom) const;
+	void changeWeapon(int weapon) const;
 	// TODO: add more other events 
 
 private:

@@ -9,9 +9,11 @@
 
 using namespace osgAudio;
 enum SOUNDS{
+	ROBOTS,
 	BASIC,
 	KABOOM_FIRE,
 	KABOOM_EXPLODE
+
 
 };
 
@@ -28,4 +30,5 @@ public:
 private:
 	std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
 	osg::ref_ptr<Source> source;
+	osg::ref_ptr<Source> backgrounfSource;
 };

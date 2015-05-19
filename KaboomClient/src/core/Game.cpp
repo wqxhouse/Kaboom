@@ -67,7 +67,7 @@ Game::Game(ConfigSettings *config)
 	Core::loadWorldFile(str_world_xml);
 	/* End testing code */
 
-    inputManager = new InputManager(client);
+    inputManager = new InputManager(client, this);
     inputManager->loadConfig();
 	
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
@@ -82,12 +82,8 @@ Game::Game(ConfigSettings *config)
 	printf("check for sound errors\n");
 	sample = new Sample("sounds\\a.wav");
 	soundManager.addToMap(KABOOM_EXPLODE,"sounds\\a.wav");
-	source->setSound(sample.get());
-	source->setGain(1);
-	source->setLooping(false);
 	printf("Adding KABOOM_EXPLODE TO MAP\n");
-	sounds->insert(std::make_pair(KABOOM_EXPLODE,sample));
-	//sounds->at(KABOOM_EXPLODE)=sample;
+	sounds->insert(std::make_pair(KABOOM_EXPLODE,sample));	
 	printf("Added KABOOM_EXPLODE TO MAP\n");
 	sample = new Sample("sounds\\a.wav");
 	printf("Adding KABOOM_FIRE TO MAP\n");

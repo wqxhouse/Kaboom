@@ -11,17 +11,18 @@
 #include "../components/TriggerComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
-#include "../systems/FiringSystem.h"
 #include "../systems/CollisionSystem.h"
+#include "../systems/DeathSystem.h"
+#include "../systems/DestroySystem.h"
 #include "../systems/ExplosionSystem.h"
+#include "../systems/FiringSystem.h"
 #include "../systems/InitializationSystem.h"
 #include "../systems/InputSystem.h"
 #include "../systems/PhysicsSystem.h"
 #include "../systems/PickupSystem.h"
+#include "../systems/SpawnSystem.h"
 #include "../systems/TimerSystem.h"
 #include "../systems/VoidSystem.h"
-#include "../systems/SpawnSystem.h"
-#include "../systems/DeathSystem.h"
 
 Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
@@ -52,6 +53,7 @@ Game::Game(ConfigSettings *configSettings)
     systemManager.addSystem(new PickupSystem(this));
     systemManager.addSystem(new ExplosionSystem(this));
     systemManager.addSystem(new DeathSystem(this));
+    systemManager.addSystem(new DestroySystem(this));
 }
 
 Game::~Game() {

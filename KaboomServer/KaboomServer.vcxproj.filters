@@ -205,6 +205,9 @@
     <ClCompile Include="src\core\OsgObjectConfigLoader.cpp">
       <Filter>Source Files\Configurations</Filter>
     </ClCompile>
+    <ClCompile Include="src\systems\DestroySystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -396,6 +399,12 @@
     </ClInclude>
     <ClInclude Include="src\core\OsgObjectConfigLoader.h">
       <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\DestroyComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\DestroySystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
