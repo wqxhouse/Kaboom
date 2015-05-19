@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="utf - 8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <world>
-	<model name="*__Huge_floor">
+
+  <model name="*__Huge_floor">
 		<file></file>
 		<material name="____TestMaterial2" />
 		<position>0.000000 0.000000 0.000000</position>
@@ -8,6 +9,54 @@
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
 
+  <model name="Bridge">
+    <file>DefaultAssets\GeometryObject\Bridge.FBX</file>
+    <material name="____Default" />
+    <position>0.000000 0.000000 0.000000</position>
+    <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
+    <scale>0.120000 0.120000 0.120000</scale>
+  </model>
+
+  <model name="CenterPlatform">
+    <file>DefaultAssets\GeometryObject\Platform.FBX</file>
+    <material name="____Default" />
+    <position>0.000000 0.000000 0.000000</position>
+    <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
+    <scale>0.120000 0.120000 0.120000</scale>
+  </model>
+
+  <model name="OuterWall">
+    <file>DefaultAssets\GeometryObject\Wall.FBX</file>
+    <material name="____Default" />
+    <position>0.000000 0.000000 0.000000</position>
+    <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
+    <scale>0.120000 0.120000 0.120000</scale>
+  </model>
+
+  <model name="Ground">
+    <file>DefaultAssets\GeometryObject\Ground.FBX</file>
+    <material name="____Default" />
+    <position>0.000000 0.000000 0.100000</position>
+    <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
+    <scale>0.120000 0.120000 0.120000</scale>
+  </model>
+
+  <model name="SideWalls">
+    <file>DefaultAssets\GeometryObject\SideWalls.FBX</file>
+    <material name="____Default" />
+    <position>0.000000 0.000000 0.000000</position>
+    <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
+    <scale>0.120000 0.120000 0.120000</scale>
+  </model>
+
+  <model name="Pillars">
+    <file>DefaultAssets\GeometryObject\Pillars.FBX</file>
+    <material name="____Default" />
+    <position>0.000000 0.000000 0.000000</position>
+    <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
+    <scale>0.120000 0.120000 0.120000</scale>
+  </model>
+<!--
 	<model name="sphere">
 		<file></file>
 		<material name="____Default" />
@@ -31,6 +80,7 @@
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
+-->
 
 	<light name="Sun" type="directional">
 		<color>0.700000 0.700000 0.700000</color>
