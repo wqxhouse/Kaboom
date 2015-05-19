@@ -43,9 +43,6 @@
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{3940c251-c989-4148-8388-9a748ea1711e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{9cb494fb-1cc7-43eb-88d3-e646c2e3abb2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Entity.h">
@@ -154,8 +151,8 @@
     <ClInclude Include="src\core\Player.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\PlayerManager.h">
-      <Filter>Header Files\Core</Filter>
+    <ClInclude Include="src\util\IdPool.h">
+      <Filter>Header Files\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +171,6 @@
     </ClCompile>
     <ClCompile Include="src\systems\EntitySystem.cpp">
       <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\PlayerManager.cpp">
-      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

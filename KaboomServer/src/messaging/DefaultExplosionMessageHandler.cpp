@@ -5,6 +5,7 @@
 #include <components/HealthComponent.h>
 #include <components/PlayerStatusComponent.h>
 #include <core/Entity.h>
+#include <core/Player.h>
 
 #include "ExplosionMessage.h"
 #include "Message.h"
@@ -89,8 +90,8 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
 
         if (charHealthComp->getAmount() == 0) {
             auto ownerComp = entity->getComponent<OwnerComponent>();
-            Player *killer = game->getPlayerManager().getPlayerByEntityId(ownerComp->getEntity()->getId());
-            Player *victim = game->getPlayerManager().getPlayerByEntityId(nearbyEntity->getId());
+            Player *killer = game->getPlayerByEntityId(ownerComp->getEntity()->getId());
+            Player *victim = game->getPlayerByEntityId(nearbyEntity->getId());
 
             if (killer->getId() != victim->getId()) {
                 killer->setKills(killer->getKills() + 1);

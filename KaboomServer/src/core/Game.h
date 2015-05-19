@@ -1,8 +1,8 @@
 #pragma once
 
 #include <core/EntityManager.h>
-#include <core/PlayerManager.h>
 #include <util/Configuration.h>
+#include <util/IdPool.h>
 #include <util/Timer.h>
 
 #include "BombFactory.h"
@@ -18,6 +18,8 @@ class Player;
 
 class Game {
 public:
+    typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
+
     Game(ConfigSettings *configSettings);
     ~Game();
 
@@ -25,9 +27,9 @@ public:
 
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
-    
-    inline PlayerManager &getPlayerManager() {
-        return playerManager;
+
+    inline Player *getPlayerByEntityId(unsigned int id) const {
+        return entityIdToPlayer.at(id);
     }
 
     inline EntityManager &getEntityManager() {
@@ -63,7 +65,8 @@ public:
     }
 
 private:
-    PlayerManager playerManager;
+    IdPool<unsigned int> playerIdPool;
+    IdToPlayerMap entityIdToPlayer;
 
     EntityManager entityManager;
     SystemManager systemManager;

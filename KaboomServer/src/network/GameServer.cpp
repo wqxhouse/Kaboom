@@ -7,6 +7,7 @@
 #include <components/PlayerStatusComponent.h>
 
 #include <core/Entity.h>
+#include <core/Player.h>
 #include <network/AssignEvent.h>
 #include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>

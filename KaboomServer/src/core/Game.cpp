@@ -3,6 +3,7 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
+#include <core/Player.h>
 #include <util/ConfigSettings.h>
 
 #include "../components/CollisionComponent.h"
@@ -99,10 +100,10 @@ void Game::update(float timeStep, int maxSubSteps) {
     //we want to have client load the gameworld first,
     //then create the player, and send the spawn player event to client
     if (server.acceptNewClient(entityManager.generateId())) {
-        //now we create a new player
+        unsigned int playerId = playerIdPool.allocate();
         Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, Vec3(0.0f, -5.0f, 5.0f));
 
-        playerManager.createPlayer(entity);
+        entityIdToPlayer[entity->getId()] = new Player(playerId, entity);
 
         //first notify the new client what entityId it should keep track of
         server.sendAssignEvent(entity->getId());
