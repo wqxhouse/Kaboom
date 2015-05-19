@@ -56,8 +56,8 @@ public:
         return world;
     }
 
-    inline std::unordered_map<std::string, Timer> & getPickupSpawnPointTimerMap() {
-        return pickupSpawnPointTimerMap;
+    inline std::unordered_map<std::string, Timer> & getPickupRequest() {
+        return pickupSpawnRequest;
     }
 
     inline std::vector<std::string> & getPlayerSpawnPointList() {
@@ -87,7 +87,7 @@ private:
 
 	std::unordered_map<std::string, Configuration> mapConfigMap;
 
-	std::unordered_map<std::string, Timer> pickupSpawnPointTimerMap;
+	std::unordered_map<std::string, Timer> pickupSpawnRequest;
 	std::vector<std::string> playerSpawnPointList;
 
     void stepSimulation(float timeStep, int maxSubSteps);

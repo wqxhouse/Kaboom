@@ -4,18 +4,18 @@
 
 #include <components/Component.h>
 
-class SpawnComponent : public Component {
+class RespawnComponent : public Component {
 public:
-    SpawnComponent(int duration)
+	RespawnComponent(int duration)
             : duration(duration) {
     }
 
-    SpawnComponent(int duration, std::string spawnPointName)
+	RespawnComponent(int duration, std::string spawnPointName)
             : duration(duration),
               spawnPointName(spawnPointName) {
     }
 
-    SpawnComponent(float x, float y, float z) 
+	RespawnComponent(float x, float y, float z)
             : spawnLocationVec(x, y, z) {
     }
 
