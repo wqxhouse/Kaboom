@@ -6,11 +6,17 @@
   <include>EffectFiles/GeometryPassConfig.xml</include>
   <include>EffectFiles/LightPrePassConfig.xml</include>
   <include>EffectFiles/LightPassConfig.xml</include>
+  <include>EffectFiles/SAOPassConfig.xml</include>
   <!--<include>EffectFiles/smaa.xml</include>-->
 
   <shader name="defaultQuad_vs" type="vertex">
     <version>120</version>
     <file>Shaders/defaultQuad.vert</file>
+  </shader>
+
+  <shader name="final_fs" type="fragment">
+    <version>400</version>
+    <file>Shaders/finalPass.frag</file>
   </shader>
 
   <uniform name="u_nearPlane" type="float">
@@ -30,6 +36,12 @@
     <internal_format>depth32</internal_format>
     <source_format>depth</source_format>
     <source_type>float</source_type>
+  </buffer>
+
+  <buffer name="b_finalLDR" type="2d">
+    <internal_format>rgba</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>ubyte</source_type>
   </buffer>
 
   <technique name="deferred_shading">
@@ -109,12 +121,66 @@
       <shader>lightPass_fs</shader>
     </deferred_pass>
 
+    <deferred_pass name="SAOPass">
+      <input_buffer unit="0" varname="u_RT2">b_RT2</input_buffer>
+      <output_buffer target="color">b_sao</output_buffer>
+      <clear_color>1 1 1 1</clear_color>
+      
+      <!-- seems like a bug, but currently working -->
+      <!-- u_projInvMat is not exposed in global compositor section (actually include does this, damn...) -->
+      <!-- but can be used from lightPass. not intended-->
+      <uniform>u_projInvMat</uniform>
+      <uniform>u_farPlane</uniform>
+      <uniform>u_projScale</uniform>
+      <uniform>u_radius</uniform>
+      <uniform>u_bias</uniform>
+      <uniform>u_intensityDivRPow6</uniform>
+
+      <shader>lightPass_vs</shader>
+      <shader>sao_fs</shader>
+    </deferred_pass>
+
+    <deferred_pass name="SAOBlurXPass">
+      <input_buffer unit="0" varname="u_sao">b_sao</input_buffer>
+      <output_buffer target="color">b_sao</output_buffer>
+      <clear_mask>depth</clear_mask>
+
+      <uniform name="u_axis" type="ivec2">
+        <value>1 0</value>
+      </uniform>
+
+      <shader>defaultQuad_vs</shader>
+      <shader>saoBlur_fs</shader>
+    </deferred_pass>
+
+    <deferred_pass name="SAOBlurYPass">
+      <input_buffer unit="0" varname="u_sao">b_sao</input_buffer>
+      <output_buffer target="color">b_sao</output_buffer>
+      <clear_mask>depth</clear_mask>
+
+      <uniform name="u_axis" type="ivec2">
+        <value>0 1</value>
+      </uniform>
+      
+      <shader>defaultQuad_vs</shader>
+      <shader>saoBlur_fs</shader>
+    </deferred_pass>
+
+    <deferred_pass name="FinalPass">
+      <input_buffer unit="0" varname="u_shadingTex">b_shading</input_buffer>
+      <input_buffer unit="1" varname="u_saoTex">b_sao</input_buffer>
+      <output_buffer>b_finalLDR</output_buffer>
+
+      <shader>defaultQuad_vs</shader>
+      <shader>final_fs</shader>
+    </deferred_pass>
+
     <forward_pass name="ManipulatorPass">
       <clear_mask>0</clear_mask>
       <output_buffer target="depth">debugDepth</output_buffer>
       <culling mask="0x4"></culling>
       <near_far preserve="0" />
-      <output_buffer>b_shading</output_buffer>
+      <output_buffer>b_finalLDR</output_buffer>
     </forward_pass>
 
     <forward_pass name="ParticleEffectPass">
@@ -123,36 +189,13 @@
       <near_far preserve="0" />
       <!-- TODO: make sure depth write is disabled -->
       <output_buffer target="depth">debugDepth</output_buffer>
-      <output_buffer>b_shading</output_buffer>
+      <output_buffer>b_finalLDR</output_buffer>
     </forward_pass>
 
-    <!-- SMAA -->
-    <!--<deferred_pass name="SMAA_EdgeDetection">
-      <input_buffer unit="0" varname="sceneTex">b_shading</input_buffer>
-      <output_buffer target="color">smaaEdgeResult</output_buffer>
-      <shader>smaa_edge_vs</shader>
-      <shader>smaa_edge_ps</shader>
+    <deferred_pass name="EndPass">
+      <input_buffer unit="0">b_finalLDR</input_buffer> 
     </deferred_pass>
 
-    <deferred_pass name="SMAA_Blend">
-      <input_buffer unit="0" varname="edgeTex">smaaEdgeResult</input_buffer>
-      <texture unit="1" varname="areaTex">smaaAreaTex</texture>
-      <texture unit="2" varname="searchTex">smaaSearchTex</texture>
-      <output_buffer target="color">smaaBlendResult</output_buffer>
-      <shader>smaa_blend_vs</shader>
-      <shader>smaa_blend_ps</shader>
-    </deferred_pass>
-
-    <deferred_pass name="SMAA_Final">
-      <input_buffer unit="0" varname="sceneTex">b_shading</input_buffer>
-      <input_buffer unit="1" varname="smaaTex">smaaBlendResult</input_buffer>
-      <shader>smaa_neighborhood_vs</shader>
-      <shader>smaa_neighborhood_ps</shader>
-    </deferred_pass>-->
-
-    <deferred_pass name="FinalPass">
-      <input_buffer unit="0">b_shading</input_buffer>
-    </deferred_pass>
   </technique>
 
 </compositor>

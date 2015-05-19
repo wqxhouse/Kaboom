@@ -17,6 +17,7 @@
 #include "LightManager.h"
 #include "ParticleEffectManager.h"
 #include "LightPrePassCallback.h"
+#include "SAOPassCallback.h"
 #include "LightPassCallback.h"
 #include "CustomFirstPersonManipulator.h"
 #include "GeometryPicker.h"
@@ -152,6 +153,7 @@ void Core::configPasses()
 
 	configGeometryPass();
 	configLightPass();
+	configSAOPass();
 
 	_passes->getOrCreateStateSet()->setMode(GL_TEXTURE_CUBE_MAP_SEAMLESS, osg::StateAttribute::ON);
 }
@@ -199,6 +201,29 @@ void Core::configParticlePass()
 	ParticleEffectManager *manager = _world.getParticleEffectManager();
 	_passes->addChild(manager->getRoot());
 	_viewer->addEventHandler(manager->getParticleUpdateHandler());
+}
+
+void Core::configSAOPass()
+{
+	osgFX::EffectCompositor::PassData saoPassData;
+	_passes->getPassData("SAOPass", saoPassData);
+	osg::Camera *passCam = saoPassData.pass;
+	_saoPassCallback = new SAOPassCallback(passCam);
+	passCam->getOrCreateStateSet()->setUpdateCallback(_saoPassCallback);
+
+	//osgFX::EffectCompositor::PassData blurXPassData;
+	//_passes->getPassData("SAOBlurXPass", blurXPassData);
+	//osg::Camera *blurX = blurXPassData.pass;
+	//osg::Depth *depth = new osg::Depth;
+	//depth->setFunction(osg::Depth::ALWAYS);
+	//blurX->getOrCreateStateSet()->setAttribute(depth);
+
+	//osgFX::EffectCompositor::PassData blurYPassData;
+	//_passes->getPassData("SAOBlurYPass", blurYPassData);
+	//osg::Camera *blurY = blurYPassData.pass;
+	//blurY->getOrCreateStateSet()->setAttribute(depth);
+
+
 }
 
 void Core::configGeometryObjectManipulator()
@@ -613,7 +638,6 @@ void Core::enableStartScreen()
 
 		LibRocketGUIManager::bindDebugWindow(_libRocketInGameGUI);
 	}
-
 }
 
 void Core::disableStartScreen()
@@ -742,7 +766,6 @@ void Core::configSpecularIBLLutPass()
 	lightPassCam->getOrCreateStateSet()->setTextureAttributeAndModes(6, lutTex);
 }
 
-
 void Core::configLibRocketGUI()
 {
 	osgViewer::ViewerBase::Views views;
@@ -806,7 +829,6 @@ float Core::getEditorFPSCamWalkingSpeed()
 	}
 }
 
-
 void Core::enableLibRocketInEditorGUI()
 {
 	if (_libRocketEditorGUI == NULL) return;
@@ -845,6 +867,11 @@ const std::string &Core::getMediaPath()
 	return _mediaPath;
 }
 
+osg::ref_ptr<SAOPassCallback> Core::getSAOPassCallback()
+{
+	return _saoPassCallback;
+}
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;
@@ -864,6 +891,8 @@ Camera Core::_savedManipulatorCam;
 osg::ref_ptr<TwGUIManager> Core::_gui;
 osg::ref_ptr<LibRocketGUIManager> Core::_libRocketEditorGUI;
 osg::ref_ptr<LibRocketGUIManager> Core::_libRocketInGameGUI;
+
+osg::ref_ptr<SAOPassCallback> Core::_saoPassCallback;
 
 osg::ref_ptr<SkyBox> Core::_skybox;
 std::string Core::_mediaPath;

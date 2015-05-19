@@ -10,6 +10,7 @@
 #include "AxisVisualizer.h"
 #include "LightVisualizer.h"
 #include "CubeMapPreFilter.h"
+#include "SAOPassCallback.h"
 
 #include "TwGUIManager.h"
 #include "LibRocketGUIManager.h"
@@ -90,6 +91,7 @@ public:
 
 	static double getLastFrameDuration();
 	static double getTimeElaspedSec();
+	static osg::ref_ptr<SAOPassCallback> getSAOPassCallback();
 
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 
@@ -123,6 +125,7 @@ private:
 	static void configGeometryPass();
 	static void configLightPass();
 	static void configParticlePass();
+	static void configSAOPass();
 
 	static void configFilePath();
 	static void configAxisVisualizer();
@@ -157,6 +160,8 @@ private:
 	static osg::ref_ptr<TwGUIManager> _gui;
 	static osg::ref_ptr<LibRocketGUIManager> _libRocketEditorGUI;
 	static osg::ref_ptr<LibRocketGUIManager> _libRocketInGameGUI;
+
+	static osg::ref_ptr<SAOPassCallback> _saoPassCallback;
 
 	// use as a temp for temporarily remove the manipulator when out of focus
 	// CAUTIOUS: when enabled, this variable is NULL

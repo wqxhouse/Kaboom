@@ -106,8 +106,26 @@ void TwGUIManager::initMainBar()
 		*(bool *)data = Core::isLibRocketInEditorGUIEnabled();
 	}, NULL, NULL)*/;
 
-	std::string camGroupDef = " group='Cam Settings' ";
+	std::string saoGroupDef = " group='SAO Settings' ";
+	std::string saoLimitDef = " min=0.0 max=10 step=0.01 ";
+	TwAddVarCB(g_twBar, "Radius", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getSAOPassCallback()->setRadius(*(float *)value);
+	}, [](void *value, void *clientData) {
+		*(float *)value = Core::getSAOPassCallback()->getRadius();
+	}, NULL, (saoGroupDef + saoLimitDef).c_str());
 
+	TwAddVarCB(g_twBar, "Intensity", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getSAOPassCallback()->setIntensity(*(float *)value);
+	}, [](void *value, void *clientData) {
+		*(float *)value = Core::getSAOPassCallback()->getIntensity();
+	}, NULL, (saoGroupDef + saoLimitDef).c_str());
+
+	std::string saofoldedStr = " Main/'SAO Settings' opened=false ";
+	TwDefine(saofoldedStr.c_str());
+
+	std::string camGroupDef = " group='Cam Settings' ";
 	TwAddVarCB(g_twBar, "Cam Control", TW_TYPE_BOOL8,
 		[](const void *value, void *clientData) {
 		bool active = *static_cast<const bool *>(value);
