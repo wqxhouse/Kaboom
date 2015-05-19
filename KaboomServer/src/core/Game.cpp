@@ -49,8 +49,8 @@ Game::Game(ConfigSettings *configSettings)
 
 	for (auto mapConfig : mapConfigMap){
 		if (mapConfig.second.getString("object-type") == "Pickup") {
-			//duration is Zero at first, so we will spawn that right away in the Spawn system
-			pickupSpawnPointTimerMap.insert(std::make_pair(mapConfig.first, Timer(0)));
+			//duration is Zero at first, so the request is immediate and it will spawn right away in Spawn System
+			pickupSpawnRequest.insert(std::make_pair(mapConfig.first, Timer(0)));
 		} else if (mapConfig.second.getString("object-type") == "Player") {
 			playerSpawnPointList.push_back(mapConfig.first);
 		}

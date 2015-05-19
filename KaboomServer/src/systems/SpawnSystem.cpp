@@ -6,7 +6,7 @@
 
 #include "../components/DestroyComponent.h"
 #include "../components/TimerComponent.h"
-#include "../components/SpawnComponent.h"
+#include "../components/RespawnComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../components/PhysicsComponent.h"
 
@@ -19,7 +19,7 @@ SpawnSystem::SpawnSystem(Game *game)
 //handle spawning of weapon pickups
 void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {	
 	//loop through the pickup spawn point and spawn them
-	for (auto spawnPointTimerIt = game->getPickupSpawnPointTimerMap().begin(); spawnPointTimerIt != game->getPickupSpawnPointTimerMap().end();) {
+	for (auto spawnPointTimerIt = game->getPickupRequest().begin(); spawnPointTimerIt != game->getPickupRequest().end();) {
 		//check if the timer has expired, if so we want to spawn that pickup
 		if (spawnPointTimerIt->second.isExpired()) {
 			const std::string spawnPointName = spawnPointTimerIt->first;
@@ -33,11 +33,11 @@ void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
 
             Entity* pickupEntity = game->getPickupFactory().createPickup(entityType, Vec3(posVec.x(), posVec.y(), posVec.z()), amount, radius);
 			//attach a special spawn component to the pickup to indicate that it will respawn over time.
-			pickupEntity->attachComponent(new SpawnComponent(duration, spawnPointName));
+			pickupEntity->attachComponent(new RespawnComponent(duration, spawnPointName));
 			game->addEntity(pickupEntity);
 
 			//remove it from the map once we have finish the request
-			spawnPointTimerIt = game->getPickupSpawnPointTimerMap().erase(spawnPointTimerIt); 
+			spawnPointTimerIt = game->getPickupRequest().erase(spawnPointTimerIt);
 		} else {
 			spawnPointTimerIt++;
 		}
@@ -47,14 +47,14 @@ void SpawnSystem::preprocessEntities(std::vector<Entity *> entities) {
 bool SpawnSystem::checkEntity(Entity *entity) {
     return !entity->hasComponent<DestroyComponent>() && 
             entity->hasComponent<PlayerStatusComponent>() &&
-            entity->hasComponent<SpawnComponent>();
+			entity->hasComponent<RespawnComponent>();
 }
 
 
 //Handling respawning of players
 void SpawnSystem::processEntity(Entity *entity) {
 	auto* playerStatusComponent = entity->getComponent<PlayerStatusComponent>();
-	auto* spawnComponent = entity->getComponent<SpawnComponent>();
+	auto* respawnComponent = entity->getComponent<RespawnComponent>();
 
 	if (playerStatusComponent->getIsAlive() == false ){ //respawn the player here
 		std::string spawnPointName = game->getPlayerSpawnPointList()[rand() % game->getPlayerSpawnPointList().size()]; //randomly pick a spawn point spot
