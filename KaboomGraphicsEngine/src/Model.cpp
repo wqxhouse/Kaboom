@@ -1,5 +1,7 @@
 
 #include "Model.h"
+#include "Core.h"
+#include "GeometryCache.h"
 #include <osgDB/ReadFile>
 
 Model::Model() {
@@ -13,7 +15,9 @@ Model::Model(std::string& modelName) {
 
 bool Model::loadModel(std::string& modelName) {
 	// Make sure model is loaded
-	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile(modelName);
+	osg::ref_ptr<osg::Node> tmp = Core::getWorldRef().getGeometryCache()->getNodeByFileName(modelName);
+	osg::ref_ptr<osg::Node> model = dynamic_cast<osg::Node*>(tmp->clone(osg::CopyOp::DEEP_COPY_ALL));
+
 	if (!model) {
 		printf("<Model::loadAnimations> model is null\n");
 		return false;
