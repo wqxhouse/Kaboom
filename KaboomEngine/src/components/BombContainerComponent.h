@@ -41,6 +41,10 @@ public:
         return inventory.at(bombType).second;
     }
 
+    inline const std::vector<Entity *> getActiveBombs() const {
+        return activeBombs;
+    }
+
     inline void addToActiveBomb(Entity *bomb) {
         activeBombs.push_back(bomb);
     }

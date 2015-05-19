@@ -3,6 +3,7 @@
 #include <core/Entity.h>
 
 #include "../components/CollisionComponent.h"
+#include "../components/DestroyComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../messaging/CollisionMessage.h"
 #include "../messaging/MessageHandler.h"
@@ -12,7 +13,8 @@ CollisionSystem::CollisionSystem(Game *game)
 }
 
 bool CollisionSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<CollisionComponent>() &&
+    return !entity->hasComponent<DestroyComponent>() &&
+            entity->hasComponent<CollisionComponent>() &&
             entity->hasComponent<MessageHandlerComponent>();
 }
 

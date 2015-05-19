@@ -39,6 +39,7 @@ void ExplosionEventHandler::handle(const Event &e) const {
         double z = (double)(-playerPos.z + bombPos.z);
 		std::cout << " x " << x << " y " << y << " z " << z << std::endl;
 		//game->source->rewind();
+		osg::ref_ptr<Source> source=new Source;
 		game->source=new Source;
 		game->source->setSound(game->sounds->at(KABOOM_EXPLODE));
 		game->source->setGain(1);
@@ -65,6 +66,10 @@ void ExplosionEventHandler::handle(const Event &e) const {
 //		printf("radian is %f \n",radian);
 		osgAudio::AudioEnvironment::instance()->update();
 		game->source->play();
+		//game->source->
+		//while (game->source->isStreaming()){
+		//	Sleep(1);
+		//}
 
 		// TODO: need to refactor the code above... probably abstract out a sound manager
 		// trigger explosion particle effect

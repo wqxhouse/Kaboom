@@ -11,9 +11,9 @@ DestroyEventHandler::DestroyEventHandler(Game *game)
 void DestroyEventHandler::handle(const Event &e) const {
     const DestroyEvent &evt = static_cast<const DestroyEvent &>(e);
 
-    EntityManager &entityManager = game->getEntityManager();
-    Entity *entity = entityManager.getEntity(evt.getEntityId());
-	if (entity != nullptr){
-		game->removeEntity(entity);
-	}
+    Entity *entity = game->getEntityManager().getEntity(evt.getEntityId());
+
+    if (entity != nullptr) {
+        game->removeEntity(entity);
+    }
 }

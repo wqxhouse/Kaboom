@@ -2,8 +2,8 @@
 
 #include "../network/GameClient.h"
 
-InputManager::InputManager(GameClient &client)
-        : inputEventHandler(client),
+InputManager::InputManager(GameClient &client, Game * game)
+        : inputEventHandler(client, game),
           keyboardEventHandler(inputEventHandler),
           mouseEventHandler(inputEventHandler) {
 }
