@@ -9,7 +9,7 @@
   </model>
 
   <model name="Bridge">
-    <file>Assets\GeometryObject\Bridge.FBX</file>
+    <file>DefaultAssets\GeometryObject\Bridge.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -17,7 +17,7 @@
   </model>
 
   <model name="CenterPlatform">
-    <file>Assets\GeometryObject\Platform.FBX</file>
+    <file>DefaultAssets\GeometryObject\Platform.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -25,7 +25,7 @@
   </model>
 
   <model name="OuterWall">
-    <file>Assets\GeometryObject\Wall.FBX</file>
+    <file>DefaultAssets\GeometryObject\Wall.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -33,7 +33,7 @@
   </model>
 
   <model name="Ground">
-    <file>Assets\GeometryObject\Ground.FBX</file>
+    <file>DefaultAssets\GeometryObject\Ground.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.100000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -41,7 +41,7 @@
   </model>
 
   <model name="SideWalls">
-    <file>Assets\GeometryObject\SideWalls.FBX</file>
+    <file>DefaultAssets\GeometryObject\SideWalls.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
@@ -49,7 +49,7 @@
   </model>
 
   <model name="Pillars">
-    <file>Assets\GeometryObject\Pillars.FBX</file>
+    <file>DefaultAssets\GeometryObject\Pillars.FBX</file>
     <material name="____Default" />
     <position>0.000000 0.000000 0.000000</position>
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>

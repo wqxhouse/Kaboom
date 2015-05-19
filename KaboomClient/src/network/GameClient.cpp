@@ -128,7 +128,7 @@ void GameClient::receive() {
 			case EVENT_PLAYER_STATUS:{
 				PlayerStatusEvent playerStatusEvent;
 				playerStatusEvent.deserialize(&networkData[i]);
-				std::cout << playerStatusEvent << std::endl;
+				//std::cout << playerStatusEvent << std::endl;
 				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerStatusEvent);
 				break;
 			}
