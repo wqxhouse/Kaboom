@@ -230,8 +230,8 @@ void GameServer::sendAmmoEvent(Entity *entity) const{
 	sendEvent(ammoAmountEvent, entityIdToClientId.at(entity->getId()));
 }
 
-void GameServer::sendScoreEvent(int kills, int deaths) const {
-	ScoreEvent scoreEvent(kills, deaths);
+void GameServer::sendScoreEvent(Player *player) const {
+    ScoreEvent scoreEvent(player->getId(), player->getKills(), player->getDeaths());
 	sendEvent(scoreEvent);
 }
 

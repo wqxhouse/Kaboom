@@ -11,6 +11,7 @@
 #include "MessageType.h"
 #include "../components/DestroyComponent.h"
 #include "../components/PhysicsComponent.h"
+#include "../components/OwnerComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
@@ -85,6 +86,21 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
         charStatusComp->getDamageTimer().start();
         charStatusComp->setIsDamaged(true);
         printf("new Player Health: %d \n", charHealthComp->getAmount());
+
+        if (charHealthComp->getAmount() == 0) {
+            auto ownerComp = entity->getComponent<OwnerComponent>();
+            Player *killer = game->getPlayerManager().getPlayerByEntityId(ownerComp->getEntity()->getId());
+            Player *victim = game->getPlayerManager().getPlayerByEntityId(nearbyEntity->getId());
+
+            if (killer->getId() != victim->getId()) {
+                killer->setKills(killer->getKills() + 1);
+            }
+
+            victim->setDeaths(victim->getDeaths() + 1);
+
+            game->getGameServer().sendScoreEvent(killer);
+            game->getGameServer().sendScoreEvent(victim);
+        }
 
 		//message.getGame()->getGameServer().sendPlayerStatusEvent(nearbyEntity);
     }
