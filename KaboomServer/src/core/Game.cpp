@@ -43,6 +43,21 @@ Game::Game(ConfigSettings *configSettings)
     std::cout << str_world_xml << std::endl;
     world.load(str_world_xml);
 
+	//Adding the map objects and spawn points
+	MapConfigLoader mapConfigLoader(mapConfigMap);
+	mapConfigLoader.load("data-server/map.xml");
+
+	for (auto mapConfig : mapConfigMap){
+		if (mapConfig.second.getString("object-type") == "Pickup") {
+			//duration is Zero at first, so we will spawn that right away in the Spawn system
+			pickupSpawnPointTimerMap.insert(std::make_pair(mapConfig.first, Timer(0)));
+		} else if (mapConfig.second.getString("object-type") == "Player") {
+			playerSpawnPointList.push_back(mapConfig.first);
+		}
+	}
+
+
+
     systemManager.addSystem(new InitializationSystem(this));
     systemManager.addSystem(new SpawnSystem(this));
     systemManager.addSystem(new InputSystem(this));

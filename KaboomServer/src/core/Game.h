@@ -62,7 +62,11 @@ public:
 
     inline std::vector<std::string> & getPlayerSpawnPointList() {
         return playerSpawnPointList;
-    }
+	}
+
+	inline std::unordered_map<std::string, Configuration> & getMapConfigMap() {
+		return mapConfigMap;
+	}
 
 private:
     IdPool<unsigned int> playerIdPool;
@@ -79,6 +83,9 @@ private:
     GameServer server;
 
     DebugWorld world;
+
+
+	std::unordered_map<std::string, Configuration> mapConfigMap;
 
 	std::unordered_map<std::string, Timer> pickupSpawnPointTimerMap;
 	std::vector<std::string> playerSpawnPointList;

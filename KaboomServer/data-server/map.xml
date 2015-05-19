@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <map>
-  <spawn-points>
+  <objects>
     <spawn-point>
-      <entity-type type="string">Pickup</entity-type>
+      <object-type type="string">Pickup</object-type>
       <id type="uint">131073</id>
       <name type="string">Kaboom 2.0</name>
       <amount type="int">5</amount>
@@ -12,38 +12,46 @@
     </spawn-point>
 
     <spawn-point>
-      <entity-type type="string">Player</entity-type>
+      <object-type type="string">Player</object-type>
       <position type="vector3">2.0 22.0 1.5</position>
       <!-- Do we want yaw, pitch here, or manually hard code the quats? <orientation type=""></orientation> -->
     </spawn-point>
     <spawn-point>
-      <entity-type type="string">Player</entity-type>
+      <object-type type="string">Player</object-type>
       <position type="vector3">2.0 -22.0 1.5</position>
     </spawn-point>
     <spawn-point>
-      <entity-type type="string">Player</entity-type>
+      <object-type type="string">Player</object-type>
       <position type="vector3">-2.0 22.0 1.5</position>
     </spawn-point>
     <spawn-point>
-      <entity-type type="string">Player</entity-type>
+      <object-type type="string">Player</object-type>
       <position type="vector3">-2.0 -22.0 1.5</position>
     </spawn-point>
   
     <spawn-point>
-      <entity-type type="string">Player</entity-type>
+      <object-type type="string">Player</object-type>
       <position type="vector3">26.0 26.0 9.0</position>
     </spawn-point>
     <spawn-point>
-      <entity-type type="string">Player</entity-type>
+      <object-type type="string">Player</object-type>
       <position type="vector3">26.0 -26.0 9.0</position>
     </spawn-point>
     <spawn-point>
-      <entity-type type="string">Player</entity-type>
+      <object-type type="string">Player</object-type>
       <position type="vector3">-26.0 26.0 9.0</position>
     </spawn-point>
     <spawn-point>
-      <entity-type type="string">Player</entity-type>
+      <object-type type="string">Player</object-type>
       <position type="vector3">-26.0 -26.0 9.0</position>
     </spawn-point>
-  </spawn-points>
+
+
+    <static-object>
+      <object-type type="string">JumpPad</object-type>
+      <position type="vector3">0.0 0.0 0.0</position>
+      <orientation type="vector3">0.0 0.0 0.0</orientation>
+      <impulse type="float">0.0</impulse>
+    </static-object>
+  </objects>
 </map>

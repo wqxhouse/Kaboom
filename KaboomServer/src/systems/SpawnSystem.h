@@ -16,12 +16,7 @@ public:
 
     virtual void processEntity(Entity *entity);
 
-	std::unordered_map<std::string, Configuration> & getSpawnConfigMap();
-
 private:
     Game *game;
-	MapConfigLoader mapConfigLoader;
-
-	std::unordered_map<std::string, Configuration> spawnConfigMap;
 
 };
