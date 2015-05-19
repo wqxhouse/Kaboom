@@ -13,37 +13,37 @@
 
     <spawn-point>
       <entity-type type="string">Player</entity-type>
-      <position type="vector3">2.0 22.0 2.0</position>
+      <position type="vector3">2.0 22.0 1.5</position>
       <!-- Do we want yaw, pitch here, or manually hard code the quats? <orientation type=""></orientation> -->
     </spawn-point>
     <spawn-point>
       <entity-type type="string">Player</entity-type>
-      <position type="vector3">2.0 -22.0 2.0</position>
+      <position type="vector3">2.0 -22.0 1.5</position>
     </spawn-point>
     <spawn-point>
       <entity-type type="string">Player</entity-type>
-      <position type="vector3">-2.0 22.0 2.0</position>
+      <position type="vector3">-2.0 22.0 1.5</position>
     </spawn-point>
     <spawn-point>
       <entity-type type="string">Player</entity-type>
-      <position type="vector3">-2.0 -22.0 2.0</position>
+      <position type="vector3">-2.0 -22.0 1.5</position>
     </spawn-point>
   
     <spawn-point>
       <entity-type type="string">Player</entity-type>
-      <position type="vector3">26.0 26.0 8.0</position>
+      <position type="vector3">26.0 26.0 9.0</position>
     </spawn-point>
     <spawn-point>
       <entity-type type="string">Player</entity-type>
-      <position type="vector3">26.0 -26.0 8.0</position>
+      <position type="vector3">26.0 -26.0 9.0</position>
     </spawn-point>
     <spawn-point>
       <entity-type type="string">Player</entity-type>
-      <position type="vector3">-26.0 26.0 8.0</position>
+      <position type="vector3">-26.0 26.0 9.0</position>
     </spawn-point>
     <spawn-point>
       <entity-type type="string">Player</entity-type>
-      <position type="vector3">-26.0 -26.0 8.0</position>
+      <position type="vector3">-26.0 -26.0 9.0</position>
     </spawn-point>
   </spawn-points>
 </map>
