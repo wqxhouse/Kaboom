@@ -6,6 +6,7 @@ class ConfigSettings;
 class Entity;
 class Event;
 class Game;
+class Player;
 class ServerEventHandlerLookup;
 class ServerNetwork;
 
@@ -29,7 +30,7 @@ public:
     void sendExplosionEvent(Entity *bomb) const;
 	void sendHealthEvent(Entity *entity) const;
     void sendAmmoEvent(Entity *entity) const;
-    void sendScoreEvent(int kills, int deaths) const;
+    void sendScoreEvent(Player *player) const;
 	void sendPlayerStatusEvent(Entity *entity) const;
 
     void sendInitializeEvent(Entity* player, const std::vector<Entity *> &entities) const;

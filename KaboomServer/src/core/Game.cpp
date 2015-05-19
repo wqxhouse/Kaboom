@@ -99,18 +99,19 @@ void Game::update(float timeStep, int maxSubSteps) {
     //we want to have client load the gameworld first,
     //then create the player, and send the spawn player event to client
     if (server.acceptNewClient(entityManager.generateId())) {
-
         //now we create a new player
-        Entity *player = characterFactory.createCharacter(DEFAULT_CHARACTER, Vec3(0.0f, -5.0f, 5.0f));
+        Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, Vec3(0.0f, -5.0f, 5.0f));
+
+        playerManager.createPlayer(entity);
 
         //first notify the new client what entityId it should keep track of
-        server.sendAssignEvent(player->getId());
+        server.sendAssignEvent(entity->getId());
 
         //send the new spawn player entity to all the clients
-        addEntity(player);
+        addEntity(entity);
 
         //second send the new client about all the exisiting entities
-        server.sendInitializeEvent(player, entityManager.getEntityList());
+        server.sendInitializeEvent(entity, entityManager.getEntityList());
 
         //lastly send the game state for each entity
         server.sendGameStatePackets(getEntityManager().getEntityList());

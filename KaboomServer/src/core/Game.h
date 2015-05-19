@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/EntityManager.h>
+#include <core/PlayerManager.h>
 #include <util/Configuration.h>
 #include <util/Timer.h>
 
@@ -13,6 +14,7 @@
 #include "../systems/SystemManager.h"
 
 class ConfigSettings;
+class Player;
 
 class Game {
 public:
@@ -23,6 +25,10 @@ public:
 
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
+    
+    inline PlayerManager &getPlayerManager() {
+        return playerManager;
+    }
 
     inline EntityManager &getEntityManager() {
         return entityManager;
@@ -57,6 +63,8 @@ public:
     }
 
 private:
+    PlayerManager playerManager;
+
     EntityManager entityManager;
     SystemManager systemManager;
 
