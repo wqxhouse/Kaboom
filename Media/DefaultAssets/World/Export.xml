@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf - 8"?>
 <world>
-	<model name="*__Huge_floor">
-		<file></file>
-		<material name="____TestMaterial2" />
-		<position>0.000000 0.000000 0.000000</position>
-		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
-	</model>
-
 	<model name="sphere">
 		<file></file>
 		<material name="____Default" />
 		<position>0.000000 20.000000 1.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
+
+	<model name="*__Huge_floor">
+		<file></file>
+		<material name="____TestMaterial2" />
+		<position>0.000000 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>

@@ -165,13 +165,13 @@ input.submit:focus
 button:hover,
 input.submit:hover
 {
-	background-image-t: 45px 90px;
+	//background-image-t: 45px 90px;
 }
 
 button:active,
 input.submit:active
 {
-	background-image-t: 90px 135px;
+	//background-image-t: 90px 135px;
 }
 
 
