@@ -10,7 +10,6 @@ void SystemManager::addSystem(EntitySystem *system) {
 
 void SystemManager::processSystems(Game *game) {
     for (EntitySystem *system : systems) {
-        system->preprocessEntities(game->getEntityManager().getEntityList());
-        system->processEntities(game->getEntityManager().getEntityList());
+        system->process();
     }
 }

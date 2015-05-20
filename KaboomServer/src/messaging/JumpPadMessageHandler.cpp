@@ -15,6 +15,9 @@
 #include "../components/RespawnComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JumpPadComponent.h"
+#include "../components/InputComponent.h"
+#include "../components/JumpComponent.h"
+
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
@@ -36,12 +39,14 @@ bool JumpPadMessageHandler::handle(const JumpPadMessage &message) const {
 
     auto &nearbyEntities = message.getNearbyEntities();
 
-    // Find closest character
     for (Entity *character : nearbyEntities) {
         auto charPosComp = character->getComponent<PositionComponent>();
 
 		//make sure the entity is a player, and that the player is not dead or disconnected
-        if (charPosComp == nullptr || !character->hasComponent<RespawnComponent>() || !character->hasComponent<DestroyComponent>()) { 
+		if (charPosComp == nullptr || 
+			!character->hasComponent<InputComponent>()  || 
+			character->hasComponent<RespawnComponent>() || 
+			character->hasComponent<DestroyComponent>()) {
             continue;
         }
 
@@ -49,13 +54,17 @@ bool JumpPadMessageHandler::handle(const JumpPadMessage &message) const {
 		auto charPhysicComp = character->getComponent<PhysicsComponent>();
 		auto charStatusComp = character->getComponent<PlayerStatusComponent>();
 		auto jumpPadComp = jumpPad->getComponent<JumpPadComponent>();
+		auto charJumpComp = character->getComponent<JumpComponent>();
 		
-		btVector3 impulseVec = jumpPadComp->getLaunchDirection() * jumpPadComp->getLaunchSpeed();
-		charPhysicComp->getRigidBody()->applyCentralImpulse(impulseVec); //apply the jumpPad force
+		if (charJumpComp != nullptr && !charJumpComp->isLaunched()) {
+			charJumpComp->setLaunched(true); //disable jumpping while getting launch by jumpPad
 
-		charStatusComp->getKnockBackTimer().setDuration(jumpPadComp->getLaunchDuration());
-		charStatusComp->getKnockBackTimer().start();
-		charStatusComp->setIsKnockBacked(true);
+			charPhysicComp->getRigidBody()->applyCentralImpulse(jumpPadComp->getLaunchSpeedVec()); //apply the jumpPad force
+
+			charStatusComp->getKnockBackTimer().setDuration(jumpPadComp->getLaunchDuration());
+			charStatusComp->getKnockBackTimer().start();
+			charStatusComp->setIsKnockBacked(true);
+		}
     }
     return true;
 }

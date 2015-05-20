@@ -9,7 +9,7 @@
 #include "../messaging/MessageHandler.h"
 
 CollisionSystem::CollisionSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool CollisionSystem::checkEntity(Entity *entity) {

@@ -10,6 +10,6 @@ ScoreEventHandler::ScoreEventHandler(Game *game)
 
 void ScoreEventHandler::handle(const Event &e) const {
     const ScoreEvent &evt = static_cast<const ScoreEvent &>(e);
-
+	game->getGameGUIEventHandler()->handle(evt);
     // TODO: Handle score update
 }

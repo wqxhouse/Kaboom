@@ -5,7 +5,6 @@
 #include <core/Entity.h>
 #include <core/EntityType.h>
 #include <util/ConfigSettings.h>
-#include <util/Configuration.h>
 
 #include "WorldLoader.h"
 #include "../components/CollisionComponent.h"
@@ -26,12 +25,13 @@ World::World(ConfigSettings* configSettings)
     world.setInternalTickCallback(onTickCallback, this);
 }
 
-void World::load(const std::string &mapXMLFile) {
+void World::load(const std::string &mapFilename, const std::string &entitiesFilename) {
     std::string mediaPath;
     configSettings->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
 
     WorldLoader loader(*this);
-    loader.load(mapXMLFile, mediaPath);
+    loader.loadMap(mapFilename, mediaPath);
+    loader.loadEntities(entitiesFilename);
 }
 
 void World::stepSimulation(float timeStep, int maxSubSteps) {
@@ -92,10 +92,6 @@ void World::onTick(btScalar timeStep) {
     }
 }
 
-const btCollisionDispatcher &World::getDispatcher() const {
-    return dispatcher;
-}
-
 void World::addStaticPlane(btVector3 origin, btVector3 normal) {
     addStaticPlane(origin, normal, btQuaternion::getIdentity());
 }
@@ -133,6 +129,7 @@ void World::handleCollision(Entity *entityA, Entity *entityB, const btManifoldPo
 
             if (collideGround) {
                 entityA->getComponent<JumpComponent>()->setJumping(false);
+				entityA->getComponent<JumpComponent>()->setLaunched(false);
             }
         }
     }

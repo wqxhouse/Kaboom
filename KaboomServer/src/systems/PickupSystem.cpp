@@ -11,7 +11,7 @@
 class WeaponPickupComponent;
 
 PickupSystem::PickupSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool PickupSystem::checkEntity(Entity *entity) {

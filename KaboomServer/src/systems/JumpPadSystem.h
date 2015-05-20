@@ -1,10 +1,10 @@
 #pragma once
 
-#include <systems/EntitySystem.h>
+#include "EntityProcessingSystem.h"
 
 class Game;
 
-class JumpPadSystem : public EntitySystem {
+class JumpPadSystem : public EntityProcessingSystem {
 public:
 	JumpPadSystem(Game *game);
 
@@ -12,6 +12,4 @@ public:
 
     virtual void processEntity(Entity *entity);
 
-private:
-    Game *game;
 };

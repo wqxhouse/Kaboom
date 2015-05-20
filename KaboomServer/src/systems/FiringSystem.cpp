@@ -11,7 +11,7 @@
 #include "../messaging/NoAttackMessage.h"
 
 FiringSystem::FiringSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool FiringSystem::checkEntity(Entity *entity) {

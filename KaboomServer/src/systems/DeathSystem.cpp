@@ -11,9 +11,10 @@
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/RespawnComponent.h"
+#include "../core/Game.h"
 
 DeathSystem::DeathSystem(Game * game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool DeathSystem::checkEntity(Entity *entity) {

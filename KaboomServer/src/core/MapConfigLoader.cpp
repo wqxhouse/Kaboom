@@ -3,10 +3,9 @@
 #include <core/EntityType.h>
 #include <util/Configuration.h>
 
-MapConfigLoader::MapConfigLoader(std::unordered_map<std::string, Configuration> &config)
+MapConfigLoader::MapConfigLoader(SpawnPointNameToConfigMap &config)
         : config(config),
-		  uniqueId(0)   
-{
+		  uniqueId(0) {
 }
 
 void MapConfigLoader::load(const std::string &filename){

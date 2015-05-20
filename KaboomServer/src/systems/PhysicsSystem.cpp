@@ -10,7 +10,7 @@
 #include "../core/Game.h"
 
 PhysicsSystem::PhysicsSystem(Game *game, World &world)
-        : game(game),
+        : EntityProcessingSystem(game),
           world(world) {
 }
 

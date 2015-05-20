@@ -19,6 +19,8 @@ void InputManager::loadConfig() {
     keyboardEventHandler.bindKey('d', KeyboardEventHandler::KEY_UP, &InputEventHandler::onMoveRightUp);
     keyboardEventHandler.bindKey(' ', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onJumpDown);
     keyboardEventHandler.bindKey(' ', KeyboardEventHandler::KEY_UP, &InputEventHandler::onJumpUp);
+	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_Tab, KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onTab);
+	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_Tab, KeyboardEventHandler::KEY_UP, &InputEventHandler::offTab);
     mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_DOWN, &InputEventHandler::onAttack1Down);
     mouseEventHandler.bindKey(osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON, MouseEventHandler::KEY_UP, &InputEventHandler::onAttack1Up);
     mouseEventHandler.bindKey(osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON, MouseEventHandler::KEY_DOWN, &InputEventHandler::onAttack2Down);
