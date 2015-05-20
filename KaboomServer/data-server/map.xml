@@ -49,9 +49,13 @@
 
     <static-object>
       <object-type type="string">JumpPad</object-type>
+      <id type="uint">262144</id>
       <position type="vector3">0.0 0.0 0.0</position>
-      <orientation type="vector3">0.0 0.0 0.0</orientation>
-      <impulse type="float">0.0</impulse>
+      <rotation type="vector3">0.0 0.0 0.0</rotation>
+      <box-size type="vector3">1.0 1.0 0.5</box-size>
+      <launch-speed type="float">5.0</launch-speed>
+      <launch-direction type="vector3">1.0 0.0 0.0</launch-direction>
+      <launch-duration type="float">500</launch-duration>
     </static-object>
   </objects>
 </map>

@@ -15,7 +15,7 @@
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
     <scale>0.120000 0.120000 0.120000</scale>
   </model>
-
+<!--
   <model name="CenterPlatform">
     <file>DefaultAssets\GeometryObject\Platform.FBX</file>
     <material name="____Default" />
@@ -31,7 +31,7 @@
     <orientation>0.707107 0.000000 0.000000 0.707107</orientation>
     <scale>0.120000 0.120000 0.120000</scale>
   </model>
-
+-->
   <model name="Ground">
     <file>DefaultAssets\GeometryObject\Ground.FBX</file>
     <material name="____Default" />
