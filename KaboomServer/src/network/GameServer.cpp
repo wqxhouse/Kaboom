@@ -69,35 +69,32 @@ void GameServer::receive(Game *game) {
             continue;
         }
 
-		EmptyEvent emptyEvent;
-		PlayerInputEvent playerInputEvent;
-        bool receivedPlayerInputEvent = false;
+        EmptyEvent emptyEvent;
+        DisconnectEvent disconnectEvent;
+        PlayerInputEvent playerInputEvent;
+        EquipEvent equipEvent;
+
+        std::unordered_set<unsigned int> receivedOpcodes;
 
         unsigned int i = 0;
         while (i < (unsigned int)len) {
             emptyEvent.deserialize(&network_data[i]);
+            receivedOpcodes.insert(emptyEvent.getOpcode());
 
             switch (emptyEvent.getOpcode()) {
                 case EVENT_DISCONNECT: {
-                    DisconnectEvent disconnectEvent;
                     disconnectEvent.deserialize(&network_data[i]);
-					disconnectEvent.setPlayerId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
-
-                    eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
+					disconnectEvent.setPlayerId(clientIdToEntityId[client_id]);
+                    break;
                 }
                 case EVENT_PLAYER_INPUT: {
                     playerInputEvent.deserialize(&network_data[i]);
-                    playerInputEvent.setPlayerId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
-
-                    receivedPlayerInputEvent = true;
-
+                    playerInputEvent.setPlayerId(clientIdToEntityId[client_id]);
                     break;
                 }
                 case EVENT_EQUIP: {
-                    EquipEvent equipEvent;
                     equipEvent.deserialize(&network_data[i]);
-                    equipEvent.setEntityId(clientIdToEntityId[client_id]); // Prevent hacking from client impersonating as other clients
-                    eventHandlerLookup.find(emptyEvent.getOpcode())->handle(equipEvent);
+                    equipEvent.setEntityId(clientIdToEntityId[client_id]);
                     break;
                 }
                 default: {
@@ -109,9 +106,17 @@ void GameServer::receive(Game *game) {
             i += emptyEvent.getByteSize();
 		}
 
-		if (receivedPlayerInputEvent) {
-			eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerInputEvent);
-		}
+        if (receivedOpcodes.count(EVENT_DISCONNECT)) {
+            eventHandlerLookup.find(EVENT_DISCONNECT)->handle(disconnectEvent);
+        }
+
+        if (receivedOpcodes.count(EVENT_PLAYER_INPUT)) {
+            eventHandlerLookup.find(EVENT_PLAYER_INPUT)->handle(playerInputEvent);
+        }
+
+        if (receivedOpcodes.count(EVENT_EQUIP)) {
+            eventHandlerLookup.find(EVENT_EQUIP)->handle(equipEvent);
+        }
     }
 
 	for (auto id : network->disconnectedClients) {
