@@ -41,18 +41,6 @@ public:
         return inventory.at(bombType).second;
     }
 
-    inline const std::vector<Entity *> getActiveBombs() const {
-        return activeBombs;
-    }
-
-    inline void addToActiveBomb(Entity *bomb) {
-        activeBombs.push_back(bomb);
-    }
-
-    inline void removeFromActiveBomb(Entity *bomb) {
-        activeBombs.erase(std::find(activeBombs.begin(), activeBombs.end(), bomb));
-    }
-
 	friend std::ostream &operator<<(std::ostream &os, const BombContainerComponent &o) {
         os << "BombContainerComponent: {" << std::endl;
         os << "    capacity: " << o.capacity << std::endl;
@@ -73,5 +61,4 @@ private:
     int capacity; // TODO: capacity is not set
 
     InventoryType inventory;
-	std::vector<Entity *> activeBombs;
 };

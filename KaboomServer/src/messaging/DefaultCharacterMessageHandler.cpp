@@ -80,8 +80,6 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                 entity->attachComponent(new DetonatorComponent(bombEntity));
             }
 
-            invComp->addToActiveBomb(bombEntity);
-
             game->addEntity(bombEntity);
         }
     }
