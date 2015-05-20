@@ -36,7 +36,7 @@ bool GameClient::disconnectFromServer() {
 }
 
 void GameClient::receive() {
-    char networkData[MAX_PACKET_SIZE];
+    static char networkData[MAX_PACKET_SIZE];
 
     int len = network.receivePackets(networkData);
 
