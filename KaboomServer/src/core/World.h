@@ -6,14 +6,20 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
+#include <util/Configuration.h>
+
+#include "../core/common.h"
+
 class ConfigSettings;
 class Entity;
 
 class World {
 public:
+    typedef std::unordered_map<std::string, Configuration> SpawnPointToConfigMap;
+
     World(ConfigSettings* configSettings);
 
-    void load(const std::string &mapXMLFile);
+    void load(const std::string &mapFilename, const std::string &entitiesFilename);
 
     virtual void stepSimulation(float timeStep, int maxSubSteps);
 
@@ -27,7 +33,9 @@ public:
 
     void onTick(btScalar timeStep);
 
-    const btCollisionDispatcher &getDispatcher() const;
+    inline SpawnPointToConfigMap &getSpawnPointConfigs() {
+        return spawnPointConfigs;
+    }
 
 protected:
     btDbvtBroadphase broadphase;
@@ -41,6 +49,8 @@ private:
     class TriggerCallback;
 
     ConfigSettings* configSettings;
+
+    SpawnPointToConfigMap spawnPointConfigs;
 
     void addStaticPlane(btVector3 origin, btVector3 normal);
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);

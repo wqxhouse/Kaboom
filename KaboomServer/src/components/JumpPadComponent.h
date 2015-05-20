@@ -6,41 +6,30 @@
 
 class JumpPadComponent : public Component {
 public:
-	JumpPadComponent(float launchSpeed, float x, float y, float z, float launchDuration)
-					: launchSpeed(launchSpeed), 
-					  launchDirection(x, y, z),
+	JumpPadComponent(float x, float y, float z, int launchDuration)
+					: launchSpeedVec(x, y, z),
 					  launchDuration(launchDuration){
     }
 
-    inline const float getLaunchSpeed() const {
-		return launchSpeed;
-    }
-	inline const btVector3 getLaunchDirection() const {
-		return launchDirection;
+	inline const btVector3 getLaunchSpeedVec() const {
+		return launchSpeedVec;
 	}
-	inline const float getLaunchDuration() const{
+	inline const int getLaunchDuration() const {
 		return launchDuration;
 	}
 
-
-	inline void setLaunchSpeed(float launchSpeed) {
-		this->launchSpeed = launchSpeed;
+	inline void setLaunchSpeedVec(float x, float y, float z) {
+		launchSpeedVec.setX(x);
+		launchSpeedVec.setY(y);
+		launchSpeedVec.setZ(z);
 	}
 
-	inline void setLaunchDirection(float x, float y, float z) {
-		launchDirection.setX(x);
-		launchDirection.setY(y);
-		launchDirection.setZ(z);
-	}
-
-	inline void setLaunchDuration(float launchDuration){
+	inline void setLaunchDuration(int launchDuration) {
 		this->launchDuration = launchDuration;
 	}
 
 private:
-
-	float launchSpeed;
-	btVector3 launchDirection;
-	float launchDuration;
+	btVector3 launchSpeedVec;
+	int launchDuration;
 
 };

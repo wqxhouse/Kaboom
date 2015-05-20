@@ -6,12 +6,12 @@
 #include <core/Player.h>
 #include <util/ConfigSettings.h>
 
-#include "../components/CollisionComponent.h"
-#include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
+#include "../components/RespawnComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
+#include "../systems/CharacterSpawnSystem.h"
 #include "../systems/CollisionSystem.h"
 #include "../systems/DeathSystem.h"
 #include "../systems/DestroySystem.h"
@@ -20,11 +20,12 @@
 #include "../systems/InitializationSystem.h"
 #include "../systems/InputSystem.h"
 #include "../systems/PhysicsSystem.h"
+#include "../systems/PickupSpawnSystem.h"
 #include "../systems/PickupSystem.h"
-#include "../systems/SpawnSystem.h"
 #include "../systems/TimerSystem.h"
 #include "../systems/VoidSystem.h"
 #include "../systems/JumpPadSystem.h"
+#include "../systems/JumpPadSpawnSystem.h"
 
 Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
@@ -43,40 +44,17 @@ Game::Game(ConfigSettings *configSettings)
     str_world_xml = str_mediaPath + str_world_xml;
 
     std::cout << str_world_xml << std::endl;
-    world.load(str_world_xml);
 
-	//Adding the map objects and spawn points
-	MapConfigLoader mapConfigLoader(mapConfigMap);
-	mapConfigLoader.load("data-server/map.xml");
-
-	for (auto mapConfig : mapConfigMap){
-		if (mapConfig.second.getString("object-type") == "Pickup") {
-			//duration is Zero at first, so the request is immediate and it will spawn right away in Spawn System
-			pickupSpawnRequest.insert(std::make_pair(mapConfig.first, Timer(0)));
-		} else if (mapConfig.second.getString("object-type") == "Player") {
-			playerSpawnPointList.push_back(mapConfig.first);
-		} else if (mapConfig.second.getString("object-type") == "JumpPad"){
-			EntityType entityType = static_cast<EntityType>(mapConfig.second.getUint("id"));
-
-			Vec3 boxSize = Vec3(mapConfig.second.getVec3("box-size").x(), mapConfig.second.getVec3("box-size").y(), mapConfig.second.getVec3("box-size").z());
-			Vec3 positionVec = Vec3(mapConfig.second.getVec3("position").x(), mapConfig.second.getVec3("position").y(), mapConfig.second.getVec3("position").z());
-			Vec3 launchDirection = Vec3(mapConfig.second.getVec3("launch-direction").x(), mapConfig.second.getVec3("launch-direction").y(), mapConfig.second.getVec3("launch-direction").z());
-			Entity* jumpPadEntity = jumpPadFactory.createJumpPad(entityType,
-				boxSize,
-				positionVec,
-				mapConfig.second.getFloat("launch-speed"),
-				launchDirection,
-				mapConfig.second.getFloat("launch-direction"));
-			addEntity(jumpPadEntity);
-		}
-	}
-
+    loadWorld(str_world_xml, "data-server/map.xml");
+   
     systemManager.addSystem(new InitializationSystem(this));
-    systemManager.addSystem(new SpawnSystem(this));
+    systemManager.addSystem(new CharacterSpawnSystem(this));
+	systemManager.addSystem(new JumpPadSpawnSystem(this));
+    systemManager.addSystem(new PickupSpawnSystem(this));
     systemManager.addSystem(new InputSystem(this));
     systemManager.addSystem(new FiringSystem(this));
     systemManager.addSystem(new PhysicsSystem(this, world));
-    systemManager.addSystem(new VoidSystem());
+    systemManager.addSystem(new VoidSystem(this));
     systemManager.addSystem(new CollisionSystem(this));
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
@@ -154,4 +132,22 @@ void Game::update(float timeStep, int maxSubSteps) {
     server.sendGameStatePackets(getEntityManager().getEntityList());
 
     world.renderDebugFrame();
+}
+
+void Game::loadWorld(const std::string &mapFilename, const std::string &entitiesFilename) {
+    world.load(mapFilename, entitiesFilename);
+
+    for (auto kv : world.getSpawnPointConfigs()) {
+        auto name = kv.first;
+        auto config = kv.second;
+
+        if (config.getString("object-type") == "Pickup") {
+            //duration is Zero at first, so the request is immediate and it will spawn right away in Spawn System
+            pickupSpawnRequest[name] = Timer(0);
+        } else if (config.getString("object-type") == "Player") {
+            playerSpawnPointList.push_back(name);
+		} else if (config.getString("object-type") == "JumpPad") {
+			jumpPadSpawnPointList.push_back(name);
+		}
+    }
 }

@@ -20,7 +20,7 @@
 #define VELOCTIYACCELERATION .1
 
 InputSystem::InputSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool InputSystem::checkEntity(Entity *entity) {
@@ -56,45 +56,7 @@ void InputSystem::processEntity(Entity *entity) {
 
     btVector3 localVelocity(0.0, 0.0, 0.0);
 
-	JumpComponent *jumpCom = entity->getComponent<JumpComponent>();
-	bool jumping = false;
-	if (jumpCom != NULL)
-	{
-		if (!jumpCom->isJumping() && inputComp->isJumping())
-		{
-            const float jumpingSpeed = EntityConfigLookup::get(entity->getType()).getFloat("jumping-speed");
-
-            velocity.setZ(velocity.getZ() + jumpingSpeed);
-			jumpCom->setJumping(true);
-			jumping = true;
-		}
-	}
-
-    // Define y to be front speed, x to be right speed
-	if (!jumping)
-	{
-        const float runningSpeed = EntityConfigLookup::get(entity->getType()).getFloat("running-speed");
-
-		if (inputComp->isMovingForward()) {
-            localVelocity.setY(runningSpeed);
-		}
-		else if (inputComp->isMovingBackward()) {
-            localVelocity.setY(-runningSpeed);
-		}
-		else {
-			localVelocity.setY(0);
-		}
-
-		if (inputComp->isMovingLeft()) {
-            localVelocity.setX(-runningSpeed);
-		}
-		else if (inputComp->isMovingRight()) {
-            localVelocity.setX(runningSpeed);
-		}
-		else {
-			localVelocity.setX(0);
-		}
-	}
+	
 
 /*    JetpackComponent *jetComp = entity->getComponent<JetpackComponent>();
 
@@ -115,7 +77,23 @@ void InputSystem::processEntity(Entity *entity) {
         }
     }*/
 
+	const float runningSpeed = EntityConfigLookup::get(entity->getType()).getFloat("running-speed");
 
+	if (inputComp->isMovingForward()) {
+		localVelocity.setY(runningSpeed);
+	} else if (inputComp->isMovingBackward()) {
+		localVelocity.setY(-runningSpeed);
+	} else {
+		localVelocity.setY(0);
+	}
+
+	if (inputComp->isMovingLeft()) {
+		localVelocity.setX(-runningSpeed);
+	} else if (inputComp->isMovingRight()) {
+		localVelocity.setX(runningSpeed);
+	} else {
+		localVelocity.setX(0);
+	}
 
 
     btVector3 worldVelocity(right * localVelocity.getX() + front * localVelocity.getY());
@@ -124,4 +102,18 @@ void InputSystem::processEntity(Entity *entity) {
     if (!playerStatusComp->checkIsKnockBacked()) { //don't move if we are knockbacked
         rigidBody->setLinearVelocity(worldVelocity);
     }
+
+
+	JumpComponent *jumpCom = entity->getComponent<JumpComponent>();
+	//bool jumping = false;
+	if (jumpCom != nullptr) {
+		if (!jumpCom->isJumping() && inputComp->isJumping() && !jumpCom->isLaunched()) {
+			const float jumpingSpeed = EntityConfigLookup::get(entity->getType()).getFloat("jumping-speed");
+
+			//velocity.setZ(velocity.getZ() + jumpingSpeed);
+			rigidBody->applyCentralImpulse(btVector3(0, 0, jumpingSpeed));
+			jumpCom->setJumping(true);
+			//jumping = true;
+		}
+	}
 }

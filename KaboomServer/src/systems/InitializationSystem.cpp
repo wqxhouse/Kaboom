@@ -12,7 +12,7 @@
 #include "../core/Game.h"
 
 InitializationSystem::InitializationSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool InitializationSystem::checkEntity(Entity *entity) {

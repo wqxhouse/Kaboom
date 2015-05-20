@@ -1,11 +1,10 @@
 #pragma once
 
-#include <systems/EntitySystem.h>
+#include "EntityProcessingSystem.h"
 
-class Game;
 class World;
 
-class PhysicsSystem : public EntitySystem {
+class PhysicsSystem : public EntityProcessingSystem {
 public:
     PhysicsSystem(Game *game, World &world);
 
@@ -16,6 +15,5 @@ public:
     virtual void processEntity(Entity *entity);
 
 private:
-    Game *game;
     World &world;
 };

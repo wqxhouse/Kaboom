@@ -14,8 +14,11 @@ void setupGUIDocuments(Game *game)
 	ConfigSettings::config->getValue("MediaPath", mediaPath);
 
 	std::string guiPath = mediaPath + "DefaultAssets\\LibRocketGUI\\InGame\\";
-	manager->addWindow(guiPath + "window_rocket.rml", true);
-	int i=manager->addWindow(guiPath + "window_start_screen.rml", true);
+	int i = manager->addWindow(guiPath + "window_rocket.rml", true);
+	manager->getWindow(i)->Hide();
+	i = manager->addWindow(guiPath + "window_start_screen.rml", true);
+	manager->getWindow(i)->Hide();
+	i = manager->addWindow(guiPath + "window_score.rml", true);
 	manager->getWindow(i)->Hide();
 
 	Rocket::Core::ElementDocument* marty = manager->getWindow(1);

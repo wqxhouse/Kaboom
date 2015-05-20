@@ -20,6 +20,7 @@ class Player;
 class Game {
 public:
     typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
+    typedef std::unordered_map<std::string, Configuration> SpawnPointToConfigMap;
 
     Game(ConfigSettings *configSettings);
     ~Game();
@@ -31,6 +32,10 @@ public:
 
     inline Player *getPlayerByEntityId(unsigned int id) const {
         return entityIdToPlayer.at(id);
+    }
+
+    inline SpawnPointToConfigMap &getSpawnPointConfigs() {
+        return world.getSpawnPointConfigs();
     }
 
     inline EntityManager &getEntityManager() {
@@ -45,9 +50,13 @@ public:
         return bombFactory;
     }
 
-    inline const PickupFactory & getPickupFactory() const {
+    inline const PickupFactory &getPickupFactory() const {
         return pickupFactory;
     }
+
+	inline const JumpPadFactory &getJumpPadFactory() const {
+		return jumpPadFactory;
+	}
 
     inline const GameServer &getGameServer() const {
         return server;
@@ -57,22 +66,19 @@ public:
         return world;
     }
 
-    inline std::unordered_map<std::string, Timer> & getPickupRequest() {
+    inline std::unordered_map<std::string, Timer> &getPickupRequest() {
         return pickupSpawnRequest;
     }
 
-    inline std::vector<std::string> & getPlayerSpawnPointList() {
+    inline std::vector<std::string> &getPlayerSpawnPointList() {
         return playerSpawnPointList;
-	}
+    }
 
-	inline std::unordered_map<std::string, Configuration> & getMapConfigMap() {
-		return mapConfigMap;
+	inline std::vector<std::string> &getJumpPadSpawnPointList() {
+		return jumpPadSpawnPointList;
 	}
 
 private:
-    IdPool<unsigned int> playerIdPool;
-    IdToPlayerMap entityIdToPlayer;
-
     EntityManager entityManager;
     SystemManager systemManager;
 
@@ -86,11 +92,12 @@ private:
 
     DebugWorld world;
 
+    std::unordered_map<std::string, Timer> pickupSpawnRequest;
+    std::vector<std::string> playerSpawnPointList;
+	std::vector<std::string> jumpPadSpawnPointList;
 
-	std::unordered_map<std::string, Configuration> mapConfigMap;
+    IdPool<unsigned int> playerIdPool;
+    IdToPlayerMap entityIdToPlayer;
 
-	std::unordered_map<std::string, Timer> pickupSpawnRequest;
-	std::vector<std::string> playerSpawnPointList;
-
-    void stepSimulation(float timeStep, int maxSubSteps);
+    void loadWorld(const std::string &mapFilename, const std::string &entitiesFilename);
 };

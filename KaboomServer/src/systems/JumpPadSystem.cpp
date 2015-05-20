@@ -11,7 +11,7 @@
 class JumpPadComponent;
 
 JumpPadSystem::JumpPadSystem(Game *game)
-        : game(game) {
+	: EntityProcessingSystem(game) {
 }
 
 bool JumpPadSystem::checkEntity(Entity *entity) {

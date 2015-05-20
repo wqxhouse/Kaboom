@@ -23,13 +23,12 @@ Entity *JumpPadFactory::createJumpPad(
 		EntityType type,
 		const Vec3 &boxSize,
 		const Vec3 &position,
-		float launchSpeed,
-		const Vec3 &launchDirection,
+		const Vec3 &launchSpeedVec,
 		float launchDuration) const {
 
     Entity *entity = entityManager.createEntity(type);
 
-	createBase(entity, boxSize, position, launchSpeed, launchDirection, launchDuration);
+	createBase(entity, boxSize, position, launchSpeedVec, launchDuration);
 
     if ((type & CAT_MASK) == CAT_JUMPPAD) {
         createJumpPad(entity);
@@ -38,7 +37,7 @@ Entity *JumpPadFactory::createJumpPad(
     return entity;
 }
 
-void JumpPadFactory::createBase(Entity *entity, const Vec3 &boxSize, const Vec3 &position, float launchSpeed, const Vec3 &launchDirection, float launchDuration) const {
+void JumpPadFactory::createBase(Entity *entity, const Vec3 &boxSize, const Vec3 &position, const Vec3 &launchSpeedVec, float launchDuration) const {
     const EntityType type = entity->getType();
 
     btTransform worldTrans;
@@ -55,7 +54,7 @@ void JumpPadFactory::createBase(Entity *entity, const Vec3 &boxSize, const Vec3 
     entity->attachComponent(new PositionComponent(position));
 	entity->attachComponent(new RotationComponent());
     entity->attachComponent(new TriggerComponent(ghostObject));
-    entity->attachComponent(new JumpPadComponent(launchSpeed, launchDirection.x, launchDirection.y, launchDirection.z, launchDuration));
+	entity->attachComponent(new JumpPadComponent(launchSpeedVec.x, launchSpeedVec.y, launchSpeedVec.z, launchDuration));
     entity->attachComponent(new MessageHandlerComponent(chain));
 }
 

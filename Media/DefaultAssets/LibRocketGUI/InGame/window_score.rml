@@ -1,0 +1,29 @@
+
+<rml>
+<head>
+	<link type="text/rcss" href="rkt_new.rcss"/>
+	<link type="text/rcss" href="invader-m.rcss"/>
+  <style>
+    div{
+    width: 150px;
+    display: inline-block;
+    text-align: center;
+    }
+    p{
+    text-align: center;
+    font-size: 200%;
+    }
+  </style>
+
+</head>
+<body class="window">
+  <table id="score_board">
+    <p>
+      <div id="id">ID</div>
+      <div id="kills">Kills</div>
+      <div id="deaths">Deaths</div>
+    </p>
+  </table>
+</body>
+
+</rml>
