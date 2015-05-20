@@ -8,6 +8,7 @@
 #include "BombFactory.h"
 #include "CharacterFactory.h"
 #include "PickupFactory.h"
+#include "JumpPadFactory.h"
 #include "../debug/DebugWorld.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
@@ -78,6 +79,7 @@ private:
     CharacterFactory characterFactory;
     BombFactory bombFactory;
     PickupFactory pickupFactory;
+	JumpPadFactory jumpPadFactory;
 
     ServerEventHandlerLookup eventHandlerLookup;
     GameServer server;

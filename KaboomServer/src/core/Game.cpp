@@ -24,11 +24,13 @@
 #include "../systems/SpawnSystem.h"
 #include "../systems/TimerSystem.h"
 #include "../systems/VoidSystem.h"
+#include "../systems/JumpPadSystem.h"
 
 Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
           bombFactory(entityManager),
           pickupFactory(entityManager),
+		  jumpPadFactory(entityManager),
           eventHandlerLookup(this),
           server(configSettings, eventHandlerLookup),
           world(configSettings) {
@@ -53,10 +55,21 @@ Game::Game(ConfigSettings *configSettings)
 			pickupSpawnRequest.insert(std::make_pair(mapConfig.first, Timer(0)));
 		} else if (mapConfig.second.getString("object-type") == "Player") {
 			playerSpawnPointList.push_back(mapConfig.first);
+		} else if (mapConfig.second.getString("object-type") == "JumpPad"){
+			EntityType entityType = static_cast<EntityType>(mapConfig.second.getUint("id"));
+
+			Vec3 boxSize = Vec3(mapConfig.second.getVec3("box-size").x(), mapConfig.second.getVec3("box-size").y(), mapConfig.second.getVec3("box-size").z());
+			Vec3 positionVec = Vec3(mapConfig.second.getVec3("position").x(), mapConfig.second.getVec3("position").y(), mapConfig.second.getVec3("position").z());
+			Vec3 launchDirection = Vec3(mapConfig.second.getVec3("launch-direction").x(), mapConfig.second.getVec3("launch-direction").y(), mapConfig.second.getVec3("launch-direction").z());
+			Entity* jumpPadEntity = jumpPadFactory.createJumpPad(entityType,
+				boxSize,
+				positionVec,
+				mapConfig.second.getFloat("launch-speed"),
+				launchDirection,
+				mapConfig.second.getFloat("launch-direction"));
+			addEntity(jumpPadEntity);
 		}
 	}
-
-
 
     systemManager.addSystem(new InitializationSystem(this));
     systemManager.addSystem(new SpawnSystem(this));
@@ -68,6 +81,7 @@ Game::Game(ConfigSettings *configSettings)
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
     systemManager.addSystem(new ExplosionSystem(this));
+	systemManager.addSystem(new JumpPadSystem(this));
     systemManager.addSystem(new DeathSystem(this));
     systemManager.addSystem(new DestroySystem(this));
 }

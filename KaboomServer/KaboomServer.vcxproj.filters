@@ -208,6 +208,15 @@
     <ClCompile Include="src\systems\DestroySystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\JumpPadFactory.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\messaging\JumpPadMessageHandler.cpp">
+      <Filter>Source Files\Messaging\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\JumpPadSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -408,6 +417,21 @@
     </ClInclude>
     <ClInclude Include="src\components\RespawnComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\JumpPadComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\JumpPadFactory.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\JumpPadMessageHandler.h">
+      <Filter>Header Files\Messaging\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\JumpPadMessage.h">
+      <Filter>Header Files\Messaging\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\JumpPadSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
