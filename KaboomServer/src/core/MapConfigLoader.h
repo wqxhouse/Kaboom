@@ -9,12 +9,14 @@ enum EntityType;
 
 class MapConfigLoader : public XMLLoader {
 public:
-	MapConfigLoader(std::unordered_map<std::string, Configuration> &config);
+    typedef std::unordered_map<std::string, Configuration> SpawnPointNameToConfigMap;
+
+    MapConfigLoader(SpawnPointNameToConfigMap &config);
 
     void load(const std::string &filename);
 
 private:
-    std::unordered_map<std::string, Configuration> &config;
+    SpawnPointNameToConfigMap &config;
 
     int uniqueId;
 

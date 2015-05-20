@@ -6,6 +6,10 @@
 
 #include "../components/DestroyComponent.h"
 
+VoidSystem::VoidSystem(Game *game)
+        : EntityProcessingSystem(game) {
+}
+
 bool VoidSystem::checkEntity(Entity *entity) {
     return entity->hasComponent<PositionComponent>();
 }

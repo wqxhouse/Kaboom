@@ -184,9 +184,6 @@
     <ClCompile Include="src\systems\VoidSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\systems\SpawnSystem.cpp">
-      <Filter>Source Files\Entity Component System\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\MapConfigLoader.cpp">
       <Filter>Source Files\Configurations</Filter>
     </ClCompile>
@@ -207,6 +204,15 @@
     </ClCompile>
     <ClCompile Include="src\systems\DestroySystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\CharacterSpawnSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\PickupSpawnSystem.cpp">
+      <Filter>Source Files\Entity Component System\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\EntityProcessingSystem.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -408,6 +414,15 @@
     </ClInclude>
     <ClInclude Include="src\components\RespawnComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\CharacterSpawnSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\PickupSpawnSystem.h">
+      <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\EntityProcessingSystem.h">
+      <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

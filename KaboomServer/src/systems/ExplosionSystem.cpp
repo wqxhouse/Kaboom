@@ -11,7 +11,7 @@
 class ExplosionComponent;
 
 ExplosionSystem::ExplosionSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool ExplosionSystem::checkEntity(Entity *entity) {

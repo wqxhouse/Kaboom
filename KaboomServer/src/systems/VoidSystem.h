@@ -1,10 +1,12 @@
 #pragma once
 
-#include <systems/EntitySystem.h>
+#include "EntityProcessingSystem.h"
 
 // Kills all entities below z=-100
-class VoidSystem : public EntitySystem {
+class VoidSystem : public EntityProcessingSystem {
 public:
+    VoidSystem(Game *game);
+
     virtual bool checkEntity(Entity *entity);
 
     virtual void processEntity(Entity *entity);
