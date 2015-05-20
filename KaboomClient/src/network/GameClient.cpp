@@ -131,7 +131,7 @@ void GameClient::receive() {
                 break;
             }
             default: {
-                printf("error in packet event types\n");
+                printf("error in packet event types: %d\n", emptyEvent.getOpcode());
                 return;
             }
         }

@@ -35,7 +35,7 @@ void PickupSpawnSystem::process() {
             entity->attachComponent(new RespawnComponent(duration, spawnPointName));
 
             game->addEntity(entity);
-            timers.erase(it++);
+            it = timers.erase(it);
         } else {
             ++it;
         }
