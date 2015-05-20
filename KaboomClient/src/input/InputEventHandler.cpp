@@ -127,7 +127,13 @@ void InputEventHandler::sendPlayerInputEvent() {
 
     client.sendMessage(evt);
 }
+void InputEventHandler::onTab(){
 
+	_game->getGameGUIEventHandler()->showScoreBoard();
+}
+void InputEventHandler::offTab(){
+	_game->getGameGUIEventHandler()->hideScoreBoard();
+}
 //void InputEventHandler::enterGameMode() {
 //	Core::enableGameMode();
 //}
