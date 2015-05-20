@@ -55,7 +55,7 @@ bool GameServer::acceptNewClient(unsigned int entity_id) {
 }
 
 void GameServer::receive(Game *game) {
-    char network_data[MAX_PACKET_SIZE];
+    static char networkData[MAX_PACKET_SIZE];
 
     for (auto it : network->sessions) {
         if (network->sessions.empty()) {
@@ -63,7 +63,7 @@ void GameServer::receive(Game *game) {
         }
 
         int client_id = it.first;
-        int len = network->receive(it.first, network_data);
+        int len = network->receive(it.first, networkData);
 
         if (len <= 0) {
             continue;
@@ -78,22 +78,22 @@ void GameServer::receive(Game *game) {
 
         unsigned int i = 0;
         while (i < (unsigned int)len) {
-            emptyEvent.deserialize(&network_data[i]);
+            emptyEvent.deserialize(&networkData[i]);
             receivedOpcodes.insert(emptyEvent.getOpcode());
 
             switch (emptyEvent.getOpcode()) {
                 case EVENT_DISCONNECT: {
-                    disconnectEvent.deserialize(&network_data[i]);
+                    disconnectEvent.deserialize(&networkData[i]);
 					disconnectEvent.setPlayerId(clientIdToEntityId[client_id]);
                     break;
                 }
                 case EVENT_PLAYER_INPUT: {
-                    playerInputEvent.deserialize(&network_data[i]);
+                    playerInputEvent.deserialize(&networkData[i]);
                     playerInputEvent.setPlayerId(clientIdToEntityId[client_id]);
                     break;
                 }
                 case EVENT_EQUIP: {
-                    equipEvent.deserialize(&network_data[i]);
+                    equipEvent.deserialize(&networkData[i]);
                     equipEvent.setEntityId(clientIdToEntityId[client_id]);
                     break;
                 }
