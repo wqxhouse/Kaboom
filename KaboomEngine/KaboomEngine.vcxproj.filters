@@ -169,9 +169,6 @@
     <ClCompile Include="src\util\Timer.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="src\systems\EntitySystem.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\BugList.txt" />

@@ -2,10 +2,9 @@
 
 #include "EntityProcessingSystem.h"
 
-// Marks all player entity as dead, but not delete the entity
-class DeathSystem : public EntityProcessingSystem {
+class CharacterSpawnSystem : public EntityProcessingSystem {
 public:
-	DeathSystem(Game* game);
+    CharacterSpawnSystem(Game *game);
 
     virtual bool checkEntity(Entity *entity);
 

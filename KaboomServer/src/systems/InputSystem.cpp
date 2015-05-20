@@ -20,7 +20,7 @@
 #define VELOCTIYACCELERATION .1
 
 InputSystem::InputSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool InputSystem::checkEntity(Entity *entity) {

@@ -9,7 +9,7 @@
 #include "../messaging/TimerExpiredMessage.h"
 
 TimerSystem::TimerSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool TimerSystem::checkEntity(Entity *entity) {
