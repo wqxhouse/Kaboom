@@ -1,5 +1,7 @@
 #include "util.h"
 
+#include <osg/Matrix>
+
 #define PI 3.14159265359
 #define deg2rad(d) ((d) * PI / 180.0)
 
@@ -20,6 +22,14 @@ btVector3 getViewDirection(Quat rotation) {
     dir.normalize();
 
     return dir;
+}
+
+Vec3 rotateVector(const Vec3 &vec, const Vec3 &axis, float deg) {
+    osg::Matrix rotMat;
+    rotMat.makeRotate(deg2rad(deg), axis.getOsgVec3());
+    osg::Vec3 result = rotMat * vec.getOsgVec3();
+
+    return Vec3(result.x(), result.y(), result.z());
 }
 
 btVector3 getImpulseVector(btVector3 pointA, btVector3 pointB, btScalar knockBackRatio) {

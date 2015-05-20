@@ -65,22 +65,63 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
             invComp->removeFromInventory(bombType);
             timer.start();
 
-            btVector3 viewDir = getViewDirection(charRotComp->getRotation());
+            btVector3 btViewDir = getViewDirection(charRotComp->getRotation());
+            Vec3 viewDir = Vec3(btViewDir.getX(), btViewDir.getY(), btViewDir.getZ());
 
             float launchSpeed = bombConfig.getFloat("launch-speed");
-            const Vec3 &pos = posComp->getPosition();
+            const Vec3 &charPos = posComp->getPosition();
+            
+            auto &factory = game->getBombFactory();
 
-            Entity* bombEntity = game->getBombFactory().createBomb(
-                    bombType,
-                    Vec3(pos.x + viewDir.getX(), pos.y + viewDir.getY(), pos.z + 1 + viewDir.getZ()),
-                    Vec3(viewDir.getX() * launchSpeed, viewDir.getY() * launchSpeed, viewDir.getZ() * launchSpeed));
-            bombEntity->attachComponent(new OwnerComponent(entity));
+            Vec3 pos;
+            Vec3 vel;
 
-            if (bombType == REMOTE_DETONATOR) {
-                entity->attachComponent(new DetonatorComponent(bombEntity));
+            pos.setOsgVec3(charPos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f) + viewDir.getOsgVec3());
+            vel.setOsgVec3(viewDir.getOsgVec3() * launchSpeed);
+
+            switch (bombType) {
+                case KABOOM_V2: {
+                    Entity *bombEntity = factory.createBomb(bombType, pos, vel);
+                    bombEntity->attachComponent(new OwnerComponent(entity));
+                    game->addEntity(bombEntity);
+                    break;
+                }
+                case TIME_BOMB: {
+                    const float angle = EntityConfigLookup::get(TIME_BOMB).getFloat("angle");
+
+                    Vec3 pos1, vel1;
+                    Vec3 dir1 = rotateVector(viewDir, Vec3(0, 0, 1), -angle);
+                    pos1.setOsgVec3(charPos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f) + dir1.getOsgVec3());
+                    vel1.setOsgVec3(dir1.getOsgVec3() * launchSpeed);
+
+                    Vec3 pos2, vel2;
+                    Vec3 dir2 = rotateVector(viewDir, Vec3(0, 0, 1), angle);
+                    pos2.setOsgVec3(charPos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f) + dir2.getOsgVec3());
+                    vel2.setOsgVec3(dir2.getOsgVec3() * launchSpeed);
+
+                    Entity *bombEntity;
+
+                    bombEntity = factory.createBomb(bombType, pos, vel);
+                    bombEntity->attachComponent(new OwnerComponent(entity));
+                    game->addEntity(bombEntity);
+
+                    bombEntity = factory.createBomb(bombType, pos1, vel1);
+                    bombEntity->attachComponent(new OwnerComponent(entity));
+                    game->addEntity(bombEntity);
+
+                    bombEntity = factory.createBomb(bombType, pos2, vel2);
+                    bombEntity->attachComponent(new OwnerComponent(entity));
+                    game->addEntity(bombEntity);
+                    break;
+                }
+                case REMOTE_DETONATOR: {
+                    Entity *bombEntity = factory.createBomb(bombType, pos, vel);
+                    bombEntity->attachComponent(new OwnerComponent(entity));
+                    entity->attachComponent(new DetonatorComponent(bombEntity));
+                    game->addEntity(bombEntity);
+                    break;
+                }
             }
-
-            game->addEntity(bombEntity);
         }
     }
 
