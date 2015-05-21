@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include <Windows.h>
+
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
@@ -95,7 +97,28 @@ void Game::removeEntity(Entity *entity) {
     entityManager.destroyEntity(entity->getId());
 }
 
-void Game::update(float timeStep, int maxSubSteps) {
+void Game::run() {
+    const clock_t TICK = 1000 / FPS;
+    const float TIME_STEP = 1.0f / FPS;
+
+    while (true) {
+        clock_t beginTime = clock();
+
+        update();
+
+        clock_t endTime = clock();
+        clock_t elapsedTime = endTime - beginTime;
+        clock_t sleepTime = TICK - elapsedTime;
+
+        if (sleepTime > 0) {
+            Sleep(sleepTime);
+        } else {
+            printf("Warning we need to slow down our server ticks!\n");
+        }
+    }
+}
+
+void Game::update() {
 
     //HERE is where the client first connect to server,
     //we want to have client load the gameworld first,

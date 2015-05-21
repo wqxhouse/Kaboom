@@ -21,10 +21,14 @@ public:
     typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
     typedef std::unordered_map<std::string, Configuration> SpawnPointToConfigMap;
 
+    const clock_t FPS = 60;
+    const int MAX_SUB_STEPS = 30;
+
     Game(ConfigSettings *configSettings);
     ~Game();
 
-    void update(float timeStep, int maxSubSteps);
+    void run();
+    void update();
 
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
