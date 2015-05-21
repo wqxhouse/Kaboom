@@ -87,7 +87,7 @@ private:
     std::unordered_map<std::string, Timer> pickupSpawnRequest;
     std::vector<std::string> playerSpawnPointList;
 
-    IdPool<unsigned int> playerIdPool;
+    IdPool playerIdPool;
     IdToPlayerMap entityIdToPlayer;
 
     void loadWorld(const std::string &mapFilename, const std::string &entitiesFilename);
