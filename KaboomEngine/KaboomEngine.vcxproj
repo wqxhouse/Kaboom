@@ -181,7 +181,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\components\BombContainerComponent.h" />
+    <ClInclude Include="src\components\InventoryComponent.h" />
     <ClInclude Include="src\components\Component.h" />
     <ClInclude Include="src\components\EquipmentComponent.h" />
     <ClInclude Include="src\components\HealthComponent.h" />

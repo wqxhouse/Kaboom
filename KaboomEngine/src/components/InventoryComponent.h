@@ -2,26 +2,25 @@
 
 #include <ostream>
 #include <unordered_map>
-#include <vector>
 
 #include "Component.h"
 #include "../core/Entity.h"
 #include "../util/Timer.h"
 
-class BombContainerComponent : public Component {
+class InventoryComponent : public Component {
 public:
     typedef std::unordered_map<EntityType, std::pair<unsigned int, Timer>> InventoryType;
 
-    BombContainerComponent(const InventoryType &inventory = InventoryType())
-        : capacity(0),
-          inventory(inventory) {
+    InventoryComponent(const InventoryType &inventory = InventoryType())
+            : capacity(0),
+              inventory(inventory) {
     }
 
-    inline void addToInventory(EntityType bombType, int amount = 1) {
+    inline void add(EntityType bombType, int amount = 1) {
         inventory[bombType].first += amount;
     }
 
-    inline void removeFromInventory(const EntityType &bombType, int amount = 1) {
+    inline void remove(const EntityType &bombType, int amount = 1) {
         if (inventory[bombType].first - amount < 0) {
             inventory.erase(bombType);
         } else {
@@ -41,17 +40,17 @@ public:
         return inventory.at(bombType).second;
     }
 
-	friend std::ostream &operator<<(std::ostream &os, const BombContainerComponent &o) {
-        os << "BombContainerComponent: {" << std::endl;
+    friend std::ostream &operator<<(std::ostream &os, const InventoryComponent &o) {
+        os << "InventoryComponent: {" << std::endl;
         os << "    capacity: " << o.capacity << std::endl;
-		os << "    inventory: { " << std::endl;
+        os << "    inventory: { " << std::endl;
         for (auto kv : o.inventory) {
-			os << "        " << kv.first << ": {" << std::endl;
+            os << "        " << kv.first << ": {" << std::endl;
             os << "            amount: " << kv.second.first << std::endl;
             os << "            expired: " << kv.second.second.isExpired() << std::endl;
             os << "        }" << std::endl;
-		}
-		os << "    }" << std::endl;
+        }
+        os << "    }" << std::endl;
         os << "}";
 
         return os;

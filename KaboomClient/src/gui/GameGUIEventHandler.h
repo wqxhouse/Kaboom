@@ -1,7 +1,7 @@
 #pragma once
 
 #include <components/HealthComponent.h>
-#include <components/BombContainerComponent.h>
+#include <components/InventoryComponent.h>
 #include <network/HealthEvent.h>
 #include <network/AmmoAmountEvent.h>
 #include <network/ScoreEvent.h>
@@ -13,7 +13,7 @@ class GameGUIEventHandler
 public:
 	GameGUIEventHandler(Game *game);
 	void handle(const HealthEvent &e, HealthComponent *healthComponent) const;
-	void handle(const AmmoAmountEvent &e, BombContainerComponent *bombConCom) const;
+    void handle(const AmmoAmountEvent &e, InventoryComponent *bombConCom) const;
 	void handle(const ScoreEvent &e) const;
 	void changeWeapon(int weapon) const;
 	void showScoreBoard() const;

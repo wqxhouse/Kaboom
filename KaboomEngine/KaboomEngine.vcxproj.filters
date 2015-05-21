@@ -97,9 +97,6 @@
     <ClInclude Include="src\util\Timer.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\components\BombContainerComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\components\EquipmentComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
@@ -156,6 +153,9 @@
     </ClInclude>
     <ClInclude Include="src\network\ReloadRequestEvent.h">
       <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\InventoryComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

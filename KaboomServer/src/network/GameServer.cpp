@@ -1,7 +1,7 @@
 #include "GameServer.h"
 
-#include <components/BombContainerComponent.h>
 #include <components/HealthComponent.h>
+#include <components/InventoryComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
@@ -225,17 +225,17 @@ void GameServer::sendHealthEvent(Entity *entity) const {
 }
 
 void GameServer::sendAmmoEvent(Entity *entity) const{
-	BombContainerComponent *bombConCom = entity->getComponent<BombContainerComponent>();
+    InventoryComponent *invComp = entity->getComponent<InventoryComponent>();
 
-	if (bombConCom == nullptr){
+    if (invComp == nullptr) {
 		return;
 	}
 
 	//Hardcode the amount of bomb
 	//when we add more bomb type, we need to modify this
-	int kaboom_ammo = bombConCom->getAmount(KABOOM_V2);
-	int time_ammo = bombConCom->getAmount(TIME_BOMB);
-	int remote_ammo = bombConCom->getAmount(REMOTE_DETONATOR);
+    int kaboom_ammo = invComp->getAmount(KABOOM_V2);
+    int time_ammo = invComp->getAmount(TIME_BOMB);
+    int remote_ammo = invComp->getAmount(REMOTE_DETONATOR);
 
 	//make sure its 0 or greater
 	kaboom_ammo = (kaboom_ammo > 0) ? kaboom_ammo : 0;

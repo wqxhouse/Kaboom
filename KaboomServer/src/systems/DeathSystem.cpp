@@ -1,6 +1,5 @@
 #include "DeathSystem.h"
 
-#include <components/BombContainerComponent.h>
 #include <components/HealthComponent.h>
 #include <components/PlayerStatusComponent.h>
 #include <components/PositionComponent.h>
