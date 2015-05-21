@@ -41,8 +41,11 @@ void DeathSystem::processEntity(Entity *entity) {
         auto detonatorComp = entity->getComponent<DetonatorComponent>();
 
         if (detonatorComp != nullptr) {
-            Entity *remoteDetonator = detonatorComp->getBomb();
-            remoteDetonator->attachComponent(new DestroyComponent());
+            auto &bombs = detonatorComp->getBombs();
+            
+            for (auto bomb : bombs) {
+                bomb->attachComponent(new DestroyComponent());
+            }
         }
     }
 }

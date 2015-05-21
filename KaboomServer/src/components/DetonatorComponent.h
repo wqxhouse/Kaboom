@@ -6,14 +6,13 @@ class Entity;
 
 class DetonatorComponent : public Component {
 public:
-    DetonatorComponent(Entity *bomb)
-            : bomb(bomb),
-              ready(false),
+    DetonatorComponent()
+            : ready(false),
               detonated(false) {
     }
 
-    inline Entity *getBomb() const {
-        return bomb;
+    inline std::vector<Entity *> &getBombs() {
+        return bombs;
     }
 
     inline bool isReady() const {
@@ -33,7 +32,7 @@ public:
     }
 
 private:
-    Entity *bomb;
+    std::vector<Entity *> bombs;
 
     bool ready;
     bool detonated;

@@ -33,9 +33,9 @@ bool RemoteDetonatorMessageHandler::handle(const CollisionMessage &message) cons
         physComp->getRigidBody()->setMassProps(0.0f, btVector3(0.0f, 0.0f, 0.0f));
     } else {
         entity->attachComponent(new ExplosionComponent());
-        auto ownerDetonatorComp = owner->getComponent<DetonatorComponent>();
-        owner->detachComponent<DetonatorComponent>();
-        delete ownerDetonatorComp;
+
+        auto &bombs = owner->getComponent<DetonatorComponent>()->getBombs();
+        bombs.erase(std::find(bombs.begin(), bombs.end(), entity));
     }
 
     return true;
