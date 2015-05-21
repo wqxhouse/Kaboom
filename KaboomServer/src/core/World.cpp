@@ -35,7 +35,7 @@ void World::load(const std::string &mapFilename, const std::string &entitiesFile
 }
 
 void World::stepSimulation(float timeStep, int maxSubSteps) {
-    world.stepSimulation(timeStep, maxSubSteps);
+    world.stepSimulation(timeStep, maxSubSteps, timeStep / maxSubSteps);
 }
 
 void World::addRigidBody(btRigidBody *rigidBody) {

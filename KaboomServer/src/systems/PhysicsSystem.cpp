@@ -15,11 +15,7 @@ PhysicsSystem::PhysicsSystem(Game *game, World &world)
 }
 
 void PhysicsSystem::preprocessEntities(std::vector<Entity *> entities) {
-    const clock_t FPS = 60;
-    const float TIME_STEP = 1.0f / FPS;
-    const int MAX_SUB_STEPS = 1;
-
-    world.stepSimulation(TIME_STEP, MAX_SUB_STEPS); // TODO: Extract constant
+    world.stepSimulation(1.0f / game->FPS, game->MAX_SUB_STEPS);
 }
 
 bool PhysicsSystem::checkEntity(Entity *entity) {
