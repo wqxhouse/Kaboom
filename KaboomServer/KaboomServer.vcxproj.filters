@@ -214,6 +214,9 @@
     <ClCompile Include="src\systems\EntityProcessingSystem.cpp">
       <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\ReloadRequestEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -423,6 +426,9 @@
     </ClInclude>
     <ClInclude Include="src\systems\EntityProcessingSystem.h">
       <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ReloadRequestEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

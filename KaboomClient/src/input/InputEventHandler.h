@@ -29,6 +29,8 @@ public:
 	void onTab();
 	void offTab();
 
+    void onReloadRequest();
+
     // void enterGameMode();
     void quitGameMode();
     // void showDebugAnalysis();

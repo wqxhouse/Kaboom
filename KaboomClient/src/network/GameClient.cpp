@@ -1,5 +1,6 @@
 #include "GameClient.h"
 
+#include <network/AmmoAmountEvent.h>
 #include <network/AssignEvent.h>
 #include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
@@ -9,11 +10,10 @@
 #include <network/PlayerInputEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
+#include <network/ReloadRequestEvent.h>
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
-#include <network/AmmoAmountEvent.h>
-
 
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
@@ -164,6 +164,10 @@ void GameClient::sendEquipEvent(EntityType type) const {
     sendMessage(evt);
 }
 
+void GameClient::sendReloadRequestEvent() const {
+    ReloadRequestEvent evt;
+    sendMessage(evt);
+}
 
 bool GameClient::getIsConnectedToServer() const {
     return network.isConnected();

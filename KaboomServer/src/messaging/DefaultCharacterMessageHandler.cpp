@@ -170,6 +170,8 @@ bool DefaultCharacterMessageHandler::handle(const Attack2Message &message) const
             detonatorComp->setDetonated(true);
         }
     }
+
+    return true;
 }
 
 bool DefaultCharacterMessageHandler::handle(const NoAttackMessage &message) const {

@@ -134,6 +134,11 @@ void InputEventHandler::onTab(){
 void InputEventHandler::offTab(){
 	_game->getGameGUIEventHandler()->hideScoreBoard();
 }
+
+void InputEventHandler::onReloadRequest() {
+    client.sendReloadRequestEvent();
+}
+
 //void InputEventHandler::enterGameMode() {
 //	Core::enableGameMode();
 //}

@@ -19,9 +19,13 @@ const Configuration &EntityConfigLookup::get(EntityType type) {
 void EntityConfigLookup::initialize() {
     if (!initialized) {
         initialized = true;
-        instance.loadBombConfig("data-server/bombs.xml");
-        instance.loadCharacterConfig("data-server/characters.xml");
+        load();
     }
+}
+
+void EntityConfigLookup::load() {
+    instance.loadBombConfig("data-server/bombs.xml");
+    instance.loadCharacterConfig("data-server/characters.xml");
 }
 
 void EntityConfigLookup::loadBombConfig(const std::string &filename) {

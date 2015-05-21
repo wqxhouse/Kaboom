@@ -56,7 +56,7 @@ void MapConfigLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string &valu
     } else if (valueType == "string") {
         std::string val;
         loadString(xmlNode, val);
-		config[id].set(xmlNode->name.c_str(), val.c_str());
+		config[id].set(xmlNode->name.c_str(), val);
 	} else if (valueType == "vector3") {
 		osg::Vec3 val;
 		loadVec3(xmlNode, val);
