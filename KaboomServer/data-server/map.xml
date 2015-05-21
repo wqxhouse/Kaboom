@@ -53,8 +53,8 @@
       <position type="vector3">0.0 0.0 0.0</position>
       <rotation type="vector3">0.0 0.0 0.0</rotation> 
       <box-size type="vector3">1.0 1.0 0.5</box-size>
-      <launch-speed type="vector3">5.0 0.0 5.0</launch-speed>
-      <launch-duration type="int">750</launch-duration>
+      <launch-speed type="vector3">5.0 0.0 3.5</launch-speed>
+      <launch-duration type="int">1000</launch-duration>
     </static-object>
   </objects>
 </map>
