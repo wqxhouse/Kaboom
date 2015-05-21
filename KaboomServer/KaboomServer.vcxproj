@@ -110,6 +110,7 @@
     <ClInclude Include="src\messaging\Attack1Message.h" />
     <ClInclude Include="src\messaging\Attack2Message.h" />
     <ClInclude Include="src\messaging\BombPickupMessageHandler.h" />
+    <ClInclude Include="src\messaging\CharacterSpawnMessage.h" />
     <ClInclude Include="src\messaging\CollisionMessage.h" />
     <ClInclude Include="src\messaging\DefaultCharacterMessageHandler.h" />
     <ClInclude Include="src\messaging\DefaultExplosionMessageHandler.h" />

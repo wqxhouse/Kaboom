@@ -151,6 +151,17 @@ void Game::update() {
     world.renderDebugFrame();
 }
 
+Vec3 Game::getPlayerSpawnPoint() {
+    auto spawnPoint = playerSpawnPointList.at(rand() % playerSpawnPointList.size());
+
+    Configuration spawnConfig = getSpawnPointConfigs().at(spawnPoint);
+
+    Vec3 pos;
+    pos.setOsgVec3(spawnConfig.getVec3("position"));
+
+    return pos;
+}
+
 void Game::loadWorld(const std::string &mapFilename, const std::string &entitiesFilename) {
     world.load(mapFilename, entitiesFilename);
 

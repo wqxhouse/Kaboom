@@ -33,6 +33,8 @@ public:
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
 
+    Vec3 getPlayerSpawnPoint();
+
     inline Player *getPlayerByEntityId(unsigned int id) const {
         return entityIdToPlayer.at(id);
     }
@@ -67,10 +69,6 @@ public:
 
     inline std::unordered_map<std::string, Timer> &getPickupRequest() {
         return pickupSpawnRequest;
-    }
-
-    inline std::vector<std::string> &getPlayerSpawnPointList() {
-        return playerSpawnPointList;
     }
 
 private:
