@@ -75,6 +75,8 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
         pos.setOsgVec3(charPos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f) + viewDir.getOsgVec3());
         vel.setOsgVec3(viewDir.getOsgVec3() * launchSpeed);
 
+        auto bombConfig = EntityConfigLookup::get(bombType);
+
         switch (bombType) {
             case KABOOM_V2: {
                 Entity *bombEntity = factory.createBomb(bombType, pos, vel);
@@ -85,31 +87,28 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                 break;
             }
             case TIME_BOMB: {
-                const float angle = EntityConfigLookup::get(TIME_BOMB).getFloat("angle");
+                const int numBombs = bombConfig.getInt("amount");
+                const float deltaAngle = bombConfig.getFloat("delta-angle");
 
-                Vec3 pos1, vel1;
-                Vec3 dir1 = rotateVector(viewDir, Vec3(0, 0, 1), -angle);
-                pos1.setOsgVec3(charPos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f) + dir1.getOsgVec3());
-                vel1.setOsgVec3(dir1.getOsgVec3() * launchSpeed);
+                float currAngle = -deltaAngle * (numBombs / 2);
 
-                Vec3 pos2, vel2;
-                Vec3 dir2 = rotateVector(viewDir, Vec3(0, 0, 1), angle);
-                pos2.setOsgVec3(charPos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f) + dir2.getOsgVec3());
-                vel2.setOsgVec3(dir2.getOsgVec3() * launchSpeed);
+                if (numBombs % 2 == 0) {
+                    currAngle += deltaAngle / 2.0f;
+                }
 
-                Entity *bombEntity;
+                for (int i = 0; i < numBombs; ++i) {
+                    Vec3 currPos, currVel;
 
-                bombEntity = factory.createBomb(bombType, pos, vel);
-                bombEntity->attachComponent(new OwnerComponent(entity));
-                game->addEntity(bombEntity);
+                    Vec3 currDir = rotateVector(viewDir, Vec3(0, 0, 1), currAngle);
+                    currPos.setOsgVec3(charPos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f) + currDir.getOsgVec3());
+                    currVel.setOsgVec3(currDir.getOsgVec3() * launchSpeed);
 
-                bombEntity = factory.createBomb(bombType, pos1, vel1);
-                bombEntity->attachComponent(new OwnerComponent(entity));
-                game->addEntity(bombEntity);
+                    Entity *bomb = factory.createBomb(bombType, currPos, currVel);
+                    bomb->attachComponent(new OwnerComponent(entity));
+                    game->addEntity(bomb);
 
-                bombEntity = factory.createBomb(bombType, pos2, vel2);
-                bombEntity->attachComponent(new OwnerComponent(entity));
-                game->addEntity(bombEntity);
+                    currAngle += deltaAngle;
+                }
 
                 invComp->removeFromInventory(bombType);
                 break;
