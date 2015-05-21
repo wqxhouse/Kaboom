@@ -40,7 +40,7 @@
         <cooldown type="int">500</cooldown>
         <launch-speed type="float">13.0</launch-speed>
         <capacity type="int">20</capacity>
-        <knockback-amount type="float">10.0</knockback-amount>
+        <knockback-amount type="float">13.0</knockback-amount>
         <knockback-duration type="int">250</knockback-duration>
         <max-damage type="int">50</max-damage>
         <min-damage type="int">10</min-damage>

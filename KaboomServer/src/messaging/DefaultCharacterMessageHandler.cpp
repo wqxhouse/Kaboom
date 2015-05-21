@@ -167,8 +167,6 @@ bool DefaultCharacterMessageHandler::handle(const Attack2Message &message) const
                 bomb->attachComponent(new ExplosionComponent());
             }
 
-            bombs.clear();
-
             detonatorComp->setDetonated(true);
         }
     }
