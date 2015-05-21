@@ -19,6 +19,7 @@
 #include <network/PlayerInputEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
+#include <network/ReloadRequestEvent.h>
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
@@ -72,6 +73,7 @@ void GameServer::receive(Game *game) {
         EmptyEvent emptyEvent;
         DisconnectEvent disconnectEvent;
         PlayerInputEvent playerInputEvent;
+        ReloadRequestEvent reloadRequestEvent;
         EquipEvent equipEvent;
 
         std::unordered_set<unsigned int> receivedOpcodes;
@@ -97,6 +99,10 @@ void GameServer::receive(Game *game) {
                     equipEvent.setEntityId(clientIdToEntityId[client_id]);
                     break;
                 }
+                case EVENT_RELOAD_REQUEST: {
+                    reloadRequestEvent.deserialize(&networkData[i]);
+                    break;
+                }
                 default: {
                     printf("<Server> error in packet types\n");
                     break;
@@ -116,6 +122,10 @@ void GameServer::receive(Game *game) {
 
         if (receivedOpcodes.count(EVENT_EQUIP)) {
             eventHandlerLookup.find(EVENT_EQUIP)->handle(equipEvent);
+        }
+
+        if (receivedOpcodes.count(EVENT_RELOAD_REQUEST)) {
+            eventHandlerLookup.find(EVENT_RELOAD_REQUEST)->handle(reloadRequestEvent);
         }
     }
 

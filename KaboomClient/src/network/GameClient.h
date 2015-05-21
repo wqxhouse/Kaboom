@@ -18,6 +18,7 @@ public:
 
     void sendMessage(const Event &evt) const;
     void sendEquipEvent(EntityType type) const;
+    void sendReloadRequestEvent() const;
 
 	unsigned int getCurrentPlayerEntityId() const;
 

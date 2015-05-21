@@ -211,6 +211,7 @@
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PlayerStatusEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
+    <ClInclude Include="src\network\ReloadRequestEvent.h" />
     <ClInclude Include="src\network\RotationEvent.h" />
     <ClInclude Include="src\network\ScoreEvent.h" />
     <ClInclude Include="src\network\SpawnEvent.h" />
