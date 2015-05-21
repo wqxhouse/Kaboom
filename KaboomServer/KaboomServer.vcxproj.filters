@@ -430,6 +430,9 @@
     <ClInclude Include="src\network\ReloadRequestEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
+    <ClInclude Include="src\messaging\CharacterSpawnMessage.h">
+      <Filter>Header Files\Messaging\Messages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-server\bombs.xml">
