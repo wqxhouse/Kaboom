@@ -99,20 +99,22 @@ void InputSystem::processEntity(Entity *entity) {
     btVector3 worldVelocity(right * localVelocity.getX() + front * localVelocity.getY());
     worldVelocity.setZ(velocity.getZ());
 
-    if (!playerStatusComp->checkIsKnockBacked()) { //don't move if we are knockbacked
+	JumpComponent *jumpComp = entity->getComponent<JumpComponent>();
+
+	if (!playerStatusComp->checkIsKnockBacked() && !jumpComp->checkIsOkToLaunch()) { //don't move if we are knockbacked
         rigidBody->setLinearVelocity(worldVelocity);
     }
 
 
-	JumpComponent *jumpCom = entity->getComponent<JumpComponent>();
+	
 	//bool jumping = false;
-	if (jumpCom != nullptr) {
-		if (!jumpCom->isJumping() && inputComp->isJumping() && !jumpCom->isLaunched()) {
+	if (jumpComp != nullptr) {
+		if (!jumpComp->isJumping() && inputComp->isJumping() && !jumpComp->checkIsStillLaunching()) {
 			const float jumpingSpeed = EntityConfigLookup::get(entity->getType()).getFloat("jumping-speed");
 
 			//velocity.setZ(velocity.getZ() + jumpingSpeed);
 			rigidBody->applyCentralImpulse(btVector3(0, 0, jumpingSpeed));
-			jumpCom->setJumping(true);
+			jumpComp->setJumping(true);
 			//jumping = true;
 		}
 	}
