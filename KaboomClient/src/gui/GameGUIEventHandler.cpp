@@ -26,7 +26,7 @@ void GameGUIEventHandler::handle(const HealthEvent &e, HealthComponent *healthCo
 	//win->GetChild(1);			
 }
 
-void GameGUIEventHandler::handle(const AmmoAmountEvent &e, BombContainerComponent *bombConCom) const
+void GameGUIEventHandler::handle(const AmmoAmountEvent &e, InventoryComponent *bombConCom) const
 {
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
 	Rocket::Core::Element * body = window1->GetChild(1);

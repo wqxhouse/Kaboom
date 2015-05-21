@@ -2,8 +2,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <components/BombContainerComponent.h>
 #include <components/EquipmentComponent.h>
+#include <components/InventoryComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
@@ -70,7 +70,7 @@ void CharacterFactory::createBase(
     rigidBody->setUserPointer(entity);
     rigidBody->setAngularFactor(btVector3(0, 0, 1)); // NOTE : prevent body from rotating in the x and y axis
 
-    BombContainerComponent::InventoryType inventory;
+    InventoryComponent::InventoryType inventory;
 
     for (auto kv : *startingInventory) {
         int cooldown = EntityConfigLookup::get(kv.first).getInt("cooldown");
@@ -84,7 +84,7 @@ void CharacterFactory::createBase(
     entity->attachComponent(new RotationComponent(rotation));
     entity->attachComponent(new CharacterRotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
-    entity->attachComponent(new BombContainerComponent(inventory));
+    entity->attachComponent(new InventoryComponent(inventory));
     entity->attachComponent(new PlayerStatusComponent());
     entity->attachComponent(new HealthComponent(healthStart, healthCap));
     entity->attachComponent(new JumpComponent);

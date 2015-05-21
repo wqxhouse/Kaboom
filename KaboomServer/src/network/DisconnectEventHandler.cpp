@@ -1,6 +1,5 @@
 #include "DisconnectEventHandler.h"
 
-#include <components/BombContainerComponent.h>
 #include <core/EntityManager.h>
 #include <network/DisconnectEvent.h>
 

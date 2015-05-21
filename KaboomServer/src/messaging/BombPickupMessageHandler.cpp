@@ -2,7 +2,7 @@
 
 #include <limits>
 
-#include <components/BombContainerComponent.h>
+#include <components/InventoryComponent.h>
 #include <components/PositionComponent.h>
 #include <components/WeaponPickupComponent.h>
 #include <core/Entity.h>
@@ -37,7 +37,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
     for (Entity *character : nearbyEntities) {
         auto charPosComp = character->getComponent<PositionComponent>();
 
-        if (charPosComp == nullptr || !character->hasComponent<BombContainerComponent>()) {
+        if (charPosComp == nullptr || !character->hasComponent<InventoryComponent>()) {
             continue;
         }
 
@@ -52,7 +52,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
     // Add bomb to character's inventory and remove pickup from world
     if (closestEntity != nullptr) {
         auto weaponPickupComp = pickup->getComponent<WeaponPickupComponent>();
-        auto invComp = closestEntity->getComponent<BombContainerComponent>();
+        auto invComp = closestEntity->getComponent<InventoryComponent>();
 
         EntityType bombType = weaponPickupComp->getType();
 
@@ -68,7 +68,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
             amount = weaponPickupComp->getAmount();
         }
 
-        invComp->addToInventory(bombType, amount);
+        invComp->add(bombType, amount);
 
         Game *game = message.getGame();
 

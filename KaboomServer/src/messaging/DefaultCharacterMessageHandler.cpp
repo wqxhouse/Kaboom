@@ -2,8 +2,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <components/BombContainerComponent.h>
 #include <components/EquipmentComponent.h>
+#include <components/InventoryComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
@@ -44,7 +44,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
     Game *game = message.getGame();
 
     auto equipComp = entity->getComponent<EquipmentComponent>();
-    auto invComp = entity->getComponent<BombContainerComponent>();
+    auto invComp = entity->getComponent<InventoryComponent>();
     auto posComp = entity->getComponent<PositionComponent>();
     auto charRotComp = entity->getComponent<CharacterRotationComponent>();
 
@@ -83,7 +83,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                 bombEntity->attachComponent(new OwnerComponent(entity));
                 game->addEntity(bombEntity);
 
-                invComp->removeFromInventory(bombType);
+                invComp->remove(bombType);
                 break;
             }
             case TIME_BOMB: {
@@ -110,7 +110,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                     currAngle += deltaAngle;
                 }
 
-                invComp->removeFromInventory(bombType);
+                invComp->remove(bombType);
                 break;
             }
             case REMOTE_DETONATOR: {
@@ -131,7 +131,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                         bombs.push_back(bomb);
                         game->addEntity(bomb);
 
-                        invComp->removeFromInventory(bombType);
+                        invComp->remove(bombType);
                     }
                 }
 
@@ -148,7 +148,7 @@ bool DefaultCharacterMessageHandler::handle(const Attack2Message &message) const
 
     auto equipComp = entity->getComponent<EquipmentComponent>();
     auto detonatorComp = entity->getComponent<DetonatorComponent>();
-    auto invComp = entity->getComponent<BombContainerComponent>();
+    auto invComp = entity->getComponent<InventoryComponent>();
 
     EntityType bombType = equipComp->getType();
 
