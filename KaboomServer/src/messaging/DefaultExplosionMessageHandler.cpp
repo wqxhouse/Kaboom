@@ -11,6 +11,8 @@
 #include "Message.h"
 #include "MessageType.h"
 #include "../components/DestroyComponent.h"
+#include "../components/DetonatorComponent.h"
+#include "../components/ExplosionComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/OwnerComponent.h"
 #include "../components/TriggerComponent.h"
@@ -30,11 +32,23 @@ bool DefaultExplosionMessageHandler::handle(const Message &message) const {
 bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) const {
     Game *game = message.getGame();
     Entity *entity = message.getEntity();
+
+    if (entity->getType() == REMOTE_DETONATOR) {
+        auto owner = entity->getComponent<OwnerComponent>()->getEntity();
+        auto &bombs = owner->getComponent<DetonatorComponent>()->getBombs();
+        bombs.erase(std::find(bombs.begin(), bombs.end(), entity));
+    }
+
     auto &nearbyEntities = message.getNearbyEntities();
 
     auto bombTriggerComp = entity->getComponent<TriggerComponent>();
 
     for (auto nearbyEntity : nearbyEntities) {
+        if (nearbyEntity->getType() == REMOTE_DETONATOR) {
+            nearbyEntity->attachComponent(new ExplosionComponent());
+            continue;
+        }
+
         auto charStatusComp = nearbyEntity->getComponent<PlayerStatusComponent>();
         auto charPhysicsComp = nearbyEntity->getComponent<PhysicsComponent>();
         auto charHealthComp = nearbyEntity->getComponent<HealthComponent>();
