@@ -2,11 +2,9 @@
 
 #include <unordered_set>
 
-template <typename T>
 class IdPool {
 public:
-    IdPool() : next(0) {
-    }
+    IdPool() : next(0) {}
 
     unsigned int allocate() {
         while (allocated.count(next) > 0) {
@@ -18,11 +16,11 @@ public:
         return next++;
     }
 
-    inline void free(T id) {
+    inline void free(unsigned int id) {
         allocated.erase(id);
     }
 
 private:
-    T next;
-    std::unordered_set<T> allocated;
+    unsigned int next;
+    std::unordered_set<unsigned int> allocated;
 };
