@@ -1,5 +1,7 @@
 #include "util.h"
 
+#include <btBulletCollisionCommon.h>
+
 #include <osg/Matrix>
 
 #define PI 3.14159265359
@@ -17,11 +19,11 @@ Quat euler2Quat(float yaw, float pitch, float roll) {
     return Quat(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
 }
 
-btVector3 getViewDirection(Quat rotation) {
+Vec3 getViewDirection(Quat rotation) {
     btVector3 dir = quatRotate(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w), btVector3(0.0f, 1.0f, 0.0f));
     dir.normalize();
 
-    return dir;
+    return Vec3(dir.getX(), dir.getY(), dir.getZ());
 }
 
 Vec3 rotateVector(const Vec3 &vec, const Vec3 &axis, float deg) {
