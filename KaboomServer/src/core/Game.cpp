@@ -34,27 +34,26 @@ Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
           bombFactory(entityManager),
           pickupFactory(entityManager),
-		  jumpPadFactory(entityManager),
+          jumpPadFactory(entityManager),
           eventHandlerLookup(this),
           server(configSettings, eventHandlerLookup),
           world(configSettings),
-          gameMode(30 * 1000, 30 * 1000, 10 * 1000),
-          spawnedMapEntities(false) { // TODO: Extract constant
-    std::string str_mediaPath = "";
-    std::string str_world_xml = "";
+          gameMode(30 * 1000, 30 * 1000, 10 * 1000) { // TODO: Extract constant
+    std::string mediaPath;
+    std::string worldXml;
 
-    configSettings->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-    configSettings->getValue(ConfigSettings::str_world_xml, str_world_xml);
+    configSettings->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
+    configSettings->getValue(ConfigSettings::str_world_xml, worldXml);
 
-    str_world_xml = str_mediaPath + str_world_xml;
+    worldXml = mediaPath + worldXml;
 
-    std::cout << str_world_xml << std::endl;
+    std::cout << worldXml << std::endl;
 
-    loadWorld(str_world_xml, "data-server/map.xml");
-   
+    world.load(worldXml, "data-server/map.xml");
+
     systemManager.addSystem(new InitializationSystem(this));
     systemManager.addSystem(new CharacterSpawnSystem(this));
-	systemManager.addSystem(new JumpPadSpawnSystem(this));
+    systemManager.addSystem(new JumpPadSpawnSystem(this));
     systemManager.addSystem(new PickupSpawnSystem(this));
     systemManager.addSystem(new InputSystem(this));
     systemManager.addSystem(new FiringSystem(this));
@@ -64,7 +63,7 @@ Game::Game(ConfigSettings *configSettings)
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
     systemManager.addSystem(new ExplosionSystem(this));
-	systemManager.addSystem(new JumpPadSystem(this));
+    systemManager.addSystem(new JumpPadSystem(this));
     systemManager.addSystem(new DeathSystem(this));
     systemManager.addSystem(new DestroySystem(this));
 }
@@ -126,15 +125,7 @@ void Game::update() {
                 const auto player = kv.second;
 
                 if (player->getEntity() == nullptr) {
-                    Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, getPlayerSpawnPoint());
-                    entity->attachComponent(new PlayerComponent(player));
-                    player->setEntity(entity);
-                    player->setKills(0);
-                    player->setDeaths(0);
-
-                    addEntity(entity);
-                    server.sendBindEvent(player);
-                    server.sendInitializeEvent(player, entityManager.getEntityList());
+                    addPlayerToWorld(player);
                 }
             }
 
@@ -145,15 +136,7 @@ void Game::update() {
         }
         case GameMode::MatchState::IN_PROGRESS: {
             if (hasNewPlayer) {
-                Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, getPlayerSpawnPoint());
-                Player *player = players.at(newPlayerId);
-                player->setEntity(entity);
-                entity->attachComponent(new PlayerComponent(player));
-
-                addEntity(entity);
-                server.sendBindEvent(player);
-                server.sendInitializeEvent(player, entityManager.getEntityList());
-                server.sendGameStatePackets(player, entityManager.getEntityList());
+                addPlayerToWorld(players.at(newPlayerId));
             }
 
             server.receive(players);
@@ -249,6 +232,15 @@ Vec3 Game::getPlayerSpawnPoint() {
     return pos;
 }
 
-void Game::loadWorld(const std::string &mapFilename, const std::string &entitiesFilename) {
-    world.load(mapFilename, entitiesFilename);
+void Game::addPlayerToWorld(Player *player) {
+    Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, getPlayerSpawnPoint());
+    entity->attachComponent(new PlayerComponent(player));
+    player->setEntity(entity);
+    player->setKills(0);
+    player->setDeaths(0);
+
+    addEntity(entity);
+    server.sendBindEvent(player);
+    server.sendInitializeEvent(player, entityManager.getEntityList());
+    server.sendGameStatePackets(player, entityManager.getEntityList());
 }
