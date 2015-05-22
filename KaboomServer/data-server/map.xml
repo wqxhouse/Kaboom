@@ -61,12 +61,14 @@
             <position type="vector3">-26.0 -26.0 9.0</position>
         </spawn-point>
 
-
-        <static-object>
-            <object-type type="string">JumpPad</object-type>
-            <position type="vector3">0.0 0.0 0.0</position>
-            <orientation type="vector3">0.0 0.0 0.0</orientation>
-            <impulse type="float">0.0</impulse>
-        </static-object>
-    </objects>
+    <static-object>
+      <object-type type="string">JumpPad</object-type>
+      <id type="uint">262144</id>
+      <position type="vector3">0.0 0.0 0.0</position>
+      <rotation type="vector3">0.0 0.0 0.0</rotation> <!-- TODO, Not used right now, this is suppose to be in Euler Angles-->
+      <box-size type="vector3">1.0 1.0 0.5</box-size>
+      <launch-speed type="vector3">5.0 0.0 10.0</launch-speed>
+      <launch-duration type="int">1000</launch-duration>
+    </static-object>
+  </objects>
 </map>

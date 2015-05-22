@@ -127,8 +127,10 @@ void World::handleCollision(Entity *entityA, Entity *entityB, const btManifoldPo
         if (entityA->hasComponent<JumpComponent>()) {
             bool collideGround = isCollidingGround(contactPoint);
 
+			JumpComponent* jumpComp = entityA->getComponent<JumpComponent>();
             if (collideGround) {
-                entityA->getComponent<JumpComponent>()->setJumping(false);
+				jumpComp->setJumping(false);
+				
             }
         }
     }
