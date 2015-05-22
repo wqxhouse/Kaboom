@@ -34,9 +34,6 @@
     <Filter Include="Header Files\Util">
       <UniqueIdentifier>{fad1e889-f9ea-4bbb-95b2-62d295f49d67}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Util">
-      <UniqueIdentifier>{4de75734-e00b-47d2-a0a2-84e3806bee01}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{4cf63092-f8cd-4cba-8041-a7b952f92699}</UniqueIdentifier>
     </Filter>
@@ -190,9 +187,6 @@
       <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="src\util\Timer.cpp">
-      <Filter>Source Files\Util</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\DeathmatchMode.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>

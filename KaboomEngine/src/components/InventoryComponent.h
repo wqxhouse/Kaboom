@@ -9,7 +9,7 @@
 
 class InventoryComponent : public Component {
 public:
-    typedef std::unordered_map<EntityType, std::pair<unsigned int, Timer>> InventoryType;
+    typedef std::unordered_map<EntityType, std::pair<int, Timer>> InventoryType;
 
     InventoryComponent(const InventoryType &inventory = InventoryType())
             : capacity(0),

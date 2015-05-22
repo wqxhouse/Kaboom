@@ -4,17 +4,28 @@
 
 class Timer {
 public:
-    Timer(clock_t duration = 0);
+    Timer::Timer(clock_t duration = 0)
+            : duration(duration),
+              startTime(clock()) {
+    }
 
-    void start();
+    inline void start() {
+        startTime = clock();
+    }
 
-    bool isExpired() const;
+    inline bool isExpired() const {
+        return clock() > startTime + duration;
+    }
 
-    clock_t getDuration() const;
-    void setDuration(clock_t duration);
+    inline clock_t getDuration() const {
+        return duration;
+    }
+
+    inline void setDuration(clock_t duration) {
+        this->duration = duration;
+    }
 
 private:
-    long duration;
-
+    clock_t duration;
     clock_t startTime;
 };
