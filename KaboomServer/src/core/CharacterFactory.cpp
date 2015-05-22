@@ -19,6 +19,7 @@
 #include "../components/JetpackComponent.h"
 #include "../components/JumpComponent.h"
 #include "../messaging/DefaultCharacterMessageHandler.h"
+#include "../messaging/BombDropMessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
 
 typedef std::unordered_map<EntityType, int> InventoryType;
@@ -97,7 +98,10 @@ void CharacterFactory::createDefaultCharacter(Entity *entity) const {
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
     static DefaultCharacterMessageHandler defaultCharHandler;
+	static BombDropMessageHandler bombDropMessageHandler;
+
     chain->addHandler(&defaultCharHandler);
+	chain->addHandler(&bombDropMessageHandler);
 
     entity->attachComponent(new JetpackComponent());
     entity->attachComponent(new EquipmentComponent(KABOOM_V2));

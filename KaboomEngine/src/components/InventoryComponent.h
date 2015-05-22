@@ -56,6 +56,19 @@ public:
         return os;
     }
 
+	inline std::pair<EntityType, int> getWeaponDropFromInventory() {
+		//Right now we just pick the bomb that the player have most
+		EntityType weaponDropType = EntityType::KABOOM_V2;
+		int maxAmount = 0;
+		for (auto weapon : inventory) {
+			if (weapon.second.first > maxAmount) {
+				weaponDropType = weapon.first;
+				maxAmount = weapon.second.first;
+			}
+		}
+		return std::pair<EntityType, int>(weaponDropType, maxAmount);
+	}
+
 private:
     int capacity; // TODO: capacity is not set
 
