@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/EntityManager.h>
+#include <core/DeathmatchMode.h>
 #include <util/Configuration.h>
 #include <util/IdPool.h>
 #include <util/Timer.h>
@@ -59,12 +60,16 @@ public:
         return pickupFactory;
     }
 
-	inline const JumpPadFactory &getJumpPadFactory() const {
-		return jumpPadFactory;
-	}
+    inline const JumpPadFactory &getJumpPadFactory() const {
+        return jumpPadFactory;
+    }
 
     inline const GameServer &getGameServer() const {
         return server;
+    }
+
+    inline const DeathmatchMode &getGameMode() const {
+        return gameMode;
     }
 
     inline DebugWorld &getWorld() {
@@ -75,17 +80,13 @@ public:
         return players;
     }
 
-    inline const IdToPlayerMap &getEntityIdToPlayerMap() const {
-        return entityIdToPlayerMap;
-    }
-
     inline std::unordered_map<std::string, Timer> &getPickupRequest() {
         return pickupSpawnRequest;
     }
 
-	inline std::vector<std::string> &getJumpPadSpawnPointList() {
-		return jumpPadSpawnPointList;
-	}
+    inline std::vector<std::string> &getJumpPadSpawnPointList() {
+        return jumpPadSpawnPointList;
+    }
 
 private:
     EntityManager entityManager;
@@ -94,20 +95,21 @@ private:
     CharacterFactory characterFactory;
     BombFactory bombFactory;
     PickupFactory pickupFactory;
-	JumpPadFactory jumpPadFactory;
+    JumpPadFactory jumpPadFactory;
 
     ServerEventHandlerLookup eventHandlerLookup;
     GameServer server;
 
+    DeathmatchMode gameMode;
     DebugWorld world;
 
-    IdPool playerIdPool;
     IdToPlayerMap players;
-    IdToPlayerMap entityIdToPlayerMap;
 
     std::unordered_map<std::string, Timer> pickupSpawnRequest;
     std::vector<std::string> playerSpawnPointList;
-	std::vector<std::string> jumpPadSpawnPointList;
+    std::vector<std::string> jumpPadSpawnPointList;
+
+    bool spawnedMapEntities;
 
     void loadWorld(const std::string &mapFilename, const std::string &entitiesFilename);
 };

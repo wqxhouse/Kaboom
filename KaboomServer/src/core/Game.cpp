@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 
+#include <components/PlayerComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
@@ -36,7 +37,9 @@ Game::Game(ConfigSettings *configSettings)
 		  jumpPadFactory(entityManager),
           eventHandlerLookup(this),
           server(configSettings, eventHandlerLookup),
-          world(configSettings) {
+          world(configSettings),
+          gameMode(30 * 1000, 30 * 1000, 10 * 1000),
+          spawnedMapEntities(false) { // TODO: Extract constant
     std::string str_mediaPath = "";
     std::string str_world_xml = "";
 
@@ -91,45 +94,113 @@ void Game::run() {
 }
 
 void Game::update() {
-    unsigned int playerId;
+    unsigned int newPlayerId;
+    bool hasNewPlayer = server.acceptClient(newPlayerId);
 
-    if (server.acceptClient(playerId)) {
-        Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, getPlayerSpawnPoint());
-        Player *player = new Player(playerId, entity);
+    if (hasNewPlayer) {
+        Player *player = new Player(newPlayerId);
         addPlayer(player);
-        addEntity(entity);
-
         server.sendConnectEvent(player);
-        server.sendBindEvent(player);
         server.sendAssignEvent(player);
-        server.sendInitializeEvent(player, entityManager.getEntityList());
-        server.sendGameStatePackets(player, entityManager.getEntityList());
     }
 
-    auto &players = getPlayers();
+    switch (gameMode.getMatchState()) {
+        case GameMode::MatchState::ENTER_MAP: {
+            for (auto kv : world.getSpawnPointConfigs()) {
+                auto name = kv.first;
+                auto config = kv.second;
 
-    server.receive(players);
-    systemManager.processSystems(this);
-    server.sendGameStatePackets(players, entityManager.getEntityList());
+                if (config.getString("object-type") == "Pickup") {
+                    //duration is Zero at first, so the request is immediate and it will spawn right away in Spawn System
+                    pickupSpawnRequest[name] = Timer(0);
+                } else if (config.getString("object-type") == "Player") {
+                    playerSpawnPointList.push_back(name);
+                } else if (config.getString("object-type") == "JumpPad") {
+                    jumpPadSpawnPointList.push_back(name);
+                }
+            }
+            break;
+        }
+        case GameMode::MatchState::PRE_MATCH: {
+            for (auto kv : players) {
+                const auto player = kv.second;
+
+                if (player->getEntity() == nullptr) {
+                    Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, getPlayerSpawnPoint());
+                    entity->attachComponent(new PlayerComponent(player));
+                    player->setEntity(entity);
+
+                    addEntity(entity);
+                    server.sendBindEvent(player);
+                    server.sendInitializeEvent(player, entityManager.getEntityList());
+                }
+            }
+
+            server.receive(players);
+            server.sendGameStatePackets(players, entityManager.getEntityList());
+            break;
+        }
+        case GameMode::MatchState::IN_PROGRESS: {
+            if (hasNewPlayer) {
+                Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, getPlayerSpawnPoint());
+                Player *player = players.at(newPlayerId);
+                player->setEntity(entity);
+                entity->attachComponent(new PlayerComponent(player));
+
+                addEntity(entity);
+                server.sendBindEvent(player);
+                server.sendInitializeEvent(player, entityManager.getEntityList());
+                server.sendGameStatePackets(player, entityManager.getEntityList());
+            }
+
+            server.receive(players);
+            systemManager.processSystems(this);
+            server.sendGameStatePackets(players, entityManager.getEntityList());
+            break;
+        }
+        case GameMode::MatchState::POST_MATCH: {
+            server.receive(players);
+            break;
+        }
+        case GameMode::MatchState::LEAVE_MAP: {
+            for (auto entity : entityManager.getEntityList()) {
+                removeEntity(entity);
+            }
+
+            for (auto kv : players) {
+                const auto player = kv.second;
+                player->setEntity(nullptr);
+            }
+            break;
+        }
+    }
+
+    if (gameMode.updateMatchState()) {
+        switch (gameMode.getMatchState()) {
+            case GameMode::MatchState::PRE_MATCH: {
+                printf("Switched to pre-match\n");
+                break;
+            }
+            case GameMode::MatchState::IN_PROGRESS: {
+                printf("Switched to in progress\n");
+                break;
+            }
+            case GameMode::MatchState::POST_MATCH: {
+                printf("Switched to post-match\n");
+                break;
+            }
+        }
+    }
 
     world.renderDebugFrame();
 }
 
 void Game::addPlayer(Player *player) {
     players[player->getId()] = player;
-    entityIdToPlayerMap[player->getEntity()->getId()] = player;
 }
 
 void Game::removePlayer(Player *player) {
     players.erase(players.find(player->getId()));
-
-    for (auto it = entityIdToPlayerMap.begin(); it != entityIdToPlayerMap.end();) {
-        if (player == it->second) {
-            it = entityIdToPlayerMap.erase(it);
-        } else {
-            ++it;
-        }
-    }
 
     delete player;
 }
@@ -181,18 +252,4 @@ Vec3 Game::getPlayerSpawnPoint() {
 
 void Game::loadWorld(const std::string &mapFilename, const std::string &entitiesFilename) {
     world.load(mapFilename, entitiesFilename);
-
-    for (auto kv : world.getSpawnPointConfigs()) {
-        auto name = kv.first;
-        auto config = kv.second;
-
-        if (config.getString("object-type") == "Pickup") {
-            //duration is Zero at first, so the request is immediate and it will spawn right away in Spawn System
-            pickupSpawnRequest[name] = Timer(0);
-        } else if (config.getString("object-type") == "Player") {
-            playerSpawnPointList.push_back(name);
-		} else if (config.getString("object-type") == "JumpPad") {
-			jumpPadSpawnPointList.push_back(name);
-		}
-    }
 }

@@ -74,7 +74,9 @@ void GameServer::receive(const IdToPlayerMap &players) {
                 }
                 case EVENT_EQUIP: {
                     equipEvent.deserialize(&networkData[i]);
-                    equipEvent.setEntityId(player->getEntity()->getId());
+                    if (player->getEntity() != nullptr) {
+                        equipEvent.setEntityId(player->getEntity()->getId());
+                    }
                     break;
                 }
                 case EVENT_RELOAD_REQUEST: {

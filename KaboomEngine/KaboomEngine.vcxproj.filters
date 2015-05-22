@@ -43,6 +43,9 @@
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{3940c251-c989-4148-8388-9a748ea1711e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{57c3e7cc-a628-4155-815f-f157dc3cb2e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Entity.h">
@@ -166,6 +169,15 @@
     <ClInclude Include="src\network\TimeEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\DeathmatchMode.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\GameMode.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\PlayerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
@@ -180,6 +192,9 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="src\util\Timer.cpp">
       <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\DeathmatchMode.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

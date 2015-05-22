@@ -185,13 +185,16 @@
     <ClInclude Include="src\components\Component.h" />
     <ClInclude Include="src\components\EquipmentComponent.h" />
     <ClInclude Include="src\components\HealthComponent.h" />
+    <ClInclude Include="src\components\PlayerComponent.h" />
     <ClInclude Include="src\components\PlayerStatusComponent.h" />
     <ClInclude Include="src\components\PositionComponent.h" />
     <ClInclude Include="src\components\RotationComponent.h" />
     <ClInclude Include="src\components\WeaponPickupComponent.h" />
+    <ClInclude Include="src\core\DeathmatchMode.h" />
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\EntityType.h" />
+    <ClInclude Include="src\core\GameMode.h" />
     <ClInclude Include="src\core\Player.h" />
     <ClInclude Include="src\math\Vec3.h" />
     <ClInclude Include="src\math\Quat.h" />
@@ -224,6 +227,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\DeathmatchMode.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />

@@ -2,6 +2,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include <components/PlayerComponent.h>
 #include <components/HealthComponent.h>
 #include <components/PlayerStatusComponent.h>
 #include <core/Entity.h>
@@ -103,9 +104,14 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
         printf("new Player Health: %d \n", charHealthComp->getAmount());
 
         if (charHealthComp->getAmount() == 0) {
+            const auto &entityManager = game->getEntityManager();
+
             auto ownerComp = entity->getComponent<OwnerComponent>();
-            Player *killer = game->getEntityIdToPlayerMap().at(ownerComp->getEntity()->getId());
-            Player *victim = game->getEntityIdToPlayerMap().at(nearbyEntity->getId());
+            auto killerEntity = entityManager.getEntity(ownerComp->getEntity()->getId());
+            auto victimEntity = entityManager.getEntity(nearbyEntity->getId());
+
+            Player *killer = killerEntity->getComponent<PlayerComponent>()->getPlayer();
+            Player *victim = victimEntity->getComponent<PlayerComponent>()->getPlayer();
 
             if (killer->getId() != victim->getId()) {
                 killer->setKills(killer->getKills() + 1);
