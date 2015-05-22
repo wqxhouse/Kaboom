@@ -55,18 +55,17 @@ bool JumpPadMessageHandler::handle(const JumpPadMessage &message) const {
 		auto charStatusComp = character->getComponent<PlayerStatusComponent>();
 		auto jumpPadComp = jumpPad->getComponent<JumpPadComponent>();
 		auto charJumpComp = character->getComponent<JumpComponent>();
-		
-		if (charJumpComp != nullptr && charJumpComp->checkIsOkToLaunch()) {
-			//this is need to make sure we don't get launched twice if we touch the same jump pad for more than a split second
-			//charJumpComp->setLaunched(true); 
-			charJumpComp->getIsLaunchingTimer().setDuration(jumpPadComp->getLaunchDuration());
-			charJumpComp->getIsLaunchingTimer().start();
+
+		//this is need to make sure we don't get launched twice if we touch the same jump pad for more than a split second
+		if (charJumpComp != nullptr && charJumpComp->checkIsLaunchByJumpPad()) {
 
 			charPhysicComp->getRigidBody()->applyCentralImpulse(jumpPadComp->getLaunchSpeedVec()); //apply the jumpPad force
 
-			//charStatusComp->getKnockBackTimer().setDuration(jumpPadComp->getLaunchDuration());
-			//charStatusComp->getKnockBackTimer().start();
-			//charStatusComp->setIsKnockBacked(true);
+			//reset the timer for the jump pad launch
+			charJumpComp->getIsLaunchByJumpPadTimer().setDuration(jumpPadComp->getLaunchDuration());
+			charJumpComp->getIsLaunchByJumpPadTimer().start();
+			charJumpComp->setIsLaunchByJumpPad(true);
+
 		}
     }
     return true;

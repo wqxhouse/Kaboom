@@ -5,10 +5,10 @@
 
 class JumpComponent : public Component {
 public:
-	JumpComponent(bool jumping = false, bool launched = false)
+	JumpComponent(bool jumping = false, bool isLaunchByJumpPad = false)
 		: jumping(jumping),
-		launched(launched),
-		isLaunchingTimer(0) {
+		isLaunchByJumpPad(isLaunchByJumpPad),
+		isLaunchByJumpPadTimer(0) {
     }
 
     inline bool isJumping() const {
@@ -19,24 +19,29 @@ public:
         this->jumping = jumping;
     }
 	
-	inline bool checkIsOkToLaunch() const {
-		return isLaunchingTimer.isExpired();
+	inline bool checkIsLaunchByJumpPad() {
+		if (isLaunchByJumpPad){
+			if (isLaunchByJumpPadTimer.isExpired()){
+				isLaunchByJumpPad = false;
+			}
+		}
+		return isLaunchByJumpPad;
 	}
 
-	inline bool isLaunched() const {
-		return launched;
+	inline bool getIsLaunchByJumpPad() const {
+		return isLaunchByJumpPad;
 	}
 
-	inline void setLaunched(bool launched) {
-		this->launched = launched;
+	inline void setIsLaunchByJumpPad(bool isLaunchByJumpPad){
+		this->isLaunchByJumpPad = isLaunchByJumpPad;
 	}
 
-	inline Timer getIsLaunchingTimer(){
-		return isLaunchingTimer;
+	inline Timer getIsLaunchByJumpPadTimer(){
+		return isLaunchByJumpPadTimer;
 	}
 
 private:
     bool jumping;
-	bool launched;
-	Timer isLaunchingTimer;
+	bool isLaunchByJumpPad;
+	Timer isLaunchByJumpPadTimer;
 };
