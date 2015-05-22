@@ -32,6 +32,7 @@
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\CharacterConfigLoader.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\JumpPadFactory.cpp" />
     <ClCompile Include="src\core\MapConfigLoader.cpp" />
     <ClCompile Include="src\core\OsgObjectConfigLoader.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
@@ -45,6 +46,7 @@
     <ClCompile Include="src\messaging\BombPickupMessageHandler.cpp" />
     <ClCompile Include="src\messaging\DefaultCharacterMessageHandler.cpp" />
     <ClCompile Include="src\messaging\DefaultExplosionMessageHandler.cpp" />
+    <ClCompile Include="src\messaging\JumpPadMessageHandler.cpp" />
     <ClCompile Include="src\messaging\KaboomV2MessageHandler.cpp" />
     <ClCompile Include="src\messaging\MessageHandlerChain.cpp" />
     <ClCompile Include="src\messaging\RemoteDetonatorMessageHandler.cpp" />
@@ -65,6 +67,8 @@
     <ClCompile Include="src\systems\FiringSystem.cpp" />
     <ClCompile Include="src\systems\InitializationSystem.cpp" />
     <ClCompile Include="src\systems\InputSystem.cpp" />
+    <ClCompile Include="src\systems\JumpPadSpawnSystem.cpp" />
+    <ClCompile Include="src\systems\JumpPadSystem.cpp" />
     <ClCompile Include="src\systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\systems\PickupSpawnSystem.cpp" />
     <ClCompile Include="src\systems\PickupSystem.cpp" />
@@ -86,6 +90,7 @@
     <ClInclude Include="src\components\InputComponent.h" />
     <ClInclude Include="src\components\JetpackComponent.h" />
     <ClInclude Include="src\components\JumpComponent.h" />
+    <ClInclude Include="src\components\JumpPadComponent.h" />
     <ClInclude Include="src\components\MessageHandlerComponent.h" />
     <ClInclude Include="src\components\OwnerComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
@@ -97,6 +102,7 @@
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\CharacterConfigLoader.h" />
     <ClInclude Include="src\core\Game.h" />
+    <ClInclude Include="src\core\JumpPadFactory.h" />
     <ClInclude Include="src\core\MapConfigLoader.h" />
     <ClInclude Include="src\core\OsgObjectConfigLoader.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
@@ -114,6 +120,8 @@
     <ClInclude Include="src\messaging\DefaultCharacterMessageHandler.h" />
     <ClInclude Include="src\messaging\DefaultExplosionMessageHandler.h" />
     <ClInclude Include="src\messaging\ExplosionMessage.h" />
+    <ClInclude Include="src\messaging\JumpPadMessage.h" />
+    <ClInclude Include="src\messaging\JumpPadMessageHandler.h" />
     <ClInclude Include="src\messaging\KaboomV2MessageHandler.h" />
     <ClInclude Include="src\messaging\Message.h" />
     <ClInclude Include="src\messaging\MessageHandler.h" />
@@ -140,6 +148,8 @@
     <ClInclude Include="src\systems\FiringSystem.h" />
     <ClInclude Include="src\systems\InitializationSystem.h" />
     <ClInclude Include="src\systems\InputSystem.h" />
+    <ClInclude Include="src\systems\JumpPadSpawnSystem.h" />
+    <ClInclude Include="src\systems\JumpPadSystem.h" />
     <ClInclude Include="src\systems\PhysicsSystem.h" />
     <ClInclude Include="src\systems\PickupSpawnSystem.h" />
     <ClInclude Include="src\systems\PickupSystem.h" />
