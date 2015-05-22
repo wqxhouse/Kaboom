@@ -24,12 +24,13 @@ InputSystem::InputSystem(Game *game)
 }
 
 bool InputSystem::checkEntity(Entity *entity) {
-	return !entity->hasComponent<DestroyComponent>() &&
-		entity->hasComponent<PositionComponent>() &&
-		entity->hasComponent<RotationComponent>() &&
-		entity->hasComponent<PhysicsComponent>() &&
-		entity->hasComponent<InputComponent>() &&
-		entity->hasComponent<PlayerStatusComponent>();
+    return game->getGameMode().getMatchState() == GameMode::MatchState::IN_PROGRESS &&
+            !entity->hasComponent<DestroyComponent>() &&
+		    entity->hasComponent<PositionComponent>() &&
+		    entity->hasComponent<RotationComponent>() &&
+		    entity->hasComponent<PhysicsComponent>() &&
+		    entity->hasComponent<InputComponent>() &&
+		    entity->hasComponent<PlayerStatusComponent>();
 }
 
 void InputSystem::processEntity(Entity *entity) {

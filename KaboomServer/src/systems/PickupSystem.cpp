@@ -15,7 +15,7 @@ PickupSystem::PickupSystem(Game *game)
 }
 
 bool PickupSystem::checkEntity(Entity *entity) {
-    return !entity->hasComponent<DestroyComponent>() && 
+    return !entity->hasComponent<DestroyComponent>() &&
             entity->hasComponent<WeaponPickupComponent>() &&
             entity->hasComponent<TriggerComponent>() &&
             entity->hasComponent<MessageHandlerComponent>();

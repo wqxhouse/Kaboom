@@ -139,6 +139,7 @@ void Game::update() {
             }
 
             server.receive(players);
+            systemManager.processSystems(this);
             server.sendGameStatePackets(players, entityManager.getEntityList());
             break;
         }
@@ -162,6 +163,8 @@ void Game::update() {
         }
         case GameMode::MatchState::POST_MATCH: {
             server.receive(players);
+            systemManager.processSystems(this);
+            server.sendGameStatePackets(players, entityManager.getEntityList());
             break;
         }
         case GameMode::MatchState::LEAVE_MAP: {
