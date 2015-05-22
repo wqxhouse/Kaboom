@@ -24,7 +24,7 @@ Entity *JumpPadFactory::createJumpPad(
 		const Vec3 &boxSize,
 		const Vec3 &position,
 		const Vec3 &launchSpeedVec,
-		float launchDuration) const {
+		int launchDuration) const {
 
     Entity *entity = entityManager.createEntity(type);
 
@@ -37,7 +37,7 @@ Entity *JumpPadFactory::createJumpPad(
     return entity;
 }
 
-void JumpPadFactory::createBase(Entity *entity, const Vec3 &boxSize, const Vec3 &position, const Vec3 &launchSpeedVec, float launchDuration) const {
+void JumpPadFactory::createBase(Entity *entity, const Vec3 &boxSize, const Vec3 &position, const Vec3 &launchSpeedVec, int launchDuration) const {
     const EntityType type = entity->getType();
 
     btTransform worldTrans;

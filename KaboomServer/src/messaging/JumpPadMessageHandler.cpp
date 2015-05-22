@@ -57,7 +57,7 @@ bool JumpPadMessageHandler::handle(const JumpPadMessage &message) const {
 		auto charJumpComp = character->getComponent<JumpComponent>();
 
 		//this is need to make sure we don't get launched twice if we touch the same jump pad for more than a split second
-		if (charJumpComp != nullptr && charJumpComp->checkIsLaunchByJumpPad()) {
+		if (charJumpComp != nullptr && !charJumpComp->checkIsLaunchByJumpPad()) {
 
 			charPhysicComp->getRigidBody()->applyCentralImpulse(jumpPadComp->getLaunchSpeedVec()); //apply the jumpPad force
 
