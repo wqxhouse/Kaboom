@@ -109,7 +109,5 @@ private:
     std::vector<std::string> playerSpawnPointList;
     std::vector<std::string> jumpPadSpawnPointList;
 
-    bool spawnedMapEntities;
-
-    void loadWorld(const std::string &mapFilename, const std::string &entitiesFilename);
+    void addPlayerToWorld(Player *player);
 };
