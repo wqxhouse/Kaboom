@@ -7,7 +7,7 @@
 
 Quat euler2Quat(float yaw, float pitch, float roll);
 
-btVector3 getViewDirection(Quat rotation);
+Vec3 getViewDirection(Quat rotation);
 
 Vec3 rotateVector(const Vec3 &v, const Vec3 &axis, float deg);
 

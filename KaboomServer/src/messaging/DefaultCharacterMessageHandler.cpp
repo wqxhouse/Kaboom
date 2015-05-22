@@ -48,95 +48,92 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
     auto posComp = entity->getComponent<PositionComponent>();
     auto charRotComp = entity->getComponent<CharacterRotationComponent>();
 
+    // Skip if no such bomb in inventory
     EntityType bombType = equipComp->getType();
-
     if (!invComp->hasBomb(bombType)) {
         return true;
     }
 
-    auto &bombConfig = EntityConfigLookup::get(bombType);
-
+    // Skip if cooldown is not ready
     Timer &timer = invComp->getTimer(bombType);
+    if (invComp->getAmount(bombType) == 0 || !timer.isExpired()) {
+        return true;
+    }
 
-    if (invComp->getAmount(bombType) > 0 && timer.isExpired()) {
-        timer.start();
+    // Reset cooldown
+    timer.start();
 
-        btVector3 btViewDir = getViewDirection(charRotComp->getRotation());
-        Vec3 viewDir = Vec3(btViewDir.getX(), btViewDir.getY(), btViewDir.getZ());
+    auto &bombConfig = EntityConfigLookup::get(bombType);
+    float launchSpeed = bombConfig.getFloat("launch-speed");
 
-        float launchSpeed = bombConfig.getFloat("launch-speed");
-        const Vec3 &charPos = posComp->getPosition();
-            
-        auto &factory = game->getBombFactory();
+    auto &factory = game->getBombFactory();
 
-        Vec3 pos;
-        Vec3 vel;
+    const Vec3 &charPos = posComp->getPosition();
+    const Vec3 viewDir = getViewDirection(charRotComp->getRotation());
 
-        pos.setOsgVec3(charPos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f) + viewDir.getOsgVec3());
-        vel.setOsgVec3(viewDir.getOsgVec3() * launchSpeed);
+    // Calculate bomb position and velocity
+    Vec3 pos, vel;
+    pos = calculateBombSpawnLocation(charPos, viewDir);
+    vel.setOsgVec3(viewDir.getOsgVec3() * launchSpeed);
 
-        auto bombConfig = EntityConfigLookup::get(bombType);
+    switch (bombType) {
+        case KABOOM_V2: {
+            Entity *bomb = factory.createBomb(bombType, pos, vel);
+            bomb->attachComponent(new OwnerComponent(entity));
+            game->addEntity(bomb);
 
-        switch (bombType) {
-            case KABOOM_V2: {
-                Entity *bombEntity = factory.createBomb(bombType, pos, vel);
-                bombEntity->attachComponent(new OwnerComponent(entity));
-                game->addEntity(bombEntity);
+            invComp->remove(bombType);
+            break;
+        }
+        case TIME_BOMB: {
+            const int numBombs = bombConfig.getInt("amount");
+            const float deltaAngle = bombConfig.getFloat("delta-angle");
 
-                invComp->remove(bombType);
-                break;
+            float currAngle = -deltaAngle * (numBombs / 2);
+
+            if (numBombs % 2 == 0) {
+                currAngle += deltaAngle / 2.0f;
             }
-            case TIME_BOMB: {
-                const int numBombs = bombConfig.getInt("amount");
-                const float deltaAngle = bombConfig.getFloat("delta-angle");
 
-                float currAngle = -deltaAngle * (numBombs / 2);
+            for (int i = 0; i < numBombs; ++i) {
+                Vec3 currDir = rotateVector(viewDir, Vec3(0, 0, 1), currAngle);
+                Vec3 currPos = calculateBombSpawnLocation(charPos, currDir);
+                Vec3 currVel;
+                currVel.setOsgVec3(currDir.getOsgVec3() * launchSpeed);
 
-                if (numBombs % 2 == 0) {
-                    currAngle += deltaAngle / 2.0f;
-                }
+                Entity *bomb = factory.createBomb(bombType, currPos, currVel);
+                bomb->attachComponent(new OwnerComponent(entity));
+                game->addEntity(bomb);
 
-                for (int i = 0; i < numBombs; ++i) {
-                    Vec3 currPos, currVel;
+                currAngle += deltaAngle;
+            }
 
-                    Vec3 currDir = rotateVector(viewDir, Vec3(0, 0, 1), currAngle);
-                    currPos.setOsgVec3(charPos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f) + currDir.getOsgVec3());
-                    currVel.setOsgVec3(currDir.getOsgVec3() * launchSpeed);
+            invComp->remove(bombType);
+            break;
+        }
+        case REMOTE_DETONATOR: {
+            auto detonatorComp = entity->getComponent<DetonatorComponent>();
 
-                    Entity *bomb = factory.createBomb(bombType, currPos, currVel);
+            if (detonatorComp == nullptr) {
+                detonatorComp = new DetonatorComponent();
+                entity->attachComponent(detonatorComp);
+            }
+
+            if (!detonatorComp->isDetonated()) {
+                auto &bombs = detonatorComp->getBombs();
+
+                if (bombs.size() < EntityConfigLookup::get(bombType).getInt("max-active")) {
+                    Entity *bomb = factory.createBomb(bombType, pos, vel);
                     bomb->attachComponent(new OwnerComponent(entity));
+
+                    bombs.push_back(bomb);
                     game->addEntity(bomb);
 
-                    currAngle += deltaAngle;
+                    invComp->remove(bombType);
                 }
-
-                invComp->remove(bombType);
-                break;
             }
-            case REMOTE_DETONATOR: {
-                auto detonatorComp = entity->getComponent<DetonatorComponent>();
 
-                if (detonatorComp == nullptr) {
-                    detonatorComp = new DetonatorComponent();
-                    entity->attachComponent(detonatorComp);
-                }
-
-                if (!detonatorComp->isDetonated()) {
-                    auto &bombs = detonatorComp->getBombs();
-
-                    if (bombs.size() < EntityConfigLookup::get(REMOTE_DETONATOR).getInt("max-active")) {
-                        Entity *bomb = factory.createBomb(bombType, pos, vel);
-                        bomb->attachComponent(new OwnerComponent(entity));
-
-                        bombs.push_back(bomb);
-                        game->addEntity(bomb);
-
-                        invComp->remove(bombType);
-                    }
-                }
-
-                break;
-            }
+            break;
         }
     }
 
@@ -188,4 +185,11 @@ bool DefaultCharacterMessageHandler::handle(const NoAttackMessage &message) cons
     }
 
     return true;
+}
+
+Vec3 DefaultCharacterMessageHandler::calculateBombSpawnLocation(const Vec3 &pos, const Vec3 &dir) const {
+    Vec3 result;
+    result.setOsgVec3(pos.getOsgVec3() + osg::Vec3(0, 0, 1) + dir.getOsgVec3());
+
+    return result;
 }
