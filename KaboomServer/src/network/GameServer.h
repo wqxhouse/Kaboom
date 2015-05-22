@@ -23,17 +23,24 @@ public:
     void sendEvent(const Event &evt) const;
     void sendEvent(const Event &evt, unsigned int playerId) const;
 
+    // Control events
+
     void sendConnectEvent(Player *player) const;
     void sendDisconnectEvent(Player *player) const;
     void sendAssignEvent(Player *player) const;
     void sendBindEvent(Player *player) const;
-    void sendScoreEvent(Player *player) const;
 
+    // One-time events
+
+    void sendScoreEvent(Player *player) const;
     void sendSpawnEvent(Entity *entity) const;
     void sendDestroyEvent(Entity *entity) const;
+    void sendExplosionEvent(Entity *entity) const;
+
+    // Game state events
+
     void sendPositionEvent(Entity *entity) const;
     void sendRotationEvent(Entity *entity) const;
-    void sendExplosionEvent(Entity *entity) const;
     void sendHealthEvent(Player *player) const;
     void sendAmmoEvent(Player *player) const;
 	void sendPlayerStatusEvent(Player *player) const;
