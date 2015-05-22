@@ -35,7 +35,7 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const ScoreEvent &o) {
         os << "ScoreEvent: {" << std::endl;
-        os << "    playerId: " << o.kills << std::endl;
+        os << "    playerId: " << o.playerId << std::endl;
         os << "    kills: " << o.kills << std::endl;
         os << "    deaths: " << o.deaths << std::endl;
         os << "}";
