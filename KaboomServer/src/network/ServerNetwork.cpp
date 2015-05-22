@@ -155,6 +155,7 @@ void ServerNetwork::removeDisconnectedPlayers() {
         const auto socket = kv->second;
         closesocket(socket);
         sessions.erase(playerId);
+        playerIdPool.free(playerId);
     }
 
     disconnectedPlayerIds.clear();

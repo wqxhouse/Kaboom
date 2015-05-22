@@ -18,10 +18,12 @@ void DisconnectEventHandler::handle(const Event &e) const {
     Player *player = game->getPlayers().at(evt.getPlayerId());
     game->getGameServer().sendDisconnectEvent(player);
 
-    player->getEntity()->attachComponent(new DestroyComponent());
+    Entity *entity = player->getEntity();
+    if (entity != nullptr) {
+        entity->attachComponent(new DestroyComponent());
+    }
 
     auto entities = game->getEntityManager().getEntityList();
-
     for (auto entity : entities) {
         auto ownerComp = entity->getComponent<OwnerComponent>();
 

@@ -33,10 +33,6 @@ public:
         components.erase(&typeid(T));
     }
 
-	void detachAllComponent() {
-		components.clear();
-	}
-
     unsigned int getId() const;
 
     const EntityType &getType() const;

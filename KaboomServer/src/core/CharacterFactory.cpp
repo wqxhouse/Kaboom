@@ -104,8 +104,17 @@ void CharacterFactory::createDefaultCharacter(Entity *entity) const {
 }
 
 void CharacterFactory::resetCharacter(Entity *entity, const Vec3 &position, const Quat &rotation) const {
-
-	entity->detachAllComponent();
+    entity->detachComponent<InputComponent>();
+    entity->detachComponent<PositionComponent>();
+    entity->detachComponent<RotationComponent>();
+    entity->detachComponent<CharacterRotationComponent>();
+    entity->detachComponent<PhysicsComponent>();
+    entity->detachComponent<InventoryComponent>();
+    entity->detachComponent<PlayerStatusComponent>();
+    entity->detachComponent<JumpComponent>();
+    entity->detachComponent<MessageHandlerComponent>();
+    entity->detachComponent<JetpackComponent>();
+    entity->detachComponent<EquipmentComponent>();
 
 	auto &charConfig = EntityConfigLookup::get(entity->getType());
 	createBase(entity, position, rotation);
