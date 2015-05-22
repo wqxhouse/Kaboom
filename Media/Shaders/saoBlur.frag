@@ -1,7 +1,9 @@
 #include "Shaders/gbufferUtil.glsl"
-#define EDGE_SHARPNESS     (1.0)
+#define EDGE_SHARPNESS     (0.8)
 #define SCALE               (2)
 #define R                   (4)
+
+// TODO: y axis is flickering. figure out
 
 const float gaussian[R + 1] = 
     float[](0.153170, 0.144893, 0.122649, 0.092902, 0.062970);  // stddev = 2.0

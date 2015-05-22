@@ -2,7 +2,7 @@
 #include <Core.h>
 
 SAOPassCallback::SAOPassCallback(osg::Camera *saoPassCam)
-	: _intensity(1.0f), _radius(1.5f),
+	: _intensity(1.0f), _radius(0.95f),
 	_saoPassCam(saoPassCam)
 {
 	_intensityDivRPow6 = _intensity / pow(_radius, 6.0f);
