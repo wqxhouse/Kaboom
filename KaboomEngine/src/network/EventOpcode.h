@@ -16,5 +16,6 @@ enum EventOpcode {
     EVENT_EQUIP = 12,
     EVENT_SCORE = 13,
 	EVENT_PLAYER_STATUS = 14,
+	EVENT_TIME = 15,
     EVENT_RELOAD_REQUEST = 100,
 };

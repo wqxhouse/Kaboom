@@ -10,6 +10,7 @@
 #include "SpawnEventHandler.h"
 #include "PlayerStatusEventHandler.h"
 #include "AmmoAmountEventHandler.h"
+#include "TimeEventHandler.h"
 
 ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
     addHandler(EVENT_DISCONNECT, new DisconnectEventHandler(game));
@@ -22,6 +23,7 @@ ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
 	addHandler(EVENT_AMMO_COUNT, new AmmoAmountEventHandler(game));
     addHandler(EVENT_SCORE, new ScoreEventHandler(game));
 	addHandler(EVENT_PLAYER_STATUS, new PlayerStatusEventHandler(game));
+	addHandler(EVENT_TIME, new TimeEventHandler(game));
 }
 
 ClientEventHandlerLookup::~ClientEventHandlerLookup() {
