@@ -29,10 +29,10 @@
 	</material>
 
 	<material name="____TestMaterial2" type="textured">
-		<albedoTex>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_baseColor.png</albedoTex>
-		<roughnessTex>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_roughness.png</roughnessTex>
-		<metallicTex>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_metallic.png</metallicTex>
-		<normalPath>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_normal.tga</normalPath>
+		<albedoTex>C:\Users\steven\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_baseColor.png</albedoTex>
+		<roughnessTex>C:\Users\steven\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_roughness.png</roughnessTex>
+		<metallicTex>C:\Users\steven\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_metallic.png</metallicTex>
+		<normalPath>C:\Users\steven\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_normal.tga</normalPath>
 	</material>
 
 	<material name="brick1Mat" type="plain">

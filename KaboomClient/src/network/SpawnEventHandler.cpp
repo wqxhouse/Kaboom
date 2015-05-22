@@ -63,7 +63,13 @@ void SpawnEventHandler::handle(const Event &e) const {
 			osgAudio::AudioEnvironment::instance()->update();
 			game->source->play();
 		}
-    }
+	} else if ((type & CAT_MASK) == CAT_JUMPPAD) {
+		entity = game->getJumpPadFactory().createJumpPad(
+			evt.getEntityId(),
+			evt.getType(),
+			evt.getPosition(),
+			evt.getRotation());
+	}
 
     if (entity != nullptr) {
         game->addEntity(entity);
