@@ -217,6 +217,7 @@
     <ClInclude Include="src\network\RotationEvent.h" />
     <ClInclude Include="src\network\ScoreEvent.h" />
     <ClInclude Include="src\network\SpawnEvent.h" />
+    <ClInclude Include="src\network\TimeEvent.h" />
     <ClInclude Include="src\systems\EntitySystem.h" />
     <ClInclude Include="src\util\IdPool.h" />
     <ClInclude Include="src\util\Timer.h" />

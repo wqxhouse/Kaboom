@@ -160,6 +160,9 @@
     <ClCompile Include="src\network\BindEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\TimeEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
@@ -269,6 +272,9 @@
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\network\BindEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\TimeEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>

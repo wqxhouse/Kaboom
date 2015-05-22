@@ -163,6 +163,9 @@
     <ClInclude Include="src\network\BindEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\TimeEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
