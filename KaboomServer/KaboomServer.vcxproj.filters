@@ -301,9 +301,6 @@
     <ClInclude Include="src\systems\PhysicsSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\common.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\BombConfigLoader.h">
       <Filter>Header Files\Configurations</Filter>
     </ClInclude>

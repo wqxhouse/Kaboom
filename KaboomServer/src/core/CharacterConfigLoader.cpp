@@ -3,7 +3,7 @@
 #include <core/EntityType.h>
 #include <util/Configuration.h>
 
-#include "common.h"
+typedef std::unordered_map<EntityType, int> InventoryType;
 
 CharacterConfigLoader::CharacterConfigLoader(std::unordered_map<EntityType, Configuration> &config)
     : config(config) {

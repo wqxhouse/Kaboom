@@ -14,7 +14,7 @@ class GameServer {
 public:
     typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
 
-    GameServer(ConfigSettings *, const ServerEventHandlerLookup &eventHandlerLookup);
+    GameServer(ConfigSettings *config, const ServerEventHandlerLookup &eventHandlerLookup);
 
     bool acceptClient(unsigned int &playerId);
 

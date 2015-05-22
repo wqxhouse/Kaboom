@@ -11,7 +11,6 @@
 #include <core/EntityManager.h>
 #include <util/Configuration.h>
 
-#include "common.h"
 #include "EntityConfigLookup.h"
 #include "../components/CharacterRotationComponent.h"
 #include "../components/InputComponent.h"
@@ -21,6 +20,8 @@
 #include "../components/JumpComponent.h"
 #include "../messaging/DefaultCharacterMessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
+
+typedef std::unordered_map<EntityType, int> InventoryType;
 
 CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {

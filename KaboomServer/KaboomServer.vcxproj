@@ -93,7 +93,6 @@
     <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
     <ClInclude Include="src\core\BombConfigLoader.h" />
-    <ClInclude Include="src\core\common.h" />
     <ClInclude Include="src\core\EntityConfigLookup.h" />
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\CharacterConfigLoader.h" />
