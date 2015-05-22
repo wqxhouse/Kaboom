@@ -212,6 +212,7 @@
     <ClInclude Include="src\network\EventOpcode.h" />
     <ClInclude Include="src\network\ExplosionEvent.h" />
     <ClInclude Include="src\network\HealthEvent.h" />
+    <ClInclude Include="src\network\MatchStateEvent.h" />
     <ClInclude Include="src\network\NetworkData.h" />
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PlayerStatusEvent.h" />

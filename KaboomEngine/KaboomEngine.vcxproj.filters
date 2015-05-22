@@ -175,6 +175,9 @@
     <ClInclude Include="src\components\PlayerComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\MatchStateEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">

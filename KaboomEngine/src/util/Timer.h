@@ -25,6 +25,10 @@ public:
         this->duration = duration;
     }
 
+    inline clock_t getStartTime() const {
+        return startTime;
+    }
+
 private:
     clock_t duration;
     clock_t startTime;

@@ -6,6 +6,7 @@
 #include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
 #include <core/Entity.h>
+#include <core/GameMode.h>
 #include <core/Player.h>
 #include <network/AmmoAmountEvent.h>
 #include <network/AssignEvent.h>
@@ -17,6 +18,7 @@
 #include <network/EquipEvent.h>
 #include <network/ExplosionEvent.h>
 #include <network/HealthEvent.h>
+#include <network/MatchStateEvent.h>
 #include <network/NetworkData.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PlayerStatusEvent.h>
@@ -152,6 +154,11 @@ void GameServer::sendAssignEvent(Player *player) const {
 
 void GameServer::sendBindEvent(Player *player) const {
     BindEvent evt(player->getId(), player->getEntity()->getId());
+    sendEvent(evt);
+}
+
+void GameServer::sendMatchStateEvent(const GameMode &gameMode) const {
+    MatchStateEvent evt(gameMode.getMatchState(), gameMode.getTimer());
     sendEvent(evt);
 }
 

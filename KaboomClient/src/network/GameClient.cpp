@@ -9,6 +9,7 @@
 #include <network/EmptyEvent.h>
 #include <network/EquipEvent.h>
 #include <network/ExplosionEvent.h>
+#include <network/MatchStateEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
@@ -83,6 +84,18 @@ void GameClient::receive() {
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
+            case EVENT_MATCH_STATE: {
+                MatchStateEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
+                break;
+            }
+            case EVENT_SCORE: {
+                ScoreEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
+                break;
+            }
             case EVENT_SPAWN: {
                 SpawnEvent evt;
                 evt.deserialize(&networkData[i]);
@@ -121,12 +134,6 @@ void GameClient::receive() {
             }
             case EVENT_AMMO_COUNT: {
                 AmmoAmountEvent evt;
-                evt.deserialize(&networkData[i]);
-                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
-                break;
-            }
-            case EVENT_SCORE: {
-                ScoreEvent evt;
                 evt.deserialize(&networkData[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;

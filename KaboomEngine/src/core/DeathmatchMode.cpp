@@ -1,11 +1,10 @@
 #include "DeathmatchMode.h"
 
 DeathmatchMode::DeathmatchMode(int preMatchDuration, int matchDuration, int postMatchDuration)
-        : preMatchDuration(preMatchDuration),
+        : GameMode(MatchState::ENTER_MAP, Timer(preMatchDuration)),
+          preMatchDuration(preMatchDuration),
           matchDuration(matchDuration),
-          postMatchDuration(postMatchDuration),
-          timer(preMatchDuration),
-          state(MatchState::ENTER_MAP) {
+          postMatchDuration(postMatchDuration) {
 }
 
 void DeathmatchMode::setMatchState(MatchState state) {
