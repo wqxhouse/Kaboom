@@ -229,6 +229,9 @@
     <ClCompile Include="src\systems\JumpPadSpawnSystem.cpp">
       <Filter>Source Files\Entity Component System\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="src\messaging\BombDropMessageHandler.cpp">
+      <Filter>Source Files\Messaging\Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -459,6 +462,12 @@
     </ClInclude>
     <ClInclude Include="src\systems\JumpPadSpawnSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\BombDropMessageHandler.h">
+      <Filter>Header Files\Messaging\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\BombDropMessage.h">
+      <Filter>Header Files\Messaging\Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

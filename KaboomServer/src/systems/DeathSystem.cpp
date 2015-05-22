@@ -5,12 +5,16 @@
 #include <components/PositionComponent.h>
 #include <core/Entity.h>
 
+#include "../components/MessageHandlerComponent.h"
 #include "../components/DestroyComponent.h"
 #include "../components/DetonatorComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/RespawnComponent.h"
 #include "../core/Game.h"
+
+#include "../messaging/BombDropMessage.h"
+#include "../messaging/BombDropMessageHandler.h"
 
 DeathSystem::DeathSystem(Game * game)
         : EntityProcessingSystem(game) {
@@ -27,10 +31,16 @@ void DeathSystem::processEntity(Entity *entity) {
     auto healthComp = entity->getComponent<HealthComponent>();
     auto playerStatusComp = entity->getComponent<PlayerStatusComponent>();
     auto physicComp = entity->getComponent<PhysicsComponent>();
+	auto handlerComp = entity->getComponent<MessageHandlerComponent>();
 
     if (healthComp->getAmount() == 0) {
         playerStatusComp->setIsAlive(false);
         //game->getGameServer().sendPlayerStatusEvent(entity);
+
+		//Do a bombDrop Here
+		BombDropMessage message(game, entity);
+		handlerComp->getHandler()->handle(message);
+
         game->getWorld().removeRigidBody(physicComp->getRigidBody());
         entity->detachComponent<PhysicsComponent>(); //just remove the physicsComponent for now, we might want to attach a spectator component, or local camera on the client
         entity->detachComponent<InputComponent>();
