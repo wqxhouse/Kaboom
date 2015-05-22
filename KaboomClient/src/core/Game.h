@@ -11,6 +11,7 @@
 
 #include "CharacterFactory.h"
 #include "BombFactory.h"
+#include "JumpPadFactory.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 #include "../gui/GameGUIEventHandler.h"
@@ -54,6 +55,7 @@ public:
 	SoundManager &getSoundManager();
     const CharacterFactory &getCharacterFactory() const;
     const BombFactory &getBombFactory() const;
+	const JumpPadFactory &getJumpPadFactory() const;
 
     const GameClient &getGameClient() const;
 
@@ -96,6 +98,7 @@ private:
 	SoundManager soundManager;
     CharacterFactory characterFactory;
 	BombFactory bombFactory;
+	JumpPadFactory jumpPadFactory;
 
     ClientEventHandlerLookup eventHandlerLookup;
     GameClient client;

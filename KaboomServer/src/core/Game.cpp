@@ -26,11 +26,14 @@
 #include "../systems/PickupSystem.h"
 #include "../systems/TimerSystem.h"
 #include "../systems/VoidSystem.h"
+#include "../systems/JumpPadSystem.h"
+#include "../systems/JumpPadSpawnSystem.h"
 
 Game::Game(ConfigSettings *configSettings)
         : characterFactory(entityManager),
           bombFactory(entityManager),
           pickupFactory(entityManager),
+		  jumpPadFactory(entityManager),
           eventHandlerLookup(this),
           server(configSettings, eventHandlerLookup),
           world(configSettings) {
@@ -43,10 +46,12 @@ Game::Game(ConfigSettings *configSettings)
     str_world_xml = str_mediaPath + str_world_xml;
 
     std::cout << str_world_xml << std::endl;
-    loadWorld(str_world_xml, "data-server/map.xml");
 
+    loadWorld(str_world_xml, "data-server/map.xml");
+   
     systemManager.addSystem(new InitializationSystem(this));
     systemManager.addSystem(new CharacterSpawnSystem(this));
+	systemManager.addSystem(new JumpPadSpawnSystem(this));
     systemManager.addSystem(new PickupSpawnSystem(this));
     systemManager.addSystem(new InputSystem(this));
     systemManager.addSystem(new FiringSystem(this));
@@ -56,6 +61,7 @@ Game::Game(ConfigSettings *configSettings)
     systemManager.addSystem(new TimerSystem(this));
     systemManager.addSystem(new PickupSystem(this));
     systemManager.addSystem(new ExplosionSystem(this));
+	systemManager.addSystem(new JumpPadSystem(this));
     systemManager.addSystem(new DeathSystem(this));
     systemManager.addSystem(new DestroySystem(this));
 }
@@ -185,6 +191,8 @@ void Game::loadWorld(const std::string &mapFilename, const std::string &entities
             pickupSpawnRequest[name] = Timer(0);
         } else if (config.getString("object-type") == "Player") {
             playerSpawnPointList.push_back(name);
-        }
+		} else if (config.getString("object-type") == "JumpPad") {
+			jumpPadSpawnPointList.push_back(name);
+		}
     }
 }

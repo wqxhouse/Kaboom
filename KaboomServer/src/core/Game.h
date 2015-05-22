@@ -8,6 +8,7 @@
 #include "BombFactory.h"
 #include "CharacterFactory.h"
 #include "PickupFactory.h"
+#include "JumpPadFactory.h"
 #include "../debug/DebugWorld.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
@@ -58,6 +59,10 @@ public:
         return pickupFactory;
     }
 
+	inline const JumpPadFactory &getJumpPadFactory() const {
+		return jumpPadFactory;
+	}
+
     inline const GameServer &getGameServer() const {
         return server;
     }
@@ -78,6 +83,10 @@ public:
         return pickupSpawnRequest;
     }
 
+	inline std::vector<std::string> &getJumpPadSpawnPointList() {
+		return jumpPadSpawnPointList;
+	}
+
 private:
     EntityManager entityManager;
     SystemManager systemManager;
@@ -85,6 +94,7 @@ private:
     CharacterFactory characterFactory;
     BombFactory bombFactory;
     PickupFactory pickupFactory;
+	JumpPadFactory jumpPadFactory;
 
     ServerEventHandlerLookup eventHandlerLookup;
     GameServer server;
@@ -97,6 +107,7 @@ private:
 
     std::unordered_map<std::string, Timer> pickupSpawnRequest;
     std::vector<std::string> playerSpawnPointList;
+	std::vector<std::string> jumpPadSpawnPointList;
 
     void loadWorld(const std::string &mapFilename, const std::string &entitiesFilename);
 };
