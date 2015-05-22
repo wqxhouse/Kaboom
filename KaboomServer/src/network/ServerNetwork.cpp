@@ -37,7 +37,7 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config) {
     hints.ai_flags = AI_PASSIVE;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(NULL, "2350", &hints, &result);
+    iResult = getaddrinfo(NULL, serverPort.c_str(), &hints, &result);
 
     if (iResult != 0) {
         printf("<Server> getaddrinfo failed with error: %d\n", iResult);

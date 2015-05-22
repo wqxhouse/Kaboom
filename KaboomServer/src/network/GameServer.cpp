@@ -158,6 +158,11 @@ void GameServer::sendBindEvent(Player *player) const {
     sendEvent(evt);
 }
 
+void GameServer::sendScoreEvent(Player *player) const {
+    ScoreEvent evt(player->getId(), player->getKills(), player->getDeaths());
+    sendEvent(evt);
+}
+
 void GameServer::sendSpawnEvent(Entity *entity) const {
     auto posComp = entity->getComponent<PositionComponent>();
     auto rotComp = entity->getComponent<RotationComponent>();
@@ -172,6 +177,11 @@ void GameServer::sendSpawnEvent(Entity *entity) const {
 
 void GameServer::sendDestroyEvent(Entity *entity) const {
     DestroyEvent evt(entity->getId());
+    sendEvent(evt);
+}
+
+void GameServer::sendExplosionEvent(Entity *entity) const {
+    ExplosionEvent evt(entity->getId());
     sendEvent(evt);
 }
 
@@ -194,11 +204,6 @@ void GameServer::sendRotationEvent(Entity *entity) const {
     }
 
     RotationEvent evt(entity->getId(), rotComp->getRotation());
-    sendEvent(evt);
-}
-
-void GameServer::sendExplosionEvent(Entity *entity) const {
-    ExplosionEvent evt(entity->getId());
     sendEvent(evt);
 }
 
@@ -233,11 +238,6 @@ void GameServer::sendAmmoEvent(Player *player) const {
 
     AmmoAmountEvent evt(kaboom_ammo, time_ammo, remote_ammo);
     sendEvent(evt, player->getId());
-}
-
-void GameServer::sendScoreEvent(Player *player) const {
-    ScoreEvent evt(player->getId(), player->getKills(), player->getDeaths());
-    sendEvent(evt);
 }
 
 void GameServer::sendPlayerStatusEvent(Player *player) const {

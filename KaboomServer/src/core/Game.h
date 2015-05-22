@@ -38,10 +38,6 @@ public:
 
     Vec3 getPlayerSpawnPoint();
 
-    inline Player *getPlayerByEntityId(unsigned int id) const {
-        return entityIdToPlayerMap.at(id);
-    }
-
     inline SpawnPointToConfigMap &getSpawnPointConfigs() {
         return world.getSpawnPointConfigs();
     }
@@ -74,12 +70,12 @@ public:
         return players;
     }
 
-    inline std::unordered_map<std::string, Timer> &getPickupRequest() {
-        return pickupSpawnRequest;
+    inline const IdToPlayerMap &getEntityIdToPlayerMap() const {
+        return entityIdToPlayerMap;
     }
 
-    inline IdToPlayerMap getEntityIdToPlayerMap() {
-        return entityIdToPlayerMap;
+    inline std::unordered_map<std::string, Timer> &getPickupRequest() {
+        return pickupSpawnRequest;
     }
 
 private:

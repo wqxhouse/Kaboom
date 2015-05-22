@@ -104,8 +104,8 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
 
         if (charHealthComp->getAmount() == 0) {
             auto ownerComp = entity->getComponent<OwnerComponent>();
-            Player *killer = game->getPlayerByEntityId(ownerComp->getEntity()->getId());
-            Player *victim = game->getPlayerByEntityId(nearbyEntity->getId());
+            Player *killer = game->getEntityIdToPlayerMap().at(ownerComp->getEntity()->getId());
+            Player *victim = game->getEntityIdToPlayerMap().at(nearbyEntity->getId());
 
             if (killer->getId() != victim->getId()) {
                 killer->setKills(killer->getKills() + 1);
