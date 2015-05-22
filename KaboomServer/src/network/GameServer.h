@@ -9,6 +9,7 @@ class Game;
 class Player;
 class ServerEventHandlerLookup;
 class ServerNetwork;
+class GameMode;
 
 class GameServer {
 public:
@@ -29,6 +30,7 @@ public:
     void sendDisconnectEvent(Player *player) const;
     void sendAssignEvent(Player *player) const;
     void sendBindEvent(Player *player) const;
+    void sendMatchStateEvent(const GameMode &gameMode) const;
 
     // One-time events
 

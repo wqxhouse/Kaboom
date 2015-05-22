@@ -182,16 +182,10 @@ void Game::update() {
 
     if (gameMode.updateMatchState()) {
         switch (gameMode.getMatchState()) {
-            case GameMode::MatchState::PRE_MATCH: {
-                printf("Switched to pre-match\n");
-                break;
-            }
-            case GameMode::MatchState::IN_PROGRESS: {
-                printf("Switched to in progress\n");
-                break;
-            }
+            case GameMode::MatchState::PRE_MATCH:
+            case GameMode::MatchState::IN_PROGRESS:
             case GameMode::MatchState::POST_MATCH: {
-                printf("Switched to post-match\n");
+                server.sendMatchStateEvent(gameMode);
                 break;
             }
         }
