@@ -78,19 +78,24 @@ void InputSystem::processEntity(Entity *entity) {
     }*/
 
 	const float runningSpeed = EntityConfigLookup::get(entity->getType()).getFloat("running-speed");
+	bool isMoving = false;
 
 	if (inputComp->isMovingForward()) {
 		localVelocity.setY(runningSpeed);
+		isMoving = true;
 	} else if (inputComp->isMovingBackward()) {
 		localVelocity.setY(-runningSpeed);
+		isMoving = true;
 	} else {
 		localVelocity.setY(0);
 	}
 
 	if (inputComp->isMovingLeft()) {
 		localVelocity.setX(-runningSpeed);
+		isMoving = true;
 	} else if (inputComp->isMovingRight()) {
 		localVelocity.setX(runningSpeed);
+		isMoving = true;
 	} else {
 		localVelocity.setX(0);
 	}
@@ -101,15 +106,13 @@ void InputSystem::processEntity(Entity *entity) {
 
 	JumpComponent *jumpComp = entity->getComponent<JumpComponent>();
 
-	if (!playerStatusComp->checkIsKnockBacked() && !jumpComp->checkIsOkToLaunch()) { //don't move if we are knockbacked
+	if (!playerStatusComp->checkIsKnockBacked() && !jumpComp->checkIsLaunchByJumpPad()) { //don't move if we are knockbacked
         rigidBody->setLinearVelocity(worldVelocity);
     }
-
-
 	
 	//bool jumping = false;
 	if (jumpComp != nullptr) {
-		if (!jumpComp->isJumping() && inputComp->isJumping() && !jumpComp->checkIsStillLaunching()) {
+		if (isMoving == true && !jumpComp->isJumping() && inputComp->isJumping() && !jumpComp->checkIsLaunchByJumpPad()) {
 			const float jumpingSpeed = EntityConfigLookup::get(entity->getType()).getFloat("jumping-speed");
 
 			//velocity.setZ(velocity.getZ() + jumpingSpeed);
