@@ -63,6 +63,71 @@ Game::Game(ConfigSettings *configSettings)
 Game::~Game() {
 }
 
+void Game::run() {
+    const clock_t TICK = 1000 / FPS;
+    const float TIME_STEP = 1.0f / FPS;
+
+    while (true) {
+        clock_t beginTime = clock();
+
+        update();
+
+        clock_t endTime = clock();
+        clock_t elapsedTime = endTime - beginTime;
+        clock_t sleepTime = TICK - elapsedTime;
+
+        if (sleepTime > 0) {
+            Sleep(sleepTime);
+        } else {
+            printf("Warning we need to slow down our server ticks!\n");
+        }
+    }
+}
+
+void Game::update() {
+    unsigned int playerId;
+
+    if (server.acceptClient(playerId)) {
+        Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, Vec3(0.0f, -5.0f, 5.0f));
+        Player *player = new Player(playerId, entity);
+        addPlayer(player);
+        addEntity(entity);
+
+        server.sendConnectEvent(player);
+        server.sendBindEvent(player);
+        server.sendAssignEvent(player);
+        server.sendInitializeEvent(player, entityManager.getEntityList());
+        server.sendGameStatePackets(player, entityManager.getEntityList());
+    }
+
+    auto &players = getPlayers();
+
+    server.receive(players);
+    systemManager.processSystems(this);
+    server.sendGameStatePackets(players, entityManager.getEntityList());
+
+    world.renderDebugFrame();
+}
+
+void Game::addPlayer(Player *player) {
+    players[player->getId()] = player;
+    entityIdToPlayerMap[player->getEntity()->getId()] = player;
+}
+
+void Game::removePlayer(Player *player) {
+    players.erase(players.find(player->getId()));
+
+    for (auto it = entityIdToPlayerMap.begin(); it != entityIdToPlayerMap.end();) {
+        if (player == it->second) {
+            it = entityIdToPlayerMap.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    delete player;
+}
+
 void Game::addEntity(Entity *entity) {
     PhysicsComponent *physicsComp = entity->getComponent<PhysicsComponent>();
 
@@ -95,60 +160,6 @@ void Game::removeEntity(Entity *entity) {
     }
 
     entityManager.destroyEntity(entity->getId());
-}
-
-void Game::run() {
-    const clock_t TICK = 1000 / FPS;
-    const float TIME_STEP = 1.0f / FPS;
-
-    while (true) {
-        clock_t beginTime = clock();
-
-        update();
-
-        clock_t endTime = clock();
-        clock_t elapsedTime = endTime - beginTime;
-        clock_t sleepTime = TICK - elapsedTime;
-
-        if (sleepTime > 0) {
-            Sleep(sleepTime);
-        } else {
-            printf("Warning we need to slow down our server ticks!\n");
-        }
-    }
-}
-
-void Game::update() {
-
-    //HERE is where the client first connect to server,
-    //we want to have client load the gameworld first,
-    //then create the player, and send the spawn player event to client
-    if (server.acceptNewClient(entityManager.generateId())) {
-        unsigned int playerId = playerIdPool.allocate();
-        Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, Vec3(0.0f, -5.0f, 5.0f));
-
-        entityIdToPlayer[entity->getId()] = new Player(playerId, entity);
-
-        //first notify the new client what entityId it should keep track of
-        server.sendAssignEvent(entity->getId());
-
-        //send the new spawn player entity to all the clients
-        addEntity(entity);
-
-        //second send the new client about all the exisiting entities
-        server.sendInitializeEvent(entity, entityManager.getEntityList());
-
-        //lastly send the game state for each entity
-        server.sendGameStatePackets(getEntityManager().getEntityList());
-    }
-
-    server.receive(this);
-
-    systemManager.processSystems(this);
-
-    server.sendGameStatePackets(getEntityManager().getEntityList());
-
-    world.renderDebugFrame();
 }
 
 Vec3 Game::getPlayerSpawnPoint() {

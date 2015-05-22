@@ -17,8 +17,8 @@ PlayerStatusEventHandler::PlayerStatusEventHandler(Game *game)
 void PlayerStatusEventHandler::handle(const Event &e) const {
 	const PlayerStatusEvent &evt = static_cast<const PlayerStatusEvent &>(e);
 
-	Entity *player = game->getEntityManager().getEntity((game->getGameClient().getCurrentPlayerEntityId()));
-	PlayerStatusComponent *playerStatusComp = player->getComponent<PlayerStatusComponent>();
+    Entity *entity = game->getCurrentPlayer()->getEntity();
+    PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
 	playerStatusComp->setIsKnockBacked(playerStatusComp->getIsKnockBacked());
 	playerStatusComp->setIsStaggered(playerStatusComp->getIsStaggered());
 	playerStatusComp->setIsDamaged(playerStatusComp->getIsDamaged());

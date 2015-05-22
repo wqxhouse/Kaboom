@@ -1,6 +1,7 @@
 #include "DisconnectEventHandler.h"
 
 #include <core/EntityManager.h>
+#include <core/Player.h>
 #include <network/DisconnectEvent.h>
 
 #include "../components/DestroyComponent.h"
@@ -15,12 +16,11 @@ DisconnectEventHandler::DisconnectEventHandler(Game *game)
 void DisconnectEventHandler::handle(const Event &e) const {
     const DisconnectEvent &evt = static_cast<const DisconnectEvent &>(e);
 
-    EntityManager &entityManager = game->getEntityManager();
-    Entity *player = entityManager.getEntity(evt.getPlayerId());
-
+    Player *player = game->getPlayers().at(evt.getPlayerId());
     game->getGameServer().sendDisconnectEvent(player);
 
-    player->attachComponent(new DestroyComponent());
+    Entity *entity = player->getEntity();
+    entity->attachComponent(new DestroyComponent());
 
     auto entities = game->getEntityManager().getEntityList();
 
@@ -31,4 +31,6 @@ void DisconnectEventHandler::handle(const Event &e) const {
             entity->attachComponent(new DestroyComponent());
         }
     }
+
+    game->removePlayer(player);
 }

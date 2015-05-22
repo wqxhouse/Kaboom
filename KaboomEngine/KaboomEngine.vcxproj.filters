@@ -157,6 +157,12 @@
     <ClInclude Include="src\components\InventoryComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\ConnectEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\BindEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">

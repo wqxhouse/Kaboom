@@ -4,7 +4,7 @@ class Entity;
 
 class Player {
 public:
-    Player(unsigned int id, Entity *entity, int kills = 0, int deaths = 0)
+    Player(unsigned int id, Entity *entity = nullptr, int kills = 0, int deaths = 0)
             : id(id),
               entity(entity),
               kills(kills),
@@ -17,6 +17,10 @@ public:
 
     inline Entity *getEntity() const {
         return entity;
+    }
+
+    inline void setEntity(Entity *entity) {
+        this->entity = entity;
     }
 
     inline int getKills() const {
