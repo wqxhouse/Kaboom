@@ -2,7 +2,7 @@
 
 #include <components/Component.h>
 
-#include "../core/Player.h"
+class Player;
 
 class DeathComponent : public Component {
 public:

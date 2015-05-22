@@ -1,16 +1,15 @@
 #include "ServerNetwork.h"
 
-#include <Winsock2.h>
 #include <ws2tcpip.h>
 
+#include <network/NetworkData.h>
 #include <util/ConfigSettings.h>
 
-ServerNetwork::ServerNetwork(ConfigSettings * _config) {
-    //Save the ConfigSetting
-    config = _config;
+#include "NetworkServices.h"
+
+ServerNetwork::ServerNetwork(ConfigSettings *config) {
     std::string serverPort;
     config->getValue(ConfigSettings::str_server_port, serverPort);
-
 
     // create WSADATA object
     WSADATA wsaData;
@@ -64,7 +63,7 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config) {
         closesocket(listenSocket);
         WSACleanup();
         exit(1);
-	}
+    }
 
     // Setup the TCP listening socket
     iResult = bind(listenSocket, result->ai_addr, (int)result->ai_addrlen);
@@ -104,9 +103,9 @@ bool ServerNetwork::acceptClient(unsigned int &playerId) {
     memset(&addr, 0, len);
     SOCKET socket = accept(listenSocket, (sockaddr *)&addr, &len);
 
-	// Don't buffer packet
-	int flag = 1;
-	setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
+    // Don't buffer packet
+    int flag = 1;
+    setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
 
     if (socket != INVALID_SOCKET) {
         playerId = playerIdPool.allocate();

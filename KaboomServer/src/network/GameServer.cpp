@@ -5,9 +5,9 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
-
 #include <core/Entity.h>
 #include <core/Player.h>
+#include <network/AmmoAmountEvent.h>
 #include <network/AssignEvent.h>
 #include <network/BindEvent.h>
 #include <network/ConnectEvent.h>
@@ -25,22 +25,17 @@
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
-#include <network/AmmoAmountEvent.h>
 #include <util/ConfigSettings.h>
 
-#include "NetworkServices.h"
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
-#include "../core/Game.h"
 
-GameServer::GameServer(ConfigSettings * config, const ServerEventHandlerLookup &eventHandlerLookup)
+GameServer::GameServer(ConfigSettings *config, const ServerEventHandlerLookup &eventHandlerLookup)
         : eventHandlerLookup(eventHandlerLookup) {
     printf("<Server> Creating a Network Server\n");
     network = new ServerNetwork(config);
 
     printf("<Sevrer> Initializing a Game\n");
-    int maxPlayers;
-    config->getValue(ConfigSettings::str_max_client, maxPlayers);
 }
 
 bool GameServer::acceptClient(unsigned int &playerId) {

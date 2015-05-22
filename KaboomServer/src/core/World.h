@@ -8,8 +8,6 @@
 
 #include <util/Configuration.h>
 
-#include "../core/common.h"
-
 class ConfigSettings;
 class Entity;
 

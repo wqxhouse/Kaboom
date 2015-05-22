@@ -1,7 +1,6 @@
 #include "WorldLoader.h"
 
 #include <btBulletDynamicsCommon.h>
-
 #include <osgbCollision/CollisionShapes.h>
 #include <osgbDynamics/MotionState.h>
 #include <osgDB/ReadFile>

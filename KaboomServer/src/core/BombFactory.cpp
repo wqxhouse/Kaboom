@@ -3,8 +3,6 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
-#include <osgDB/XmlParser>
-
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>

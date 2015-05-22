@@ -1,12 +1,11 @@
 #pragma once
 
+#include <Winsock2.h>
+
 #include <unordered_map>
 #include <unordered_set>
 
-#include <network/NetworkData.h>
 #include <util/IdPool.h>
-
-#include "NetworkServices.h"
 
 class ConfigSettings;
 
@@ -31,8 +30,6 @@ public:
 
 private:
     typedef std::unordered_map<unsigned int, SOCKET> IdToSocketMap;
-
-    ConfigSettings *config;
 
     SOCKET listenSocket;
 
