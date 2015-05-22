@@ -259,9 +259,9 @@ void GameServer::sendPlayerStatusEvent(Player *player) const {
     sendEvent(evt, player->getId());
 }
 
-void GameServer::sendInitializeEvent(Player *player, const std::vector<Entity *> &entities) const {
+void GameServer::sendInitializeEvent(Player *newPlayer, const IdToPlayerMap &players, const std::vector<Entity *> &entities) const {
     for (auto entity : entities) {
-        if (entity->getId() == player->getEntity()->getId()) {
+        if (entity->getId() == newPlayer->getEntity()->getId()) {
             continue;
         }
 
@@ -273,7 +273,13 @@ void GameServer::sendInitializeEvent(Player *player, const std::vector<Entity *>
                 entity->getType(),
                 posComp->getPosition(),
                 rotComp->getRotation());
-        sendEvent(evt, player->getId());
+        sendEvent(evt, newPlayer->getId());
+    }
+
+    for (auto kv : players) {
+        const auto player = kv.second;
+        ScoreEvent evt(player->getId(), player->getKills(), player->getDeaths());
+        sendEvent(evt, newPlayer->getId());
     }
 }
 

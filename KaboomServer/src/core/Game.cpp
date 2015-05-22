@@ -254,6 +254,6 @@ void Game::addPlayerToWorld(Player *player) {
 
     addEntity(entity);
     server.sendBindEvent(player);
-    server.sendInitializeEvent(player, entityManager.getEntityList());
+    server.sendInitializeEvent(player, players, entityManager.getEntityList());
     server.sendGameStatePackets(player, entityManager.getEntityList());
 }
