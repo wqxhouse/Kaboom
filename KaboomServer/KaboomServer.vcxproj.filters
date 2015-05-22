@@ -456,7 +456,7 @@
     </ClInclude>
     <ClInclude Include="src\messaging\CharacterSpawnMessage.h">
       <Filter>Header Files\Messaging\Messages</Filter>
-    </ClCompile>
+    </ClInclude>
     <ClInclude Include="src\systems\JumpPadSpawnSystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
