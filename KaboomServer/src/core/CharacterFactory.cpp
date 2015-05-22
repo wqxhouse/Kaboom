@@ -18,6 +18,7 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
 #include "../components/JumpComponent.h"
+#include "../components/RespawnComponent.h"
 #include "../messaging/DefaultCharacterMessageHandler.h"
 #include "../messaging/BombDropMessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
@@ -119,6 +120,9 @@ void CharacterFactory::resetCharacter(Entity *entity, const Vec3 &position, cons
     entity->detachComponent<MessageHandlerComponent>();
     entity->detachComponent<JetpackComponent>();
     entity->detachComponent<EquipmentComponent>();
+	if (entity->hasComponent<RespawnComponent>()){
+		entity->detachComponent<RespawnComponent>();
+	}
 
 	auto &charConfig = EntityConfigLookup::get(entity->getType());
 	createBase(entity, position, rotation);
