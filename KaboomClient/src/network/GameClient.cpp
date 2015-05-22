@@ -2,6 +2,8 @@
 
 #include <network/AmmoAmountEvent.h>
 #include <network/AssignEvent.h>
+#include <network/BindEvent.h>
+#include <network/ConnectEvent.h>
 #include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
 #include <network/EmptyEvent.h>
@@ -19,9 +21,7 @@
 #include "ClientEventHandlerLookup.h"
 
 GameClient::GameClient(const ClientEventHandlerLookup &eventHandlerLookup)
-        : eventHandlerLookup(eventHandlerLookup),
-          currentPlayerEntityId(0),
-          assignedEntity(false) {
+        : eventHandlerLookup(eventHandlerLookup) {
 }
 
 bool GameClient::connectToServer(const std::string &serverAddress, const int serverPort) {
@@ -30,7 +30,6 @@ bool GameClient::connectToServer(const std::string &serverAddress, const int ser
 }
 
 bool GameClient::disconnectFromServer() {
-    assignedEntity = false;//next time we connect, we need to obtain a new entity
     network.disconnectFromServer();
     return !network.isConnected();
 }
@@ -59,75 +58,82 @@ void GameClient::receive() {
         //printf("byteSize is %d\n", emptyEvent.getByteSize());
 
         switch (emptyEvent.getOpcode()) {
-            case EVENT_ASSIGN: {
-                AssignEvent assignEvent;
-                assignEvent.deserialize(&networkData[i]);
-
-                if (!assignedEntity) {
-                    printf("<Client> Got Assigned a new EntityId %d\n", assignEvent.getEntityId());
-                    currentPlayerEntityId = assignEvent.getEntityId(); //set entityId the client needs to keep track of
-                }
-
+            case EVENT_CONNECT: {
+                ConnectEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_DISCONNECT: {
-                DisconnectEvent disconnectEvent;
-                disconnectEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(disconnectEvent);
+                DisconnectEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
+                break;
+            }
+            case EVENT_ASSIGN: {
+                AssignEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
+                break;
+            }
+            case EVENT_BIND: {
+                BindEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_SPAWN: {
-                SpawnEvent spawnEvent;
-                spawnEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(spawnEvent);
+                SpawnEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_DESTROY: {
-                DestroyEvent destroyEvent;
-                destroyEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(destroyEvent.getOpcode())->handle(destroyEvent);
+                DestroyEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_POSITION: {
-                PositionEvent positionEvent;
-                positionEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(positionEvent);
+                PositionEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_ROTATION: {
-                RotationEvent rotationEvent;
-                rotationEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(rotationEvent);
+                RotationEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_EXPLOSION: {
-                ExplosionEvent explosionEvent;
-                explosionEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(explosionEvent);
+                ExplosionEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_HEALTH: {
-                HealthEvent healthEvent;
-                healthEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(healthEvent);
+                HealthEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_AMMO_COUNT: {
-                AmmoAmountEvent ammoAmountEvent;
-                ammoAmountEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(ammoAmountEvent);
+                AmmoAmountEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_SCORE: {
-                ScoreEvent scoreEvent;
-                scoreEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(scoreEvent);
+                ScoreEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_PLAYER_STATUS: {
-                PlayerStatusEvent playerStatusEvent;
-                playerStatusEvent.deserialize(&networkData[i]);
-                eventHandlerLookup.find(emptyEvent.getOpcode())->handle(playerStatusEvent);
+                PlayerStatusEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             default: {
@@ -138,14 +144,6 @@ void GameClient::receive() {
 
         i += emptyEvent.getByteSize();
     }
-}
-
-unsigned int GameClient::getCurrentPlayerEntityId() const {
-    return currentPlayerEntityId;
-}
-
-bool GameClient::getAssignedEntity() const {
-    return assignedEntity;
 }
 
 void GameClient::sendMessage(const Event &evt) const {

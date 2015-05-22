@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/EntityManager.h>
+#include <core/Player.h>
 #include <util/ConfigSettings.h>
 
 #include <Camera.h>
@@ -26,13 +27,24 @@ using namespace osgAudio;
 
 class InputManager;
 
-
 class Game {
 public:
+    typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
+
     Game(ConfigSettings *config);
     ~Game();
 
     void run();
+
+    inline void addPlayer(Player *player) {
+        players[player->getId()] = player;
+    }
+
+    inline void removePlayer(Player *player) {
+        players.erase(players.find(player->getId()));
+
+        delete player;
+    }
 
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
@@ -61,6 +73,18 @@ public:
 	osg::ref_ptr<Sample> sample;
 	std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
 
+    inline Player *getCurrentPlayer() const {
+        return currentPlayer;
+    }
+
+    inline void setCurrentPlayer(Player *currentPlayer) {
+        this->currentPlayer = currentPlayer;
+    }
+
+    inline const IdToPlayerMap &getPlayers() const {
+        return players;
+    }
+
 private:
 	friend void GameGUIListener::setGameState(GameStateMachine state);
 	
@@ -75,6 +99,9 @@ private:
 
     ClientEventHandlerLookup eventHandlerLookup;
     GameClient client;
+
+    Player *currentPlayer;
+    IdToPlayerMap players;
 
 	GeometryObjectManager *_geometryManager;
 	MaterialManager *_materialManager;

@@ -1,9 +1,14 @@
 #include "ServerNetwork.h"
 
+#include <Winsock2.h>
+#include <ws2tcpip.h>
+
+#include <util/ConfigSettings.h>
+
 ServerNetwork::ServerNetwork(ConfigSettings * _config) {
     //Save the ConfigSetting
     config = _config;
-    string serverPort;
+    std::string serverPort;
     config->getValue(ConfigSettings::str_server_port, serverPort);
 
 
@@ -11,7 +16,7 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config) {
     WSADATA wsaData;
 
     // our sockets for the server
-    ListenSocket = INVALID_SOCKET;
+    listenSocket = INVALID_SOCKET;
 
     // address info for the server to listen to
     struct addrinfo *result = NULL;
@@ -41,9 +46,9 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config) {
     }
 
     // Create a SOCKET for connecting to server
-    ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+    listenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 
-    if (ListenSocket == INVALID_SOCKET) {
+    if (listenSocket == INVALID_SOCKET) {
         printf("<Server> socket failed with error: %ld\n", WSAGetLastError());
         freeaddrinfo(result);
         WSACleanup();
@@ -52,22 +57,22 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config) {
 
     // Set the mode of the socket to be nonblocking
     u_long iMode = 1;
-    iResult = ioctlsocket(ListenSocket, FIONBIO, &iMode);
+    iResult = ioctlsocket(listenSocket, FIONBIO, &iMode);
 
     if (iResult == SOCKET_ERROR) {
         printf("<Server> ioctlsocket failed with error: %d\n", WSAGetLastError());
-        closesocket(ListenSocket);
+        closesocket(listenSocket);
         WSACleanup();
         exit(1);
 	}
 
     // Setup the TCP listening socket
-    iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
+    iResult = bind(listenSocket, result->ai_addr, (int)result->ai_addrlen);
 
     if (iResult == SOCKET_ERROR) {
         printf("<Server> bind failed with error: %d\n", WSAGetLastError());
         freeaddrinfo(result);
-        closesocket(ListenSocket);
+        closesocket(listenSocket);
         WSACleanup();
         exit(1);
     }
@@ -76,82 +81,91 @@ ServerNetwork::ServerNetwork(ConfigSettings * _config) {
     freeaddrinfo(result);
 
     // start listening for new clients attempting to connect
-    iResult = listen(ListenSocket, SOMAXCONN);
+    iResult = listen(listenSocket, SOMAXCONN);
 
     if (iResult == SOCKET_ERROR) {
         printf("<Server> listen failed with error: %d\n", WSAGetLastError());
-        closesocket(ListenSocket);
+        closesocket(listenSocket);
         WSACleanup();
         exit(1);
     }
 
     struct sockaddr_in sin;
     socklen_t len = sizeof(sin);
-    if (getsockname(ListenSocket, (struct sockaddr *)&sin, &len) == -1)
+    if (getsockname(listenSocket, (struct sockaddr *)&sin, &len) == -1)
         perror("getsockname");
     else
         printf("<Server> Begin listening on port %d\n", ntohs(sin.sin_port));
 }
 
-bool ServerNetwork::acceptNewClient(unsigned int id) {
-    // if client waiting, accept the connection and save the socket
-	SOCKET socket = accept(ListenSocket, NULL, NULL);
+bool ServerNetwork::acceptClient(unsigned int &playerId) {
+    sockaddr_in addr;
+    int len = sizeof(addr);
+    memset(&addr, 0, len);
+    SOCKET socket = accept(listenSocket, (sockaddr *)&addr, &len);
 
 	// Don't buffer packet
 	int flag = 1;
 	setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
 
     if (socket != INVALID_SOCKET) {
-        // insert new client into session id table
-        sessions.insert(pair<unsigned int, SOCKET>(id, socket));
+        playerId = playerIdPool.allocate();
+        sessions[playerId] = socket;
+
+        char clientIp[INET_ADDRSTRLEN];
+        inet_ntop(AF_INET, &addr.sin_addr, clientIp, INET_ADDRSTRLEN);
+        int clientPort = (int)ntohs(addr.sin_port);
+
+        printf("<Server> Player %d (%s:%d) connected to server.\n", playerId, clientIp, clientPort);
         return true;
     }
 
     return false;
-
 }
 
-int ServerNetwork::receive(unsigned int clientId, char *recvbuf) {
-    SOCKET socket = sessions[clientId];
+int ServerNetwork::receive(unsigned int playerId, char *recvbuf) {
+    SOCKET socket = sessions[playerId];
 
     int iResult = NetworkServices::receiveMessage(socket, recvbuf, MAX_PACKET_SIZE);
 
     if (iResult == 0) {
-        printf("<Server> Client Disconncect, closing connection\n");
-        disconnectedClients.insert(clientId);
+        printf("<Server> Player %d disconnected.\n", playerId);
+        disconnectedPlayerIds.insert(playerId);
     }
 
     return iResult;
 }
 
 void ServerNetwork::send(char *packet, int size) {
-    for (auto it : sessions) {
-        int iSendResult = NetworkServices::sendMessage(it.second, packet, size);
-
-        if (iSendResult == SOCKET_ERROR) {
-            printf("send failed with error: %d\n", WSAGetLastError());
-            disconnectedClients.insert(it.first);
-        }
+    for (auto kv : sessions) {
+        const auto playerId = kv.first;
+        const auto socket = kv.second;
+        send(packet, size, playerId, socket);
     }
 }
 
-void ServerNetwork::send(char *packet, int size, int clientId) {
-    auto kv = sessions.find(clientId);
+void ServerNetwork::send(char *packet, int size, int playerId) {
+    const auto socket = sessions[playerId];
+    send(packet, size, playerId, socket);
+}
 
-    int iSendResult = NetworkServices::sendMessage(kv->second, packet, size);
+void ServerNetwork::removeDisconnectedPlayers() {
+    for (auto id : disconnectedPlayerIds) {
+        const auto kv = sessions.find(id);
+        const auto playerId = kv->first;
+        const auto socket = kv->second;
+        closesocket(socket);
+        sessions.erase(playerId);
+    }
+
+    disconnectedPlayerIds.clear();
+}
+
+void ServerNetwork::send(char *packet, int size, unsigned int playerId, SOCKET socket) {
+    int iSendResult = NetworkServices::sendMessage(socket, packet, size);
 
     if (iSendResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
-        disconnectedClients.insert(kv->first);
+        printf("<Server> Unable to send to player %d (socket error: %d).\n", playerId, WSAGetLastError());
+        disconnectedPlayerIds.insert(playerId);
     }
-}
-
-void ServerNetwork::removeDisconnectedClients() {
-    for (auto clientId : disconnectedClients) {
-        auto kv = sessions.find(clientId);
-        closesocket(kv->second);
-        sessions.erase(kv->first);
-    }
-
-    disconnectedClients.clear();
 }

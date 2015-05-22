@@ -197,6 +197,8 @@
     <ClInclude Include="src\math\Quat.h" />
     <ClInclude Include="src\network\AmmoAmountEvent.h" />
     <ClInclude Include="src\network\AssignEvent.h" />
+    <ClInclude Include="src\network\BindEvent.h" />
+    <ClInclude Include="src\network\ConnectEvent.h" />
     <ClInclude Include="src\network\DisconnectEvent.h" />
     <ClInclude Include="src\network\EmptyEvent.h" />
     <ClInclude Include="src\network\DestroyEvent.h" />

@@ -35,7 +35,7 @@ void SpawnEventHandler::handle(const Event &e) const {
                 evt.getRotation());
 
 		game->source = new Source;
-		Entity *player = entityManager.getEntity(game->getGameClient().getCurrentPlayerEntityId());
+        Entity *player = game->getCurrentPlayer()->getEntity();
 		if (player != nullptr){
 
 

@@ -18,7 +18,7 @@ AmmoAmountEventHandler::AmmoAmountEventHandler(Game *game)
 void AmmoAmountEventHandler::handle(const Event &e) const {
 	const AmmoAmountEvent &evt = static_cast<const AmmoAmountEvent &>(e);
 
-	Entity *player = game->getEntityManager().getEntity((game->getGameClient().getCurrentPlayerEntityId()));
+    Entity *player = game->getCurrentPlayer()->getEntity();
     InventoryComponent *invComp = player->getComponent<InventoryComponent>();
 	//bombConCom->setAmount(evt.getAmount());
     game->getGameGUIEventHandler()->handle(evt, invComp);

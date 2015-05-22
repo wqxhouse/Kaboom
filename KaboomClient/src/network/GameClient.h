@@ -20,18 +20,11 @@ public:
     void sendEquipEvent(EntityType type) const;
     void sendReloadRequestEvent() const;
 
-	unsigned int getCurrentPlayerEntityId() const;
-
-	bool getAssignedEntity() const;
 	bool getIsConnectedToServer() const;
 
 private:
     const ClientEventHandlerLookup &eventHandlerLookup;
 
     ClientNetwork network;
-
-    bool assignedEntity;
-
-	unsigned int currentPlayerEntityId;
 
 };

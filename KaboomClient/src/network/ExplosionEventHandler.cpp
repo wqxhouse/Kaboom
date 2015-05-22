@@ -23,7 +23,7 @@ void ExplosionEventHandler::handle(const Event &e) const {
 
     EntityManager &entityManager = game->getEntityManager();
     Entity *bomb = entityManager.getEntity(evt.getBombId());
-	Entity *player = entityManager.getEntity(game->getGameClient().getCurrentPlayerEntityId());
+    Entity *player = game->getCurrentPlayer()->getEntity();
 
     // TODO: Handle explosion effect.
 	try{

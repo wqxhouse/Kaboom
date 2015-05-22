@@ -30,13 +30,16 @@ public:
     void run();
     void update();
 
+    void addPlayer(Player *player);
+    void removePlayer(Player *player);
+
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
 
     Vec3 getPlayerSpawnPoint();
 
     inline Player *getPlayerByEntityId(unsigned int id) const {
-        return entityIdToPlayer.at(id);
+        return entityIdToPlayerMap.at(id);
     }
 
     inline SpawnPointToConfigMap &getSpawnPointConfigs() {
@@ -67,8 +70,16 @@ public:
         return world;
     }
 
+    inline const IdToPlayerMap &getPlayers() const {
+        return players;
+    }
+
     inline std::unordered_map<std::string, Timer> &getPickupRequest() {
         return pickupSpawnRequest;
+    }
+
+    inline IdToPlayerMap getEntityIdToPlayerMap() {
+        return entityIdToPlayerMap;
     }
 
 private:
@@ -84,11 +95,12 @@ private:
 
     DebugWorld world;
 
+    IdPool playerIdPool;
+    IdToPlayerMap players;
+    IdToPlayerMap entityIdToPlayerMap;
+
     std::unordered_map<std::string, Timer> pickupSpawnRequest;
     std::vector<std::string> playerSpawnPointList;
-
-    IdPool playerIdPool;
-    IdToPlayerMap entityIdToPlayer;
 
     void loadWorld(const std::string &mapFilename, const std::string &entitiesFilename);
 };
