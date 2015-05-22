@@ -12,6 +12,7 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/RespawnComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../core/GameModeConfigLoader.h"
 #include "../network/GameServer.h"
 #include "../network/ServerEventHandlerLookup.h"
 #include "../systems/CharacterSpawnSystem.h"
@@ -37,8 +38,7 @@ Game::Game(ConfigSettings *configSettings)
           jumpPadFactory(entityManager),
           eventHandlerLookup(this),
           server(configSettings, eventHandlerLookup),
-          world(configSettings),
-          gameMode(30 * 1000, 30 * 1000, 10 * 1000) { // TODO: Extract constant
+          world(configSettings) {
     std::string mediaPath;
     std::string worldXml;
 
@@ -50,6 +50,15 @@ Game::Game(ConfigSettings *configSettings)
     std::cout << worldXml << std::endl;
 
     world.load(worldXml, "data-server/map.xml");
+
+    GameModeConfigLoader gameModeConfigLoader(gameModeConfigs);
+    gameModeConfigLoader.load("data-server/game-modes.xml");
+
+    auto deathmatchConfig = gameModeConfigs["Deathmatch"];
+
+    gameMode.setPreMatchDuration(deathmatchConfig.getInt("pre-match-duration") * 1000);
+    gameMode.setMatchDuration(deathmatchConfig.getInt("match-duration") * 1000);
+    gameMode.setPostMatchDuration(deathmatchConfig.getInt("post-match-duration") * 1000);
 
     systemManager.addSystem(new InitializationSystem(this));
     systemManager.addSystem(new CharacterSpawnSystem(this));
@@ -121,6 +130,10 @@ void Game::update() {
             break;
         }
         case GameMode::MatchState::PRE_MATCH: {
+            if (players.empty()) {
+                gameMode.setTimer(Timer(gameMode.getPreMatchDuration()));
+            }
+
             for (auto kv : players) {
                 const auto player = kv.second;
 

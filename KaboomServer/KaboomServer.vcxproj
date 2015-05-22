@@ -32,6 +32,7 @@
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\CharacterConfigLoader.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\GameModeConfigLoader.cpp" />
     <ClCompile Include="src\core\JumpPadFactory.cpp" />
     <ClCompile Include="src\core\MapConfigLoader.cpp" />
     <ClCompile Include="src\core\OsgObjectConfigLoader.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\CharacterConfigLoader.h" />
     <ClInclude Include="src\core\Game.h" />
+    <ClInclude Include="src\core\GameModeConfigLoader.h" />
     <ClInclude Include="src\core\JumpPadFactory.h" />
     <ClInclude Include="src\core\MapConfigLoader.h" />
     <ClInclude Include="src\core\OsgObjectConfigLoader.h" />
@@ -173,6 +175,7 @@
   <ItemGroup>
     <Xml Include="data-server\bombs.xml" />
     <Xml Include="data-server\characters.xml" />
+    <Xml Include="data-server\game-modes.xml" />
     <Xml Include="data-server\map.xml" />
   </ItemGroup>
   <ItemGroup>
