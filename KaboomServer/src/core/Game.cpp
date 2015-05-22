@@ -129,6 +129,8 @@ void Game::update() {
                     Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, getPlayerSpawnPoint());
                     entity->attachComponent(new PlayerComponent(player));
                     player->setEntity(entity);
+                    player->setKills(0);
+                    player->setDeaths(0);
 
                     addEntity(entity);
                     server.sendBindEvent(player);
