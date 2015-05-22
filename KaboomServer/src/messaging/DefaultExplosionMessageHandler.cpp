@@ -34,12 +34,6 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
     Game *game = message.getGame();
     Entity *entity = message.getEntity();
 
-    if (entity->getType() == REMOTE_DETONATOR) {
-        auto owner = entity->getComponent<OwnerComponent>()->getEntity();
-        auto &bombs = owner->getComponent<DetonatorComponent>()->getBombs();
-        bombs.erase(std::find(bombs.begin(), bombs.end(), entity));
-    }
-
     auto &nearbyEntities = message.getNearbyEntities();
 
     auto bombTriggerComp = entity->getComponent<TriggerComponent>();
