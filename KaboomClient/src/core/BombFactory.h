@@ -11,6 +11,8 @@ class BombFactory {
 public:
     BombFactory(EntityManager &entityManager);
 
+	void loadBomb(std::string mediaPath);
+
     Entity *createBomb(
             unsigned int id,
             EntityType type,
@@ -19,9 +21,12 @@ public:
 
 private:
     EntityManager &entityManager;
+	osg::ref_ptr<osg::Node> _kaboom2_0;
+	osg::ref_ptr<osg::Node> _timer;
+	osg::ref_ptr<osg::Node> _remote;
 
     void createBase(Entity *entity, const Vec3 &position, Quat rotation) const;
-    void createKaboomV2(Entity *entity) const;
-    void createTimeBomb(Entity *entity) const;
-    void createRemoteDetonator(Entity *entity) const;
+	void createKaboomV2(Entity *entity, const Vec3 &position, Quat rotation) const;
+	void createTimeBomb(Entity *entity, const Vec3 &position, Quat rotation) const;
+	void createRemoteDetonator(Entity *entity, const Vec3 &position, Quat rotation) const;
 };

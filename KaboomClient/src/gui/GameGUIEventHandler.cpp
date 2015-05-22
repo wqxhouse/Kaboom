@@ -73,6 +73,19 @@ void  GameGUIEventHandler::handle(const ScoreEvent &e)const {
 
 }
 
+void GameGUIEventHandler::handle(const TimeEvent &e) const{
+	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
+	Rocket::Core::Element * clock = window1->GetChild(3);
+
+	
+	int seconds = ((int)(e.getTime()) / CLOCKS_PER_SEC);
+	int mintues = seconds / 60;
+	seconds %= 60;
+
+	std::string timer = std::to_string(mintues) + ":" + std::to_string(seconds);
+	clock->SetInnerRML(timer.c_str());
+}
+
 void GameGUIEventHandler::changeWeapon(int weapon) const
 {
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
@@ -87,16 +100,31 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 		else
 			ammoTable->GetChild(i)->SetProperty("color", "purple");
 	}
+
+	Rocket::Core::Element * current_bomb = window1->GetChild(2);
+	switch (weapon){
+		case 0:
+			current_bomb->SetClassNames("kaboom");
+			break;
+		case 1:
+			current_bomb->SetClassNames("timer");
+			break;
+		case 2:
+			current_bomb->SetClassNames("remote_bomb");
+			break;
+	}
 }
+
 void GameGUIEventHandler::showScoreBoard() const{
-	Core::getInGameLibRocketGUIManager()->getWindow(0)->Hide();
-	Core::getInGameLibRocketGUIManager()->getWindow(1)->Hide();
+	//Core::getInGameLibRocketGUIManager()->getWindow(0)->Hide();
+	//Core::getInGameLibRocketGUIManager()->getWindow(1)->Hide();
 	Core::getInGameLibRocketGUIManager()->getWindow(2)->Show();
 
 }
+
 void GameGUIEventHandler::hideScoreBoard() const{
-	Core::getInGameLibRocketGUIManager()->getWindow(0)->Show();
-	Core::getInGameLibRocketGUIManager()->getWindow(1)->Hide();
+	//Core::getInGameLibRocketGUIManager()->getWindow(0)->Show();
+	//Core::getInGameLibRocketGUIManager()->getWindow(1)->Hide();
 	Core::getInGameLibRocketGUIManager()->getWindow(2)->Hide();
 
 }
