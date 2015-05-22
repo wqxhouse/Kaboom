@@ -105,6 +105,7 @@ private:
 
     IdToPlayerMap players;
 
+    std::unordered_map<std::string, Configuration> gameModeConfigs;
     std::unordered_map<std::string, Timer> pickupSpawnRequest;
     std::vector<std::string> playerSpawnPointList;
     std::vector<std::string> jumpPadSpawnPointList;

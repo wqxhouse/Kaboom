@@ -30,6 +30,10 @@ public:
         return timer;
     }
 
+    inline void setTimer(const Timer &timer) {
+        this->timer = timer;
+    }
+
 protected:
     MatchState state;
     Timer timer;

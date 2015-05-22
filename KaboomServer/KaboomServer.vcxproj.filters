@@ -232,6 +232,9 @@
     <ClCompile Include="src\messaging\BombDropMessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\GameModeConfigLoader.cpp">
+      <Filter>Source Files\Configurations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -469,6 +472,9 @@
     <ClInclude Include="src\messaging\BombDropMessage.h">
       <Filter>Header Files\Messaging\Messages</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\GameModeConfigLoader.h">
+      <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-server\bombs.xml">
@@ -478,6 +484,9 @@
       <Filter>Resource Files</Filter>
     </Xml>
     <Xml Include="data-server\map.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="data-server\game-modes.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>
