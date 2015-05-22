@@ -36,7 +36,7 @@ public:
 		this->isLaunchByJumpPad = isLaunchByJumpPad;
 	}
 
-	inline Timer getIsLaunchByJumpPadTimer(){
+	inline Timer &getIsLaunchByJumpPadTimer(){
 		return isLaunchByJumpPadTimer;
 	}
 

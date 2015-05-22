@@ -17,11 +17,11 @@ public:
             const Vec3 &position,
 			//const Vec4 &orientation,
 			const Vec3 &launchSpeedVec,
-			float launchDuration) const;
+			int launchDuration) const;
 
 private:
     EntityManager &entityManager;
 
-	void createBase(Entity *entity, const Vec3 &boxSize, const Vec3 &position, const Vec3 &launchSpeedVec, float launchDuration) const;
+	void createBase(Entity *entity, const Vec3 &boxSize, const Vec3 &position, const Vec3 &launchSpeedVec, int launchDuration) const;
     void createJumpPad(Entity *entity) const;
 };
