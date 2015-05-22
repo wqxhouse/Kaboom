@@ -7,6 +7,7 @@ void main()
     v_uvcoord = gl_MultiTexCoord0.st;
     gl_Position = ftransform();
 
+	// TODO: compute these on cpu
     float viewX = gl_Position.x;
     float viewY = gl_Position.y;
     float viewZ = 1;

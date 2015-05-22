@@ -14,21 +14,41 @@ uniform float u_bias;
 uniform float u_projScale; // height / (2.0 * tan(fovy * 0.5))
 uniform float u_intensityDivRPow6;
 
+uniform mat4 u_projInvMat;
+// uniform sampler2D u_debugDepth;
+uniform vec2 u_bufferSizeInv;
+
 float radius2 = u_radius * u_radius;
 
-//#define NUM_SAMPLES (11)
-//#define NUM_SPIRAL_TURNS (7)
-
-#define NUM_SAMPLES (16)
-#define NUM_SPIRAL_TURNS (11)
+#define NUM_SAMPLES (11)
+#define NUM_SPIRAL_TURNS (7)
 #define CLAMP_FAR (-500)
 
 /////////////////////////////////////////////////////////
-vec3 getViewSpacePosition(ivec2 ssCoord)
+vec3 getViewSpacePositionV2(ivec2 ssCoord)
 {
 	vec4 RT2 = texelFetch(u_RT2, ssCoord, 0);
 	float linearZ = recoverDepth(RT2.zw);
-    return getViewSpacePositionFromLinearZ(linearZ, u_farPlane, v_viewRay);
+	
+	// TODO: find a faster way 
+	// 1) LUT may be an option 
+	// 2) http://www.gamedev.net/topic/594142-reconstructing-view-space-position-from-depth/
+
+	// calc viewray in screen space or sampling is not correct
+	vec2 ndcXY = ((ssCoord + vec2(0.5)) * u_bufferSizeInv) * 2.0 - 1.0;
+	vec4 viewRayNDCFar = vec4(ndcXY, 1, 1);
+    vec4 viewRayVS = u_projInvMat * viewRayNDCFar;
+    viewRayVS /= viewRayVS.w;
+    viewRayVS /= viewRayVS.z;
+
+    return getViewSpacePositionFromLinearZ(linearZ, u_farPlane, viewRayVS.xyz);
+
+	//float z = texelFetch(u_debugDepth, ssCoord, 0).x * 2.0 - 1.0;
+	//vec2 coord = ((ssCoord + vec2(0.5)) / vec2(1280, 720)) * 2.0 - 1.0;
+	//vec4 posNDC = vec4(coord, z, 1.0);
+	//vec4 posVS = u_projInvMat * posNDC;
+	//return posVS.xyz / posVS.w;
+	//return posVS;
 }
 
 void getViewSpacePositionAndNormal(ivec2 ssCoord, out vec3 viewPos, out vec3 viewNormal, out vec4 o_RT2)
@@ -55,7 +75,7 @@ vec2 tapLocation(int sampleNumber, float spinAngle, out float ssR)
 vec3 getOffsetPosition(ivec2 ssCoord, vec2 unitOffset, float ssR) 
 {
 	ivec2 ssOffsetCoord = ssCoord + ivec2(unitOffset * ssR);
-	return getViewSpacePosition(ssOffsetCoord);
+	return getViewSpacePositionV2(ssOffsetCoord);
 }
 
 float sampleAO(in ivec2 ssC, in vec3 viewPos, in vec3 viewNormal, in float ssDiskRadius, 
@@ -79,11 +99,6 @@ float sampleAO(in ivec2 ssC, in vec3 viewPos, in vec3 viewNormal, in float ssDis
 	return f * f * f * max((vn - u_bias) / (epsilon + vv), 0.0);
 }
 
-vec3 getNormal(vec3 C)
-{
-	return normalize(cross(dFdy(C), dFdx(C)));
-}
-
 void main() 
 {
 	vec3 res = vec3(0.0);
@@ -98,10 +113,10 @@ void main()
 	if(viewPos.z < CLAMP_FAR) discard;
 
 	//vec2 packZ = splitFloat2x8(clamp(-viewPos.z * (1.0 / CLAMP_FAR), 0.0, 1.0));
-	//vec2 packZ = splitFloat2x8(clamp(viewPos.z * (1.0 / CLAMP_FAR), 0.0, 1.0));
-	//res.gb = packZ;
+	vec2 packZ = splitFloat2x8(clamp(viewPos.z * (1.0 / CLAMP_FAR), 0.0, 1.0));
+	res.gb = packZ;
 
-	res.gb = RT2.zw;
+	// res.gb = RT2.zw;
 
     float ssDiskRadius = -u_projScale * u_radius / viewPos.z;
     float randomPatternRotationAngle = 30.0 * (ssCoord.x ^ ssCoord.y) + 10.0 * ssCoord.x * ssCoord.y;
@@ -113,7 +128,17 @@ void main()
     }
 
     float AO = max(0.0, 1.0 - sum * u_intensityDivRPow6 * (5.0 / NUM_SAMPLES));
-	res.r = AO;
 
+	// 2x2 box filter
+    if (abs(dFdx(viewPos.z)) < 0.02) 
+	{
+        AO -= dFdx(AO) * ((ssCoord.x & 1) - 0.5);
+    }
+    if (abs(dFdy(viewPos.z)) < 0.02) 
+	{
+        AO -= dFdy(AO) * ((ssCoord.y & 1) - 0.5);
+    }
+
+	res.r = AO;
 	gl_FragColor = vec4(res, 1);
 }

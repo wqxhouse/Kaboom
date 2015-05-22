@@ -123,6 +123,7 @@
 
     <deferred_pass name="SAOPass">
       <input_buffer unit="0" varname="u_RT2">b_RT2</input_buffer>
+      <input_buffer unit="1" varname="u_debugDepth">debugDepth</input_buffer>
       <output_buffer target="color">b_sao</output_buffer>
       <clear_color>1 1 1 1</clear_color>
       
@@ -135,6 +136,7 @@
       <uniform>u_radius</uniform>
       <uniform>u_bias</uniform>
       <uniform>u_intensityDivRPow6</uniform>
+      <uniform>u_bufferSizeInv</uniform>
 
       <shader>lightPass_vs</shader>
       <shader>sao_fs</shader>

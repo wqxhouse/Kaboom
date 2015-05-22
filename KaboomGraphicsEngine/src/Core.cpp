@@ -98,6 +98,11 @@ osg::Vec2 Core::getScreenSize()
 	return _screenSize;
 }
 
+osg::Vec2 Core::getRenderResolution()
+{
+	return _renderResolution;
+}
+
 void Core::configFilePath()
 {
 	// TODO: read from config file

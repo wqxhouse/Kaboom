@@ -9,9 +9,9 @@
   
   
   <buffer name="b_sao" type="2d">
-    <internal_format>rgb16f</internal_format>
+    <internal_format>rgb</internal_format>
     <source_format>rgb</source_format>
-    <source_type>float</source_type>
+    <source_type>ubyte</source_type>
   </buffer>
 
   <shader name="sao_fs" type="fragment">
@@ -29,7 +29,7 @@
   <!-- but can be used from lightPass. not intended-->
   <!--<uniform name="u_projInvMat" type="mat4"></uniform>-->
   <uniform name="u_radius" type="float">
-    <value>0.1</value>
+    <value>1.5</value>
   </uniform>
   
   <uniform name="u_bias" type="float">
@@ -38,5 +38,6 @@
   
   <uniform name="u_projScale" type="float"></uniform>
   <uniform name="u_intensityDivRPow6" type="float"></uniform>
+  <uniform name="u_bufferSizeInv" type="vec2"></uniform>
   
 </compositor>

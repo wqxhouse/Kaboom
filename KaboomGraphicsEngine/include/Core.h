@@ -26,6 +26,7 @@ public:
 	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath);
 
 	static osg::Vec2 getScreenSize();
+	static osg::Vec2 getRenderResolution();
 
 	static void loadMaterialFile(const std::string &filePath);
 	static void loadTypeIdFile(const std::string &filePath);
