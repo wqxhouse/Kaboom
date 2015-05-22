@@ -11,10 +11,6 @@ EquipEventHandler::EquipEventHandler(Game *game)
 }
 
 void EquipEventHandler::handle(const Event &e) const {
-    if (game->getGameMode().getMatchState() != GameMode::MatchState::IN_PROGRESS) {
-        return;
-    }
-
     const EquipEvent &evt = static_cast<const EquipEvent &>(e);
 
     EntityManager &entityManager = game->getEntityManager();

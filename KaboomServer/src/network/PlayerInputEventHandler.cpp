@@ -16,10 +16,6 @@ PlayerInputEventHandler::PlayerInputEventHandler(Game *game)
 }
 
 void PlayerInputEventHandler::handle(const Event &e) const {
-    if (game->getGameMode().getMatchState() != GameMode::MatchState::IN_PROGRESS) {
-        return;
-    }
-
     const PlayerInputEvent &evt = static_cast<const PlayerInputEvent &>(e);
 
     Entity *entity = game->getPlayers().at(evt.getPlayerId())->getEntity();
