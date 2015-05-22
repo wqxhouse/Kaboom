@@ -47,7 +47,7 @@ public:
     void sendAmmoEvent(Player *player) const;
 	void sendPlayerStatusEvent(Player *player) const;
 
-    void sendInitializeEvent(Player *player, const std::vector<Entity *> &entities) const;
+    void sendInitializeEvent(Player *newPlayer, const IdToPlayerMap &players, const std::vector<Entity *> &entities) const;
     void sendGameStatePackets(Player *player, const std::vector<Entity *> &entities) const;
     void sendGameStatePackets(const IdToPlayerMap &players, const std::vector<Entity *> &entities) const;
 
