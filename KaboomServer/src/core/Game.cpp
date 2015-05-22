@@ -88,7 +88,7 @@ void Game::update() {
     unsigned int playerId;
 
     if (server.acceptClient(playerId)) {
-        Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, Vec3(0.0f, -5.0f, 5.0f));
+        Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, getPlayerSpawnPoint());
         Player *player = new Player(playerId, entity);
         addPlayer(player);
         addEntity(entity);
