@@ -6,6 +6,7 @@
 #include "LightVisualizer.h"
 
 LightManager::LightManager()
+	: _shadowManager(NULL)
 {
 	_visualizer = new LightVisualizer();
 }
@@ -20,6 +21,11 @@ LightManager::~LightManager()
 	_lightsMap.clear();
 
 	delete _visualizer;
+}
+
+void LightManager::initShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRoot)
+{
+	_shadowManager = new ShadowManager(passes, geomRoot);
 }
 
 bool LightManager::addDirectionalLight(const std::string &name,
@@ -42,6 +48,12 @@ bool LightManager::addDirectionalLight(const std::string &name,
 
 	_lightsMap.insert(std::make_pair(name, dirLight));
 	_lights.push_back(dirLight);
+
+	if (castShadow && _shadowManager != NULL)
+	{
+		_shadowManager->addDirectionalLight(dirLight);
+	}
+
 	++_numLights;
 
 	return true;
@@ -71,6 +83,12 @@ bool LightManager::addPointLight(const std::string &name,
 
 	_lightsMap.insert(std::make_pair(name, pointLight));
 	_lights.push_back(pointLight);
+
+	if (castShadow && _shadowManager != NULL)
+	{
+		_shadowManager->addPointLight(pointLight);
+	}
+
 	++_numLights;
 
 	return true;
