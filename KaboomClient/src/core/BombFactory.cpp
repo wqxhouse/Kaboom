@@ -23,6 +23,7 @@ void BombFactory::loadBomb(std::string mediaPath)
 	_kaboom2_0 = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\kaboom2_0.fbx");
 	_timer = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\timeBomb.fbx");
 	_remote = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\remoteBomb.fbx");
+	_health = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\remoteBomb.fbx");
 }
 
 Entity *BombFactory::createBomb(
@@ -34,27 +35,34 @@ Entity *BombFactory::createBomb(
 
     //createBase(entity, position, rotation);
 
+	entity->attachComponent(new PositionComponent(position));
+	entity->attachComponent(new RotationComponent(rotation));
+
     switch (type) {
         case KABOOM_V2: {
-			createKaboomV2(entity, position, rotation);
+			createKaboomV2(entity);
             break;
         }
         case TIME_BOMB: {
-			createTimeBomb(entity, position, rotation);
+			createTimeBomb(entity);
             break;
         }
         case REMOTE_DETONATOR: {
-			createRemoteDetonator(entity, position, rotation);
+			createRemoteDetonator(entity);
             break;
         }
+		case HEALTH_PACK:{
+			createHealthPack(entity);
+		}
+		default:{
+			createBase(entity);
+		}
     }
 
     return entity;
 }
 
-void BombFactory::createBase(Entity *entity, const Vec3 &position, Quat rotation) const {
-    entity->attachComponent(new PositionComponent(position));
-    entity->attachComponent(new RotationComponent(rotation));
+void BombFactory::createBase(Entity *entity) const {
 
     auto &config = EntityConfigLookup::get(entity->getType());
 
@@ -74,9 +82,7 @@ void BombFactory::createBase(Entity *entity, const Vec3 &position, Quat rotation
     entity->attachComponent(new SceneNodeComponent(bombNode));
 }
 
-void BombFactory::createKaboomV2(Entity *entity, const Vec3 &position, Quat rotation) const {
-	entity->attachComponent(new PositionComponent(position));
-	entity->attachComponent(new RotationComponent(rotation));
+void BombFactory::createKaboomV2(Entity *entity) const {
 
 	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
 	transformation->addChild(_kaboom2_0);
@@ -88,9 +94,7 @@ void BombFactory::createKaboomV2(Entity *entity, const Vec3 &position, Quat rota
 	entity->attachComponent(new SceneNodeComponent(bombNode));
 }
 
-void BombFactory::createTimeBomb(Entity *entity, const Vec3 &position, Quat rotation) const {
-	entity->attachComponent(new PositionComponent(position));
-	entity->attachComponent(new RotationComponent(rotation));
+void BombFactory::createTimeBomb(Entity *entity) const {
 
 	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
 	transformation->addChild(_timer);
@@ -102,10 +106,20 @@ void BombFactory::createTimeBomb(Entity *entity, const Vec3 &position, Quat rota
 	entity->attachComponent(new SceneNodeComponent(bombNode));
 }
 
-void BombFactory::createRemoteDetonator(Entity *entity, const Vec3 &position, Quat rotation) const {
-	entity->attachComponent(new PositionComponent(position));
-	entity->attachComponent(new RotationComponent(rotation));
+void BombFactory::createRemoteDetonator(Entity *entity) const {
 
+	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
+	transformation->addChild(_remote);
+
+	osg::ref_ptr<osg::Group> bombNode = new osg::Group;
+
+	bombNode->addChild(transformation);
+
+	entity->attachComponent(new SceneNodeComponent(bombNode));
+}
+
+void BombFactory::createHealthPack(Entity *entity) const {
+	
 	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
 	transformation->addChild(_remote);
 

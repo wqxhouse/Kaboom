@@ -25,7 +25,15 @@
             <radius type="float">0.5</radius>
             <position type="vector3">-31.0 0.0 8.0</position>
         </spawn-point>
-
+        <spawn-point>
+            <object-type type="string">Pickup</object-type>
+            <id type="uint">131076</id>
+            <!-- HeathPack: Amount is healing amount -->
+            <amount type="int">50</amount>
+            <duration type="int">5000</duration>
+            <radius type="float">0.5</radius>
+            <position type="vector3">5.0 5.0 1.0</position>
+        </spawn-point>
         <spawn-point>
             <object-type type="string">Player</object-type>
             <position type="vector3">2.0 22.0 1.5</position>
