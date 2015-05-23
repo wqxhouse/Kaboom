@@ -5,6 +5,7 @@
 #include <components/InventoryComponent.h>
 #include <components/PositionComponent.h>
 #include <components/WeaponPickupComponent.h>
+#include <components/HealthComponent.h>
 #include <core/Entity.h>
 
 #include "Message.h"
@@ -56,22 +57,28 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
 
         EntityType bombType = weaponPickupComp->getType();
 
-        // TODO: Detect and handle maximum number of bombs a character can hold
+		//if pick up is an health pack we want to add to health instead
+		if (bombType == HEALTH_PACK) { 
+			const int healAmount = weaponPickupComp->getAmount();
+			auto charHealthComp = closestEntity->getComponent<HealthComponent>();
+			charHealthComp->addAmount(healAmount);
 
-        const int capacity = EntityConfigLookup::get(bombType).getInt("capacity");
-        const int invAmount = invComp->getAmount(bombType);
-        const int pickupAmount = weaponPickupComp->getAmount();
+		} else {
+			// TODO: Detect and handle maximum number of bombs a character can hold
+			const int capacity = EntityConfigLookup::get(bombType).getInt("capacity");
+			const int invAmount = invComp->getAmount(bombType);
+			const int pickupAmount = weaponPickupComp->getAmount();
 
-        int amount = capacity - invAmount;
+			int amount = capacity - invAmount;
 
-        if (weaponPickupComp->getAmount() < amount) {
-            amount = weaponPickupComp->getAmount();
-        }
+			if (weaponPickupComp->getAmount() < amount) {
+				amount = weaponPickupComp->getAmount();
+			}
 
-        invComp->add(bombType, amount);
+			invComp->add(bombType, amount);
+		}
 
         Game *game = message.getGame();
-
 
         //if the pickup has a spawn component, meaning it is a pickup that respawn over time, 
         //add it to the pickupSpawnTimer maps, for requesting a respawn, later in the future

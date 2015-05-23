@@ -14,5 +14,6 @@ enum EntityType {
     KABOOM_V2 = CAT_BOMB | 1,
     TIME_BOMB = CAT_BOMB | 2,
     REMOTE_DETONATOR = CAT_BOMB | 3,
+	HEALTH_PACK = CAT_BOMB | 4,
 
 };
