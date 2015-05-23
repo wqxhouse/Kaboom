@@ -5,6 +5,7 @@
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
+#include <components/WeaponPickupComponent.h>
 #include <core/Entity.h>
 #include <core/GameMode.h>
 #include <core/Player.h>
@@ -182,10 +183,14 @@ void GameServer::sendPlayerDeathEvent(Player *player) const {
 void GameServer::sendSpawnEvent(Entity *entity) const {
     auto posComp = entity->getComponent<PositionComponent>();
     auto rotComp = entity->getComponent<RotationComponent>();
+    auto weaponPickupComp = entity->getComponent<WeaponPickupComponent>();
+
+    const bool pickup = weaponPickupComp != nullptr;
 
     SpawnEvent evt(
             entity->getId(),
             entity->getType(),
+            pickup,
             posComp->getPosition(),
             rotComp->getRotation());
     sendEvent(evt);
@@ -279,10 +284,14 @@ void GameServer::sendInitializeEvent(Player *newPlayer, const IdToPlayerMap &pla
 
         PositionComponent *posComp = entity->getComponent<PositionComponent>();
         RotationComponent *rotComp = entity->getComponent<RotationComponent>();
+        auto weaponPickupComp = entity->getComponent<WeaponPickupComponent>();
+
+        const bool pickup = weaponPickupComp != nullptr;
 
         SpawnEvent evt(
                 entity->getId(),
                 entity->getType(),
+                pickup,
                 posComp->getPosition(),
                 rotComp->getRotation());
         sendEvent(evt, newPlayer->getId());
