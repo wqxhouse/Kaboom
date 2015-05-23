@@ -123,7 +123,7 @@ void CubeMapPreFilter::setupCameras(int texWidth, const osg::Vec3 &eyePos, int &
 
 			_specularCamGroup->addChild(cam);
 		}
-		printf("Bind %d level to resolution %d\n", mipmapLevel, currTexSize);
+		// printf("Bind %d level to resolution %d\n", mipmapLevel, currTexSize);
 		currTexSize /= 2;
 	}
 
@@ -219,7 +219,7 @@ void CubeMapPreFilter::changeCubeMap(osg::TextureCubeMap *cubemap)
 
 osg::Matrix CubeMapPreFilter::calcViewMatrix(int face, const osg::Vec3 &eyePos)
 {
-	std::cout << face << std::endl;
+	// std::cout << face << std::endl;
 	static const osg::Vec3 viewDirs[6] = { 
 		osg::Vec3(1, 0, 0), 
 		osg::Vec3(-1, 0, 0), 
