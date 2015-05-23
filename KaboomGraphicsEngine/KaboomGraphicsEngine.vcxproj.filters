@@ -57,6 +57,12 @@
     <Filter Include="Header Files\Materials">
       <UniqueIdentifier>{84c3c9f8-9f4f-457b-9104-5a05ec2562c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Shadow">
+      <UniqueIdentifier>{3f322eb0-c500-4a30-becb-27e67c6c0881}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shadow">
+      <UniqueIdentifier>{498b51ce-0709-4b2e-8729-82da41450ceb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -188,6 +194,18 @@
     </ClInclude>
     <ClInclude Include="include\SAOPassCallback.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShadowManager.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShadowDepthCamera.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShadowAtlas.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShadowTile.h">
+      <Filter>Header Files\Shadow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -323,6 +341,18 @@
     <ClCompile Include="src\SAOPassCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ShadowAtlas.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowDepthCamera.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowManager.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowTile.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">
@@ -347,6 +377,9 @@
       <Filter>Media\EffectFiles</Filter>
     </Xml>
     <Xml Include="..\Media\EffectFiles\SAOPassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\ShadowDepthPassConfig.xml">
       <Filter>Media\EffectFiles</Filter>
     </Xml>
   </ItemGroup>
@@ -452,6 +485,9 @@
       <Filter>Media\Shaders</Filter>
     </None>
     <None Include="..\Media\Shaders\finalPass.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\emptyFragment.frag">
       <Filter>Media\Shaders</Filter>
     </None>
   </ItemGroup>

@@ -283,6 +283,10 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\ParticleTexture.h" />
     <ClInclude Include="include\PointLight.h" />
     <ClInclude Include="include\SAOPassCallback.h" />
+    <ClInclude Include="include\ShadowAtlas.h" />
+    <ClInclude Include="include\ShadowDepthCamera.h" />
+    <ClInclude Include="include\ShadowManager.h" />
+    <ClInclude Include="include\ShadowTile.h" />
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\SparkDrawable.h" />
     <ClInclude Include="include\SparkUpdatingHandler.h" />
@@ -330,6 +334,10 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\ParticleTexture.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\SAOPassCallback.cpp" />
+    <ClCompile Include="src\ShadowAtlas.cpp" />
+    <ClCompile Include="src\ShadowDepthCamera.cpp" />
+    <ClCompile Include="src\ShadowManager.cpp" />
+    <ClCompile Include="src\ShadowTile.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\SparkDrawable.cpp" />
     <ClCompile Include="src\SparkUpdatingHandler.cpp" />
@@ -352,6 +360,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="..\Media\EffectFiles\SAOPassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\ShadowDepthPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\template.xml" />
   </ItemGroup>
@@ -368,6 +377,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\cubemapSpecularPreFilter.frag" />
     <None Include="..\Media\Shaders\cubemapPrefilter.vert" />
     <None Include="..\Media\Shaders\defaultQuad.vert" />
+    <None Include="..\Media\Shaders\emptyFragment.frag" />
     <None Include="..\Media\Shaders\finalPass.frag" />
     <None Include="..\Media\Shaders\gbufferUtil.glsl" />
     <None Include="..\Media\Shaders\gbuffer_plain.frag" />

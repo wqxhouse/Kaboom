@@ -3,6 +3,7 @@
 
 class ShadowAtlas
 {
+public:
 	ShadowAtlas();
 
 	void createAtlas();
