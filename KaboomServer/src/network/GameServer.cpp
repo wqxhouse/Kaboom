@@ -2,6 +2,7 @@
 
 #include <components/HealthComponent.h>
 #include <components/InventoryComponent.h>
+#include <components/PlayerComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
@@ -145,6 +146,11 @@ void GameServer::sendConnectEvent(Player *player) const {
     sendEvent(evt);
 }
 
+void GameServer::sendConnectEvent(Player *player, unsigned int receiverId) const {
+    ConnectEvent evt(player->getId());
+    sendEvent(evt, receiverId);
+}
+
 void GameServer::sendDisconnectEvent(Player *player) const {
     DisconnectEvent evt(player->getId());
     sendEvent(evt);
@@ -194,6 +200,22 @@ void GameServer::sendSpawnEvent(Entity *entity) const {
             posComp->getPosition(),
             rotComp->getRotation());
     sendEvent(evt);
+}
+
+void GameServer::sendSpawnEvent(Entity *entity, unsigned int receiverId) const {
+    auto posComp = entity->getComponent<PositionComponent>();
+    auto rotComp = entity->getComponent<RotationComponent>();
+    auto weaponPickupComp = entity->getComponent<WeaponPickupComponent>();
+
+    const bool pickup = weaponPickupComp != nullptr;
+
+    SpawnEvent evt(
+            entity->getId(),
+            entity->getType(),
+            pickup,
+            posComp->getPosition(),
+            rotComp->getRotation());
+    sendEvent(evt, receiverId);
 }
 
 void GameServer::sendDestroyEvent(Entity *entity) const {
@@ -276,27 +298,31 @@ void GameServer::sendPlayerStatusEvent(Player *player) const {
     sendEvent(evt, player->getId());
 }
 
-void GameServer::sendInitializeEvent(Player *newPlayer, const IdToPlayerMap &players, const std::vector<Entity *> &entities) const {
-    for (auto entity : entities) {
-        if (entity->getId() == newPlayer->getEntity()->getId()) {
+void GameServer::sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players) const {
+    sendConnectEvent(newPlayer); // Tells everyone about the new player's player ID
+    sendAssignEvent(newPlayer); // Tells this player its player ID
+
+    // Tells the new player about everyone else's player ID
+    for (auto kv : players) {
+        const auto playerId = kv.first;
+        const auto player = kv.second;
+
+        if (playerId == newPlayer->getId()) {
             continue;
         }
 
-        PositionComponent *posComp = entity->getComponent<PositionComponent>();
-        RotationComponent *rotComp = entity->getComponent<RotationComponent>();
-        auto weaponPickupComp = entity->getComponent<WeaponPickupComponent>();
-
-        const bool pickup = weaponPickupComp != nullptr;
-
-        SpawnEvent evt(
-                entity->getId(),
-                entity->getType(),
-                pickup,
-                posComp->getPosition(),
-                rotComp->getRotation());
-        sendEvent(evt, newPlayer->getId());
+        sendConnectEvent(player, newPlayer->getId());
     }
+}
 
+void GameServer::sendNewPlayerEnterWorldEvent(
+        Player *newPlayer,
+        const IdToPlayerMap &players,
+        const std::vector<Entity *> &entities) const {
+    sendBindEvent(newPlayer); // Tells everyone about the new player's entity ID
+    sendScoreEvent(newPlayer); // Tells everyone about the new player's score
+
+    // Tells the new player about everyone else's entity ID and score
     for (auto kv : players) {
         const auto player = kv.second;
 
@@ -304,15 +330,22 @@ void GameServer::sendInitializeEvent(Player *newPlayer, const IdToPlayerMap &pla
             continue;
         }
 
-        ConnectEvent connectEvent(player->getId());
-        sendEvent(connectEvent, newPlayer->getId());
-
         BindEvent bindEvent(player->getId(), player->getEntity()->getId());
         sendEvent(bindEvent, newPlayer->getId());
 
         ScoreEvent scoreEvent(player->getId(), player->getKills(), player->getDeaths());
         sendEvent(scoreEvent, newPlayer->getId());
     }
+
+    // Tells the new player about every entity's entity ID (except itself)
+    for (auto entity : entities) {
+        if (entity->getId() != newPlayer->getEntity()->getId()) {
+            sendSpawnEvent(entity, newPlayer->getId());
+        }
+    }
+
+    // Tells the new player about the current game state
+    sendGameStatePackets(newPlayer, entities);
 }
 
 void GameServer::sendGameStatePackets(Player *player, const std::vector<Entity *> &entities) const {

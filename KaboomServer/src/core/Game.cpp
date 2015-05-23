@@ -104,12 +104,12 @@ void Game::run() {
 void Game::update() {
     unsigned int newPlayerId;
     bool hasNewPlayer = server.acceptClient(newPlayerId);
+    Player *newPlayer = nullptr;
 
     if (hasNewPlayer) {
-        Player *player = new Player(newPlayerId);
-        addPlayer(player);
-        server.sendConnectEvent(player);
-        server.sendAssignEvent(player);
+        newPlayer = new Player(newPlayerId);
+        addPlayer(newPlayer);
+        server.sendNewPlayerEvent(newPlayer, players);
     }
 
     switch (gameMode.getMatchState()) {
@@ -127,37 +127,28 @@ void Game::update() {
                     jumpPadSpawnPointList.push_back(name);
                 }
             }
-            break;
-        }
-        case GameMode::MatchState::PRE_MATCH: {
-            if (players.empty()) {
-                gameMode.setTimer(Timer(gameMode.getPreMatchDuration()));
-            }
 
             for (auto kv : players) {
                 const auto player = kv.second;
-
-                if (player->getEntity() == nullptr) {
-                    addPlayerToWorld(player);
+                addPlayerToWorld(player);
+                server.sendBindEvent(player);
+                server.sendScoreEvent(player);
+                for (auto entity : entityManager.getEntityList()) {
+                    if (!entity->hasComponent<PlayerComponent>()) {
+                        server.sendSpawnEvent(entity, player->getId());
+                    }
                 }
             }
-
-            server.receive(players);
-            systemManager.processSystems(this);
-            server.sendGameStatePackets(players, entityManager.getEntityList());
             break;
         }
-        case GameMode::MatchState::IN_PROGRESS: {
+        case GameMode::MatchState::PRE_MATCH:
+        case GameMode::MatchState::IN_PROGRESS:
+        case GameMode::MatchState::POST_MATCH: {
             if (hasNewPlayer) {
-                addPlayerToWorld(players.at(newPlayerId));
+                addPlayerToWorld(newPlayer);
+                server.sendNewPlayerEnterWorldEvent(newPlayer, players, entityManager.getEntityList());
             }
 
-            server.receive(players);
-            systemManager.processSystems(this);
-            server.sendGameStatePackets(players, entityManager.getEntityList());
-            break;
-        }
-        case GameMode::MatchState::POST_MATCH: {
             server.receive(players);
             systemManager.processSystems(this);
             server.sendGameStatePackets(players, entityManager.getEntityList());
@@ -174,6 +165,10 @@ void Game::update() {
             }
             break;
         }
+    }
+
+    if (gameMode.getMatchState() == GameMode::MatchState::PRE_MATCH && players.empty()) {
+        gameMode.setTimer(Timer(gameMode.getPreMatchDuration()));
     }
 
     if (gameMode.updateMatchState()) {
@@ -253,6 +248,4 @@ void Game::addPlayerToWorld(Player *player) {
     player->setDeaths(0);
 
     addEntity(entity);
-    server.sendBindEvent(player);
-    server.sendInitializeEvent(player, players, entityManager.getEntityList());
 }

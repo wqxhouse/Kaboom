@@ -27,6 +27,7 @@ public:
     // Control events
 
     void sendConnectEvent(Player *player) const;
+    void sendConnectEvent(Player *player, unsigned int receiverId) const;
     void sendDisconnectEvent(Player *player) const;
     void sendAssignEvent(Player *player) const;
     void sendBindEvent(Player *player) const;
@@ -38,6 +39,7 @@ public:
     void sendPlayerRespawnEvent(Player *player) const;
     void sendPlayerDeathEvent(Player *player) const;
     void sendSpawnEvent(Entity *entity) const;
+    void sendSpawnEvent(Entity *entity, unsigned int receiverId) const;
     void sendDestroyEvent(Entity *entity) const;
     void sendExplosionEvent(Entity *entity) const;
 
@@ -49,7 +51,11 @@ public:
     void sendAmmoEvent(Player *player) const;
 	void sendPlayerStatusEvent(Player *player) const;
 
-    void sendInitializeEvent(Player *newPlayer, const IdToPlayerMap &players, const std::vector<Entity *> &entities) const;
+    void sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players) const;
+    void sendNewPlayerEnterWorldEvent(
+            Player *newPlayer,
+            const IdToPlayerMap &players,
+            const std::vector<Entity *> &entities) const;
     void sendGameStatePackets(Player *player, const std::vector<Entity *> &entities) const;
     void sendGameStatePackets(const IdToPlayerMap &players, const std::vector<Entity *> &entities) const;
 
