@@ -50,8 +50,9 @@ Entity *BombFactory::createBomb(
 			createRemoteDetonator(entity, position, rotation);
             break;
         }
-		case HEALTH_PACK:{ //TODO: REMOVE THIS CASE ONCE WE SWITCH OVER TO PICKUP FACTORY
-			createRemoteDetonator(entity, position, rotation);
+		default:{
+			createBase(entity, position, rotation);
+			break;
 		}
     }
 

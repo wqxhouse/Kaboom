@@ -74,6 +74,7 @@ Game::Game(ConfigSettings *config)
 	
 	//loading the bomb asset.
 	bombFactory.loadBomb(str_mediaPath);
+	pickupFactory.loadPickup(str_mediaPath);
 
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
     Core::addEventHandler(&inputManager->getMouseEventHandler());

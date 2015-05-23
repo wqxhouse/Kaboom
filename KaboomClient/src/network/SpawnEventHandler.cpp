@@ -27,11 +27,13 @@ void SpawnEventHandler::handle(const Event &e) const {
                 evt.getType(),
                 evt.getPosition(),
                 evt.getRotation());
-    } 
-	//TODO Add a case for bomb pickup here, call PickupFactory
-
-
-	else if ((type & CAT_MASK) == CAT_BOMB) {
+    } else if (evt.isPickup()) { //If it's a pickup we want to create a pickup instead
+		entity = game->getPickupFactory().createPickup(
+			evt.getEntityId(),
+			evt.getType(),
+			evt.getPosition(),
+			evt.getRotation());
+	} else if ((type & CAT_MASK) == CAT_BOMB) {
         entity = game->getBombFactory().createBomb(
                 evt.getEntityId(),
                 evt.getType(),

@@ -53,9 +53,11 @@ Entity *PickupFactory::createPickup(
         }
 		case HEALTH_PACK:{
 			createHealthPackPickup(entity, position, rotation);
+			break;
 		}
 		default:{
 			createBase(entity, position, rotation);
+			break;
 		}
     }
 
