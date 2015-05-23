@@ -178,6 +178,12 @@
     <ClInclude Include="src\network\MatchStateEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\PlayerDeathEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerRespawnEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
