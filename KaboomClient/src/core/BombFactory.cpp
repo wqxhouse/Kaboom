@@ -20,9 +20,9 @@ BombFactory::BombFactory(EntityManager &entityManager)
 
 void BombFactory::loadBomb(std::string mediaPath)
 {
-	_kaboom2_0 = osgDB::readNodeFile( mediaPath + "Assets\\GeometryObject\\kaboom2_0.fbx");
-	_timer = osgDB::readNodeFile( mediaPath + "Assets\\GeometryObject\\timeBomb.fbx");
-	_remote = osgDB::readNodeFile( mediaPath + "Assets\\GeometryObject\\remoteBomb.fbx");
+	_kaboom2_0 = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\kaboom2_0.fbx");
+	_timer = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\timeBomb.fbx");
+	_remote = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\remoteBomb.fbx");
 }
 
 Entity *BombFactory::createBomb(
