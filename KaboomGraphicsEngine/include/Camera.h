@@ -54,6 +54,11 @@ public:
 		return _up;
 	}
 
+	inline const osg::Vec3 &getFront() const
+	{
+		return _front;
+	}
+
 	inline float getFovY() const
 	{
 		return _fovy;
