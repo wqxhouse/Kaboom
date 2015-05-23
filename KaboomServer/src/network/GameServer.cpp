@@ -20,7 +20,9 @@
 #include <network/HealthEvent.h>
 #include <network/MatchStateEvent.h>
 #include <network/NetworkData.h>
+#include <network/PlayerDeathEvent.h>
 #include <network/PlayerInputEvent.h>
+#include <network/PlayerRespawnEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/ReloadRequestEvent.h>
@@ -164,6 +166,16 @@ void GameServer::sendMatchStateEvent(const GameMode &gameMode) const {
 
 void GameServer::sendScoreEvent(Player *player) const {
     ScoreEvent evt(player->getId(), player->getKills(), player->getDeaths());
+    sendEvent(evt);
+}
+
+void GameServer::sendPlayerRespawnEvent(Player *player) const {
+    PlayerRespawnEvent evt;
+    sendEvent(evt);
+}
+
+void GameServer::sendPlayerDeathEvent(Player *player) const {
+    PlayerDeathEvent evt;
     sendEvent(evt);
 }
 
