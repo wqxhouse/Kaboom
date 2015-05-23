@@ -22,10 +22,10 @@ void ShadowAtlas::createAtlas()
 
 	_tileCount = _size / _tileSize;
 	_tiles.resize(_tileCount);
-	_tiles[0].resize(_tileCount);
 
 	for (int i = 0; i < _tileCount; ++i)
 	{
+		_tiles[i].resize(_tileCount);
 		for (int j = 0; j < _tileCount; ++j)
 		{
 			_tiles[i][j] = -1;
@@ -120,8 +120,8 @@ osg::Vec2 ShadowAtlas::createTile(int id, int width, int height)
 		_freeTiles -= width * height;
 
 		return osg::Vec2(
-			tilePos.x / _tileCount,
-			tilePos.y / _tileCount);
+			tilePos.x() / _tileCount,
+			tilePos.y() / _tileCount);
 	}
 
 	else
