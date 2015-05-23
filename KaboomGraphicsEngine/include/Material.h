@@ -178,6 +178,16 @@ public:
 		_normalMapLerp = alpha;
 	}
 
+	inline float getEmissiveMapLerp(float alpha)
+	{
+		return _emissiveMapLerp;
+	}
+
+	inline void setEmissiveMapLerp(float alpha)
+	{
+		_emissiveMapLerp = alpha;
+	}
+
 	inline void setTextureOffset(const osg::Vec2 &offset)
 	{
 		_textureOffset = offset;
@@ -247,11 +257,13 @@ private:
 	std::string _metallicMapPath;
 	std::string _albedoMapPath;
 	std::string _normalMapPath;
+	std::string _emissiveMapPath;
 
 	float _albedoTexLerp;
 	float _roughnessTexLerp;
 	float _metallicTexLerp;
 	float _normalMapLerp;
+	float _emissiveMapLerp; // only apply to emissive map
 
 	osg::Vec2 _textureOffset;
 	bool _materialUpdateEnabled;
