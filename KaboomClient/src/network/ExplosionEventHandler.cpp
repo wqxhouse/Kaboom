@@ -73,7 +73,10 @@ void ExplosionEventHandler::handle(const Event &e) const {
 		// TODO: can add some randomness by applying a random quat
 		// explosionEffect->setExplosionRadius(2);
 		osg::Vec3 bombPosVec = bombPos.getOsgVec3();
-		explosionEffect->run(bombPos.getOsgVec3());
+		osg::Matrix mm;
+		mm.makeRotate(1.57, osg::Vec3(0, 1, 0));
+		osg::Quat qq = mm.getRotate();
+		explosionEffect->run(bombPos.getOsgVec3(), qq);
 	}
 	catch (Error e) {
 		std::cerr << e << "\n";
