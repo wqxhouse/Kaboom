@@ -61,6 +61,8 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	configPasses();
 	configViewer();
 
+	_world.getLightManager()->initShadowManager(_passes, _world.getGeometryManager()->getRootNode());
+
 	// need to config after config viewer
 	configParticlePass();
 

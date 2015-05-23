@@ -2,6 +2,13 @@
 #include <vector>
 #include <unordered_map>
 #include <osg/Vec3>
+#include <osg/Group>
+#include "ShadowManager.h"
+
+namespace osgFX
+{
+	class EffectCompositor;
+}
 
 class LightVisualizer;
 class Light;
@@ -10,6 +17,8 @@ class LightManager
 public:
 	LightManager();
 	~LightManager();
+
+	void initShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRoot);
 	
 	bool addDirectionalLight(const std::string &name,
 		const osg::Vec3 &dirToWorld,
@@ -49,5 +58,6 @@ private:
 	int _numLights;
 
 	LightVisualizer *_visualizer;
+	ShadowManager *_shadowManager;
 };
 
