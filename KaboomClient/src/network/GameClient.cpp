@@ -10,7 +10,9 @@
 #include <network/EquipEvent.h>
 #include <network/ExplosionEvent.h>
 #include <network/MatchStateEvent.h>
+#include <network/PlayerDeathEvent.h>
 #include <network/PlayerInputEvent.h>
+#include <network/PlayerRespawnEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/ReloadRequestEvent.h>
@@ -92,6 +94,18 @@ void GameClient::receive() {
             }
             case EVENT_SCORE: {
                 ScoreEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
+                break;
+            }
+            case EVENT_PLAYER_RESPAWN: {
+                PlayerRespawnEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
+                break;
+            }
+            case EVENT_PLAYER_DEATH: {
+                PlayerDeathEvent evt;
                 evt.deserialize(&networkData[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
