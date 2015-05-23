@@ -214,7 +214,9 @@
     <ClInclude Include="src\network\HealthEvent.h" />
     <ClInclude Include="src\network\MatchStateEvent.h" />
     <ClInclude Include="src\network\NetworkData.h" />
+    <ClInclude Include="src\network\PlayerDeathEvent.h" />
     <ClInclude Include="src\network\PlayerInputEvent.h" />
+    <ClInclude Include="src\network\PlayerRespawnEvent.h" />
     <ClInclude Include="src\network\PlayerStatusEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
     <ClInclude Include="src\network\ReloadRequestEvent.h" />

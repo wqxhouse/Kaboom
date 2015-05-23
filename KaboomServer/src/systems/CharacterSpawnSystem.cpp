@@ -1,5 +1,6 @@
 #include "CharacterSpawnSystem.h"
 
+#include <components/PlayerComponent.h>
 #include <components/PlayerStatusComponent.h>
 
 #include "../components/DestroyComponent.h"
@@ -25,6 +26,12 @@ void CharacterSpawnSystem::processEntity(Entity *entity) {
 
     if (playerStatusComp->getIsAlive()) {
         return;
+    }
+
+    auto playerComp = entity->getComponent<PlayerComponent>();
+
+    if (playerComp != nullptr) {
+        game->getGameServer().sendPlayerRespawnEvent(playerComp->getPlayer());
     }
 
     Vec3 spawnPoint = game->getPlayerSpawnPoint();

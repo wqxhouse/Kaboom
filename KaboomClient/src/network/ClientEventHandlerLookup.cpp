@@ -9,6 +9,8 @@
 #include "ExplosionEventHandler.h"
 #include "HealthEventHandler.h"
 #include "MatchStateEventHandler.h"
+#include "PlayerDeathEventHandler.h"
+#include "PlayerRespawnEventHandler.h"
 #include "PlayerStatusEventHandler.h"
 #include "PositionEventHandler.h"
 #include "RotationEventHandler.h"
@@ -23,6 +25,8 @@ ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
     addHandler(EVENT_BIND, new BindEventHandler(game));
     addHandler(EVENT_MATCH_STATE, new MatchStateEventHandler(game));
     addHandler(EVENT_SCORE, new ScoreEventHandler(game));
+    addHandler(EVENT_PLAYER_RESPAWN, new PlayerRespawnEventHandler(game));
+    addHandler(EVENT_PLAYER_DEATH, new PlayerDeathEventHandler(game));
     addHandler(EVENT_SPAWN, new SpawnEventHandler(game));
     addHandler(EVENT_DESTROY, new DestroyEventHandler(game));
     addHandler(EVENT_POSITION, new PositionEventHandler(game));
