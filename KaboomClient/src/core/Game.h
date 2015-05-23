@@ -12,6 +12,8 @@
 #include "CharacterFactory.h"
 #include "BombFactory.h"
 #include "JumpPadFactory.h"
+#include "PickupFactory.h"
+
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 #include "../gui/GameGUIEventHandler.h"
@@ -56,6 +58,7 @@ public:
     const CharacterFactory &getCharacterFactory() const;
     const BombFactory &getBombFactory() const;
 	const JumpPadFactory &getJumpPadFactory() const;
+	const PickupFactory &getPickupFactory() const;
 
     const GameClient &getGameClient() const;
 
@@ -99,6 +102,7 @@ private:
     CharacterFactory characterFactory;
 	BombFactory bombFactory;
 	JumpPadFactory jumpPadFactory;
+	PickupFactory pickupFactory;
 
     ClientEventHandlerLookup eventHandlerLookup;
     GameClient client;
