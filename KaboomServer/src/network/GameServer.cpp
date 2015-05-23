@@ -299,8 +299,19 @@ void GameServer::sendInitializeEvent(Player *newPlayer, const IdToPlayerMap &pla
 
     for (auto kv : players) {
         const auto player = kv.second;
-        ScoreEvent evt(player->getId(), player->getKills(), player->getDeaths());
-        sendEvent(evt, newPlayer->getId());
+
+        if (player->getId() == newPlayer->getId()) {
+            continue;
+        }
+
+        ConnectEvent connectEvent(player->getId());
+        sendEvent(connectEvent, newPlayer->getId());
+
+        BindEvent bindEvent(player->getId(), player->getEntity()->getId());
+        sendEvent(bindEvent, newPlayer->getId());
+
+        ScoreEvent scoreEvent(player->getId(), player->getKills(), player->getDeaths());
+        sendEvent(scoreEvent, newPlayer->getId());
     }
 }
 
