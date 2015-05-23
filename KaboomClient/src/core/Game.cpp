@@ -23,6 +23,7 @@ Game::Game(ConfigSettings *config)
           characterFactory(entityManager),
           bombFactory(entityManager),
 		  jumpPadFactory(entityManager),
+		  pickupFactory(entityManager),
           eventHandlerLookup(this),
           client(eventHandlerLookup), 
 	      _camera(Core::getMainCamera()) {
@@ -242,6 +243,10 @@ const BombFactory &Game::getBombFactory() const {
 
 const JumpPadFactory &Game::getJumpPadFactory() const {
 	return jumpPadFactory;
+}
+
+const PickupFactory &Game::getPickupFactory() const {
+	return pickupFactory;
 }
 
 const GameClient &Game::getGameClient() const {

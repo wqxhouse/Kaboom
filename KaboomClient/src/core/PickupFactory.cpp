@@ -1,4 +1,4 @@
-#include "BombFactory.h"
+#include "PickupFactory.h"
 
 #include <osg/Geode>
 #include <osg/MatrixTransform>
@@ -13,19 +13,20 @@
 #include "EntityConfigLookup.h"
 #include "../components/SceneNodeComponent.h"
 
-BombFactory::BombFactory(EntityManager &entityManager)
+PickupFactory::PickupFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 
 }
 
-void BombFactory::loadBomb(std::string mediaPath)
+void PickupFactory::loadPickup(std::string mediaPath)
 {
-	_kaboom2_0 = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\kaboom2_0.fbx");
-	_timer = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\timeBomb.fbx");
-	_remote = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\remoteBomb.fbx");
+	_kaboom2_0_ammo = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\kaboom2_0.fbx");
+	_timer_ammo = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\timeBomb.fbx");
+	_remote_ammo = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\remoteBomb.fbx");
+	_health_pack = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\remoteBomb.fbx"); //don't have a model for healthpack right now, just load one of the model
 }
 
-Entity *BombFactory::createBomb(
+Entity *PickupFactory::createPickup(
         unsigned int id,
         EntityType type,
         const Vec3 &position,
@@ -39,26 +40,29 @@ Entity *BombFactory::createBomb(
 
     switch (type) {
         case KABOOM_V2: {
-			createKaboomV2(entity, position, rotation);
+			createKaboomV2Pickup(entity, position, rotation);
             break;
         }
         case TIME_BOMB: {
-			createTimeBomb(entity, position, rotation);
+			createTimeBombPickup(entity, position, rotation);
             break;
         }
         case REMOTE_DETONATOR: {
-			createRemoteDetonator(entity, position, rotation);
+			createRemoteDetonatorPickup(entity, position, rotation);
             break;
         }
-		case HEALTH_PACK:{ //TODO: REMOVE THIS CASE ONCE WE SWITCH OVER TO PICKUP FACTORY
-			createRemoteDetonator(entity, position, rotation);
+		case HEALTH_PACK:{
+			createHealthPackPickup(entity, position, rotation);
+		}
+		default:{
+			createBase(entity, position, rotation);
 		}
     }
 
     return entity;
 }
 
-void BombFactory::createBase(Entity *entity, const Vec3 &position, Quat rotation) const {
+void PickupFactory::createBase(Entity *entity, const Vec3 &position, Quat rotation) const {
 
     auto &config = EntityConfigLookup::get(entity->getType());
 
@@ -78,10 +82,10 @@ void BombFactory::createBase(Entity *entity, const Vec3 &position, Quat rotation
     entity->attachComponent(new SceneNodeComponent(bombNode));
 }
 
-void BombFactory::createKaboomV2(Entity *entity, const Vec3 &position, Quat rotation) const {
+void PickupFactory::createKaboomV2Pickup(Entity *entity, const Vec3 &position, Quat rotation) const {
 
 	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
-	transformation->addChild(_kaboom2_0);
+	transformation->addChild(_kaboom2_0_ammo);
 
 	osg::ref_ptr<osg::Group> bombNode = new osg::Group;
 
@@ -90,10 +94,10 @@ void BombFactory::createKaboomV2(Entity *entity, const Vec3 &position, Quat rota
 	entity->attachComponent(new SceneNodeComponent(bombNode));
 }
 
-void BombFactory::createTimeBomb(Entity *entity, const Vec3 &position, Quat rotation) const {
+void PickupFactory::createTimeBombPickup(Entity *entity, const Vec3 &position, Quat rotation) const {
 
 	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
-	transformation->addChild(_timer);
+	transformation->addChild(_timer_ammo);
 
 	osg::ref_ptr<osg::Group> bombNode = new osg::Group;
 
@@ -102,10 +106,22 @@ void BombFactory::createTimeBomb(Entity *entity, const Vec3 &position, Quat rota
 	entity->attachComponent(new SceneNodeComponent(bombNode));
 }
 
-void BombFactory::createRemoteDetonator(Entity *entity, const Vec3 &position, Quat rotation) const {
+void PickupFactory::createRemoteDetonatorPickup(Entity *entity, const Vec3 &position, Quat rotation) const {
 
 	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
-	transformation->addChild(_remote);
+	transformation->addChild(_remote_ammo);
+
+	osg::ref_ptr<osg::Group> bombNode = new osg::Group;
+
+	bombNode->addChild(transformation);
+
+	entity->attachComponent(new SceneNodeComponent(bombNode));
+}
+
+void PickupFactory::createHealthPackPickup(Entity *entity, const Vec3 &position, Quat rotation) const {
+	
+	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
+	transformation->addChild(_health_pack);
 
 	osg::ref_ptr<osg::Group> bombNode = new osg::Group;
 

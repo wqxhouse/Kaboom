@@ -258,6 +258,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\JumpPadFactory.cpp" />
+    <ClCompile Include="src\core\PickupFactory.cpp" />
     <ClCompile Include="src\core\SoundManager.cpp" />
     <ClCompile Include="src\gui\GameGUI.cpp" />
     <ClCompile Include="src\gui\GameGUIEventHandler.cpp" />
@@ -303,6 +304,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\Core\GameStateMachine.h" />
     <ClInclude Include="src\core\JumpPadFactory.h" />
+    <ClInclude Include="src\core\PickupFactory.h" />
     <ClInclude Include="src\core\SoundManager.h" />
     <ClInclude Include="src\gui\GameGUI.h" />
     <ClInclude Include="src\gui\GameGUIEventHandler.h" />
