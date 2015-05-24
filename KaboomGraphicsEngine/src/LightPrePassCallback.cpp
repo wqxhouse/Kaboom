@@ -96,7 +96,9 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		(*array)[uboIndex + 0] = (float)position.x();
 		(*array)[uboIndex + 1] = (float)position.y();
 		(*array)[uboIndex + 2] = (float)position.z();
-		// padding 3
+		// radius 
+		(*array)[uboIndex + 3] = radius;
+
 		(*array)[uboIndex + 4] = (float)color.x();
 		(*array)[uboIndex + 5] = (float)color.y();
 		(*array)[uboIndex + 6] = (float)color.z();
@@ -104,8 +106,8 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		(*array)[uboIndex + 8] = (float)dirFromLight.x();
 		(*array)[uboIndex + 9] = (float)dirFromLight.y();
 		(*array)[uboIndex + 10] = (float)dirFromLight.z();
-
-		(*array)[uboIndex + 11] = radius;
+		// padding 11
+		// (*array)[uboIndex + 11] = radius;
 
 		uboIndex += 12; // for the next light
 	}

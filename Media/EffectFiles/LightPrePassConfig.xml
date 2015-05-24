@@ -65,15 +65,13 @@
   <uniform_buffer name="u_lightsBuffer" data_variance="dynamic" size="128">
     <!--position-->
     <value type="vec3">1.0 1.0 1.0</value>
-    <!--padding-->
-    <value type="float">0.0</value>
+    <!--radius-->
+    <value type="float">1.0</value>
     <!--color-->
     <value type="vec3">1.0 1.0 1.0</value>
     <!--padding-->
     <value type="float">0.0</value>
     <!--dirFromLight-->
     <value type="vec3">1.0 1.0 1.0</value>
-    <!--radius-->
-    <value type="float">1.0</value>
   </uniform_buffer>
 </compositor>
