@@ -28,6 +28,10 @@ uniform int u_arrayPointLight[MAX_POINT_LIGHTS];
 uniform int u_countDirectionalLight;
 uniform int u_arrayDirectionalLight[MAX_DIRECTIONAL_LIGHTS];
 
+uniform int u_countShadowPointLight;
+uniform int u_arrayShadowPointLight[MAX_POINT_SHADOW_LIGHTS];
+
+
 //void debugFill(vec3 color)
 //{
 //	for(int i = 0; i < int(u_destSize.x); i++)
@@ -140,7 +144,7 @@ void main()
 
     // Init counters
     int processedPointLights = 0;
-    //int processedShadowPointLights = 0;
+    int processedShadowPointLights = 0;
     int processedDirectionalLights = 0;
     //int processedShadowDirectionalLights = 0;
 
@@ -177,7 +181,7 @@ void main()
         // First 8 pixels store count
         // Second/Third line stores point lights
         // Fourth/Fifth line stores shadow point lights
-        // Sixt stores directional lights
+        // Sixth stores directional lights
         // Seventh stores directional shadowed lights
         // Eight is free (yet)
 
@@ -199,18 +203,18 @@ void main()
         }
 
         // Process shadowed point lights
-        //baseOffset = storageCoord + ivec2(0,3);
-        //currentOffset = ivec2(0);
+        baseOffset = storageCoord + ivec2(0,3);
+        currentOffset = ivec2(0);
 
-        //for (int i = 0; i < countPointLightShadow; i++) {
-        //    int index = arrayPointLightShadow[i];
-        //    Light light = lights[index];
-        //    if (isPointLightInFrustum(light, frustum)) {
-        //        currentOffset = ivec2(processedShadowPointLights % 8, processedShadowPointLights / 8);
-        //        imageStore(destination, baseOffset + currentOffset, ivec4(index));
-        //        processedShadowPointLights += 1;
-        //    }
-        //}
+        for (int i = 0; i < u_countShadowPointLight; i++) {
+            int index = u_arrayShadowPointLight[i];
+            Light light = lights[index];
+            if (isPointLightInFrustumDebug(light, fd)) {
+                currentOffset = ivec2(processedShadowPointLights % 8, processedShadowPointLights / 8);
+                imageStore(o_destination, baseOffset + currentOffset, ivec4(index));
+                processedShadowPointLights += 1;
+            }
+        }
 
         // Process directional lights
         baseOffset = storageCoord + ivec2(0,5);
@@ -225,7 +229,6 @@ void main()
             imageStore(o_destination, baseOffset + currentOffset, ivec4(index));
             processedDirectionalLights += 1;
         }
-
 
         // Process shadowed directional lights
         //baseOffset = storageCoord + ivec2(0,6);
@@ -243,7 +246,7 @@ void main()
 	//gl_FragColor = vec4(minDepth);
 
     imageStore(o_destination, storageCoord + ivec2(0, 0), ivec4(processedPointLights));
-//    imageStore(o_destination, storageCoord + ivec2(1, 0), ivec4(processedShadowPointLights));
+    imageStore(o_destination, storageCoord + ivec2(1, 0), ivec4(processedShadowPointLights));
     imageStore(o_destination, storageCoord + ivec2(2, 0), ivec4(processedDirectionalLights));
 //    imageStore(o_destination, storageCoord + ivec2(3, 0), ivec4(processedDirectionalShadowLights));
 }

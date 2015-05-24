@@ -40,17 +40,28 @@
   <uniform name="u_countDirectionalLight" type="int">
     <value>0</value>
   </uniform>
+  
+  <uniform name="u_countShadowDirectionalLight" type="int">
+    <value>0</value>
+  </uniform>
 
+  <uniform name="u_countShadowPointLight" type="int">
+    <value>0</value>
+  </uniform>
+  
   <!--<uniform name="u_viewMat" type="mat4"></uniform>
   <uniform name="u_projMat" type="mat4"></uniform>
   <uniform name="u_viewProjMat" type="mat4"></uniform>-->
   <uniform name="u_projMat" type="mat4"></uniform>
   
-  <uniform name="u_arrayDirectionalLight" type="int" size="1" isArray="1"/>
+  <uniform name="u_arrayDirectionalLight" type="int" size="1" isArray="1" />
+  <uniform name="u_arrayShadowDirectionalLight"  type="int" size="1" isArray="1" />
+  
   <!--<uniform name="u_arrayPointLight" type="int" size="512" isArray="1" />-->
   <uniform name="u_arrayPointLight" type="int" size="256" isArray="1" />
+  <uniform name="u_arrayShadowPointLight" type="int" size="6" isArray="1" />
   
-  <!-- Currently set visible light maximum to 256 -->
+  <!-- Currently set visible light maximum to 128 -->
   <uniform_buffer name="u_lightsBuffer" data_variance="dynamic" size="128">
     <!--position-->
     <value type="vec3">1.0 1.0 1.0</value>

@@ -38,6 +38,8 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	
 	std::vector<int> dirLightIds;
 	std::vector<int> pointLightIds;
+	std::vector<int> dirShadowLightIds;
+	std::vector<int> pointShadowLightIds;
 
 	int uboIndex = 0;
 
@@ -65,14 +67,28 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 			dirFromLight.y() = dir.y();
 			dirFromLight.z() = dir.z();
 
-			dirLightIds.push_back(i);
+			if (l->getCastShadow())
+			{
+				dirShadowLightIds.push_back(i);
+			}
+			else
+			{
+				dirLightIds.push_back(i);
+			}
 		}
 		else if (l->getLightType() == POINTLIGHT)
 		{
 			PointLight *ptLight = l->asPointLight();
 			radius = ptLight->getRadius();
 
-			pointLightIds.push_back(i);
+			if (l->getCastShadow())
+			{
+				pointShadowLightIds.push_back(i);
+			}
+			else
+			{
+				pointLightIds.push_back(i);
+			}
 		}
 
 		// TODO: think a way to do lazy updating 
@@ -99,7 +115,9 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 
 	// set uniforms
 	ss->getUniform("u_countDirectionalLight")->set((int)dirLightIds.size());
+	// ss->getUniform("u_countShadowDirectionalLight")->set((int)dirShadowLightIds.size());
 	ss->getUniform("u_countPointLight")->set((int)pointLightIds.size());
+	ss->getUniform("u_countShadowPointLight")->set((int)pointShadowLightIds.size());
 
 	// set dirLight array
 	osg::Uniform *dirArray = ss->getUniform("u_arrayDirectionalLight");
@@ -112,6 +130,12 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	for (int i = 0; i < pointLightIds.size(); i++)
 	{
 		pointArray->setElement(i, pointLightIds[i]);
+	}
+
+	osg::Uniform *pointShadowArray = ss->getUniform("u_arrayShadowPointLight");
+	for (int i = 0; i < pointShadowLightIds.size(); i++)
+	{
+		pointShadowArray->setElement(i, pointShadowLightIds[i]);
 	}
 
 	// update projMat 
