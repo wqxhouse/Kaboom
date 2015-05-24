@@ -40,6 +40,7 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	std::vector<int> pointLightIds;
 	std::vector<int> dirShadowLightIds;
 	std::vector<int> pointShadowLightIds;
+	std::vector<int> shadowMapIndex(6);
 
 	int uboIndex = 0;
 
@@ -84,6 +85,11 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 			if (l->getCastShadow())
 			{
 				pointShadowLightIds.push_back(i);
+				for (int i = 0; i < 6; i++)
+				{
+					shadowMapIndex[i] = ptLight->getShadowMapIndex(i);
+					// shadowMapIndex[i] = i;
+				}
 			}
 			else
 			{
@@ -107,9 +113,26 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		(*array)[uboIndex + 9] = (float)dirFromLight.y();
 		(*array)[uboIndex + 10] = (float)dirFromLight.z();
 		// padding 11
-		// (*array)[uboIndex + 11] = radius;
 
-		uboIndex += 12; // for the next light
+		// for int array, save int bit pattern in float array
+		(*array)[uboIndex + 12] = *(float *)&shadowMapIndex[0]; 
+		(*array)[uboIndex + 16] = *(float *)&shadowMapIndex[1]; 
+		(*array)[uboIndex + 20] = *(float *)&shadowMapIndex[2]; 
+		(*array)[uboIndex + 24] = *(float *)&shadowMapIndex[3]; 
+		(*array)[uboIndex + 28] = *(float *)&shadowMapIndex[4]; 
+		(*array)[uboIndex + 32] = *(float *)&shadowMapIndex[5]; 
+
+		// debug
+		//(*array)[uboIndex + 12] = 1.0f;
+		//(*array)[uboIndex + 16] = 2.0f;
+		//(*array)[uboIndex + 20] = 3.0f;
+		//(*array)[uboIndex + 24] = 4.0f;
+		//(*array)[uboIndex + 28] = 5.0f;
+		//(*array)[uboIndex + 32] = 6.0f;
+
+		// padding 33 - 36
+
+		uboIndex += 36; // for the next light
 	}
 
 	array->dirty();

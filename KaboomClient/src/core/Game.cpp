@@ -77,26 +77,28 @@ Game::Game(ConfigSettings *config)
 	_materialManager = Core::getWorldRef().getMaterialManager();
 	_particleEffectManager = Core::getWorldRef().getParticleEffectManager();
 
-	source = new Source;
-	
-	printf("check for sound errors\n");
-	sample = new Sample("sounds\\a.wav");
-	soundManager.addToMap(KABOOM_EXPLODE,"sounds\\a.wav");
-	source->setSound(sample.get());
-	source->setGain(1);
-	source->setLooping(false);
-	printf("Adding KABOOM_EXPLODE TO MAP\n");
-	sounds->insert(std::make_pair(KABOOM_EXPLODE,sample));
-	//sounds->at(KABOOM_EXPLODE)=sample;
-	printf("Added KABOOM_EXPLODE TO MAP\n");
-	sample = new Sample("sounds\\a.wav");
-	printf("Adding KABOOM_FIRE TO MAP\n");
-	sounds->insert(std::make_pair(KABOOM_FIRE, sample));
-	printf("Added KABOOM_FIRE TO MAP\n");
-	sample = new Sample("sounds\\a.wav");
-	printf("Adding BASIC TO MAP\n");
-	sounds->insert(std::make_pair(BASIC, sample));
-	printf("Added BASIC TO MAP\n");
+	// source = new Source;
+	//
+	//printf("check for sound errors\n");
+	//sample = new Sample("sounds\\a.wav");
+	//soundManager.addToMap(KABOOM_EXPLODE,"sounds\\a.wav");
+	//source->setSound(sample.get());
+	//source->setGain(1);
+	//source->setLooping(false);
+	//printf("Adding KABOOM_EXPLODE TO MAP\n");
+	//sounds->insert(std::make_pair(KABOOM_EXPLODE,sample));
+	////sounds->at(KABOOM_EXPLODE)=sample;
+	//printf("Added KABOOM_EXPLODE TO MAP\n");
+	//sample = new Sample("sounds\\a.wav");
+	//printf("Adding KABOOM_FIRE TO MAP\n");
+	//sounds->insert(std::make_pair(KABOOM_FIRE, sample));
+	//printf("Added KABOOM_FIRE TO MAP\n");
+	//sample = new Sample("sounds\\a.wav");
+	//printf("Adding BASIC TO MAP\n");
+	//sounds->insert(std::make_pair(BASIC, sample));
+	//printf("Added BASIC TO MAP\n");
+
+
 	/*sample = new Sample("C:\\Users\\melapier\\Downloads\\djsona.wav");
 	backgroundMusic = new Source;
 	backgroundMusic->setSound(sample.get());

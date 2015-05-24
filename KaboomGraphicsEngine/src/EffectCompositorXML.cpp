@@ -683,6 +683,16 @@ osg::Texture* EffectCompositor::createTextureFromXML(osgDB::XmlNode* xmlNode, bo
 					<< std::hex << atoi(dataType.c_str()) << std::dec << std::endl;
 			}
 		}
+		//else if (childName == "hardware_shadowmap")
+		//{
+		//	std::string enabledStr = xmlChild->getTrimmedContents();
+		//	int tf = atoi(enabledStr.c_str());
+		//	if (tf != 0)
+		//	{
+		//		texture->setShadowComparison(true);
+		//		texture->setShadowCompareFunc(osg::Texture::ShadowCompareFunc::LEQUAL);
+		//	}
+		//}
 		else if (childName == "binding")
 		{
 			std::string bindStr = xmlChild->getTrimmedContents();
@@ -761,39 +771,61 @@ osg::UniformBufferBinding* EffectCompositor::createUniformBufferFromXML(osgDB::X
 
 			if (childNode->name == "value")
 			{
-				std::stringstream ss;
-				ss << childNode->getTrimmedContents();
-				switch (dataType)
+				int times = 1;
+
+				// handle array in uniform buffer
+				if (!childNode->children.empty() && childNode->children[0]->name == "array")
 				{
-				case GL_FLOAT:
-					for (int n = 0; n < numValues; ++n)
+					osgDB::XmlNode *arrayChild = childNode->children[0].get();
+					int elemNum = atoi(arrayChild->getTrimmedContents().c_str());
+					if (elemNum > 1)
 					{
-						float v = 0.0f; ss >> v;
-						buffer->push_back(v);
+						times = elemNum;
 					}
-					break;
-				case GL_DOUBLE:
-					OSG_WARN << "Not implemented double for UBO" << std::endl;
-					break;
-				case GL_INT:
-					for (int n = 0; n < numValues; ++n)
+					else
 					{
-						int v = 0; ss >> v;
-						float vBit = *(float *)&v;
-						buffer->push_back(vBit);
+						OSG_WARN << "EffectCompositor: <array> content invalid" << std::endl;
 					}
-					break;
-				case GL_UNSIGNED_INT:
-					for (int n = 0; n < numValues; ++n)
+				}
+				
+				// times = 1 when no array
+				for (int i = 0; i < times; i++)
+				{
+					std::stringstream ss;
+					ss << childNode->getTrimmedContents();
+					switch (dataType)
 					{
-						unsigned int v = 0; ss >> v;
-						float vBit = *(float *)&v;
-						buffer->push_back(vBit);
+					case GL_FLOAT:
+						for (int n = 0; n < numValues; ++n)
+						{
+							float v = 0.0f; ss >> v;
+							buffer->push_back(v);
+						}
+						break;
+					case GL_DOUBLE:
+						OSG_WARN << "Not implemented double for UBO" << std::endl;
+						break;
+					case GL_INT:
+						for (int n = 0; n < numValues; ++n)
+						{
+							int v = 0; ss >> v;
+							float vBit = *(float *)&v;
+							buffer->push_back(vBit);
+						}
+						break;
+					case GL_UNSIGNED_INT:
+						for (int n = 0; n < numValues; ++n)
+						{
+							unsigned int v = 0; ss >> v;
+							float vBit = *(float *)&v;
+							buffer->push_back(vBit);
+						}
+						break;
+					default:
+						OSG_NOTICE << "EffectCompositor: <uniform> " << name 
+							<< " doesn't have a recognizable value type: " << typeString << std::endl;
+						break;
 					}
-					break;
-				default:
-					OSG_NOTICE << "EffectCompositor: <uniform> " << name << " doesn't have a recognizable value type: " << typeString << std::endl;
-					break;
 				}
 			}
 		}
