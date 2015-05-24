@@ -1,9 +1,11 @@
 struct Light 
 {
-    vec3 position;
-    float radius;
-    vec3 color;
-    vec3 dirFromLight;
+    vec3 position;  
+	float radius;
+    vec3 color;	    
+    vec3 dirFromLight;  
+	float padding;
+	int shadowMapIndex[6]; // std140 made this 16 * 6 bytes instead of 4 * 6 bytes, which sucks
 };
 
 vec3 computeSpecular(vec3 specularColor, float roughness, float NxL, float LxH, float NxV, float NxH) 
