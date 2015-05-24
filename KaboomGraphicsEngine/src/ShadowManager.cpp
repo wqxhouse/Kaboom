@@ -5,12 +5,12 @@
 #include "ShadowDepthCamera.h"
 
 #define MAX_SHADOW_MAPS 60
+#define SHADOW_ATLAS_RESOLUTION 4096
 ShadowManager::ShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRoot)
 	: _passes(passes), _geomRoot(geomRoot)
 {
 	_atlas = new ShadowAtlas();
-	_atlas->setSize(4096);
-	_atlas->createAtlas();
+	_atlas->createAtlas(SHADOW_ATLAS_RESOLUTION);
 
 	_depthCameras.resize(MAX_SHADOW_MAPS);
 	for (int i = 0; i < MAX_SHADOW_MAPS; i++)
@@ -91,8 +91,8 @@ void ShadowManager::addPointLight(PointLight *light)
 			return;
 		}
 
-		ShadowDepthCamera *depthCam = new ShadowDepthCamera(_depthAtlasTex.get(), light, i);
-		depthCam->setResolution(resolution, resolution);
+		ShadowDepthCamera *depthCam = new ShadowDepthCamera(_depthAtlasTex.get(), _atlas,light, i);
+		// depthCam->setResolution(resolution, resolution);
 		light->setShadowMapIndex(i, slot);
 	}
 }

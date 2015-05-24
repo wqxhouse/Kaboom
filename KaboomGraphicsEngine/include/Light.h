@@ -92,7 +92,8 @@ public:
 	struct ShadowMapInfo
 	{
 		int _shadowMapIndex;
-		osg::Vec2 atlasPos;
+		osg::Vec2i _atlasPos;
+		bool _hasAtlasPos;
 	};
 
 protected:

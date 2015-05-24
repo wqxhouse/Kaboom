@@ -6,8 +6,7 @@ class ShadowAtlas
 public:
 	ShadowAtlas();
 
-	void createAtlas();
-	void setSize(int size);
+	void createAtlas(int sizej);
 	inline int getSize()
 	{
 		return _size;
@@ -29,7 +28,7 @@ public:
 	}
 
 	void removeTile(int id);
-	osg::Vec2 createTile(int id, int width, int height);
+	osg::Vec2i createTile(int id, int width, int height);
 
 
 private:

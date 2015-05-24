@@ -6,15 +6,15 @@ class Light;
 class PointLight;
 class DirectionalLight;
 class ShadowDepthCameraCallback;
+class ShadowAtlas;
 class ShadowDepthCamera
 {
 public:
-	ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, Light *light, int face=-1);
-	void setRegion(float l, float r, float b, float t);
+	ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas *atlas, Light *light, int face = -1);
 	void setActive(bool tf);
-	void setResolution(int width, int height);
 
 private:
+
 	void createSharedQuad();
 	osg::Matrix getCurrWVPById(int id);
 
@@ -23,11 +23,10 @@ private:
 
 	int _id;
 	int _face; // for point light depth cube face
-	int _resWidth;
-	int _resHeight;
 
 	Light *_light;
 	std::vector<osg::ref_ptr<ShadowDepthCameraCallback> >  _updateCallback;
+	ShadowAtlas *_atlas;
 
 	static osg::ref_ptr<osg::Geode> _quadGeode;
 	static int _highest_id;
@@ -36,7 +35,7 @@ private:
 class ShadowDepthCameraCallback : public osg::NodeCallback
 {
 public:
-	ShadowDepthCameraCallback(Light *light, int face=-1);
+	ShadowDepthCameraCallback(ShadowAtlas *atlas, Light *light, int face=-1);
 	virtual void operator()(osg::Node *, osg::NodeVisitor *);
 
 	inline osg::Matrix getCurrWVP()
@@ -45,9 +44,14 @@ public:
 	}
 
 private:
+	// void setRegion(float l, float r, float b, float t);
 	void makeLightSpaceMat(osg::Matrix &view, osg::Matrix &proj);
 	osg::Matrix calcPointLightViewMat(const osg::Vec3 &pos, int face);
+	void setShadowMapResHelper(Light *light, int resolution);
+	void setShadowMapAtlasPosHelper(Light *light, const osg::Vec2i &atlasPos, int face=-1);
+
 	Light *_light;
 	int _face;
 	osg::Matrix _currWVP;
+	ShadowAtlas *_atlas;
 };
