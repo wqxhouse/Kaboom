@@ -1,9 +1,9 @@
 struct Light 
 {
     vec3 position;
+    float radius;
     vec3 color;
     vec3 dirFromLight;
-    float radius;
 };
 
 vec3 computeSpecular(vec3 specularColor, float roughness, float NxL, float LxH, float NxV, float NxH) 
