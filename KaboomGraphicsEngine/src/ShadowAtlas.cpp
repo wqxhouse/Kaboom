@@ -65,11 +65,11 @@ osg::Vec2i ShadowAtlas::createTile(int id, int width, int height)
 
 	for (int j = 0; j < loopW; j++)
 	{
-		if (j == -1)
+		if (!tileFound)
 		{
 			for (int i = 0; i < loopH; i++)
 			{
-				if (i == -1)
+				if (!tileFound)
 				{
 					bool tileIsFree = true;
 					for (int x = 0; x < tileW; x++)
@@ -103,20 +103,15 @@ osg::Vec2i ShadowAtlas::createTile(int id, int width, int height)
 
 	if (tileFound)
 	{
-		for (int x = 0; x < width; x++)
+		for (int x = 0; x < tileW; x++)
 		{
-			for (int y = 0; y < height; y++)
+			for (int y = 0; y < tileH; y++)
 			{
-				_tiles[y + tilePos.x()][x + tilePos.y()] = id;
+				_tiles[y + tilePos.y()][x + tilePos.x()] = id;
 			}
 		}
-		_freeTiles -= width * height;
-
-		//return osg::Vec2i(
-		//	tilePos.x() / _tileCount,
-		//	tilePos.y() / _tileCount);
-
-		return osg::Vec2i(tilePos.x(), tilePos.y());
+		_freeTiles -= tileW * tileH;
+		return osg::Vec2i(tilePos.x() * _tileSize, tilePos.y() * _tileSize);
 	}
 	else
 	{
@@ -124,3 +119,11 @@ osg::Vec2i ShadowAtlas::createTile(int id, int width, int height)
 		return osg::Vec2i(-1, -1);
 	}
 }
+//
+//osg::Vec2i ShadowAtlas::convertTilePosToTexelPos(const osg::Vec2i &tilePos)
+//{
+//	int x = tilePos.x() * _tileSize;
+//	int y = tilePos.y() * _tileSize;
+//
+//	return osg::Vec2i(x, y);
+//}

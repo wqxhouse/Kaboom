@@ -7,6 +7,7 @@
   <include>EffectFiles/LightPrePassConfig.xml</include>
   <include>EffectFiles/LightPassConfig.xml</include>
   <include>EffectFiles/SAOPassConfig.xml</include>
+  <include>EffectFiles/ShadowDepthPassConfig.xml</include>
   <!--<include>EffectFiles/smaa.xml</include>-->
 
   <shader name="defaultQuad_vs" type="vertex">

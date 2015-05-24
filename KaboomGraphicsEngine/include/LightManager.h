@@ -48,6 +48,11 @@ public:
 		return _numLights;
 	}
 
+	ShadowManager *getShadowManager()
+	{
+		return _shadowManager;
+	}
+
 	osg::ref_ptr<osg::MatrixTransform> getVisualizerRoot();
 	Light *getLight(const std::string &name);
 	Light *getLight(int index);

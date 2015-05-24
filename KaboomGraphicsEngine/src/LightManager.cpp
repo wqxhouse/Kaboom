@@ -21,6 +21,11 @@ LightManager::~LightManager()
 	_lightsMap.clear();
 
 	delete _visualizer;
+
+	if (_shadowManager != NULL)
+	{
+		delete _shadowManager;
+	}
 }
 
 void LightManager::initShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRoot)
