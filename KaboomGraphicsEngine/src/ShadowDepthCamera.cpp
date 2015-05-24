@@ -21,13 +21,14 @@ ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas
 	_shadowDepthCam->setRenderOrder(osg::Camera::PRE_RENDER);
 	_shadowDepthCam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
 	_shadowDepthCam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
-	_shadowDepthCam->attach(osg::Camera::COLOR_BUFFER, _shadowAtlasTex);
+	_shadowDepthCam->attach(osg::Camera::DEPTH_BUFFER, _shadowAtlasTex);
 
 	ShadowDepthCameraCallback *callback = new ShadowDepthCameraCallback(_atlas, _light, face);
 	// _updateCallback.push_back(callback);
 	_updateCallback = callback;
 	_shadowDepthCam->setUpdateCallback(callback);
 	_shadowDepthCam->addChild(_geomRoot.get());
+	_shadowDepthCam->setViewport(0, 0, 1280, 720);
 }
 
 //void ShadowDepthCamera::createSharedQuad()
