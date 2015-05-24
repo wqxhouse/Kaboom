@@ -490,5 +490,8 @@
     <None Include="..\Media\Shaders\emptyFragment.frag">
       <Filter>Media\Shaders</Filter>
     </None>
+    <None Include="..\Media\Shaders\shadowUtil.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

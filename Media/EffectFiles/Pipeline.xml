@@ -87,7 +87,9 @@
       <uniform>u_countPointLight</uniform>
       <uniform>u_countDirectionalLight</uniform>
       <uniform>u_arrayDirectionalLight</uniform>
+      <uniform>u_countShadowPointLight</uniform>
       <uniform>u_arrayPointLight</uniform>
+      <uniform>u_arrayShadowPointLight</uniform>
 
       <!--<uniform>u_viewMat</uniform>-->
       <uniform>u_projMat</uniform>
