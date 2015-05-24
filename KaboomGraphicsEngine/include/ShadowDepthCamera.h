@@ -10,13 +10,17 @@ class ShadowAtlas;
 class ShadowDepthCamera
 {
 public:
-	ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas *atlas, Light *light, int face = -1);
+	ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas *atlas, osg::Group *geomRoot, Light *light, int face = -1);
 	void setActive(bool tf);
+	inline osg::ref_ptr<osg::Camera> getRoot()
+	{
+		return _shadowDepthCam;
+	}
 
 private:
 
-	void createSharedQuad();
-	osg::Matrix getCurrWVPById(int id);
+	// void createSharedQuad();
+	// osg::Matrix getCurrWVPById(int id);
 
 	osg::ref_ptr<osg::Camera> _shadowDepthCam;
 	osg::ref_ptr<osg::Texture2D> _shadowAtlasTex;
@@ -25,10 +29,12 @@ private:
 	int _face; // for point light depth cube face
 
 	Light *_light;
-	std::vector<osg::ref_ptr<ShadowDepthCameraCallback> >  _updateCallback;
+	// std::vector<osg::ref_ptr<ShadowDepthCameraCallback> >  _updateCallback;
+	ShadowDepthCameraCallback *_updateCallback;
 	ShadowAtlas *_atlas;
+	osg::observer_ptr<osg::Group> _geomRoot;
 
-	static osg::ref_ptr<osg::Geode> _quadGeode;
+	// static osg::ref_ptr<osg::Geode> _quadGeode;
 	static int _highest_id;
 };
 

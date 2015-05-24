@@ -12,13 +12,15 @@ ShadowManager::ShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRo
 	_atlas = new ShadowAtlas();
 	_atlas->createAtlas(SHADOW_ATLAS_RESOLUTION);
 
+	_depthCamGroup = new osg::Group;
+
 	_depthCameras.resize(MAX_SHADOW_MAPS);
 	for (int i = 0; i < MAX_SHADOW_MAPS; i++)
 	{
 		_depthCameras[i] = NULL;
 	}
 
-	// getPassCam();
+	getPassInfo();
 }
 
 ShadowManager::~ShadowManager()
@@ -35,10 +37,6 @@ ShadowManager::~ShadowManager()
 
 void ShadowManager::getPassInfo()
 {
-	osgFX::EffectCompositor::PassData depthPassData;
-	_passes->getPassData("ShadowDepthPass", depthPassData);
-	_shadowDepthPassCam = depthPassData.pass;
-
 	_depthAtlasTex = static_cast<osg::Texture2D *>(_passes->getTexture("b_shadowAtlas"));
 }
 
@@ -51,7 +49,7 @@ int ShadowManager::findAvailableDepthSlot()
 {
 	for (int i = 0; i < _depthCameras.size(); i++)
 	{
-		if (_depthCameras[i] != NULL)
+		if (_depthCameras[i] == NULL)
 		{
 			return i;
 		}
@@ -91,8 +89,9 @@ void ShadowManager::addPointLight(PointLight *light)
 			return;
 		}
 
-		ShadowDepthCamera *depthCam = new ShadowDepthCamera(_depthAtlasTex.get(), _atlas,light, i);
-		// depthCam->setResolution(resolution, resolution);
+		ShadowDepthCamera *depthCam = new ShadowDepthCamera(_depthAtlasTex.get(), _atlas, _geomRoot.get(), light, i);
+		_depthCamGroup->addChild(depthCam->getRoot());
+
 		light->setShadowMapIndex(i, slot);
 	}
 }

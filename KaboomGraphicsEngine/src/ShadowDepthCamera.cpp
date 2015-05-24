@@ -4,13 +4,13 @@
 #include "DirectionalLight.h"
 #include "ShadowAtlas.h"
 
-ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas *atlas, Light *light, int face)
-	: _shadowAtlasTex(shadowAtlasTex), _light(light), _face(face)
+ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas *atlas, osg::Group *geomRoot, Light *light, int face)
+	: _shadowAtlasTex(shadowAtlasTex), _atlas(atlas), _light(light), _face(face), _geomRoot(geomRoot)
 {
-	if (_quadGeode == NULL)
-	{
-		createSharedQuad();
-	}
+	//if (_quadGeode == NULL)
+	//{
+	//	createSharedQuad();
+	//}
 
 	_id = _highest_id++;
 
@@ -24,18 +24,20 @@ ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas
 	_shadowDepthCam->attach(osg::Camera::COLOR_BUFFER, _shadowAtlasTex);
 
 	ShadowDepthCameraCallback *callback = new ShadowDepthCameraCallback(_atlas, _light, face);
-	_updateCallback.push_back(callback);
+	// _updateCallback.push_back(callback);
+	_updateCallback = callback;
 	_shadowDepthCam->setUpdateCallback(callback);
+	_shadowDepthCam->addChild(_geomRoot.get());
 }
 
-void ShadowDepthCamera::createSharedQuad()
-{
-	_quadGeode = new osg::Geode;
-	osg::Drawable *d =
-		osg::createTexturedQuadGeometry(
-		osg::Vec3(), osg::Vec3(1.0f, 0.0f, 0.0f), osg::Vec3(0.0f, 1.0f, 0.0f));
-	_quadGeode->addDrawable(d);
-}
+//void ShadowDepthCamera::createSharedQuad()
+//{
+//	_quadGeode = new osg::Geode;
+//	osg::Drawable *d =
+//		osg::createTexturedQuadGeometry(
+//		osg::Vec3(), osg::Vec3(1.0f, 0.0f, 0.0f), osg::Vec3(0.0f, 1.0f, 0.0f));
+//	_quadGeode->addDrawable(d);
+//}
 
 void ShadowDepthCamera::setActive(bool tf)
 {
@@ -49,11 +51,12 @@ void ShadowDepthCamera::setActive(bool tf)
 	}
 }
 
-osg::Matrix ShadowDepthCamera::getCurrWVPById(int id)
-{
-	ShadowDepthCameraCallback *callback = _updateCallback[id];
-	return callback->getCurrWVP();
-}
+// todo, move this to manager
+//osg::Matrix ShadowDepthCamera::getCurrWVPById(int id)
+//{
+//	ShadowDepthCameraCallback *callback = _updateCallback[id];
+//	return callback->getCurrWVP();
+//}
 
 // === === === === === === === === === === ===  
 ShadowDepthCameraCallback::ShadowDepthCameraCallback(ShadowAtlas *atlas, Light *light, int face)
@@ -74,8 +77,8 @@ void ShadowDepthCameraCallback::operator()(osg::Node *node, osg::NodeVisitor *nv
 	cam->setProjectionMatrix(projMat);
 
 	// Determine render viewport
-	int shadowMapIndex;
-	int shadowMapRes;
+	int shadowMapIndex = -1;
+	int shadowMapRes = -1;
 	if (_light->getLightType() == DIRECTIONAL)
 	{
 		DirectionalLight *dl = _light->asDirectionalLight();
@@ -84,11 +87,12 @@ void ShadowDepthCameraCallback::operator()(osg::Node *node, osg::NodeVisitor *nv
 	else if (_light->getLightType() == POINTLIGHT)
 	{
 		PointLight *pl = _light->asPointLight();
-		if (!pl->hasShadowMapAtlasPos(_face))
+		if (pl->hasShadowMapAtlasPos(_face))
 		{
-			shadowMapIndex = pl->getShadowMapIndex(_face);
-			shadowMapRes = pl->getShadowMapRes();
+			return;
 		}
+		shadowMapIndex = pl->getShadowMapIndex(_face);
+		shadowMapRes = pl->getShadowMapRes();
 	}
 
 	// todo: make sure using shadowmap index doesn't not produce conflicts or override
@@ -194,5 +198,5 @@ osg::Matrix ShadowDepthCameraCallback::calcPointLightViewMat(const osg::Vec3 &po
 	return cam;
 }
 
-osg::ref_ptr<osg::Geode> ShadowDepthCamera::_quadGeode = NULL;
+// osg::ref_ptr<osg::Geode> ShadowDepthCamera::_quadGeode = NULL;
 int ShadowDepthCamera::_highest_id = 0;
