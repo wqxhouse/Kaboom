@@ -78,7 +78,14 @@ public:
 	virtual DirectionalLight *asDirectionalLight();
 	virtual PointLight *asPointLight();
 
+	struct ShadowMapInfo
+	{
+		int _shadowMapIndex;
+		osg::Vec2 atlasPos;
+	};
+
 protected:
+
 	std::string _name;
 	LightBound _bound;
 

@@ -4,7 +4,7 @@
 #include "DirectionalLight.h"
 
 ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, Light *light, int face)
-	: _shadowAtlasTex(shadowAtlasTex), _light(light), _face(face)
+	: _shadowAtlasTex(shadowAtlasTex), _light(light), _face(face), _resWidth(512), _resHeight(512)
 {
 	if (_quadGeode == NULL)
 	{
@@ -14,7 +14,7 @@ ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, Light *ligh
 	_id = _highest_id++;
 
 	_shadowDepthCam = new osg::Camera();
-	_shadowDepthCam->addChild(_quadGeode);
+	// _shadowDepthCam->addChild(_quadGeode);
 
 	_shadowDepthCam->setClearMask(GL_DEPTH_BUFFER_BIT); // do not clear color buffer, or atlas will be destroyed
 	_shadowDepthCam->setRenderOrder(osg::Camera::PRE_RENDER);
@@ -25,6 +25,13 @@ ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, Light *ligh
 	ShadowDepthCameraCallback *callback = new ShadowDepthCameraCallback(_light, face);
 	_updateCallback.push_back(callback);
 	_shadowDepthCam->setUpdateCallback(callback);
+}
+
+void ShadowDepthCamera::setResolution(int width, int height)
+{
+	_resWidth = width;
+	_resHeight = height;
+	// TODO: update camera ? 
 }
 
 void ShadowDepthCamera::createSharedQuad()
