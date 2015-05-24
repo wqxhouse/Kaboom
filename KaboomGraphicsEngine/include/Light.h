@@ -27,6 +27,7 @@ public:
 
 	inline const osg::Vec3 &getPosition()
 	{
+		_needUpdate = true;
 		return _position;
 	}
 
@@ -73,6 +74,16 @@ public:
 	inline void setIntensity(float intensity)
 	{
 		_intensity = intensity;
+	}
+
+	inline void setNeedUpdate(bool tf)
+	{
+		_needUpdate = tf;
+	}
+
+	inline bool getNeedUpdate()
+	{
+		return _needUpdate;
 	}
 
 	virtual DirectionalLight *asDirectionalLight();

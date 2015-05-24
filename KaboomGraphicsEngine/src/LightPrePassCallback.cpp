@@ -40,24 +40,15 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	std::vector<int> pointLightIds;
 
 	int uboIndex = 0;
-	//std::cout << Core::getMainCamera().getNearPlane() << std::endl;
-	//std::cout << Core::getMainCamera().getFarPlane() << std::endl;
 
 	// TODO: add shadow information
 	for (int i = 0; i < visible_lights.size(); i++)
 	{
 		Light *l = visible_lights[i];
-		//vec3 position;
-		//vec3 color;
-		//vec3 lookat; // directional light & spot light
-		//float radius; // point light
-
+	
 		// apply viewspace transformation here
 		// TODO: fix this, currently this causes flickering
 		osg::Vec3 position = l->getPosition() * Core::getMainCamera().getViewMatrix();
-		// std::cout << position << std::endl;
-
-		// osg::Vec3 position = l->getPosition();
 
 		// Here color is multiplied with intensity
 		osg::Vec3 color = l->getColor() * l->getIntensity();
@@ -73,9 +64,6 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 			dirFromLight.x() = dir.x();
 			dirFromLight.y() = dir.y();
 			dirFromLight.z() = dir.z();
-
-			// std::cout << Core::getMainCamera().getViewMatrix() << std::endl;
-			// std::cout << dir << std::endl;
 
 			dirLightIds.push_back(i);
 		}
@@ -126,12 +114,8 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		pointArray->setElement(i, pointLightIds[i]);
 	}
 
-	// update mvp 
-	//ss->getUniform("u_viewMat")->set(osg::Matrixf(Core::getMainCamera().getViewMatrix()));
+	// update projMat 
 	ss->getUniform("u_projMat")->set(osg::Matrixf(Core::getMainCamera().getClampedProjectionMatrix()));
-	//ss->getUniform("u_viewProjMat")->set(osg::Matrixf(Core::getMainCamera().getClampedViewProjectionMatrix()));
-
-	//ss->getUniform("u_viewProjMat")->set(osg::Matrixf(Core::getMainCamera().getViewMatrix()) * osg::Matrixf(Core::getMainCamera().getProjectionMatrix()));
 }
 
 std::vector<Light *> LightPrePassCallback::performLightCulling()
@@ -142,21 +126,6 @@ std::vector<Light *> LightPrePassCallback::performLightCulling()
 	const osg::Matrix viewMat = Core::getMainCamera().getViewMatrix();
 
 	osg::Matrix inv_vp = osg::Matrix::inverse(viewMat * projMat);
-
-	//osg::Polytope frustum;
-	//frustum.setToUnitFrustum();
-	//frustum.transformProvidingInverse(inv_vp);
-
-	// debug 
-	/*osg::Matrix dview;
-	dview.makeLookAt(osg::Vec3(0, -100, 0), osg::Vec3(0, 0, 0), osg::Vec3(0, 0, 1));
-
-	osg::Matrix dproj;
-	dproj.makeFrustum(-1, 1, -1, 1, 0.1, 1000);
-
-	osg::Matrix dmvp = dview * dproj;
-	osg::Matrix invMvp;
-	invMvp.invert(dmvp);*/
 
 	osg::Polytope frustum;
 	frustum.setToUnitFrustum();
@@ -182,6 +151,7 @@ std::vector<Light *> LightPrePassCallback::performLightCulling()
 		{
 			// TODO: output light ... culled, use custom logging later
 			OSG_WARN << "light " << l->getName() << " frustum culled." << std::endl;
+			// l->setNeedUpdate(false);
 		}
 	}
 
