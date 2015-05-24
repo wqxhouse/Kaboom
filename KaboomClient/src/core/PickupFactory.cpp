@@ -23,7 +23,7 @@ void PickupFactory::loadPickup(std::string mediaPath)
 	_kaboom2_0_ammo = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\kaboom2_0.fbx");
 	_timer_ammo = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\timeBomb.fbx");
 	_remote_ammo = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\remoteBomb.fbx");
-	_health_pack = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\remoteBomb.fbx"); //don't have a model for healthpack right now, just load one of the model
+	_health_pack = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\healthPack.fbx"); 
 }
 
 Entity *PickupFactory::createPickup(
