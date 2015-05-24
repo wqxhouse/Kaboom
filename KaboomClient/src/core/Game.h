@@ -1,27 +1,26 @@
 #pragma once
 
-#include <core/EntityManager.h>
-#include <core/Player.h>
-#include <util/ConfigSettings.h>
+#include <osgAudio/Source.h>
+#include <osgAudio/AudioEnvironment.h>
+#include <osgAudio/Sample.h>
 
 #include <Camera.h>
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
 #include <ParticleEffectManager.h>
+#include <core/EntityManager.h>
+#include <core/Player.h>
+#include <util/ConfigSettings.h>
 
 #include "CharacterFactory.h"
 #include "BombFactory.h"
 #include "JumpPadFactory.h"
 #include "PickupFactory.h"
-
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 #include "../gui/GameGUIEventHandler.h"
 #include "../gui/GameGUIListener.h"
 
-#include <osgAudio/Source.h>
-#include <osgAudio/AudioEnvironment.h>
-#include <osgAudio/Sample.h>
 #include "SoundManager.h"
 #include "LibRocketGUIManager.h"
 #include "GameStateMachine.h"
@@ -33,6 +32,11 @@ class InputManager;
 class Game {
 public:
     typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
+
+    osg::ref_ptr<Source> source;
+    osg::ref_ptr<Source> backgroundMusic;
+    osg::ref_ptr<Sample> sample;
+    std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
 
     Game(ConfigSettings *config);
     ~Game();
@@ -53,30 +57,57 @@ public:
     void removeEntity(Entity *entity);
     void removeAllEntities();
 
-    EntityManager &getEntityManager();
-	SoundManager &getSoundManager();
-    const CharacterFactory &getCharacterFactory() const;
-    const BombFactory &getBombFactory() const;
-	const JumpPadFactory &getJumpPadFactory() const;
-	const PickupFactory &getPickupFactory() const;
+    inline SoundManager &getSoundManager() {
+        return soundManager;
+    }
 
-    const GameClient &getGameClient() const;
+    inline EntityManager &getEntityManager() {
+        return entityManager;
+    }
 
-    GeometryObjectManager *getGeometryManager();
-    MaterialManager *getMaterialManager();
-	ParticleEffectManager *getParticleEffectManager();
+    inline const CharacterFactory &getCharacterFactory() const {
+        return characterFactory;
+    }
 
-	const GameGUIEventHandler *getGameGUIEventHandler() const;
-	inline const GameStateMachine getCurrentGameState() const
-	{
-		return gsm;
-	}
+    inline const BombFactory &getBombFactory() const {
+        return bombFactory;
+    }
 
-    Camera &getCamera();
-	osg::ref_ptr<Source> source;
-	osg::ref_ptr<Source> backgroundMusic;
-	osg::ref_ptr<Sample> sample;
-	std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
+    inline const JumpPadFactory &getJumpPadFactory() const {
+        return jumpPadFactory;
+    }
+
+    inline const PickupFactory &getPickupFactory() const {
+        return pickupFactory;
+    }
+
+    inline const GameClient &getGameClient() const {
+        return client;
+    }
+
+    inline GeometryObjectManager *getGeometryManager() {
+        return _geometryManager;
+    }
+
+    inline MaterialManager *getMaterialManager() {
+        return _materialManager;
+    }
+
+    inline ParticleEffectManager *getParticleEffectManager() {
+        return _particleEffectManager;
+    }
+
+    inline const GameGUIEventHandler *getGameGUIEventHandler() const {
+        return _guiEventHandler;
+    }
+
+    inline const GameStateMachine getCurrentGameState() const {
+        return gsm;
+    }
+
+    inline Camera &getCamera() {
+        return _camera;
+    }
 
     inline Player *getCurrentPlayer() const {
         return currentPlayer;
@@ -91,18 +122,18 @@ public:
     }
 
 private:
-	friend void GameGUIListener::setGameState(GameStateMachine state);
-	
-	GameStateMachine gsm = EDITOR_MODE;
+    friend void GameGUIListener::setGameState(GameStateMachine state);
+
+    GameStateMachine gsm = EDITOR_MODE;
     ConfigSettings *config;
     InputManager *inputManager;
+    SoundManager soundManager;
 
     EntityManager entityManager;
-	SoundManager soundManager;
     CharacterFactory characterFactory;
-	BombFactory bombFactory;
-	JumpPadFactory jumpPadFactory;
-	PickupFactory pickupFactory;
+    BombFactory bombFactory;
+    JumpPadFactory jumpPadFactory;
+    PickupFactory pickupFactory;
 
     ClientEventHandlerLookup eventHandlerLookup;
     GameClient client;
@@ -110,10 +141,10 @@ private:
     Player *currentPlayer;
     IdToPlayerMap players;
 
-	GeometryObjectManager *_geometryManager;
-	MaterialManager *_materialManager;
-	ParticleEffectManager *_particleEffectManager;
+    GeometryObjectManager *_geometryManager;
+    MaterialManager *_materialManager;
+    ParticleEffectManager *_particleEffectManager;
 
-	Camera &_camera;
-	GameGUIEventHandler *_guiEventHandler;
+    Camera &_camera;
+    GameGUIEventHandler *_guiEventHandler;
 };
