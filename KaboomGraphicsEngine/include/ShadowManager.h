@@ -25,12 +25,13 @@ public:
 
 private:
 	void getPassInfo();
+	int findAvailableDepthSlot();
 
 	ShadowAtlas *_atlas;
 	osg::observer_ptr<osgFX::EffectCompositor> _passes;
 	osg::observer_ptr<osg::Camera> _shadowDepthPassCam;
 
-	std::vector<ShadowDepthCamera> _depthCameras;
+	std::vector<ShadowDepthCamera *> _depthCameras;
 	osg::observer_ptr<osg::Texture2D> _depthAtlasTex;
 
 	osg::observer_ptr<osg::Group> _geomRoot;
