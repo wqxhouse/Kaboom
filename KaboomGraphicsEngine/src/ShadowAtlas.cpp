@@ -3,11 +3,17 @@
 ShadowAtlas::ShadowAtlas()
 	: _size(512), _freeTiles(0), _tileSize(32)
 {
-	
 }
 
-void ShadowAtlas::createAtlas()
+void ShadowAtlas::createAtlas(int size)
 {
+	if (size <= 128 && size > 4096)
+	{
+		OSG_WARN << "ShadowAtlas: Out of bounds " << std::endl;
+		return;
+	}
+	_size = size;
+
 	_freeTiles = _tileSize * _tileSize;
 	if (_size % _tileSize != 0)
 	{
@@ -33,15 +39,6 @@ void ShadowAtlas::createAtlas()
 	}
 }
 
-void ShadowAtlas::setSize(int size)
-{
-	if (_size <= 128 && _size >= 4096)
-	{
-		OSG_WARN << "ShadowAtlas: Out of bounds " << std::endl;
-	}
-	_size = size;
-}
-
 void ShadowAtlas::removeTile(int id)
 {
 	for (int i = 0; i < _tileCount; ++i)
@@ -57,7 +54,7 @@ void ShadowAtlas::removeTile(int id)
 }
 
 /* return top left coord */
-osg::Vec2 ShadowAtlas::createTile(int id, int width, int height)
+osg::Vec2i ShadowAtlas::createTile(int id, int width, int height)
 {
 	int tileW = width / _tileSize;
 	int tileH = height / _tileSize;
@@ -106,10 +103,6 @@ osg::Vec2 ShadowAtlas::createTile(int id, int width, int height)
 
 	if (tileFound)
 	{
-		//for x in range(0, width) :
-		//	for y in range(0, height) :
-		//		self.tiles[y + offsetY][x + offsetX] = value
-		//		self.freeTiles -= width * height
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)
@@ -119,13 +112,15 @@ osg::Vec2 ShadowAtlas::createTile(int id, int width, int height)
 		}
 		_freeTiles -= width * height;
 
-		return osg::Vec2(
-			tilePos.x() / _tileCount,
-			tilePos.y() / _tileCount);
-	}
+		//return osg::Vec2i(
+		//	tilePos.x() / _tileCount,
+		//	tilePos.y() / _tileCount);
 
+		return osg::Vec2i(tilePos.x(), tilePos.y());
+	}
 	else
 	{
 		OSG_WARN << "ShadowAtlas: create tile failed. not enough space" << std::endl;
+		return osg::Vec2i(-1, -1);
 	}
 }

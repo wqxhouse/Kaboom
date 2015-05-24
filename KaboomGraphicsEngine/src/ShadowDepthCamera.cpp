@@ -2,9 +2,10 @@
 #include <osg/Texture>
 #include "PointLight.h"
 #include "DirectionalLight.h"
+#include "ShadowAtlas.h"
 
-ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, Light *light, int face)
-	: _shadowAtlasTex(shadowAtlasTex), _light(light), _face(face), _resWidth(512), _resHeight(512)
+ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas *atlas, Light *light, int face)
+	: _shadowAtlasTex(shadowAtlasTex), _light(light), _face(face)
 {
 	if (_quadGeode == NULL)
 	{
@@ -22,16 +23,9 @@ ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, Light *ligh
 	_shadowDepthCam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
 	_shadowDepthCam->attach(osg::Camera::COLOR_BUFFER, _shadowAtlasTex);
 
-	ShadowDepthCameraCallback *callback = new ShadowDepthCameraCallback(_light, face);
+	ShadowDepthCameraCallback *callback = new ShadowDepthCameraCallback(_atlas, _light, face);
 	_updateCallback.push_back(callback);
 	_shadowDepthCam->setUpdateCallback(callback);
-}
-
-void ShadowDepthCamera::setResolution(int width, int height)
-{
-	_resWidth = width;
-	_resHeight = height;
-	// TODO: update camera ? 
 }
 
 void ShadowDepthCamera::createSharedQuad()
@@ -41,11 +35,6 @@ void ShadowDepthCamera::createSharedQuad()
 		osg::createTexturedQuadGeometry(
 		osg::Vec3(), osg::Vec3(1.0f, 0.0f, 0.0f), osg::Vec3(0.0f, 1.0f, 0.0f));
 	_quadGeode->addDrawable(d);
-}
-
-void ShadowDepthCamera::setRegion(float l, float r, float b, float t)
-{
-	_shadowDepthCam->setViewport(l, r, b, t);
 }
 
 void ShadowDepthCamera::setActive(bool tf)
@@ -67,19 +56,87 @@ osg::Matrix ShadowDepthCamera::getCurrWVPById(int id)
 }
 
 // === === === === === === === === === === ===  
-ShadowDepthCameraCallback::ShadowDepthCameraCallback(Light *light, int face)
-	: _light(light), _face(face)
+ShadowDepthCameraCallback::ShadowDepthCameraCallback(ShadowAtlas *atlas, Light *light, int face)
+	: _atlas(atlas), _light(light), _face(face)
 {
 }
 
 void ShadowDepthCameraCallback::operator()(osg::Node *node, osg::NodeVisitor *nv)
 {
+	// todo: check need update
+
+	// calc mvp
 	osg::Camera *cam = static_cast<osg::Camera *>(node);
 	osg::Matrix viewMat;
 	osg::Matrix projMat;
 	makeLightSpaceMat(viewMat, projMat);
 	cam->setViewMatrix(viewMat);
 	cam->setProjectionMatrix(projMat);
+
+	// Determine render viewport
+	int shadowMapIndex;
+	int shadowMapRes;
+	if (_light->getLightType() == DIRECTIONAL)
+	{
+		DirectionalLight *dl = _light->asDirectionalLight();
+		// todo
+	}
+	else if (_light->getLightType() == POINTLIGHT)
+	{
+		PointLight *pl = _light->asPointLight();
+		if (!pl->hasShadowMapAtlasPos(_face))
+		{
+			shadowMapIndex = pl->getShadowMapIndex(_face);
+			shadowMapRes = pl->getShadowMapRes();
+		}
+	}
+
+	// todo: make sure using shadowmap index doesn't not produce conflicts or override
+	osg::Vec2i atlasPos = _atlas->createTile(shadowMapIndex, shadowMapRes, shadowMapRes);
+	if (atlasPos.x() < 0)
+	{
+		int tileSize = _atlas->getTileSize();
+		setShadowMapResHelper(_light, tileSize);
+		shadowMapRes = tileSize;
+		
+		// try again
+		atlasPos = _atlas->createTile(shadowMapIndex,
+			tileSize, tileSize);
+		if (atlasPos.x() < 0)
+		{
+			OSG_WARN << "ShadowDepthCamera:: Shadow atlas full. "
+				"Atlas resolution dynamic change to be implemented..." << std::endl;
+		}
+	}
+
+	setShadowMapAtlasPosHelper(_light, atlasPos, _face);
+	cam->setViewport(atlasPos.x(), atlasPos.y(), shadowMapRes, shadowMapRes);
+}
+
+void ShadowDepthCameraCallback::setShadowMapResHelper(Light *light, int resolution)
+{
+	if (light->getLightType() == DIRECTIONAL)
+	{
+
+	}
+	else if (light->getLightType() == POINTLIGHT)
+	{
+		PointLight *pt = light->asPointLight();
+		pt->setShadowMapRes(resolution);
+	}
+}
+
+void ShadowDepthCameraCallback::setShadowMapAtlasPosHelper(Light *light, const osg::Vec2i &atlasPos, int face)
+{
+	if (light->getLightType() == DIRECTIONAL)
+	{
+
+	}
+	else if (light->getLightType() == POINTLIGHT)
+	{
+		PointLight *pt = light->asPointLight();
+		pt->setShadowAtlasPos(face, atlasPos);
+	}
 }
 
 void ShadowDepthCameraCallback::makeLightSpaceMat(osg::Matrix &view, osg::Matrix &proj)

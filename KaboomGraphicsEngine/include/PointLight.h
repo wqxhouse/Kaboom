@@ -26,11 +26,13 @@ public:
 		return _shadowMapRes;
 	}
 
-	void setShadowAtlasPos(int face, const osg::Vec2 &pos);
-	osg::Vec2 getShadowAtlasPos(int face);
+	void setShadowAtlasPos(int face, const osg::Vec2i &pos);
+	osg::Vec2i getShadowAtlasPos(int face);
 
 	void setShadowMapIndex(int face, int index);
 	int getShadowMapIndex(int face);
+
+	bool hasShadowMapAtlasPos(int face);
 
 	virtual PointLight *asPointLight();
 
@@ -38,7 +40,7 @@ public:
 	virtual void setPosition(const osg::Vec3 &pos);
 
 private:
-
+	void initShadowMapInfo();
 
 	float _radius;
 	int _shadowMapRes;
