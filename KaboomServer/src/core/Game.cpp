@@ -75,16 +75,17 @@ Game::Game(ConfigSettings *configSettings)
     systemManager.addSystem(new JumpPadSystem(this));
     systemManager.addSystem(new DeathSystem(this));
     systemManager.addSystem(new DestroySystem(this));
+
+    srand(time(NULL));
 }
 
 Game::~Game() {
 }
 
 void Game::run() {
-    const clock_t TICK = 1000 / FPS;
-    const float TIME_STEP = 1.0f / FPS;
-
     while (true) {
+        const clock_t TICK = 1000 / FPS;
+
         clock_t beginTime = clock();
 
         update();
@@ -96,7 +97,7 @@ void Game::run() {
         if (sleepTime > 0) {
             Sleep(sleepTime);
         } else {
-            printf("Warning we need to slow down our server ticks!\n");
+            printf("Warning we need to slow down our server ticks! %d ms\n", sleepTime);
         }
     }
 }
