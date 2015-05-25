@@ -122,10 +122,10 @@ bool ServerNetwork::acceptClient(unsigned int &playerId) {
     return false;
 }
 
-int ServerNetwork::receive(unsigned int playerId, char *recvbuf) {
+int ServerNetwork::receive(unsigned int playerId, char *recvbuf, int bufSize) {
     SOCKET socket = sessions[playerId];
 
-    int iResult = NetworkServices::receiveMessage(socket, recvbuf, MAX_PACKET_SIZE);
+    int iResult = NetworkServices::receiveMessage(socket, recvbuf, bufSize);
 
     if (iResult == 0) {
         printf("<Server> Player %d disconnected.\n", playerId);

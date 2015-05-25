@@ -17,7 +17,7 @@ public:
 
     bool acceptClient(unsigned int &playerId);
 
-    int receive(unsigned int playerId, char *recvbuf);
+    int receive(unsigned int playerId, char *recvbuf, int bufSize);
 
     void send(char *packet, int size);
     void send(char *packet, int size, int playerId);

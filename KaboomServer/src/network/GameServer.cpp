@@ -50,12 +50,18 @@ bool GameServer::acceptClient(unsigned int &playerId) {
 }
 
 void GameServer::receive(const IdToPlayerMap &players) {
-    static char networkData[MAX_PACKET_SIZE];
-
     for (auto kv : players) {
         const auto player = kv.second;
 
-        int len = network->receive(player->getId(), networkData);
+        static char networkBuffer[MAX_PACKET_SIZE];
+        static int bufferOffset = 0;
+
+        int len = network->receive(
+                player->getId(),
+                networkBuffer + bufferOffset,
+                MAX_PACKET_SIZE - bufferOffset);
+
+        bufferOffset = 0;
 
         if (len <= 0) {
             continue;
@@ -69,31 +75,37 @@ void GameServer::receive(const IdToPlayerMap &players) {
 
         std::unordered_set<unsigned int> receivedOpcodes;
 
-        unsigned int i = 0;
-        while (i < (unsigned int)len) {
-            emptyEvent.deserialize(&networkData[i]);
+        int i = 0;
+        while (i < len) {
+            emptyEvent.deserialize(&networkBuffer[i]);
             receivedOpcodes.insert(emptyEvent.getOpcode());
+
+            if (i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
+                bufferOffset = MAX_PACKET_SIZE - i;
+                memcpy(networkBuffer, &networkBuffer[i], bufferOffset);
+                break;
+            }
 
             switch (emptyEvent.getOpcode()) {
                 case EVENT_PLAYER_INPUT: {
-                    playerInputEvent.deserialize(&networkData[i]);
+                    playerInputEvent.deserialize(&networkBuffer[i]);
                     playerInputEvent.setPlayerId(player->getId());
                     break;
                 }
                 case EVENT_PLAYER_RENAME: {
-                    playerRenameEvent.deserialize(&networkData[i]);
+                    playerRenameEvent.deserialize(&networkBuffer[i]);
                     playerRenameEvent.setPlayerId(player->getId());
                     break;
                 }
                 case EVENT_EQUIP: {
-                    equipEvent.deserialize(&networkData[i]);
+                    equipEvent.deserialize(&networkBuffer[i]);
                     if (player->getEntity() != nullptr) {
                         equipEvent.setEntityId(player->getEntity()->getId());
                     }
                     break;
                 }
                 case EVENT_RELOAD_REQUEST: {
-                    reloadRequestEvent.deserialize(&networkData[i]);
+                    reloadRequestEvent.deserialize(&networkBuffer[i]);
                     break;
                 }
                 default: {

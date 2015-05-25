@@ -10,7 +10,7 @@ public:
     void connectToServer(const std::string &serverAddress, const int &serverPort);
 	void disconnectFromServer();
 
-    int receivePackets(char *);
+    int receivePackets(char *, int bufSize);
     void sendMessage(char *message, int size) const;
 
 	inline bool isConnected() const
