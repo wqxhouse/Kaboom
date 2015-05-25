@@ -1,5 +1,8 @@
 #include "PickupFactory.h"
 
+#include <Core.h>
+#include <GeometryCache.h>
+#include <GeometryObject.h>
 #include <osg/Geode>
 #include <osg/MatrixTransform>
 #include <osg/Shape>
@@ -16,14 +19,6 @@
 PickupFactory::PickupFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 
-}
-
-void PickupFactory::loadPickup(std::string mediaPath)
-{
-	_kaboom2_0_ammo = osgDB::readNodeFile( mediaPath + "DefaultAssets\\GeometryObject\\kaboom2_0.fbx");
-	_timer_ammo = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\timeBomb.fbx");
-	_remote_ammo = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\remoteBomb.fbx");
-	_health_pack = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\healthPack.fbx"); 
 }
 
 Entity *PickupFactory::createPickup(
@@ -86,48 +81,59 @@ void PickupFactory::createBase(Entity *entity, const Vec3 &position, Quat rotati
 
 void PickupFactory::createKaboomV2Pickup(Entity *entity, const Vec3 &position, Quat rotation) const {
 
-	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
-	transformation->addChild(_kaboom2_0_ammo);
+	GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
 
-	osg::ref_ptr<osg::Group> bombNode = new osg::Group;
+	//Currently using Kaboom object as a place holder
+	//Kaboom has an id of 1.
+	Material * mat = geoCache->getMaterialById(1);
+	osg::ref_ptr<osg::Node> kaboom_box = geoCache->getNodeById(1);
 
-	bombNode->addChild(transformation);
-
-	entity->attachComponent(new SceneNodeComponent(bombNode));
+	//this is a memory leak, hopefully it is not too bad.
+	GeometryObject *kaboom_pickup = new GeometryObject("kaboom_box", kaboom_box);
+	kaboom_pickup->setMaterial(mat);
+	entity->attachComponent(new SceneNodeComponent(kaboom_pickup->getRoot()));
 }
 
 void PickupFactory::createTimeBombPickup(Entity *entity, const Vec3 &position, Quat rotation) const {
 
-	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
-	transformation->addChild(_timer_ammo);
+	GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
 
-	osg::ref_ptr<osg::Group> bombNode = new osg::Group;
+	//Currently using the Timer object as a place holder.
+	//Timer has an id of 2.
+	Material * mat = geoCache->getMaterialById(2);
+	osg::ref_ptr<osg::Node> timer_box = geoCache->getNodeById(2);
 
-	bombNode->addChild(transformation);
-
-	entity->attachComponent(new SceneNodeComponent(bombNode));
+	//this is a memory leak, hopefully it is not too bad.
+	GeometryObject *timer_pickup = new GeometryObject("timer_box", timer_box);
+	timer_pickup->setMaterial(mat);
+	entity->attachComponent(new SceneNodeComponent(timer_pickup->getRoot()));
 }
 
 void PickupFactory::createRemoteDetonatorPickup(Entity *entity, const Vec3 &position, Quat rotation) const {
 
-	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
-	transformation->addChild(_remote_ammo);
+	GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
 
-	osg::ref_ptr<osg::Group> bombNode = new osg::Group;
+	//Currently using the remote bomb object as placeholder
+	//Remote has an id of 3.
+	Material * mat = geoCache->getMaterialById(3);
+	osg::ref_ptr<osg::Node> remote_box = geoCache->getNodeById(3);
 
-	bombNode->addChild(transformation);
-
-	entity->attachComponent(new SceneNodeComponent(bombNode));
+	//this is a memory leak, hopefully it is not too bad.
+	GeometryObject *remote_pickup = new GeometryObject("remote_box", remote_box);
+	remote_pickup->setMaterial(mat);
+	entity->attachComponent(new SceneNodeComponent(remote_pickup->getRoot()));
 }
 
 void PickupFactory::createHealthPackPickup(Entity *entity, const Vec3 &position, Quat rotation) const {
 	
-	osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
-	transformation->addChild(_health_pack);
+	GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
 
-	osg::ref_ptr<osg::Group> bombNode = new osg::Group;
+	//Health pack has an id of 201.
+	Material * mat = geoCache->getMaterialById(201);
+	osg::ref_ptr<osg::Node> health_pack = geoCache->getNodeById(201);
 
-	bombNode->addChild(transformation);
-
-	entity->attachComponent(new SceneNodeComponent(bombNode));
+	//this is a memory leak, hopefully it is not too bad.
+	GeometryObject *health_pack_pickup = new GeometryObject("health_pack", health_pack);
+	health_pack_pickup->setMaterial(mat);
+	entity->attachComponent(new SceneNodeComponent(health_pack_pickup->getRoot()));
 }
