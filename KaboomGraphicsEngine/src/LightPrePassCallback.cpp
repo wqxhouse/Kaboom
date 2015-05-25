@@ -29,7 +29,7 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	// 2. update shader input 
 	// retrieve ubb
 	osg::UniformBufferBinding *ubb = 
-		static_cast<osg::UniformBufferBinding *>(ss->getAttribute(osg::StateAttribute::UNIFORMBUFFERBINDING));
+		static_cast<osg::UniformBufferBinding *>(ss->getAttribute(osg::StateAttribute::UNIFORMBUFFERBINDING, 0));
 
 	osg::UniformBufferObject* ubo
 		= static_cast<osg::UniformBufferObject*>(ubb->getBufferObject());

@@ -44,7 +44,7 @@ uniform int u_maxLodLevel;
 
 void main() 
 {
-	vec4 abc = vec4(shadowDepthMap[0].altas_uvcoord, 0, 1);
+	// vec4 abc = vec4(shadowDepthMap[0].altas_uvcoord, 0, 1);
 	// return;
 
     // Compute texcoords
