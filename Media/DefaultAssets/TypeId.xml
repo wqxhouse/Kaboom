@@ -6,6 +6,14 @@
         <orientation>-0.000000 0.707107 0.707107 -0.000000</orientation>
         <scale>0.0031 0.0031 0.0031</scale>
     </type>
+
+    <type id="102"> 
+        <mesh>run2.fbx</mesh>
+        <material name="____Default" />
+        <position>0.0 0.0 -1.1</position>
+        <orientation>-0.000000 0.707107 0.707107 -0.000000</orientation>
+        <scale>0.0031 0.0031 0.0031</scale>
+    </type>
     
     <type id="1"> 
         <mesh>DefaultAssets\GeometryObject\kaboom2_0.fbx</mesh>
