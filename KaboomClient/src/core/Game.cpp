@@ -57,16 +57,19 @@ Game::Game(ConfigSettings *config)
 	std::string str_mediaPath = "";
 	std::string str_material_xml = "";
 	std::string str_world_xml = "";
+	std::string str_typeid_xml = "";
 
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
 	config->getValue(ConfigSettings::str_material_xml, str_material_xml);
 	config->getValue(ConfigSettings::str_world_xml, str_world_xml);
+	config->getValue(ConfigSettings::str_typeid_xml, str_typeid_xml);
 
 	str_world_xml = str_mediaPath + str_world_xml;
 	str_material_xml = str_mediaPath + str_material_xml;
 
 	Core::loadMaterialFile(str_material_xml);
 	Core::loadWorldFile(str_world_xml);
+	Core::loadTypeIdFile(str_typeid_xml);
 	/* End testing code */
 
     inputManager = new InputManager(client, this);
