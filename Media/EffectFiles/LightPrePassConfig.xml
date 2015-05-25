@@ -73,14 +73,18 @@
     <!--padding-->
     <value type="float">0.0</value>
     <!--dirFromLight-->
-    <value type="vec3">1.0 1.0 1.0</value> 
+    <value type="vec3">1.0 1.0 1.0</value>
     <!--padding-->
-    <value type="float">0.0</value> <!-- 12 bytes -->
-    
+    <value type="float">0.0</value>
+    <!-- 12 bytes -->
+
     <!--shadow cube index for 6 faces-->
     <value type="int">
-      <array>24</array>      <!-- due to the limitation of ubo, need to use 4 times the space for 6 ints -->
-    </value>                 <!-- 12 + 24 = 36 bytes -->
-    <!-- total = 36 * 128 / 1024 = 4.5KB < 32KB -->    
+      <array>24</array>
+      <!-- due to the limitation of ubo, need to use 4 times the space for 6 ints -->
+    </value>
+    <!-- 12 + 24 = 36 bytes -->
+    <!-- total = 36 * 128 / 1024 = 4.5KB < 32KB -->
   </uniform_buffer>
+
 </compositor>

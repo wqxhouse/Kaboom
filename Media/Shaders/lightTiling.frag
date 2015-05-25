@@ -17,7 +17,7 @@ layout (r32i, binding=0) uniform iimage2D o_destination;
 
 layout(std140) uniform u_lightsBuffer
 {
-	// currently support up to 256 visible lights
+	// currently support up to 128 visible lights
 	// due to uniform size limit & performance
 	Light lights[MAX_VISIBLE_LIGHTS];
 };

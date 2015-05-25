@@ -239,7 +239,8 @@ osg::Camera* EffectCompositor::createPassFromXML(osgDB::XmlNode* xmlNode)
 				// FIXME: consider a case that the actual shader is attached 
 				// in a child of the effectcompositor, then the next line 
 				// is invalid since the ubo is not bind to the correct shader
-				program->addBindUniformBlock(uniformBufferName, program->getUniformBlockBindingList().size());
+				int bindingLoc = ubb->getIndex();
+				program->addBindUniformBlock(uniformBufferName, bindingLoc);
 			}
 			else
 			{
@@ -249,11 +250,12 @@ osg::Camera* EffectCompositor::createPassFromXML(osgDB::XmlNode* xmlNode)
 				if (ubb)
 				{
 					stateset->setAttributeAndModes(ubb, osg::StateAttribute::ON);
-
+					int bindingLoc = ubb->getIndex();
 					// FIXME: consider a case that the actual shader is attached 
 					// in a child of the effectcompositor, then the next line 
 					// is invalid since the ubo is not bind to the correct shader
-					program->addBindUniformBlock(uniformBufferName, program->getUniformBlockBindingList().size());
+
+					program->addBindUniformBlock(uniformBufferName, bindingLoc);
 				}
 				else
 				{
@@ -836,7 +838,9 @@ osg::UniformBufferBinding* EffectCompositor::createUniformBufferFromXML(osgDB::X
 	osg::ref_ptr<osg::UniformBufferObject> ubo = new osg::UniformBufferObject;
 	buffer->setBufferObject(ubo);
 
-	osg::ref_ptr<osg::UniformBufferBinding> ubb = new osg::UniformBufferBinding(0, ubo.get(), 0, blockSize);
+	// FIXME: consider case that uniform buffer deleted, then this loc dependency will be messed up.
+	int bindingLoc = _uniformBufferMap.size();
+	osg::ref_ptr<osg::UniformBufferBinding> ubb = new osg::UniformBufferBinding(bindingLoc, ubo.get(), 0, blockSize);
 	std::string dataVariance = xmlNode->properties["data_variance"];
 	if (dataVariance == "static")
 	{

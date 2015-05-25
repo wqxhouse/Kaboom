@@ -114,6 +114,8 @@
       <output_buffer target="color">b_shading</output_buffer>
 
       <uniform_buffer>u_lightsBuffer</uniform_buffer>
+      <uniform_buffer>u_shadowDepthMapBuffer</uniform_buffer>
+      
       <uniform>u_viewInvMat</uniform>
       <uniform>u_projInvMat</uniform>
       <uniform>u_farPlane</uniform>

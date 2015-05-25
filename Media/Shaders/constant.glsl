@@ -15,6 +15,7 @@ const float sqrt_of_2 = 1.4142135623;
 //#define MAX_POINT_LIGHTS 512 
 //#define MAX_VISIBLE_LIGHTS 256 
 
+#define MAX_SHADOW_MAPS 64
 #define MAX_POINT_LIGHTS 256 
 #define MAX_POINT_SHADOW_LIGHTS 6
 #define MAX_VISIBLE_LIGHTS 128 

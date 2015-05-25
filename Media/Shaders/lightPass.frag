@@ -5,6 +5,7 @@
 #include "Shaders/gbufferUtil.glsl"
 #include "Shaders/Material.glsl"
 #include "Shaders/lightUtil.glsl"
+#include "Shaders/shadowUtil.glsl"
 
 #pragma optionNV (unroll all)
 
@@ -20,6 +21,11 @@ layout(std140) uniform u_lightsBuffer
 	// currently support up to 128 visible lights
 	// due to uniform size limit & performance
 	Light lights[MAX_VISIBLE_LIGHTS];
+};
+
+layout(std140) uniform u_shadowDepthMapBuffer 
+{
+	ShadowDepthMap shadowDepthMap[MAX_SHADOW_MAPS];
 };
 
 varying vec2 v_uvcoord;
@@ -38,6 +44,9 @@ uniform int u_maxLodLevel;
 
 void main() 
 {
+	vec4 abc = vec4(shadowDepthMap[0].altas_uvcoord, 0, 1);
+	// return;
+
     // Compute texcoords
     ivec2 screenSize = textureSize(u_RT0, 0);
 

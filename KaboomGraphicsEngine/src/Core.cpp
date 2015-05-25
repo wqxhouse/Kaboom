@@ -196,7 +196,7 @@ void Core::configLightPass()
 	if (lightPass.pass != NULL)
 	{
 		lightPass.pass->getOrCreateStateSet()->
-			setUpdateCallback(new LightPassCallback(&_cubemapPreFilter));
+			setUpdateCallback(new LightPassCallback(&_cubemapPreFilter, _world.getLightManager()));
 	}
 	else
 	{

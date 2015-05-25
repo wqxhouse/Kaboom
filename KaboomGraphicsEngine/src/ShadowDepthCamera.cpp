@@ -35,12 +35,50 @@ void ShadowDepthCamera::setActive(bool tf)
 	}
 }
 
+
+osg::Vec2 ShadowDepthCamera::getAtlasPosUVCoord()
+{
+	auto type = _light->getLightType();
+	osg::Vec2i ssCoord = osg::Vec2i();
+	if (type == DIRECTIONAL)
+	{
+		// todo	
+	}
+	else if (type == POINTLIGHT)
+	{
+		PointLight *pl = _light->asPointLight();
+		ssCoord = pl->getShadowAtlasPos(_face);
+	}
+
+	int atlasSize = _atlas->getSize();
+	double x = (double)ssCoord.x() / atlasSize;
+	double y = (double)ssCoord.y() / atlasSize;
+	return osg::Vec2(x, y);
+}
+
+float ShadowDepthCamera::getShadowMapScaleWRTAtlas()
+{
+	auto type = _light->getLightType();
+	int resolution = 0;
+	if (type == DIRECTIONAL)
+	{
+		// todo	
+	}
+	else if (type == POINTLIGHT)
+	{
+		PointLight *pl = _light->asPointLight();
+		resolution = pl->getShadowMapRes();
+	}
+
+	double texScale = (double)resolution / _atlas->getSize();
+	return texScale;
+}
+
 // todo, move this to manager
-//osg::Matrix ShadowDepthCamera::getCurrWVPById(int id)
-//{
-//	ShadowDepthCameraCallback *callback = _updateCallback[id];
-//	return callback->getCurrWVP();
-//}
+const osg::Matrix &ShadowDepthCamera::getCurrWVP()
+{
+	return _updateCallback->getCurrWVP();
+}
 
 // === === === === === === === === === === ===  
 ShadowDepthCameraCallback::ShadowDepthCameraCallback(ShadowAtlas *atlas, Light *light, int face)

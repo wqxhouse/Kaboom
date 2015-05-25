@@ -12,7 +12,13 @@ class ShadowDepthCamera
 public:
 	ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas *atlas, 
 		osg::Group *geomRoot, Light *light, int face = -1);
+
 	void setActive(bool tf);
+	osg::Vec2 getAtlasPosUVCoord();
+	float getShadowMapScaleWRTAtlas();
+
+	const osg::Matrix &getCurrWVP();
+
 	inline osg::ref_ptr<osg::Camera> getRoot()
 	{
 		return _shadowDepthCam;
@@ -42,7 +48,7 @@ public:
 	ShadowDepthCameraCallback(ShadowAtlas *atlas, Light *light, int face=-1);
 	virtual void operator()(osg::Node *, osg::NodeVisitor *);
 
-	inline osg::Matrix getCurrWVP()
+	inline const osg::Matrix &getCurrWVP()
 	{
 		return _currWVP;
 	}
