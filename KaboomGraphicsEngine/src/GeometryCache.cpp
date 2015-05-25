@@ -44,6 +44,17 @@ bool GeometryCache::addTypeId(const int type_id, std::string fileName, Material*
 	return addModel(fileName);
 }
 
+bool GeometryCache::addTypeId(const int type_id, std::string fileName, Material* material, osg::Matrix matrix)
+{
+	bool retVal = addTypeId(type_id, fileName, material);
+
+	if (retVal) {
+		_matrixMap.insert(std::make_pair(type_id, matrix));
+	}
+
+	return retVal;
+}
+
 osg::ref_ptr<osg::Node> GeometryCache::getNodeByFileName(std::string fileName)
 {
 	std::unordered_map<std::string, osg::ref_ptr<osg::Node>>::iterator itr = _modelMap.find(fileName);
@@ -84,6 +95,19 @@ osg::ref_ptr<osg::Node> GeometryCache::getNodeById(const int type_id, std::strin
 
 	fileName = itr1->second;
 	return getNodeByFileName(fileName);
+}
+
+osg::Matrix GeometryCache::getMatrixById(const int type_id)
+{
+	std::unordered_map<int, osg::Matrix>::iterator itr1 = _matrixMap.find(type_id);
+	if (itr1 == _matrixMap.end())
+	{
+		OSG_WARN << "getMatrixNodeById: Id '" << type_id << "' has no matrix" << std::endl;
+		//return NULL;
+		return osg::Matrix::identity();
+	}
+
+	return itr1->second;
 }
 
 Material* GeometryCache::getMaterialById(const int type_id)

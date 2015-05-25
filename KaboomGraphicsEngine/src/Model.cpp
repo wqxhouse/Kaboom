@@ -4,19 +4,45 @@
 #include "GeometryCache.h"
 #include <osgDB/ReadFile>
 
-Model::Model() {
+Model::Model() 
+{
 	transform = new osg::MatrixTransform();
 }
 
-Model::Model(std::string& modelName) {
+Model::Model(int type_id) 
+{
+	transform = new osg::MatrixTransform();
+
+	GeometryCache* cache = Core::getWorldRef().getGeometryCache();
+	loadModel(type_id);
+
+	transform->setMatrix(cache->getMatrixById(101));
+	playAnimation();
+}
+
+Model::Model(std::string& modelName) 
+{
 	transform = new osg::MatrixTransform();
 	loadModel(modelName);
+	playAnimation();
 }
 
-bool Model::loadModel(std::string& modelName) {
+bool Model::loadModel(int type_id) 
+{
+	osg::ref_ptr<osg::Node> tmp = Core::getWorldRef().getGeometryCache()->getNodeById(type_id);
+	return loadModelHelper(tmp);
+}
+
+bool Model::loadModel(std::string& modelName) 
+{
 	// Make sure model is loaded
 	osg::ref_ptr<osg::Node> tmp = Core::getWorldRef().getGeometryCache()->getNodeByFileName(modelName);
-	osg::ref_ptr<osg::Node> model = dynamic_cast<osg::Node*>(tmp->clone(osg::CopyOp::DEEP_COPY_ALL));
+	return loadModelHelper(tmp);
+}
+
+bool Model::loadModelHelper(osg::ref_ptr<osg::Node> origNode) 
+{
+	osg::ref_ptr<osg::Node> model = dynamic_cast<osg::Node*>(origNode->clone(osg::CopyOp::DEEP_COPY_ALL));
 
 	if (!model) {
 		printf("<Model::loadAnimations> model is null\n");
@@ -36,14 +62,10 @@ bool Model::loadModel(std::string& modelName) {
 	return true;
 }
 
-osg::ref_ptr<osg::MatrixTransform> Model::getRootNode() {
+osg::ref_ptr<osg::MatrixTransform> Model::getRootNode() 
+{
 	return transform;
 }
-
-//void Model::setPosition(osg::Vec3& v) {
-//	transform->setPosition(v);
-//}
-
 
 void Model::playAnimation(std::string& animName) {
 	if (!this->animManager) {
@@ -66,7 +88,8 @@ void Model::playAnimation(std::string& animName) {
 	}
 }
 
-void Model::stopAnimation() {
+void Model::stopAnimation() 
+{
 	if (!this->animManager) {
 		printf("<Model::stopAnimation> animManager is null\n");
 	}
