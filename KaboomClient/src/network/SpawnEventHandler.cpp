@@ -40,7 +40,6 @@ void SpawnEventHandler::handle(const Event &e) const {
                 evt.getPosition(),
                 evt.getRotation());
 
-		game->source = new Source;
         Entity *player = game->getCurrentPlayer()->getEntity();
 		if (player != nullptr){
 
@@ -54,20 +53,12 @@ void SpawnEventHandler::handle(const Event &e) const {
             double y = (double)(-playerPos.y + entityPos.y);
             double z = (double)(-playerPos.z + entityPos.z);
 
-			switch (type&(~CAT_BOMB)){
-			case KABOOM_V2:
-				game->source->setSound(game->sounds->at(KABOOM_FIRE).get());
-				break;
-			default:
-				game->source->setSound(game->sounds->at(BASIC).get());
-				printf("unknown bomb type gets no sound\n");
-				break;
+			switch (type) {
+                case KABOOM_V2: {
+                    game->getSoundManager().playSound(SoundType::KABOOM_FIRE);
+                    break;
+                }
 			}
-			game->source->setRolloffFactor(sqrt(x*x + y*y + z*z));
-			game->source->setGain(1);
-			game->source->setLooping(false);
-			osgAudio::AudioEnvironment::instance()->update();
-			game->source->play();
 		}
 	} else if ((type & CAT_MASK) == CAT_JUMPPAD) {
 		entity = game->getJumpPadFactory().createJumpPad(

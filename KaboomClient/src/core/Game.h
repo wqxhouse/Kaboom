@@ -1,9 +1,5 @@
 #pragma once
 
-#include <osgAudio/Source.h>
-#include <osgAudio/AudioEnvironment.h>
-#include <osgAudio/Sample.h>
-
 #include <Camera.h>
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
@@ -20,23 +16,15 @@
 #include "../network/GameClient.h"
 #include "../gui/GameGUIEventHandler.h"
 #include "../gui/GameGUIListener.h"
-
-#include "SoundManager.h"
+#include "../sound/SoundManager.h"
 #include "LibRocketGUIManager.h"
 #include "GameStateMachine.h"
-
-using namespace osgAudio;
 
 class InputManager;
 
 class Game {
 public:
     typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
-
-    osg::ref_ptr<Source> source;
-    osg::ref_ptr<Source> backgroundMusic;
-    osg::ref_ptr<Sample> sample;
-    std::unordered_map<SOUNDS, osg::ref_ptr<Sample> > *sounds;
 
     Game(ConfigSettings *config);
     ~Game();

@@ -29,7 +29,7 @@
 extern osg::ref_ptr<CompositorAnalysis> configureViewerForMode(osgViewer::Viewer& viewer, osgFX::EffectCompositor* compositor,
 	osg::Node* model, int displayMode);
 
-void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath)
+void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath, osg::Node *soundRoot)
 {
 	_mediaPath = mediaPath;
 	// TODO: add reshape callback for winPos, winHeight, bufferSize
@@ -68,6 +68,8 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 
 	_sceneRoot->addChild(_passes);
 	_hasInit = true;
+
+    _sceneRoot->addChild(soundRoot);
 }
 
 void Core::loadMaterialFile(const std::string &filePath)

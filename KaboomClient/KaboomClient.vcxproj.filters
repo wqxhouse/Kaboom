@@ -52,6 +52,12 @@
     <Filter Include="Source Files\Configurations">
       <UniqueIdentifier>{751106d8-70a7-48b9-90ce-f48b88757249}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Sound">
+      <UniqueIdentifier>{a1f517ed-2f09-43df-adb9-f10b21a28d57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sound">
+      <UniqueIdentifier>{14ba3959-5706-4327-9803-e59b13913435}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -107,9 +113,6 @@
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
     <ClCompile Include="src\core\CharacterFactory.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\SoundManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\network\DestroyEventHandler.cpp">
@@ -178,6 +181,9 @@
     <ClCompile Include="src\network\PlayerRespawnEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\sound\SoundManager.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
@@ -234,9 +240,6 @@
     </ClInclude>
     <ClInclude Include="src\components\SceneNodeComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\SoundManager.h">
-      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\network\DestroyEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
@@ -306,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="src\network\PlayerDeathEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\SoundManager.h">
+      <Filter>Header Files\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

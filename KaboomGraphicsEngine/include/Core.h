@@ -22,7 +22,7 @@ namespace osgLibRocket
 class Core
 {
 public:
-	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath);
+	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath, osg::Node *soundRoot);
 
 	static osg::Vec2 getScreenSize();
 
