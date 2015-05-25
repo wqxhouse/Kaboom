@@ -235,6 +235,9 @@
     <ClCompile Include="src\core\GameModeConfigLoader.cpp">
       <Filter>Source Files\Configurations</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\PlayerRenameEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -474,6 +477,9 @@
     </ClInclude>
     <ClInclude Include="src\core\GameModeConfigLoader.h">
       <Filter>Header Files\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerRenameEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

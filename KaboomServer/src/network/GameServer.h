@@ -36,6 +36,7 @@ public:
     // One-time events
 
     void sendScoreEvent(Player *player) const;
+    void sendPlayerRenameEvent(Player *player) const;
     void sendPlayerRespawnEvent(Player *player) const;
     void sendPlayerDeathEvent(Player *player) const;
     void sendSpawnEvent(Entity *entity) const;

@@ -1,10 +1,16 @@
 #pragma once
 
+#include <string>
+
 class Entity;
 
 class Player {
 public:
-    Player(unsigned int id, Entity *entity = nullptr, int kills = 0, int deaths = 0)
+    Player(unsigned int id,
+            const std::string &name = "Player",
+            Entity *entity = nullptr,
+            int kills = 0,
+            int deaths = 0)
             : id(id),
               entity(entity),
               kills(kills),
@@ -13,6 +19,14 @@ public:
 
     inline unsigned int getId() const {
         return id;
+    }
+
+    inline const std::string &getName() const {
+        return name;
+    }
+
+    inline void setName(const std::string &name) {
+        this->name = name;
     }
 
     inline Entity *getEntity() const {
@@ -41,6 +55,8 @@ public:
 
 private:
     unsigned int id;
+    std::string name;
+
     Entity *entity;
 
     int kills;
