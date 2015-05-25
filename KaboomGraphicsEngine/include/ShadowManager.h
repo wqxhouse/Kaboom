@@ -27,6 +27,17 @@ public:
 	{
 		return _depthCamGroup;
 	}
+	
+	inline int getCurrShadowMapNum()
+	{
+		return _currShadowMapNum;
+	}
+
+	int getNumShadowMaps();
+	bool hasCameraAtIndex(int index);
+	const osg::Matrix &getLightSpaceWVP(int index);
+	float getShadowMapScaleWRTAtlas(int index);
+	osg::Vec2 getAtlasPosUVCoord(int index);
 
 private:
 	void getPassInfo();
@@ -41,4 +52,10 @@ private:
 	osg::observer_ptr<osg::Texture2D> _depthAtlasTex;
 
 	osg::observer_ptr<osg::Group> _geomRoot;
+
+	// used for getting reference when depthCamera by index not found
+	// used by const osg::Matrix &getLightSpaceWVP(int index);
+	osg::Matrix _defaultMatrix; 
+
+	int _currShadowMapNum;
 };

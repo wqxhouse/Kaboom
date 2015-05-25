@@ -35,6 +35,16 @@ ShadowManager::~ShadowManager()
 	}
 }
 
+bool ShadowManager::hasCameraAtIndex(int index)
+{
+	return _depthCameras[index] != NULL ? true : false;
+}
+
+int ShadowManager::getNumShadowMaps()
+{
+	return MAX_SHADOW_MAPS;
+}
+
 void ShadowManager::getPassInfo()
 {
 	_depthAtlasTex = static_cast<osg::Texture2D *>(_passes->getTexture("b_shadowAtlas"));
@@ -56,6 +66,24 @@ int ShadowManager::findAvailableDepthSlot()
 	}
 	
 	return -1;
+}
+
+const osg::Matrix &ShadowManager::getLightSpaceWVP(int index)
+{
+	if (_depthCameras[index] == NULL) return _defaultMatrix;
+	return _depthCameras[index]->getCurrWVP();
+}
+
+float ShadowManager::getShadowMapScaleWRTAtlas(int index)
+{
+	if (_depthCameras[index] == NULL) return -1.0f;
+	return _depthCameras[index]->getShadowMapScaleWRTAtlas();
+}
+
+osg::Vec2 ShadowManager::getAtlasPosUVCoord(int index)
+{
+	if (_depthCameras[index] == NULL) return osg::Vec2(-1, -1);
+	return _depthCameras[index]->getAtlasPosUVCoord();
 }
 
 void ShadowManager::addPointLight(PointLight *light)
@@ -93,5 +121,6 @@ void ShadowManager::addPointLight(PointLight *light)
 		_depthCamGroup->addChild(depthCam->getRoot());
 
 		light->setShadowMapIndex(i, slot);
+		_currShadowMapNum++;
 	}
 }
