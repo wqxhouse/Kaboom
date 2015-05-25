@@ -12,6 +12,7 @@
 #include <network/MatchStateEvent.h>
 #include <network/PlayerDeathEvent.h>
 #include <network/PlayerInputEvent.h>
+#include <network/PlayerRenameEvent.h>
 #include <network/PlayerRespawnEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
@@ -94,6 +95,12 @@ void GameClient::receive() {
             }
             case EVENT_SCORE: {
                 ScoreEvent evt;
+                evt.deserialize(&networkData[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
+                break;
+            }
+            case EVENT_PLAYER_RENAME: {
+                PlayerRenameEvent evt;
                 evt.deserialize(&networkData[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
@@ -184,6 +191,11 @@ void GameClient::sendMessage(const Event &evt) const {
     network.sendMessage(data, size);
 
     delete[] data;
+}
+
+void GameClient::sendPlayerRenameEvent(const std::string &name) const {
+    PlayerRenameEvent evt(0, name.c_str());
+    sendMessage(evt);
 }
 
 void GameClient::sendEquipEvent(EntityType type) const {

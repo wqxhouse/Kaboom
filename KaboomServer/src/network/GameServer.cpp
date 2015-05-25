@@ -24,6 +24,7 @@
 #include <network/NetworkData.h>
 #include <network/PlayerDeathEvent.h>
 #include <network/PlayerInputEvent.h>
+#include <network/PlayerRenameEvent.h>
 #include <network/PlayerRespawnEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
@@ -62,6 +63,7 @@ void GameServer::receive(const IdToPlayerMap &players) {
 
         EmptyEvent emptyEvent;
         PlayerInputEvent playerInputEvent;
+        PlayerRenameEvent playerRenameEvent;
         ReloadRequestEvent reloadRequestEvent;
         EquipEvent equipEvent;
 
@@ -76,6 +78,11 @@ void GameServer::receive(const IdToPlayerMap &players) {
                 case EVENT_PLAYER_INPUT: {
                     playerInputEvent.deserialize(&networkData[i]);
                     playerInputEvent.setPlayerId(player->getId());
+                    break;
+                }
+                case EVENT_PLAYER_RENAME: {
+                    playerRenameEvent.deserialize(&networkData[i]);
+                    playerRenameEvent.setPlayerId(player->getId());
                     break;
                 }
                 case EVENT_EQUIP: {
@@ -96,10 +103,14 @@ void GameServer::receive(const IdToPlayerMap &players) {
             }
 
             i += emptyEvent.getByteSize();
-		}
+        }
 
         if (receivedOpcodes.count(EVENT_PLAYER_INPUT)) {
             eventHandlerLookup.find(EVENT_PLAYER_INPUT)->handle(playerInputEvent);
+        }
+
+        if (receivedOpcodes.count(EVENT_PLAYER_RENAME)) {
+            eventHandlerLookup.find(EVENT_PLAYER_RENAME)->handle(playerRenameEvent);
         }
 
         if (receivedOpcodes.count(EVENT_EQUIP)) {
@@ -173,6 +184,11 @@ void GameServer::sendMatchStateEvent(const GameMode &gameMode) const {
 
 void GameServer::sendScoreEvent(Player *player) const {
     ScoreEvent evt(player->getId(), player->getKills(), player->getDeaths());
+    sendEvent(evt);
+}
+
+void GameServer::sendPlayerRenameEvent(Player *player) const {
+    PlayerRenameEvent evt(player->getId(), player->getName());
     sendEvent(evt);
 }
 

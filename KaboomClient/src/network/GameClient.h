@@ -17,6 +17,8 @@ public:
 	bool disconnectFromServer();
 
     void sendMessage(const Event &evt) const;
+
+    void sendPlayerRenameEvent(const std::string &name) const;
     void sendEquipEvent(EntityType type) const;
     void sendReloadRequestEvent() const;
 
