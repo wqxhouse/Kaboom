@@ -114,6 +114,32 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 			break;
 	}
 }
+void GameGUIEventHandler::endGame() const{
+	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
+	Rocket::Core::Element * table = window2->GetChild(0);
+	bool flag = true;
+	int maxKills = 0;
+	int playerId = 0;
+	int location=0;
+	for (int i = 1; i<table->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = table->GetChild(i);
+		Rocket::Core::String s = tr->GetChild(1)->GetInnerRML();
+		//Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
+		std::string numString= s.CString();
+		int num = std::stoi(numString);
+		if (num> maxKills){
+			maxKills = num;
+			location = 0;
+			Rocket::Core::String player = tr->GetChild(0)->GetInnerRML();
+			playerId = std::stoi(player.CString());
+		}
+	}
+
+	window2->Show();
+	//TODO end game screen
+
+
+}
 
 void GameGUIEventHandler::showScoreBoard() const{
 	//Core::getInGameLibRocketGUIManager()->getWindow(0)->Hide();

@@ -17,6 +17,7 @@ public:
     void handle(const AmmoAmountEvent &e, InventoryComponent *bombConCom) const;
 	void handle(const ScoreEvent &e) const;
 	void handle(const TimeEvent &e) const;
+	void endGame() const;
 	void changeWeapon(int weapon) const;
 	void showScoreBoard() const;
 	void hideScoreBoard() const;
