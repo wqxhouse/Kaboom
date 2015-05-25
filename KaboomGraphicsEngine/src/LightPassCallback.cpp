@@ -32,8 +32,9 @@ void LightPassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	std::vector<ShadowMapUniformBlock> data(numShadowMap);
 
 	// retrieve ubb
+	// FIXME: currently get binding 1 (shadow map ubo) hard coded, consider refactoring using some containers
 	osg::UniformBufferBinding *ubb =
-		static_cast<osg::UniformBufferBinding *>(ss->getAttribute(osg::StateAttribute::UNIFORMBUFFERBINDING));
+		static_cast<osg::UniformBufferBinding *>(ss->getAttribute(osg::StateAttribute::UNIFORMBUFFERBINDING, 1));
 	osg::UniformBufferObject* ubo
 		= static_cast<osg::UniformBufferObject *>(ubb->getBufferObject());
 	osg::FloatArray* array = static_cast<osg::FloatArray*>(ubo->getBufferData(0));
@@ -50,15 +51,16 @@ void LightPassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		// TODO: consider precompute view inv matrix, since it is used every where
 		data[i]._vwvp = osg::Matrix::inverse(Core::getMainCamera().getViewMatrix()) * wvp;
 		data[i]._atlas_uvcoord = sManager->getAtlasPosUVCoord(i);
-		data[i].tex_scale = sManager->getShadowMapScaleWRTAtlas(i);
+		data[i]._tex_scale = sManager->getShadowMapScaleWRTAtlas(i);
 
 		// insert ubo
 		*(osg::Matrixf *)(&(*array)[uboIndex]) = data[i]._vwvp;
 		*(osg::Vec2f *)(&(*array)[uboIndex + 64]) = data[i]._atlas_uvcoord;
-		*(float *)(&(*array)[uboIndex + 72]) = data[i].tex_scale;
+		*(float *)(&(*array)[uboIndex + 72]) = data[i]._tex_scale;
 
 		uboIndex += 76;
 	}
+	array->dirty();
 
 	//osg::Vec3 dummy;
 	//osg::Vec3 eye;

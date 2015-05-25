@@ -16,7 +16,7 @@ private:
 	{
 		osg::Matrixf _vwvp;
 		osg::Vec2 _atlas_uvcoord;
-		float tex_scale;
+		float _tex_scale;
 	};
 
 	CubeMapPreFilter *_cubemapPreFilter;

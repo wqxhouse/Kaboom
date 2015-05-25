@@ -84,7 +84,7 @@
       <!-- due to the limitation of ubo, need to use 4 times the space for 6 ints -->
     </value>
     <!-- 12 + 24 = 36 bytes -->
-    <!-- total = 36 * 128 / 1024 = 4.5KB < 32KB -->
+    <!-- total = 36 * 128 * 4 / 1024 = 18KB < 32KB -->
   </uniform_buffer>
 
 </compositor>
