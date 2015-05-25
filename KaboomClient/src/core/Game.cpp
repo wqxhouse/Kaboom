@@ -74,10 +74,6 @@ Game::Game(ConfigSettings *config)
 
     inputManager = new InputManager(client, this);
     inputManager->loadConfig();
-	
-	//loading the bomb asset.
-	bombFactory.loadBomb(str_mediaPath);
-	pickupFactory.loadPickup(str_mediaPath);
 
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
     Core::addEventHandler(&inputManager->getMouseEventHandler());

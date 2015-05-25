@@ -11,8 +11,6 @@ class PickupFactory {
 public:
 	PickupFactory(EntityManager &entityManager);
 
-	void loadPickup(std::string mediaPath);
-
     Entity *createPickup(
             unsigned int id,
             EntityType type,
