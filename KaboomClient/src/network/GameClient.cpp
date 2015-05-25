@@ -40,9 +40,12 @@ bool GameClient::disconnectFromServer() {
 }
 
 void GameClient::receive() {
-    static char networkData[MAX_PACKET_SIZE];
+    static char networkBuffer[MAX_PACKET_SIZE];
+    static int bufferOffset = 0;
 
-    int len = network.receivePackets(networkData);
+    int len = network.receivePackets(networkBuffer + bufferOffset, MAX_PACKET_SIZE - bufferOffset);
+
+    bufferOffset = 0;
 
     if (len == 0) {
         printf("<Client> Server is not responding switch back to editor");
@@ -54,10 +57,16 @@ void GameClient::receive() {
         return;
     }
 
-    unsigned int i = 0;
-    while (i < (unsigned int)len) {
+    int i = 0;
+    while (i < len) {
         EmptyEvent emptyEvent;
-        emptyEvent.deserialize(&networkData[i]);
+        emptyEvent.deserialize(&networkBuffer[i]);
+
+        if (i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
+            bufferOffset = MAX_PACKET_SIZE - i;
+            memcpy(networkBuffer, &networkBuffer[i], bufferOffset);
+            break;
+        }
 
        // printf("eventType is %d\n", emptyEvent.getOpcode());
         //printf("byteSize is %d\n", emptyEvent.getByteSize());
@@ -65,110 +74,110 @@ void GameClient::receive() {
         switch (emptyEvent.getOpcode()) {
             case EVENT_CONNECT: {
                 ConnectEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_DISCONNECT: {
                 DisconnectEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_ASSIGN: {
                 AssignEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_BIND: {
                 BindEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_MATCH_STATE: {
                 MatchStateEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_SCORE: {
                 ScoreEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_PLAYER_RENAME: {
                 PlayerRenameEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_PLAYER_RESPAWN: {
                 PlayerRespawnEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_PLAYER_DEATH: {
                 PlayerDeathEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_SPAWN: {
                 SpawnEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_DESTROY: {
                 DestroyEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_POSITION: {
                 PositionEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_ROTATION: {
                 RotationEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_EXPLOSION: {
                 ExplosionEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_HEALTH: {
                 HealthEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_AMMO_COUNT: {
                 AmmoAmountEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
             case EVENT_PLAYER_STATUS: {
                 PlayerStatusEvent evt;
-                evt.deserialize(&networkData[i]);
+                evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
 			case EVENT_TIME:
 			{
 				TimeEvent timeEvent;
-				timeEvent.deserialize(&networkData[i]);
+				timeEvent.deserialize(&networkBuffer[i]);
 				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(timeEvent);
 				break;
 			}
