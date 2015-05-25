@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include <osg/Group>
-#include <osgAudio/FileStream.h>
+#include <osgAudio/SoundRoot.h>
 
 #include <Core.h>
 #include <GeometryObjectManager.h>
@@ -43,9 +43,9 @@ Game::Game(ConfigSettings *config)
     int bufferH = atoi(renbufferHStr.c_str());
     int screenW = atoi(screenWStr.c_str());
     int screenH = atoi(screenHStr.c_str());
-	sounds = new std::unordered_map<SOUNDS, osg::ref_ptr<Sample> >();
 
-    Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
+    osg::ref_ptr<osgAudio::SoundRoot> soundRoot = new osgAudio::SoundRoot;
+    Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath, soundRoot);
 	// init gui handler after Core::init() is called, so that it gets the intialized in game gui 
 	_guiEventHandler = new GameGUIEventHandler(this);
 
@@ -83,30 +83,12 @@ Game::Game(ConfigSettings *config)
 	_materialManager = Core::getWorldRef().getMaterialManager();
 	_particleEffectManager = Core::getWorldRef().getParticleEffectManager();
 
-	source = new Source;
-	
-	printf("check for sound errors\n");
-	sample = new Sample("sounds\\a.wav");
-	soundManager.addToMap(KABOOM_EXPLODE,"sounds\\a.wav");
-	printf("Adding KABOOM_EXPLODE TO MAP\n");
-	sounds->insert(std::make_pair(KABOOM_EXPLODE,sample));	
-	printf("Added KABOOM_EXPLODE TO MAP\n");
-	sample = new Sample("sounds\\a.wav");
-	printf("Adding KABOOM_FIRE TO MAP\n");
-	sounds->insert(std::make_pair(KABOOM_FIRE, sample));
-	printf("Added KABOOM_FIRE TO MAP\n");
-	sample = new Sample("sounds\\a.wav");
-	printf("Adding BASIC TO MAP\n");
-	sounds->insert(std::make_pair(BASIC, sample));
-	printf("Added BASIC TO MAP\n");
-	/*sample = new Sample("C:\\Users\\melapier\\Downloads\\djsona.wav");
-	backgroundMusic = new Source;
-	backgroundMusic->setSound(sample.get());
-	backgroundMusic->setGain(1);
-	backgroundMusic->setLooping(true);
-	backgroundMusic->play();*/
-	//delete source;
-	printf("finished check sound errors");
+    printf("Loading KABOOM_EXPLODE sound\n");
+    soundManager.loadSound(SoundType::KABOOM_EXPLODE, "sounds\\a.wav");
+    printf("Loading KABOOM_FIRE sound\n");
+    soundManager.loadSound(SoundType::KABOOM_FIRE, "sounds\\a.wav");
+    printf("Loading BASIC sound\n");
+    soundManager.loadSound(SoundType::BASIC, "sounds\\a.wav");
 }
 
 Game::~Game() {

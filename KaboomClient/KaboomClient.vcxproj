@@ -259,7 +259,6 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\JumpPadFactory.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
-    <ClCompile Include="src\core\SoundManager.cpp" />
     <ClCompile Include="src\gui\GameGUI.cpp" />
     <ClCompile Include="src\gui\GameGUIEventHandler.cpp" />
     <ClCompile Include="src\gui\GameGUIListener.cpp" />
@@ -292,6 +291,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\network\PositionEventHandler.cpp" />
     <ClCompile Include="src\network\TimeEventHandler.cpp" />
     <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\sound\SoundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -307,7 +307,6 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\Core\GameStateMachine.h" />
     <ClInclude Include="src\core\JumpPadFactory.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
-    <ClInclude Include="src\core\SoundManager.h" />
     <ClInclude Include="src\gui\GameGUI.h" />
     <ClInclude Include="src\gui\GameGUIEventHandler.h" />
     <ClInclude Include="src\gui\GameGUIListener.h" />
@@ -339,6 +338,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\network\PositionEventHandler.h" />
     <ClInclude Include="src\network\TimeEventHandler.h" />
     <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\sound\SoundManager.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
