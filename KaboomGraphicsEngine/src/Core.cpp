@@ -94,6 +94,11 @@ World &Core::getWorldRef()
 	return _world;
 }
 
+osg::ref_ptr<TwGUIManager> Core::getEditorGUI()
+{
+	return _gui;
+}
+
 osg::Vec2 Core::getScreenSize()
 {
 	return _screenSize;
