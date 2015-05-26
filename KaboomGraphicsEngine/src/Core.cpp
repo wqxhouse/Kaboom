@@ -211,17 +211,18 @@ void Core::configSAOPass()
 	_saoPassCallback = new SAOPassCallback(passCam);
 	passCam->getOrCreateStateSet()->setUpdateCallback(_saoPassCallback);
 
-	//osgFX::EffectCompositor::PassData blurXPassData;
-	//_passes->getPassData("SAOBlurXPass", blurXPassData);
-	//osg::Camera *blurX = blurXPassData.pass;
-	//osg::Depth *depth = new osg::Depth;
-	//depth->setFunction(osg::Depth::ALWAYS);
-	//blurX->getOrCreateStateSet()->setAttribute(depth);
+	osgFX::EffectCompositor::PassData blurXPassData;
+	_passes->getPassData("SAOBlurXPass", blurXPassData);
+	osg::Camera *blurX = blurXPassData.pass;
+	osg::Depth *depth = new osg::Depth;
+	depth->setFunction(osg::Depth::ALWAYS);
+	depth->setWriteMask(false);
+	blurX->getOrCreateStateSet()->setAttribute(depth);
 
-	//osgFX::EffectCompositor::PassData blurYPassData;
-	//_passes->getPassData("SAOBlurYPass", blurYPassData);
-	//osg::Camera *blurY = blurYPassData.pass;
-	//blurY->getOrCreateStateSet()->setAttribute(depth);
+	osgFX::EffectCompositor::PassData blurYPassData;
+	_passes->getPassData("SAOBlurYPass", blurYPassData);
+	osg::Camera *blurY = blurYPassData.pass;
+	blurY->getOrCreateStateSet()->setAttribute(depth);
 
 
 }

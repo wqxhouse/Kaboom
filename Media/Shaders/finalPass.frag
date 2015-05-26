@@ -18,6 +18,7 @@ void main()
 	//gl_FragColor = vec4(ao * shading, 1);
 	// gl_FragColor = vec4(vec3(ao), 1);
 
-	vec3 depth = texelFetch(u_saoTex, ssCoord, 0).rgb;
-	gl_FragColor = vec4(vec3(depth.r), 1);
+	float ao_1 = pow(ao, 1.0/2.2);
+
+	gl_FragColor = vec4(ao_1 * shading, 1);
 }
