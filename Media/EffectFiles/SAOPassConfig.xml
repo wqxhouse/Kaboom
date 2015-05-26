@@ -9,8 +9,8 @@
   
   
   <buffer name="b_sao" type="2d">
-    <internal_format>rgb16f</internal_format>
-    <source_format>rgb</source_format>
+    <internal_format>rgba32f</internal_format>
+    <source_format>rgba</source_format>
     <source_type>float</source_type>
   </buffer>
 

@@ -39,9 +39,9 @@
   </buffer>
 
   <buffer name="b_finalLDR" type="2d">
-    <internal_format>rgba</internal_format>
+    <internal_format>rgba32f</internal_format>
     <source_format>rgba</source_format>
-    <source_type>ubyte</source_type>
+    <source_type>float</source_type>
   </buffer>
 
   <technique name="deferred_shading">
@@ -64,6 +64,8 @@
       <output_buffer target="color0">b_RT0</output_buffer>
       <output_buffer target="color1">b_RT1</output_buffer>
       <output_buffer target="color2">b_RT2</output_buffer>
+      <output_buffer target="color3">b_position</output_buffer>
+      <output_buffer target="color4">b_normal</output_buffer>
       <output_buffer target="depth">debugDepth</output_buffer>
     </forward_pass>
 
@@ -123,6 +125,8 @@
 
     <deferred_pass name="SAOPass">
       <input_buffer unit="0" varname="u_RT2">b_RT2</input_buffer>
+      <input_buffer unit="1" varname="u_position">b_position</input_buffer>
+      <input_buffer unit="2" varname="u_normal">b_normal</input_buffer>
       <output_buffer target="color">b_sao</output_buffer>
       <clear_color>1 1 1 1</clear_color>
       

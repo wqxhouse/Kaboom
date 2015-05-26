@@ -24,6 +24,14 @@
 		<scale>0.250000 0.250000 0.250000</scale>
 	</model>
 
+	<model name="shelf">
+		<file>Assets\GeometryObject\Shelf N120912.3DS</file>
+		<material name="____Default" />
+		<position>2.011489 -9.415632 6.756204</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
+	</model>
+
 	<model name="platform">
 		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
 		<material name="____TestMaterial" />
