@@ -4,8 +4,13 @@
 #include "PointLight.h"
 #include "ShadowDepthCamera.h"
 
+#include <osg/TextureCubeMap>
+#include <osgDB/ReadFile>
+#include <Core.h>
+
 #define MAX_SHADOW_MAPS 60
 #define SHADOW_ATLAS_RESOLUTION 4096
+
 ShadowManager::ShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRoot)
 	: _passes(passes), _geomRoot(geomRoot), _currShadowMapNum(0)
 {
@@ -21,6 +26,10 @@ ShadowManager::ShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRo
 	}
 
 	getPassInfo();
+
+	_pointLightShadowFaceLookupTex = new osg::TextureCubeMap;
+	configShadowMapFaceLookupCube();
+	
 }
 
 ShadowManager::~ShadowManager()
@@ -33,6 +42,30 @@ ShadowManager::~ShadowManager()
 			delete _depthCameras[i];
 		}
 	}
+}
+
+void ShadowManager::configShadowMapFaceLookupCube()
+{
+	osg::TextureCubeMap *cubemap = _pointLightShadowFaceLookupTex;
+	std::string texPath = Core::getMediaPath() + "DefaultAssets\\PointLightShadowLookup\\";
+
+	for (int i = 0; i < 6; i++)
+	{
+		osg::Image *img = osgDB::readImageFile(texPath + std::to_string(i) + ".png");
+		if (img == NULL)
+		{
+			OSG_WARN << "ShadowManager: cubemap tex not found" << std::endl;
+			continue;
+		}
+		cubemap->setImage(osg::TextureCubeMap::POSITIVE_X + i, img);
+	}
+
+	cubemap->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP_TO_EDGE);
+	cubemap->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP_TO_EDGE);
+	cubemap->setWrap(osg::Texture::WRAP_R, osg::Texture::CLAMP_TO_EDGE);
+	cubemap->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR_MIPMAP_LINEAR);
+	cubemap->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
+	cubemap->setResizeNonPowerOfTwoHint(false);
 }
 
 bool ShadowManager::hasCameraAtIndex(int index)
