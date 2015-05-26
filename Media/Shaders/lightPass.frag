@@ -5,8 +5,7 @@
 #include "Shaders/lightPBRModel.glsl"
 #include "Shaders/gbufferUtil.glsl"
 #include "Shaders/Material.glsl"
-#include "Shaders/Samples.glsl"
-// #include "Shaders/shadowUtil.glsl"
+#include "Shaders/shadowUtil.glsl"
 #include "Shaders/lightUtil.glsl"
 
 uniform sampler2D u_RT0;
@@ -24,10 +23,10 @@ layout(std140) uniform u_lightsBuffer
 	Light lights[MAX_VISIBLE_LIGHTS];
 };
 
-//layout(std140) uniform u_shadowDepthMapBuffer 
-//{
-//	ShadowDepthMap u_shadowDepthMap[MAX_SHADOW_MAPS];
-//};
+layout(std140) uniform u_shadowDepthMapBuffer 
+{
+	ShadowDepthMap u_shadowDepthMaps[MAX_SHADOW_MAPS];
+};
 
 varying vec3 v_viewRay;
 
@@ -107,8 +106,7 @@ void main()
         currentLightId = texelFetch(u_lightsPerTile, baseOffset + currentOffset, 0).r;
         currentLight = lights[currentLightId];
 
-		//ShadowInfo shadowInfo = getPointLightShadowInfoHelper();
-  //      result += applyShadowPointLight(currentLight, material, shadowInfo, u_shadowAtlas);
+        result += applyShadowPointLight(currentLight, material, u_viewInvMat, u_shadowAtlas, u_shadowFaceLookup, u_shadowDepthMaps);
     }
 
     // Compute directional lights
@@ -134,5 +132,11 @@ void main()
     result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
     //result = 1.0f - exp(-1.0 * result);
 
-	gl_FragColor = vec4(result, 1.0);
+	// gl_FragColor = vec4(result, 1.0);
+
+	//vec3 l = normalize(light.position - material.position);
+	//vec3 l_ws = (u_viewInvMat * vec4(l, 0)).xyz;
+	vec3 l_ws = vec3(0, 0, -1);
+	float face = textureLod(u_shadowFaceLookup, l_ws, 0).r;
+	gl_FragColor = vec4(face);
 }

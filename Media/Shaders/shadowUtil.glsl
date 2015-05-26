@@ -1,3 +1,5 @@
+#include "Shaders/Samples.glsl"
+
 struct ShadowDepthMap
 {
 	mat4 vwvp;
@@ -8,8 +10,8 @@ struct ShadowDepthMap
 vec2 getShadowOffsets(vec3 N, vec3 L) 
 {
     float cos_alpha = clamp(dot(N, L), 0.0, 1.0);
-    float offset_scale_N = sqrt(1 - cos_alpha*cos_alpha); // sin(acos(L¡¤N))
-    float offset_scale_L = offset_scale_N / cos_alpha;    // tan(acos(L¡¤N))
+    float offset_scale_N = sqrt(1 - cos_alpha*cos_alpha); 
+    float offset_scale_L = offset_scale_N / cos_alpha;   
     return vec2(offset_scale_N, min(2, offset_scale_L));
 }
 
@@ -28,7 +30,7 @@ vec3 reprojectShadow(ShadowDepthMap shadowInfo, vec3 pos)
     return (projected.xyz / projected.w * 0.5) + 0.5;
 }
 
-vec2 calcAtlasUVCoord(vec2 fullQuadCoord, in ShadowDepthMap shadowInfo) 
+vec2 calcAtlasUVCoord(vec2 fullQuadCoord, ShadowDepthMap shadowInfo) 
 {
     return clamp(fullQuadCoord, 0, 1) * shadowInfo.tex_scale + shadowInfo.altas_uvcoord;
 }
@@ -54,8 +56,8 @@ float PCF(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, fl
     return 1.0 - clamp(sum, 0.0, 1.0);
 }
 
-float computePointLightShadow(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, float slopeScaledBias, 
-							  float normalScaledBias, float baseBias) 
+float computePointLightShadow(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, Material material,
+			vec3 n, vec3 l, float slopeScaledBias, float normalScaledBias, float baseBias) 
 {
     vec3 biasedPos = computeBiasedPosition(material.position, slopeScaledBias, normalScaledBias, n, l);
     vec3 projCoord = reprojectShadow(shadowInfo, biasedPos);

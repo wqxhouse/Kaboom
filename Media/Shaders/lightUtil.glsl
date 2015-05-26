@@ -111,26 +111,27 @@ vec3 applyPointLight(Light light, Material material)
 //vec3 applyShadowPointLight(Light light, Material material, 
 //	in sampler2D u_shadowAtlas, in samplerCube u_shadowCube, 
 //	in mat4 viewInvMat, in struct ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
-//vec3 applyShadowPointLight(Light light, Material material, ShadowDepthMap shadowInfo, sampler2D u_shadowAtlas)
-//{
-//	float distanceToLight = distance(material.position, light.position);   
-//    float attenuation = computePointLightAttenuation(light, distanceToLight);
+vec3 applyShadowPointLight(Light light, Material material, mat4 u_viewInvMat,
+			sampler2D u_shadowAtlas, samplerCube u_shadowCube, ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
+{
+	float distanceToLight = distance(material.position, light.position);   
+    float attenuation = computePointLightAttenuation(light, distanceToLight);
 
-//    vec3 l = normalize(light.position - material.position);
-//    vec3 v = normalize(-material.position);
-//    vec3 n = normalize(material.normal);
-//    vec3 h = normalize(l + v);
+    vec3 l = normalize(light.position - material.position);
+    vec3 v = normalize(-material.position);
+    vec3 n = normalize(material.normal);
+    vec3 h = normalize(l + v);
 
-//	vec3 l_ws = u_viewInvMat * vec4(l, 0).xyz;
-	//int face = int(textureLod(u_shadowCube, l_ws, 0).r * 5.0);
- //   int shadowMapIndex = light.shadowMapIndex[face];
- //   ShadowDepthMap shadowInfo = u_shadowDepthMap[shadowMapIndex]; 
-   
-//    float shadowFactor = computePointLightShadow(u_shadowAtlas, shadowInfo, material, n, l, 0.2, 0.001, 0.0015);
+	vec3 l_ws = (u_viewInvMat * vec4(l, 0)).xyz;
+	int face = int(textureLod(u_shadowCube, l_ws, 0).r * 5.0);
+    int shadowMapIndex = light.shadowMapIndex[face];
+	ShadowDepthMap shadowInfo = depthMap[shadowMapIndex];
 
-//    return computeLightModel(light, material, l, v, n, h, attenuation, shadowFactor);
-//	// return vec3(1);
-//}
+    float shadowFactor = computePointLightShadow(u_shadowAtlas, shadowInfo, material, n, l, 0.2, 0.001, 0.0015);
+
+    return computeLightModel(light, material, l, v, n, h, attenuation, shadowFactor);
+	// return vec3(1);
+}
 
 // Modified version of Unreal 4's
 // Need more precision for roughness below 0.5

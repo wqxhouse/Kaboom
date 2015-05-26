@@ -9,7 +9,7 @@ uniform float u_farPlane;
 #include "Shaders/lightPBRModel.glsl"
 #include "Shaders/gbufferUtil.glsl"
 #include "Shaders/Material.glsl"
-// #include "Shaders/shadowUtil.glsl"
+#include "Shaders/shadowUtil.glsl"
 #include "Shaders/lightUtil.glsl" 
 #include "Shaders/lightCulling.glsl"
 

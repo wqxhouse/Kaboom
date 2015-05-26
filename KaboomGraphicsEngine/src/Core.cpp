@@ -270,6 +270,7 @@ void Core::configSceneNode()
 {
 	_geomRoot = new osg::Group;
 	_geomRoot->addChild(_world.getGeometryManager()->getRootNode());
+	_sceneRoot->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 }
 
 void Core::configViewer()
