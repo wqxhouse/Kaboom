@@ -1158,8 +1158,37 @@ osg::Shader* EffectCompositor::createShaderFromXML(osgDB::XmlNode* xmlNode, bool
 
 	std::string code = shader->getShaderSource();
 	std::string::size_type pos = 0;
+
+	// FIXME: currently not detecting comment sign /* */ 
 	while ((pos = code.find("#include", pos)) != std::string::npos)
 	{
+		std::string::iterator it = code.begin() + pos;
+		std::string subLine;
+		int commentCounter = 0;
+		bool lineCommented = false;
+		for (std::string::iterator it2 = it; it2 != code.begin(); it2--)
+		{
+			if (*it2 == '\r\n' || *it2 == '\n')
+			{
+				subLine = std::string(it2, it);
+				if (subLine.find("//") != std::string::npos)
+				{
+					lineCommented = true;
+				}
+				break;
+			}
+		}
+
+		if (lineCommented)
+		{
+			for (; *it != '\r\n' && *it != '\n'; it++)
+			{
+				++pos;
+			}
+			++pos;
+			continue;
+		}
+
 		// Find all "#include" and handle them
 		std::string::size_type pos2 = code.find_first_not_of(" ", pos + 8);
 		if (pos2 == std::string::npos || code[pos2] != '\"') break;
