@@ -12,6 +12,8 @@ uniform sampler2D u_RT0;
 uniform sampler2D u_RT1;
 uniform sampler2D u_RT2;
 
+uniform sampler2D u_position;
+
 uniform sampler2D u_shadowAtlas;
 uniform isampler2D u_lightsPerTile;
 //uniform sampler2D u_lightsPerTile;
@@ -65,6 +67,8 @@ void main()
     vec4 rt2 = texelFetch(u_RT2, screenCoord, 0);
 
 	Material material = getMaterialFromGBuffer(rt0, rt1, rt2, u_farPlane, v_viewRay);
+
+	material.position = texelFetch(u_position, screenCoord, 0).xyz;
 
     // Fetch the light counts
     // We perform a min as it *might* be that we read a wrong value
@@ -120,7 +124,7 @@ void main()
         result += applyDirectionalLight(currentLight, material);
     }
 
-    //// Compute shadowed directinal lights
+    //// Compute shadowed directional lights
     //baseOffset = precomputeCoord + ivec2(0, 6);
     //for (int i = 0; i < countDirectionalLightShadow; i++) {
     //    currentOffset = ivec2(i % 8, i / 8);
@@ -133,11 +137,11 @@ void main()
     result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
     //result = 1.0f - exp(-1.0 * result);
 
-	//gl_FragColor = vec4(result, 1.0);
+	gl_FragColor = vec4(result, 1.0);
 
 	// debug sample atlas
 	//vec3 l_ws = vec3(0, 0, -1);
-	//int face = int(textureLod(u_shadowFaceLookup, l_ws, 0).r * 5.0);
+	//int face = int((textureLod(u_shadowFaceLookup, l_ws, 0).r + 0.1) * 5.0);
 	//int shadowMapIndex = lights[0].shadowMapIndex[face];
 	//ShadowDepthMap shadowInfo = u_shadowDepthMaps[shadowMapIndex];
 
@@ -157,7 +161,21 @@ void main()
 
 	//gl_FragColor = vec4(vec3(z), 1);
 
-	vec4 vsPos = vec4(material.position, 1);
-	vec4 wsPos = u_shadowDepthMaps[0].vwvp * vsPos;
-	gl_FragColor = wsPos;
+	//vec4 vsPos = vec4(material.position, 1);
+	//vec4 wsPos = u_shadowDepthMaps[0].vwvp * vsPos;
+	//gl_FragColor = wsPos;
+
+	//vec3 ll = normalize(lights[0].position - material.position);
+	//vec3 ws_ll = (u_viewInvMat * vec4(ll, 0)).xyz;
+	//int face = int(textureLod(u_shadowFaceLookup, ws_ll, 0).r * 5.0);
+	//int shadowMapIndex = lights[0].shadowMapIndex[face];
+	//ShadowDepthMap shadowInfo = u_shadowDepthMaps[shadowMapIndex];
+
+	//vec2 samplePos = shadowInfo.tex_scale * v_uvcoord + shadowInfo.altas_uvcoord;
+	//vec4 atlasSample = textureLod(u_shadowAtlas, samplePos, 0);
+
+	//float depth = atlasSample.r;
+	//gl_FragColor = vec4(vec3(depth), 1);
+
+	//gl_FragColor = vec4(ws_ll, 1);
 }

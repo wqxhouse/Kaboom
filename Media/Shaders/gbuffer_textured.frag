@@ -62,4 +62,6 @@ void main()
 	gl_FragData[0] = vec4(albedo, 1.0); // albedo + translucent
 	gl_FragData[1] = vec4(roughness, u_specular, metallic, 0.0); // material buffer + unshaded bit(for skybox)
 	gl_FragData[2] = vec4(encodeNormal(view_normal), splitDepth2x16(v_depth)); // encoded normal + split linDepth
+
+	gl_FragData[3] = vec4(v_position.xyz, 1);
 }
