@@ -29,6 +29,7 @@ void DisconnectEventHandler::handle(const Event &e) const {
 
         if (ownerComp != nullptr) {
             entity->attachComponent(new DestroyComponent());
+            entity->detachComponent<OwnerComponent>();
         }
     }
 

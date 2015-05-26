@@ -43,17 +43,18 @@ void GameClient::receive() {
     static char networkBuffer[MAX_PACKET_SIZE];
     static int bufferOffset = 0;
 
-    int len = network.receivePackets(networkBuffer + bufferOffset, MAX_PACKET_SIZE - bufferOffset);
+    int result = network.receivePackets(networkBuffer + bufferOffset, MAX_PACKET_SIZE - bufferOffset);
+    int len = bufferOffset + result;
 
     bufferOffset = 0;
 
-    if (len == 0) {
+    if (result == 0) {
         printf("<Client> Server is not responding switch back to editor");
         network.disconnectFromServer();
         return;
     }
 
-    if (len < 0) {
+    if (result < 0) {
         return;
     }
 
@@ -62,7 +63,7 @@ void GameClient::receive() {
         EmptyEvent emptyEvent;
         emptyEvent.deserialize(&networkBuffer[i]);
 
-        if (i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
+        if (i + sizeof(EmptyEvent) > MAX_PACKET_SIZE || i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
             bufferOffset = MAX_PACKET_SIZE - i;
             memcpy(networkBuffer, &networkBuffer[i], bufferOffset);
             break;

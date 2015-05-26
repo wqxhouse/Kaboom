@@ -56,14 +56,15 @@ void GameServer::receive(const IdToPlayerMap &players) {
         static char networkBuffer[MAX_PACKET_SIZE];
         static int bufferOffset = 0;
 
-        int len = network->receive(
+        int result = network->receive(
                 player->getId(),
                 networkBuffer + bufferOffset,
                 MAX_PACKET_SIZE - bufferOffset);
+        int len = bufferOffset + result;
 
         bufferOffset = 0;
 
-        if (len <= 0) {
+        if (result <= 0) {
             continue;
         }
 
@@ -80,7 +81,7 @@ void GameServer::receive(const IdToPlayerMap &players) {
             emptyEvent.deserialize(&networkBuffer[i]);
             receivedOpcodes.insert(emptyEvent.getOpcode());
 
-            if (i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
+            if (i + sizeof(EmptyEvent) > MAX_PACKET_SIZE || i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
                 bufferOffset = MAX_PACKET_SIZE - i;
                 memcpy(networkBuffer, &networkBuffer[i], bufferOffset);
                 break;
@@ -311,19 +312,21 @@ void GameServer::sendAmmoEvent(Player *player) const {
     sendEvent(evt, player->getId());
 }
 
-void GameServer::sendPlayerStatusEvent(Player *player) const {
-    PlayerStatusComponent *playerStatusComp = player->getEntity()->getComponent<PlayerStatusComponent>();
+void GameServer::sendPlayerStatusEvent(Entity *entity) const {
+    PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
 
     if (playerStatusComp == nullptr) {
         return;
     }
 
     PlayerStatusEvent evt(
-            playerStatusComp->checkIsKnockBacked(),
-            playerStatusComp->checkIsStaggered(),
-            playerStatusComp->checkIsDamaged(),
-            playerStatusComp->getIsAlive());
-    sendEvent(evt, player->getId());
+            entity->getId(),
+            playerStatusComp->isAlive(),
+            playerStatusComp->isRunning(),
+            playerStatusComp->isJumping(),
+            playerStatusComp->isAttacking(),
+            playerStatusComp->isDamaged());
+    sendEvent(evt);
 }
 
 void GameServer::sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players) const {
@@ -380,23 +383,23 @@ void GameServer::sendGameStatePackets(Player *player, const std::vector<Entity *
     for (auto entity : entities) {
         sendPositionEvent(entity);
         sendRotationEvent(entity);
+        sendPlayerStatusEvent(entity);
     }
 
     sendHealthEvent(player);
     sendAmmoEvent(player);
-    sendPlayerStatusEvent(player);
 }
 
 void GameServer::sendGameStatePackets(const IdToPlayerMap &players, const std::vector<Entity *> &entities) const {
     for (auto entity : entities) {
         sendPositionEvent(entity);
         sendRotationEvent(entity);
+        sendPlayerStatusEvent(entity);
     }
 
     for (auto kv : players) {
         const auto player = kv.second;
         sendHealthEvent(player);
         sendAmmoEvent(player);
-        sendPlayerStatusEvent(player);
     }
 }

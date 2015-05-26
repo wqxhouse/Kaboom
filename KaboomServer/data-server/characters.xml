@@ -23,6 +23,6 @@
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
         <running-speed type="float">5.0</running-speed>
-        <jumping-speed type="float">2.0</jumping-speed>
+        <jumping-speed type="float">5.0</jumping-speed>
     </character>
 </characters>

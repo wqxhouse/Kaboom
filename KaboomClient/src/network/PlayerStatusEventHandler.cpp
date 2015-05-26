@@ -1,9 +1,5 @@
 #include "PlayerStatusEventHandler.h"
 
-#include <osg/MatrixTransform>
-
-#include <Core.h>
-#include <GeometryObject.h>
 #include <components/PlayerStatusComponent.h>
 #include <core/Entity.h>
 #include <network/PlayerStatusEvent.h>
@@ -15,12 +11,14 @@ PlayerStatusEventHandler::PlayerStatusEventHandler(Game *game)
 }
 
 void PlayerStatusEventHandler::handle(const Event &e) const {
-	const PlayerStatusEvent &evt = static_cast<const PlayerStatusEvent &>(e);
+    const PlayerStatusEvent &evt = static_cast<const PlayerStatusEvent &>(e);
 
-    Entity *entity = game->getCurrentPlayer()->getEntity();
-    PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
-	playerStatusComp->setIsKnockBacked(playerStatusComp->getIsKnockBacked());
-	playerStatusComp->setIsStaggered(playerStatusComp->getIsStaggered());
-	playerStatusComp->setIsDamaged(playerStatusComp->getIsDamaged());
-	playerStatusComp->setIsAlive(playerStatusComp->getIsAlive());
+    Entity *entity = game->getEntityManager().getEntity(evt.getEntityId());
+
+    auto playerStatusComp = entity->getComponent<PlayerStatusComponent>();
+    playerStatusComp->setAlive(evt.isAlive());
+    playerStatusComp->setRunning(evt.isRunning());
+    playerStatusComp->setJumping(evt.isJumping());
+    playerStatusComp->setAttacking(evt.isAttacking());
+    playerStatusComp->setDamaged(evt.isDamaged());
 }

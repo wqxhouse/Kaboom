@@ -41,8 +41,9 @@
         </spawn-point>
         <spawn-point>
             <object-type type="string">Player</object-type>
-            <position type="vector3">2.0 -22.0 1.5</position>
+            <position type="vector3">0.0 0.0 1.5</position>
         </spawn-point>
+      <!--
         <spawn-point>
             <object-type type="string">Player</object-type>
             <position type="vector3">-2.0 22.0 1.5</position>
@@ -68,7 +69,7 @@
             <object-type type="string">Player</object-type>
             <position type="vector3">-26.0 -26.0 9.0</position>
         </spawn-point>
-
+-->
     <static-object>
       <object-type type="string">JumpPad</object-type>
       <id type="uint">262144</id>

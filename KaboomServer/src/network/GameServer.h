@@ -50,7 +50,7 @@ public:
     void sendRotationEvent(Entity *entity) const;
     void sendHealthEvent(Player *player) const;
     void sendAmmoEvent(Player *player) const;
-	void sendPlayerStatusEvent(Player *player) const;
+    void sendPlayerStatusEvent(Entity *entity) const;
 
     void sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players) const;
     void sendNewPlayerEnterWorldEvent(

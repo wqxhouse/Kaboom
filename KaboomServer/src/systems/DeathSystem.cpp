@@ -35,7 +35,7 @@ void DeathSystem::processEntity(Entity *entity) {
     auto handlerComp = entity->getComponent<MessageHandlerComponent>();
 
     if (healthComp->getAmount() == 0) {
-        playerStatusComp->setIsAlive(false);
+        playerStatusComp->setAlive(false);
         //game->getGameServer().sendPlayerStatusEvent(entity);
         auto playerComp = entity->getComponent<PlayerComponent>();
 

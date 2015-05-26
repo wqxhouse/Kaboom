@@ -92,9 +92,7 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
         printf("damage taken: %d \n", damage);
 
         charHealthComp->subtractAmount(damage);
-        charStatusComp->getDamageTimer().setDuration(250); // TODO: this should be global
-        charStatusComp->getDamageTimer().start();
-        charStatusComp->setIsDamaged(true);
+        charStatusComp->setDamaged(true);
         printf("new Player Health: %d \n", charHealthComp->getAmount());
 
         if (charHealthComp->getAmount() == 0) {
