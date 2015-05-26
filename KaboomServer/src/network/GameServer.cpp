@@ -56,14 +56,15 @@ void GameServer::receive(const IdToPlayerMap &players) {
         static char networkBuffer[MAX_PACKET_SIZE];
         static int bufferOffset = 0;
 
-        int len = network->receive(
+        int result = network->receive(
                 player->getId(),
                 networkBuffer + bufferOffset,
                 MAX_PACKET_SIZE - bufferOffset);
+        int len = bufferOffset + result;
 
         bufferOffset = 0;
 
-        if (len <= 0) {
+        if (result <= 0) {
             continue;
         }
 
@@ -80,7 +81,7 @@ void GameServer::receive(const IdToPlayerMap &players) {
             emptyEvent.deserialize(&networkBuffer[i]);
             receivedOpcodes.insert(emptyEvent.getOpcode());
 
-            if (i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
+            if (i + sizeof(EmptyEvent) > MAX_PACKET_SIZE || i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
                 bufferOffset = MAX_PACKET_SIZE - i;
                 memcpy(networkBuffer, &networkBuffer[i], bufferOffset);
                 break;
