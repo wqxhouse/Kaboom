@@ -9,6 +9,9 @@ class Vec3;
 
 class CharacterFactory {
 public:
+	static const int IDLE = 101;
+	static const int RUNNING = 102;
+
     CharacterFactory(EntityManager &entityManager);
 
     Entity *createCharacter(
