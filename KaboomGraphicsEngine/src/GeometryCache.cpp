@@ -124,3 +124,10 @@ Material* GeometryCache::getMaterialById(const int type_id)
 	}
 }
 
+void GeometryCache::clearCache()
+{
+	_modelMap.clear();
+	_fileNameMap.clear();
+	_materialMap.clear();
+	_matrixMap.clear();
+}

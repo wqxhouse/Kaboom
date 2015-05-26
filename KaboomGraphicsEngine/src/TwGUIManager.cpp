@@ -83,6 +83,14 @@ void TwGUIManager::initMainBar()
 		Core::enableStartScreen();
 	}, NULL, " label='--> Run Game :)' ");
 
+
+	// 'Load World File' button
+	TwAddButton(g_twBar, "Load World File",
+		[](void *clientData) {
+		loadWorldXML();
+	},
+		NULL, NULL);
+
 	// 'Export to XML' button
 	TwAddButton(g_twBar, "Export to XML",
 		[](void *clientData) {
@@ -196,6 +204,13 @@ void TwGUIManager::initMainBar()
 
 	TwAddSeparator(g_twBar, NULL, NULL);
 
+	initAddBarHelper();
+	//index = 0;
+}
+
+
+void TwGUIManager::initAddBarHelper()
+{
 	// Process geometries
 	const std::unordered_map<std::string, GeometryObject *> &gmMap = _gm->getGeometryObjectMapRef();
 	for (std::unordered_map<std::string, GeometryObject *>::const_iterator it = gmMap.begin();
@@ -207,8 +222,6 @@ void TwGUIManager::initMainBar()
 		// Moved code to a function
 		addModelToGUI(g_twBar, geom, GEOM_GROUP_NAME, _index);
 	}
-
-	//index = 0;
 }
 
 void TwGUIManager::initLightBar()
@@ -216,6 +229,11 @@ void TwGUIManager::initLightBar()
 	g_lightBar = TwNewBar("Lights");
 	TwDefine(" Lights label='Lights' size='300 180' color='185 185 50' position='16 515'");
 
+	initLightBarHelper();
+}
+
+void TwGUIManager::initLightBarHelper()
+{
 	// process lights
 	for (int i = 0; i < _lm->getNumLights(); i++)
 	{
@@ -496,6 +514,11 @@ void TwGUIManager::initPlainMaterialBar()
 	g_plainMaterialBar = TwNewBar("Plain_Materials");
 	TwDefine(" Plain_Materials label='Plain Materials' size='250 240' color='96 216 96' position='1025 140' valueswidth=100");
 
+	initPlainMaterialBarHelper();
+}
+
+void TwGUIManager::initPlainMaterialBarHelper()
+{
 	// Process materials
 	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
 	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMap.begin();
@@ -505,7 +528,7 @@ void TwGUIManager::initPlainMaterialBar()
 		Material *mat = it->second;
 
 		if (mat->getUseTexture()) continue;
-		
+
 		// Moved code to a function
 		addPlainMaterialToGUI(g_plainMaterialBar, mat, PLAIN_MATERIAL_GROUP_NAME, _index);
 	}
@@ -516,6 +539,11 @@ void TwGUIManager::initTexturedMaterialBar()
 	g_texturedMaterialBar = TwNewBar("Textured_Materials");
 	TwDefine(" Textured_Materials label='Textured Materials' size='250 240' color='216 96 96' position='1025 380' valueswidth=100");
 
+	initTexturedMaterialBarHelper();
+}
+
+void TwGUIManager::initTexturedMaterialBarHelper()
+{
 	// Process materials
 	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
 	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMap.begin();
@@ -529,7 +557,6 @@ void TwGUIManager::initTexturedMaterialBar()
 		// Moved code to a function
 		addTexturedMaterialToGUI(g_texturedMaterialBar, mat, TEXTURED_MATERIAL_GROUP_NAME, _index);
 	}
-
 }
 
 void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index) {
@@ -2320,6 +2347,70 @@ void TwGUIManager::exportMaterialXML(std::string &path)
 	tabs--;
 	write(f, tabs, "</materialList>");
 	f.close();			// Close file
+}
+
+
+void TwGUIManager::loadWorldXML()
+{
+	std::string filePath = "";
+	bool validFile = openFile(filePath);
+
+	if (validFile) {
+		std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+
+		// Get the destination path for Material.xml
+		std::string subPath = filePath.substr(0, filePath.length() - fileName.length());
+		std::string matPath = subPath + "Materials.xml";
+
+		osg::ref_ptr<TwGUIManager> gui = Core::getEditorGUI();
+
+		// Delete items from managers
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+		LightManager* lm = Core::getWorldRef().getLightManager();
+
+		// Delete GeometryObjects
+		std::unordered_map<std::string, GeometryObject *> geomObjMap = gm->getGeometryObjectMapRef();
+		for (auto& x : geomObjMap) {
+			TwRemoveVar(gui->g_twBar, x.first.c_str());
+			gm->deleteGeometry(x.first);
+		}
+
+		// Delete Materials
+		std::unordered_map<std::string, Material *> matMap = mm->getMaterialMapRef();
+		for (auto& x : matMap) {
+			bool isTexture = x.second->getUseTexture();
+			if (isTexture) {
+				TwRemoveVar(gui->g_texturedMaterialBar, x.first.c_str());
+			}
+			else {
+				TwRemoveVar(gui->g_plainMaterialBar, x.first.c_str());
+			}
+
+			mm->deleteMaterial(x.first);
+		}
+
+		// Delete Lights
+		std::unordered_map<std::string, Light *> lightMap = lm->getLightMapRef();
+		for (auto& x : lightMap) {
+			TwRemoveVar(gui->g_lightBar, x.first.c_str());
+			lm ->deleteLight(x.first);
+		}
+
+		// Re-initialize stuff
+		Core::getWorldRef().getGeometryCache()->clearCache();
+		mm->reloadBuiltInMaterials();
+		Core::loadMaterialFile(matPath);
+
+		// Load the world file
+		Core::getWorldRef().loadXMLFile(fileName);
+
+		// Refresh GUI
+		gui->initAddBarHelper();
+		gui->initPlainMaterialBarHelper();
+		gui->initTexturedMaterialBarHelper();
+		gui->initLightBarHelper();
+	}
 }
 
 bool TwGUIManager::_allBarMinimized = false;
