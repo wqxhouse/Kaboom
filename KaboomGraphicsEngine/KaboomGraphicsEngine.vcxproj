@@ -393,6 +393,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\lightTiling.frag" />
     <None Include="..\Media\Shaders\lightUtil.glsl" />
     <None Include="..\Media\Shaders\Material.glsl" />
+    <None Include="..\Media\Shaders\Samples.glsl" />
     <None Include="..\Media\Shaders\sao.frag" />
     <None Include="..\Media\Shaders\saoBlur.frag" />
     <None Include="..\Media\Shaders\shadowUtil.glsl" />

@@ -20,4 +20,6 @@ const float sqrt_of_2 = 1.4142135623;
 #define MAX_POINT_SHADOW_LIGHTS 6
 #define MAX_VISIBLE_LIGHTS 128 
 
+#define SHADOW_MAP_ATLAS_SIZE 4096
+
 // #pragma optionNV (unroll all)

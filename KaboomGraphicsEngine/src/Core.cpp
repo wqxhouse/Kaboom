@@ -258,6 +258,11 @@ void Core::configCubemapPrefilterPass()
 	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_cubeMapDiffuseTex", 5));
 	cam->getOrCreateStateSet()->setTextureAttributeAndModes(5, _cubemapPreFilter.getGeneratedDiffuseCubemap());
 
+	// at this stage shadow manager is already initialized so safe to get
+	osg::TextureCubeMap *cubeTex = _world.getLightManager()->getShadowManager()->getShadowFaceLookupCubeTex();
+	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_shadowFaceLookup", 6));
+	cam->getOrCreateStateSet()->setTextureAttributeAndModes(6, cubeTex);
+
 	_passes->addChild(_cubemapPreFilter.getRoot());
 }
 

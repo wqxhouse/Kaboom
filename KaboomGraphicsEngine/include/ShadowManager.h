@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <osg/Camera>
+#include <osg/TextureCubeMap>
 #include "ShadowAtlas.h"
 #include "ShadowDepthCamera.h"
 
@@ -23,6 +24,11 @@ public:
 	void addDirectionalLight(DirectionalLight *light);
 	void addPointLight(PointLight *light);
 
+	inline osg::ref_ptr<osg::TextureCubeMap> getShadowFaceLookupCubeTex()
+	{
+		return _pointLightShadowFaceLookupTex;
+	}
+
 	inline osg::ref_ptr<osg::Group> getRoot()
 	{
 		return _depthCamGroup;
@@ -41,12 +47,14 @@ public:
 
 private:
 	void getPassInfo();
+	void configShadowMapFaceLookupCube();
 	int findAvailableDepthSlot();
 
 	ShadowAtlas *_atlas;
 	osg::observer_ptr<osgFX::EffectCompositor> _passes;
 	// osg::observer_ptr<osg::Camera> _shadowDepthPassCam;
 	osg::ref_ptr<osg::Group> _depthCamGroup;
+	osg::ref_ptr<osg::TextureCubeMap> _pointLightShadowFaceLookupTex;
 
 	std::vector<ShadowDepthCamera *> _depthCameras;
 	osg::observer_ptr<osg::Texture2D> _depthAtlasTex;
