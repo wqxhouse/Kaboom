@@ -9,4 +9,7 @@ public:
 		: GameGUIListener(game) {}
 
 	virtual void ProcessEvent(Rocket::Core::Event& event);
+	void setMode(GameStateMachine );
+private:
+	GameStateMachine mode;
 };

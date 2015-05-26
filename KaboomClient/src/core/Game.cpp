@@ -27,7 +27,7 @@ Game::Game(ConfigSettings *config)
           eventHandlerLookup(this),
           client(eventHandlerLookup), 
 	      _camera(Core::getMainCamera()) {
-
+	name = new std::string();
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
     config->getValue(ConfigSettings::str_screenPosX, screenPosXStr);
@@ -92,6 +92,8 @@ Game::Game(ConfigSettings *config)
     soundManager.loadSound(SoundType::KABOOM_FIRE, "sounds\\a.wav");
     printf("Loading BASIC sound\n");
     soundManager.loadSound(SoundType::BASIC, "sounds\\a.wav");
+	
+
 }
 
 Game::~Game() {
@@ -111,19 +113,24 @@ void Game::run() {
 	LibRocketGUIManager *guiManager = Core::getInGameLibRocketGUIManager();
 	Rocket::Core::ElementDocument* in_game_screen_ui = guiManager->getWindow(0);
 	Rocket::Core::ElementDocument* start_screen_ui = guiManager->getWindow(1);
-
+	Rocket::Core::ElementDocument* name_screen_ui = guiManager->getWindow(3);
     //while (!Core::isViewerClosed()) { // TODO: buggy right now
     while (true) {
 		// printf("duration: %lf\n", Core::getLastFrameDuration());
 		switch (gsm) {
 		case EDITOR_MODE:
 			if (Core::isInStartScreenMode()) { //pressed the PlayGame Button
-				gsm = START_SCREEN_MODE;
+				gsm = NAME_SCREEN;
 			}
+			break;
+		case NAME_SCREEN:
+			in_game_screen_ui->Hide();
+			name_screen_ui->Show();
 			break;
 		case START_SCREEN_MODE:
 		{
 			in_game_screen_ui->Hide();
+			name_screen_ui->Hide();
 			start_screen_ui->Show();
 			break;
 		}
