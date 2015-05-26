@@ -29,6 +29,7 @@ layout(std140) uniform u_shadowDepthMapBuffer
 };
 
 varying vec3 v_viewRay;
+varying vec2 v_uvcoord;
 
 uniform vec3 osg_OutputBufferSize;
 // uniform vec3 u_eyePos;
@@ -132,11 +133,31 @@ void main()
     result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
     //result = 1.0f - exp(-1.0 * result);
 
-	// gl_FragColor = vec4(result, 1.0);
+	//gl_FragColor = vec4(result, 1.0);
 
-	//vec3 l = normalize(light.position - material.position);
-	//vec3 l_ws = (u_viewInvMat * vec4(l, 0)).xyz;
-	vec3 l_ws = vec3(0, 0, -1);
-	float face = textureLod(u_shadowFaceLookup, l_ws, 0).r;
-	gl_FragColor = vec4(face);
+	// debug sample atlas
+	//vec3 l_ws = vec3(0, 0, -1);
+	//int face = int(textureLod(u_shadowFaceLookup, l_ws, 0).r * 5.0);
+	//int shadowMapIndex = lights[0].shadowMapIndex[face];
+	//ShadowDepthMap shadowInfo = u_shadowDepthMaps[shadowMapIndex];
+
+	//vec2 samplePos = shadowInfo.tex_scale * v_uvcoord + shadowInfo.altas_uvcoord;
+	//vec4 atlasSample = textureLod(u_shadowAtlas, samplePos, 0);
+
+	//float depth = atlasSample.r;
+	//gl_FragColor = vec4(vec3(depth), 1);
+
+	// debug vwvp transformation
+
+	//vec4 vsPos = vec4(material.position, 1);
+	//vec4 lightSpaceClip = u_shadowDepthMaps[5].vwvp * vsPos;
+	//vec3 lightSpaceNDC = lightSpaceClip.xyz / lightSpaceClip.w;
+	//vec3 lightSpaceNormalized = lightSpaceNDC * 0.5 + vec3(0.5);
+	//float z = lightSpaceNormalized.z;
+
+	//gl_FragColor = vec4(vec3(z), 1);
+
+	vec4 vsPos = vec4(material.position, 1);
+	vec4 wsPos = u_shadowDepthMaps[0].vwvp * vsPos;
+	gl_FragColor = wsPos;
 }

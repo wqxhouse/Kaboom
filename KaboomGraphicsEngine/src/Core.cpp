@@ -260,8 +260,9 @@ void Core::configCubemapPrefilterPass()
 
 	// at this stage shadow manager is already initialized so safe to get
 	osg::TextureCubeMap *cubeTex = _world.getLightManager()->getShadowManager()->getShadowFaceLookupCubeTex();
-	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_shadowFaceLookup", 6));
-	cam->getOrCreateStateSet()->setTextureAttributeAndModes(6, cubeTex);
+	// texture unit 6 is split sum lut
+	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_shadowFaceLookup", 7));
+	cam->getOrCreateStateSet()->setTextureAttributeAndModes(7, cubeTex);
 
 	_passes->addChild(_cubemapPreFilter.getRoot());
 }
