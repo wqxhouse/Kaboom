@@ -1,5 +1,6 @@
 #include "PlayerInputEventHandler.h"
 
+#include <components/PlayerStatusComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
@@ -30,6 +31,20 @@ void PlayerInputEventHandler::handle(const Event &e) const {
         inputComp->setJumping(evt.isJumping());
         inputComp->setAttacking1(evt.isAttacking1());
         inputComp->setAttacking2(evt.isAttacking2());
+    }
+
+    auto playerStatusComp = entity->getComponent<PlayerStatusComponent>();
+
+    if (playerStatusComp != nullptr) {
+        const bool running = evt.isMovingForward() ||
+                evt.isMovingBackward() ||
+                evt.isMovingLeft() ||
+                evt.isMovingRight();
+        const bool attacking = evt.isAttacking1() || evt.isAttacking2();
+
+        playerStatusComp->setRunning(running);
+        playerStatusComp->setJumping(evt.isJumping());
+        playerStatusComp->setAttacking(attacking);
     }
 
     auto rotComp = entity->getComponent<RotationComponent>();
