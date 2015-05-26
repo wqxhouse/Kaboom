@@ -1159,6 +1159,7 @@ osg::Shader* EffectCompositor::createShaderFromXML(osgDB::XmlNode* xmlNode, bool
 	std::string code = shader->getShaderSource();
 	std::string::size_type pos = 0;
 
+	// FIXME: do not deal with recursive #include
 	// FIXME: currently not detecting comment sign /* */ 
 	while ((pos = code.find("#include", pos)) != std::string::npos)
 	{
@@ -1203,7 +1204,19 @@ osg::Shader* EffectCompositor::createShaderFromXML(osgDB::XmlNode* xmlNode, bool
 		osg::ref_ptr<osg::Shader> innerShader = osgDB::readShaderFile(shader->getType(), filename);
 		if (!innerShader) break;
 
-		code.replace(pos, pos3 - pos + 1, innerShader->getShaderSource());
+		std::string shaderSource = innerShader->getShaderSource();
+		//std::string::size_type pragmaPos;
+		//if (pragmaPos = shaderSource.find("#pragma") != std::string::npos)
+		//{
+		//	// TODO: need more testing like #pragmaonce 
+		//	// FIXME: did not deal with // #pragma once comments
+		//	if (shaderSource.find("once", pos + 7) != std::string::npos)
+		//	{
+		//		break;
+		//	}
+		//}
+
+		code.replace(pos, pos3 - pos + 1, shaderSource);
 		pos += innerShader->getShaderSource().size();
 	}
 
