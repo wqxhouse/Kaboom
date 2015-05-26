@@ -1,3 +1,3 @@
 #pragma once
 
-#define MAX_PACKET_SIZE 10000
+#define MAX_PACKET_SIZE 100000
