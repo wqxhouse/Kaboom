@@ -16,6 +16,7 @@ ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas
 	_shadowDepthCam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
 	_shadowDepthCam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
 	_shadowDepthCam->attach(osg::Camera::DEPTH_BUFFER, _shadowAtlasTex);
+	_shadowDepthCam->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
 
 	ShadowDepthCameraCallback *callback = new ShadowDepthCameraCallback(_atlas, _light, face);
 	_updateCallback = callback;
@@ -201,10 +202,10 @@ osg::Matrix ShadowDepthCameraCallback::calcPointLightViewMat(const osg::Vec3 &po
 	};
 
 	static const osg::Vec3 upDirs[6] = {
-		osg::Vec3(0, -1, 0),
-		osg::Vec3(0, -1, 0),
 		osg::Vec3(0, 0, 1),
-		osg::Vec3(0, 0, -1),
+		osg::Vec3(0, 0, 1),
+		osg::Vec3(0, 0, 1),
+		osg::Vec3(0, 0, 1),
 		osg::Vec3(0, -1, 0),
 		osg::Vec3(0, -1, 0),
 	};

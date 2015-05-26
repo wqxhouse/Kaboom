@@ -38,29 +38,43 @@ vec2 calcAtlasUVCoord(vec2 fullQuadCoord, ShadowDepthMap shadowInfo)
 float PCF(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, float baseBias, vec2 projSize) 
 {
     vec2 atlasCoord = calcAtlasUVCoord(projCoord.xy, shadowInfo);
-    float biasedDepth = projCoord.z - baseBias;
-    vec2 filterRadiusUV = 2.0 * projSize;
+  //  float biasedDepth = projCoord.z - baseBias;
+  //  vec2 filterRadiusUV = 2.0 * projSize;
 
-    // PCF Filter
-    float sum = 0.0;
-    for ( int i = 0; i < 16; ++i ) // 16 samples
-    {
-		vec2 offset = poissonDisk32[i] * filterRadiusUV;
-            //sum += 1.0 - textureLod(shadowAtlasPCF, vec3(centerCoord + offset, biasedDepth) , 0);
+  //  // PCF Filter
+  //  float sum = 0.0;
+  //  for ( int i = 0; i < 16; ++i ) // 16 samples
+  //  {
+		//vec2 offset = poissonDisk32[i] * filterRadiusUV;
+  //          //sum += 1.0 - textureLod(shadowAtlasPCF, vec3(centerCoord + offset, biasedDepth) , 0);
 
-		float sampled = textureLod(u_shadowAtlas, atlasCoord + offset , 0).x;
-		sum += step(sampled, biasedDepth);        
-    }
+		//float sampled = textureLod(u_shadowAtlas, atlasCoord + offset , 0).x;
+		//sum += step(sampled, biasedDepth);        
+  //  }
 
-    sum /= 16;
-    return 1.0 - clamp(sum, 0.0, 1.0);
+  //  sum /= 16;
+  //  return 1.0 - clamp(sum, 0.0, 1.0);
+
+	float sampled = textureLod(u_shadowAtlas, atlasCoord, 0);
+	//if(projCoord.z > sampled)
+	//{
+	//	return 0.5;
+	//}
+	//else
+	//{
+	//	return 1.0;
+	//}
+
+	return clamp(projCoord.z, 0.0, 1.0);
+
 }
 
 float computePointLightShadow(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, Material material,
 			vec3 n, vec3 l, float slopeScaledBias, float normalScaledBias, float baseBias) 
 {
-    vec3 biasedPos = computeBiasedPosition(material.position, slopeScaledBias, normalScaledBias, n, l);
-    vec3 projCoord = reprojectShadow(shadowInfo, biasedPos);
+    //vec3 biasedPos = computeBiasedPosition(material.position, slopeScaledBias, normalScaledBias, n, l); 
+	//vec3 projCoord = reprojectShadow(shadowInfo, biasedPos);
+	vec3 projCoord = reprojectShadow(shadowInfo, material.position);
 
     return PCF(u_shadowAtlas, shadowInfo, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE) );
 }

@@ -60,11 +60,9 @@ vec3 computeLightModel(Light light, Material material,
 	//vec3 diffuseContribution = DiffuseBRDF(diffuseColor, roughness, NoV, NoL, VoH);
     lightingResult += diffuseContribution;
 
-	vec3 commonTerm = NoL * light.color * shadowFactor * attenuation; // TODO: implement shadow later 
+	vec3 commonTerm = NoL * light.color * shadowFactor * attenuation;
 	lightingResult *= commonTerm;
 
-	// debug
-	// lightingResult = pow(lightingResult, vec3(1/2.2));
     return lightingResult;
 }
 
@@ -122,8 +120,8 @@ vec3 applyShadowPointLight(Light light, Material material, mat4 u_viewInvMat,
     vec3 n = normalize(material.normal);
     vec3 h = normalize(l + v);
 
-	vec3 l_ws = (u_viewInvMat * vec4(l, 0)).xyz;
-	int face = int(textureLod(u_shadowCube, l_ws, 0).r * 5.0);
+	vec3 l_ws = (u_viewInvMat * vec4(-l, 0)).xyz;
+	int face = int((textureLod(u_shadowCube, l_ws, 0).r + 0.1) * 5.0);
     int shadowMapIndex = light.shadowMapIndex[face];
 	ShadowDepthMap shadowInfo = depthMap[shadowMapIndex];
 
