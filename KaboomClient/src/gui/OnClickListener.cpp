@@ -2,6 +2,9 @@
 
 void OnClickListener::ProcessEvent(Rocket::Core::Event& event) 
 {
-	setGameState(CONNECT_TO_SERVER);
+	setGameState(mode);
 	std::cout << "marty was clicked" << std::endl;
+}
+void OnClickListener::setMode(GameStateMachine g){
+	mode = g;
 }

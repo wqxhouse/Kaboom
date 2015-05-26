@@ -108,6 +108,7 @@ public:
     inline const IdToPlayerMap &getPlayers() const {
         return players;
     }
+	std::string *name;
 
 private:
     friend void GameGUIListener::setGameState(GameStateMachine state);
