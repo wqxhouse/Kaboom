@@ -311,19 +311,21 @@ void GameServer::sendAmmoEvent(Player *player) const {
     sendEvent(evt, player->getId());
 }
 
-void GameServer::sendPlayerStatusEvent(Player *player) const {
-    PlayerStatusComponent *playerStatusComp = player->getEntity()->getComponent<PlayerStatusComponent>();
+void GameServer::sendPlayerStatusEvent(Entity *entity) const {
+    PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
 
     if (playerStatusComp == nullptr) {
         return;
     }
 
     PlayerStatusEvent evt(
-            playerStatusComp->checkIsKnockBacked(),
-            playerStatusComp->checkIsStaggered(),
-            playerStatusComp->checkIsDamaged(),
-            playerStatusComp->getIsAlive());
-    sendEvent(evt, player->getId());
+            entity->getId(),
+            playerStatusComp->isAlive(),
+            playerStatusComp->isRunning(),
+            playerStatusComp->isJumping(),
+            playerStatusComp->isAttacking(),
+            playerStatusComp->isDamaged());
+    sendEvent(evt);
 }
 
 void GameServer::sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players) const {
@@ -380,23 +382,23 @@ void GameServer::sendGameStatePackets(Player *player, const std::vector<Entity *
     for (auto entity : entities) {
         sendPositionEvent(entity);
         sendRotationEvent(entity);
+        sendPlayerStatusEvent(entity);
     }
 
     sendHealthEvent(player);
     sendAmmoEvent(player);
-    sendPlayerStatusEvent(player);
 }
 
 void GameServer::sendGameStatePackets(const IdToPlayerMap &players, const std::vector<Entity *> &entities) const {
     for (auto entity : entities) {
         sendPositionEvent(entity);
         sendRotationEvent(entity);
+        sendPlayerStatusEvent(entity);
     }
 
     for (auto kv : players) {
         const auto player = kv.second;
         sendHealthEvent(player);
         sendAmmoEvent(player);
-        sendPlayerStatusEvent(player);
     }
 }

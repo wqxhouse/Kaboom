@@ -24,7 +24,7 @@ bool CharacterSpawnSystem::checkEntity(Entity *entity) {
 void CharacterSpawnSystem::processEntity(Entity *entity) {
     auto playerStatusComp = entity->getComponent<PlayerStatusComponent>();
 
-    if (playerStatusComp->getIsAlive()) {
+    if (playerStatusComp->isAlive()) {
         return;
     }
 

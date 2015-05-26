@@ -6,56 +6,98 @@
 
 class PlayerStatusEvent : public Event {
 public:
-	PlayerStatusEvent(bool isKnockBacked = false, 
-					  bool isStaggered = false, 
-					  bool isDamaged = false, 
-					  bool isAlive = false)
-		: Event(EVENT_PLAYER_STATUS, sizeof(PlayerStatusEvent)),
-		isKnockBacked(isKnockBacked),
-		isStaggered(isStaggered),
-		isDamaged(isDamaged),
-		isAlive(isAlive){
+    PlayerStatusEvent() : PlayerStatusEvent(0, false, false, false, false, false) {}
+
+    PlayerStatusEvent(
+            unsigned int entityId,
+            bool alive,
+            bool running,
+            bool jumping,
+            bool attacking,
+            bool damaged)
+            : Event(EVENT_PLAYER_STATUS, sizeof(PlayerStatusEvent)),
+              entityId(entityId),
+              alive(alive),
+              running(running),
+              jumping(jumping),
+              attacking(attacking),
+              damaged(damaged) {
     }
 
     inline virtual void serialize(char *buf) const {
-		memcpy(buf, this, sizeof(PlayerStatusEvent));
+        memcpy(buf, this, sizeof(PlayerStatusEvent));
     }
 
     inline virtual void deserialize(char *buf) {
-		memcpy(this, buf, sizeof(PlayerStatusEvent));
+        memcpy(this, buf, sizeof(PlayerStatusEvent));
     }
 
-    inline bool getIsKnockBacked() const {
-        return isKnockBacked;
+    inline unsigned int getEntityId() const {
+        return entityId;
     }
 
-	inline bool getIsStaggered() const {
-		return isStaggered;
-	}
+    inline void setEntityId(unsigned int entityId) {
+        this->entityId = entityId;
+    }
 
-	inline bool getIsDamaged() const {
-		return isDamaged;
-	}
+    inline bool isAlive() const {
+        return alive;
+    }
 
-	inline bool getIsAlive() const {
-		return isAlive;
-	}
+    inline void setAlive(bool alive) {
+        this->alive = alive;
+    }
 
-	friend std::ostream &operator<<(std::ostream &os, const PlayerStatusEvent &o) {
+    inline bool isRunning() const {
+        return running;
+    }
+
+    inline void setRunning(bool running) {
+        this->running = running;
+    }
+
+    inline bool isJumping() const {
+        return jumping;
+    }
+
+    inline void setJumping(bool jumping) {
+        this->jumping = jumping;
+    }
+
+    inline bool isAttacking() const {
+        return attacking;
+    }
+
+    inline void setAttacking(bool attacking) {
+        this->attacking = attacking;
+    }
+
+    inline bool isDamaged() const {
+        return damaged;
+    }
+
+    inline void setDamaged(bool damaged) {
+        this->damaged = damaged;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const PlayerStatusEvent &o) {
         os << "PlayerStatusEvent: {" << std::endl;
-        os << "    isKnockBacked: " << o.isKnockBacked << std::endl;
-		os << "    isStaggered: " << o.isStaggered << std::endl;
-		os << "    isDamaged: " << o.isDamaged << std::endl;
-		os << "    isAlive: " << o.isAlive << std::endl;
+        os << "    entityId: " << o.entityId << std::endl;
+        os << "    alive: " << o.alive << std::endl;
+        os << "    running: " << o.running << std::endl;
+        os << "    jumping: " << o.jumping << std::endl;
+        os << "    attacking: " << o.attacking << std::endl;
+        os << "    damaged: " << o.damaged << std::endl;
         os << "}";
 
         return os;
     }
 
 private:
-	bool isKnockBacked;
-	bool isStaggered;
-	bool isDamaged;
-	bool isAlive;
-	
+    unsigned int entityId;
+    bool alive;
+    bool running;
+    bool jumping;
+    bool attacking;
+    bool damaged;
 };
