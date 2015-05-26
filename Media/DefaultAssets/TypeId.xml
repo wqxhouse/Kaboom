@@ -17,21 +17,21 @@
     
     <type id="1"> 
         <mesh>DefaultAssets\GeometryObject\kaboom2_0.fbx</mesh>
-        <material name="____Default" />
+        <material name="SphereMat" />
     </type>
     
     <type id="2"> 
         <mesh>DefaultAssets\GeometryObject\timeBomb.fbx</mesh>
-        <material name="____Default" />
+        <material name="roundGroundMat" />
     </type>
     
     <type id="3"> 
         <mesh>DefaultAssets\GeometryObject\remoteBomb.fbx</mesh>
-        <material name="____Default" />
+        <material name="____TestMaterial" />
     </type>
     
     <type id="201"> 
         <mesh>DefaultAssets\GeometryObject\healthPack.fbx</mesh>
-        <material name="____Default" />
+        <material name="brick1Mat" />
     </type>
 </dynamic_objects>

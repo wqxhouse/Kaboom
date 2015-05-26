@@ -74,10 +74,6 @@ Game::Game(ConfigSettings *config)
 
     inputManager = new InputManager(client, this);
     inputManager->loadConfig();
-	
-	//loading the bomb asset.
-	bombFactory.loadBomb(str_mediaPath);
-	pickupFactory.loadPickup(str_mediaPath);
 
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
     Core::addEventHandler(&inputManager->getMouseEventHandler());
@@ -166,7 +162,7 @@ void Game::run() {
 			// TODO: put this two as initial values in the config file
 			
 			Core::getMainCamera().setFovXAndUpdate(90);
-			Core::getMainCamera().setNearAndFarAndUpdate(0.1, 500);
+			Core::getMainCamera().setNearAndFarAndUpdate(1, 500);
 
 			// TODO: Robin: need to check this.
 			// Since receive fails when the packet received is zero (from the source code, not sure if it is the intended behavior)

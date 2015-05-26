@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "Core.h"
 #include "GeometryCache.h"
+#include "GeometryObject.h"
 #include <osgDB/ReadFile>
 
 Model::Model() 
@@ -13,10 +14,10 @@ Model::Model()
 Model::Model(int type_id, bool hasAnim)
 	: Model()
 {
+	GeometryCache* cache = Core::getWorldRef().getGeometryCache();
+
 	if (!hasAnim) {
 		loadModel(type_id);
-
-		GeometryCache* cache = Core::getWorldRef().getGeometryCache();
 		_root->setMatrix(cache->getMatrixById(type_id));
 	}
 	else {
@@ -51,8 +52,18 @@ Model::Model(std::string& modelName)
 bool Model::loadModel(int type_id) 
 {
 	_curr_type_id = type_id;
-	osg::ref_ptr<osg::Node> tmp = Core::getWorldRef().getGeometryCache()->getNodeById(type_id);
-	return loadModelHelper(tmp, _root, _animManager);
+
+	GeometryCache* cache = Core::getWorldRef().getGeometryCache();
+	osg::ref_ptr<osg::Node> tmp = cache->getNodeById(type_id);
+	bool retVal = loadModelHelper(tmp, _root, _animManager);
+
+	// Use GeometryObject to handle the Material, model will be a grandchild
+	// [TODO: Fix this memory leak]
+	GeometryObject geom = GeometryObject("Character Dummy", _root.get());
+	geom.setMaterial(cache->getMaterialById(type_id));
+	_root = geom.getRoot();
+
+	return retVal;
 }
 
 bool Model::loadModel(std::string& modelName) 
@@ -99,6 +110,13 @@ void Model::addAnimationById(int type_id)
 	osg::ref_ptr<osg::Node> tmp = cache->getNodeById(type_id);
 
 	loadModelHelper(tmp, node, animManager);
+
+	// Use GeometryObject to handle the Material, model will be a grandchild
+	// [TODO: Fix this memory leak]
+	GeometryObject* geom = new GeometryObject("Character Dummy", node.get());
+	geom->setMaterial(cache->getMaterialById(type_id));
+	node = geom->getRoot();
+
 	node->setMatrix(cache->getMatrixById(type_id));
 
 	_modelMap.insert(std::make_pair(type_id, node));

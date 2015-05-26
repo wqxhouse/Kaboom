@@ -1,5 +1,6 @@
 #include "InitializationSystem.h"
 
+#include <components/PlayerStatusComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
@@ -62,5 +63,12 @@ void InitializationSystem::processEntity(Entity *entity) {
         }
 
         triggerComp->getGhostObject()->setWorldTransform(worldTrans);
+    }
+
+    // Reset player status
+    PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
+
+    if (playerStatusComp != nullptr) {
+        playerStatusComp->setDamaged(false);
     }
 }

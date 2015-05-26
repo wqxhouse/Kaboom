@@ -26,9 +26,10 @@ Entity *CharacterFactory::createCharacter(
         Quat rotation) const {
     Entity *entity = entityManager.createEntity(id, characterType);
 
-	Model *model = new Model(101, true);
-	model->addAnimationById(102);
-	model->playAnimation(102);
+	Model *model;
+	model = new Model(IDLE, true);
+	model->addAnimationById(RUNNING);
+	model->playAnimation(RUNNING);
 
 	entity->attachComponent(new SceneNodeComponent(model->getRootNode()));
     entity->attachComponent(new PositionComponent(position));
