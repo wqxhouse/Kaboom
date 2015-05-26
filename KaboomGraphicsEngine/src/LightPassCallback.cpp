@@ -55,10 +55,10 @@ void LightPassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 
 		// insert ubo
 		*(osg::Matrixf *)(&(*array)[uboIndex]) = data[i]._vwvp;
-		*(osg::Vec2f *)(&(*array)[uboIndex + 64]) = data[i]._atlas_uvcoord;
-		*(float *)(&(*array)[uboIndex + 72]) = data[i]._tex_scale;
+		*(osg::Vec2f *)(&(*array)[uboIndex + 16]) = data[i]._atlas_uvcoord;
+		*(float *)(&(*array)[uboIndex + 18]) = data[i]._tex_scale;
 
-		uboIndex += 76;
+		uboIndex += 20;
 	}
 	array->dirty();
 

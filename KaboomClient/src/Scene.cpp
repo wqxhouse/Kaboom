@@ -105,7 +105,8 @@ void setupScene()
 	l->addPointLight("debug1", osg::Vec3(0, 0, 2), osg::Vec3(0, 1, 0), 100, false);
 	l->addPointLight("debug2", osg::Vec3(0, 0, 2), osg::Vec3(0, 1, 0), 100, false);*/
 
-	l->addPointLight("hello_world", osg::Vec3(3, 0, 4), osg::Vec3(0, 1, 0), 100, true);
-	l->addPointLight("super_shadow", osg::Vec3(-3, 0, 4), osg::Vec3(0, 1, 0), 100, true);
+	l->addPointLight("hello_world", osg::Vec3(0, 0, 20), osg::Vec3(0, 1, 0), 100, true);
+	l->getLight("hello_world")->asPointLight()->setIntensity(2.0);
+	// l->addPointLight("super_shadow", osg::Vec3(-3, 0, 4), osg::Vec3(0, 1, 0), 100, true);
 
 }

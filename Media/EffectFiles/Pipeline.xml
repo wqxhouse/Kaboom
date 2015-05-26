@@ -108,8 +108,8 @@
       <input_buffer unit="2" varname="u_RT1">b_RT1</input_buffer>
       <input_buffer unit="3" varname="u_RT2">b_RT2</input_buffer>
       <!--<input_buffer unit="4" varname="u_cubeMapTex">b_cubemap</input_buffer>-->
-      <!-- 5 is the lut; 6 is shadow cube face look up -->
-      <input_buffer unit="7" varname="u_shadowAtlas">b_shadowAtlas</input_buffer>
+      <!-- 5 is the lut; 6 is split sum LUT; 7 is shadow cube face look up -->
+      <input_buffer unit="8" varname="u_shadowAtlas">b_shadowAtlas</input_buffer>
 
       <clear_mask>depth</clear_mask>
       <output_buffer target="color">b_shading</output_buffer>
