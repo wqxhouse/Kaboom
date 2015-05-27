@@ -204,5 +204,7 @@ public:
 		osg::Camera *mainCam = static_cast<osg::Camera *>(node);
 		mainCam->setViewMatrix(Core::getMainCamera().getViewMatrix());
 		mainCam->setProjectionMatrix(Core::getMainCamera().getProjectionMatrix());
+
+		traverse(node, nv);
 	}
 };
