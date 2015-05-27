@@ -274,6 +274,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\network\AmmoAmountEventHandler.cpp" />
     <ClCompile Include="src\network\AssignEventHandler.cpp" />
     <ClCompile Include="src\network\BindEventHandler.cpp" />
+    <ClCompile Include="src\network\ChatEventHandler.cpp" />
     <ClCompile Include="src\network\ClientEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ConnectEventHandler.cpp" />
     <ClCompile Include="src\network\DestroyEventHandler.cpp" />
@@ -325,6 +326,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\network\AmmoAmountEventHandler.h" />
     <ClInclude Include="src\network\AssignEventHandler.h" />
     <ClInclude Include="src\network\BindEventHandler.h" />
+    <ClInclude Include="src\network\ChatEventHandler.h" />
     <ClInclude Include="src\network\ClientEventHandlerLookup.h" />
     <ClInclude Include="src\network\ConnectEventHandler.h" />
     <ClInclude Include="src\network\DestroyEventHandler.h" />

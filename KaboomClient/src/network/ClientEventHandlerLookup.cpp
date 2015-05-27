@@ -3,6 +3,7 @@
 #include "AmmoAmountEventHandler.h"
 #include "AssignEventHandler.h"
 #include "BindEventHandler.h"
+#include "ChatEventHandler.h"
 #include "ConnectEventHandler.h"
 #include "DestroyEventHandler.h"
 #include "DisconnectEventHandler.h"
@@ -25,6 +26,7 @@ ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
     addHandler(EVENT_ASSIGN, new AssignEventHandler(game));
     addHandler(EVENT_BIND, new BindEventHandler(game));
     addHandler(EVENT_MATCH_STATE, new MatchStateEventHandler(game));
+    addHandler(EVENT_CHAT, new ChatEventHandler(game));
     addHandler(EVENT_SCORE, new ScoreEventHandler(game));
     addHandler(EVENT_PLAYER_RENAME, new PlayerRenameEventHandler(game));
     addHandler(EVENT_PLAYER_RESPAWN, new PlayerRespawnEventHandler(game));
