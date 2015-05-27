@@ -30,6 +30,7 @@ public:
 	static void loadTypeIdFile(const std::string &filePath);
 	static void loadWorldFile(const std::string &worldFilePath);
 	static World &getWorldRef();
+	static osg::ref_ptr<TwGUIManager> getEditorGUI();
 
 	static Camera &getMainCamera();
 	static const std::string &getMediaPath();

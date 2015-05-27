@@ -22,6 +22,8 @@ public:
 	Material* getMaterialById(const int type_id);
 	osg::Matrix getMatrixById(const int type_id);
 
+	void clearCache();
+
 private:
 	std::unordered_map<std::string, osg::ref_ptr<osg::Node>> _modelMap;
 	std::unordered_map<int, std::string> _fileNameMap;
