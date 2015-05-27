@@ -110,7 +110,7 @@ void Game::update() {
     if (hasNewPlayer) {
         newPlayer = new Player(newPlayerId);
         addPlayer(newPlayer);
-        server.sendNewPlayerEvent(newPlayer, players);
+        server.sendNewPlayerEvent(newPlayer, players,gameMode);
     }
 
     switch (gameMode.getMatchState()) {

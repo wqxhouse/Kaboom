@@ -15,5 +15,5 @@ void ScoreEventHandler::handle(const Event &e) const {
     player->setKills(evt.getKills());
     player->setDeaths(evt.getDeaths());
 
-	game->getGameGUIEventHandler()->handle(evt);
+	game->getGameGUIEventHandler()->handle(evt, player->getName());
 }
