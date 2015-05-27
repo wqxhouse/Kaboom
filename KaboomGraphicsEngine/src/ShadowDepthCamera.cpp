@@ -189,7 +189,7 @@ void ShadowDepthCameraCallback::makeLightSpaceMat(osg::Matrix &view, osg::Matrix
 		osg::Vec3 wsDir = dirLight->getLightToWorldDirection();
 		viewMat.makeLookAt(osg::Vec3(), wsDir, osg::Vec3(0, 0, 1));*/
 		DirectionalLight *dl = _light->asDirectionalLight();
-		makePSSMLightSpaceMat(dl, view, proj);
+		makePSSMLightSpaceMat(dl, viewMat, projMat);
 	}
 	else if (_light->getLightType() == POINTLIGHT)
 	{
@@ -214,7 +214,7 @@ void ShadowDepthCameraCallback::makePSSMLightSpaceMat(DirectionalLight *dl, osg:
 		corners[i] = fdata.corner(i);
 	}
 
-	float prevSplitDist = _face == 0 ? Core::getMainCamera().getNearPlane() : dl->getCascadeSplitDist(_face - 1);
+	float prevSplitDist = _face == 0 ? 0 : dl->getCascadeSplitDist(_face - 1);
 	float splitDist = dl->getCascadeSplitDist(_face);
 
 	// get corners of current cascade
@@ -227,46 +227,100 @@ void ShadowDepthCameraCallback::makePSSMLightSpaceMat(DirectionalLight *dl, osg:
 		corners[i] = corners[i] + nearCornerRay;
 	}
 
-	osg::Vec3 ws_viewFrustumCentroid = fdata.getCenter();
+	// Calculate the centroid of the view frustum slice
+	osg::Vec3 ws_viewFrustumCentroid;
+	for (int i = 0; i < 8; ++i)
+	{
+		ws_viewFrustumCentroid = ws_viewFrustumCentroid + corners[i];
+	}
+	ws_viewFrustumCentroid *= 1.0f / 8.0f;
+
+	// optimize helper
+	// osg::Vec3 ws_viewFrustumCentroid = fdata.getCenter();
 	osg::Vec3 ws_lightDir = -dl->getLightToWorldDirection();
 	ws_lightDir.normalize();
 
 	// use constant z-up for stability.
-	osg::Vec3 upDir = osg::Vec3(0, 0, 1);
+	//osg::Vec3 upDir = osg::Vec3(0, 0, 1);
 
-	float bsphereRad = fdata.getBSphereRadius();
-	osg::Vec3 maxExtents = osg::Vec3(bsphereRad, bsphereRad, bsphereRad);
-	osg::Vec3 minExtents = -maxExtents;
+	//float bsphereRad = fdata.getBSphereRadius();
+	//osg::Vec3 maxExtents = osg::Vec3(bsphereRad, bsphereRad, bsphereRad);
+	//osg::Vec3 minExtents = -maxExtents;
 
-	osg::Vec3 extent = maxExtents - minExtents;
+	//osg::Vec3 extent = maxExtents - minExtents;
+	//osg::Vec3 shadowCamPos = ws_viewFrustumCentroid + ws_lightDir * -minExtents.z();
+
+	//osg::Matrix shadowOrthoMat = osg::Matrixd::ortho(minExtents.x(), maxExtents.x(), minExtents.y(), maxExtents.y(), 0.0, extent.z());
+	//osg::Matrix shadowViewMat = osg::Matrixd::lookAt(shadowCamPos, ws_viewFrustumCentroid, upDir);
+	//
+	//osg::Matrix shadowVPMat = shadowViewMat * shadowOrthoMat;
+	//osg::Vec4 origin(0.0f, 0.0f, 0.0f, 1.0f);
+	//origin = origin * shadowVPMat;
+	//float shadowMapResDiv2 = dl->getShadowMapRes() / 2.0;
+	//origin.x() *= shadowMapResDiv2;
+	//origin.y() *= shadowMapResDiv2;
+	//
+	//osg::Vec4 roundedOrigin;
+	//roundedOrigin.x() = osg::round(origin.x());
+	//roundedOrigin.y() = osg::round(origin.y());
+	//roundedOrigin.z() = osg::round(origin.z());
+	//roundedOrigin.w() = osg::round(origin.w());
+	//
+	//osg::Vec4 roundOffset = roundedOrigin - origin;
+	//float rcp = 1.0 / shadowMapResDiv2;
+	//roundOffset.x() *= rcp;
+	//roundOffset.y() *= rcp;
+	//roundOffset.z() = 0.0f;
+	//roundOffset.w() = 0.0f;
+	//
+	//shadowOrthoMat(3, 0) += roundOffset.x();
+	//shadowOrthoMat(3, 1) += roundOffset.y();
+
+
+	// Create a temporary view matrix for the light
+	osg::Vec3 lookAt = ws_viewFrustumCentroid - ws_lightDir;
+	const osg::Matrix &viewMat = Core::getMainCamera().getViewMatrix();
+
+	osg::Vec3 upDir = osg::Vec3(viewMat(0, 0), viewMat(1, 0), viewMat(2, 0));
+	osg::Matrix lightView = osg::Matrix::lookAt(ws_viewFrustumCentroid, lookAt, upDir);
+
+	// Calculate an AABB around the frustum corners
+	osg::Vec3 mins = osg::Vec3(FLT_MAX, FLT_MAX, FLT_MAX);
+	osg::Vec3 maxes = osg::Vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	for (int i = 0; i < 8; ++i)
+	{
+		osg::Vec3 lightSpaceCorner = corners[i] * lightView;
+		float minsX = osg::minimum(mins.x(), lightSpaceCorner.x());
+		float minsY = osg::minimum(mins.y(), lightSpaceCorner.y());
+		float minsZ = osg::minimum(mins.z(), lightSpaceCorner.z());
+		mins = osg::Vec3(minsX, minsY, minsZ);
+
+		float maxesX = osg::maximum(maxes.x(), lightSpaceCorner.x());
+		float maxesY = osg::maximum(maxes.y(), lightSpaceCorner.y());
+		float maxesZ = osg::maximum(maxes.z(), lightSpaceCorner.z());
+		maxes = osg::Vec3(maxesX, maxesY, maxesZ);
+
+		//mins = osg::minimum(mins, lightSpaceCorner);
+		//maxes = osg::maximum(maxes, lightSpaceCorner);
+	}
+
+	osg::Vec3 &minExtents = mins;
+	osg::Vec3 &maxExtents = maxes;
+
+	// Adjust the min/max to accommodate the filtering size
+	int filterSize = 0;
+	float smSize = dl->getShadowMapRes();
+	float scale = (smSize + filterSize) / static_cast<float>(smSize);
+	minExtents.x() *= scale;
+	minExtents.y() *= scale;
+	maxExtents.x() *= scale;
+	maxExtents.y() *= scale;
+
+	osg::Vec3 cascadeExtents = maxExtents - minExtents; 
 	osg::Vec3 shadowCamPos = ws_viewFrustumCentroid + ws_lightDir * -minExtents.z();
 
-	osg::Matrix shadowOrthoMat = osg::Matrixd::ortho(minExtents.x(), maxExtents.x(), minExtents.y(), maxExtents.y(), 0.0, extent.z());
+	osg::Matrix shadowOrthoMat = osg::Matrixd::ortho(minExtents.x(), maxExtents.x(), minExtents.y(), maxExtents.y(), 0.0, cascadeExtents.z());
 	osg::Matrix shadowViewMat = osg::Matrixd::lookAt(shadowCamPos, ws_viewFrustumCentroid, upDir);
-	
-	osg::Matrix shadowVPMat = shadowViewMat * shadowOrthoMat;
-	osg::Vec4 origin(0.0f, 0.0f, 0.0f, 1.0f);
-	origin = origin * shadowVPMat;
-	float shadowMapResDiv2 = dl->getShadowMapRes() / 2.0;
-	origin.x() *= shadowMapResDiv2;
-	origin.y() *= shadowMapResDiv2;
-	
-	osg::Vec4 roundedOrigin;
-	roundedOrigin.x() = osg::round(origin.x());
-	roundedOrigin.y() = osg::round(origin.y());
-	roundedOrigin.z() = osg::round(origin.z());
-	roundedOrigin.w() = osg::round(origin.w());
-	
-	osg::Vec4 roundOffset = roundedOrigin - origin;
-	float rcp = 1.0 / shadowMapResDiv2;
-	roundOffset.x() *= rcp;
-	roundOffset.y() *= rcp;
-	roundOffset.z() = 0.0f;
-	roundOffset.w() = 0.0f;
-	
-	shadowOrthoMat(3, 0) += roundOffset.x();
-	shadowOrthoMat(3, 1) += roundOffset.y();
-
 	view = shadowViewMat;
 	proj = shadowOrthoMat;
 }

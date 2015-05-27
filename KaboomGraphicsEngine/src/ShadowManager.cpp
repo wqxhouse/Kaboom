@@ -1,13 +1,16 @@
 #include "ShadowManager.h"
+
+#include <cmath>
+#include <osg/TextureCubeMap>
+#include <osgDB/ReadFile>
+
 #include "EffectCompositor.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "ShadowDepthCamera.h"
 #include "LightManager.h"
 
-#include <osg/TextureCubeMap>
-#include <osgDB/ReadFile>
-#include <Core.h>
+#include "Core.h"
 
 #define MAX_SHADOW_MAPS 60
 #define SHADOW_ATLAS_RESOLUTION 4096
@@ -203,6 +206,7 @@ DepthCamGroupCallback::DepthCamGroupCallback()
 
 void DepthCamGroupCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 {
+	if (nv->getFrameStamp()->getFrameNumber() == 1) return;
 	for (int i = 0; i < _lmanager->getNumLights(); i++)
 	{
 		Light *l = _lmanager->getLight(i);
@@ -215,7 +219,8 @@ void DepthCamGroupCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 			float clipRange = farClip - nearClip;
 
 			float minZ = nearClip;
-			float maxZ = nearClip + (dl->getShadowFarPlane() / farClip) * clipRange;
+			float shadowFar = dl->getShadowFarPlane();
+			float maxZ = nearClip + ((shadowFar > farClip ? farClip : shadowFar) / farClip) * clipRange;
 
 			float range = maxZ - minZ;
 			float ratio = maxZ / minZ;
