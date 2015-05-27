@@ -16,7 +16,9 @@ void main()
 
 	// consider if ao should go into hdr tonemap or not
 
-	//gl_FragColor = vec4(ao * shading, 1);
+	ao = pow(ao, 1.0 / 2.2);
+
+	gl_FragColor = vec4(ao * shading, 1);
 	//gl_FragColor = vec4(vec3(ao), 1);
-	gl_FragColor = vec4(shading, 1);
+	//gl_FragColor = vec4(shading, 1);
 }

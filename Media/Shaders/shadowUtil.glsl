@@ -35,7 +35,8 @@ vec2 calcAtlasUVCoord(vec2 fullQuadCoord, ShadowDepthMap shadowInfo)
     return clamp(fullQuadCoord, 0, 1) * shadowInfo.tex_scale + shadowInfo.altas_uvcoord;
 }
 
-float PCF(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, float baseBias, vec2 projSize) 
+//float PCF(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, float baseBias, vec2 projSize) 
+float PCF(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, float baseBias, vec2 projSize) 
 {
     vec2 atlasCoord = calcAtlasUVCoord(projCoord.xy, shadowInfo);
     float biasedDepth = projCoord.z - baseBias;
@@ -46,10 +47,10 @@ float PCF(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, fl
     for ( int i = 0; i < 16; ++i ) // 16 samples
     {
 		vec2 offset = poissonDisk32[i] * filterRadiusUV;
-            //sum += 1.0 - textureLod(shadowAtlasPCF, vec3(centerCoord + offset, biasedDepth) , 0);
+        sum += 1.0 - textureLod(u_shadowAtlas, vec3(atlasCoord + offset, biasedDepth) , 0);
 
-		float sampled = textureLod(u_shadowAtlas, atlasCoord + offset , 0).x;
-		sum += step(sampled, biasedDepth);        
+		//float sampled = textureLod(u_shadowAtlas, atlasCoord + offset , 0).x;
+		//sum += step(sampled, biasedDepth);        
     }
 
     sum /= 16;
@@ -68,7 +69,9 @@ float PCF(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, fl
 	//return clamp(projCoord.z, 0.0, 1.0);
 }
 
-float computePointLightShadow(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, Material material,
+//float computePointLightShadow(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, Material material,
+//			vec3 n, vec3 l, float slopeScaledBias, float normalScaledBias, float baseBias) 
+float computePointLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, Material material,
 			vec3 n, vec3 l, float slopeScaledBias, float normalScaledBias, float baseBias) 
 {
     vec3 biasedPos = computeBiasedPosition(material.position, slopeScaledBias, normalScaledBias, n, l); 

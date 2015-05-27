@@ -685,16 +685,16 @@ osg::Texture* EffectCompositor::createTextureFromXML(osgDB::XmlNode* xmlNode, bo
 					<< std::hex << atoi(dataType.c_str()) << std::dec << std::endl;
 			}
 		}
-		//else if (childName == "hardware_shadowmap")
-		//{
-		//	std::string enabledStr = xmlChild->getTrimmedContents();
-		//	int tf = atoi(enabledStr.c_str());
-		//	if (tf != 0)
-		//	{
-		//		texture->setShadowComparison(true);
-		//		texture->setShadowCompareFunc(osg::Texture::ShadowCompareFunc::LEQUAL);
-		//	}
-		//}
+		else if (childName == "hardware_shadowmap")
+		{
+			std::string enabledStr = xmlChild->getTrimmedContents();
+			int tf = atoi(enabledStr.c_str());
+			if (tf != 0)
+			{
+				texture->setShadowComparison(true);
+				texture->setShadowCompareFunc(osg::Texture::ShadowCompareFunc::LEQUAL);
+			}
+		}
 		else if (childName == "binding")
 		{
 			std::string bindStr = xmlChild->getTrimmedContents();

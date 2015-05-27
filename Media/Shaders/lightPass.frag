@@ -14,7 +14,9 @@ uniform sampler2D u_RT2;
 
 //uniform sampler2D u_position;
 
-uniform sampler2D u_shadowAtlas;
+// uniform sampler2D u_shadowAtlas;
+
+uniform sampler2DShadow u_shadowAtlas; // hardware PCF
 uniform isampler2D u_lightsPerTile;
 //uniform sampler2D u_lightsPerTile;
 
