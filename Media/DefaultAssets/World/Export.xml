@@ -4,7 +4,7 @@
 		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
 		<material name="____TestMaterial" />
 		<position>-17.000000 0.000000 3.000000</position>
-		<orientation>-0.000000 0.629320 0.000000 0.777146</orientation>
+		<orientation>0.000000 0.629320 0.000000 0.777146</orientation>
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
 
@@ -24,12 +24,12 @@
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
 
-	<model name="shelf">
-		<file>Assets\GeometryObject\Shelf N120912.3DS</file>
-		<material name="____Default" />
-		<position>-10.761695 1.132566 5.555159</position>
-		<orientation>-0.000000 0.000000 -0.284015 0.958820</orientation>
-		<scale>0.010000 0.010000 0.010000</scale>
+	<model name="testBox">
+		<file>DefaultAssets\GeometryObject\3boxStack.dae</file>
+		<material name="brick1Mat" />
+		<position>0.000000 1.000000 -1.000000</position>
+		<orientation>0.008727 0.000000 0.000000 0.999962</orientation>
+		<scale>0.250000 0.250000 0.250000</scale>
 	</model>
 
 	<model name="platform3">
@@ -40,20 +40,12 @@
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
 
-	<model name="testBox">
-		<file>DefaultAssets\GeometryObject\3boxStack.dae</file>
-		<material name="brick1Mat" />
-		<position>0.000000 1.000000 -1.000000</position>
-		<orientation>0.008727 0.000000 0.000000 0.999962</orientation>
-		<scale>0.250000 0.250000 0.250000</scale>
-	</model>
-
-	<model name="platform2">
-		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
-		<material name="____TestMaterial" />
-		<position>13.223345 0.000000 -1.000000</position>
-		<orientation>0.731354 0.000000 0.681998 0.000000</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
+	<model name="shelf">
+		<file>Assets\GeometryObject\Shelf N120912.3DS</file>
+		<material name="____Default" />
+		<position>-10.761695 1.132566 5.555159</position>
+		<orientation>0.000000 0.000000 -0.284015 0.958820</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
 	</model>
 
 	<model name="platform">
@@ -61,6 +53,14 @@
 		<material name="____TestMaterial" />
 		<position>2.491811 0.000000 -1.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
+
+	<model name="platform2">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>13.223345 0.000000 -1.000000</position>
+		<orientation>0.731354 0.000000 0.681998 0.000000</orientation>
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
 
@@ -73,10 +73,10 @@
 	</model>
 
 	<light name="hello_world" type="point">
-		<color>0.356863 0.039216 0.921569</color>
+		<color>0.000000 1.000000 0.000000</color>
 		<castShadow>1</castShadow>
 		<intensity>2.000000</intensity>
-		<position>0.000000 -6.000000 11.000000</position>
+		<position>1.000000 7.000000 13.000000</position>
 		<radius>100.000000</radius>
 	</light>
 

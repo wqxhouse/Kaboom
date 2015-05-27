@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf - 8"?>
 <materialList>
 	<material name="____Default" type="plain">
-		<albedo>0.098039 0.298039 0.274510</albedo>
-		<roughness>0.940000</roughness>
-		<specular>0.520000</specular>
-		<metallic>0.590000</metallic>
+		<albedo>0.100000 0.300000 0.900000</albedo>
+		<roughness>0.500000</roughness>
+		<specular>0.500000</specular>
+		<metallic>0.000000</metallic>
 	</material>
 
 	<material name="SphereMat" type="plain">
@@ -22,10 +22,10 @@
 	</material>
 
 	<material name="____TestMaterial" type="plain">
-		<albedo>0.999879 0.510978 0.200000</albedo>
-		<roughness>0.590000</roughness>
+		<albedo>0.893461 0.191474 0.200000</albedo>
+		<roughness>0.893461</roughness>
 		<specular>0.500000</specular>
-		<metallic>0.120000</metallic>
+		<metallic>0.191474</metallic>
 	</material>
 
 	<material name="____TestMaterial2" type="textured">
