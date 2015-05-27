@@ -133,7 +133,7 @@ SPK::SPK_ID ExplosionEffect::createExplosionEffect(
 	waveRenderer->enableRenderingHint(SPK::ALPHA_TEST, true); // uses the alpha test
 	waveRenderer->setAlphaTestThreshold(0.0f);
 	waveRenderer->setOrientation(SPK::FIXED_ORIENTATION); // the orientatin is fixed
-	waveRenderer->lookVector.set(0.0f, 1.0f, 0.0f);
+	waveRenderer->lookVector.set(0.0f, 0.0f, 1.0f);
 	waveRenderer->upVector.set(1.0f, 0.0f, 0.0f); // we dont really care about the up axis
 	waveRenderer->setShared(true);
 
@@ -232,48 +232,48 @@ SPK::SPK_ID ExplosionEffect::createExplosionEffect(
 	SPK::Model* waveModel = SPK::Model::create(
 		SPK::FLAG_ALPHA | SPK::FLAG_SIZE,
 		SPK::FLAG_SIZE | SPK::FLAG_ALPHA);
-	waveModel->setParam(SPK::PARAM_SIZE, 0.0f, 4.0f);
+	waveModel->setParam(SPK::PARAM_SIZE, 0.0f, 8.0f);
 	waveModel->setParam(SPK::PARAM_ALPHA, 0.2f, 0.0f);
-	waveModel->setLifeTime(0.8f, 0.8f);
+	waveModel->setLifeTime(0.3f, 0.3f);
 	waveModel->setShared(true);
 
 	//
 	// Emitters
 	//
-	SPK::Sphere* explosionSphere = SPK::Sphere::create(SPK::Vector3D(0.0f, 0.0f, 0.0f), 0.4f);
+	SPK::Sphere* explosionSphere = SPK::Sphere::create(SPK::Vector3D(0.0f, 0.0f, 0.0f), 1.2f);
 
 	// smoke emitter
 	SPK::RandomEmitter* smokeEmitter = SPK::RandomEmitter::create();
-	smokeEmitter->setZone(SPK::Sphere::create(SPK::Vector3D(0.0f, 0.0f, 0.0f), 0.6f), false);
+	smokeEmitter->setZone(SPK::Sphere::create(SPK::Vector3D(0.0f, 0.0f, 0.0f), 1.4f), false);
 	smokeEmitter->setFlow(-1);
-	smokeEmitter->setTank(15);
+	smokeEmitter->setTank(135);
 	smokeEmitter->setForce(0.02f, 0.04f);
 
 	// flame emitter
 	SPK::NormalEmitter* flameEmitter = SPK::NormalEmitter::create();
 	flameEmitter->setZone(explosionSphere);
 	flameEmitter->setFlow(-1);
-	flameEmitter->setTank(15);
+	flameEmitter->setTank(135);
 	flameEmitter->setForce(0.06f, 0.1f);
 
 	// flash emitter
 	SPK::StaticEmitter* flashEmitter = SPK::StaticEmitter::create();
-	flashEmitter->setZone(SPK::Sphere::create(SPK::Vector3D(0.0f, 0.0f, 0.0f), 0.1f));
+	flashEmitter->setZone(SPK::Sphere::create(SPK::Vector3D(0.0f, 0.0f, 0.0f), 0.3f));
 	flashEmitter->setFlow(-1);
-	flashEmitter->setTank(3);
+	flashEmitter->setTank(27);
 
 	// spark 1 emitter
 	SPK::NormalEmitter* spark1Emitter = SPK::NormalEmitter::create();
 	spark1Emitter->setZone(explosionSphere);
 	spark1Emitter->setFlow(-1);
-	spark1Emitter->setTank(20);
+    spark1Emitter->setTank(180);
 	spark1Emitter->setForce(2.0f, 3.0f);
 
 	// spark 2 emitter
 	SPK::NormalEmitter* spark2Emitter = SPK::NormalEmitter::create();
 	spark2Emitter->setZone(explosionSphere);
 	spark2Emitter->setFlow(-1);
-	spark2Emitter->setTank(400);
+	spark2Emitter->setTank(3600);
 	spark2Emitter->setForce(0.4f, 0.8f);
 
 	// wave emitter
@@ -287,29 +287,29 @@ SPK::SPK_ID ExplosionEffect::createExplosionEffect(
 	//
 
 	// smoke group
-	SPK::Group* smokeGroup = SPK::Group::create(smokeModel, 15);
+	SPK::Group* smokeGroup = SPK::Group::create(smokeModel, 135);
 	smokeGroup->addEmitter(smokeEmitter);
 	smokeGroup->setRenderer(smokeRenderer);
 	smokeGroup->setGravity(SPK::Vector3D(0.0f, 0.0f, 0.05f));
 
 	// flame group
-	SPK::Group* flameGroup = SPK::Group::create(flameModel, 15);
+	SPK::Group* flameGroup = SPK::Group::create(flameModel, 135);
 	flameGroup->addEmitter(flameEmitter);
 	flameGroup->setRenderer(flameRenderer);
 
 	// flash group
-	SPK::Group* flashGroup = SPK::Group::create(flashModel, 3);
+	SPK::Group* flashGroup = SPK::Group::create(flashModel, 27);
 	flashGroup->addEmitter(flashEmitter);
 	flashGroup->setRenderer(flashRenderer);
 
 	// spark 1 group
-	SPK::Group* spark1Group = SPK::Group::create(spark1Model, 20);
+	SPK::Group* spark1Group = SPK::Group::create(spark1Model, 180);
 	spark1Group->addEmitter(spark1Emitter);
 	spark1Group->setRenderer(spark1Renderer);
 	spark1Group->setGravity(SPK::Vector3D(0.0f, 0.0f, -1.5f));
 
 	// spark 2 group
-	SPK::Group* spark2Group = SPK::Group::create(spark2Model, 400);
+	SPK::Group* spark2Group = SPK::Group::create(spark2Model, 3600);
 	spark2Group->addEmitter(spark2Emitter);
 	spark2Group->setRenderer(spark2Renderer);
 	spark2Group->setGravity(SPK::Vector3D(0.0f, 0.0f, -0.3f));
