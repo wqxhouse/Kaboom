@@ -22,6 +22,8 @@ public:
 	World();
 	~World();
 
+	void loadXMLFile(const std::string &filePath);
+
 	void createModelFromXML(osgDB::XmlNode* xmlNode);
 	void createLightFromXML(osgDB::XmlNode* xmlNode);
 
@@ -49,11 +51,18 @@ public:
 	{
 		return _cache;
 	}
+
+	inline std::string& getWorldPath()
+	{
+		return _worldPath;
+	}
 	
 protected:
 	virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 
 private:
+	std::string _worldPath;
+
 	GeometryObjectManager *_geomManager;
 	MaterialManager *_materialManager;
 	LightManager *_lightManager;

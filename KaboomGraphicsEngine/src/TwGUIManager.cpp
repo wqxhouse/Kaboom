@@ -16,6 +16,10 @@
 #include "GeometryObjectManipulator.h"
 #include <osg/ComputeBoundsVisitor>
 
+//This is needed for virtually 
+//everything in BrowseFolder.
+#include <shlobj.h>
+
 const float PI_F = 3.14159265358979f;
 
 int TwGUIManager::_index = 0;
@@ -2160,21 +2164,39 @@ void TwGUIManager::fitObjectToScreen(osg::MatrixTransform *mt)
 
 void TwGUIManager::exportXML()
 {
-	// Might wanna move this code somewhere else
-	ConfigSettings* config = ConfigSettings::config;
-	std::string str_export_material_xml = "";
-	std::string str_export_world_xml = "";
-	std::string str_mediaPath = "";
-	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-	config->getValue(ConfigSettings::str_material_xml, str_export_material_xml);
-	config->getValue(ConfigSettings::str_export_xml, str_export_world_xml);
+	TCHAR t_path[MAX_PATH];
+	BROWSEINFO bi = { 0 };
+	//bi.lpszTitle = ("All Folders Automatically Recursed.");
+	LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
 
-	// TODO: support custom file names
-	std::string exportWorldPath = str_mediaPath + str_export_world_xml;
-	std::string exportMaterialPath = str_mediaPath + str_export_material_xml;
+	if (pidl != 0)
+	{
+		// get the name of the folder and put it in path
+		SHGetPathFromIDList(pidl, t_path);
 
-	exportWorldXML(exportWorldPath);
-	exportMaterialXML(exportMaterialPath);
+		std::wstring w_path = t_path;
+		std::string destPath(w_path.begin(), w_path.end());
+
+		std::string source = Core::getWorldRef().getWorldPath();
+		std::string copyCmd = "xcopy " + source + " " + destPath + "  /e /y /i /r";
+		system(copyCmd.c_str());//"xcopy " + source.c_str() + " " + path + "  /e /y /i /r");
+
+		//// Might wanna move this code somewhere else
+		//ConfigSettings* config = ConfigSettings::config;
+		//std::string str_export_material_xml = "";
+		//std::string str_export_world_xml = "";
+		//std::string str_mediaPath = "";
+		//config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+		//config->getValue(ConfigSettings::str_material_xml, str_export_material_xml);
+		//config->getValue(ConfigSettings::str_export_xml, str_export_world_xml);
+
+		//// TODO: support custom file names
+		//std::string exportWorldPath = str_mediaPath + str_export_world_xml;
+		//std::string exportMaterialPath = str_mediaPath + str_export_material_xml;
+
+		exportWorldXML(destPath + "\\World\\Export.xml");
+		exportMaterialXML(destPath + "\\World\\Materials.xml");
+	}
 }
 
 void TwGUIManager::exportWorldXML(std::string &path)
@@ -2403,7 +2425,7 @@ void TwGUIManager::loadWorldXML()
 		Core::loadMaterialFile(matPath);
 
 		// Load the world file
-		Core::getWorldRef().loadXMLFile(fileName);
+		Core::getWorldRef().loadXMLFile(filePath);
 
 		// Refresh GUI
 		gui->initAddBarHelper();
