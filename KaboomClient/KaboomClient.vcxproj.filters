@@ -331,6 +331,9 @@
     <ClInclude Include="src\gui\OnClickRemoveLetterListener.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\ModelComponent.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-client\bombs.xml">

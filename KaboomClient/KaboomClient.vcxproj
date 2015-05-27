@@ -300,6 +300,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\ModelComponent.h" />
     <ClInclude Include="src\components\SceneNodeComponent.h" />
     <ClInclude Include="src\core\BombConfigLoader.h" />
     <ClInclude Include="src\core\BombFactory.h" />

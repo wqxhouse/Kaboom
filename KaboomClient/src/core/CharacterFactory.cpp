@@ -10,6 +10,7 @@
 #include <components/PlayerStatusComponent.h>
 #include <core/EntityManager.h>
 #include "../components/SceneNodeComponent.h"
+#include "../components/ModelComponent.h"
 #include "Model.h"
 #include "Core.h"
 #include "GeometryCache.h"
@@ -29,8 +30,9 @@ Entity *CharacterFactory::createCharacter(
 	Model *model;
 	model = new Model(IDLE, true);
 	model->addAnimationById(RUNNING);
-	model->playAnimation(RUNNING);
+	model->playAnimation(IDLE);
 
+	entity->attachComponent(new ModelComponent(model));
 	entity->attachComponent(new SceneNodeComponent(model->getRootNode()));
     entity->attachComponent(new PositionComponent(position));
     entity->attachComponent(new RotationComponent(rotation));
