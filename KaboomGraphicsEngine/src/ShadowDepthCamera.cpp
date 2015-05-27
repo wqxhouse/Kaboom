@@ -180,7 +180,7 @@ void ShadowDepthCameraCallback::makeLightSpaceMat(osg::Matrix &view, osg::Matrix
 	else if (_light->getLightType() == POINTLIGHT)
 	{
 		PointLight *pt = _light->asPointLight();
-		projMat.makePerspective(90, 1.0, 0.5, pt->getRadius());
+		projMat.makePerspective(95, 1.0, 0.5, pt->getRadius());
 		viewMat = calcPointLightViewMat(pt->getPosition(), _face);
 	}
 

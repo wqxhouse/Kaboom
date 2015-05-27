@@ -19,5 +19,5 @@ void main()
 	gl_FragData[2] = vec4(encodeNormal(normalize(v_normal)), splitDepth2x16(v_depth)); // encoded normal + split linDepth
 	// gl_FragData[2] = vec4(encodeNormal(normalize(v_normal)), 0, 0); // encoded normal + split linDepth
 
-	gl_FragData[3] = vec4(v_position.xyz, 1);
+	//gl_FragData[3] = vec4(v_position.xyz, 1);
 }

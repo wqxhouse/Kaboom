@@ -34,6 +34,6 @@
   <buffer name="b_RT2" template="buf_rgba16f" /> <!--64bit-->
 
 
-  <buffer name="b_position" template="buf_rgba32f" />
+  <!--<buffer name="b_position" template="buf_rgba32f" />-->
   
 </compositor>
