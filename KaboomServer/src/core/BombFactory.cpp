@@ -17,6 +17,7 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/TimerComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../math/util.h"
 #include "../messaging/DefaultExplosionMessageHandler.h"
 #include "../messaging/KaboomV2MessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
@@ -75,6 +76,7 @@ void BombFactory::createBase(
 
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, localInertia);
     rigidBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    rigidBody->setAngularVelocity(btVector3(randDecimal(-3.0f, 3.0f), randDecimal(-3.0f, 3.0f), randDecimal(-3.0f, 3.0f)));
     rigidBody->setUserPointer(entity);
 
     btGhostObject *ghostObject = new btGhostObject();

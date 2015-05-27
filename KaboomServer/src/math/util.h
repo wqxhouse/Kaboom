@@ -14,3 +14,6 @@ Vec3 rotateVector(const Vec3 &v, const Vec3 &axis, float deg);
 btVector3 getImpulseVector(btVector3 pointA, btVector3 pointB, btScalar knockBackRatio);
 
 float getDistance(const Vec3 &pos1, const Vec3 &pos2);
+
+float randDecimal();
+float randDecimal(float min, float max);

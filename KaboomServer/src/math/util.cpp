@@ -52,3 +52,13 @@ float getDistance(const Vec3 &pos1, const Vec3 &pos2) {
 
     return sqrt(dx * dx + dy * dy + dz * dz);
 }
+
+float randDecimal() {
+    return rand() % RAND_MAX / (float)RAND_MAX;
+}
+
+float randDecimal(float min, float max) {
+    const float diff = max - min;
+    const float avg = (min + max) / 2.0f;
+    return randDecimal() * diff - avg;
+}
