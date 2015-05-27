@@ -21,7 +21,6 @@ World::World(ConfigSettings* configSettings)
           dispatcher(&collisionConfiguration),
           world(&dispatcher, &broadphase, &solver, &collisionConfiguration) {
     setGravity(9.8f);
-    broadphase.getOverlappingPairCache()->setInternalGhostPairCallback(new TriggerCallback());
     world.setInternalTickCallback(onTickCallback, this);
 }
 
@@ -49,9 +48,9 @@ void World::removeRigidBody(btRigidBody *rigidBody) {
 void World::addTrigger(btGhostObject *ghostObject) {
     ghostObject->setCollisionFlags(ghostObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
     world.addCollisionObject(
-        ghostObject,
-        btBroadphaseProxy::SensorTrigger,
-        btBroadphaseProxy::AllFilter ^ btBroadphaseProxy::SensorTrigger ^ btBroadphaseProxy::StaticFilter);
+            ghostObject,
+            btBroadphaseProxy::SensorTrigger,
+            btBroadphaseProxy::AllFilter ^ btBroadphaseProxy::SensorTrigger ^ btBroadphaseProxy::StaticFilter);
 }
 
 void World::removeTrigger(btGhostObject *ghostObject) {
@@ -79,16 +78,20 @@ void World::onTick(btScalar timeStep) {
 
         btManifoldPoint contactPoint = manifold->getContactPoint(0);
 
-        // Ignore ghost objects.
-        if (!collisionObjA->hasContactResponse() || !collisionObjB->hasContactResponse()) {
-            continue;
-        }
-
         Entity *entityA = static_cast<Entity *>(collisionObjA->getUserPointer());
         Entity *entityB = static_cast<Entity *>(collisionObjB->getUserPointer());
 
-        handleCollision(entityA, entityB, contactPoint);
-        handleCollision(entityB, entityA, contactPoint);
+        if (entityA == entityB) {
+            continue;
+        }
+
+        if (collisionObjA->hasContactResponse() && collisionObjB->hasContactResponse()) {
+            handleCollision(entityA, entityB, contactPoint);
+            handleCollision(entityB, entityA, contactPoint);
+        } else {
+            handleTrigger(entityA, entityB, contactPoint);
+            handleTrigger(entityB, entityA, contactPoint);
+        }
     }
 }
 
@@ -127,11 +130,21 @@ void World::handleCollision(Entity *entityA, Entity *entityB, const btManifoldPo
         if (entityA->hasComponent<JumpComponent>()) {
             bool collideGround = isCollidingGround(contactPoint);
 
-			JumpComponent* jumpComp = entityA->getComponent<JumpComponent>();
+            JumpComponent* jumpComp = entityA->getComponent<JumpComponent>();
             if (collideGround) {
-				jumpComp->setJumping(false);
-				
+                jumpComp->setJumping(false);
+
             }
+        }
+    }
+}
+
+void World::handleTrigger(Entity *entityA, Entity *entityB, const btManifoldPoint &contactPoint) const {
+    if (entityA != nullptr) {
+        auto *triggerComp = entityA->getComponent<TriggerComponent>();
+
+        if (triggerComp != nullptr && entityB != nullptr) {
+            triggerComp->addTriggerEntity(entityB);
         }
     }
 }
@@ -143,50 +156,4 @@ bool World::isCollidingGround(const btManifoldPoint &contactPoint) const {
 
     // allow for error
     return dot > 0.05 ? true : false;
-}
-
-btBroadphasePair *World::TriggerCallback::addOverlappingPair(btBroadphaseProxy *proxy0, btBroadphaseProxy *proxy1) {
-    auto *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
-    auto *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
-
-    auto *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
-    auto *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
-
-    addTriggerEntity(entity0, entity1);
-    addTriggerEntity(entity1, entity0);
-
-    return btGhostPairCallback::addOverlappingPair(proxy0, proxy1);
-}
-
-void *World::TriggerCallback::removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher) {
-    auto *colObj0 = static_cast<btCollisionObject *>(proxy0->m_clientObject);
-    auto *colObj1 = static_cast<btCollisionObject *>(proxy1->m_clientObject);
-
-    auto *entity0 = static_cast<Entity *>(colObj0->getUserPointer());
-    auto *entity1 = static_cast<Entity *>(colObj1->getUserPointer());
-
-    removeTriggerEntity(entity0, entity1);
-    removeTriggerEntity(entity1, entity0);
-
-    return btGhostPairCallback::removeOverlappingPair(proxy0, proxy1, dispatcher);
-}
-
-void World::TriggerCallback::addTriggerEntity(Entity *entityA, Entity *entityB) const {
-    if (entityA != nullptr) {
-        auto *triggerComp = entityA->getComponent<TriggerComponent>();
-
-        if (triggerComp != nullptr && entityB != nullptr) {
-            triggerComp->addTriggerEntity(entityB);
-        }
-    }
-}
-
-void World::TriggerCallback::removeTriggerEntity(Entity *entityA, Entity *entityB) const {
-    if (entityA != nullptr) {
-        auto *triggerComp = entityA->getComponent<TriggerComponent>();
-
-        if (triggerComp != nullptr && entityB != nullptr) {
-            triggerComp->removeTriggerEntity(entityB);
-        }
-    }
 }

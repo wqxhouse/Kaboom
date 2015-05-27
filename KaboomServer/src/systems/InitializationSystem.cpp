@@ -29,6 +29,13 @@ void InitializationSystem::processEntity(Entity *entity) {
         colComp->clearContactEntities();
     }
 
+    // Clear trigger results
+    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
+
+    if (triggerComp != nullptr) {
+        triggerComp->clearTriggerEntities();
+    }
+
     // Activate rigid bodies
     PhysicsComponent *physComp = entity->getComponent<PhysicsComponent>();
 
@@ -46,8 +53,6 @@ void InitializationSystem::processEntity(Entity *entity) {
     }
 
     // Update trigger position
-    TriggerComponent *triggerComp = entity->getComponent<TriggerComponent>();
-
     if (triggerComp != nullptr) {
         btTransform worldTrans = btTransform::getIdentity();
 

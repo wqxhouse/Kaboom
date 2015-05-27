@@ -5,7 +5,7 @@
         <name type="string">Kaboom 2.0</name>
         <size type="float">0.1</size>
         <mass type="float">1.0</mass>
-        <explosion-radius type="float">2.0</explosion-radius>
+        <explosion-radius type="float">4.0</explosion-radius>
         <cooldown type="int">500</cooldown>
         <launch-speed type="float">12.0</launch-speed>
         <capacity type="int">20</capacity>
@@ -19,7 +19,7 @@
         <name type="string">Time Bomb</name>
         <size type="float">0.1</size>
         <mass type="float">1.0</mass>
-        <explosion-radius type="float">2.0</explosion-radius>
+        <explosion-radius type="float">4.0</explosion-radius>
         <cooldown type="int">1500</cooldown>
         <launch-speed type="float">15.0</launch-speed>
         <capacity type="int">20</capacity>
@@ -37,7 +37,7 @@
         <name type="string">Remote Detonator</name>
         <size type="float">0.1</size>
         <mass type="float">1.0</mass>
-        <explosion-radius type="float">6.0</explosion-radius>
+        <explosion-radius type="float">4.0</explosion-radius>
         <cooldown type="int">500</cooldown>
         <launch-speed type="float">13.0</launch-speed>
         <capacity type="int">20</capacity>

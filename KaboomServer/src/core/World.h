@@ -22,9 +22,9 @@ public:
     virtual void stepSimulation(float timeStep, int maxSubSteps);
 
     virtual void addRigidBody(btRigidBody *rigidBody);
-    void addTrigger(btGhostObject *ghostObject);
-
     virtual void removeRigidBody(btRigidBody *rigidBody);
+
+    void addTrigger(btGhostObject *ghostObject);
     void removeTrigger(btGhostObject *ghostObject);
 
     void setGravity(float gravity);
@@ -44,8 +44,6 @@ protected:
     btDiscreteDynamicsWorld world;
 
 private:
-    class TriggerCallback;
-
     ConfigSettings* configSettings;
 
     SpawnPointToConfigMap spawnPointConfigs;
@@ -54,15 +52,7 @@ private:
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
 
     void handleCollision(Entity *entityA, Entity *entityB, const btManifoldPoint &contactPoint) const;
+    void handleTrigger(Entity *entityA, Entity *entityB, const btManifoldPoint &contactPoint) const;
+
     bool isCollidingGround(const btManifoldPoint &contactPoint) const;
-};
-
-class World::TriggerCallback : public btGhostPairCallback{
-public:
-    virtual btBroadphasePair *addOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1);
-    virtual void *removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher);
-
-private:
-    void addTriggerEntity(Entity *entityA, Entity *entityB) const;
-    void removeTriggerEntity(Entity *entityA, Entity *entityB) const;
 };
