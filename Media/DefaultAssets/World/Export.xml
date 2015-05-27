@@ -16,12 +16,12 @@
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
 
-	<model name="testBox">
-		<file>DefaultAssets\GeometryObject\3boxStack.dae</file>
-		<material name="brick1Mat" />
-		<position>0.000000 1.000000 1.000000</position>
-		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>0.250000 0.250000 0.250000</scale>
+	<model name="platform1">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>13.000000 0.000000 -1.000000</position>
+		<orientation>0.700909 -0.000000 0.713250 -0.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
 
 	<model name="platform">
@@ -32,68 +32,44 @@
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
 
-	<!--
-	<light name="Sun" type="directional">
-		<color>0.700000 0.700000 0.700000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<direction>0.100201 -0.881765 -0.460923</direction>
-	</light>
+	<model name="platform2">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>0.000000 0.000000 -1.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
 
-	<light name="pt2" type="point">
-		<color>0.300000 0.700000 0.300000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>-7.000000 0.000000 0.000000</position>
-		<radius>100.000000</radius>
-	</light>
+	<model name="platform15">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>5.000000 14.000000 -1.000000</position>
+		<orientation>0.124284 0.719107 0.670578 -0.133278</orientation>
+		<scale>1.000000 1.000000 1.050000</scale>
+	</model>
 
-	<light name="debug" type="point">
-		<color>1.000000 0.160784 0.596078</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>-9.000000 -5.000000 2.000000</position>
-		<radius>100.000000</radius>
-	</light>
+	<model name="platform3">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>-13.000000 0.000000 -1.000000</position>
+		<orientation>-0.000000 0.688355 0.000000 0.725374</orientation>
+		<scale>1.050000 1.000000 1.000000</scale>
+	</model>
 
-	<light name="debug1" type="point">
+	<model name="platform4">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>0.000000 0.000000 23.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
+
+	<light name="hello_world" type="point">
 		<color>0.000000 1.000000 0.000000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 0.000000 2.000000</position>
-		<radius>100.000000</radius>
+		<castShadow>1</castShadow>
+		<intensity>2.000000</intensity>
+		<position>0.000000 0.000000 10.000000</position>
+		<radius>270.000000</radius>
 	</light>
-
-	<light name="pt4" type="point">
-		<color>0.300000 0.300000 0.700000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 -7.000000 3.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="debug2" type="point">
-		<color>0.000000 1.000000 0.000000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 0.000000 2.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="pt1" type="point">
-		<color>0.700000 0.300000 0.300000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>7.000000 0.000000 3.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="pt3" type="point">
-		<color>0.700000 0.700000 0.300000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 7.000000 3.000000</position>
-		<radius>100.000000</radius>
-	</light>-->
 
 </world>
