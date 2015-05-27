@@ -76,7 +76,7 @@ void BombFactory::createBase(
 
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, localInertia);
     rigidBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
-    rigidBody->setAngularVelocity(btVector3(randDecimal(-3.0f, 3.0f), randDecimal(-3.0f, 3.0f), randDecimal(-3.0f, 3.0f)));
+    rigidBody->setAngularVelocity(btVector3(randDecimal(-2.0f, 2.0f), randDecimal(-2.0f, 2.0f), randDecimal(-2.0f, 2.0f)));
     rigidBody->setUserPointer(entity);
 
     btGhostObject *ghostObject = new btGhostObject();
