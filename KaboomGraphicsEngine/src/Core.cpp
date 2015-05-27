@@ -163,7 +163,7 @@ void Core::configPasses()
 	configLightPass();
 	configSAOPass();
 
-	_passes->getOrCreateStateSet()->setMode(GL_TEXTURE_CUBE_MAP_SEAMLESS, osg::StateAttribute::ON);
+	//_passes->getOrCreateStateSet()->setMode(GL_TEXTURE_CUBE_MAP_SEAMLESS, osg::StateAttribute::ON);
 }
 
 void Core::configGeometryPass()

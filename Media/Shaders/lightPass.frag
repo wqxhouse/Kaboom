@@ -86,7 +86,7 @@ void main()
         texelFetch(u_lightsPerTile, precomputeCoord + ivec2(2, 0), 0).r);
 
     vec3 result = vec3(0);
-	result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel);
+	//result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel);
 
     // Compute point lights
     ivec2 baseOffset = precomputeCoord + ivec2(0, 1);
