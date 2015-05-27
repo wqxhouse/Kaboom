@@ -3,7 +3,7 @@
     <game-mode>
         <name type="string">Deathmatch</name>
         <pre-match-duration type="int">3</pre-match-duration> <!-- in seconds -->
-        <match-duration type="int">180</match-duration> <!-- in seconds -->
+        <match-duration type="int">300</match-duration> <!-- in seconds -->
         <post-match-duration type="int">15</post-match-duration> <!-- in seconds -->
     </game-mode>
 </game-modes>

@@ -108,7 +108,11 @@ public:
     inline const IdToPlayerMap &getPlayers() const {
         return players;
     }
+
 	std::string *name;
+	clock_t timeOfAssign;
+	clock_t serverTimeElapsed;
+	clock_t duration;
 
 private:
     friend void GameGUIListener::setGameState(GameStateMachine state);
@@ -136,4 +140,6 @@ private:
 
     Camera &_camera;
     GameGUIEventHandler *_guiEventHandler;
+
+	bool abc;
 };

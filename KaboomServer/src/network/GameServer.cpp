@@ -33,7 +33,6 @@
 #include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
 #include <util/ConfigSettings.h>
-
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 
@@ -96,6 +95,7 @@ void GameServer::receive(const IdToPlayerMap &players) {
                 case EVENT_PLAYER_RENAME: {
                     playerRenameEvent.deserialize(&networkBuffer[i]);
                     playerRenameEvent.setPlayerId(player->getId());
+					std::cout << "rename event stuff" << std::endl;
                     break;
                 }
                 case EVENT_EQUIP: {
@@ -180,8 +180,9 @@ void GameServer::sendDisconnectEvent(Player *player) const {
     sendEvent(evt);
 }
 
-void GameServer::sendAssignEvent(Player *player) const {
-    AssignEvent evt(player->getId());
+void GameServer::sendAssignEvent(Player *player, DeathmatchMode &gameMode) const {
+	AssignEvent evt(clock() - gameMode.getTimer().getStartTime(), gameMode.getMatchDuration(), player->getId());
+	std::cout << evt << std::endl;
     sendEvent(evt, player->getId());
 }
 
@@ -329,9 +330,9 @@ void GameServer::sendPlayerStatusEvent(Entity *entity) const {
     sendEvent(evt);
 }
 
-void GameServer::sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players) const {
+void GameServer::sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players,DeathmatchMode &gameMode) const {
     sendConnectEvent(newPlayer); // Tells everyone about the new player's player ID
-    sendAssignEvent(newPlayer); // Tells this player its player ID
+    sendAssignEvent(newPlayer,gameMode); // Tells this player its player ID
 
     // Tells the new player about everyone else's player ID
     for (auto kv : players) {

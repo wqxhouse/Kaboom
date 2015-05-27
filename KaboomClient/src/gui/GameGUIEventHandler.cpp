@@ -1,6 +1,7 @@
 #include "GameGUIEventHandler.h"
 
 #include <Core.h>
+#include <time.h>
 #include "../core/Game.h"
 
 GameGUIEventHandler::GameGUIEventHandler(Game *game)
@@ -39,13 +40,13 @@ void GameGUIEventHandler::handle(const AmmoAmountEvent &e, InventoryComponent *b
 		ammoTable->GetChild(i)->GetFirstChild()->SetInnerRML(std::to_string(temp).c_str());
 	}
 }
-void  GameGUIEventHandler::handle(const ScoreEvent &e)const {
+void  GameGUIEventHandler::handle(const ScoreEvent &e, std::string name)const {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
 	bool flag = true;
 	for (int i = 1; i<table->GetNumChildren(); i++){
 		Rocket::Core::Element * tr = table->GetChild(i);
-		Rocket::Core::String s=tr->GetChild(0)->GetInnerRML();
+		Rocket::Core::String s=tr->GetChild(0)->GetId();
 		Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
 		if (s==d){
 			flag = false;
@@ -60,7 +61,13 @@ void  GameGUIEventHandler::handle(const ScoreEvent &e)const {
 		Rocket::Core::Element* new_td_kills = window2->CreateElement("div");
 		Rocket::Core::Element* new_td_death = window2->CreateElement("div");
 
-		new_td_id->SetInnerRML(std::to_string(e.getPlayerId()).c_str());
+		new_td_id->SetId(std::to_string(e.getPlayerId()).c_str());
+
+		if (name != "")
+			new_td_id->SetInnerRML(name.c_str());
+		else
+			new_td_id->SetInnerRML(std::to_string(e.getPlayerId()).c_str());
+
 		new_td_kills->SetInnerRML(std::to_string(e.getKills()).c_str());
 		new_td_death->SetInnerRML(std::to_string(e.getDeaths()).c_str());
 
@@ -71,19 +78,6 @@ void  GameGUIEventHandler::handle(const ScoreEvent &e)const {
 		printf("I am in\n");
 	}
 
-}
-
-void GameGUIEventHandler::handle(const TimeEvent &e) const{
-	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
-	Rocket::Core::Element * clock = window1->GetChild(3);
-
-	
-	int seconds = ((int)(e.getTime()) / CLOCKS_PER_SEC);
-	int mintues = seconds / 60;
-	seconds %= 60;
-
-	std::string timer = std::to_string(mintues) + ":" + std::to_string(seconds);
-	clock->SetInnerRML(timer.c_str());
 }
 
 void GameGUIEventHandler::changeWeapon(int weapon) const
@@ -153,4 +147,35 @@ void GameGUIEventHandler::hideScoreBoard() const{
 	//Core::getInGameLibRocketGUIManager()->getWindow(1)->Hide();
 	Core::getInGameLibRocketGUIManager()->getWindow(2)->Hide();
 
+}
+void GameGUIEventHandler::changeTime(Game *game) const{
+	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
+	Rocket::Core::Element * clock = window1->GetChild(3);
+	//clock_t time_elapsed = game->serverTimeElapsed;
+	clock_t time_passed = std::clock() - game->timeOfAssign;
+	//clock_t duration = game->duration;
+
+	clock_t remaining_time = game->duration - game->serverTimeElapsed - time_passed;
+	int seconds = ((int)(remaining_time) / CLOCKS_PER_SEC);
+	int mintues = seconds / 60;
+	seconds %= 60;
+
+	std::string timer = std::to_string(mintues) + ":" + std::to_string(seconds);
+	clock->SetInnerRML(timer.c_str());
+}
+
+void GameGUIEventHandler::handle(const PlayerRenameEvent &e, Player* player) const
+{
+	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
+	Rocket::Core::Element * table = window2->GetChild(0);
+	bool flag = true;
+	for (int i = 1; i<table->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = table->GetChild(i);
+		Rocket::Core::String s = tr->GetChild(0)->GetId();
+		Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
+		if (s == d && player->getName() != ""){
+			flag = false;
+			tr->GetChild(0)->SetInnerRML(player->getName().c_str());
+		}
+	}
 }

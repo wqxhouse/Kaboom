@@ -121,6 +121,7 @@ void Game::run() {
 			break;
 		case NAME_SCREEN:
 			in_game_screen_ui->Hide();
+			start_screen_ui->Hide();
 			name_screen_ui->Show();
 			break;
 		case START_SCREEN_MODE:
@@ -128,6 +129,7 @@ void Game::run() {
 			in_game_screen_ui->Hide();
 			name_screen_ui->Hide();
 			start_screen_ui->Show();
+			abc = true;
 			break;
 		}
 		case EXIT_START_SCREEN_MODE:
@@ -140,14 +142,22 @@ void Game::run() {
 		{
 			config->getValue(ConfigSettings::str_server_address, serverAddress);
 			config->getValue(ConfigSettings::str_server_port, serverPort);
+
 			in_game_screen_ui->Show();
 			start_screen_ui->Hide();
+			name_screen_ui->Hide();
+
 
             bool res = client.connectToServer(serverAddress, serverPort);
+
 			if (res)
 			{
 				gsm = GAME_MODE;
 				Core::enableGameMode();
+				if (abc){
+					client.sendPlayerRenameEvent(*name);
+					abc = false;
+				}
 			}
 			else
 			{
@@ -163,14 +173,14 @@ void Game::run() {
 			
 			Core::getMainCamera().setFovXAndUpdate(90);
 			Core::getMainCamera().setNearAndFarAndUpdate(1, 500);
-
+			
 			// TODO: Robin: need to check this.
 			// Since receive fails when the packet received is zero (from the source code, not sure if it is the intended behavior)
 			// and the client will be disconnected from the server 
 			// Thus, we want to check if receive fails. If fails, since we are disconnected, should fall back to editor state.
 			// E.g: close the server whlie running the game 
             client.receive();
-
+			_guiEventHandler->changeTime(this);
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
 				removeAllEntities(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;
@@ -181,7 +191,7 @@ void Game::run() {
 			client.disconnectFromServer();
 			gsm = START_SCREEN_MODE;
 			break;
-		}
+		}		
         Core::AdvanceFrame();
     }
 }
