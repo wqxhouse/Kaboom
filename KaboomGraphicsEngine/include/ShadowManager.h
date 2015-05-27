@@ -67,3 +67,12 @@ private:
 
 	int _currShadowMapNum;
 };
+
+class DepthCamGroupCallback : public osg::NodeCallback
+{
+public:
+	DepthCamGroupCallback();
+	virtual void operator()(osg::Node* node, osg::NodeVisitor* nv);
+private:
+	LightManager *_lmanager;
+};
