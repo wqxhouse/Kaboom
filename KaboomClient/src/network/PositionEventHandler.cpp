@@ -44,7 +44,7 @@ void PositionEventHandler::handle(const Event &e) const {
         pos.normalize();
         pos.z() = 0.0f;
         pos.normalize();
-        pos *= 0.9f;
+        pos *= 0.5f;
         pos += osgPos + osg::Vec3(0.0f, 0.0f, 1.0f);
         game->getCamera().setFpsEyePositionAndUpdate(pos);
     }
