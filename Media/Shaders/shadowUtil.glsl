@@ -60,7 +60,7 @@ float PCF(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, fl
 	//{
 	//	return 0.5;
 	//}
-	//else
+	//elseq
 	//{
 	//	return 1.0;
 	//}
