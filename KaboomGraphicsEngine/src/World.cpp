@@ -33,6 +33,14 @@ World::~World()
 	delete _cache;
 }
 
+void World::loadXMLFile(const std::string &filePath)
+{
+	XMLLoader::loadXMLFile(filePath);
+
+	std::size_t found = filePath.find("\\World\\");
+	_worldPath = filePath.substr(0, found);
+}
+
 void World::loadXMLNode(osgDB::XmlNode *xmlRoot)
 {
 	// Ignore the most outer tag ("world")
