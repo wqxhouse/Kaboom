@@ -18,7 +18,11 @@ Model::Model(int type_id, bool hasAnim)
 
 	if (!hasAnim) {
 		loadModel(type_id);
-		_root->setMatrix(cache->getMatrixById(type_id));
+
+		osg::ref_ptr<osg::MatrixTransform> transformNode = dynamic_cast<osg::MatrixTransform*>
+			(_root->getChild(0));
+		//_root
+		transformNode->setMatrix(cache->getMatrixById(type_id));
 	}
 	else {
 		addAnimationById(type_id);
@@ -29,7 +33,8 @@ Model::Model(int type_id, bool hasAnim)
 			return;
 		}
 
-		_root = itr->second;
+		_root->addChild(itr->second);
+		//_root = itr->second;
 
 		std::unordered_map<int, osg::ref_ptr<osgAnimation::BasicAnimationManager>>::iterator itr2 =
 			_animManagerMap.find(type_id);
@@ -55,14 +60,16 @@ bool Model::loadModel(int type_id)
 
 	GeometryCache* cache = Core::getWorldRef().getGeometryCache();
 	osg::ref_ptr<osg::Node> tmp = cache->getNodeById(type_id);
-	bool retVal = loadModelHelper(tmp, _root, _animManager);
+	osg::ref_ptr<osg::MatrixTransform> transformNode = NULL;
+	bool retVal = loadModelHelper(tmp, transformNode, _animManager);
 
 	// Use GeometryObject to handle the Material, model will be a grandchild
 	// [TODO: Fix this memory leak]
-	GeometryObject geom = GeometryObject("Character Dummy", _root.get());
+	GeometryObject geom = GeometryObject("Character Dummy", transformNode.get());
 	geom.setMaterial(cache->getMaterialById(type_id));
-	_root = geom.getRoot();
+	transformNode = geom.getRoot();
 
+	_root->addChild(transformNode);
 	return retVal;
 }
 
@@ -70,7 +77,11 @@ bool Model::loadModel(std::string& modelName)
 {
 	// Make sure model is loaded
 	osg::ref_ptr<osg::Node> tmp = Core::getWorldRef().getGeometryCache()->getNodeByFileName(modelName);
-	return loadModelHelper(tmp, _root, _animManager);
+	osg::ref_ptr<osg::MatrixTransform> transformNode = NULL;
+	bool retVal = loadModelHelper(tmp, transformNode, _animManager);
+
+	_root->addChild(transformNode);
+	return retVal;
 }
 
 bool Model::loadModelHelper(osg::ref_ptr<osg::Node> origNode, osg::ref_ptr<osg::Group> newNode, 
@@ -113,7 +124,7 @@ void Model::addAnimationById(int type_id)
 
 	// Use GeometryObject to handle the Material, model will be a grandchild
 	// [TODO: Fix this memory leak]
-	GeometryObject* geom = new GeometryObject("Character Dummy", node.get());
+	GeometryObject* geom = new GeometryObject("Character Dummy" + type_id, node.get());
 	geom->setMaterial(cache->getMaterialById(type_id));
 	node = geom->getRoot();
 
@@ -161,7 +172,8 @@ void Model::playAnimation(int type_id, std::string& animName)
 			return;
 		}
 
-		_root = itr1->second;
+		_root->setChild(0, itr1->second);
+		//_root = itr1->second;
 
 		// Set current animation manager to the playing animation
 		std::unordered_map<int, osg::ref_ptr<osgAnimation::BasicAnimationManager>>::iterator itr2 =
@@ -174,9 +186,9 @@ void Model::playAnimation(int type_id, std::string& animName)
 
 		_animManager = itr2->second;
 		_curr_type_id = type_id;
-	}
 
-	playAnimation(animName);
+		playAnimation(animName);
+	}
 }
 
 void Model::stopAnimation() 
