@@ -207,6 +207,9 @@
     <ClInclude Include="include\ShadowTile.h">
       <Filter>Header Files\Shadow</Filter>
     </ClInclude>
+    <ClInclude Include="include\FrustumHelper.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -351,6 +354,9 @@
       <Filter>Source Files\Shadow</Filter>
     </ClCompile>
     <ClCompile Include="src\ShadowTile.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FrustumHelper.cpp">
       <Filter>Source Files\Shadow</Filter>
     </ClCompile>
   </ItemGroup>

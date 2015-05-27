@@ -692,7 +692,7 @@ osg::Texture* EffectCompositor::createTextureFromXML(osgDB::XmlNode* xmlNode, bo
 			if (tf != 0)
 			{
 				texture->setShadowComparison(true);
-				texture->setShadowCompareFunc(osg::Texture::ShadowCompareFunc::LEQUAL);
+				texture->setShadowCompareFunc(osg::Texture::ShadowCompareFunc::LESS);
 			}
 		}
 		else if (childName == "binding")

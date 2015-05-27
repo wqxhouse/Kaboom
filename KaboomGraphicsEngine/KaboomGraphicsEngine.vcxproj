@@ -262,6 +262,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\DraggerUpdateCallback.h" />
     <ClInclude Include="include\EffectCompositor.h" />
     <ClInclude Include="include\ExplosionEffect.h" />
+    <ClInclude Include="include\FrustumHelper.h" />
     <ClInclude Include="include\GeometryObject.h" />
     <ClInclude Include="include\GeometryObjectManager.h" />
     <ClInclude Include="include\GeometryObjectManipulator.h" />
@@ -314,6 +315,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\EffectCompositor.cpp" />
     <ClCompile Include="src\EffectCompositorXML.cpp" />
     <ClCompile Include="src\ExplosionEffect.cpp" />
+    <ClCompile Include="src\FrustumHelper.cpp" />
     <ClCompile Include="src\GeometryObject.cpp" />
     <ClCompile Include="src\GeometryObjectManager.cpp" />
     <ClCompile Include="src\GeometryObjectManipulator.cpp" />

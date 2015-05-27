@@ -3,6 +3,7 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "ShadowDepthCamera.h"
+#include "LightManager.h"
 
 #include <osg/TextureCubeMap>
 #include <osgDB/ReadFile>
@@ -18,6 +19,7 @@ ShadowManager::ShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRo
 	_atlas->createAtlas(SHADOW_ATLAS_RESOLUTION);
 
 	_depthCamGroup = new osg::Group;
+	_depthCamGroup->setUpdateCallback(new DepthCamGroupCallback);
 
 	_depthCameras.resize(MAX_SHADOW_MAPS);
 	for (int i = 0; i < MAX_SHADOW_MAPS; i++)
@@ -85,38 +87,40 @@ void ShadowManager::getPassInfo()
 
 void ShadowManager::addDirectionalLight(DirectionalLight *light)
 {
-	// todo
-}
-
-int ShadowManager::findAvailableDepthSlot()
-{
-	for (int i = 0; i < _depthCameras.size(); i++)
+	int resolution = light->getShadowMapRes();
+	int tileSize = _atlas->getTileSize();
+	int atlasSize = _atlas->getSize();
+	if (resolution < tileSize || resolution % tileSize != 0)
 	{
-		if (_depthCameras[i] == NULL)
-		{
-			return i;
-		}
+		OSG_WARN << "The cubemap shadow resolution has to be a multiple of " << tileSize << std::endl;
+		light->setShadowMapRes(tileSize);
+		resolution = tileSize;
 	}
-	
-	return -1;
-}
 
-const osg::Matrix &ShadowManager::getLightSpaceWVP(int index)
-{
-	if (_depthCameras[index] == NULL) return _defaultMatrix;
-	return _depthCameras[index]->getCurrWVP();
-}
+	if (resolution > atlasSize)
+	{
+		OSG_WARN << "The cubemap shadow resolution cannot be larger than " << atlasSize << std::endl;
+		light->setShadowMapRes(tileSize);
+		resolution = tileSize;
+	}
 
-float ShadowManager::getShadowMapScaleWRTAtlas(int index)
-{
-	if (_depthCameras[index] == NULL) return -1.0f;
-	return _depthCameras[index]->getShadowMapScaleWRTAtlas();
-}
+	for (int i = 0; i < light->getNumSplits(); i++)
+	{
+		// FIXME: same problem as pointlight;  in addPointLight()
+		int slot = findAvailableDepthSlot();
+		if (slot == -1)
+		{
+			OSG_WARN << "no available shadow map slots" << std::endl;
+			return;
+		}
 
-osg::Vec2 ShadowManager::getAtlasPosUVCoord(int index)
-{
-	if (_depthCameras[index] == NULL) return osg::Vec2(-1, -1);
-	return _depthCameras[index]->getAtlasPosUVCoord();
+		ShadowDepthCamera *depthCam = new ShadowDepthCamera(_depthAtlasTex.get(), _atlas, _geomRoot.get(), light, i);
+		_depthCameras[_currShadowMapNum] = depthCam;
+		_depthCamGroup->addChild(depthCam->getRoot());
+
+		light->setShadowMapIndex(i, slot);
+		_currShadowMapNum++;
+	}
 }
 
 void ShadowManager::addPointLight(PointLight *light)
@@ -157,4 +161,77 @@ void ShadowManager::addPointLight(PointLight *light)
 		light->setShadowMapIndex(i, slot);
 		_currShadowMapNum++;
 	}
+}
+
+int ShadowManager::findAvailableDepthSlot()
+{
+	for (int i = 0; i < _depthCameras.size(); i++)
+	{
+		if (_depthCameras[i] == NULL)
+		{
+			return i;
+		}
+	}
+	
+	return -1;
+}
+
+const osg::Matrix &ShadowManager::getLightSpaceWVP(int index)
+{
+	if (_depthCameras[index] == NULL) return _defaultMatrix;
+	return _depthCameras[index]->getCurrWVP();
+}
+
+float ShadowManager::getShadowMapScaleWRTAtlas(int index)
+{
+	if (_depthCameras[index] == NULL) return -1.0f;
+	return _depthCameras[index]->getShadowMapScaleWRTAtlas();
+}
+
+osg::Vec2 ShadowManager::getAtlasPosUVCoord(int index)
+{
+	if (_depthCameras[index] == NULL) return osg::Vec2(-1, -1);
+	return _depthCameras[index]->getAtlasPosUVCoord();
+}
+
+//=====================================================================
+DepthCamGroupCallback::DepthCamGroupCallback()
+{
+	// TODO: hacky
+	_lmanager = Core::getWorldRef().getLightManager();
+}
+
+void DepthCamGroupCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
+{
+	for (int i = 0; i < _lmanager->getNumLights(); i++)
+	{
+		Light *l = _lmanager->getLight(i);
+		if (l->getLightType() == DIRECTIONAL)
+		{
+			DirectionalLight *dl = l->asDirectionalLight();
+			Camera &camera = Core::getMainCamera();
+			float nearClip = camera.getNearPlane();
+			float farClip = camera.getFarPlane();
+			float clipRange = farClip - nearClip;
+
+			float minZ = nearClip;
+			float maxZ = nearClip + (dl->getShadowFarPlane() / farClip) * clipRange;
+
+			float range = maxZ - minZ;
+			float ratio = maxZ / minZ;
+
+			int numSplits = dl->getNumSplits();
+			for (int j = 0; j < numSplits; j++)
+			{
+				float p = (j + 1) / static_cast<float>(numSplits);
+				float log = minZ * std::pow(ratio, p);
+				float uniform = minZ + range * p;
+				float d = (log - uniform) + uniform;
+				float dist = (d - nearClip) / clipRange;
+				dl->setCascadeSplitDist(j, dist);
+			}
+		}
+
+	}
+	traverse(node, nv);
 }
