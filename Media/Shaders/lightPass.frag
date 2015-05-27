@@ -12,7 +12,7 @@ uniform sampler2D u_RT0;
 uniform sampler2D u_RT1;
 uniform sampler2D u_RT2;
 
-uniform sampler2D u_position;
+//uniform sampler2D u_position;
 
 uniform sampler2D u_shadowAtlas;
 uniform isampler2D u_lightsPerTile;
@@ -68,7 +68,7 @@ void main()
 
 	Material material = getMaterialFromGBuffer(rt0, rt1, rt2, u_farPlane, v_viewRay);
 
-	material.position = texelFetch(u_position, screenCoord, 0).xyz;
+	//material.position = texelFetch(u_position, screenCoord, 0).xyz;
 
     // Fetch the light counts
     // We perform a min as it *might* be that we read a wrong value

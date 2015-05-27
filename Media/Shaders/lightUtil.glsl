@@ -121,7 +121,7 @@ vec3 applyShadowPointLight(Light light, Material material, mat4 u_viewInvMat,
     vec3 h = normalize(l + v);
 
 	vec3 l_ws = (u_viewInvMat * vec4(-l, 0)).xyz;
-	int face = int((textureLod(u_shadowCube, l_ws, 0).r + 0.1) * 5.0);
+	int face = int((textureLod(u_shadowCube, l_ws, 0).r) * 5.0);
     int shadowMapIndex = light.shadowMapIndex[face];
 	ShadowDepthMap shadowInfo = depthMap[shadowMapIndex];
 
