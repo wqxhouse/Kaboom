@@ -106,11 +106,10 @@ vec3 applyPointLight(Light light, Material material)
 	//return vec3(attenuation);
 }
 
-//vec3 applyShadowPointLight(Light light, Material material, 
-//	in sampler2D u_shadowAtlas, in samplerCube u_shadowCube, 
-//	in mat4 viewInvMat, in struct ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
+//vec3 applyShadowPointLight(Light light, Material material, mat4 u_viewInvMat,
+//			sampler2D u_shadowAtlas, samplerCube u_shadowCube, ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
 vec3 applyShadowPointLight(Light light, Material material, mat4 u_viewInvMat,
-			sampler2D u_shadowAtlas, samplerCube u_shadowCube, ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
+			sampler2DShadow u_shadowAtlas, samplerCube u_shadowCube, ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
 {
 	float distanceToLight = distance(material.position, light.position);   
     float attenuation = computePointLightAttenuation(light, distanceToLight);
