@@ -107,6 +107,9 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
 
             if (killer->getId() != victim->getId()) {
                 killer->setKills(killer->getKills() + 1);
+                game->getGameServer().sendChatEvent(victim->getName() + " was killed by " + killer->getName() + ".");
+            } else {
+                game->getGameServer().sendChatEvent(victim->getName() + " committed suicide.");
             }
 
             victim->setDeaths(victim->getDeaths() + 1);

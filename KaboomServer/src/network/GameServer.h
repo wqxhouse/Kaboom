@@ -36,6 +36,7 @@ public:
 
     // One-time events
 
+    void sendChatEvent(const std::string &message) const;
     void sendScoreEvent(Player *player) const;
     void sendPlayerRenameEvent(Player *player) const;
     void sendPlayerRespawnEvent(Player *player) const;

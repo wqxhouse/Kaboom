@@ -13,6 +13,7 @@
 #include <network/AmmoAmountEvent.h>
 #include <network/AssignEvent.h>
 #include <network/BindEvent.h>
+#include <network/ChatEvent.h>
 #include <network/ConnectEvent.h>
 #include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
@@ -95,7 +96,6 @@ void GameServer::receive(const IdToPlayerMap &players) {
                 case EVENT_PLAYER_RENAME: {
                     playerRenameEvent.deserialize(&networkBuffer[i]);
                     playerRenameEvent.setPlayerId(player->getId());
-					std::cout << "rename event stuff" << std::endl;
                     break;
                 }
                 case EVENT_EQUIP: {
@@ -193,6 +193,11 @@ void GameServer::sendBindEvent(Player *player) const {
 
 void GameServer::sendMatchStateEvent(const GameMode &gameMode) const {
     MatchStateEvent evt(gameMode.getMatchState(), gameMode.getTimer());
+    sendEvent(evt);
+}
+
+void GameServer::sendChatEvent(const std::string &message) const {
+    ChatEvent evt(0, message);
     sendEvent(evt);
 }
 
