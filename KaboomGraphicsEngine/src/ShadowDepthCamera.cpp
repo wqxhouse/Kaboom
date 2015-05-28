@@ -47,7 +47,8 @@ osg::Vec2 ShadowDepthCamera::getAtlasPosUVCoord()
 	osg::Vec2i ssCoord = osg::Vec2i();
 	if (type == DIRECTIONAL)
 	{
-		// todo	
+		DirectionalLight *dl = _light->asDirectionalLight();
+		ssCoord = dl->getShadowAtlasPos(_face);
 	}
 	else if (type == POINTLIGHT)
 	{
