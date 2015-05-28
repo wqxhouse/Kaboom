@@ -95,7 +95,7 @@ vec3 applyDirectionalLight(Light light, Material material)
 
 vec3 applyShadowDirectionalLight(Light light, Material material)
 {
-	  float attenuation = 1.0;
+	 float attenuation = 1.0;
     // no att for dir light
 	
     vec3 l = -light.dirFromLight;
