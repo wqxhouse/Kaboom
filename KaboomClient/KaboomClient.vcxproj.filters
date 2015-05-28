@@ -340,6 +340,9 @@
     <ClInclude Include="src\network\ChatEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\TrailingEffectComponent.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-client\bombs.xml">
