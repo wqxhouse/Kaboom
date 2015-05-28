@@ -123,9 +123,11 @@ void Game::run() {
 			in_game_screen_ui->Hide();
 			start_screen_ui->Hide();
 			name_screen_ui->Show();
+			inputManager->loadNameTyping();
 			break;
 		case START_SCREEN_MODE:
 		{
+			inputManager->loadConfig();
 			in_game_screen_ui->Hide();
 			name_screen_ui->Hide();
 			start_screen_ui->Show();
