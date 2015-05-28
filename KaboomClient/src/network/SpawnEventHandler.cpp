@@ -5,7 +5,7 @@
 #include <components/PositionComponent.h>
 #include <ParticleEffectManager.h>
 #include <TrailingEffect.h>
-
+#include <components/RotationComponent.h>
 #include "../core/Game.h"
 #include "../components/SceneNodeComponent.h"
 #include <GeometryObject.h>
@@ -19,7 +19,7 @@ void SpawnEventHandler::handle(const Event &e) const {
 	EntityManager &entityManager = game->getEntityManager();
     EntityType type = evt.getType();
     Entity *entity = nullptr;
-	
+	Entity *player = game->getCurrentPlayer()->getEntity();
 	
     if ((type & CAT_MASK) == CAT_CHARACTER) {
         entity = game->getCharacterFactory().createCharacter(
@@ -52,10 +52,14 @@ void SpawnEventHandler::handle(const Event &e) const {
             double x = (double)(-playerPos.x + entityPos.x);
             double y = (double)(-playerPos.y + entityPos.y);
             double z = (double)(-playerPos.z + entityPos.z);
-
+			auto bombPos = entity->getComponent<PositionComponent>()->getPosition();
+			auto playerRot = player->getComponent<RotationComponent>()->getRotation();
+			auto playerPoss = player->getComponent<PositionComponent>()->getPosition();
+			game->getSoundManager().setListenerPosition(playerPoss);
+			game->getSoundManager().setListenerRotation(playerRot);
 			switch (type) {
                 case KABOOM_V2: {
-                    game->getSoundManager().playSound(SoundType::KABOOM_FIRE);
+                    game->getSoundManager().playSound(SoundType::KABOOM_FIRE,bombPos);
                     break;
                 }
 			}

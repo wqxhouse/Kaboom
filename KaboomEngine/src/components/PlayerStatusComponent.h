@@ -13,6 +13,7 @@ public:
               damaged(false),
               isKnockBacked(false),
               isStaggered(false),
+			  jumped(false),
               knockBackTimer(0),
               staggerTimer(0) {
     }
@@ -102,6 +103,12 @@ public:
     inline Timer &getStaggerTimer() {
         return staggerTimer;
     }
+	inline void setJumped(bool j){
+		jumped = j;
+	}
+	inline bool getJumped(){
+		return jumped;
+	}
 
 private:
     bool alive;
@@ -111,6 +118,7 @@ private:
     bool damaged;
     bool isKnockBacked;
     bool isStaggered;
+	bool jumped;
 
     Timer knockBackTimer;
     Timer staggerTimer;

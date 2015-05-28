@@ -11,7 +11,8 @@ enum class SoundType {
     ROBOTS,
     BASIC,
     KABOOM_FIRE,
-    KABOOM_EXPLODE
+    KABOOM_EXPLODE,
+	WALKING,
 };
 
 class SoundManager {
