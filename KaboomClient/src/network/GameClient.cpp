@@ -3,6 +3,7 @@
 #include <network/AmmoAmountEvent.h>
 #include <network/AssignEvent.h>
 #include <network/BindEvent.h>
+#include <network/ChatEvent.h>
 #include <network/ConnectEvent.h>
 #include <network/DestroyEvent.h>
 #include <network/DisconnectEvent.h>
@@ -99,6 +100,12 @@ void GameClient::receive() {
             }
             case EVENT_MATCH_STATE: {
                 MatchStateEvent evt;
+                evt.deserialize(&networkBuffer[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
+                break;
+            }
+            case EVENT_CHAT: {
+                ChatEvent evt;
                 evt.deserialize(&networkBuffer[i]);
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
