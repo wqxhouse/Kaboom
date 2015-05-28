@@ -1999,7 +1999,7 @@ int TwGUIManager::getTwKey(int key, bool useCtrl) const
 	case osgGA::GUIEventAdapter::KEY_KP_Up: return '8';
 	case osgGA::GUIEventAdapter::KEY_KP_Page_Up: return '9';
 	case osgGA::GUIEventAdapter::KEY_KP_Decimal: return '.';
-	case osgGA::GUIEventAdapter::KEY_KP_Delete: return TW_KEY_RETURN;
+	case osgGA::GUIEventAdapter::KEY_KP_Enter: return TW_KEY_RETURN;
 
 	}
 	if (useCtrl && key < 27) key += 'a' - 1;
