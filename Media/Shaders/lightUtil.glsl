@@ -93,6 +93,19 @@ vec3 applyDirectionalLight(Light light, Material material)
     return computeLightModel(light, material, l, v, n, h, attenuation, 1.0);
 }
 
+vec3 applyShadowDirectionalLight(Light light, Material material)
+{
+	  float attenuation = 1.0;
+    // no att for dir light
+	
+    vec3 l = -light.dirFromLight;
+    //vec3 v = normalize(eyePosition - material.position);
+    vec3 v = normalize(-material.position);
+    vec3 n = normalize(material.normal);
+    vec3 h = normalize(l + v);
+    return computeLightModel(light, material, l, v, n, h, attenuation, 1.0);
+}
+
 vec3 applyPointLight(Light light, Material material) 
 {
     float distanceToLight = distance(material.position, light.position);

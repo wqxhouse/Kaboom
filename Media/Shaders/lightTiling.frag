@@ -32,6 +32,9 @@ uniform int u_arrayDirectionalLight[MAX_DIRECTIONAL_LIGHTS];
 uniform int u_countShadowPointLight;
 uniform int u_arrayShadowPointLight[MAX_POINT_SHADOW_LIGHTS];
 
+uniform int u_countShadowDirectionalLight;
+uniform int u_arrayShadowDirectionalLight[MAX_DIRECTIONAL_SHADOW_LIGHTS];
+
 
 //void debugFill(vec3 color)
 //{
@@ -147,7 +150,7 @@ void main()
     int processedPointLights = 0;
     int processedShadowPointLights = 0;
     int processedDirectionalLights = 0;
-    //int processedShadowDirectionalLights = 0;
+	int processedShadowDirectionalLights = 0;
 
         // Compute tile bounds, needed for frustum
         vec2 tileScale = vec2(virtualScreenSize) * 0.5f / vec2(tileSize);
@@ -232,23 +235,23 @@ void main()
         }
 
         // Process shadowed directional lights
-        //baseOffset = storageCoord + ivec2(0,6);
-        //currentOffset = ivec2(0);
+        baseOffset = storageCoord + ivec2(0,6);
+        currentOffset = ivec2(0);
 
-        //for (int i = 0; i < countDirectionalLightShadow; i++) {
-        //    // No frustum check. Directional lights are always visible
-        //    int index = arrayDirectionalLightShadow[i];
-        //    Light light = lights[index];
-        //    currentOffset = ivec2(processedDirectionalShadowLights % 8, processedDirectionalShadowLights / 8);
-        //    imageStore(destination, baseOffset + currentOffset, ivec4(index));
-        //    processedDirectionalShadowLights += 1;
-        //}
+        for (int i = 0; i < u_countShadowDirectionalLight; i++) 
+		{
+            int index = u_arrayShadowDirectionalLight[i];
+            Light light = lights[index];
+            currentOffset = ivec2(processedShadowDirectionalLights % 8, processedShadowDirectionalLights / 8);
+            imageStore(o_destination, baseOffset + currentOffset, ivec4(index));
+            processedShadowDirectionalLights += 1;
+        }
 
 	//gl_FragColor = vec4(minDepth);
 
     imageStore(o_destination, storageCoord + ivec2(0, 0), ivec4(processedPointLights));
     imageStore(o_destination, storageCoord + ivec2(1, 0), ivec4(processedShadowPointLights));
     imageStore(o_destination, storageCoord + ivec2(2, 0), ivec4(processedDirectionalLights));
-//    imageStore(o_destination, storageCoord + ivec2(3, 0), ivec4(processedDirectionalShadowLights));
+    imageStore(o_destination, storageCoord + ivec2(3, 0), ivec4(processedShadowDirectionalLights));
 }
 

@@ -60,6 +60,7 @@
   <!--<uniform name="u_arrayPointLight" type="int" size="512" isArray="1" />-->
   <uniform name="u_arrayPointLight" type="int" size="256" isArray="1" />
   <uniform name="u_arrayShadowPointLight" type="int" size="6" isArray="1" />
+  <uniform name="u_arrayShadowDirectionalLight" type="int" size="1" isArray="1" />
   
   <!-- Currently set visible light maximum to 128 -->
   <!-- Intel HD4400 max ubo size 32768 bytes -->

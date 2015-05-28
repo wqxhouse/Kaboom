@@ -1,6 +1,7 @@
 #include "ShadowDepthCamera.h"
 #include <osg/Texture>
 #include <osg/Polytope>
+#include <math.h> 
 #include "PointLight.h"
 #include "DirectionalLight.h"
 #include "ShadowAtlas.h"
@@ -281,7 +282,8 @@ void ShadowDepthCameraCallback::makePSSMLightSpaceMat(DirectionalLight *dl, osg:
 	osg::Vec3 lookAt = ws_viewFrustumCentroid - ws_lightDir;
 	const osg::Matrix &viewMat = Core::getMainCamera().getViewMatrix();
 
-	osg::Vec3 upDir = osg::Vec3(viewMat(0, 0), viewMat(1, 0), viewMat(2, 0));
+	//osg::Vec3 upDir = osg::Vec3(viewMat(0, 0), viewMat(1, 0), viewMat(2, 0));
+	osg::Vec3 upDir = Core::getMainCamera().getUp(); // can we make this assumption that it is always up?
 	osg::Matrix lightView = osg::Matrix::lookAt(ws_viewFrustumCentroid, lookAt, upDir);
 
 	// Calculate an AABB around the frustum corners
@@ -317,10 +319,52 @@ void ShadowDepthCameraCallback::makePSSMLightSpaceMat(DirectionalLight *dl, osg:
 	maxExtents.y() *= scale;
 
 	osg::Vec3 cascadeExtents = maxExtents - minExtents; 
-	osg::Vec3 shadowCamPos = ws_viewFrustumCentroid + ws_lightDir * -minExtents.z();
+	osg::Vec3 shadowCamPos = ws_viewFrustumCentroid + ws_lightDir * maxExtents.z();
 
 	osg::Matrix shadowOrthoMat = osg::Matrixd::ortho(minExtents.x(), maxExtents.x(), minExtents.y(), maxExtents.y(), 0.0, cascadeExtents.z());
 	osg::Matrix shadowViewMat = osg::Matrixd::lookAt(shadowCamPos, ws_viewFrustumCentroid, upDir);
+
+
+	// snipping to texel incr
+	osg::Matrix vp = shadowViewMat * shadowOrthoMat;
+	osg::Vec3 origin(0, 0, 0);
+	origin = origin * vp;
+	origin *= 0.5;
+	origin.x() += 0.5;
+	origin.y() += 0.5;
+	origin.z() += 0.5;
+
+	double texelSize = 1.0 / dl->getShadowMapRes();
+	osg::Vec3 offset;
+	offset.x() = std::fmod(offset.x(), texelSize);
+	offset.y() = std::fmod(offset.y(), texelSize);
+	offset.z() = 0.0;
+
+	osg::Matrix inv_vp = osg::Matrix::inverse(vp);
+	osg::Vec3 originNDC = origin - osg::Vec3(offset);
+	osg::Vec3 newOrigin = (origin - offset) * 2.0 - osg::Vec3(1.0, 1.0, 1.0);
+
+	shadowCamPos -= newOrigin;
+	shadowViewMat = osg::Matrixd::lookAt(shadowCamPos, ws_viewFrustumCentroid, upDir);
+
+
+	/*mvp = Mat4(source.computeMVP())
+
+		basePoint = mvp.xform(Point4(0, 0, 0, 1))
+		texelSize = 1.0 / float(source.resolution)
+
+		basePoint *= 0.5
+		basePoint += Vec4(0.5)
+
+		offsetX = basePoint.x % texelSize
+		offsetY = basePoint.y % texelSize
+
+		mvp.invertInPlace()
+		newBase = mvp.xform(Point4(
+		(basePoint.x - offsetX) * 2.0 - 1.0,
+		(basePoint.y - offsetY) * 2.0 - 1.0,
+		(basePoint.z) * 2.0 - 1.0, 1))
+		destPos -= Vec3(newBase.x, newBase.y, newBase.z)*/
 	view = shadowViewMat;
 	proj = shadowOrthoMat;
 }
