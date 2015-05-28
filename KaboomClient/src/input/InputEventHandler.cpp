@@ -112,6 +112,21 @@ void InputEventHandler::onEquip3() {
 	_game->getGameGUIEventHandler()->changeWeapon(2);
 }
 
+void InputEventHandler::typeCharacter(char c)
+{
+	_game->name->push_back(c);
+	_game->getGameGUIEventHandler()->updateUserName(_game->name);
+}
+
+void InputEventHandler::removeCharacter()
+{
+	if (_game->name->size() > 0)
+	{
+		_game->name->pop_back();
+		_game->getGameGUIEventHandler()->updateUserName(_game->name);
+	}
+}
+
 void InputEventHandler::sendPlayerInputEvent() {
     PlayerInputEvent evt(
             0,

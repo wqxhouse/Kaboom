@@ -25,6 +25,7 @@ public:
 	void showScoreBoard() const;
 	void hideScoreBoard() const;
 	void changeTime(Game *game) const;
+	void updateUserName(std::string * name) const;
 	// TODO: add more other events 
 
 private:
