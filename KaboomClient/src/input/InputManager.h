@@ -12,6 +12,7 @@ public:
     InputManager(GameClient &client, Game * game);
 
     void loadConfig();
+	void loadNameTyping();
 
     KeyboardEventHandler &getKeyboardEventHandler();
     MouseEventHandler &getMouseEventHandler();

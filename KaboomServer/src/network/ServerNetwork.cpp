@@ -165,7 +165,9 @@ void ServerNetwork::send(char *packet, int size, unsigned int playerId, SOCKET s
     int iSendResult = NetworkServices::sendMessage(socket, packet, size);
 
     if (iSendResult == SOCKET_ERROR) {
-        printf("<Server> Unable to send to player %d (socket error: %d).\n", playerId, WSAGetLastError());
-        disconnectedPlayerIds.insert(playerId);
+		if (WSAGetLastError() != WSAEWOULDBLOCK) {
+			printf("<Server> Unable to send to player %d (socket error: %d).\n", playerId, WSAGetLastError());
+			disconnectedPlayerIds.insert(playerId);
+		}
     }
 }
