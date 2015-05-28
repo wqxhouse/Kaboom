@@ -158,9 +158,11 @@ void GameGUIEventHandler::changeTime(Game *game) const{
 	clock_t remaining_time = game->duration - game->serverTimeElapsed - time_passed;
 	int seconds = ((int)(remaining_time) / CLOCKS_PER_SEC);
 	int mintues = seconds / 60;
+	mintues = abs(mintues);
 	seconds %= 60;
+	seconds = abs(seconds);
 
-	std::string timer = std::to_string(mintues) + ":" + std::to_string(seconds);
+	std::string timer = std::to_string(mintues/10) + std::to_string(mintues%10) + ":" + std::to_string(seconds/10)+ std::to_string(seconds%10);
 	clock->SetInnerRML(timer.c_str());
 }
 
@@ -178,4 +180,11 @@ void GameGUIEventHandler::handle(const PlayerRenameEvent &e, Player* player) con
 			tr->GetChild(0)->SetInnerRML(player->getName().c_str());
 		}
 	}
+}
+
+void GameGUIEventHandler::updateUserName(std::string * name) const
+{
+	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(3);
+	Rocket::Core::Element * nameElement = window2->GetChild(1);
+	nameElement->SetInnerRML(name->c_str());
 }

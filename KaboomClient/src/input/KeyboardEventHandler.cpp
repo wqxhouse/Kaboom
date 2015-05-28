@@ -34,8 +34,45 @@ bool KeyboardEventHandler::bindKey(int key, KeyState state, Function func) {
     }
 }
 
+bool KeyboardEventHandler::unbindKey(int key) {
+	int lowerKey = tolower(key);
+
+	if (keyDownFuncMap.end() != keyDownFuncMap.find(lowerKey)) {
+		keyDownFuncMap.erase(lowerKey);
+		return true;
+	}
+	else {
+		std::cerr << "No such key '" << lowerKey << "' to be removed." << std::endl;
+		return false;
+	}
+}
+
+bool KeyboardEventHandler::unbindKey(int key, KeyState state) {
+	int lowerKey = tolower(key);
+
+	if (state == KEY_DOWN) {
+		return unbindKey(lowerKey);
+	}
+	else {
+		if (keyUpFuncMap.end() != keyUpFuncMap.find(lowerKey)) {
+			keyUpFuncMap.erase(lowerKey);
+			return true;
+		}
+		else {
+			std::cerr << "No such key '" << lowerKey << "' to be removed." << std::endl;
+			return false;
+		}
+	}
+}
+
+void KeyboardEventHandler::unbindKeyAll()
+{
+	keyUpFuncMap.clear();
+	keyDownFuncMap.clear();
+}
+
 bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us) {
-    if (!Core::isInGameMode()) {
+	if (!Core::isInGameMode() && !Core::isInStartScreenMode() ) {
         return false;
     }
 
@@ -58,6 +95,14 @@ bool KeyboardEventHandler::handleKeyDown(const osgGA::GUIEventAdapter &ea, osgGA
         (inputEventHandler.*(itr->second.keyFunction))();
         return true;
     }
+	else if (itr == keyDownFuncMap.end() && !Core::isInGameMode())
+	{
+		std::cout << "key pressed '" << key << "'." << std::endl;
+		if (osgGA::GUIEventAdapter::KEY_BackSpace == key)
+			inputEventHandler.removeCharacter();
+		else
+			inputEventHandler.typeCharacter(key);
+	}
 
     return false;
 }

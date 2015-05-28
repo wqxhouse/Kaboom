@@ -9,6 +9,7 @@ InputManager::InputManager(GameClient &client, Game * game)
 }
 
 void InputManager::loadConfig() {
+	keyboardEventHandler.unbindKeyAll();
     keyboardEventHandler.bindKey('w', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onMoveForwardDown);
     keyboardEventHandler.bindKey('w', KeyboardEventHandler::KEY_UP, &InputEventHandler::onMoveForwardUp);
     keyboardEventHandler.bindKey('s', KeyboardEventHandler::KEY_DOWN, &InputEventHandler::onMoveBackwardDown);
@@ -35,6 +36,11 @@ void InputManager::loadConfig() {
 	//keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F8, KeyboardEventHandler::KEY_UP, &InputEventHandler::enterGameMode);
 	//keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F9, KeyboardEventHandler::KEY_UP, &InputEventHandler::showDebugAnalysis);
 	//keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F10, KeyboardEventHandler::KEY_UP, &InputEventHandler::hideDebugAnalysis);
+}
+
+void InputManager::loadNameTyping()
+{
+	keyboardEventHandler.unbindKeyAll();
 }
 
 KeyboardEventHandler &InputManager::getKeyboardEventHandler() {

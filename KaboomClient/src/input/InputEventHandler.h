@@ -28,6 +28,8 @@ public:
     void onEquip3();
 	void onTab();
 	void offTab();
+	void typeCharacter(char c);
+	void removeCharacter();
 
     void onReloadRequest();
 
