@@ -83,9 +83,11 @@ Game::Game(ConfigSettings *config)
 	_particleEffectManager = Core::getWorldRef().getParticleEffectManager();
 
     printf("Loading KABOOM_EXPLODE sound\n");
-    soundManager.loadSound(SoundType::KABOOM_EXPLODE, "sounds\\a.wav");
+    soundManager.loadSound(SoundType::KABOOM_EXPLODE, "sounds\\bomb.wav");
     printf("Loading KABOOM_FIRE sound\n");
-    soundManager.loadSound(SoundType::KABOOM_FIRE, "sounds\\a.wav");
+    soundManager.loadSound(SoundType::KABOOM_FIRE, "sounds\\throw.wav");
+	printf("Loading WALKING sound\n");
+	soundManager.loadSound(SoundType::WALKING, "sounds\\walking.mp3");
     printf("Loading BASIC sound\n");
     soundManager.loadSound(SoundType::BASIC, "sounds\\a.wav");
 	

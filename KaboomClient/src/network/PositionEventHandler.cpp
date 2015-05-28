@@ -5,6 +5,7 @@
 #include <Core.h>
 #include <GeometryObject.h>
 #include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
 #include <network/PositionEvent.h>
 
@@ -28,9 +29,10 @@ void PositionEventHandler::handle(const Event &e) const {
     if (posComp == nullptr) {
         return;
     }
-
+	
     posComp->setPosition(evt.getPosition());
     const Vec3 &pos = posComp->getPosition();
+
 
     const auto name = std::to_string(entity->getId());
     const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);
@@ -48,4 +50,5 @@ void PositionEventHandler::handle(const Event &e) const {
         pos += osgPos + osg::Vec3(0.0f, 0.0f, 1.0f);
         game->getCamera().setFpsEyePositionAndUpdate(pos);
     }
+
 }
