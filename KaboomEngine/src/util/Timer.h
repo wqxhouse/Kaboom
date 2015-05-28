@@ -1,35 +1,35 @@
 #pragma once
 
-#include <time.h> 
+#include <chrono>
 
 class Timer {
 public:
-    Timer::Timer(clock_t duration = 0)
-            : duration(duration),
-              startTime(clock()) {
+    Timer::Timer(long long duration = 0)
+            : duration(std::chrono::milliseconds(duration)),
+              startTime(std::chrono::high_resolution_clock::now()) {
     }
 
     inline void start() {
-        startTime = clock();
+        startTime = std::chrono::high_resolution_clock::now();
     }
 
     inline bool isExpired() const {
-        return clock() > startTime + duration;
+        return std::chrono::high_resolution_clock::now() > startTime + duration;
     }
 
-    inline clock_t getDuration() const {
+    inline std::chrono::milliseconds getDuration() const {
         return duration;
     }
 
-    inline void setDuration(clock_t duration) {
-        this->duration = duration;
+    inline void setDuration(long long duration) {
+        this->duration = std::chrono::milliseconds(duration);
     }
 
-    inline clock_t getStartTime() const {
+    inline std::chrono::high_resolution_clock::time_point getStartTime() const {
         return startTime;
     }
 
 private:
-    clock_t duration;
-    clock_t startTime;
+    std::chrono::milliseconds duration;
+    std::chrono::high_resolution_clock::time_point startTime;
 };
