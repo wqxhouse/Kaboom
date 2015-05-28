@@ -4,6 +4,7 @@
 
 #include <Core.h>
 #include <GeometryObject.h>
+#include <TrailingEffect.h>
 #include <components/PositionComponent.h>
 #include <core/Entity.h>
 #include <network/PositionEvent.h>
