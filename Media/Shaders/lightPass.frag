@@ -87,6 +87,10 @@ void main()
     int countDirectionalLight = min(MAX_DIRECTIONAL_LIGHTS, 
         texelFetch(u_lightsPerTile, precomputeCoord + ivec2(2, 0), 0).r);
 
+
+	int countDirectionalLightShadow = min(MAX_DIRECTIONAL_SHADOW_LIGHTS, 
+        texelFetch(u_lightsPerTile, precomputeCoord + ivec2(3, 0), 0).r);
+
     vec3 result = vec3(0);
 	result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel);
 
@@ -128,12 +132,13 @@ void main()
 
     //// Compute shadowed directional lights
     //baseOffset = precomputeCoord + ivec2(0, 6);
-    //for (int i = 0; i < countDirectionalLightShadow; i++) {
-    //    currentOffset = ivec2(i % 8, i / 8);
-    //    currentLightId = texelFetch(lightsPerTile, baseOffset + currentOffset, 0).r;
-    //    currentLight = lights[currentLightId];
-    //    result += applyDirectionalLightWithShadow(currentLight, material OCCLUSION_PER_LIGHT_SEND_PARAMETERS );
-    //}
+    for (int i = 0; i < countDirectionalLightShadow; i++) 
+	{
+        currentOffset = ivec2(i % 8, i / 8);
+        currentLightId = texelFetch(u_lightsPerTile, baseOffset + currentOffset, 0).r;
+        currentLight = lights[currentLightId];
+        result += applyShadowDirectionalLight(currentLight, material);
+    }
 
     // SRGB - gamma correction ( TODO: last step or here??? )
     result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 

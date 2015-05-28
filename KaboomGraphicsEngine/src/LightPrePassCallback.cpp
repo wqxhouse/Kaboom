@@ -71,6 +71,10 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 			if (l->getCastShadow())
 			{
 				dirShadowLightIds.push_back(i);
+				for (int j = 0; j < dirLight->getNumSplits(); j++)
+				{
+					shadowMapIndex[j] = dirLight->getShadowMapIndex(j);
+				}
 			}
 			else
 			{
@@ -85,9 +89,9 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 			if (l->getCastShadow())
 			{
 				pointShadowLightIds.push_back(i);
-				for (int i = 0; i < 6; i++)
+				for (int j = 0; j < 6; j++)
 				{
-					shadowMapIndex[i] = ptLight->getShadowMapIndex(i);
+					shadowMapIndex[j] = ptLight->getShadowMapIndex(j);
 					// shadowMapIndex[i] = i;
 				}
 			}
@@ -140,7 +144,7 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 
 	// set uniforms
 	ss->getUniform("u_countDirectionalLight")->set((int)dirLightIds.size());
-	// ss->getUniform("u_countShadowDirectionalLight")->set((int)dirShadowLightIds.size());
+	ss->getUniform("u_countShadowDirectionalLight")->set((int)dirShadowLightIds.size());
 	ss->getUniform("u_countPointLight")->set((int)pointLightIds.size());
 	ss->getUniform("u_countShadowPointLight")->set((int)pointShadowLightIds.size());
 
@@ -161,6 +165,12 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	for (int i = 0; i < pointShadowLightIds.size(); i++)
 	{
 		pointShadowArray->setElement(i, pointShadowLightIds[i]);
+	}
+
+	osg::Uniform *dirShadowArray = ss->getUniform("u_arrayShadowDirectionalLight");
+	for (int i = 0; i < dirShadowLightIds.size(); i++)
+	{
+		dirShadowArray->setElement(i, dirShadowLightIds[i]);
 	}
 
 	// update projMat 

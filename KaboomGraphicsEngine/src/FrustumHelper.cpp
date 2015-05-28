@@ -14,16 +14,16 @@ const osg::Vec4 FrustumHelper::_unitCubeCorners[8] =
 {
 	// opengl NDC space
 	// near plane
-	osg::Vec4(-1, -1, 1, 1),
-	osg::Vec4(1, -1, 1, 1),
-	osg::Vec4(1, 1, 1, 1),
-	osg::Vec4(-1, 1, 1, 1),
-
-	// far plane
 	osg::Vec4(-1, -1, -1, 1),
 	osg::Vec4(1, -1, -1, 1),
 	osg::Vec4(1, 1, -1, 1),
 	osg::Vec4(-1, 1, -1, 1),
+
+	// far plane
+	osg::Vec4(-1, -1, 1, 1),
+	osg::Vec4(1, -1, 1, 1),
+	osg::Vec4(1, 1, 1, 1),
+	osg::Vec4(-1, 1, 1, 1),
 };
 
 FrustumHelper::FrustumHelper()

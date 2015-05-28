@@ -82,14 +82,16 @@
       <output_buffer target="color">b_computeShaderTrigger</output_buffer>
 
       <clear_mask>color</clear_mask>
-      
+
       <uniform_buffer>u_lightsBuffer</uniform_buffer>
       <uniform>u_countPointLight</uniform>
       <uniform>u_countDirectionalLight</uniform>
-      <uniform>u_arrayDirectionalLight</uniform>
+      <uniform>u_countShadowDirectionalLight</uniform>
       <uniform>u_countShadowPointLight</uniform>
+      <uniform>u_arrayDirectionalLight</uniform>
       <uniform>u_arrayPointLight</uniform>
       <uniform>u_arrayShadowPointLight</uniform>
+      <uniform>u_arrayShadowDirectionalLight</uniform>
 
       <!--<uniform>u_viewMat</uniform>-->
       <uniform>u_projMat</uniform>
