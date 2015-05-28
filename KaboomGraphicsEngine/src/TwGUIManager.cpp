@@ -1986,6 +1986,19 @@ int TwGUIManager::getTwKey(int key, bool useCtrl) const
 	case osgGA::GUIEventAdapter::KEY_F10: return TW_KEY_F10;
 	case osgGA::GUIEventAdapter::KEY_F11: return TW_KEY_F11;
 	case osgGA::GUIEventAdapter::KEY_F12: return TW_KEY_F12;
+	case osgGA::GUIEventAdapter::KEY_KP_Insert: return '0';
+	case osgGA::GUIEventAdapter::KEY_KP_End: return '1';
+	case osgGA::GUIEventAdapter::KEY_KP_Down: return '2';
+	case osgGA::GUIEventAdapter::KEY_KP_Page_Down: return '3';
+	case osgGA::GUIEventAdapter::KEY_KP_Left: return '4';
+	case osgGA::GUIEventAdapter::KEY_KP_Begin: return '5';
+	case osgGA::GUIEventAdapter::KEY_KP_Right: return '6';
+	case osgGA::GUIEventAdapter::KEY_KP_Home: return '7';
+	case osgGA::GUIEventAdapter::KEY_KP_Up: return '8';
+	case osgGA::GUIEventAdapter::KEY_KP_Page_Up: return '9';
+	case osgGA::GUIEventAdapter::KEY_KP_Decimal: return '.';
+	case osgGA::GUIEventAdapter::KEY_KP_Delete: return TW_KEY_RETURN;
+
 	}
 	if (useCtrl && key < 27) key += 'a' - 1;
 	return key;
