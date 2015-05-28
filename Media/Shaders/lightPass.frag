@@ -131,7 +131,7 @@ void main()
     }
 
     //// Compute shadowed directional lights
-    //baseOffset = precomputeCoord + ivec2(0, 6);
+    baseOffset = precomputeCoord + ivec2(0, 6);
     for (int i = 0; i < countDirectionalLightShadow; i++) 
 	{
         currentOffset = ivec2(i % 8, i / 8);
