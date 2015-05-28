@@ -11,8 +11,12 @@ MatchStateEventHandler::MatchStateEventHandler(Game *game)
 void MatchStateEventHandler::handle(const Event &e) const {
     const MatchStateEvent &evt = static_cast<const MatchStateEvent &>(e);
 
+    DeathmatchMode &gameMode = game->getGameMode();
+    gameMode.setMatchState(evt.getState());
+    gameMode.setTimer(evt.getTimer());
+
     // TODO: Handle match state event
-	if (evt.getState() == GameMode::MatchState::POST_MATCH){	
-		return;
-	}
+    if (evt.getState() == GameMode::MatchState::POST_MATCH) {
+        return;
+    }
 }
