@@ -106,19 +106,12 @@ float computeDirectionalLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMa
     float slopeScaledBias, float normalScaledBias, float baseBias) 
 {
     vec3 projCoord;
-    // int shadow_map_index = getPSSMShadowIndex(depthMap, light, position, 0.1, projCoord);
 	ShadowDepthMap selectedShadowInfo;
     getPSSMCascade(depthMap, lightSMIndices, position, 0.1, projCoord, selectedShadowInfo);
-    // if (shadow_map_index >= 3) return 1.0; // >= split num : 3
-
-    //ShadowDepthMap shadowInfo = depthMap[light.shadowMapIndex[shadow_map_index]];
-
     vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias / 1024.0, 
 			normalScaledBias / 1024.0, n, l); // hard code resolution 
     projCoord = reprojectShadow(selectedShadowInfo, biasedPos);
     baseBias /= 1024.0;
 
 	return PCF(u_shadowAtlas, selectedShadowInfo, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE));
-
-	return 1.0;
 }
