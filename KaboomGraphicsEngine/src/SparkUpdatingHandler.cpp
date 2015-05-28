@@ -1,4 +1,5 @@
 #include "SparkUpdatingHandler.h"
+#include <osg/ValueObject>
 #include <osgViewer/View>
 
 bool SparkUpdatingHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
@@ -23,14 +24,33 @@ bool SparkUpdatingHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAc
 			osg::Transform* trackee = itr->_trackee.get();
 			if (trackee)
 			{
-				if (itr->_dirtyMatrix)
-				{
-					itr->_transformMatrix = computeTransformMatrix(spark, trackee);
-					itr->_dirtyMatrix = false;
-				}
+				itr->_transformMatrix = computeTransformMatrix(spark, trackee);
 
 				osg::Matrix matrix; trackee->computeLocalToWorldMatrix(matrix, NULL);
-				spark->setGlobalTransformMatrix(matrix * itr->_transformMatrix);
+
+				osg::Vec3 osgStart;
+				const osg::Vec3& osgEnd = matrix.getTrans();
+				bool hasValue = trackee->getUserValue<osg::Vec3>("pos", osgStart);
+				trackee->setUserValue("pos", osgEnd);
+
+				if (hasValue) {
+					SPK::Vector3D start(osgStart.x(), osgStart.y(), osgStart.z());
+					SPK::Vector3D end(osgEnd.x(), osgEnd.y(), osgEnd.z());
+
+					if (spark->getNumParticleSystems() > 0) {
+						SPK::System *system = spark->getParticleSystem(0);
+						SPK::Group *group = system->getGroup(0);
+						SPK::Model *model = group->getModel();
+						SPK::Emitter *emitter = group->getEmitter(0);
+						group->addParticles(start, end, emitter, 0.025f);
+						
+						float step = ea.getTime();
+
+						model->setParam(SPK::PARAM_RED, 0.6f + 0.4f * sin(step));
+						model->setParam(SPK::PARAM_GREEN, 0.6f + 0.4f * sin(step + 3.14159f * 2.0f / 3.0f));
+						model->setParam(SPK::PARAM_BLUE, 0.6f + 0.4f * sin(step + 3.14159f * 4.0f / 3.0f));
+					}
+				}
 			}
 			spark->update(time, eye);
 		}
@@ -63,9 +83,9 @@ osg::Matrix SparkUpdatingHandler::computeTransformMatrix(SparkDrawable* spark, o
 		return osg::Matrix::identity();
 
 	// Collect the parent paths, ignoring the last one (the spark/trackee itself)
-	osg::NodePath& sparkPath = sparkGeode->getParentalNodePaths()[0]; 
+	osg::NodePath sparkPath = sparkGeode->getParentalNodePaths().at(0); 
 	sparkPath.pop_back();
-	osg::NodePath& trackeePath = trackee->getParentalNodePaths()[0];  
+	osg::NodePath trackeePath = trackee->getParentalNodePaths().at(0);  
 	trackeePath.pop_back();
 	return computeLocalToWorld(trackeePath) * computeWorldToLocal(sparkPath);
 }

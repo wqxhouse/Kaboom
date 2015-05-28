@@ -4,7 +4,7 @@
 #include "ParticleEffectManager.h"
 #include "Light.h"
 
-#define SMOKE_STR "smoke"
+#define POINT_PTR "point"
 
 TrailingEffect::TrailingEffect(ParticleEffectManager *manager, SparkUpdatingHandler *handler)
 	: ParticleEffect(manager), _handler(handler)
@@ -17,8 +17,8 @@ TrailingEffect::TrailingEffect(ParticleEffectManager *manager, SparkUpdatingHand
 	std::string trailingPath = mediaPath + "DefaultAssets\\ParticleTextures\\Trailing\\";
 
 	// cache texture
-	ParticleTexture *smokeTex = _manager->getOrCreateParticleTexture(trailingPath + "smoke.png");
-	_particleDrawable->addImage(SMOKE_STR, smokeTex, GL_RGBA);
+	ParticleTexture *particleTex = _manager->getOrCreateParticleTexture(trailingPath + "point.bmp");
+	_particleDrawable->addImage(POINT_PTR, particleTex, GL_RGBA);
 	_particleDrawable->setBaseSystemCreator(createTrailingEffect);
 }
 
@@ -38,43 +38,43 @@ SPK::SPK_ID TrailingEffect::createTrailingEffect(
 	const SparkDrawable::TextureIDMap& textureIDMap,
 	int screenWidth, int screenHeight)
 {
-	int textureParticle = getTextureIdFromTextureIDMap(textureIDMap, SMOKE_STR);
+	int textureParticle = getTextureIdFromTextureIDMap(textureIDMap, POINT_PTR);
+
+	// Renderers
 	SPK::GL::GLQuadRenderer* particleRenderer = SPK::GL::GLQuadRenderer::create();
+	particleRenderer->enableBlending(true);
+	particleRenderer->setBlendingFunctions(GL_SRC_ALPHA, GL_ONE);
 	particleRenderer->setTexturingMode(SPK::TEXTURE_2D);
-	particleRenderer->setAtlasDimensions(2, 2);
 	particleRenderer->setTexture(textureParticle);
 	particleRenderer->setTextureBlending(GL_MODULATE);
 	particleRenderer->setScale(0.05f, 0.05f);
-	particleRenderer->setBlending(SPK::BLENDING_ADD);
-	particleRenderer->enableRenderingHint(SPK::DEPTH_WRITE, false);
+	particleRenderer->enableRenderingHint(SPK::DEPTH_TEST, false);
+	particleRenderer->setShared(true);
+
+	SPK::Interpolator* interpolator = NULL; // pointer to an interpolator that is used to retrieve interpolators
 
 	// Model
-	SPK::Model* particleModel = SPK::Model::create(
-		SPK::FLAG_SIZE | SPK::FLAG_ALPHA | SPK::FLAG_TEXTURE_INDEX | SPK::FLAG_ANGLE,
-		SPK::FLAG_SIZE | SPK::FLAG_ALPHA,
-		SPK::FLAG_SIZE | SPK::FLAG_TEXTURE_INDEX | SPK::FLAG_ANGLE);
-	particleModel->setParam(SPK::PARAM_SIZE, 0.5f, 1.0f, 10.0f, 20.0f);
-	particleModel->setParam(SPK::PARAM_ALPHA, 1.0f, 0.0f);
-	particleModel->setParam(SPK::PARAM_ANGLE, 0.0f, 2.0f * osg::PI);
-	particleModel->setParam(SPK::PARAM_TEXTURE_INDEX, 0.0f, 4.0f);
-	particleModel->setLifeTime(2.0f, 5.0f);
+	SPK::Model* particleModel = SPK::Model::create(SPK::FLAG_RED | SPK::FLAG_GREEN | SPK::FLAG_BLUE | SPK::FLAG_ALPHA | SPK::FLAG_SIZE, SPK::FLAG_ALPHA | SPK::FLAG_SIZE);
+	particleModel->setParam(SPK::PARAM_ALPHA, 0.5f, 0.0f);	// the particles will fade as they die
+	particleModel->setParam(SPK::PARAM_SIZE, 1.0f, 15.0f);	// the particles will enlarge over time
+	particleModel->setLifeTime(0.5f, 1.0f);
+	particleModel->setShared(true);
 
 	// Emitter
-	SPK::SphericEmitter* particleEmitter = SPK::SphericEmitter::create(
-		SPK::Vector3D(-1.0f, 0.0f, 0.0f), 0.0f, 0.1f * osg::PI);
-	particleEmitter->setZone(SPK::Point::create(SPK::Vector3D(0.0f, 0.015f, 0.0f)));
-	particleEmitter->setFlow(250.0);
-	particleEmitter->setForce(1.5f, 1.5f);
+	// We set up a spheric emitter that emits in all direction with a very small force in order to slightly displace the particles
+	SPK::RandomEmitter* particleEmitter = SPK::RandomEmitter::create();
+	particleEmitter->setForce(0.01f, 0.01f);
+	particleEmitter->setShared(false);
 
 	// Group
-	SPK::Group* particleGroup = SPK::Group::create(particleModel, 500);
-	particleGroup->addEmitter(particleEmitter);
+	SPK::Group* particleGroup = SPK::Group::create(particleModel, 14000);
 	particleGroup->setRenderer(particleRenderer);
-	particleGroup->setGravity(SPK::Vector3D(0.0f, 0.0f, 0.05f));
-	particleGroup->enableAABBComputing(true);
+	particleGroup->setFriction(-0.3f); // negative friction : The particles will accelerate over time
+	particleGroup->addEmitter(particleEmitter);
 
+	// System
 	SPK::System* particleSystem = SPK::System::create();
 	particleSystem->addGroup(particleGroup);
-	particleSystem->enableAABBComputing(true);
+
 	return particleSystem->getSPKID();
 }
