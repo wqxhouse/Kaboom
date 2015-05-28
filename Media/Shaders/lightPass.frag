@@ -137,7 +137,7 @@ void main()
         currentOffset = ivec2(i % 8, i / 8);
         currentLightId = texelFetch(u_lightsPerTile, baseOffset + currentOffset, 0).r;
         currentLight = lights[currentLightId];
-        result += applyShadowDirectionalLight(currentLight, material);
+        result += applyShadowDirectionalLight(currentLight, material, u_shadowAtlas, u_shadowDepthMaps);
     }
 
     // SRGB - gamma correction ( TODO: last step or here??? )
