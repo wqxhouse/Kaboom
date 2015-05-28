@@ -582,6 +582,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string rotYVarName = ROT_Y_LABEL + indexStr;
 	std::string rotZVarName = ROT_Z_LABEL + indexStr;
 
+	std::string posStep = " step=0.01";
 	std::string scaleLimitVal = " step=0.05";
 
 	BarItem* item = new BarItem();
@@ -650,7 +651,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		item, materialDef.c_str());
 
 
-	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
+	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'" + posStep;
 	TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -673,7 +674,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, posXDef.c_str());
 
-	std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'";
+	std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'" + posStep;
 	TwAddVarCB(bar, posYVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -696,7 +697,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, posYDef.c_str());
 
-	std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'";
+	std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'" + posStep;
 	TwAddVarCB(bar, posZVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -956,6 +957,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 	std::string name = l->getName();
 
 	std::string nameGroupDef = " group='" + name + "' ";
+	std::string posStep = " step=0.01";
 
 	std::string indexStr = std::to_string(_index);
 	std::string posXVarName = POS_X_LABEL + indexStr;
@@ -1080,7 +1082,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			*(float *)data = l->getIntensity();
 		}, pl, intensityNameDef.c_str());
 
-		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
+		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'" + posStep;
 		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
 			[](const void *value, void *clientData) {
 			float posX = *(const float *)value;
@@ -1100,7 +1102,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 
 		}, pl, posXDef.c_str());
 
-		std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'";
+		std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'" + posStep;
 		TwAddVarCB(bar, posYVarName.c_str(), TW_TYPE_FLOAT,
 			[](const void *value, void *clientData) {
 			float posY = *(const float *)value;
@@ -1120,7 +1122,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 
 		}, pl, posYDef.c_str());
 
-		std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'";
+		std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'" + posStep;
 		TwAddVarCB(bar, posZVarName.c_str(), TW_TYPE_FLOAT,
 			[](const void *value, void *clientData) {
 			float posZ = *(const float *)value;
