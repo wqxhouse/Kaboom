@@ -138,7 +138,8 @@ void GameGUIEventHandler::endGame() const{
 void GameGUIEventHandler::showScoreBoard() const{
 	//Core::getInGameLibRocketGUIManager()->getWindow(0)->Hide();
 	//Core::getInGameLibRocketGUIManager()->getWindow(1)->Hide();
-	Core::getInGameLibRocketGUIManager()->getWindow(2)->Show();
+	if (Core::isInGameMode())
+		Core::getInGameLibRocketGUIManager()->getWindow(2)->Show();
 
 }
 
