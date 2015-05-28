@@ -61,13 +61,18 @@ void ParticleEffectManager::createBuiltInTrailingEffect()
 
 ParticleEffect *ParticleEffectManager::getParticleEffect(enum BuiltInParticleEffect effect)
 {
+	TrailingEffect *trailingEffect;
+
 	switch (effect)
 	{
 	case EXPLOSION:
 		return _particleEffects[_builtInExplsionEffectStr];
 		break;
 	case TRAILING:
-		return _particleEffects[_builtInTrailingEffectStr];
+		trailingEffect = new TrailingEffect(this, _particleUpdateHandler);
+		_particleGroup->addChild(trailingEffect->getRoot());
+		_particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(trailingEffect->getRoot()->getDrawable(0)));
+		return trailingEffect;
 		break;
 	default:
 		OSG_WARN << "ParticleEffectManager:: invalid enum" << std::endl;
