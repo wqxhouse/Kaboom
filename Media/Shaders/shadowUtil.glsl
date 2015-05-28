@@ -71,12 +71,54 @@ float PCF(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoo
 
 //float computePointLightShadow(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, Material material,
 //			vec3 n, vec3 l, float slopeScaledBias, float normalScaledBias, float baseBias) 
-float computePointLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, Material material,
+float computePointLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 position,
 			vec3 n, vec3 l, float slopeScaledBias, float normalScaledBias, float baseBias) 
 {
-    vec3 biasedPos = computeBiasedPosition(material.position, slopeScaledBias, normalScaledBias, n, l); 
+    vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias, normalScaledBias, n, l); 
 	vec3 projCoord = reprojectShadow(shadowInfo, biasedPos);
-	// vec3 projCoord = reprojectShadow(shadowInfo, material.position);
 
     return PCF(u_shadowAtlas, shadowInfo, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE) );
+}
+
+void getPSSMCascade(ShadowDepthMap depthMap[MAX_SHADOW_MAPS], int lightSMIndices[6],  
+		vec3 position, float borderFactor, out vec3 projCoord, out ShadowDepthMap selectedShadowInfo) 
+{
+	// hard coded for 3 now
+    for (int i = 0; i < 3; i++) 
+	{
+        int shadowMapIndex = lightSMIndices[i];
+        // ShadowDepthMap shadowInfo = depthMap[shadowMapIndex]
+		selectedShadowInfo = depthMap[shadowMapIndex];
+        projCoord = reprojectShadow(selectedShadowInfo, position);
+
+        if (all(greaterThan(projCoord.xy, vec2(borderFactor))) 
+		 && all(lessThan(projCoord.xy, vec2(1-borderFactor)))) 
+		{
+            // Source can be used
+            break;
+        }
+    }
+}
+
+
+float computeDirectionalLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMap depthMap[MAX_SHADOW_MAPS],
+	int lightSMIndices[6], vec3 position, vec3 n, vec3 l, 
+    float slopeScaledBias, float normalScaledBias, float baseBias) 
+{
+    vec3 projCoord;
+    // int shadow_map_index = getPSSMShadowIndex(depthMap, light, position, 0.1, projCoord);
+	ShadowDepthMap selectedShadowInfo;
+    getPSSMCascade(depthMap, lightSMIndices, position, 0.1, projCoord, selectedShadowInfo);
+    // if (shadow_map_index >= 3) return 1.0; // >= split num : 3
+
+    //ShadowDepthMap shadowInfo = depthMap[light.shadowMapIndex[shadow_map_index]];
+
+    vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias / 1024.0, 
+			normalScaledBias / 1024.0, n, l); // hard code resolution 
+    projCoord = reprojectShadow(selectedShadowInfo, biasedPos);
+    baseBias /= 1024.0;
+
+	return PCF(u_shadowAtlas, selectedShadowInfo, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE));
+
+	return 1.0;
 }

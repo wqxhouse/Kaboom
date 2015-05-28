@@ -67,7 +67,8 @@ float ShadowDepthCamera::getShadowMapScaleWRTAtlas()
 	int resolution = 0;
 	if (type == DIRECTIONAL)
 	{
-		// todo	
+		DirectionalLight *dl = _light->asDirectionalLight();
+		resolution = dl->getShadowMapRes();
 	}
 	else if (type == POINTLIGHT)
 	{

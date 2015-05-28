@@ -93,17 +93,15 @@ vec3 applyDirectionalLight(Light light, Material material)
     return computeLightModel(light, material, l, v, n, h, attenuation, 1.0);
 }
 
-vec3 applyShadowDirectionalLight(Light light, Material material)
+vec3 applyShadowDirectionalLight(Light light, Material material, sampler2DShadow u_shadowAtlas, ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
 {
-	 float attenuation = 1.0;
-    // no att for dir light
-	
     vec3 l = -light.dirFromLight;
-    //vec3 v = normalize(eyePosition - material.position);
     vec3 v = normalize(-material.position);
     vec3 n = normalize(material.normal);
     vec3 h = normalize(l + v);
-    return computeLightModel(light, material, l, v, n, h, attenuation, 1.0);
+	float shadow = computeDirectionalLightShadow(u_shadowAtlas, depthMap, light.shadowMapIndex, 
+			material.position, n, l, 40.0, 60.0, 0.015);
+    return computeLightModel(light, material, l, v, n, h, 1.0, shadow);
 }
 
 vec3 applyPointLight(Light light, Material material) 
@@ -137,7 +135,7 @@ vec3 applyShadowPointLight(Light light, Material material, mat4 u_viewInvMat,
     int shadowMapIndex = light.shadowMapIndex[face];
 	ShadowDepthMap shadowInfo = depthMap[shadowMapIndex];
 
-    float shadowFactor = computePointLightShadow(u_shadowAtlas, shadowInfo, material, n, l, 0.2, 0.001, 0.0015);
+    float shadowFactor = computePointLightShadow(u_shadowAtlas, shadowInfo, material.position, n, l, 0.2, 0.001, 0.0015);
 
     return computeLightModel(light, material, l, v, n, h, attenuation, shadowFactor);
 	// return vec3(1);
