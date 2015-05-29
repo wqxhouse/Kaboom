@@ -5,7 +5,6 @@
 #include <network/HealthEvent.h>
 #include <network/AmmoAmountEvent.h>
 #include <network/ScoreEvent.h>
-#include <network/TimeEvent.h>
 #include <network/MatchStateEvent.h>
 #include <network/PlayerRenameEvent.h>
 #include <LibRocketGUIManager.h>
