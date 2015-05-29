@@ -180,9 +180,8 @@ void GameServer::sendDisconnectEvent(Player *player) const {
     sendEvent(evt);
 }
 
-void GameServer::sendAssignEvent(Player *player, DeathmatchMode &gameMode) const {
-	AssignEvent evt(clock() - gameMode.getTimer().getStartTime(), gameMode.getMatchDuration(), player->getId());
-	std::cout << evt << std::endl;
+void GameServer::sendAssignEvent(Player *player) const {
+	AssignEvent evt(player->getId());
     sendEvent(evt, player->getId());
 }
 
@@ -335,9 +334,9 @@ void GameServer::sendPlayerStatusEvent(Entity *entity) const {
     sendEvent(evt);
 }
 
-void GameServer::sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players,DeathmatchMode &gameMode) const {
+void GameServer::sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players, DeathmatchMode &gameMode) const {
     sendConnectEvent(newPlayer); // Tells everyone about the new player's player ID
-    sendAssignEvent(newPlayer,gameMode); // Tells this player its player ID
+    sendAssignEvent(newPlayer); // Tells this player its player ID
 
     // Tells the new player about everyone else's player ID
     for (auto kv : players) {
@@ -350,6 +349,8 @@ void GameServer::sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &play
 
         sendConnectEvent(player, newPlayer->getId());
     }
+
+    sendMatchStateEvent(gameMode);
 }
 
 void GameServer::sendNewPlayerEnterWorldEvent(

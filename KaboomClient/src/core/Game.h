@@ -4,6 +4,7 @@
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
 #include <ParticleEffectManager.h>
+#include <core/DeathmatchMode.h>
 #include <core/EntityManager.h>
 #include <core/Player.h>
 #include <util/ConfigSettings.h>
@@ -109,10 +110,11 @@ public:
         return players;
     }
 
+    inline DeathmatchMode &getGameMode() {
+        return gameMode;
+    }
+
 	std::string *name;
-	clock_t timeOfAssign;
-	clock_t serverTimeElapsed;
-	clock_t duration;
 
 private:
     friend void GameGUIListener::setGameState(GameStateMachine state);
@@ -142,4 +144,6 @@ private:
     GameGUIEventHandler *_guiEventHandler;
 
 	bool abc;
+
+    DeathmatchMode gameMode;
 };

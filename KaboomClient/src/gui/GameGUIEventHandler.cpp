@@ -152,18 +152,17 @@ void GameGUIEventHandler::hideScoreBoard() const{
 void GameGUIEventHandler::changeTime(Game *game) const{
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
 	Rocket::Core::Element * clock = window1->GetChild(3);
-	//clock_t time_elapsed = game->serverTimeElapsed;
-	clock_t time_passed = std::clock() - game->timeOfAssign;
-	//clock_t duration = game->duration;
 
-	clock_t remaining_time = game->duration - game->serverTimeElapsed - time_passed;
-	int seconds = ((int)(remaining_time) / CLOCKS_PER_SEC);
-	int mintues = seconds / 60;
-	mintues = abs(mintues);
-	seconds %= 60;
-	seconds = abs(seconds);
+    const auto &startTime = game->getGameMode().getTimer().getStartTime();
+    const auto duration = game->getGameMode().getTimer().getDuration();
 
-	std::string timer = std::to_string(mintues/10) + std::to_string(mintues%10) + ":" + std::to_string(seconds/10)+ std::to_string(seconds%10);
+    const auto remainingTime = duration - (std::chrono::high_resolution_clock::now() - startTime);
+    const auto remainingSeconds = std::chrono::duration_cast<std::chrono::seconds>(remainingTime);
+
+    int seconds = remainingSeconds.count() % 60;
+    int minutes = remainingSeconds.count() / 60;
+
+    std::string timer = std::to_string(minutes / 10) + std::to_string(minutes % 10) + ":" + std::to_string(seconds / 10) + std::to_string(seconds % 10);
 	clock->SetInnerRML(timer.c_str());
 }
 

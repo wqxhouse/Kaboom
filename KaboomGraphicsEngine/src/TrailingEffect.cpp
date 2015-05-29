@@ -48,7 +48,7 @@ SPK::SPK_ID TrailingEffect::createTrailingEffect(
 	particleRenderer->setTexture(textureParticle);
 	particleRenderer->setTextureBlending(GL_MODULATE);
 	particleRenderer->setScale(0.05f, 0.05f);
-	particleRenderer->enableRenderingHint(SPK::DEPTH_TEST, false);
+    particleRenderer->enableRenderingHint(SPK::DEPTH_WRITE, false);
 	particleRenderer->setShared(true);
 
 	SPK::Interpolator* interpolator = NULL; // pointer to an interpolator that is used to retrieve interpolators
