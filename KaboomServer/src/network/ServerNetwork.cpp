@@ -189,12 +189,11 @@ void ServerNetwork::send(char *data, int size, unsigned int playerId, SOCKET soc
         int iSendResult = NetworkServices::sendMessage(socket, packet.data, packet.size);
 
         if (iSendResult == SOCKET_ERROR) {
-            if (WSAGetLastError() == WSAEWOULDBLOCK) {
-                break;
-            } else {
+            if (WSAGetLastError() != WSAEWOULDBLOCK) {
                 printf("<Server> Unable to send to player %d (socket error: %d).\n", playerId, WSAGetLastError());
                 disconnectedPlayerIds.insert(playerId);
             }
+            break;
         } else {
             delete[] packet.data;
             queue.pop_front();
