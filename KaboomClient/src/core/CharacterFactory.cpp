@@ -12,9 +12,6 @@
 #include "../components/SceneNodeComponent.h"
 #include "../components/ModelComponent.h"
 #include "Model.h"
-#include "Core.h"
-#include "GeometryCache.h"
-#include "util/ConfigSettings.h"
 
 CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
@@ -27,13 +24,10 @@ Entity *CharacterFactory::createCharacter(
         Quat rotation) const {
     Entity *entity = entityManager.createEntity(id, characterType);
 
-	Model *model;
-	model = new Model(IDLE, true);
-	model->addAnimationById(RUNNING);
-	model->playAnimation(IDLE);
+	entity->attachComponent(new ModelComponent());
+	auto modelComp = entity->getComponent<ModelComponent>();
 
-	entity->attachComponent(new ModelComponent(model));
-	entity->attachComponent(new SceneNodeComponent(model->getRootNode()));
+	entity->attachComponent(new SceneNodeComponent(modelComp->getModel()->getRootNode()));
     entity->attachComponent(new PositionComponent(position));
     entity->attachComponent(new RotationComponent(rotation));
 	entity->attachComponent(new HealthComponent(100,100));

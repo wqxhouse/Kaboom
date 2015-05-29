@@ -89,9 +89,20 @@ void Core::loadWorldFile(const std::string &worldFilePath)
 	_world.loadXMLFile(worldFilePath);
 }
 
+void Core::loadModelCache(int numPlayers)
+{
+	// Load models by the number of maximum players
+	_modelCache.addModels(numPlayers);
+}
+
 World &Core::getWorldRef()
 {
 	return _world;
+}
+
+ModelCache &Core::getModelCache()
+{
+	return _modelCache;
 }
 
 osg::ref_ptr<TwGUIManager> Core::getEditorGUI()
@@ -861,6 +872,8 @@ osg::Vec2 Core::_renderResolution;
 osg::Vec2 Core::_winPos;
 World Core::_world;
 bool Core::_hasInit = false;
+
+ModelCache Core::_modelCache;
 
 osg::ref_ptr<osgGA::CameraManipulator> Core::_camManipulatorTemp = NULL;
 bool Core::_hasEnvMap = false;

@@ -70,6 +70,7 @@ Game::Game(ConfigSettings *config)
 	Core::loadMaterialFile(str_material_xml);
 	Core::loadWorldFile(str_world_xml);
 	Core::loadTypeIdFile(str_typeid_xml);
+	Core::loadModelCache(4);
 	/* End testing code */
 
     inputManager = new InputManager(client, this);

@@ -279,6 +279,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\MaterialLoader.h" />
     <ClInclude Include="include\MaterialManager.h" />
     <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\ModelCache.h" />
     <ClInclude Include="include\ParticleEffect.h" />
     <ClInclude Include="include\ParticleEffectManager.h" />
     <ClInclude Include="include\ParticleTexture.h" />
@@ -326,6 +327,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\MaterialLoader.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\ModelCache.cpp" />
     <ClCompile Include="src\ParticleEffect.cpp" />
     <ClCompile Include="src\ParticleEffectManager.cpp" />
     <ClCompile Include="src\ParticleTexture.cpp" />
