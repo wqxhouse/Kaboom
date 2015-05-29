@@ -156,18 +156,48 @@ void ServerNetwork::removeDisconnectedPlayers() {
         closesocket(socket);
         sessions.erase(playerId);
         playerIdPool.free(playerId);
+
+        if (packetQueues.count(playerId) > 0) {
+            auto &queue = packetQueues.at(playerId);
+
+            while (!queue.empty()) {
+                delete[] queue.front().data;
+                queue.pop_front();
+            }
+        }
     }
 
     disconnectedPlayerIds.clear();
 }
 
-void ServerNetwork::send(char *packet, int size, unsigned int playerId, SOCKET socket) {
-    int iSendResult = NetworkServices::sendMessage(socket, packet, size);
+void ServerNetwork::send(char *data, int size, unsigned int playerId, SOCKET socket) {
+    Packet packet;
+    packet.data = data;
+    packet.size = size;
 
-    if (iSendResult == SOCKET_ERROR) {
-		if (WSAGetLastError() != WSAEWOULDBLOCK) {
-			printf("<Server> Unable to send to player %d (socket error: %d).\n", playerId, WSAGetLastError());
-			disconnectedPlayerIds.insert(playerId);
-		}
+    if (packetQueues.count(playerId) == 0) {
+        packetQueues[playerId] = std::deque<Packet>();
+    }
+
+    auto &queue = packetQueues[playerId];
+
+    queue.push_back(packet);
+
+    while (!queue.empty()) {
+        Packet packet = packetQueues[playerId].front();
+
+        int iSendResult = NetworkServices::sendMessage(socket, packet.data, packet.size);
+
+        if (iSendResult == SOCKET_ERROR) {
+            if (WSAGetLastError() == WSAEWOULDBLOCK) {
+                break;
+            } else {
+                printf("<Server> Unable to send to player %d (socket error: %d).\n", playerId, WSAGetLastError());
+                disconnectedPlayerIds.insert(playerId);
+            }
+        } else {
+            delete[] packet.data;
+            queue.pop_front();
+        }
     }
 }

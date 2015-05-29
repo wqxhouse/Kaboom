@@ -2,6 +2,7 @@
 
 #include <Winsock2.h>
 
+#include <deque>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -31,11 +32,18 @@ public:
 private:
     typedef std::unordered_map<unsigned int, SOCKET> IdToSocketMap;
 
+    struct Packet {
+        char *data;
+        int size;
+    };
+
     SOCKET listenSocket;
 
     IdPool playerIdPool;
     IdToSocketMap sessions;
     IdSet disconnectedPlayerIds;
 
-    void send(char *packet, int size, unsigned int playerId, SOCKET socket);
+    std::unordered_map<unsigned int, std::deque<Packet>> packetQueues;
+
+    void send(char *data, int size, unsigned int playerId, SOCKET socket);
 };
