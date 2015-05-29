@@ -16,11 +16,16 @@ ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas
 	_shadowDepthCam = new osg::Camera();
 
 	_shadowDepthCam->setClearMask(GL_DEPTH_BUFFER_BIT); // do not clear color buffer, or atlas will be destroyed
-	_shadowDepthCam->setRenderOrder(osg::Camera::PRE_RENDER);
+	_shadowDepthCam->setRenderOrder(osg::Camera::PRE_RENDER, -100);
 	_shadowDepthCam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
 	_shadowDepthCam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
 	_shadowDepthCam->attach(osg::Camera::DEPTH_BUFFER, _shadowAtlasTex);
 	_shadowDepthCam->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
+
+	// not sure why, but osg by default generates a color buffer the same size as the attached depth texture.
+	// which makes the graphcis memory usage explode... imagine 4096^2 * camNum extra color buffers, easily crashing the graphics driver
+	// the following line disables that... Thanks to api-trace, CodeXL debugging tools, and osg source code.
+	_shadowDepthCam->setImplicitBufferAttachmentMask(0x0, 0x0);
 
 	ShadowDepthCameraCallback *callback = new ShadowDepthCameraCallback(_atlas, _light, face);
 	_updateCallback = callback;
