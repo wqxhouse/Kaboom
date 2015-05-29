@@ -238,6 +238,9 @@
     <ClCompile Include="src\network\PlayerRenameEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\messaging\BombDropDespawnMessageHandler.cpp">
+      <Filter>Source Files\Messaging\Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -480,6 +483,12 @@
     </ClInclude>
     <ClInclude Include="src\network\PlayerRenameEventHandler.h">
       <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\BombDropDespawnMessage.h">
+      <Filter>Header Files\Messaging\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\BombDropDespawnMessageHandler.h">
+      <Filter>Header Files\Messaging\Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

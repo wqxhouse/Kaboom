@@ -44,6 +44,7 @@
     <ClCompile Include="src\debug\OsgBulletDebugViewer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\util.cpp" />
+    <ClCompile Include="src\messaging\BombDropDespawnMessageHandler.cpp" />
     <ClCompile Include="src\messaging\BombDropMessageHandler.cpp" />
     <ClCompile Include="src\messaging\BombPickupMessageHandler.cpp" />
     <ClCompile Include="src\messaging\DefaultCharacterMessageHandler.cpp" />
@@ -118,6 +119,8 @@
     <ClInclude Include="src\math\util.h" />
     <ClInclude Include="src\messaging\Attack1Message.h" />
     <ClInclude Include="src\messaging\Attack2Message.h" />
+    <ClInclude Include="src\messaging\BombDropDespawnMessage.h" />
+    <ClInclude Include="src\messaging\BombDropDespawnMessageHandler.h" />
     <ClInclude Include="src\messaging\BombDropMessage.h" />
     <ClInclude Include="src\messaging\BombDropMessageHandler.h" />
     <ClInclude Include="src\messaging\BombPickupMessageHandler.h" />

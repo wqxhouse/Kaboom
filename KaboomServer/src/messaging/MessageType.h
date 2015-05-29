@@ -11,4 +11,5 @@ enum class MessageType {
     CHARACTER_SPAWN,
 	JUMP_PAD,
 	BOMB_DROP,
+	BOMB_DROP_DESPAWN,
 };
