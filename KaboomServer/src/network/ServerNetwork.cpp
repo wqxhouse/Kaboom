@@ -139,8 +139,13 @@ void ServerNetwork::send(char *packet, int size) {
     for (auto kv : sessions) {
         const auto playerId = kv.first;
         const auto socket = kv.second;
-        send(packet, size, playerId, socket);
+
+        char *newPacket = new char[size];
+        memcpy(newPacket, packet, size);
+        send(newPacket, size, playerId, socket);
     }
+
+    delete[] packet;
 }
 
 void ServerNetwork::send(char *packet, int size, int playerId) {
@@ -161,7 +166,8 @@ void ServerNetwork::removeDisconnectedPlayers() {
             auto &queue = packetQueues.at(playerId);
 
             while (!queue.empty()) {
-                delete[] queue.front().data;
+                Packet packet = queue.front();
+                delete[] packet.data;
                 queue.pop_front();
             }
         }
@@ -184,7 +190,7 @@ void ServerNetwork::send(char *data, int size, unsigned int playerId, SOCKET soc
     queue.push_back(packet);
 
     while (!queue.empty()) {
-        Packet packet = packetQueues[playerId].front();
+        Packet packet = queue.front();
 
         int iSendResult = NetworkServices::sendMessage(socket, packet.data, packet.size);
 
