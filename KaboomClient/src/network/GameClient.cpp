@@ -64,7 +64,11 @@ void GameClient::receive() {
         EmptyEvent emptyEvent;
         emptyEvent.deserialize(&networkBuffer[i]);
 
-        if (i + sizeof(EmptyEvent) > MAX_PACKET_SIZE || i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
+        if (i + sizeof(EmptyEvent) > len) {
+            bufferOffset = len - i;
+            memcpy(networkBuffer, &networkBuffer[i], bufferOffset);
+            break;
+        } else if (i + sizeof(EmptyEvent) > MAX_PACKET_SIZE || i + emptyEvent.getByteSize() > MAX_PACKET_SIZE) {
             bufferOffset = MAX_PACKET_SIZE - i;
             memcpy(networkBuffer, &networkBuffer[i], bufferOffset);
             break;
