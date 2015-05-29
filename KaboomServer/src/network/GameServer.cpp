@@ -155,8 +155,6 @@ void GameServer::sendEvent(const Event &evt) const {
 
     evt.serialize(data);
     network->send(data, size);
-
-    delete[] data;
 }
 
 void GameServer::sendEvent(const Event &evt, unsigned int playerId) const {
@@ -165,8 +163,6 @@ void GameServer::sendEvent(const Event &evt, unsigned int playerId) const {
 
     evt.serialize(data);
     network->send(data, size, playerId);
-
-    delete[] data;
 }
 
 void GameServer::sendConnectEvent(Player *player) const {
