@@ -36,6 +36,27 @@
     <Filter Include="Source Files\CubemapUtil">
       <UniqueIdentifier>{04ab4550-9c88-456b-ac43-7f3d4a68e834}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Manipulator">
+      <UniqueIdentifier>{cb4e69dc-9d35-4ac2-a1ec-e539d538dc50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Manipulator">
+      <UniqueIdentifier>{f5228322-a4f8-4285-9a2b-570c89b86a11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Media\InEditorGUI">
+      <UniqueIdentifier>{afcb396e-7355-4e4a-946f-a3724ce6bfd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Particle">
+      <UniqueIdentifier>{e02a3dd5-8108-4e19-b45d-6540156b15a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Particle">
+      <UniqueIdentifier>{c9164d12-2056-40db-864f-d6360eed9b43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Materials">
+      <UniqueIdentifier>{2861d982-bd9a-4783-84de-94e1a31e3234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Materials">
+      <UniqueIdentifier>{84c3c9f8-9f4f-457b-9104-5a05ec2562c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -96,9 +117,6 @@
     <ClInclude Include="include\GeometryPicker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GeometryObjectManipulator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Visualizer.h">
       <Filter>Header Files\Visualizer</Filter>
     </ClInclude>
@@ -131,6 +149,45 @@
     </ClInclude>
     <ClInclude Include="include\LightVisualizer.h">
       <Filter>Header Files\Visualizer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryObjectManipulator.h">
+      <Filter>Header Files\Manipulator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomTranslateAxisDragger.h">
+      <Filter>Header Files\Manipulator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SparkDrawable.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SparkUpdatingHandler.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ParticleTexture.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ParticleEffect.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ParticleEffectManager.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ExplosionEffect.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TrailingEffect.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MaterialBuiltIn.h">
+      <Filter>Header Files\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TestMaterial.h">
+      <Filter>Header Files\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TestMaterial2.h">
+      <Filter>Header Files\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryCache.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -191,9 +248,6 @@
     <ClCompile Include="src\GeometryPicker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GeometryObjectManipulator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -233,6 +287,42 @@
     <ClCompile Include="src\LightVisualizer.cpp">
       <Filter>Source Files\Visualizer</Filter>
     </ClCompile>
+    <ClCompile Include="src\GeometryObjectManipulator.cpp">
+      <Filter>Source Files\Manipulator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CustomTranslateAxisDragger.cpp">
+      <Filter>Source Files\Manipulator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SparkUpdatingHandler.cpp">
+      <Filter>Source Files\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SparkDrawable.cpp">
+      <Filter>Source Files\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleTexture.cpp">
+      <Filter>Source Files\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleEffect.cpp">
+      <Filter>Source Files\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleEffectManager.cpp">
+      <Filter>Source Files\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ExplosionEffect.cpp">
+      <Filter>Source Files\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TrailingEffect.cpp">
+      <Filter>Source Files\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="include\TestMaterial.cpp">
+      <Filter>Source Files\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestMaterial2.cpp">
+      <Filter>Source Files\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">
@@ -253,19 +343,7 @@
     <Xml Include="..\Media\EffectFiles\template.xml">
       <Filter>Media\EffectFiles</Filter>
     </Xml>
-    <Xml Include="..\Media\EffectFiles\Test.xml">
-      <Filter>Media\EffectFiles</Filter>
-    </Xml>
-    <Xml Include="..\Media\EffectFiles\TestWorld.xml">
-      <Filter>Media\EffectFiles</Filter>
-    </Xml>
     <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml">
-      <Filter>Media\EffectFiles</Filter>
-    </Xml>
-    <Xml Include="..\Media\EffectFiles\Materials.xml">
-      <Filter>Media\EffectFiles</Filter>
-    </Xml>
-    <Xml Include="..\Media\EffectFiles\TypeId.xml">
       <Filter>Media\EffectFiles</Filter>
     </Xml>
   </ItemGroup>
@@ -348,6 +426,21 @@
     </None>
     <None Include="..\Media\Shaders\cubemapDiffusePreFilter.frag">
       <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\invader.rcss">
+      <Filter>Media\InEditorGUI</Filter>
+    </None>
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\rkt.rcss">
+      <Filter>Media\InEditorGUI</Filter>
+    </None>
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\setNameWindow.rml">
+      <Filter>Media\InEditorGUI</Filter>
+    </None>
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\window.rml">
+      <Filter>Media\InEditorGUI</Filter>
+    </None>
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\window_rocket.rml">
+      <Filter>Media\InEditorGUI</Filter>
     </None>
   </ItemGroup>
 </Project>

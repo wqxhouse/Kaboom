@@ -1,5 +1,8 @@
 #include "BombConfigLoader.h"
 
+#include <core/EntityType.h>
+#include <util/Configuration.h>
+
 BombConfigLoader::BombConfigLoader(std::unordered_map<EntityType, Configuration> &config)
         : config(config) {
 }
@@ -56,6 +59,6 @@ void BombConfigLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string &val
     } else if (valueType == "string") {
         std::string val;
         loadString(xmlNode, val);
-        config[type].set(xmlNode->name.c_str(), val.c_str());
+        config[type].set(xmlNode->name.c_str(), val);
     }
 }

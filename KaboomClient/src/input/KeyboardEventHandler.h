@@ -29,6 +29,11 @@ public:
 
     bool bindKey(int key, Function func);
     bool bindKey(int key, KeyState state, Function func);
+	bool bindKey(int key, Function func(char c));
+	bool bindKey(int key, KeyState state, Function func(char c));
+	bool unbindKey(int key);
+	bool unbindKey(int key, KeyState state);
+	void unbindKeyAll();
 
     virtual bool handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);
     bool handleKeyDown(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us);

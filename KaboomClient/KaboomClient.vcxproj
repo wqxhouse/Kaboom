@@ -218,7 +218,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(SolutionDir);$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(SolutionDir);$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include\Spark;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -235,15 +235,15 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OSG_LIB_PATH);$(SolutionDir)\3rdParty\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>osgAudio.lib;ws2_32.lib;osg.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;osgViewer.lib;osgManipulator.lib;AntTweakBar64.lib;shell.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;ws2_32.lib;osg.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;osgViewer.lib;osgAudio.lib;osgAnimation.lib;osgManipulator.lib;AntTweakBar64.lib;shell.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib;SPARK_GL.lib;SPARK.lib</AdditionalDependencies>
       <AdditionalOptions>
       </AdditionalOptions>
       <SubSystem>Console</SubSystem>
       <LinkTimeCodeGeneration />
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(ProjectDir)" /D /I /Y
-xcopy "$(SolutionDir)\SharedConfig\config.ini" "$(TargetDir)" /D /I /Y
+      <Command>xcopy "$(SolutionDir)SharedConfig\Config.ini" "$(ProjectDir)" /D /I /Y
+xcopy "$(SolutionDir)SharedConfig\Config.ini" "$(TargetDir)" /D /I /Y
 xcopy "$(SolutionDir)3rdparty\bin\*.dll" "$(TargetDir)" /D /I /Y
 xcopy "$(ProjectDir)\data-client" "$(TargetDir)\data-client" /D /I /Y
 xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
@@ -251,57 +251,102 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\SceneNodeComponent.cpp" />
-    <ClCompile Include="src\core\BombDataLookup.cpp" />
+    <ClCompile Include="src\core\BombConfigLoader.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
+    <ClCompile Include="src\core\CharacterConfigLoader.cpp" />
+    <ClCompile Include="src\core\EntityConfigLookup.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
-    <ClCompile Include="src\core\SoundManager.cpp" />
-    <ClCompile Include="src\GameGUI.cpp" />
+    <ClCompile Include="src\core\JumpPadFactory.cpp" />
+    <ClCompile Include="src\core\PickupFactory.cpp" />
+    <ClCompile Include="src\gui\GameGUI.cpp" />
+    <ClCompile Include="src\gui\GameGUIEventHandler.cpp" />
+    <ClCompile Include="src\gui\GameGUIListener.cpp" />
+    <ClCompile Include="src\gui\OnClickAddLetterListener.cpp" />
+    <ClCompile Include="src\gui\OnClickEndGameListener.cpp" />
+    <ClCompile Include="src\gui\OnClickListener.cpp" />
+    <ClCompile Include="src\gui\OnClickRemoveLetterListener.cpp" />
     <ClCompile Include="src\input\InputEventHandler.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\input\KeyboardEventHandler.cpp" />
     <ClCompile Include="src\input\MouseEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\network\AmmoAmountEventHandler.cpp" />
+    <ClCompile Include="src\network\AssignEventHandler.cpp" />
+    <ClCompile Include="src\network\BindEventHandler.cpp" />
+    <ClCompile Include="src\network\ChatEventHandler.cpp" />
     <ClCompile Include="src\network\ClientEventHandlerLookup.cpp" />
+    <ClCompile Include="src\network\ConnectEventHandler.cpp" />
     <ClCompile Include="src\network\DestroyEventHandler.cpp" />
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
     <ClCompile Include="src\network\ExplosionEventHandler.cpp" />
+    <ClCompile Include="src\network\HealthEventHandler.cpp" />
+    <ClCompile Include="src\network\MatchStateEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerDeathEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerRenameEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerRespawnEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerStatusEventHandler.cpp" />
     <ClCompile Include="src\network\RotationEventHandler.cpp" />
+    <ClCompile Include="src\network\ScoreEventHandler.cpp" />
     <ClCompile Include="src\network\SpawnEventHandler.cpp" />
     <ClCompile Include="src\network\GameClient.cpp" />
     <ClCompile Include="src\network\ClientNetwork.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PositionEventHandler.cpp" />
     <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\sound\SoundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\ModelComponent.h" />
     <ClInclude Include="src\components\SceneNodeComponent.h" />
-    <ClInclude Include="src\core\BombData.h" />
-    <ClInclude Include="src\core\BombDataLookup.h" />
+    <ClInclude Include="src\components\TrailingEffectComponent.h" />
+    <ClInclude Include="src\core\BombConfigLoader.h" />
     <ClInclude Include="src\core\BombFactory.h" />
+    <ClInclude Include="src\core\CharacterConfigLoader.h" />
+    <ClInclude Include="src\core\EntityConfigLookup.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
-    <ClInclude Include="src\core\SoundManager.h" />
-    <ClInclude Include="src\GameGUI.h" />
+    <ClInclude Include="src\Core\GameStateMachine.h" />
+    <ClInclude Include="src\core\JumpPadFactory.h" />
+    <ClInclude Include="src\core\PickupFactory.h" />
+    <ClInclude Include="src\gui\GameGUI.h" />
+    <ClInclude Include="src\gui\GameGUIEventHandler.h" />
+    <ClInclude Include="src\gui\GameGUIListener.h" />
+    <ClInclude Include="src\gui\OnClickAddLetterListener.h" />
+    <ClInclude Include="src\gui\OnClickEndGameListener.h" />
+    <ClInclude Include="src\gui\OnClickListener.h" />
+    <ClInclude Include="src\gui\OnClickRemoveLetterListener.h" />
     <ClInclude Include="src\input\InputEventHandler.h" />
     <ClInclude Include="src\input\InputManager.h" />
     <ClInclude Include="src\input\KeyboardEventHandler.h" />
     <ClInclude Include="src\input\MouseEventHandler.h" />
+    <ClInclude Include="src\network\AmmoAmountEventHandler.h" />
+    <ClInclude Include="src\network\AssignEventHandler.h" />
+    <ClInclude Include="src\network\BindEventHandler.h" />
+    <ClInclude Include="src\network\ChatEventHandler.h" />
     <ClInclude Include="src\network\ClientEventHandlerLookup.h" />
+    <ClInclude Include="src\network\ConnectEventHandler.h" />
     <ClInclude Include="src\network\DestroyEventHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
     <ClInclude Include="src\network\ExplosionEventHandler.h" />
+    <ClInclude Include="src\network\HealthEventHandler.h" />
+    <ClInclude Include="src\network\MatchStateEventHandler.h" />
+    <ClInclude Include="src\network\PlayerDeathEventHandler.h" />
+    <ClInclude Include="src\network\PlayerRenameEventHandler.h" />
+    <ClInclude Include="src\network\PlayerRespawnEventHandler.h" />
+    <ClInclude Include="src\network\PlayerStatusEventHandler.h" />
     <ClInclude Include="src\network\RotationEventHandler.h" />
+    <ClInclude Include="src\network\ScoreEventHandler.h" />
     <ClInclude Include="src\network\SpawnEventHandler.h" />
     <ClInclude Include="src\network\GameClient.h" />
     <ClInclude Include="src\network\ClientNetwork.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PositionEventHandler.h" />
     <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\sound\SoundManager.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -317,9 +362,12 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-client\bombs.xml" />
+    <Xml Include="data-client\characters.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\SharedConfig\Config.ini" />
+    <Text Include="..\SharedConfig\Config.ini">
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\BugList.txt" />

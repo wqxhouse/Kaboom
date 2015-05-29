@@ -223,7 +223,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\include;$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\;$(SolutionDir)\3rdParty\include\Spark;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -245,7 +245,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     </PostBuildEvent>
     <Lib>
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
-      <AdditionalDependencies>Comdlg32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Comdlg32.lib; Shell32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -256,9 +257,12 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\CubeMapPreFilter.h" />
     <ClInclude Include="include\CubemapUtil.h" />
     <ClInclude Include="include\CustomFirstPersonManipulator.h" />
+    <ClInclude Include="include\CustomTranslateAxisDragger.h" />
     <ClInclude Include="include\DirectionalLight.h" />
     <ClInclude Include="include\DraggerUpdateCallback.h" />
     <ClInclude Include="include\EffectCompositor.h" />
+    <ClInclude Include="include\ExplosionEffect.h" />
+    <ClInclude Include="include\GeometryCache.h" />
     <ClInclude Include="include\GeometryObject.h" />
     <ClInclude Include="include\GeometryObjectManager.h" />
     <ClInclude Include="include\GeometryObjectManipulator.h" />
@@ -271,11 +275,20 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\LightPrePassCallback.h" />
     <ClInclude Include="include\LightVisualizer.h" />
     <ClInclude Include="include\Material.h" />
+    <ClInclude Include="include\MaterialBuiltIn.h" />
     <ClInclude Include="include\MaterialLoader.h" />
     <ClInclude Include="include\MaterialManager.h" />
     <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\ParticleEffect.h" />
+    <ClInclude Include="include\ParticleEffectManager.h" />
+    <ClInclude Include="include\ParticleTexture.h" />
     <ClInclude Include="include\PointLight.h" />
     <ClInclude Include="include\SkyBox.h" />
+    <ClInclude Include="include\SparkDrawable.h" />
+    <ClInclude Include="include\SparkUpdatingHandler.h" />
+    <ClInclude Include="include\TestMaterial.h" />
+    <ClInclude Include="include\TestMaterial2.h" />
+    <ClInclude Include="include\TrailingEffect.h" />
     <ClInclude Include="include\TwGUIManager.h" />
     <ClInclude Include="include\TypeIdLoader.h" />
     <ClInclude Include="include\Visualizer.h" />
@@ -283,17 +296,21 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\TestMaterial.cpp" />
     <ClCompile Include="src\AxisVisualizer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Core.cpp" />
     <ClCompile Include="src\CubemapPreFilter.cpp" />
     <ClCompile Include="src\CubemapUtil.cpp" />
     <ClCompile Include="src\CustomFirstPersonManipulator.cpp" />
+    <ClCompile Include="src\CustomTranslateAxisDragger.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
     <ClCompile Include="src\DraggerUpdateCallback.cpp" />
     <ClCompile Include="src\EffectAnalysisHelper.cpp" />
     <ClCompile Include="src\EffectCompositor.cpp" />
     <ClCompile Include="src\EffectCompositorXML.cpp" />
+    <ClCompile Include="src\ExplosionEffect.cpp" />
+    <ClCompile Include="src\GeometryCache.cpp" />
     <ClCompile Include="src\GeometryObject.cpp" />
     <ClCompile Include="src\GeometryObjectManager.cpp" />
     <ClCompile Include="src\GeometryObjectManipulator.cpp" />
@@ -309,8 +326,15 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\MaterialLoader.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\ParticleEffect.cpp" />
+    <ClCompile Include="src\ParticleEffectManager.cpp" />
+    <ClCompile Include="src\ParticleTexture.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
+    <ClCompile Include="src\SparkDrawable.cpp" />
+    <ClCompile Include="src\SparkUpdatingHandler.cpp" />
+    <ClCompile Include="src\TestMaterial2.cpp" />
+    <ClCompile Include="src\TrailingEffect.cpp" />
     <ClCompile Include="src\TwGUIManager.cpp" />
     <ClCompile Include="src\TypeIdLoader.cpp" />
     <ClCompile Include="src\Visualizer.cpp" />
@@ -324,18 +348,19 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <Xml Include="..\Media\EffectFiles\GeometryPassPlain.xml" />
     <Xml Include="..\Media\EffectFiles\LightPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\LightPrePassConfig.xml" />
-    <Xml Include="..\Media\EffectFiles\Materials.xml" />
     <Xml Include="..\Media\EffectFiles\Pipeline.xml">
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\template.xml" />
-    <Xml Include="..\Media\EffectFiles\Test.xml" />
-    <Xml Include="..\Media\EffectFiles\TestWorld.xml" />
-    <Xml Include="..\Media\EffectFiles\TypeId.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\BugList.txt" />
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\invader.rcss" />
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\rkt.rcss" />
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\setNameWindow.rml" />
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\window.rml" />
+    <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\window_rocket.rml" />
     <None Include="..\Media\EffectFiles\smaa.xml" />
     <None Include="..\Media\Shaders\constant.glsl" />
     <None Include="..\Media\Shaders\cubemapDiffusePreFilter.frag" />

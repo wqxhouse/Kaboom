@@ -1,39 +1,30 @@
 #include "FiringSystem.h"
 
-#include <btBulletDynamicsCommon.h>
+#include <core/Entity.h>
 
-#include <components/EquipmentComponent.h>
-#include <components/PositionComponent.h>
-#include <components/RotationComponent.h>
-#include <core/FireMode.h>
-#include <util/Timer.h>
-
-#include "../components/DetonatorComponent.h"
-#include "../components/ExplosionComponent.h"
+#include "../components/DestroyComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/MessageHandlerComponent.h"
-#include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
-#include "../math/util.h"
 #include "../messaging/Attack1Message.h"
 #include "../messaging/Attack2Message.h"
+#include "../messaging/MessageHandler.h"
 #include "../messaging/NoAttackMessage.h"
 
-#define VELOCITYCAP 2
-#define VELOCTIYACCELERATION .1
-
 FiringSystem::FiringSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool FiringSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<InputComponent>() &&
+    return game->getGameMode().getMatchState() == GameMode::MatchState::IN_PROGRESS &&
+            !entity->hasComponent<DestroyComponent>() &&
+            entity->hasComponent<InputComponent>() &&
             entity->hasComponent<MessageHandlerComponent>();
 }
 
 void FiringSystem::processEntity(Entity *entity) {
-    InputComponent* inputComp = entity->getComponent<InputComponent>();
-    MessageHandlerComponent *handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto inputComp = entity->getComponent<InputComponent>();
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
 
     if (!inputComp->isAttacking1() && !inputComp->isAttacking2()) {
         NoAttackMessage message(game, entity);

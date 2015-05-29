@@ -1,11 +1,20 @@
 #include "stdafx.h" 
 #include "MaterialManager.h"
-#include "Material.h"
+#include "MaterialBuiltIn.h"
+
+#include <Core.h>
 
 MaterialManager *MaterialManager::_weakMaterialManagerPtr;
 MaterialManager::MaterialManager()
 {
 	_weakMaterialManagerPtr = this;
+
+	const std::string &mediaPath = Core::getMediaPath();
+	_emptyAlbedoMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\albedo.png";
+	_emptyRoughnessMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\roughness.png";
+	_emptyMetallicMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\metallic.png";
+	_emptyNormalMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\normal.png";
+
 	createBuiltInMaterials();
 }
 
@@ -37,9 +46,22 @@ MaterialManager::~MaterialManager()
 
 void MaterialManager::createBuiltInMaterials()
 {
-	// default
-	Material *m = new Material("____builtInDefault", onTexturePathChange);
-	_builtInMaterial.push_back(m);
+	// TODO: make helper function, current design is too bad; 
+	// TODO: make editor display built in material differently, not mixing with standard ones
+
+	Material *default = new Material("____Default", onTexturePathChange);
+	_materialMap.insert(std::make_pair(default->getName(), default));
+	_builtInMaterial.push_back(default);
+
+	Material *builtIn1 = createTestMaterial(onTexturePathChange);
+	_materialMap.insert(std::make_pair(builtIn1->getName(), builtIn1));
+	setMaterialUpdateCallback(builtIn1->getName(), testMaterialCallback);
+	_builtInMaterial.push_back(builtIn1);
+
+	std::string test2Name = createTestMaterial2(onTexturePathChange, this);
+	Material *test2Mat = getMaterial(test2Name);
+	setMaterialUpdateCallback(test2Name, testMaterial2Callback);
+	_builtInMaterial.push_back(test2Mat);
 }
 
 Material *MaterialManager::getBuiltInMaterial(enum MaterialBuiltIn type)
@@ -70,7 +92,7 @@ bool MaterialManager::createPlainMaterial(const std::string &name,
 	return true;
 }
 
-bool MaterialManager::createTextureMaterial(const std::string &name,
+bool MaterialManager::createTexturedMaterial(const std::string &name,
 	const std::string &albedoPath,
 	const std::string &roughnessPath,
 	const std::string &metallicPath,
@@ -83,43 +105,71 @@ bool MaterialManager::createTextureMaterial(const std::string &name,
 		return false;
 	}
 
-	//osg::Image *albedo = osgDB::readImageFile(albedoPath);
-	//osg::Image *specular = osgDB::readImageFile(specularPath);
-	//osg::Image *roughness = osgDB::readImageFile(roughnessPath);
-	//osg::Image *metallic = osgDB::readImageFile(metallicPath);
-	//osg::Image *normalMap = osgDB::readImageFile(normalMapPath);
-
-	//osg::Texture2D *albedoTex = new osg::Texture2D;
-	//albedoTex->setImage(albedo);
-	//_textureMap.insert(std::make_pair(albedoPath, albedoTex));
-
-	//osg::Texture2D *specularTex = new osg::Texture2D;
-	//specularTex->setImage(specular);
-	//_textureMap.insert(std::make_pair(specularPath, specularTex));
-
-	//osg::Texture2D *roughnessTex = new osg::Texture2D;
-	//roughnessTex->setImage(roughness);
-	//_textureMap.insert(std::make_pair(roughnessPath, roughnessTex));
-
-	//osg::Texture2D *metallicTex = new osg::Texture2D;
-	//metallicTex->setImage(metallic);
-	//_textureMap.insert(std::make_pair(metallicPath, metallicTex));
-
-	//osg::Texture2D *normalMapTex = new osg::Texture2D;
-	//normalMapTex->setImage(normalMap);
-	//_textureMap.insert(std::make_pair(normalMapPath, normalMapTex));
-
-	// above unnecessary since set..Texture handles them
 	Material *mat = new Material(name, onTexturePathChange);
 	mat->setUseTexture(true);
-	mat->setAlbedoTexturePath(albedoPath, mode);
-	mat->setMetallicMapPath(metallicPath, mode);
-	mat->setRoughnessMapPath(roughnessPath, mode);
-	mat->setNormalMapPath(normalMapPath, mode);
+	mat->setMode(mode);
+
+	if (albedoPath.empty())
+	{
+		mat->setAlbedoTexturePath(_emptyAlbedoMapPath, mode);
+	}
+	else
+	{
+		mat->setAlbedoTexturePath(albedoPath, mode);
+		mat->setAlbedoTexLerp(1.0);
+	}
+
+	if (roughnessPath.empty())
+	{
+		mat->setRoughnessMapPath(_emptyRoughnessMapPath, mode);
+	}
+	else
+	{
+		mat->setRoughnessMapPath(roughnessPath, mode);
+		mat->setRoughnessTexLerp(1.0);
+	}
+
+	if (metallicPath.empty())
+	{
+		mat->setMetallicMapPath(_emptyMetallicMapPath, mode);
+	}
+	else
+	{
+		mat->setMetallicMapPath(metallicPath, mode);
+		mat->setMetallicTexLerp(1.0);
+	}
+
+	if (normalMapPath.empty())
+	{
+		mat->setNormalMapPath(_emptyNormalMapPath, mode);
+	}
+	else
+	{
+		mat->setNormalMapPath(normalMapPath, mode);
+		mat->setNormalMapLerp(1.0);
+	}
 
 	_materialMap.insert(std::make_pair(name, mat));
 
 	return true;
+}
+
+void MaterialManager::setMaterialUpdateCallback(const std::string &name, MaterialUpdateCallback callback, void *userData)
+{
+	Material *m = getMaterial(name);
+	if (!m) return;
+
+	m->_updateCallback = callback;
+	m->_userData = userData;
+}
+
+void MaterialManager::deleteMaterial(const std::string &name)
+{
+	Material *m = _materialMap[name];
+	if (_materialMap.find(name) != _materialMap.end()){
+		_materialMap.erase(name);
+		delete m;
+	}
 }
 
 bool MaterialManager::renameMaterial(const std::string &oldName, const std::string &newName)
@@ -252,4 +302,11 @@ osg::ref_ptr<osg::Texture> MaterialManager::getNormalMapTexture(Material *m)
 		// console output material not found;
 		return NULL;
 	}
+}
+
+
+void MaterialManager::reloadBuiltInMaterials()
+{
+	_builtInMaterial.clear();
+	createBuiltInMaterials();
 }

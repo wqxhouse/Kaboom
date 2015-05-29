@@ -1,10 +1,12 @@
 #pragma once
 
+#include "KaboomClient\src\core\Game.h"
+
 class GameClient;
 
 class InputEventHandler {
 public:
-    InputEventHandler(GameClient &client);
+    InputEventHandler(GameClient &client, Game * game);
 
     void onMoveForwardDown();
     void onMoveForwardUp();
@@ -21,6 +23,15 @@ public:
     void onAttack2Down();
     void onAttack2Up();
     void onLook(float yaw, float pitch);
+    void onEquip1();
+    void onEquip2();
+    void onEquip3();
+	void onTab();
+	void offTab();
+	void typeCharacter(char c);
+	void removeCharacter();
+
+    void onReloadRequest();
 
     // void enterGameMode();
     void quitGameMode();
@@ -29,6 +40,7 @@ public:
 
 private:
     GameClient &client;
+	Game * _game;
 
     bool movingForward;
     bool movingBackward;

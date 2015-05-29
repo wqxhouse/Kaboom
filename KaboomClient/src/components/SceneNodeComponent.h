@@ -7,10 +7,17 @@
 
 class SceneNodeComponent : public Component {
 public:
-    SceneNodeComponent(osg::ref_ptr<osg::Node> node);
+    SceneNodeComponent(osg::ref_ptr<osg::Node> node)
+            : node(node) {
+    }
 
-    osg::ref_ptr<osg::Node> getNode() const;
-    void setNode(osg::ref_ptr<osg::Node> node);
+    inline osg::ref_ptr<osg::Node> getNode() const {
+        return node;
+    }
+
+    inline void setNode(osg::ref_ptr<osg::Node> node) {
+        this->node = node;
+    }
 
 private:
     osg::ref_ptr<osg::Node> node;

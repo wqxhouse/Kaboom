@@ -15,6 +15,7 @@
 #include "World.h"
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
+#include "ParticleEffectManager.h"
 #include "LightPrePassCallback.h"
 #include "LightPassCallback.h"
 #include "CustomFirstPersonManipulator.h"
@@ -28,7 +29,7 @@
 extern osg::ref_ptr<CompositorAnalysis> configureViewerForMode(osgViewer::Viewer& viewer, osgFX::EffectCompositor* compositor,
 	osg::Node* model, int displayMode);
 
-void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath)
+void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath, osg::Node *soundRoot)
 {
 	_mediaPath = mediaPath;
 	// TODO: add reshape callback for winPos, winHeight, bufferSize
@@ -38,6 +39,8 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	_winPos = osg::Vec2(winPosX, winPosY);
 	_sceneRoot = new osg::Group;
 	_gui = new TwGUIManager;
+
+	_currentFrameNum = 0;
 
 	// let configLibRocketGUI create the instance
 	_libRocketInGameGUI = NULL;
@@ -57,11 +60,16 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	configPasses();
 	configViewer();
 
+	// need to config after config viewer
+	configParticlePass();
+
 	// need to do it before finalize(), since client needs this before running
 	configLibRocketGUI();
 
 	_sceneRoot->addChild(_passes);
 	_hasInit = true;
+
+    _sceneRoot->addChild(soundRoot);
 }
 
 void Core::loadMaterialFile(const std::string &filePath)
@@ -84,6 +92,11 @@ void Core::loadWorldFile(const std::string &worldFilePath)
 World &Core::getWorldRef()
 {
 	return _world;
+}
+
+osg::ref_ptr<TwGUIManager> Core::getEditorGUI()
+{
+	return _gui;
 }
 
 osg::Vec2 Core::getScreenSize()
@@ -188,6 +201,13 @@ void Core::configLightPass()
 	}
 }
 
+void Core::configParticlePass()
+{
+	ParticleEffectManager *manager = _world.getParticleEffectManager();
+	_passes->addChild(manager->getRoot());
+	_viewer->addEventHandler(manager->getParticleUpdateHandler());
+}
+
 void Core::configGeometryObjectManipulator()
 {
 	GeometryObjectManipulator::initWithRootNode(_passes);
@@ -250,7 +270,7 @@ void Core::AdvanceFrame()
 		if (_isFirstFrame)
 		{
 			finalize();
-			_lastFrameStartTime = _frameStartTime
+			_firstFrameStartTime = _lastFrameStartTime = _frameStartTime
 				= osg::Timer::instance()->getStartTick();
 
 			_isFirstFrame = false;
@@ -261,7 +281,22 @@ void Core::AdvanceFrame()
 			_cubemapPreFilter.enableCompute();
 			_requestPrefilterCubeMap = false;
 		}
+
+		++_currentFrameNum;
 		_viewer->frame();
+
+		// Currently a work around for making fit object to screen work in 
+		// single threaded context
+		// Since it depends on the setHomePosition and disableCameraManiuplator
+		// but if disable the camera before the next frame is called
+		// the setHomePosition will not take effect. 
+		// For more: see setCurrentCameraManipulatorHomePosition() 
+		if (_requestDisableCameraManipulator)
+		{
+			_viewer->frame();
+			disableCameraManipulator();
+			_requestDisableCameraManipulator = false;
+		}
 
 		// _cubemapPreFilter.saveImagesToFile("C:\\3DEngine\\temp");
 		_cubemapPreFilter.disableCompute();
@@ -281,6 +316,11 @@ double Core::getLastFrameDuration()
 	return osg::Timer::instance()->delta_s(_lastFrameStartTime, _frameStartTime);
 }
 
+double Core::getTimeElaspedSec()
+{
+	return osg::Timer::instance()->delta_s(_firstFrameStartTime, _frameStartTime);
+}
+
 bool Core::isViewerClosed()
 {
 	return _viewer->done();
@@ -288,7 +328,13 @@ bool Core::isViewerClosed()
 
 void Core::freezeCameraOnGUIDemand()
 {
-	if (_gui->isMouseOver() || _libRocketEditorGUI->isMouseOver())
+	bool isDragging = false;
+	if (!isCamLocked() && _currCamManipulatorType == FIRSTPERSON)
+	{
+		isDragging = static_cast<CustomFirstPersonManipulator *>(_viewer->getCameraManipulator())->isDragging();
+	}
+
+	if (isMouseOverAnyEditor() && !isDragging)
 	{
 		disableCameraManipulator();
 	}
@@ -303,6 +349,7 @@ void Core::freezeCameraOnGUIDemand()
 }
 
 void Core::finalize()
+
 {
 	if (!_hasInit)
 	{
@@ -323,8 +370,9 @@ void Core::finalize()
 		_hasEnvMap = true;
 	}
 
-	configGeometryObjectManipulator();
 	configAxisVisualizer();
+	configLightVisualizer();
+	configGeometryObjectManipulator();
 
 	_analysisHUD = configureViewerForMode(*_viewer, _passes, NULL, 1);
 	_analysisHUD->toggleHelper(); // disabled by default
@@ -359,6 +407,22 @@ void Core::disableCameraManipulator()
 		_savedManipulatorCam = _cam;
 		// std::cout << _savedManipulatorCam.getEyePosition() << std::endl;
 		_viewer->setCameraManipulator(NULL);
+
+		// The following intends to fix the bug that, when mouse over the gui while moving followed by 
+		// a mouse left gui, the camera will move itself in the direction you pressed before you do the 
+		// mouse over the gui. 
+		// The reason is that when you are moving, the moving bits are active in the fps camera. 
+		// However, disabling camera upon mouse over gui will block the handle() function in the fps camera, 
+		// making it not detecting keyboard release, thus not clearing the movement. Therefore, when your mouse
+		// left the gui, the camera will be active, but with the moving bits on, thus moving by itself.
+		// The fix is just to manually clear the movement after the mouse over.
+		// Update: decided to put this in the generic disableManiuplator for all cases. 
+		// Certainly there are other cases such as when moving the camera, you press 'tab' to lock the camera
+		// It is the same effect as the one written above.
+		if (_currCamManipulatorType == FIRSTPERSON)
+		{
+			static_cast<CustomFirstPersonManipulator *>(_camManipulatorTemp.get())->clearMovement();
+		}
 	}
 }
 
@@ -371,7 +435,7 @@ void Core::enableCameraManipulator()
 	_camManipulatorTemp->setHomePosition(_savedManipulatorCam.getEyePosition(),
 		_savedManipulatorCam.getLookAt(), _savedManipulatorCam.getUp());
 	_viewer->getCamera()->setProjectionMatrix(_savedManipulatorCam.getProjectionMatrix());
-	_viewer->setCameraManipulator(_camManipulatorTemp);
+	_viewer->setCameraManipulator(_camManipulatorTemp); // this implies _viewer->home();
 
 	_savedManipulatorCam = Camera();
 	_camManipulatorTemp = NULL;
@@ -405,6 +469,7 @@ void Core::setCurrentCameraManipulatorHomePosition(const osg::Vec3 &eye, const o
 	if ((cam = _viewer->getCameraManipulator()) != NULL)
 	{
 		cam->setHomePosition(eye, lookAt, up);
+		_viewer->home();
 	}
 	else
 	{
@@ -412,12 +477,14 @@ void Core::setCurrentCameraManipulatorHomePosition(const osg::Vec3 &eye, const o
 		_camManipulatorTemp->setHomePosition(eye, lookAt, up);
 		_viewer->getCamera()->setProjectionMatrix(_savedManipulatorCam.getProjectionMatrix());
 		_viewer->setCameraManipulator(_camManipulatorTemp);
+		_viewer->home();
 
 		_savedManipulatorCam = Camera();
 		_camManipulatorTemp = NULL;
 
 		// disable after changing the position
-		disableCameraManipulator();
+		// disableCameraManipulator();
+		requestDisableCameraManipulator();
 	}
 }
 
@@ -434,6 +501,22 @@ void Core::disableGeometryObjectManipulator()
 	// Actually can make it an instance.
 	_manipulatorEnabled = GeometryObjectManipulator::isVisible();
 	GeometryObjectManipulator::setVisible(false);
+}
+
+void Core::enableLightVisualizer()
+{
+	bool enabled = _passes->containsNode(_world.getLightManager()->getVisualizerRoot());
+	if (enabled) return;
+
+	_passes->addChild(_world.getLightManager()->getVisualizerRoot());
+}
+
+void Core::disableLightVisualizer()
+{
+	bool disabled = !_passes->containsNode(_world.getLightManager()->getVisualizerRoot());
+	if (disabled) return;
+
+	_passes->removeChild(_world.getLightManager()->getVisualizerRoot());
 }
 
 void Core::configSkyBox()
@@ -520,21 +603,48 @@ void Core::disableTwGUI()
 	}
 }
 
-void Core::enableGameMode()
+void Core::enableStartScreen()
 {
-	if (!_gameMode)
+	if (!_startScreenMode)
 	{
-		_gameMode = true;
+		_startScreenMode = true;
 
 		disablePassDataDisplay();
 		disableCameraManipulator();
 		disableTwGUI();
 		disableGeometryObjectManipulator();
+		disableLightVisualizer();
 
 		_libRocketEditorGUI->disableGUI();
 		_libRocketInGameGUI->enableGUI();
 
 		LibRocketGUIManager::bindDebugWindow(_libRocketInGameGUI);
+	}
+
+}
+
+void Core::disableStartScreen()
+{
+	if (_startScreenMode)
+	{
+		_startScreenMode = false;
+
+		enableTwGUI();
+		enableCameraManipulator();
+		enableGeometryObjectManipulator();
+		enableLightVisualizer();
+
+		_libRocketEditorGUI->enableGUI();
+		_libRocketInGameGUI->disableGUI();
+		LibRocketGUIManager::bindDebugWindow(_libRocketEditorGUI);
+	}
+}
+
+void Core::enableGameMode()
+{
+	if (!_gameMode)
+	{
+		_gameMode = true;
 
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
@@ -546,14 +656,6 @@ void Core::disableGameMode()
 	if (_gameMode)
 	{
 		_gameMode = false;
-
-		enableTwGUI();
-		enableCameraManipulator();
-		enableGeometryObjectManipulator();
-
-		_libRocketEditorGUI->enableGUI();
-		_libRocketInGameGUI->disableGUI();
-		LibRocketGUIManager::bindDebugWindow(_libRocketEditorGUI);
 
 		//// TODO: change back to editor key bindings
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
@@ -585,6 +687,11 @@ void Core::addEventHandler(osgGA::GUIEventHandler *handler)
 	_viewer->addEventHandler(handler);
 }
 
+bool Core::isInStartScreenMode()
+{
+	return _startScreenMode ? true : false;
+}
+
 bool Core::isInGameMode()
 {
 	return _gameMode ? true : false;
@@ -595,6 +702,12 @@ void Core::configAxisVisualizer()
 	_axisVisualizer.init();
 	_axisVisualizer.setPosition(osg::Vec3());
 	_passes->addChild(_axisVisualizer.getRoot());
+}
+
+
+void Core::configLightVisualizer()
+{
+	_passes->addChild(_world.getLightManager()->getVisualizerRoot());
 }
 
 void Core::requestPrefilterCubeMap()
@@ -609,6 +722,12 @@ void Core::requestPrefilterCubeMapWithCubeMap(osg::TextureCubeMap *cubemap)
 {
 	_requestPrefilterCubeMap = true;
 	_cubemapPreFilter.changeCubeMap(cubemap);
+}
+
+
+void Core::requestDisableCameraManipulator()
+{
+	_requestDisableCameraManipulator = true;
 }
 
 void Core::configSpecularIBLLutPass()
@@ -630,6 +749,7 @@ void Core::configSpecularIBLLutPass()
 	lightPassCam->getOrCreateStateSet()->setTextureAttributeAndModes(6, lutTex);
 }
 
+
 void Core::configLibRocketGUI()
 {
 	osgViewer::ViewerBase::Views views;
@@ -640,15 +760,16 @@ void Core::configLibRocketGUI()
 	_libRocketEditorGUI = new LibRocketGUIManager(guiPath, gc);
 	_libRocketInGameGUI = new LibRocketGUIManager(guiPath, gc);
 	_libRocketInGameGUI->disableGUI();
-	
+
 	// Create Editor GUI 
 	std::string testWindowPath = guiPath + "InEditor\\setNameWindow.rml";
-	_libRocketEditorGUI->addWindow(testWindowPath, true);
+	int id = _libRocketEditorGUI->addWindow(testWindowPath, true);
+	_libRocketEditorGUI->getWindow(id)->Hide();
 
 	_viewer->addEventHandler(_libRocketEditorGUI);
 	_sceneRoot->addChild(_libRocketEditorGUI->getRoot());
 	_viewer->addEventHandler(_libRocketInGameGUI);
-	_sceneRoot->addChild(_libRocketInGameGUI->getRoot());
+	_sceneRoot->addChild(_libRocketInGameGUI->getRoot());;
 }
 
 bool Core::isCamLocked()
@@ -711,10 +832,24 @@ bool Core::isLibRocketInEditorGUIEnabled()
 	return _libRocketEditorGUI->isGUIEnabled();
 }
 
+bool Core::isMouseOverAnyEditor()
+{
+	return _gui->isMouseOver() || _libRocketEditorGUI->isMouseOver();
+}
 
 osg::ref_ptr<LibRocketGUIManager> Core::getInGameLibRocketGUIManager()
 {
 	return _libRocketInGameGUI;
+}
+
+osg::ref_ptr<LibRocketGUIManager> Core::getInEditorLibRocketGUIManager()
+{
+	return _libRocketEditorGUI;
+}
+
+const std::string &Core::getMediaPath()
+{
+	return _mediaPath;
 }
 
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
@@ -741,6 +876,7 @@ osg::ref_ptr<SkyBox> Core::_skybox;
 std::string Core::_mediaPath;
 osg::ref_ptr<CompositorAnalysis> Core::_analysisHUD;
 
+bool Core::_startScreenMode;
 bool Core::_gameMode;
 bool Core::_passDataDisplay;
 bool Core::_guiEnabled;
@@ -749,9 +885,13 @@ bool Core::_manipulatorEnabled;
 bool Core::_isFirstFrame;
 bool Core::_allowEditorChangeProjection;
 bool Core::_requestPrefilterCubeMap = false;
+bool Core::_requestDisableCameraManipulator = false;
 
 osg::Timer_t Core::_lastFrameStartTime;
 osg::Timer_t Core::_frameStartTime;
+osg::Timer_t Core::_firstFrameStartTime;
+
+int Core::_currentFrameNum;
 
 AxisVisualizer Core::_axisVisualizer;
 

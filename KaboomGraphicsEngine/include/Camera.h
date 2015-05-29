@@ -54,6 +54,11 @@ public:
 		return _up;
 	}
 
+	inline const osg::Vec3 &getFront() const
+	{
+		return _front;
+	}
+
 	inline float getFovY() const
 	{
 		return _fovy;
@@ -62,6 +67,11 @@ public:
 	inline float getFovX() const
 	{
 		return fovYToX(_fovy, _screenSize);
+	}
+
+	inline osg::Vec2 getScreenSize() const
+	{
+		return _screenSize;
 	}
 		
 	// Setters : should only be called from the input manager of the client
@@ -80,6 +90,8 @@ public:
 	static osg::Quat eulerToQuat(float yaw, float pitch);
 	static float fovXToY(float fovx, const osg::Vec2 screenSize);
 	static float fovYToX(float fovy, const osg::Vec2 screenSize);
+
+	osg::Vec3 getScreenCenterCoord(float z);
 
 private:
 	friend class osgFX::EffectCompositor;

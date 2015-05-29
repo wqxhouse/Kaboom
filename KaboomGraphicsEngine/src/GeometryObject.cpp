@@ -181,9 +181,9 @@ void GeometryObject::setScale(const osg::Vec3 &scale)
 	mat.makeTranslate(pos);
 	mat.preMult(osg::Matrix::rotate(rot));
 
-	std::cout << mat << std::endl;
+	//std::cout << mat << std::endl;
 	mat.preMult(osg::Matrix::scale(scale));
-	std::cout << mat << std::endl;
+	//std::cout << mat << std::endl;
 
 	_objRoot->setMatrix(mat);
 }
@@ -264,21 +264,40 @@ void GeometryObject::setUpMaterialState()
 		ss->addUniform(new osg::Uniform("u_roughnessTex", 1));
 		ss->addUniform(new osg::Uniform("u_metallicTex", 2));
 		ss->addUniform(new osg::Uniform("u_normalMapTex", 3));
+
+		ss->addUniform(new osg::Uniform("u_albedoTexLerp", 0.0f));
+		ss->addUniform(new osg::Uniform("u_roughnessTexLerp", 0.0f));
+		ss->addUniform(new osg::Uniform("u_metallicTexLerp", 0.0f));
+		ss->addUniform(new osg::Uniform("u_normalMapLerp", 0.0f));
+		ss->addUniform(new osg::Uniform("u_textureOffset", osg::Vec2()));
 	}
 	else
 	{
 		ss->setAttributeAndModes(getPlainShader(), osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE);
-		ss->addUniform(new osg::Uniform("u_albedo", osg::Vec3f(_material->getAlbedo())));
-		ss->addUniform(new osg::Uniform("u_roughness", _material->getRoughness()));
-		ss->addUniform(new osg::Uniform("u_metallic", _material->getMetallic()));
-		ss->addUniform(new osg::Uniform("u_specular", _material->getSpecular()));
 	}
+
+	ss->addUniform(new osg::Uniform("u_albedo", osg::Vec3f(_material->getAlbedo())));
+	ss->addUniform(new osg::Uniform("u_roughness", _material->getRoughness()));
+	ss->addUniform(new osg::Uniform("u_metallic", _material->getMetallic()));
+	ss->addUniform(new osg::Uniform("u_specular", _material->getSpecular()));
 }
 
 void GeometryObject::updateMaterialState()
 {
+	// Before uploading uniforms, run custom update callback to update properties
+	if (_material->hasUpdateCallback() && _material->isMaterialUpdateEnabled())
+	{
+		_material->getUpdateCallback()(_material);
+	}
+
 	// TODO: make sure pass (camera) is the correct node for forward shading
 	osg::ref_ptr<osg::StateSet> ss = _materialNode->getOrCreateStateSet();
+
+	// TODO: change to UBO later // and translucent
+	ss->getUniform("u_albedo")->set(osg::Vec3f(_material->getAlbedo()));
+	ss->getUniform("u_roughness")->set(_material->getRoughness());
+	ss->getUniform("u_metallic")->set(_material->getMetallic());
+	ss->getUniform("u_specular")->set(_material->getSpecular());
 
 	if (_material->getUseTexture())
 	{
@@ -292,16 +311,13 @@ void GeometryObject::updateMaterialState()
 		ss->setTextureAttributeAndModes(2, metallicTex);
 		osg::Texture *normalMapTex = mm->getNormalMapTexture(_material);
 		ss->setTextureAttributeAndModes(3, normalMapTex);
-	}
-	else
-	{
-		// TODO: change to UBO later // and translucent
-		ss->getUniform("u_albedo")->set(osg::Vec3f(_material->getAlbedo()));
-		ss->getUniform("u_roughness")->set(_material->getRoughness());
-		ss->getUniform("u_metallic")->set(_material->getMetallic());
-		ss->getUniform("u_specular")->set(_material->getSpecular());
-	}
 
+		ss->getUniform("u_albedoTexLerp")->set(_material->getAlbedoTexLerp());
+		ss->getUniform("u_roughnessTexLerp")->set(_material->getRoughnessTexLerp());
+		ss->getUniform("u_metallicTexLerp")->set(_material->getMetallicTexLerp());
+		ss->getUniform("u_normalMapLerp")->set(_material->getNormalMapMapLerp());
+		ss->getUniform("u_textureOffset")->set(_material->getTextureOffset());
+	}
 }
 
 osg::ref_ptr<osg::Program> GeometryObject::getPlainShader()

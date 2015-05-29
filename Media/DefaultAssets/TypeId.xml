@@ -1,0 +1,37 @@
+<dynamic_objects>
+    <type id="101"> 
+        <mesh>idle2.fbx</mesh>
+        <material name="____Default" />
+        <position>0.0 0.0 -1.1</position>
+        <orientation>-0.000000 0.707107 0.707107 -0.000000</orientation>
+        <scale>0.0031 0.0031 0.0031</scale>
+    </type>
+
+    <type id="102"> 
+        <mesh>run2.fbx</mesh>
+        <material name="____Default" />
+        <position>0.0 0.0 -1.1</position>
+        <orientation>-0.000000 0.707107 0.707107 -0.000000</orientation>
+        <scale>0.0031 0.0031 0.0031</scale>
+    </type>
+    
+    <type id="1"> 
+        <mesh>DefaultAssets\GeometryObject\kaboom2_0.fbx</mesh>
+        <material name="SphereMat" />
+    </type>
+    
+    <type id="2"> 
+        <mesh>DefaultAssets\GeometryObject\timeBomb.fbx</mesh>
+        <material name="roundGroundMat" />
+    </type>
+    
+    <type id="3"> 
+        <mesh>DefaultAssets\GeometryObject\remoteBomb.fbx</mesh>
+        <material name="____TestMaterial" />
+    </type>
+    
+    <type id="201"> 
+        <mesh>DefaultAssets\GeometryObject\healthPack.fbx</mesh>
+        <material name="brick1Mat" />
+    </type>
+</dynamic_objects>

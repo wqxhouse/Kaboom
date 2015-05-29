@@ -25,26 +25,23 @@
     <Filter Include="Source Files\Network">
       <UniqueIdentifier>{9e914da2-4be1-4ac6-a499-bcf8a9566d92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Network\Events">
-      <UniqueIdentifier>{bf993038-5284-4890-b143-0b9d4e11c307}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Network\Events">
       <UniqueIdentifier>{4b97dc79-1fa6-495f-9552-820f7008f19e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Entity Component System\Components">
       <UniqueIdentifier>{551451fc-a9fb-4c26-9b1e-294e27143b4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entity Component System\Components">
-      <UniqueIdentifier>{9e933be9-d712-41e0-92fc-60720b99dc61}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{be66f7ba-63cd-4573-8dda-abf5f0a603da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Util">
       <UniqueIdentifier>{fad1e889-f9ea-4bbb-95b2-62d295f49d67}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Util">
-      <UniqueIdentifier>{4de75734-e00b-47d2-a0a2-84e3806bee01}</UniqueIdentifier>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{4cf63092-f8cd-4cba-8041-a7b952f92699}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{3940c251-c989-4148-8388-9a748ea1711e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{57c3e7cc-a628-4155-815f-f157dc3cb2e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -97,14 +94,8 @@
     <ClInclude Include="src\network\ExplosionEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\FireMode.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\util\Timer.h">
       <Filter>Header Files\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\BombContainerComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\components\EquipmentComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
@@ -133,6 +124,69 @@
     <ClInclude Include="src\network\DestroyEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\HealthEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\AmmoAmountEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\EquipEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\Vec3.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\Quat.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ScoreEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerStatusEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Player.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\IdPool.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ReloadRequestEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\InventoryComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ConnectEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\BindEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\DeathmatchMode.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\GameMode.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\PlayerComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\MatchStateEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerDeathEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerRespawnEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerRenameEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\ChatEvent.h">
+      <Filter>Header Files\Network\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">
@@ -144,60 +198,9 @@
     <ClCompile Include="src\network\EventHandlerLookup.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\Event.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\EmptyEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\PlayerInputEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\PositionEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\RotationEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="src\network\SpawnEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\AssignEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\DisconnectEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\network\ExplosionEvent.cpp">
-      <Filter>Source Files\Network\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\Timer.cpp">
-      <Filter>Source Files\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\BombContainerComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\EquipmentComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\HealthComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\PlayerStatusComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\PositionComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\RotationComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\WeaponPickupComponent.cpp">
-      <Filter>Source Files\Entity Component System\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\EntitySystem.cpp">
-      <Filter>Source Files\Entity Component System</Filter>
+    <ClCompile Include="src\core\DeathmatchMode.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

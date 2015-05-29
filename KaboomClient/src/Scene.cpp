@@ -23,9 +23,9 @@ void createInfinitePlane(GeometryObjectManager *manager, MaterialManager *matMan
 
 	osg::ref_ptr<osg::Vec2Array> quad_tcoords = new osg::Vec2Array; // texture coords
 	quad_tcoords->push_back(osg::Vec2(0, 0));
-	quad_tcoords->push_back(osg::Vec2(500, 0));
-	quad_tcoords->push_back(osg::Vec2(500, 500));
-	quad_tcoords->push_back(osg::Vec2(0, 500));
+	quad_tcoords->push_back(osg::Vec2(150, 0));
+	quad_tcoords->push_back(osg::Vec2(150, 150));
+	quad_tcoords->push_back(osg::Vec2(0, 150));
 
 	osg::ref_ptr<osg::Vec3Array> normal_coords = new osg::Vec3Array;
 	normal_coords->push_back(osg::Vec3(0, 0, 1));
@@ -52,17 +52,18 @@ void createInfinitePlane(GeometryObjectManager *manager, MaterialManager *matMan
 	// Add * in front of the name to make it un-movable;
 	manager->addGeometry("*__Huge_floor", floorGeo, osg::Vec3(0, 0, 0));
 
-	// material
-	ConfigSettings* config = ConfigSettings::config;
-	std::string str_mediaPath = "";
-	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-	matManager->createTextureMaterial("__floorMat",
-		str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_baseColor.png",
-		str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_roughness.png",
-		str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_metallic.png",
-		str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_normal.tga", osg::Texture::REPEAT);
 
-	manager->setGeometryMaterial("*__Huge_floor", matManager->getMaterial("__floorMat"));
+	// material
+	//ConfigSettings* config = ConfigSettings::config;
+	//std::string str_mediaPath = "";
+	//config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+	//matManager->createTexturedMaterial("__floorMat",
+	//	str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_baseColor.png",
+	//	str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_roughness.png",
+	//	str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_metallic.png",
+	//	str_mediaPath + "DefaultAssets\\GeometryObject\\__ground\\textures\\ground_normal.tga", osg::Texture::REPEAT);
+
+	//manager->setGeometryMaterial("*__Huge_floor", matManager->getMaterial("__floorMat"));
 }
 
 void setupScene()
@@ -90,12 +91,12 @@ void setupScene()
 	createInfinitePlane(g, m);
 	/*l->addDirectionalLight("Sun", osg::Vec3(0.1, -0.88, -0.46), osg::Vec3(0.7, 0.7, 0.7), false);*/
 
-	osg::ref_ptr<osg::Sphere> sp = new osg::Sphere;
-	osg::ref_ptr<osg::ShapeDrawable> sd = new osg::ShapeDrawable;
-	sd->setShape(sp);
-	osg::ref_ptr<osg::Geode> geode = new osg::Geode;
-	geode->addDrawable(sd);
-	g->addGeometry("sphere", geode, osg::Vec3(0, 20, 1));
+	//osg::ref_ptr<osg::Sphere> sp = new osg::Sphere;
+	//osg::ref_ptr<osg::ShapeDrawable> sd = new osg::ShapeDrawable;
+	//sd->setShape(sp);
+	//osg::ref_ptr<osg::Geode> geode = new osg::Geode;
+	//geode->addDrawable(sd);
+	//g->addGeometry("sphere", geode, osg::Vec3(0, 20, 1));
 	/*
 	m->createPlainMaterial("SphereMat", osg::Vec3(0.3, 0.3, 0.3), 0.1, 0.5, 1.0);
 	g->setGeometryMaterial("sphere", m->getMaterial("SphereMat"));

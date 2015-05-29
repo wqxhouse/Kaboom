@@ -1,41 +1,49 @@
 #pragma once
 
+#include <Winsock2.h>
+
+#include <deque>
 #include <unordered_map>
 #include <unordered_set>
 
-#include <Winsock2.h>
-#include <ws2tcpip.h>
+#include <util/IdPool.h>
 
-#include <network/NetworkData.h>
-#include <util/ConfigSettings.h>
-
-#include "NetworkServices.h"
-
-using namespace std;
+class ConfigSettings;
 
 class ServerNetwork {
 public:
-    ConfigSettings * config;
+    typedef std::unordered_set<unsigned int> IdSet;
 
-    ServerNetwork(ConfigSettings *);
+    ServerNetwork(ConfigSettings *config);
 
-    // Socket to listen for new connections
-    SOCKET ListenSocket;
+    bool acceptClient(unsigned int &playerId);
 
-    // table to keep track of each client's socket
-    std::unordered_map<unsigned int, SOCKET> sessions;
-
-    // accept new connections
-    bool acceptNewClient(unsigned int id);
-
-    // receive incoming data
-    int receive(unsigned int clientId, char *recvbuf);
+    int receive(unsigned int playerId, char *recvbuf, int bufSize);
 
     void send(char *packet, int size);
-    void send(char *packet, int size, int clientId);
+    void send(char *packet, int size, int playerId);
 
-    void removeDisconnectedClients();
-	std::unordered_set<unsigned int> disconnectedClients;
+    inline const IdSet &getDisconnectedPlayerIds() const {
+        return disconnectedPlayerIds;
+    }
+
+    void removeDisconnectedPlayers();
+
 private:
-    
+    typedef std::unordered_map<unsigned int, SOCKET> IdToSocketMap;
+
+    struct Packet {
+        char *data;
+        int size;
+    };
+
+    SOCKET listenSocket;
+
+    IdPool playerIdPool;
+    IdToSocketMap sessions;
+    IdSet disconnectedPlayerIds;
+
+    std::unordered_map<unsigned int, std::deque<Packet>> packetQueues;
+
+    void send(char *data, int size, unsigned int playerId, SOCKET socket);
 };

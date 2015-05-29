@@ -1,17 +1,12 @@
 #pragma once
 
-#include <systems/EntitySystem.h>
+#include "EntityProcessingSystem.h"
 
-class Game;
-
-class InputSystem : public EntitySystem {
+class InputSystem : public EntityProcessingSystem {
 public:
     InputSystem(Game *game);
 
     virtual bool checkEntity(Entity *entity);
 
     virtual void processEntity(Entity *entity);
-
-private:
-    Game *game;
 };

@@ -1,4 +1,13 @@
-<material name="SphereMat" type="plain">
+<?xml version="1.0" encoding="utf - 8"?>
+<materialList>
+	<material name="____Default" type="plain">
+		<albedo>0.100000 0.300000 0.900000</albedo>
+		<roughness>0.500000</roughness>
+		<specular>0.500000</specular>
+		<metallic>0.000000</metallic>
+	</material>
+
+	<material name="SphereMat" type="plain">
 		<albedo>0.300000 0.300000 0.300000</albedo>
 		<roughness>0.100000</roughness>
 		<specular>0.500000</specular>
@@ -12,9 +21,25 @@
 		<metallic>0.000000</metallic>
 	</material>
 
+	<material name="____TestMaterial" type="plain">
+		<albedo>0.800000 0.200000 0.200000</albedo>
+		<roughness>0.500000</roughness>
+		<specular>0.500000</specular>
+		<metallic>0.000000</metallic>
+	</material>
+
+	<material name="____TestMaterial2" type="textured">
+		<albedoTex>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_baseColor.png</albedoTex>
+		<roughnessTex>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_roughness.png</roughnessTex>
+		<metallicTex>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_metallic.png</metallicTex>
+		<normalPath>C:\Users\melapier\Downloads\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_normal.tga</normalPath>
+	</material>
+
 	<material name="brick1Mat" type="plain">
 		<albedo>1.000000 0.980392 0.184314</albedo>
 		<roughness>0.350000</roughness>
 		<specular>0.500000</specular>
 		<metallic>0.490000</metallic>
 	</material>
+
+</materialList>

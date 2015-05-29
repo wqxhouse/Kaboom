@@ -9,8 +9,7 @@ PlayerInputEvent::PlayerInputEvent(
         bool movingLeft,
         bool movingRight,
         bool jumping,
-        bool attacking1,
-        bool attacking2,
+        bool firing,
         float yaw,
         float pitch)
         : Event(EVENT_PLAYER_INPUT, sizeof(PlayerInputEvent)),
@@ -20,8 +19,7 @@ PlayerInputEvent::PlayerInputEvent(
           movingLeft(movingLeft),
           movingRight(movingRight),
           jumping(jumping),
-          attacking1(attacking1),
-          attacking2(attacking2),
+          firing(firing),
           yaw(yaw),
           pitch(pitch) {
 }
@@ -54,12 +52,8 @@ bool PlayerInputEvent::isJumping() const {
     return jumping;
 }
 
-bool PlayerInputEvent::isAttacking1() const {
-    return attacking1;
-}
-
-bool PlayerInputEvent::isAttacking2() const {
-    return attacking2;
+bool PlayerInputEvent::isFiring() const {
+    return firing;
 }
 
 float PlayerInputEvent::getYaw() const {

@@ -8,16 +8,20 @@
 #include <osgDB/Options>
 #include <osgDB/XmlParser>
 
+#include "GeometryCache.h"
 #include "GeometryObject.h"
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
 #include "MaterialManager.h"
+#include "ParticleEffectManager.h"
 
 World::World()
 {
 	_geomManager = new GeometryObjectManager;
 	_materialManager = new MaterialManager;
 	_lightManager = new LightManager;
+	_particleEffectManager = new ParticleEffectManager;
+	_cache = new GeometryCache;
 }
 
 World::~World()
@@ -25,6 +29,16 @@ World::~World()
 	delete _geomManager;
 	delete _materialManager;
 	delete _lightManager;
+	delete _particleEffectManager;
+	delete _cache;
+}
+
+void World::loadXMLFile(const std::string &filePath)
+{
+	XMLLoader::loadXMLFile(filePath);
+
+	std::size_t found = filePath.find("\\World\\");
+	_worldPath = filePath.substr(0, found);
 }
 
 void World::loadXMLNode(osgDB::XmlNode *xmlRoot)
@@ -76,10 +90,15 @@ void World::createModelFromXML(osgDB::XmlNode* xmlNode)
 			std::string file;
 			loadString(xmlChild, file);
 
-			model = osgDB::readNodeFile(file);
+			model = _cache->getNodeByFileName(file);
 			if (!_geomManager->addGeometry(name, model, file)) {
-				std::cout << "createModelFromXML(): " << name << " failed to create" << std::endl;
-				return;
+				std::cout << "createModelFromXML(): " << name << " failed to create, trying to find if it exists already..." << std::endl;
+				if (_geomManager->getGeometryObject(name) != NULL) {
+					std::cout << "  => found " + name + " in the GeometryObjectManager" << std::endl;
+					continue;
+				} else {
+					std::cout << "  => not found in GeometryObjectManager... break." << std::endl;
+				}
 			}
 		}
 		else if (childName == "material") {
@@ -131,7 +150,7 @@ void World::createLightFromXML(osgDB::XmlNode* xmlNode)
 	std::string name = xmlNode->properties["name"];
 	std::string type = xmlNode->properties["type"];
 	osg::Vec3 color, position, direction;
-	float radius;
+	float radius, intensity = 1.0f;
 	bool doShadow;
 
 	for (unsigned int i = 0; i < xmlNode->children.size(); ++i)
@@ -150,6 +169,9 @@ void World::createLightFromXML(osgDB::XmlNode* xmlNode)
 		else if (childName == "direction") {
 			loadVec3(xmlChild, direction);
 		}
+		else if (childName == "intensity") {
+			loadFloat(xmlChild, intensity);
+		}
 		else if (childName == "radius") {
 			loadFloat(xmlChild, radius);
 		}
@@ -159,9 +181,9 @@ void World::createLightFromXML(osgDB::XmlNode* xmlNode)
 	}
 
 	if (type == "point") {
-		_lightManager->addPointLight(name, position, color, radius, doShadow);
+		_lightManager->addPointLight(name, position, color, radius, doShadow, intensity);
 	}
 	else if (type == "directional") {
-		_lightManager->addDirectionalLight(name, direction, color, doShadow);
+		_lightManager->addDirectionalLight(name, direction, color, doShadow, intensity);
 	}
 }

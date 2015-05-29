@@ -1,40 +1,28 @@
 #pragma once
+
 #include <string>
 #include <unordered_map>
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <btBulletDynamicsCommon.h>
-
-#include <osg/Node>
-#include <osgDB/XmlParser>
-
-#include <osg/MatrixTransform>
-
-#include <osgbCollision/GLDebugDrawer.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <util/Configuration.h>
-#include <util/ConfigSettings.h>
 
-#include "OsgBulletDebugViewer.h"
-
-
+class ConfigSettings;
 class Entity;
 
 class World {
 public:
-    World(ConfigSettings * );
+    typedef std::unordered_map<std::string, Configuration> SpawnPointToConfigMap;
 
-    void loadMap();
+    World(ConfigSettings* configSettings);
 
-	void loadMapFromXML(const std::string &mapXMLFile);
+    void load(const std::string &mapFilename, const std::string &entitiesFilename);
 
-    void stepSimulation(float timeStep, int maxSubSteps);
-	
-    void addRigidBody(btRigidBody *rigidBody);
+    virtual void stepSimulation(float timeStep, int maxSubSteps);
 
-	void addRigidBodyAndConvertToOSG(btRigidBody *rigidBody);
-
-    void removeRigidBody(btRigidBody *rigidBody);
+    virtual void addRigidBody(btRigidBody *rigidBody);
+    virtual void removeRigidBody(btRigidBody *rigidBody);
 
     void addTrigger(btGhostObject *ghostObject);
     void removeTrigger(btGhostObject *ghostObject);
@@ -43,25 +31,11 @@ public:
 
     void onTick(btScalar timeStep);
 
-    const btCollisionDispatcher &getDispatcher() const;
+    inline SpawnPointToConfigMap &getSpawnPointConfigs() {
+        return spawnPointConfigs;
+    }
 
-	void renderDebugFrame();
-
-	void debugDrawWorld(); //use for updating the debug world frame
-
-private:
-    class TriggerCallback;
-
-	std::string mediaPath;
-
-	bool debugMode;
-
-	std::unordered_map<std::string, Configuration> osgNodeConfigMap;
-
-	OsgBulletDebugViewer* debugViewer;
-
-	ConfigSettings* config;
-
+protected:
     btDbvtBroadphase broadphase;
     btDefaultCollisionConfiguration collisionConfiguration;
     btCollisionDispatcher dispatcher;
@@ -69,19 +43,16 @@ private:
 
     btDiscreteDynamicsWorld world;
 
+private:
+    ConfigSettings* configSettings;
+
+    SpawnPointToConfigMap spawnPointConfigs;
+
     void addStaticPlane(btVector3 origin, btVector3 normal);
     void addStaticPlane(btVector3 origin, btVector3 normal, btQuaternion rotation);
 
-	void handleCollision(Entity *entityA, Entity *entityB, const btManifoldPoint &contactPoint) const; 
-	bool isCollidingGround(const btManifoldPoint &contactPoint) const;
-};
+    void handleCollision(Entity *entityA, Entity *entityB, const btManifoldPoint &contactPoint) const;
+    void handleTrigger(Entity *entityA, Entity *entityB, const btManifoldPoint &contactPoint) const;
 
-class World::TriggerCallback : public btGhostPairCallback {
-public:
-    virtual btBroadphasePair *addOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1);
-    virtual void *removeOverlappingPair(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1, btDispatcher* dispatcher);
-
-private:
-    void addTriggerEntity(Entity *entityA, Entity *entityB) const;
-    void removeTriggerEntity(Entity *entityA, Entity *entityB) const;
+    bool isCollidingGround(const btManifoldPoint &contactPoint) const;
 };

@@ -1,30 +1,39 @@
 #include "EntityConfigLookup.h"
 
+#include <util/Configuration.h>
+
 #include "BombConfigLoader.h"
 #include "CharacterConfigLoader.h"
 
-const EntityConfigLookup& EntityConfigLookup::instance() {
-    static bool initialized = false;
-    static EntityConfigLookup instance;
+bool EntityConfigLookup::initialized = false;
+EntityConfigLookup EntityConfigLookup::instance;
 
+const Configuration &EntityConfigLookup::get(EntityType type) {
     if (!initialized) {
-        instance.load("data-server/bombs.xml");
-        instance.load("data-server/characters.xml");
-
-        initialized = true;
+        initialize();
     }
 
-    return instance;
+    return instance.config.at(type);
 }
 
-void EntityConfigLookup::load(const std::string &filename) {
-    BombConfigLoader bombConfigLoader(config);
-    bombConfigLoader.load(filename);
-
-    CharacterConfigLoader charConfigLoader(config);
-    charConfigLoader.load(filename);
+void EntityConfigLookup::initialize() {
+    if (!initialized) {
+        initialized = true;
+        load();
+    }
 }
 
-const Configuration &EntityConfigLookup::operator[](EntityType type) const {
-    return config.at(type);
+void EntityConfigLookup::load() {
+    instance.loadBombConfig("data-server/bombs.xml");
+    instance.loadCharacterConfig("data-server/characters.xml");
+}
+
+void EntityConfigLookup::loadBombConfig(const std::string &filename) {
+    BombConfigLoader loader(config);
+    loader.load(filename);
+}
+
+void EntityConfigLookup::loadCharacterConfig(const std::string &filename) {
+    CharacterConfigLoader loader(config);
+    loader.load(filename);
 }

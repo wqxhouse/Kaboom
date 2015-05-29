@@ -3,20 +3,24 @@
 #include <string>
 #include <unordered_map>
 
-#include <util/Configuration.h>
-
+class Configuration;
 enum EntityType;
 
 class EntityConfigLookup {
 public:
-    static const EntityConfigLookup& instance();
-
-    void load(const std::string &filename);
-
-    const Configuration &operator[](EntityType type) const;
+    static const Configuration &get(EntityType type);
+    static void load();
 
 private:
-    EntityConfigLookup() {}
+    static bool initialized;
+    static EntityConfigLookup instance;
+
+    static void initialize();
 
     std::unordered_map<EntityType, Configuration> config;
+
+    EntityConfigLookup() {}
+
+    void loadBombConfig(const std::string &filename);
+    void loadCharacterConfig(const std::string &filename);
 };

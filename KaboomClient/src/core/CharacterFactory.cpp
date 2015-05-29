@@ -4,11 +4,17 @@
 #include <osg/MatrixTransform>
 #include <osg/Shape>
 #include <osg/ShapeDrawable>
-
+#include <components/HealthComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
+#include <components/PlayerStatusComponent.h>
 #include <core/EntityManager.h>
 #include "../components/SceneNodeComponent.h"
+#include "../components/ModelComponent.h"
+#include "Model.h"
+#include "Core.h"
+#include "GeometryCache.h"
+#include "util/ConfigSettings.h"
 
 CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
@@ -17,27 +23,21 @@ CharacterFactory::CharacterFactory(EntityManager &entityManager)
 Entity *CharacterFactory::createCharacter(
         unsigned int id,
         EntityType characterType,
-        float x,
-        float y,
-        float z,
-        float yaw,
-        float pitch) const {
+        const Vec3 &position,
+        Quat rotation) const {
     Entity *entity = entityManager.createEntity(id, characterType);
-	osg::ref_ptr<osg::Capsule> capsule = new osg::Capsule(osg::Vec3(), 0.5f, 1.0f);
-	osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(capsule);
-    osg::ref_ptr<osg::Geode> model = new osg::Geode;
-    model->addDrawable(drawable);
 
-    osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
-    transformation->addChild(model);
+	Model *model;
+	model = new Model(IDLE, true);
+	model->addAnimationById(RUNNING);
+	model->playAnimation(IDLE);
 
-    osg::ref_ptr<osg::Group> playerNode = new osg::Group;
-
-    playerNode->addChild(transformation);
-
-    entity->attachComponent(new SceneNodeComponent(playerNode));
-    entity->attachComponent(new PositionComponent(x, y, z));
-    entity->attachComponent(new RotationComponent(yaw, pitch));
+	entity->attachComponent(new ModelComponent(model));
+	entity->attachComponent(new SceneNodeComponent(model->getRootNode()));
+    entity->attachComponent(new PositionComponent(position));
+    entity->attachComponent(new RotationComponent(rotation));
+	entity->attachComponent(new HealthComponent(100,100));
+	entity->attachComponent(new PlayerStatusComponent());
 
     return entity;
 }

@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <osg/Vec3>
 
+class LightVisualizer;
 class Light;
 class LightManager
 {
@@ -13,13 +14,15 @@ public:
 	bool addDirectionalLight(const std::string &name,
 		const osg::Vec3 &dirToWorld,
 		const osg::Vec3 &color,
-		bool castShadow);
+		bool castShadow,
+		float intensity = 1.0f);
 
 	bool addPointLight(const std::string &name,
 		const osg::Vec3 &position,
 		const osg::Vec3 &color,
 		float radius, 
-		bool castShadow);
+		bool castShadow,
+		float intensity = 1.0f);
 
 	void deleteLight(const std::string &name);
 	bool renameLight(const std::string &oldName, const std::string &newName);
@@ -36,6 +39,7 @@ public:
 		return _numLights;
 	}
 
+	osg::ref_ptr<osg::MatrixTransform> getVisualizerRoot();
 	Light *getLight(const std::string &name);
 	Light *getLight(int index);
 
@@ -44,5 +48,6 @@ private:
 	std::vector<Light *> _lights;
 	int _numLights;
 
+	LightVisualizer *_visualizer;
 };
 

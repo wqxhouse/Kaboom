@@ -8,13 +8,16 @@
 #include "../messaging/CollisionMessage.h"
 
 bool KaboomV2MessageHandler::handle(const Message &message) const {
-    if (message.getType() != MessageType::COLLISION) {
-        return false;
+    switch (message.getType()) {
+        case MessageType::COLLISION: {
+            return handle(static_cast<const CollisionMessage &>(message));
+        }
     }
 
-    auto &msg = static_cast<const CollisionMessage &>(message);
+    return false;
+}
 
-    msg.getEntity()->attachComponent(new ExplosionComponent());
-
+bool KaboomV2MessageHandler::handle(const CollisionMessage &message) const {
+    message.getEntity()->attachComponent(new ExplosionComponent());
     return true;
 }

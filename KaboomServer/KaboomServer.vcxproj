@@ -27,95 +27,146 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\JetpackComponent.cpp" />
     <ClCompile Include="src\core\BombConfigLoader.cpp" />
     <ClCompile Include="src\core\EntityConfigLookup.cpp" />
     <ClCompile Include="src\core\BombFactory.cpp" />
     <ClCompile Include="src\core\CharacterConfigLoader.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
-    <ClCompile Include="src\core\OsgBulletDebugViewer.cpp" />
+    <ClCompile Include="src\core\GameModeConfigLoader.cpp" />
+    <ClCompile Include="src\core\JumpPadFactory.cpp" />
+    <ClCompile Include="src\core\MapConfigLoader.cpp" />
     <ClCompile Include="src\core\OsgObjectConfigLoader.cpp" />
     <ClCompile Include="src\core\PickupFactory.cpp" />
     <ClCompile Include="src\core\CharacterFactory.cpp" />
     <ClCompile Include="src\core\World.cpp" />
+    <ClCompile Include="src\core\WorldLoader.cpp" />
+    <ClCompile Include="src\debug\DebugWorld.cpp" />
+    <ClCompile Include="src\debug\OsgBulletDebugViewer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\util.cpp" />
+    <ClCompile Include="src\messaging\BombDropDespawnMessageHandler.cpp" />
+    <ClCompile Include="src\messaging\BombDropMessageHandler.cpp" />
+    <ClCompile Include="src\messaging\BombPickupMessageHandler.cpp" />
     <ClCompile Include="src\messaging\DefaultCharacterMessageHandler.cpp" />
     <ClCompile Include="src\messaging\DefaultExplosionMessageHandler.cpp" />
+    <ClCompile Include="src\messaging\JumpPadMessageHandler.cpp" />
     <ClCompile Include="src\messaging\KaboomV2MessageHandler.cpp" />
     <ClCompile Include="src\messaging\MessageHandlerChain.cpp" />
+    <ClCompile Include="src\messaging\RemoteDetonatorMessageHandler.cpp" />
     <ClCompile Include="src\messaging\TimeBombMessageHandler.cpp" />
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
+    <ClCompile Include="src\network\EquipEventHandler.cpp" />
     <ClCompile Include="src\network\GameServer.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerRenameEventHandler.cpp" />
+    <ClCompile Include="src\network\ReloadRequestEventHandler.cpp" />
     <ClCompile Include="src\network\ServerEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ServerNetwork.cpp" />
     <ClCompile Include="src\systems\CollisionSystem.cpp" />
+    <ClCompile Include="src\systems\DeathSystem.cpp" />
+    <ClCompile Include="src\systems\DestroySystem.cpp" />
+    <ClCompile Include="src\systems\EntityProcessingSystem.cpp" />
     <ClCompile Include="src\systems\ExplosionSystem.cpp" />
     <ClCompile Include="src\systems\FiringSystem.cpp" />
     <ClCompile Include="src\systems\InitializationSystem.cpp" />
     <ClCompile Include="src\systems\InputSystem.cpp" />
+    <ClCompile Include="src\systems\JumpPadSpawnSystem.cpp" />
+    <ClCompile Include="src\systems\JumpPadSystem.cpp" />
     <ClCompile Include="src\systems\PhysicsSystem.cpp" />
+    <ClCompile Include="src\systems\PickupSpawnSystem.cpp" />
     <ClCompile Include="src\systems\PickupSystem.cpp" />
+    <ClCompile Include="src\systems\CharacterSpawnSystem.cpp" />
     <ClCompile Include="src\systems\SystemManager.cpp" />
     <ClCompile Include="src\systems\TimerSystem.cpp" />
+    <ClCompile Include="src\systems\VoidSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\CharacterRotationComponent.h" />
     <ClInclude Include="src\components\CollisionComponent.h" />
+    <ClInclude Include="src\components\DeathComponent.h" />
+    <ClInclude Include="src\components\DestroyComponent.h" />
     <ClInclude Include="src\components\DetonatorComponent.h" />
     <ClInclude Include="src\components\ExplosionComponent.h" />
     <ClInclude Include="src\components\InputComponent.h" />
     <ClInclude Include="src\components\JetpackComponent.h" />
     <ClInclude Include="src\components\JumpComponent.h" />
+    <ClInclude Include="src\components\JumpPadComponent.h" />
     <ClInclude Include="src\components\MessageHandlerComponent.h" />
+    <ClInclude Include="src\components\OwnerComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
+    <ClInclude Include="src\components\RespawnComponent.h" />
     <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
     <ClInclude Include="src\core\BombConfigLoader.h" />
-    <ClInclude Include="src\core\common.h" />
     <ClInclude Include="src\core\EntityConfigLookup.h" />
     <ClInclude Include="src\core\BombFactory.h" />
     <ClInclude Include="src\core\CharacterConfigLoader.h" />
     <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\core\OsgBulletDebugViewer.h" />
+    <ClInclude Include="src\core\GameModeConfigLoader.h" />
+    <ClInclude Include="src\core\JumpPadFactory.h" />
+    <ClInclude Include="src\core\MapConfigLoader.h" />
     <ClInclude Include="src\core\OsgObjectConfigLoader.h" />
     <ClInclude Include="src\core\PickupFactory.h" />
     <ClInclude Include="src\core\CharacterFactory.h" />
     <ClInclude Include="src\core\World.h" />
+    <ClInclude Include="src\core\WorldLoader.h" />
+    <ClInclude Include="src\debug\DebugWorld.h" />
+    <ClInclude Include="src\debug\OsgBulletDebugViewer.h" />
     <ClInclude Include="src\math\util.h" />
     <ClInclude Include="src\messaging\Attack1Message.h" />
     <ClInclude Include="src\messaging\Attack2Message.h" />
+    <ClInclude Include="src\messaging\BombDropDespawnMessage.h" />
+    <ClInclude Include="src\messaging\BombDropDespawnMessageHandler.h" />
+    <ClInclude Include="src\messaging\BombDropMessage.h" />
+    <ClInclude Include="src\messaging\BombDropMessageHandler.h" />
+    <ClInclude Include="src\messaging\BombPickupMessageHandler.h" />
+    <ClInclude Include="src\messaging\CharacterSpawnMessage.h" />
     <ClInclude Include="src\messaging\CollisionMessage.h" />
     <ClInclude Include="src\messaging\DefaultCharacterMessageHandler.h" />
     <ClInclude Include="src\messaging\DefaultExplosionMessageHandler.h" />
     <ClInclude Include="src\messaging\ExplosionMessage.h" />
+    <ClInclude Include="src\messaging\JumpPadMessage.h" />
+    <ClInclude Include="src\messaging\JumpPadMessageHandler.h" />
     <ClInclude Include="src\messaging\KaboomV2MessageHandler.h" />
     <ClInclude Include="src\messaging\Message.h" />
     <ClInclude Include="src\messaging\MessageHandler.h" />
     <ClInclude Include="src\messaging\MessageHandlerChain.h" />
     <ClInclude Include="src\messaging\MessageType.h" />
     <ClInclude Include="src\messaging\NoAttackMessage.h" />
+    <ClInclude Include="src\messaging\PickupMessage.h" />
+    <ClInclude Include="src\messaging\RemoteDetonatorMessageHandler.h" />
     <ClInclude Include="src\messaging\TimerExpiredMessage.h" />
     <ClInclude Include="src\messaging\TimeBombMessageHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
+    <ClInclude Include="src\network\EquipEventHandler.h" />
     <ClInclude Include="src\network\GameServer.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
+    <ClInclude Include="src\network\PlayerRenameEventHandler.h" />
+    <ClInclude Include="src\network\ReloadRequestEventHandler.h" />
     <ClInclude Include="src\network\ServerEventHandlerLookup.h" />
     <ClInclude Include="src\network\ServerNetwork.h" />
     <ClInclude Include="src\systems\CollisionSystem.h" />
+    <ClInclude Include="src\systems\DeathSystem.h" />
+    <ClInclude Include="src\systems\DestroySystem.h" />
+    <ClInclude Include="src\systems\EntityProcessingSystem.h" />
     <ClInclude Include="src\systems\ExplosionSystem.h" />
     <ClInclude Include="src\systems\FiringSystem.h" />
     <ClInclude Include="src\systems\InitializationSystem.h" />
     <ClInclude Include="src\systems\InputSystem.h" />
+    <ClInclude Include="src\systems\JumpPadSpawnSystem.h" />
+    <ClInclude Include="src\systems\JumpPadSystem.h" />
     <ClInclude Include="src\systems\PhysicsSystem.h" />
+    <ClInclude Include="src\systems\PickupSpawnSystem.h" />
     <ClInclude Include="src\systems\PickupSystem.h" />
+    <ClInclude Include="src\systems\CharacterSpawnSystem.h" />
     <ClInclude Include="src\systems\SystemManager.h" />
     <ClInclude Include="src\systems\TimerSystem.h" />
+    <ClInclude Include="src\systems\VoidSystem.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -129,12 +180,16 @@
   <ItemGroup>
     <Xml Include="data-server\bombs.xml" />
     <Xml Include="data-server\characters.xml" />
+    <Xml Include="data-server\game-modes.xml" />
+    <Xml Include="data-server\map.xml" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\BugList.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\SharedConfig\Config.ini" />
+    <Text Include="..\SharedConfig\Config.ini">
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56B7232B-1CBB-489A-B34A-EDF3151698B6}</ProjectGuid>

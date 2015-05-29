@@ -15,6 +15,7 @@ CustomFirstPersonManipulator::CustomFirstPersonManipulator(int flag)
 {
 	_movingForward = _movingBackward = _movingLeft = _movingRight = false;
 	_metersPerSec = 10.0;
+	_isDragging = false;
 }
 
 CustomFirstPersonManipulator::~CustomFirstPersonManipulator()
@@ -30,6 +31,34 @@ void CustomFirstPersonManipulator::setWalkingSpeed(float metersPerSec)
 float CustomFirstPersonManipulator::getWalkingSpeed()
 {
 	return _metersPerSec;
+}
+
+bool CustomFirstPersonManipulator::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us)
+{
+	// disable scrolling for scaling
+	if (ea.getEventType() == GUIEventAdapter::SCROLL)
+	{
+		return false;
+	}
+
+	return StandardManipulator::handle(ea, us);
+}
+
+bool CustomFirstPersonManipulator::handleMouseDrag(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
+{
+	_isDragging = true;
+	return StandardManipulator::handleMouseDrag(ea, us);
+}
+
+bool CustomFirstPersonManipulator::handleMouseRelease(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
+{
+	_isDragging = false;
+	return StandardManipulator::handleMouseRelease(ea, us);
+}
+
+bool CustomFirstPersonManipulator::isDragging()
+{
+	return _isDragging;
 }
 
 bool CustomFirstPersonManipulator::handleFrame(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us)
@@ -108,4 +137,12 @@ bool CustomFirstPersonManipulator::handleKeyUp(const osgGA::GUIEventAdapter &ea,
 	}
 
 	return StandardManipulator::handleKeyUp(ea, us);
+}
+
+void CustomFirstPersonManipulator::clearMovement()
+{
+	_movingLeft = false;
+	_movingRight = false;
+	_movingForward = false;
+	_movingBackward = false;
 }

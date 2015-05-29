@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "SkyBox.h"
 #include "AxisVisualizer.h"
+#include "LightVisualizer.h"
 #include "CubeMapPreFilter.h"
 
 #include "TwGUIManager.h"
@@ -21,7 +22,7 @@ namespace osgLibRocket
 class Core
 {
 public:
-	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath);
+	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath, osg::Node *soundRoot);
 
 	static osg::Vec2 getScreenSize();
 
@@ -29,8 +30,10 @@ public:
 	static void loadTypeIdFile(const std::string &filePath);
 	static void loadWorldFile(const std::string &worldFilePath);
 	static World &getWorldRef();
+	static osg::ref_ptr<TwGUIManager> getEditorGUI();
 
 	static Camera &getMainCamera();
+	static const std::string &getMediaPath();
 
 	static void AdvanceFrame();
 	static void finalize();
@@ -64,20 +67,30 @@ public:
 	static void disableLibRocketInEditorGUI();
 	static bool isLibRocketInEditorGUIEnabled();
 	static osg::ref_ptr<LibRocketGUIManager> getInGameLibRocketGUIManager();
+	static osg::ref_ptr<LibRocketGUIManager> getInEditorLibRocketGUIManager();
 
+	static void enableStartScreen();
+	static void disableStartScreen();
 	static void enableGameMode();
 	static void disableGameMode();
 
 	static void enableGeometryObjectManipulator();
 	static void disableGeometryObjectManipulator();
 
+	static void enableLightVisualizer();
+	static void disableLightVisualizer();
+
 	static void setEditorFPSCamWalkingSpeed(float metersPerSec);
 	static float getEditorFPSCamWalkingSpeed();
 
+	static bool isInStartScreenMode();
 	static bool isInGameMode();
 	static bool isCamLocked();
-	static double getLastFrameDuration();
 	static bool isViewerClosed();
+	static bool isMouseOverAnyEditor();
+
+	static double getLastFrameDuration();
+	static double getTimeElaspedSec();
 
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 
@@ -86,6 +99,8 @@ public:
 
 	static void requestPrefilterCubeMap();
 	static void requestPrefilterCubeMapWithCubeMap(osg::TextureCubeMap *cubemap);
+
+	static void requestDisableCameraManipulator();
 
 	// static void run();
 
@@ -108,9 +123,11 @@ private:
 	static void configSpecularIBLLutPass();
 	static void configGeometryPass();
 	static void configLightPass();
+	static void configParticlePass();
 
 	static void configFilePath();
 	static void configAxisVisualizer();
+	static void configLightVisualizer();
 
 	static void configLibRocketGUI();
 
@@ -151,6 +168,7 @@ private:
 	static enum CamManipulatorType _currCamManipulatorType;
 
 	// on screen flags
+	static bool _startScreenMode;
 	static bool _gameMode;
 	static bool _passDataDisplay;
 	static bool _guiEnabled;
@@ -160,9 +178,13 @@ private:
 
 	static bool _allowEditorChangeProjection;
 	static bool _requestPrefilterCubeMap;
+	static bool _requestDisableCameraManipulator;
 
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 
+	static osg::Timer_t _firstFrameStartTime;
+
+	static int _currentFrameNum;
 
 	static AxisVisualizer _axisVisualizer;
 	static CubeMapPreFilter _cubemapPreFilter;

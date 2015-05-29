@@ -1,9 +1,9 @@
 #include "OsgObjectConfigLoader.h"
 
-#include "common.h"
+#include <util/Configuration.h>
 
 OsgObjectConfigLoader::OsgObjectConfigLoader(std::unordered_map<std::string, Configuration> &config)
-    : config(config) {
+        : config(config) {
 }
 
 void OsgObjectConfigLoader::load(const std::string &filename) {
@@ -67,7 +67,7 @@ void OsgObjectConfigLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string
 	} else if (valueType == "string") {
 		std::string val;
 		loadString(xmlNode, val);
-		config[modelName].set(xmlNode->name.c_str(), val.c_str());
+		config[modelName].set(xmlNode->name.c_str(), val);
 	} else if (valueType == "vector3") {
 		osg::Vec3 val;
 		loadVec3(xmlNode, val);

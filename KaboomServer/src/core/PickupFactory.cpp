@@ -8,35 +8,58 @@
 #include <core/Entity.h>
 #include <core/EntityManager.h>
 
+#include "../components/RespawnComponent.h"
+#include "../components/MessageHandlerComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../messaging/BombPickupMessageHandler.h"
+#include "../messaging/MessageHandlerChain.h"
 
 PickupFactory::PickupFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
 }
 
 Entity *PickupFactory::createPickup(
-        const EntityType &pickupType,
-        unsigned int amount,
-        float x,
-        float y,
-        float z) const {
-    const float PICKUP_RADIUS = 1.0f;
+        EntityType type,
+        const Vec3 &position,
+        int amount,
+		float radius) const {
 
-    Entity *entity = entityManager.createEntity(pickupType);
+    Entity *entity = entityManager.createEntity(type);
+
+    createBase(entity, position, amount, radius);
+
+    if ((type & CAT_MASK) == CAT_BOMB) {
+        createBombPickup(entity);
+    }
+
+    return entity;
+}
+
+void PickupFactory::createBase(Entity *entity, const Vec3 &position, int amount, float radius) const {
+    const EntityType type = entity->getType();
 
     btTransform worldTrans;
     worldTrans.setIdentity();
-    worldTrans.setOrigin(btVector3(x, y, z));
+    worldTrans.setOrigin(btVector3(position.x, position.y, position.z));
 
     btGhostObject *ghostObject = new btGhostObject();
-    ghostObject->setCollisionShape(new btSphereShape(PICKUP_RADIUS));
+    ghostObject->setCollisionShape(new btSphereShape(radius));
     ghostObject->setUserPointer(entity);
     ghostObject->setWorldTransform(worldTrans);
 
-    entity->attachComponent(new PositionComponent(x, y, z));
+    MessageHandlerChain *chain = new MessageHandlerChain();
+
+    entity->attachComponent(new PositionComponent(position));
     entity->attachComponent(new RotationComponent());
     entity->attachComponent(new TriggerComponent(ghostObject));
-    entity->attachComponent(new WeaponPickupComponent(pickupType, amount));
+    entity->attachComponent(new WeaponPickupComponent(type, amount));
+    entity->attachComponent(new MessageHandlerComponent(chain));
+}
 
-    return entity;
+void PickupFactory::createBombPickup(Entity *entity) const {
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    static BombPickupMessageHandler bombPickupHandler;
+    chain->addHandler(&bombPickupHandler);
 }

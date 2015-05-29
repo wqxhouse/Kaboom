@@ -1,10 +1,12 @@
 #pragma once
 
 #include <network/Event.h>
+#include <network/HealthEvent.h>
 #include <network/NetworkData.h>
 #include "ClientNetwork.h"
 
 class ClientEventHandlerLookup;
+enum EntityType;
 
 class GameClient {
 public:
@@ -16,18 +18,15 @@ public:
 
     void sendMessage(const Event &evt) const;
 
-	unsigned int getCurrentPlayerEntityId() const;
+    void sendPlayerRenameEvent(const std::string &name) const;
+    void sendEquipEvent(EntityType type) const;
+    void sendReloadRequestEvent() const;
 
-	bool getAssignedEntity() const;
 	bool getIsConnectedToServer() const;
 
 private:
     const ClientEventHandlerLookup &eventHandlerLookup;
 
     ClientNetwork network;
-
-    bool assignedEntity;
-
-	unsigned int currentPlayerEntityId;
 
 };

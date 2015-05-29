@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<game-modes>
+    <game-mode>
+        <name type="string">Deathmatch</name>
+        <pre-match-duration type="int">11</pre-match-duration> <!-- in seconds -->
+        <match-duration type="int">22</match-duration> <!-- in seconds -->
+        <post-match-duration type="int">13</post-match-duration> <!-- in seconds -->
+    </game-mode>
+</game-modes>

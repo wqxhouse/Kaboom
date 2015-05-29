@@ -112,6 +112,6 @@ void MaterialLoader::createTexturedMaterialFromXML(osgDB::XmlNode* xmlNode)
 	setDefaultString(metallicTex);
 	setDefaultString(normalPath);
 
-	_materialManager->createTextureMaterial(name,
+	_materialManager->createTexturedMaterial(name,
 		albedoTex, roughnessTex, metallicTex, normalPath);
 }

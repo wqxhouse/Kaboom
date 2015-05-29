@@ -21,13 +21,11 @@ public:
         return static_cast<T>(properties.at(name).ptr);
     }
 
-	
-
     void set(const char *name, bool value);
     void set(const char *name, int value);
     void set(const char *name, unsigned int value);
     void set(const char *name, float value);
-    void set(const char *name, const char *value);
+    void set(const char *name, const std::string &value);
     void set(const char *name, void *value);
 	void set(const char *name, osg::Vec3 vec3);
 	void set(const char *name, osg::Vec4 vec4);
@@ -38,7 +36,7 @@ private:
         int i;
         unsigned int ui;
         float f;
-        char *s;
+        std::string s;
         void *ptr;
 		osg::Vec3 vec3;
 		osg::Vec4 vec4;

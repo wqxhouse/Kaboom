@@ -25,7 +25,7 @@ bool GeometryPicker::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAd
 	{
 		if (ea.getX() == _mX && ea.getY() == _mY)
 		{
-			if (Core::isCamLocked())
+			if (Core::isCamLocked() && !Core::isMouseOverAnyEditor())
 			{
 				pick(ea, aa);
 			}
@@ -103,6 +103,15 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 					foundNode = true;
 					break;
 				}
+				else if (name == "__LightVisualizerBillBoard")
+				{
+					// TODO: 
+					osg::Drawable *drawable = nearIntersection.drawable;
+					osg::Node *billboard = drawable->getParent(0);
+					auto visualizer = static_cast<LightVisualizerWrapper *>(billboard->getUserData())->getLightVisualizer();
+					Light *light = visualizer->getLightFromDrawable(drawable);
+					GeometryObjectManipulator::attachLight(light);
+				}
 				else if (name.substr(0, 6) == "Skybox")
 				{
 					clickedOnSkyBox = true;
@@ -122,7 +131,7 @@ void GeometryPicker::pick(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdap
 			{ 
 					std::cout << "Picking object : " << objectName << std::endl;
 					GeometryObjectManipulator::
-						changeCurrentNode(objectNode);
+						attachTransformNode(objectNode);
 			}
 		}
 	}

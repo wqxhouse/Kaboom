@@ -169,6 +169,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -180,58 +181,60 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\components\BombContainerComponent.h" />
+    <ClInclude Include="src\components\InventoryComponent.h" />
     <ClInclude Include="src\components\Component.h" />
     <ClInclude Include="src\components\EquipmentComponent.h" />
     <ClInclude Include="src\components\HealthComponent.h" />
+    <ClInclude Include="src\components\PlayerComponent.h" />
     <ClInclude Include="src\components\PlayerStatusComponent.h" />
     <ClInclude Include="src\components\PositionComponent.h" />
     <ClInclude Include="src\components\RotationComponent.h" />
     <ClInclude Include="src\components\WeaponPickupComponent.h" />
+    <ClInclude Include="src\core\DeathmatchMode.h" />
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\EntityType.h" />
-    <ClInclude Include="src\core\FireMode.h" />
+    <ClInclude Include="src\core\GameMode.h" />
+    <ClInclude Include="src\core\Player.h" />
+    <ClInclude Include="src\math\Vec3.h" />
+    <ClInclude Include="src\math\Quat.h" />
+    <ClInclude Include="src\network\AmmoAmountEvent.h" />
     <ClInclude Include="src\network\AssignEvent.h" />
+    <ClInclude Include="src\network\BindEvent.h" />
+    <ClInclude Include="src\network\ChatEvent.h" />
+    <ClInclude Include="src\network\ConnectEvent.h" />
     <ClInclude Include="src\network\DisconnectEvent.h" />
     <ClInclude Include="src\network\EmptyEvent.h" />
     <ClInclude Include="src\network\DestroyEvent.h" />
+    <ClInclude Include="src\network\EquipEvent.h" />
     <ClInclude Include="src\network\Event.h" />
     <ClInclude Include="src\network\EventHandler.h" />
     <ClInclude Include="src\network\EventHandlerLookup.h" />
     <ClInclude Include="src\network\EventOpcode.h" />
     <ClInclude Include="src\network\ExplosionEvent.h" />
+    <ClInclude Include="src\network\HealthEvent.h" />
+    <ClInclude Include="src\network\MatchStateEvent.h" />
     <ClInclude Include="src\network\NetworkData.h" />
+    <ClInclude Include="src\network\PlayerDeathEvent.h" />
     <ClInclude Include="src\network\PlayerInputEvent.h" />
+    <ClInclude Include="src\network\PlayerRenameEvent.h" />
+    <ClInclude Include="src\network\PlayerRespawnEvent.h" />
+    <ClInclude Include="src\network\PlayerStatusEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
+    <ClInclude Include="src\network\ReloadRequestEvent.h" />
     <ClInclude Include="src\network\RotationEvent.h" />
+    <ClInclude Include="src\network\ScoreEvent.h" />
     <ClInclude Include="src\network\SpawnEvent.h" />
     <ClInclude Include="src\systems\EntitySystem.h" />
+    <ClInclude Include="src\util\IdPool.h" />
     <ClInclude Include="src\util\Timer.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\BombContainerComponent.cpp" />
-    <ClCompile Include="src\components\EquipmentComponent.cpp" />
-    <ClCompile Include="src\components\HealthComponent.cpp" />
-    <ClCompile Include="src\components\PlayerStatusComponent.cpp" />
-    <ClCompile Include="src\components\PositionComponent.cpp" />
-    <ClCompile Include="src\components\RotationComponent.cpp" />
-    <ClCompile Include="src\components\WeaponPickupComponent.cpp" />
+    <ClCompile Include="src\core\DeathmatchMode.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
-    <ClCompile Include="src\network\AssignEvent.cpp" />
-    <ClCompile Include="src\network\DisconnectEvent.cpp" />
-    <ClCompile Include="src\network\EmptyEvent.cpp" />
-    <ClCompile Include="src\network\Event.cpp" />
     <ClCompile Include="src\network\EventHandlerLookup.cpp" />
-    <ClCompile Include="src\network\ExplosionEvent.cpp" />
-    <ClCompile Include="src\network\PlayerInputEvent.cpp" />
-    <ClCompile Include="src\network\PositionEvent.cpp" />
-    <ClCompile Include="src\network\RotationEvent.cpp" />
-    <ClCompile Include="src\network\SpawnEvent.cpp" />
-    <ClCompile Include="src\systems\EntitySystem.cpp" />
-    <ClCompile Include="src\util\Timer.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>

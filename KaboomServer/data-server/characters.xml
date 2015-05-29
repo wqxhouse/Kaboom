@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <characters>
     <character>
         <id type="uint">65537</id>
@@ -22,5 +22,7 @@
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
+        <running-speed type="float">5.0</running-speed>
+        <jumping-speed type="float">5.0</jumping-speed>
     </character>
 </characters>

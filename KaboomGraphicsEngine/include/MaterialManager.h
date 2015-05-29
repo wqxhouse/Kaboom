@@ -2,21 +2,22 @@
 #include <unordered_map> 
 #include <osg/Vec3>
 #include <osg/Texture>
+#include "Material.h"
 
 // TODO: built-in material
 enum MaterialBuiltIn
 {
 	DEFAULT, 
+	TEST_MATERIAL1, 
+	TEST_MATERIAL2, // TODO: make this useful, consider refactoring
 };
 
 class GeometryObject;
-class Material;
 class MaterialManager
 {
 public:
 	MaterialManager();
 	~MaterialManager();
-
 
 	inline const std::unordered_map<std::string, Material *> getMaterialMapRef() const
 	{
@@ -29,13 +30,16 @@ public:
 		float specular,
 		float metallic);
 
-	bool createTextureMaterial(const std::string &name,
+	bool createTexturedMaterial(const std::string &name,
 		const std::string &albedoPath,
 		const std::string &roughnessPath,
 		const std::string &metallicPath, 
 		const std::string &normalMapPath, 
 		osg::Texture::WrapMode mode=osg::Texture::CLAMP_TO_EDGE);
 
+	void setMaterialUpdateCallback(const std::string &name, MaterialUpdateCallback callback, void *userData = NULL);
+
+	void deleteMaterial(const std::string &name);
 	bool renameMaterial(const std::string &oldName, const std::string &newName);
 
 	bool doesNameExist(const std::string &name);
@@ -47,6 +51,8 @@ public:
 	osg::ref_ptr<osg::Texture> getRoughnessTexture(Material *m);
 	osg::ref_ptr<osg::Texture> getMetallicTexture(Material *m);
 	osg::ref_ptr<osg::Texture> getNormalMapTexture(Material *m);
+
+	void reloadBuiltInMaterials();
 
 private:
 	void createBuiltInMaterials();
@@ -71,5 +77,10 @@ private:
 	std::unordered_map<std::string, GeometryObject *> _materialGeomBinding;
 
 	std::vector<Material *> _builtInMaterial;
+
+	std::string _emptyAlbedoMapPath;
+	std::string _emptyNormalMapPath;
+	std::string _emptyMetallicMapPath;
+	std::string _emptyRoughnessMapPath;
 };
 
