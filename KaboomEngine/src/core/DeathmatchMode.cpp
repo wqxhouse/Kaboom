@@ -33,7 +33,7 @@ bool DeathmatchMode::updateMatchState() {
     switch (state) {
         case MatchState::ENTER_MAP: {
             setMatchState(MatchState::PRE_MATCH);
-            break;
+			return true;
         }
         case MatchState::PRE_MATCH: {
             if (timer.isExpired()) {
@@ -57,8 +57,8 @@ bool DeathmatchMode::updateMatchState() {
             break;
         }
         case MatchState::LEAVE_MAP: {
-            setMatchState(MatchState::ENTER_MAP);
-            break;
+			setMatchState(MatchState::ENTER_MAP);
+			return true;
         }
     }
 

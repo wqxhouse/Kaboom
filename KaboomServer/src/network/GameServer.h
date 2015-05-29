@@ -30,7 +30,7 @@ public:
     void sendConnectEvent(Player *player) const;
     void sendConnectEvent(Player *player, unsigned int receiverId) const;
     void sendDisconnectEvent(Player *player) const;
-	void sendAssignEvent(Player *player, DeathmatchMode &gameMode) const;
+	void sendAssignEvent(Player *player) const;
     void sendBindEvent(Player *player) const;
     void sendMatchStateEvent(const GameMode &gameMode) const;
 
@@ -54,7 +54,7 @@ public:
     void sendAmmoEvent(Player *player) const;
     void sendPlayerStatusEvent(Entity *entity) const;
 
-	void sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players, DeathmatchMode &gameMode) const;
+    void sendNewPlayerEvent(Player *newPlayer, const IdToPlayerMap &players, DeathmatchMode &gameMode) const;
     void sendNewPlayerEnterWorldEvent(
             Player *newPlayer,
             const IdToPlayerMap &players,

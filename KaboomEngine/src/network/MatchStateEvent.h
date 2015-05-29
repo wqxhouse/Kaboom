@@ -34,10 +34,6 @@ public:
     friend std::ostream& operator<<(std::ostream &os, const MatchStateEvent &o) {
         os << "MatchStateEvent: {" << std::endl;
         os << "    state: " << static_cast<int>(o.state) << std::endl;
-        os << "    timer: {" << std::endl;
-        os << "        duration: " << o.getTimer().getDuration() << std::endl;
-        os << "        startTime: " << o.getTimer().getStartTime() << std::endl;
-        os << "    }" << std::endl;
         os << "}";
 
         return os;
