@@ -21,7 +21,6 @@
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
 #include <network/SpawnEvent.h>
-#include <network/TimeEvent.h>
 
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
@@ -186,13 +185,6 @@ void GameClient::receive() {
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
-			case EVENT_TIME:
-			{
-				TimeEvent timeEvent;
-				timeEvent.deserialize(&networkBuffer[i]);
-				eventHandlerLookup.find(emptyEvent.getOpcode())->handle(timeEvent);
-				break;
-			}
             default: {
                 printf("error in packet event types: %d\n", emptyEvent.getOpcode());
                 return;

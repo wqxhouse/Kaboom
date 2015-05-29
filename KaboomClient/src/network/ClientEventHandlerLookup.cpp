@@ -18,7 +18,6 @@
 #include "RotationEventHandler.h"
 #include "ScoreEventHandler.h"
 #include "SpawnEventHandler.h"
-#include "TimeEventHandler.h"
 
 ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
     addHandler(EVENT_CONNECT, new ConnectEventHandler(game));
@@ -39,7 +38,6 @@ ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
     addHandler(EVENT_HEALTH, new HealthEventHandler(game));
     addHandler(EVENT_AMMO_COUNT, new AmmoAmountEventHandler(game));
     addHandler(EVENT_PLAYER_STATUS, new PlayerStatusEventHandler(game));
-    addHandler(EVENT_TIME, new TimeEventHandler(game));
 }
 
 ClientEventHandlerLookup::~ClientEventHandlerLookup() {

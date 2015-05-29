@@ -293,7 +293,6 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\network\ClientNetwork.cpp" />
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PositionEventHandler.cpp" />
-    <ClCompile Include="src\network\TimeEventHandler.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\sound\SoundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -346,7 +345,6 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\network\ClientNetwork.h" />
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PositionEventHandler.h" />
-    <ClInclude Include="src\network\TimeEventHandler.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\sound\SoundManager.h" />
     <ClInclude Include="stdafx.h" />
