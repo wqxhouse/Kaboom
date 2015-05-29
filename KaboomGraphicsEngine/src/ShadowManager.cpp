@@ -23,6 +23,8 @@ ShadowManager::ShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRo
 
 	_depthCamGroup = new osg::Group;
 	_depthCamGroup->setUpdateCallback(new DepthCamGroupCallback);
+	// disable all shaders when rendering depth
+	_depthCamGroup->getOrCreateStateSet()->setAttribute(new osg::Program(), osg::StateAttribute::OVERRIDE);
 
 	_depthCameras.resize(MAX_SHADOW_MAPS);
 	for (int i = 0; i < MAX_SHADOW_MAPS; i++)

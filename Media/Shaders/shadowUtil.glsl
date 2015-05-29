@@ -35,7 +35,6 @@ vec2 calcAtlasUVCoord(vec2 fullQuadCoord, ShadowDepthMap shadowInfo)
     return clamp(fullQuadCoord, 0, 1) * shadowInfo.tex_scale + shadowInfo.altas_uvcoord;
 }
 
-//float PCF(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, float baseBias, vec2 projSize) 
 float PCF(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, float baseBias, vec2 projSize) 
 {
     vec2 atlasCoord = calcAtlasUVCoord(projCoord.xy, shadowInfo);
@@ -55,22 +54,8 @@ float PCF(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoo
 
     sum /= 16;
     return 1.0 - clamp(sum, 0.0, 1.0);
-
-	//float sampled = textureLod(u_shadowAtlas, atlasCoord, 0);
-	//if(projCoord.z > sampled)
-	//{
-	//	return 0.5;
-	//}
-	//else
-	//{
-	//	return 1.0;
-	//}
-
-	//return clamp(projCoord.z, 0.0, 1.0);
 }
 
-//float computePointLightShadow(sampler2D u_shadowAtlas, ShadowDepthMap shadowInfo, Material material,
-//			vec3 n, vec3 l, float slopeScaledBias, float normalScaledBias, float baseBias) 
 float computePointLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 position,
 			vec3 n, vec3 l, float slopeScaledBias, float normalScaledBias, float baseBias) 
 {
@@ -107,7 +92,7 @@ float computeDirectionalLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMa
 {
     vec3 projCoord;
 	ShadowDepthMap selectedShadowInfo;
-    getPSSMCascade(depthMap, lightSMIndices, position, 0.1, projCoord, selectedShadowInfo);
+    getPSSMCascade(depthMap, lightSMIndices, position, 0.0, projCoord, selectedShadowInfo);
     vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias / 1024.0, 
 			normalScaledBias / 1024.0, n, l); // hard code resolution 
     projCoord = reprojectShadow(selectedShadowInfo, biasedPos);
