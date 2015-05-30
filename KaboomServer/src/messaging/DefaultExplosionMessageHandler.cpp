@@ -17,6 +17,7 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/OwnerComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../components/PlayerRespawnComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 
@@ -48,7 +49,7 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
         auto charPhysicsComp = nearbyEntity->getComponent<PhysicsComponent>();
         auto charHealthComp = nearbyEntity->getComponent<HealthComponent>();
 
-        if (charStatusComp == nullptr || charPhysicsComp == nullptr || charHealthComp == nullptr) {
+		if (charStatusComp == nullptr || charPhysicsComp == nullptr || charHealthComp == nullptr || nearbyEntity->hasComponent<PlayerRespawnComponent>()) {
             continue;
         }
 

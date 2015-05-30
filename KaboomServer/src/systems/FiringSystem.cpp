@@ -5,6 +5,7 @@
 #include "../components/DestroyComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/MessageHandlerComponent.h"
+#include "../components/PlayerRespawnComponent.h"
 #include "../core/Game.h"
 #include "../messaging/Attack1Message.h"
 #include "../messaging/Attack2Message.h"
@@ -18,6 +19,7 @@ FiringSystem::FiringSystem(Game *game)
 bool FiringSystem::checkEntity(Entity *entity) {
     return game->getGameMode().getMatchState() == GameMode::MatchState::IN_PROGRESS &&
             !entity->hasComponent<DestroyComponent>() &&
+			!entity->hasComponent<PlayerRespawnComponent>() &&
             entity->hasComponent<InputComponent>() &&
             entity->hasComponent<MessageHandlerComponent>();
 }
