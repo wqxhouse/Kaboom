@@ -1,15 +1,15 @@
 <dynamic_objects>
     <type id="101"> 
-        <mesh>idle2.fbx</mesh>
-        <material name="____Default" />
-        <position>0.0 0.0 -1.1</position>
-        <orientation>-0.000000 0.707107 0.707107 -0.000000</orientation>
+        <mesh>player_idle.fbx</mesh>
+        <material name="____TestMaterial" />
+        <position>1.1 0.0 -1.1</position>
+        <orientation>0.500000 -0.500000 -0.500000 0.500000</orientation>
         <scale>0.0031 0.0031 0.0031</scale>
     </type>
 
     <type id="102"> 
-        <mesh>run2.fbx</mesh>
-        <material name="____Default" />
+        <mesh>player_run.fbx</mesh>
+        <material name="____TestMaterial" />
         <position>0.0 0.0 -1.1</position>
         <orientation>-0.000000 0.707107 0.707107 -0.000000</orientation>
         <scale>0.0031 0.0031 0.0031</scale>

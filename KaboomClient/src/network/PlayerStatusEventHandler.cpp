@@ -9,6 +9,7 @@
 #include <network/PlayerStatusEvent.h>
 
 #include "../core/Game.h"
+#include <Core.h>			// For animation type-id constants
 
 PlayerStatusEventHandler::PlayerStatusEventHandler(Game *game)
         : game(game) {

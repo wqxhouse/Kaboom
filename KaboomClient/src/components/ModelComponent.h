@@ -1,13 +1,19 @@
 #pragma once
 
+#include <Core.h>
 #include <Model.h>
+#include <ModelCache.h>
 
 #include <components/Component.h>
 
 class ModelComponent : public Component {
 public:
-	ModelComponent(Model* model)
-		: model(model) {
+	ModelComponent() {
+		model = Core::getModelCache().getModel();
+	}
+
+	~ModelComponent() {
+		Core::getModelCache().releaseModel(model);
 	}
 
 	inline Model* getModel() const {

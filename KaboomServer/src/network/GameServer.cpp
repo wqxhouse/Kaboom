@@ -36,6 +36,7 @@
 #include <util/ConfigSettings.h>
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
+#include "../components/JumpComponent.h"
 
 GameServer::GameServer(ConfigSettings *config, const ServerEventHandlerLookup &eventHandlerLookup)
         : eventHandlerLookup(eventHandlerLookup) {
@@ -319,8 +320,9 @@ void GameServer::sendAmmoEvent(Player *player) const {
 
 void GameServer::sendPlayerStatusEvent(Entity *entity) const {
     PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
+	JumpComponent *jumpComp = entity->getComponent<JumpComponent>();
 
-    if (playerStatusComp == nullptr) {
+    if (playerStatusComp == nullptr && jumpComp == nullptr) {
         return;
     }
 
@@ -328,7 +330,7 @@ void GameServer::sendPlayerStatusEvent(Entity *entity) const {
             entity->getId(),
             playerStatusComp->isAlive(),
             playerStatusComp->isRunning(),
-            playerStatusComp->isJumping(),
+            jumpComp->isJumping(),
             playerStatusComp->isAttacking(),
             playerStatusComp->isDamaged());
     sendEvent(evt);
