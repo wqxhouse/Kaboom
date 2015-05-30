@@ -490,6 +490,9 @@
     <ClInclude Include="src\messaging\BombDropDespawnMessageHandler.h">
       <Filter>Header Files\Messaging\Handlers</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\PlayerRespawnComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-server\bombs.xml">
