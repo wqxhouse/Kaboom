@@ -7,7 +7,7 @@
 class PlayerRespawnComponent : public Component {
 public:
 	PlayerRespawnComponent(bool isReadyToSpawn = false)
-		: isReadyToSpawn(isReadyToSpawn) {
+		: isReadyToSpawn(isReadyToSpawn){
 	}
 
 	inline const bool getIsReadyToSpawn() const {

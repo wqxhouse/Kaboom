@@ -27,7 +27,7 @@
 #include <network/PlayerInputEvent.h>
 #include <network/PlayerRenameEvent.h>
 #include <network/PlayerRespawnEvent.h>
-#include <network/PlayerSpawnRequestEvent.h>
+#include <network/PlayerRespawnRequestEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/ReloadRequestEvent.h>

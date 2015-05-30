@@ -154,6 +154,10 @@ void InputEventHandler::onReloadRequest() {
     client.sendReloadRequestEvent();
 }
 
+void InputEventHandler::onRespawnRequest() {
+	client.sendPlayerRespawnRequestEvent();
+}
+
 //void InputEventHandler::enterGameMode() {
 //	Core::enableGameMode();
 //}

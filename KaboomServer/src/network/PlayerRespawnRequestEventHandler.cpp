@@ -1,28 +1,29 @@
+#include "PlayerRespawnRequestEventHandler.h"
 
-#include <network/PlayerSpawnRequestEvent.h>
+#include <components/EquipmentComponent.h>
 #include <core/EntityManager.h>
 #include <core/Player.h>
 
-#include "PlayerRespawnRequestEventHandler.h"
+#include <network/PlayerRespawnRequestEvent.h>
+
+#include "../components/PlayerRespawnComponent.h"
+#include "../core/Game.h"
 
 PlayerRespawnRequestEventHandler::PlayerRespawnRequestEventHandler(Game* game)
-	: game(game){
-}
+	:game(game) {
 
-
-PlayerRespawnRequestEventHandler::~PlayerRespawnRequestEventHandler()
-{
 }
 
 void PlayerRespawnRequestEventHandler::handle(const Event &e) const {
+
 	const PlayerRespawnRequestEvent &evt = static_cast<const PlayerRespawnRequestEvent &>(e);
+	Entity *entity = game->getPlayers().at(evt.getPlayerId())->getEntity();
 
-	if ()
-	///Player *player = game->getPlayers().at(evt.getPlayerId());
+	if (entity != nullptr) {
+		auto playerRespawnComp = entity->getComponent<PlayerRespawnComponent>();
+		if (playerRespawnComp != nullptr) {
+			playerRespawnComp->setIsReadyToSpawn(true);
+		}
+	}
 
-	//if (player != nullptr){
-		
-	//}
 }
-
-

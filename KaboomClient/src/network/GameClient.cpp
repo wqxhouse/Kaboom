@@ -16,11 +16,12 @@
 #include <network/PlayerRenameEvent.h>
 #include <network/PlayerRespawnEvent.h>
 #include <network/PlayerStatusEvent.h>
+#include <network/PlayerRespawnRequestEvent.h>
 #include <network/PositionEvent.h>
 #include <network/ReloadRequestEvent.h>
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
-#include <network/SpawnEvent.h>
+#include <network/SpawnEvent.h>'
 
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
@@ -223,4 +224,9 @@ void GameClient::sendReloadRequestEvent() const {
 
 bool GameClient::getIsConnectedToServer() const {
     return network.isConnected();
+}
+
+void GameClient::sendPlayerRespawnRequestEvent() const {
+	PlayerRespawnRequestEvent evt;
+	sendMessage(evt);
 }
