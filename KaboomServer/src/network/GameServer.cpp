@@ -27,6 +27,7 @@
 #include <network/PlayerInputEvent.h>
 #include <network/PlayerRenameEvent.h>
 #include <network/PlayerRespawnEvent.h>
+#include <network/PlayerSpawnRequestEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/ReloadRequestEvent.h>
@@ -72,7 +73,8 @@ void GameServer::receive(const IdToPlayerMap &players) {
         PlayerInputEvent playerInputEvent;
         PlayerRenameEvent playerRenameEvent;
         ReloadRequestEvent reloadRequestEvent;
-        EquipEvent equipEvent;
+		EquipEvent equipEvent;
+		PlayerRespawnRequestEvent playerRespawnRequestEvent;
 
         std::unordered_set<unsigned int> receivedOpcodes;
 
@@ -113,6 +115,11 @@ void GameServer::receive(const IdToPlayerMap &players) {
                     reloadRequestEvent.deserialize(&networkBuffer[i]);
                     break;
                 }
+				case EVENT_PLAYER_RESPAWN_REQUEST: {
+					playerRespawnRequestEvent.deserialize(&networkBuffer[i]);
+					playerRespawnRequestEvent.setPlayerId(player->getId());
+					break;
+				}
                 default: {
                     printf("<Server> error in packet types\n");
                     break;
@@ -137,6 +144,10 @@ void GameServer::receive(const IdToPlayerMap &players) {
         if (receivedOpcodes.count(EVENT_RELOAD_REQUEST)) {
             eventHandlerLookup.find(EVENT_RELOAD_REQUEST)->handle(reloadRequestEvent);
         }
+
+		if (receivedOpcodes.count(EVENT_PLAYER_RESPAWN_REQUEST)){
+			eventHandlerLookup.find(EVENT_PLAYER_RESPAWN_REQUEST)->handle(playerRespawnRequestEvent);
+		}
     }
 
     auto disconnectedPlayerIds = network->getDisconnectedPlayerIds();

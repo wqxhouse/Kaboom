@@ -219,6 +219,7 @@
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PlayerRenameEvent.h" />
     <ClInclude Include="src\network\PlayerRespawnEvent.h" />
+    <ClInclude Include="src\network\PlayerSpawnRequestEvent.h" />
     <ClInclude Include="src\network\PlayerStatusEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
     <ClInclude Include="src\network\ReloadRequestEvent.h" />
