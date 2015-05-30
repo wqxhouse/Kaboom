@@ -23,6 +23,10 @@
                 <id type="uint">131076</id>
                 <amount type="int">20</amount>
             </item>
+            <item>
+                <id type="uint">131077</id>
+                <amount type="int">20</amount>
+            </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>

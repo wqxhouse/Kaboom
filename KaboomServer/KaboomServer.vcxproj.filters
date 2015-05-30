@@ -244,6 +244,9 @@
     <ClCompile Include="src\messaging\SaltyMartyBombMessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\messaging\FakeBombMessageHandler.cpp">
+      <Filter>Source Files\Messaging\Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -494,6 +497,9 @@
       <Filter>Header Files\Messaging\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\messaging\SaltyMartyBombMessageHandler.h">
+      <Filter>Header Files\Messaging\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\FakeBombMessageHandler.h">
       <Filter>Header Files\Messaging\Handlers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -19,6 +19,7 @@
 #include "../components/TriggerComponent.h"
 #include "../math/util.h"
 #include "../messaging/DefaultExplosionMessageHandler.h"
+#include "../messaging/FakeBombMessageHandler.h"
 #include "../messaging/KaboomV2MessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
 #include "../messaging/RemoteDetonatorMessageHandler.h"
@@ -52,6 +53,10 @@ Entity *BombFactory::createBomb(
         }
         case SALTY_MARTY_BOMB: {
             createSaltyMartyBomb(entity);
+            break;
+        }
+        case FAKE_BOMB: {
+            createFakeBomb(entity);
             break;
         }
     }
@@ -143,6 +148,16 @@ void BombFactory::createSaltyMartyBomb(Entity *entity) const {
 
     static SaltyMartyBombMessageHandler saltyMartyBombMessageHandler;
     chain->addHandler(&saltyMartyBombMessageHandler);
+
+    entity->attachComponent(new CollisionComponent());
+}
+
+void BombFactory::createFakeBomb(Entity *entity) const {
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    static FakeBombMessageHandler fakeBombMessageHandler;
+    chain->addHandler(&fakeBombMessageHandler);
 
     entity->attachComponent(new CollisionComponent());
 }

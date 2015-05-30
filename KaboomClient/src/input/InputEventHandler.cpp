@@ -117,6 +117,11 @@ void InputEventHandler::onEquip4() {
     _game->getGameGUIEventHandler()->changeWeapon(3);
 }
 
+void InputEventHandler::onEquip5() {
+    client.sendEquipEvent(FAKE_BOMB);
+    _game->getGameGUIEventHandler()->changeWeapon(4);
+}
+
 void InputEventHandler::typeCharacter(char c)
 {
 	_game->name->push_back(c);
