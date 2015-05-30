@@ -13,6 +13,7 @@
 #include "PickupMessage.h"
 #include "../components/DestroyComponent.h"
 #include "../components/RespawnComponent.h"
+#include "../components/PlayerRespawnComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
@@ -38,7 +39,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
     for (Entity *character : nearbyEntities) {
         auto charPosComp = character->getComponent<PositionComponent>();
 
-        if (charPosComp == nullptr || !character->hasComponent<InventoryComponent>()) {
+		if (charPosComp == nullptr || !character->hasComponent<InventoryComponent>() || character->hasComponent<PlayerRespawnComponent>()) {
             continue;
         }
 
