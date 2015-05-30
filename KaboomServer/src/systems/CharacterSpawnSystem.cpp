@@ -5,7 +5,7 @@
 
 #include "../components/DestroyComponent.h"
 #include "../components/MessageHandlerComponent.h"
-#include "../components/PlayerRespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../core/Game.h"
 #include "../messaging/CharacterSpawnMessage.h"
@@ -17,7 +17,7 @@ CharacterSpawnSystem::CharacterSpawnSystem(Game *game)
 
 bool CharacterSpawnSystem::checkEntity(Entity *entity) {
     return !entity->hasComponent<DestroyComponent>() &&
-			entity->hasComponent<PlayerRespawnComponent>() &&
+			entity->hasComponent<PlayerDeathComponent>() &&
             entity->hasComponent<PlayerStatusComponent>();
 }
 
@@ -29,9 +29,9 @@ void CharacterSpawnSystem::processEntity(Entity *entity) {
     }
 
 
-	auto playerRespawnComp = entity->getComponent<PlayerRespawnComponent>();
+	auto playerDeathComp = entity->getComponent<PlayerDeathComponent>();
 
-	if (playerRespawnComp->getIsReadyToSpawn()){ //Make sure the player is ready to spawn before we respawn the player
+	if (playerDeathComp->getIsReadyToSpawn()){ //Make sure the player is ready to spawn before we respawn the player
 		
 		auto playerComp = entity->getComponent<PlayerComponent>();
 

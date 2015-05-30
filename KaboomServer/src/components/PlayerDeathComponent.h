@@ -4,9 +4,9 @@
 
 #include <components/Component.h>
 
-class PlayerRespawnComponent : public Component {
+class PlayerDeathComponent : public Component {
 public:
-	PlayerRespawnComponent(bool isReadyToSpawn = false)
+	PlayerDeathComponent(bool isReadyToSpawn = false)
 		: isReadyToSpawn(isReadyToSpawn){
 	}
 

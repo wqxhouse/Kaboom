@@ -6,7 +6,7 @@
 
 #include <network/PlayerRespawnRequestEvent.h>
 
-#include "../components/PlayerRespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../core/Game.h"
 
 PlayerRespawnRequestEventHandler::PlayerRespawnRequestEventHandler(Game* game)
@@ -20,9 +20,9 @@ void PlayerRespawnRequestEventHandler::handle(const Event &e) const {
 	Entity *entity = game->getPlayers().at(evt.getPlayerId())->getEntity();
 
 	if (entity != nullptr) {
-		auto playerRespawnComp = entity->getComponent<PlayerRespawnComponent>();
-		if (playerRespawnComp != nullptr) {
-			playerRespawnComp->setIsReadyToSpawn(true);
+		auto playerDeathComp = entity->getComponent<PlayerDeathComponent>();
+		if (playerDeathComp != nullptr) {
+			playerDeathComp->setIsReadyToSpawn(true);
 		}
 	}
 

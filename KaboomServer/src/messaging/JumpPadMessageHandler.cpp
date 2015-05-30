@@ -10,7 +10,7 @@
 #include "MessageType.h"
 #include "JumpPadMessage.h"
 #include "../components/DestroyComponent.h"
-#include "../components/PlayerRespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JumpPadComponent.h"
 #include "../components/InputComponent.h"
@@ -43,7 +43,7 @@ bool JumpPadMessageHandler::handle(const JumpPadMessage &message) const {
 		//make sure the entity is a player, and that the player is not dead or disconnected
 		if (charPosComp == nullptr || 
 			!character->hasComponent<InputComponent>()  || 
-			character->hasComponent<PlayerRespawnComponent>() || 
+			character->hasComponent<PlayerDeathComponent>() || 
 			character->hasComponent<DestroyComponent>()) {
             continue;
         }

@@ -12,8 +12,8 @@
 #include "MessageType.h"
 #include "PickupMessage.h"
 #include "../components/DestroyComponent.h"
-#include "../components/RespawnComponent.h"
-#include "../components/PlayerRespawnComponent.h"
+#include "../components/PickupRespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
@@ -39,7 +39,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
     for (Entity *character : nearbyEntities) {
         auto charPosComp = character->getComponent<PositionComponent>();
 
-		if (charPosComp == nullptr || !character->hasComponent<InventoryComponent>() || character->hasComponent<PlayerRespawnComponent>()) {
+		if (charPosComp == nullptr || !character->hasComponent<InventoryComponent>() || character->hasComponent<PlayerDeathComponent>()) {
             continue;
         }
 
@@ -83,8 +83,8 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
 
         //if the pickup has a spawn component, meaning it is a pickup that respawn over time, 
         //add it to the pickupSpawnTimer maps, for requesting a respawn, later in the future
-		if (pickup->hasComponent<RespawnComponent>()) {
-			RespawnComponent* respawnComp = pickup->getComponent<RespawnComponent>();
+		if (pickup->hasComponent<PickupRespawnComponent>()) {
+			PickupRespawnComponent* respawnComp = pickup->getComponent<PickupRespawnComponent>();
 			game->getPickupRequest().insert(std::make_pair(respawnComp->getSpawnPointName(), Timer(respawnComp->getDuration())));
         }
 

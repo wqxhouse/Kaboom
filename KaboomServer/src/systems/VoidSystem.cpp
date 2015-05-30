@@ -4,7 +4,7 @@
 #include <components/PositionComponent.h>
 #include <core/Entity.h>
 
-#include "../components/PlayerRespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../components/DestroyComponent.h"
 
 VoidSystem::VoidSystem(Game *game)
@@ -12,7 +12,7 @@ VoidSystem::VoidSystem(Game *game)
 }
 
 bool VoidSystem::checkEntity(Entity *entity) {
-    return !entity->hasComponent<PlayerRespawnComponent>() &&
+    return !entity->hasComponent<PlayerDeathComponent>() &&
 		  entity->hasComponent<PositionComponent>();
 }
 

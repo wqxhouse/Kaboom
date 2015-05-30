@@ -1,6 +1,5 @@
 #include "JumpPadSpawnSystem.h"
 
-#include "../components/RespawnComponent.h"
 #include "../core/Game.h"
 
 JumpPadSpawnSystem::JumpPadSpawnSystem(Game *game)
