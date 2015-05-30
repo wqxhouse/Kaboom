@@ -13,6 +13,11 @@
 
 #include "TwGUIManager.h"
 #include "LibRocketGUIManager.h"
+#include "ModelCache.h"
+
+// Character Animations Type-ID
+static const int IDLE = 101;
+static const int RUNNING = 102;
 
 namespace osgLibRocket
 {
@@ -29,8 +34,11 @@ public:
 	static void loadMaterialFile(const std::string &filePath);
 	static void loadTypeIdFile(const std::string &filePath);
 	static void loadWorldFile(const std::string &worldFilePath);
+	static void loadModelCache(int numPlayers);
+
 	static World &getWorldRef();
 	static osg::ref_ptr<TwGUIManager> getEditorGUI();
+	static ModelCache &getModelCache();
 
 	static Camera &getMainCamera();
 	static const std::string &getMediaPath();
@@ -150,6 +158,8 @@ private:
 	static World _world;
 	static bool _hasInit;
 	static bool _hasEnvMap;
+
+	static ModelCache _modelCache;
 
 	// mainCamera
 	friend class osgFX::EffectCompositor;

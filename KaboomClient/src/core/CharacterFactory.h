@@ -2,9 +2,6 @@
 
 #include <math/Quat.h>
 
-static const int IDLE = 101;
-static const int RUNNING = 102;
-
 class Entity;
 enum EntityType;
 class EntityManager;
