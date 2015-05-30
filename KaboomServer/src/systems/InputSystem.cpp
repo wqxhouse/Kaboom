@@ -8,7 +8,7 @@
 #include <core/EntityManager.h>
 
 #include "../components/DestroyComponent.h"
-#include "../components/PlayerRespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
@@ -27,7 +27,7 @@ InputSystem::InputSystem(Game *game)
 bool InputSystem::checkEntity(Entity *entity) {
     return game->getGameMode().getMatchState() == GameMode::MatchState::IN_PROGRESS &&
             !entity->hasComponent<DestroyComponent>() &&
-			!entity->hasComponent<PlayerRespawnComponent>() &&
+			!entity->hasComponent<PlayerDeathComponent>() &&
 		    entity->hasComponent<PositionComponent>() &&
 		    entity->hasComponent<RotationComponent>() &&
 		    entity->hasComponent<PhysicsComponent>() &&

@@ -8,7 +8,6 @@
 #include <core/Entity.h>
 #include <core/EntityManager.h>
 
-#include "../components/RespawnComponent.h"
 #include "../components/JumpPadComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../components/TriggerComponent.h"

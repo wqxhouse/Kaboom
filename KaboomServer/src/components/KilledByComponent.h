@@ -4,9 +4,9 @@
 
 class Player;
 
-class DeathComponent : public Component {
+class KilledByComponent : public Component {
 public:
-    DeathComponent(Player *killer)
+    KilledByComponent(Player *killer)
             : killer(killer) {
     }
 

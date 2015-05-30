@@ -5,7 +5,7 @@
 
 #include "../components/CharacterRotationComponent.h"
 #include "../components/CollisionComponent.h"
-#include "../components/PlayerRespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../components/DestroyComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../core/Game.h"
@@ -21,7 +21,7 @@ void PhysicsSystem::preprocessEntities(std::vector<Entity *> entities) {
 
 bool PhysicsSystem::checkEntity(Entity *entity) {
     return !entity->hasComponent<DestroyComponent>() &&
-		   !entity->hasComponent<PlayerRespawnComponent>() &&
+		   !entity->hasComponent<PlayerDeathComponent>() &&
             entity->hasComponent<PhysicsComponent>();
 }
 

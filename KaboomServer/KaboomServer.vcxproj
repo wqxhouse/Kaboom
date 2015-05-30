@@ -88,7 +88,7 @@
   <ItemGroup>
     <ClInclude Include="src\components\CharacterRotationComponent.h" />
     <ClInclude Include="src\components\CollisionComponent.h" />
-    <ClInclude Include="src\components\DeathComponent.h" />
+    <ClInclude Include="src\components\KilledByComponent.h" />
     <ClInclude Include="src\components\DestroyComponent.h" />
     <ClInclude Include="src\components\DetonatorComponent.h" />
     <ClInclude Include="src\components\ExplosionComponent.h" />
@@ -99,8 +99,8 @@
     <ClInclude Include="src\components\MessageHandlerComponent.h" />
     <ClInclude Include="src\components\OwnerComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
-    <ClInclude Include="src\components\PlayerRespawnComponent.h" />
-    <ClInclude Include="src\components\RespawnComponent.h" />
+    <ClInclude Include="src\components\PlayerDeathComponent.h" />
+    <ClInclude Include="src\components\PickupRespawnComponent.h" />
     <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
     <ClInclude Include="src\core\BombConfigLoader.h" />
