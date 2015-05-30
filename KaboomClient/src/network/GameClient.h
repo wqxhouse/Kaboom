@@ -21,6 +21,7 @@ public:
     void sendPlayerRenameEvent(const std::string &name) const;
     void sendEquipEvent(EntityType type) const;
     void sendReloadRequestEvent() const;
+	void sendPlayerRespawnRequestEvent() const;
 
 	bool getIsConnectedToServer() const;
 

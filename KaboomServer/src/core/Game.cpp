@@ -10,7 +10,7 @@
 #include <util/ConfigSettings.h>
 
 #include "../components/PhysicsComponent.h"
-#include "../components/RespawnComponent.h"
+#include "../components/PickupRespawnComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../core/GameModeConfigLoader.h"
 #include "../network/GameServer.h"
