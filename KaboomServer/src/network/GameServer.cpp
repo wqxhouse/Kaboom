@@ -192,7 +192,15 @@ void GameServer::sendBindEvent(Player *player) const {
 }
 
 void GameServer::sendMatchStateEvent(const GameMode &gameMode) const {
-    MatchStateEvent evt(gameMode.getMatchState(), gameMode.getTimer());
+    const auto remainingTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+            gameMode.getTimer().getStartTime() +
+            gameMode.getTimer().getDuration() -
+            std::chrono::high_resolution_clock::now());
+
+    MatchStateEvent evt(
+            gameMode.getMatchState(),
+            gameMode.getTimer().getDuration(),
+            remainingTime);
     sendEvent(evt);
 }
 
