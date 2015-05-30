@@ -60,6 +60,7 @@
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp" />
     <ClCompile Include="src\network\PlayerRenameEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerRespawnRequestEventHandler.cpp" />
     <ClCompile Include="src\network\ReloadRequestEventHandler.cpp" />
     <ClCompile Include="src\network\ServerEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ServerNetwork.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
     <ClInclude Include="src\network\PlayerRenameEventHandler.h" />
+    <ClInclude Include="src\network\PlayerRespawnRequestEventHandler.h" />
     <ClInclude Include="src\network\ReloadRequestEventHandler.h" />
     <ClInclude Include="src\network\ServerEventHandlerLookup.h" />
     <ClInclude Include="src\network\ServerNetwork.h" />

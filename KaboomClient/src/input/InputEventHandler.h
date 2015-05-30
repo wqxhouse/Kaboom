@@ -32,6 +32,7 @@ public:
 	void removeCharacter();
 
     void onReloadRequest();
+	void onRespawnRequest();
 
     // void enterGameMode();
     void quitGameMode();

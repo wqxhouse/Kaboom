@@ -120,6 +120,7 @@ void CharacterFactory::resetCharacter(Entity *entity, const Vec3 &position, cons
     entity->detachComponent<MessageHandlerComponent>();
     entity->detachComponent<JetpackComponent>();
     entity->detachComponent<EquipmentComponent>();
+
 	if (entity->hasComponent<PlayerRespawnComponent>()){
 		entity->detachComponent<PlayerRespawnComponent>();
 	}
