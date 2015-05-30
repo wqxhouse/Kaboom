@@ -62,6 +62,7 @@
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp" />
     <ClCompile Include="src\network\PlayerRenameEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerRespawnRequestEventHandler.cpp" />
     <ClCompile Include="src\network\ReloadRequestEventHandler.cpp" />
     <ClCompile Include="src\network\ServerEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ServerNetwork.cpp" />
@@ -89,7 +90,7 @@
   <ItemGroup>
     <ClInclude Include="src\components\CharacterRotationComponent.h" />
     <ClInclude Include="src\components\CollisionComponent.h" />
-    <ClInclude Include="src\components\DeathComponent.h" />
+    <ClInclude Include="src\components\KilledByComponent.h" />
     <ClInclude Include="src\components\DestroyComponent.h" />
     <ClInclude Include="src\components\DetonatorComponent.h" />
     <ClInclude Include="src\components\ExplosionComponent.h" />
@@ -100,7 +101,8 @@
     <ClInclude Include="src\components\MessageHandlerComponent.h" />
     <ClInclude Include="src\components\OwnerComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
-    <ClInclude Include="src\components\RespawnComponent.h" />
+    <ClInclude Include="src\components\PlayerDeathComponent.h" />
+    <ClInclude Include="src\components\PickupRespawnComponent.h" />
     <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
     <ClInclude Include="src\core\BombConfigLoader.h" />
@@ -151,6 +153,7 @@
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
     <ClInclude Include="src\network\PlayerRenameEventHandler.h" />
+    <ClInclude Include="src\network\PlayerRespawnRequestEventHandler.h" />
     <ClInclude Include="src\network\ReloadRequestEventHandler.h" />
     <ClInclude Include="src\network\ServerEventHandlerLookup.h" />
     <ClInclude Include="src\network\ServerNetwork.h" />

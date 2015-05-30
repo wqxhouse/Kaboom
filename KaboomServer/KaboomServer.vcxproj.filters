@@ -246,6 +246,9 @@
     </ClCompile>
     <ClCompile Include="src\messaging\FakeBombMessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
+	</ClCompile>
+    <ClCompile Include="src\network\PlayerRespawnRequestEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -439,12 +442,6 @@
     <ClInclude Include="src\systems\DestroySystem.h">
       <Filter>Header Files\Entity Component System\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\components\DeathComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\RespawnComponent.h">
-      <Filter>Header Files\Entity Component System\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\components\JumpPadComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
     </ClInclude>
@@ -501,6 +498,18 @@
     </ClInclude>
     <ClInclude Include="src\messaging\FakeBombMessageHandler.h">
       <Filter>Header Files\Messaging\Handlers</Filter>
+	</ClInclude>
+    <ClInclude Include="src\network\PlayerRespawnRequestEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\KilledByComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\PlayerDeathComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\PickupRespawnComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>s
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

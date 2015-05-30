@@ -5,7 +5,7 @@
 
 #include "../components/DestroyComponent.h"
 #include "../components/MessageHandlerComponent.h"
-#include "../components/RespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../core/Game.h"
 #include "../messaging/CharacterSpawnMessage.h"
@@ -17,7 +17,7 @@ CharacterSpawnSystem::CharacterSpawnSystem(Game *game)
 
 bool CharacterSpawnSystem::checkEntity(Entity *entity) {
     return !entity->hasComponent<DestroyComponent>() &&
-            entity->hasComponent<RespawnComponent>() &&
+			entity->hasComponent<PlayerDeathComponent>() &&
             entity->hasComponent<PlayerStatusComponent>();
 }
 
@@ -28,20 +28,27 @@ void CharacterSpawnSystem::processEntity(Entity *entity) {
         return;
     }
 
-    auto playerComp = entity->getComponent<PlayerComponent>();
 
-    if (playerComp != nullptr) {
-        game->getGameServer().sendPlayerRespawnEvent(playerComp->getPlayer());
-    }
+	auto playerDeathComp = entity->getComponent<PlayerDeathComponent>();
 
-    Vec3 spawnPoint = game->getPlayerSpawnPoint();
+	if (playerDeathComp->getIsReadyToSpawn()){ //Make sure the player is ready to spawn before we respawn the player
+		
+		auto playerComp = entity->getComponent<PlayerComponent>();
 
-    game->getCharacterFactory().resetCharacter(entity, spawnPoint);
-    game->getWorld().addRigidBody(entity->getComponent<PhysicsComponent>()->getRigidBody());
+		if (playerComp != nullptr) {
+			game->getGameServer().sendPlayerRespawnEvent(playerComp->getPlayer());
+		}
 
-    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
-    if (handlerComp != nullptr) {
-        CharacterSpawnMessage msg(game, entity, spawnPoint);
-        handlerComp->getHandler()->handle(msg);
-    }
+		Vec3 spawnPoint = game->getPlayerSpawnPoint();
+
+		game->getCharacterFactory().resetCharacter(entity, spawnPoint);
+		game->getWorld().addRigidBody(entity->getComponent<PhysicsComponent>()->getRigidBody());
+
+		auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+		if (handlerComp != nullptr) {
+			CharacterSpawnMessage msg(game, entity, spawnPoint);
+			handlerComp->getHandler()->handle(msg);
+		}
+	}
+
 }

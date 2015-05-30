@@ -11,7 +11,7 @@
 #include "../components/DetonatorComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/PhysicsComponent.h"
-#include "../components/RespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../core/Game.h"
 
 #include "../messaging/BombDropMessage.h"
@@ -51,7 +51,7 @@ void DeathSystem::processEntity(Entity *entity) {
         entity->detachComponent<PhysicsComponent>(); //just remove the physicsComponent for now, we might want to attach a spectator component, or local camera on the client
         entity->detachComponent<InputComponent>();
 
-        entity->attachComponent(new RespawnComponent(500));
+        entity->attachComponent(new PlayerDeathComponent());
 
         auto detonatorComp = entity->getComponent<DetonatorComponent>();
 

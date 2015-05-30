@@ -1,6 +1,6 @@
 #include "PickupSpawnSystem.h"
 
-#include "../components/RespawnComponent.h"
+#include "../components/PickupRespawnComponent.h"
 #include "../core/Game.h"
 
 PickupSpawnSystem::PickupSpawnSystem(Game *game)
@@ -32,7 +32,7 @@ void PickupSpawnSystem::process() {
                     amount,
                     radius);
             //attach a special spawn component to the pickup to indicate that it will respawn over time.
-            entity->attachComponent(new RespawnComponent(duration, spawnPointName));
+            entity->attachComponent(new PickupRespawnComponent(duration, spawnPointName));
 
             game->addEntity(entity);
             it = timers.erase(it);
