@@ -2,6 +2,7 @@
 
 #include <components/PlayerStatusComponent.h>
 #include "../components/ModelComponent.h"
+#include "../components/SoundComponent.h"
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/Entity.h>
@@ -31,15 +32,23 @@ void PlayerStatusEventHandler::handle(const Event &e) const {
 	auto playerPos = player->getComponent<PositionComponent>()->getPosition();
 	game->getSoundManager().setListenerPosition(playerPos);
 	game->getSoundManager().setListenerRotation(playerRot);
-	if (evt.isRunning()){
-		game->getSoundManager().playSound(SoundType::WALKING, bombPos);
+	auto soundComp = entity->getComponent<SoundComponent>();
+	if (evt.isRunning()&&!evt.isJumping()){
+		//game->getSoundManager().playSound(SoundType::WALKING, bombPos);
+		
+		soundComp->setListenerPosition(playerPos);
+		soundComp->setListenerRotation(playerRot);
+		soundComp->playSound(bombPos);
+	}
+	else{
+		soundComp->stopSound();
 	}
 	if (evt.isJumping()&&!playerStatusComp->getJumped()){
 		game->getSoundManager().playSound(SoundType::KABOOM_FIRE, bombPos);
 	}
-	if (evt.isJumping()){
+	
 		playerStatusComp->setJumped(evt.isJumping());
-	}
+	
 
 	auto modelComp = entity->getComponent<ModelComponent>();
 	Model* model = modelComp->getModel();

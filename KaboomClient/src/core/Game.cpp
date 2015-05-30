@@ -17,6 +17,7 @@
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
+#include <osgAudio/AudioEnvironment.h>
 
 Game::Game(ConfigSettings *config)
         : config(config),
@@ -28,6 +29,7 @@ Game::Game(ConfigSettings *config)
           client(eventHandlerLookup), 
 	      _camera(Core::getMainCamera()) {
 	name = new std::string();
+	osgAudio::AudioEnvironment::instance()->init();
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
     config->getValue(ConfigSettings::str_screenPosX, screenPosXStr);

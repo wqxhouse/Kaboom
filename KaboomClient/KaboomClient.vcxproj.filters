@@ -337,6 +337,9 @@
     <ClInclude Include="src\components\TrailingEffectComponent.h">
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\SoundComponent.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data-client\bombs.xml">
