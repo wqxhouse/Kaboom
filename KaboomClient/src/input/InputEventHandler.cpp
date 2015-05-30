@@ -109,7 +109,12 @@ void InputEventHandler::onEquip2() {
 
 void InputEventHandler::onEquip3() {
     client.sendEquipEvent(REMOTE_DETONATOR);
-	_game->getGameGUIEventHandler()->changeWeapon(2);
+    _game->getGameGUIEventHandler()->changeWeapon(2);
+}
+
+void InputEventHandler::onEquip4() {
+    client.sendEquipEvent(SALTY_MARTY_BOMB);
+    _game->getGameGUIEventHandler()->changeWeapon(3);
 }
 
 void InputEventHandler::typeCharacter(char c)

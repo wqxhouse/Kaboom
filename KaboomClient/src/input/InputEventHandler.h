@@ -26,6 +26,7 @@ public:
     void onEquip1();
     void onEquip2();
     void onEquip3();
+    void onEquip4();
 	void onTab();
 	void offTab();
 	void typeCharacter(char c);

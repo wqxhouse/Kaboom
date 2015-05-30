@@ -77,14 +77,6 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
     vel.setOsgVec3(viewDir.getOsgVec3() * launchSpeed);
 
     switch (bombType) {
-        case KABOOM_V2: {
-            Entity *bomb = factory.createBomb(bombType, pos, vel);
-            bomb->attachComponent(new OwnerComponent(entity));
-            game->addEntity(bomb);
-
-            invComp->remove(bombType);
-            break;
-        }
         case TIME_BOMB: {
             const int numBombs = bombConfig.getInt("amount");
             const float deltaAngle = bombConfig.getFloat("delta-angle");
@@ -133,6 +125,14 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
                 }
             }
 
+            break;
+        }
+        default: {
+            Entity *bomb = factory.createBomb(bombType, pos, vel);
+            bomb->attachComponent(new OwnerComponent(entity));
+            game->addEntity(bomb);
+
+            invComp->remove(bombType);
             break;
         }
     }
