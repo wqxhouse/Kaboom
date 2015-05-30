@@ -14,21 +14,22 @@ enum class SoundType {
     KABOOM_EXPLODE,
 	WALKING,
 };
+namespace ours{
+	class SoundManager {
+	public:
+		SoundManager();
+		~SoundManager();
 
-class SoundManager {
-public:
-    SoundManager();
-    ~SoundManager();
+		void loadSound(SoundType type, const std::string &filename);
 
-    void loadSound(SoundType type, const std::string &filename);
+		void playSound(SoundType type);
+		void playSound(SoundType type, const Vec3 &position);
 
-    void playSound(SoundType type);
-    void playSound(SoundType type, const Vec3 &position);
+		void setListenerPosition(const Vec3 &position) const;
+		void setListenerRotation(const Quat &rotation) const;
 
-    void setListenerPosition(const Vec3 &position) const;
-    void setListenerRotation(const Quat &rotation) const;
-
-private:
-    osgAudio::SoundState *getSound(SoundType type);
-    std::string getSoundName(SoundType type) const;
-};
+	private:
+		osgAudio::SoundState *getSound(SoundType type);
+		std::string getSoundName(SoundType type) const;
+	};
+}
