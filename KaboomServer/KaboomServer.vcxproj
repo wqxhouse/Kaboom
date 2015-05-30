@@ -53,6 +53,7 @@
     <ClCompile Include="src\messaging\KaboomV2MessageHandler.cpp" />
     <ClCompile Include="src\messaging\MessageHandlerChain.cpp" />
     <ClCompile Include="src\messaging\RemoteDetonatorMessageHandler.cpp" />
+    <ClCompile Include="src\messaging\SaltyMartyBombMessageHandler.cpp" />
     <ClCompile Include="src\messaging\TimeBombMessageHandler.cpp" />
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
     <ClCompile Include="src\network\EquipEventHandler.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="src\messaging\NoAttackMessage.h" />
     <ClInclude Include="src\messaging\PickupMessage.h" />
     <ClInclude Include="src\messaging\RemoteDetonatorMessageHandler.h" />
+    <ClInclude Include="src\messaging\SaltyMartyBombMessageHandler.h" />
     <ClInclude Include="src\messaging\TimerExpiredMessage.h" />
     <ClInclude Include="src\messaging\TimeBombMessageHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />

@@ -43,7 +43,11 @@ Entity *BombFactory::createBomb(
             break;
         }
         case REMOTE_DETONATOR: {
-			createRemoteDetonator(entity);
+            createRemoteDetonator(entity);
+            break;
+        }
+        case SALTY_MARTY_BOMB: {
+            createSaltyMartyBomb(entity);
             break;
         }
 		default:{
@@ -115,4 +119,19 @@ void BombFactory::createRemoteDetonator(Entity *entity) const {
 	GeometryObject *remote_bomb = new GeometryObject("remote", remote);
 	remote_bomb->setMaterial(mat);
 	entity->attachComponent(new SceneNodeComponent(remote_bomb->getRoot()));
+}
+
+void BombFactory::createSaltyMartyBomb(Entity *entity) const {
+    // TODO: Change geometry to salty marty bomb
+
+    GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
+
+    //Kaboom has an id of 1.
+    Material * mat = geoCache->getMaterialById(1);
+    osg::ref_ptr<osg::Node> kaboom = geoCache->getNodeById(1);
+
+    //this is a memory leak, hopefully it is not too bad.
+    GeometryObject *kaboom2_0 = new GeometryObject("kaboom", kaboom);
+    kaboom2_0->setMaterial(mat);
+    entity->attachComponent(new SceneNodeComponent(kaboom2_0->getRoot()));
 }

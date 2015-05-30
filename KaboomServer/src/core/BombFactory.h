@@ -23,4 +23,5 @@ private:
     void createKaboomV2(Entity *entity) const;
     void createTimeBomb(Entity *entity) const;
     void createRemoteDetonator(Entity *entity) const;
+    void createSaltyMartyBomb(Entity *entity) const;
 };
