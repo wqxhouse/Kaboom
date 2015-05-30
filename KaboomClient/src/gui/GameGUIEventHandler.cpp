@@ -159,11 +159,26 @@ void GameGUIEventHandler::changeTime(Game *game) const{
     const auto remainingTime = duration - (std::chrono::high_resolution_clock::now() - startTime);
     const auto remainingSeconds = std::chrono::duration_cast<std::chrono::seconds>(remainingTime);
 
-    int seconds = remainingSeconds.count() % 60;
-    int minutes = remainingSeconds.count() / 60;
+    const int seconds = remainingSeconds.count() % 60;
+    const int minutes = remainingSeconds.count() / 60;
 
-    std::string timer = std::to_string(minutes / 10) + std::to_string(minutes % 10) + ":" + std::to_string(seconds / 10) + std::to_string(seconds % 10);
-	clock->SetInnerRML(timer.c_str());
+    int minutesTensDigit = minutes / 10;
+    int minutesOnesDigit = minutes % 10;
+    int secondsTensDigit = seconds / 10;
+    int secondsOnesDigit = seconds % 10;
+    
+    if (minutesTensDigit < 0) { minutesTensDigit = 0; }
+    if (minutesOnesDigit < 0) { minutesOnesDigit = 0; }
+    if (secondsTensDigit < 0) { secondsTensDigit = 0; }
+    if (secondsOnesDigit < 0) { secondsOnesDigit = 0; }
+
+    std::string timerString =
+            std::to_string(minutesTensDigit) +
+            std::to_string(minutesOnesDigit) +
+            ":" +
+            std::to_string(secondsTensDigit) +
+            std::to_string(secondsOnesDigit);
+    clock->SetInnerRML(timerString.c_str());
 }
 
 void GameGUIEventHandler::handle(const PlayerRenameEvent &e, Player* player) const
