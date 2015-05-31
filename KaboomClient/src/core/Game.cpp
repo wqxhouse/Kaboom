@@ -18,6 +18,8 @@
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
 #include <osgAudio/AudioEnvironment.h>
+#include <osgAudio/Sample.h>
+using namespace osgAudio;
 
 Game::Game(ConfigSettings *config)
         : config(config),
@@ -91,6 +93,8 @@ Game::Game(ConfigSettings *config)
     soundManager.loadSound(SoundType::KABOOM_FIRE, "sounds\\throw.wav");
 	printf("Loading WALKING sound\n");
 	soundManager.loadSound(SoundType::WALKING, "sounds\\walking.mp3");
+	osg::ref_ptr<Sample> walk = new Sample("sounds\\walking.mp3");
+	characterFactory.setWalkingSample(walk);
     printf("Loading BASIC sound\n");
     soundManager.loadSound(SoundType::BASIC, "sounds\\a.wav");
 	
@@ -115,6 +119,7 @@ void Game::run() {
 	Rocket::Core::ElementDocument* in_game_screen_ui = guiManager->getWindow(0);
 	Rocket::Core::ElementDocument* start_screen_ui = guiManager->getWindow(1);
 	Rocket::Core::ElementDocument* name_screen_ui = guiManager->getWindow(3);
+	Rocket::Core::ElementDocument* death_screen_ui = guiManager->getWindow(4);
     //while (!Core::isViewerClosed()) { // TODO: buggy right now
     while (true) {
 		// printf("duration: %lf\n", Core::getLastFrameDuration());
@@ -136,6 +141,7 @@ void Game::run() {
 			in_game_screen_ui->Hide();
 			name_screen_ui->Hide();
 			start_screen_ui->Show();
+			death_screen_ui->Hide();
 			abc = true;
 			break;
 		}
@@ -153,7 +159,7 @@ void Game::run() {
 			in_game_screen_ui->Show();
 			start_screen_ui->Hide();
 			name_screen_ui->Hide();
-
+			death_screen_ui->Hide();
 
             bool res = client.connectToServer(serverAddress, serverPort);
 
