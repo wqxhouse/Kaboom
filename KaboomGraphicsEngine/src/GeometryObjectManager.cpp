@@ -7,6 +7,7 @@ GeometryObjectManager::GeometryObjectManager()
 {
 	_geomRoot = new osg::Group;
 	_suffix = 1;
+	_shadowedScene = new osg::Group;
 }
 
 GeometryObjectManager::~GeometryObjectManager()
@@ -19,7 +20,7 @@ GeometryObjectManager::~GeometryObjectManager()
 	_geomObjMap.clear();
 }
 
-bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, osg::Vec3 pos)
+bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, osg::Vec3 pos, bool receiveShadow)
 {
 	if (geomNode == nullptr) {
 		std::cout << "geomNode is null: " << name << std::endl;
@@ -37,10 +38,17 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 
 	_geomObjMap.insert(std::make_pair(name, geomObj));
 	_geomRoot->addChild(geomObj->getRoot());
+
+	if (receiveShadow)
+	{
+		_shadowedScene->addChild(geomObj->getRoot());
+		geomObj->setReceiveShadow(true);
+	}
+
 	return true;
 }
 
-bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName)
+bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName, bool receiveShadow)
 {
 	if (geomNode == nullptr) {
 		std::cout << "geomNode is null: " << name << std::endl;
@@ -57,10 +65,18 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 
 	_geomObjMap.insert(std::make_pair(name, geomObj));
 	_geomRoot->addChild(geomObj->getRoot());
+
+	if (receiveShadow)
+	{
+		_shadowedScene->addChild(geomObj->getRoot());
+		geomObj->setReceiveShadow(true);
+	}
+
+
 	return true;
 }
 
-bool GeometryObjectManager::addGeometryByTypeId(const std::string &name, const int type_id, osg::Vec3 pos)
+bool GeometryObjectManager::addGeometryByTypeId(const std::string &name, const int type_id, osg::Vec3 pos, bool receiveShadow)
 {
 	std::unordered_map<int, GeometryObject *>::iterator itr = _typeIdGeomMap.find(type_id);
 	if (itr == _typeIdGeomMap.end())
@@ -75,6 +91,11 @@ bool GeometryObjectManager::addGeometryByTypeId(const std::string &name, const i
 	_geomObjMap.insert(std::make_pair(name, newGeom));
 	_geomRoot->addChild(newGeom->getRoot());
 
+	if (receiveShadow)
+	{
+		_shadowedScene->addChild(newGeom->getRoot());
+	}
+
 	return true;	
 }
 
@@ -84,6 +105,11 @@ void GeometryObjectManager::deleteGeometry(const std::string &name)
 	if (_geomObjMap.find(name) != _geomObjMap.end()){
 		_geomObjMap.erase(name);
 		_geomRoot->removeChild(geomObj->getRoot());
+
+		if (geomObj->getReceiveShadow())
+		{
+			_shadowedScene->removeChild(geomObj->getRoot());
+		}
 		delete geomObj;
 	}
 }

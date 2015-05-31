@@ -2,6 +2,8 @@
 #include <osg/Texture>
 #include <osg/Polytope>
 #include <math.h> 
+#include <osg/ComputeBoundsVisitor>
+#include "Core.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
 #include "ShadowAtlas.h"
@@ -197,7 +199,11 @@ void ShadowDepthCameraCallback::makeLightSpaceMat(osg::Matrix &view, osg::Matrix
 		osg::Vec3 wsDir = dirLight->getLightToWorldDirection();
 		viewMat.makeLookAt(osg::Vec3(), wsDir, osg::Vec3(0, 0, 1));*/
 		DirectionalLight *dl = _light->asDirectionalLight();
-		makePSSMLightSpaceMat(dl, viewMat, projMat);
+		// TODO: revert back to pssm after the demo 
+		// makePSSMLightSpaceMat(dl, viewMat, projMat);
+
+		// temporarily use scene bound single shadow map
+		makeSceneBoundLightSpaceMat(dl, viewMat, projMat);
 	}
 	else if (_light->getLightType() == POINTLIGHT)
 	{
@@ -209,6 +215,67 @@ void ShadowDepthCameraCallback::makeLightSpaceMat(osg::Matrix &view, osg::Matrix
 	_currWVP = viewMat * projMat;
 	view = viewMat;
 	proj = projMat;
+}
+
+void ShadowDepthCameraCallback::makeSceneBoundLightSpaceMat(DirectionalLight *dl, osg::Matrix &view, osg::Matrix &proj)
+{
+	// compute shadowed scene bound
+	osg::ComputeBoundsVisitor cv;
+	osg::Group *shadowedScene = Core::getWorldRef().getGeometryManager()->getShadowedSceneNode();
+	shadowedScene->accept(cv);
+
+	osg::BoundingBox bbox = cv.getBoundingBox();
+
+	// find bary center
+	osg::Vec3 center = bbox.center();
+	
+	// get temp light view matrix
+	osg::Vec3 lightToWorld = dl->getLightToWorldDirection();
+	lightToWorld.normalize();
+	osg::Matrix lightView = osg::Matrix::lookAt(center, lightToWorld, osg::Vec3(0, 0, 1));
+
+	// transform bbox to light space
+	osg::Vec3 mins = osg::Vec3(FLT_MAX, FLT_MAX, FLT_MAX);
+	osg::Vec3 maxes = osg::Vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	for (int i = 0; i < 8; ++i)
+	{
+		osg::Vec3 lightSpaceCorner = bbox.corner(i) * lightView;
+		float minsX = osg::minimum(mins.x(), lightSpaceCorner.x());
+		float minsY = osg::minimum(mins.y(), lightSpaceCorner.y());
+		float minsZ = osg::minimum(mins.z(), lightSpaceCorner.z());
+		mins = osg::Vec3(minsX, minsY, minsZ);
+
+		float maxesX = osg::maximum(maxes.x(), lightSpaceCorner.x());
+		float maxesY = osg::maximum(maxes.y(), lightSpaceCorner.y());
+		float maxesZ = osg::maximum(maxes.z(), lightSpaceCorner.z());
+		maxes = osg::Vec3(maxesX, maxesY, maxesZ);
+	}
+
+	osg::Vec3 lightPos = center + (-lightToWorld) * maxes.z();
+	
+	// get final light viewMat
+	osg::Matrix lightViewFinal = osg::Matrix::lookAt(lightPos, center, osg::Vec3(0, 0, 1));
+
+	// get projection matrix
+	int filterSize = 3; // hardware 3x3 pcf filter
+	float smSize = dl->getShadowMapRes();
+	float scale = (smSize + filterSize) / static_cast<float>(smSize);
+	mins.x() *= scale;
+	mins.y() *= scale;
+	maxes.x() *= scale;
+	maxes.y() *= scale;
+
+	// osg::Matrix shadowOrthoMat = osg::Matrixd::ortho(mins.x(), maxes.x(), mins.y(), maxes.y(), 0.0, -mins.z());
+	// TODO: here hardcoded a scene far bound. (since in the game we do not include the huge sea plane
+	// into bound calc to gain higher shadow map pixel intensity. but this means we cannot use 
+	// the tight scene bound. or the sea will not correctly shaded).
+	osg::Matrix shadowOrthoMat = osg::Matrixd::ortho(mins.x(), maxes.x(), mins.y(), maxes.y(), 0.0, 2000.0);
+	view = lightViewFinal;
+	proj = shadowOrthoMat;
+
+	//lightPos = -lightToWorld * 50;
+	//view = osg::Matrix::lookAt(lightPos, osg::Vec3(0, 0, 0), osg::Vec3(0, 0, 1));
+	//proj = osg::Matrix::ortho(-100, 100, -100, 100, 0, 1000);
 }
 
 void ShadowDepthCameraCallback::makePSSMLightSpaceMat(DirectionalLight *dl, osg::Matrix &view, osg::Matrix &proj)

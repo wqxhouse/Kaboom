@@ -57,6 +57,7 @@ private:
 	// void setRegion(float l, float r, float b, float t);
 	void makeLightSpaceMat(osg::Matrix &view, osg::Matrix &proj);
 	void makePSSMLightSpaceMat(DirectionalLight *dl, osg::Matrix &view, osg::Matrix &proj);
+	void makeSceneBoundLightSpaceMat(DirectionalLight *dl, osg::Matrix &view, osg::Matrix &proj);
 	osg::Matrix calcPointLightViewMat(const osg::Vec3 &pos, int face);
 	void setShadowMapResHelper(Light *light, int resolution);
 	void setShadowMapAtlasPosHelper(Light *light, const osg::Vec2i &atlasPos, int face=-1);

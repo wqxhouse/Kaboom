@@ -50,7 +50,7 @@ void createInfinitePlane(GeometryObjectManager *manager, MaterialManager *matMan
 
 	floorGeo->addDrawable(floorGeometry);
 	// Add * in front of the name to make it un-movable;
-	manager->addGeometry("*__Huge_floor", floorGeo, osg::Vec3(0, 0, 0));
+	manager->addGeometry("*__Huge_floor", floorGeo, osg::Vec3(0, 0, 0), false);
 
 
 	// material
@@ -107,8 +107,8 @@ void setupScene()
 
 	//l->addDirectionalLight("Sun", osg::Vec3(0.1, -0.88, -0.46), osg::Vec3(0.7, 0.7, 0.7), true);
 	l->addDirectionalLight("Sun", osg::Vec3(0, -1, -1), osg::Vec3(0.7, 0.7, 0.7), true);
-	l->addPointLight("hello_world", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 100, true);
-	l->getLight("hello_world")->asPointLight()->setIntensity(2.0);
+	//l->addPointLight("hello_world", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 100, true);
+	//l->getLight("hello_world")->asPointLight()->setIntensity(2.0);
 	// l->addPointLight("super_shadow", osg::Vec3(-3, 0, 4), osg::Vec3(0, 1, 0), 100, true);
 
 }
