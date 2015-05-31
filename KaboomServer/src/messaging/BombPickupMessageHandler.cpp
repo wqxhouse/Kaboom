@@ -2,15 +2,17 @@
 
 #include <limits>
 
+#include <components/HealthComponent.h>
 #include <components/InventoryComponent.h>
 #include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <components/WeaponPickupComponent.h>
-#include <components/HealthComponent.h>
 #include <core/Entity.h>
 
 #include "Message.h"
 #include "MessageType.h"
 #include "PickupMessage.h"
+#include "TickMessage.h"
 #include "../components/DestroyComponent.h"
 #include "../components/PickupRespawnComponent.h"
 #include "../components/PlayerDeathComponent.h"
@@ -19,8 +21,13 @@
 #include "../math/util.h"
 
 bool BombPickupMessageHandler::handle(const Message &message) const {
-    if (message.getType() == MessageType::PICKUP) {
-        return handle(static_cast<const PickupMessage &>(message));
+    switch (message.getType()) {
+        case MessageType::PICKUP: {
+            return handle(static_cast<const PickupMessage &>(message));
+        }
+        case MessageType::TICK: {
+            return handle(static_cast<const TickMessage &>(message));
+        }
     }
 
     return false;
@@ -90,6 +97,26 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
 
         pickup->attachComponent(new DestroyComponent());
     }
+
+    return true;
+}
+
+bool BombPickupMessageHandler::handle(const TickMessage &message) const {
+    auto rotComp = message.getEntity()->getComponent<RotationComponent>();
+    Quat quat = rotComp->getRotation();
+    Quat delta = euler2Quat(3.0f, 0.0f, 0.0f);
+
+    btQuaternion btQuat(quat.x, quat.y, quat.z, quat.w);
+    btQuaternion btDelta(delta.x, delta.y, delta.z, delta.w);
+
+    btQuat *= btDelta;
+
+    quat.x = btQuat.getX();
+    quat.y = btQuat.getY();
+    quat.z = btQuat.getZ();
+    quat.w = btQuat.getW();
+
+    rotComp->setRotation(quat);
 
     return true;
 }

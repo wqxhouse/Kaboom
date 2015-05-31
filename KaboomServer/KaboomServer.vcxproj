@@ -145,6 +145,7 @@
     <ClInclude Include="src\messaging\PickupMessage.h" />
     <ClInclude Include="src\messaging\RemoteDetonatorMessageHandler.h" />
     <ClInclude Include="src\messaging\SaltyMartyBombMessageHandler.h" />
+    <ClInclude Include="src\messaging\TickMessage.h" />
     <ClInclude Include="src\messaging\TimerExpiredMessage.h" />
     <ClInclude Include="src\messaging\TimeBombMessageHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
