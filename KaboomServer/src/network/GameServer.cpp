@@ -232,12 +232,12 @@ void GameServer::sendPlayerRenameEvent(Player *player) const {
 
 void GameServer::sendPlayerRespawnEvent(Player *player) const {
     PlayerRespawnEvent evt;
-    sendEvent(evt);
+    sendEvent(evt, player->getId());
 }
 
 void GameServer::sendPlayerDeathEvent(Player *player) const {
     PlayerDeathEvent evt;
-    sendEvent(evt);
+    sendEvent(evt, player->getId());
 }
 
 void GameServer::sendSpawnEvent(Entity *entity) const {
