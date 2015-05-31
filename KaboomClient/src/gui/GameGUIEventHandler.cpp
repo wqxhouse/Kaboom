@@ -12,18 +12,23 @@ GameGUIEventHandler::GameGUIEventHandler(Game *game)
 void GameGUIEventHandler::handle(const HealthEvent &e, HealthComponent *healthComponent) const
 {
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
-	Rocket::Core::Element * body = window1->GetFirstChild();
-	Rocket::Core::Element *healthTable = body->GetFirstChild();
-	for (int i = 0; i < healthTable->GetNumChildren(); i++){
-		//printf("\nthe health is at %d\n", healthComponent->getAmount());
-		if (healthComponent->getAmount() / 20.0 <= i){
-			healthTable->GetChild(i)->SetProperty("background-color", "red");
-			healthTable->GetChild(i)->SetProperty("color", "red");
-			continue;
-		}
-		healthTable->GetChild(i)->SetProperty("background-color", "green");
-		healthTable->GetChild(i)->SetProperty("color", "green");
-	}
+	Rocket::Core::Element * health = window1->GetElementById("health");
+
+	int currentHP = healthComponent->getAmount();
+	if (currentHP == 100)
+		health->SetAttribute("class", "hp_100");
+	else if(currentHP >= 75)
+		health->SetAttribute("class", "hp_75");
+	else if (currentHP >= 50)
+		health->SetAttribute("class", "hp_50");
+	else if (currentHP >= 30)
+		health->SetAttribute("class", "hp_30");
+	else if (currentHP >= 15)
+		health->SetAttribute("class", "hp_15");
+	else if (currentHP > 0)
+		health->SetAttribute("class", "hp_15");
+	else
+		health->SetAttribute("class", "hp_0");
 	//win->GetChild(1);			
 }
 
@@ -37,7 +42,7 @@ void GameGUIEventHandler::handle(const AmmoAmountEvent &e, InventoryComponent *b
 	for (int i = 0; i < 3; i++)
 	{
 		int temp = e.getAmmoAmount(i);
-		ammoTable->GetChild(i)->GetFirstChild()->SetInnerRML(std::to_string(temp).c_str());
+		ammoTable->GetChild(i)->GetFirstChild()->GetChild(1)->SetInnerRML(std::to_string(temp).c_str());
 	}
 }
 void  GameGUIEventHandler::handle(const ScoreEvent &e, std::string name)const {
@@ -84,27 +89,28 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 {
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
 	Rocket::Core::Element * body = window1->GetChild(1);
-	Rocket::Core::Element *ammoTable = body->GetFirstChild();
+	//Rocket::Core::Element *ammoTable = body->GetFirstChild();
 
-	//hardcode the number amount of bomb; currently there are 3 bombs
-	for (int i = 0; i < 3; i++)
-	{
-		if (weapon == i)
-			ammoTable->GetChild(i)->SetProperty("color", "red");
-		else
-			ammoTable->GetChild(i)->SetProperty("color", "purple");
-	}
+	////hardcode the number amount of bomb; currently there are 3 bombs
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	if (weapon == i)
+	//		ammoTable->GetChild(i)->SetProperty("color", "red");
+	//	else
+	//		ammoTable->GetChild(i)->SetProperty("color", "purple");
+	//}
 
 	Rocket::Core::Element * current_bomb = window1->GetChild(2);
+	Rocket::Core::Element *bomb = current_bomb->GetFirstChild();
 	switch (weapon){
 		case 0:
-			current_bomb->SetClassNames("kaboom");
+			bomb->SetClassNames("kaboom_curr");
 			break;
 		case 1:
-			current_bomb->SetClassNames("timer");
+			bomb->SetClassNames("time_curr");
 			break;
 		case 2:
-			current_bomb->SetClassNames("remote_bomb");
+			bomb->SetClassNames("remote_curr");
 			break;
 	}
 }

@@ -14,7 +14,7 @@ void setupGUIDocuments(Game *game)
 	LibRocketGUIManager *manager = Core::getInGameLibRocketGUIManager();
 	std::string mediaPath;
 	ConfigSettings::config->getValue("MediaPath", mediaPath);
-
+	
 	std::string guiPath = mediaPath + "DefaultAssets\\LibRocketGUI\\InGame\\";
 	int i = manager->addWindow(guiPath + "window_rocket.rml", true);
 	manager->getWindow(i)->Hide();

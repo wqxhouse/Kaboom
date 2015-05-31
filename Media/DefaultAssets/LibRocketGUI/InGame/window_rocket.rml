@@ -4,76 +4,180 @@
 	<link type="text/rcss" href="rkt_new.rcss"/>
 	<link type="text/rcss" href="invader-m.rcss"/>
   <style>
+    div.kaboom_curr{
+    background-decorator: image;
+    background-image: display-kaboom.tga;
+    }
+    div.time_curr{
+    background-decorator: image;
+    background-image: display-time.tga;
+    }
+    div.remote_curr{
+    background-decorator: image;
+    background-image: display-sticky.tga;
+    }
     div.kaboom{
-      background-decorator: image;
-      background-image: kaboom2_0.tga;
+    background-decorator: image;
+    background-image: kaboom2_0.tga;
     }
     div.timer{
-      background-decorator: image;
-      background-image: timeBomb.tga;
+    background-decorator: image;
+    background-image: timeBomb.tga;
     }
     div.remote_bomb{
-      background-decorator: image;
-      background-image: remoteBomb.tga;
+    background-decorator: image;
+    background-image: remoteBomb.tga;
+    }
+    div.hp_100{
+    background-decorator: image;
+    background-image: hp-100.tga;
+    }
+    div.hp_75{
+    background-decorator: image;
+    background-image: hp-75.tga;
+    }
+    div.hp_50{
+    background-decorator: image;
+    background-image: hp-50.tga;
+    }
+    div.hp_30{
+    background-decorator: image;
+    background-image: hp-30.tga;
+    }
+    div.hp_15{
+    background-decorator: image;
+    background-image: hp-15.tga;
+    }
+    div.hp_0{
+    background-decorator: image;
+    background-image: hp-0.tga;
+    }
+    div.inner_info{
+    background-decorator: image;
+    background-image: health-KDA-display.tga;
     }
     div#items{
-      width: 50px;
-      height: 50px;
-      text-align: right;
-      display: inline-block;
-      font-size:300%;
+    background-decorator: image;
+    background-image: individual-circle.tga;
+    width: 12%;
+    height: 17%;
+    text-align: right;
+    display: inline-block;
     }
     div#current_bomb{
-      position: absolute;
-      top: 80%;
-      left : 90%;
-      width: 100px;
-      height: 100px;
-      text-align: right;
-      font-size:300%;
-    }
-    table#health_bar{
-      position: absolute;
-      top :90%;
+    position: absolute;
+    top: 70%;
+    left : 82%;
+    width: 18%;
+    height: 27%;
+
+    background-decorator: image;
+    background-image: current-bomb-display.tga;
     }
     table#bomb_counter{
-      position: absolute;
-      top: 85%;
-      left : 60%;
+    position: absolute;
+    top: 77%;
+    left : 45%;
+    }
+    div#bomb{
+    position: absolute;
+    width:50%;
+    height:50%;
+    top: 25%;
+    left: 25%;
+    }
+    div#bomb_count{
+    position: absolute;
+    background-decorator: image;
+    background-image: indiv-number-glow.tga;
+    text-align: center;
+    width: 40%;
+    height: 50%;
+    top: 50%;
+    left: 60%;
+    font-size:265%;
+    vertical-align: middle;
+    color: black;
     }
     body
     {
-      width: 100%;
-      height: 100%;
-      margin: auto;
+    width: 100%;
+    height: 100%;
+    margin: auto;
     }
     div.clock{
-      font-size:500%;
+    position: absolute;
+    left:40%;
+    background-decorator: image;
+    background-image: timer-display_v2.tga;
+    width: 20%;
+    font-size:500%;
+    text-align: center;
+    }
+    div#health{
+    position: absolute;
+    top: 68%;
+    width: 20%;
+    height: 30%;
+    }
+    div#inner{
+    position: absolute;
+    width: 95%;
+    height: 100%;
+    top: 9%;
+    }
+    div#inner_right{
+    position: absolute;
+    width: 90%;
+    height: 95%;
+    top: 8%;
+    left: 10%;
+    }
+    div#extra{
+    width: 21%;
+    height: 28.5%;
+    background-decorator: image;
+    background-image: bomb-display-extra.tga;
+    position: absolute;
+    top: 63%;
+    left : 79.5%;
     }
   </style>
 
 </head>
 <body class="window">
-  <table id="health_bar">
-    <tr>
-      <td id="1">three</td>
-      <td id="2">three</td>
-      <td id="3">three</td>
-      <td id="4">three</td>
-      <td id="5">three</td>
-    </tr>
-  </table>
+  <div id="health" class = "hp_100">
+    <div id="inner" class ="inner_info"></div>
+  </div>
   <table id="bomb_counter">
     <tr id ="bombs">
-      <td id="b1" style="margin: 4px 4px 4px 4px; color: black;"><div id="items" class ="kaboom">Kaboom</div></td>
-      <td id="b2" style="margin: 4px 4px 4px 4px; color: purple;"><div id="items" class ="timer">Timer</div></td>
-      <td id="b3" style="margin: 4px 4px 4px 4px; color: purple;"><div id="items" class="remote_bomb">Remote Bomb</div></td>
-      <td id="b4" style="margin: 4px 4px 4px 4px; color: purple;">Salt Marty Bomb</td>
-      <td id="b5" style="margin: 4px 4px 4px 4px; color: purple;">Fake Bomb</td>
+      <td id="b1">
+        <div id="items">
+          <div id="bomb" class ="kaboom"></div>
+          <div id="bomb_count"></div>
+        </div>
+      </td>
+      <td id="b2">
+        <div id="items" >
+          <div id="bomb" class ="timer"></div>
+          <div id="bomb_count"></div>
+        </div>
+      </td>
+      <td id="b3" >
+        <div id="items" >
+           <div id="bomb" class="remote_bomb"></div>
+           <div id="bomb_count"></div>
+        </div>
+      </td>
+      <!--<td id="b4" style="margin: 4px 4px 4px 4px; color: purple;">Salt Marty Bomb</td>
+      <td id="b5" style="margin: 4px 4px 4px 4px; color: purple;">Fake Bomb</td>-->
     </tr>
   </table>
-  <div id="current_bomb" class ="kaboom"></div>
+  <div id="current_bomb" >
+    <div id="inner_right" class ="kaboom_curr"></div>
+  </div>
   <div class ="clock">0:00</div>
+  <div id="extra"></div>
 </body>
 
 </rml>
