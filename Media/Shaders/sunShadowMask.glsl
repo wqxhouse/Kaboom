@@ -1,13 +1,6 @@
 #include "Shaders/constant.glsl"
 #include "Shaders/shadowUtil.glsl"
 
-struct ShadowDepthMap
-{
-	mat4 vwvp;
-	vec2 altas_uvcoord;
-	float tex_scale;
-};
-
 uniform mat4 u_vwvp_sun;
 uniform vec2 u_atlas_uvcoord_sun;
 uniform float u_tex_scale_sun;
@@ -22,6 +15,5 @@ float getSunShadowMask(vec3 vs_position, vec3 vs_normalized_normal)
 	return computeDirectionalLightShadowMask(u_shadowAtlas, vs_position, n, l, u_vwvp_sun, u_atlas_uvcoord_sun, 
 										     u_tex_scale_sun, 40.0, 60.0, 0.015);
 }
-
 
 

@@ -146,6 +146,7 @@ void main()
     //result = 1.0f - exp(-1.0 * result);
 
 	gl_FragColor = vec4(result, 1.0);
+	gl_FragColor = vec4(sunShadowMask);
 
 	// debug sample atlas
 	//vec3 l_ws = vec3(0, 0, -1);
