@@ -121,3 +121,22 @@ float computeDirectionalLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMa
 
 	return PCF(u_shadowAtlas, sdm, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE));
 }
+
+float computeDirectionalLightShadowMask(sampler2DShadow u_shadowAtlas, vec3 position, vec3 n, vec3 l, 
+	mat4 vwvp, vec2 atlasUVCoord, float texScale,
+    float slopeScaledBias, float normalScaledBias, float baseBias)
+{
+	const float resInv = 1.0 / 2048.0;
+	vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias * resInv, 
+			normalScaledBias * resInv, n, l); // hard code resolution  
+
+	ShadowDepthMap sdm;
+	sdm.vwvp = vwvp;
+	sdm.altas_uvcoord = atlasUVCoord;
+	sdm.tex_scale = texScale;
+
+	vec3 projCoord = reprojectShadow(sdm, biasedPos);
+	baseBias *= resInv;
+
+	return PCF(u_shadowAtlas, sdm, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE));
+}

@@ -57,6 +57,9 @@ public:
 	Light *getLight(const std::string &name);
 	Light *getLight(int index);
 
+	// TODO: refactor
+	DirectionalLight *getSunLight();
+
 private:
 	std::unordered_map<std::string, Light *> _lightsMap;
 	std::vector<Light *> _lights;
@@ -64,5 +67,7 @@ private:
 
 	LightVisualizer *_visualizer;
 	ShadowManager *_shadowManager;
+
+	DirectionalLight *_sunLight;
 };
 

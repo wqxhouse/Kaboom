@@ -55,7 +55,7 @@ void DirectionalLight::setShadowMapIndex(int split, int index)
 	_shadowMapInfo[split]._shadowMapIndex = index;
 }
 
-int DirectionalLight::getShadowMapIndex(int split)
+int DirectionalLight::getShadowMapIndexForSplit(int split)
 {
 	return _shadowMapInfo[split]._shadowMapIndex;
 }

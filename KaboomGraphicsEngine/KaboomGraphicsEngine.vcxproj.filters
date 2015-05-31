@@ -502,5 +502,8 @@
     <None Include="..\Media\Shaders\Samples.glsl">
       <Filter>Media\Shaders</Filter>
     </None>
+    <None Include="..\Media\Shaders\sunShadowMask.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

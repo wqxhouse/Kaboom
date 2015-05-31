@@ -73,7 +73,7 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 				dirShadowLightIds.push_back(i);
 				for (int j = 0; j < dirLight->getNumSplits(); j++)
 				{
-					shadowMapIndex[j] = dirLight->getShadowMapIndex(j);
+					shadowMapIndex[j] = dirLight->getShadowMapIndexForSplit(j);
 				}
 			}
 			else

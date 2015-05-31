@@ -29,6 +29,11 @@ public:
 		return _pointLightShadowFaceLookupTex;
 	}
 
+	inline osg::ref_ptr<osg::Texture2D> getShadowAtlas()
+	{
+		return _depthAtlasTex;
+	}
+
 	inline osg::ref_ptr<osg::Group> getRoot()
 	{
 		return _depthCamGroup;
