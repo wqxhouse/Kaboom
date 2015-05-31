@@ -3,6 +3,7 @@
 #include "MessageHandler.h"
 
 class PickupMessage;
+class TickMessage;
 
 class BombPickupMessageHandler : public MessageHandler {
 public:
@@ -10,4 +11,5 @@ public:
 
 private:
     bool handle(const PickupMessage &message) const;
+    bool handle(const TickMessage &message) const;
 };

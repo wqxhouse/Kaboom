@@ -246,7 +246,7 @@
     </ClCompile>
     <ClCompile Include="src\messaging\FakeBombMessageHandler.cpp">
       <Filter>Source Files\Messaging\Handlers</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="src\network\PlayerRespawnRequestEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
@@ -510,6 +510,9 @@
     </ClInclude>
     <ClInclude Include="src\components\PickupRespawnComponent.h">
       <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\messaging\TickMessage.h">
+      <Filter>Header Files\Messaging\Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
