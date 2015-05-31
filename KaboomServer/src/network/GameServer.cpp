@@ -394,6 +394,8 @@ void GameServer::sendNewPlayerEnterWorldEvent(
 
         ScoreEvent scoreEvent(player->getId(), player->getKills(), player->getDeaths());
         sendEvent(scoreEvent, newPlayer->getId());
+		PlayerRenameEvent playerRenameEvent(player->getId(),player->getName());
+		sendEvent(playerRenameEvent,newPlayer->getId());
     }
 
     // Tells the new player about every entity's entity ID (except itself)
