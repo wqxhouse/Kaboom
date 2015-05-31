@@ -167,10 +167,9 @@ void Game::run() {
 			{
 				gsm = GAME_MODE;
 				Core::enableGameMode();
-				if (abc){
-					client.sendPlayerRenameEvent(*name);
-					abc = false;
-				}
+				client.sendPlayerRenameEvent(*name);
+			//abc = false;
+				
 			}
 			else
 			{
