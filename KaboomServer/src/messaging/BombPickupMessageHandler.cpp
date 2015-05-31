@@ -104,7 +104,7 @@ bool BombPickupMessageHandler::handle(const PickupMessage &message) const {
 bool BombPickupMessageHandler::handle(const TickMessage &message) const {
     auto rotComp = message.getEntity()->getComponent<RotationComponent>();
     Quat quat = rotComp->getRotation();
-    Quat delta = euler2Quat(3.0f, 0.0f, 0.0f);
+    Quat delta = euler2Quat(2.0f, 0.0f, 0.0f);
 
     btQuaternion btQuat(quat.x, quat.y, quat.z, quat.w);
     btQuaternion btDelta(delta.x, delta.y, delta.z, delta.w);
