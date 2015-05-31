@@ -55,7 +55,7 @@
   <uniform name="u_projMat" type="mat4"></uniform>
   
   <uniform name="u_arrayDirectionalLight" type="int" size="1" isArray="1" />
-  <uniform name="u_arrayShadowDirectionalLight"  type="int" size="1" isArray="1" />
+  <!--<uniform name="u_arrayShadowDirectionalLight"  type="int" size="1" isArray="1" />-->
   
   <!--<uniform name="u_arrayPointLight" type="int" size="512" isArray="1" />-->
   <uniform name="u_arrayPointLight" type="int" size="256" isArray="1" />

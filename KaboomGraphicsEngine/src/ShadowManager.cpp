@@ -36,7 +36,20 @@ ShadowManager::ShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRo
 
 	_pointLightShadowFaceLookupTex = new osg::TextureCubeMap;
 	configShadowMapFaceLookupCube();
-	
+
+	//static osg::ref_ptr<osg::Camera> _abcd = new osg::Camera;
+	//_abcd->setClearDepth(1.0);
+	//_abcd->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
+	//_abcd->setClearMask(GL_DEPTH_BUFFER_BIT);
+	//_abcd->attach(osg::Camera::DEPTH_BUFFER, _depthAtlasTex.get());
+	//osg::ref_ptr<osg::Depth> depth = new osg::Depth;
+	//depth->setFunction(osg::Depth::ALWAYS);
+	//depth->setWriteMask(false);
+	//_abcd->getOrCreateStateSet()->setAttribute(depth);
+	//_abcd->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
+	//_abcd->setRenderOrder(osg::Camera::PRE_RENDER, -101);
+	//_abcd->setImplicitBufferAttachmentMask(0x0, 0x0);
+	//_depthCamGroup->addChild(_abcd);
 }
 
 ShadowManager::~ShadowManager()
