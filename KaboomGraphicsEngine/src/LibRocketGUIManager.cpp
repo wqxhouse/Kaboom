@@ -33,6 +33,7 @@ LibRocketGUIManager::LibRocketGUIManager(const std::string &guiResourcePath, osg
 		Rocket::Core::FontDatabase::LoadFontFace((_guiPath + "Resources\\Delicious-Italic.otf").c_str());
 		Rocket::Core::FontDatabase::LoadFontFace((_guiPath + "Resources\\Delicious-Bold.otf").c_str());
 		Rocket::Core::FontDatabase::LoadFontFace((_guiPath + "Resources\\Delicious-BoldItalic.otf").c_str());
+		Rocket::Core::FontDatabase::LoadFontFace((_guiPath + "Resources\\kinishinai_nbp.otf").c_str());
 
 		// TODO: add guard here for Rocket library init
 	}
