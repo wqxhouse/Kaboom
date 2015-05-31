@@ -9,6 +9,9 @@
 #include "MaterialManager.h"
 #include "Core.h"
 
+#include "DirectionalLight.h"
+#include "ShadowManager.h"
+
 GeometryObject::GeometryObject(const std::string &name, osg::Node *geomNode)
 	: _receiveShadow(true)
 {
@@ -282,6 +285,15 @@ void GeometryObject::setUpMaterialState()
 	ss->addUniform(new osg::Uniform("u_roughness", _material->getRoughness()));
 	ss->addUniform(new osg::Uniform("u_metallic", _material->getMetallic()));
 	ss->addUniform(new osg::Uniform("u_specular", _material->getSpecular()));
+
+	ss->addUniform(new osg::Uniform("u_vwvp_sun", osg::Matrixf()));
+	ss->addUniform(new osg::Uniform("u_atlas_uvcoord_sun", osg::Vec2()));
+	ss->addUniform(new osg::Uniform("u_tex_scale_sun", 0.0f));
+	ss->addUniform(new osg::Uniform("u_shadowAtlas", 4));
+	ss->addUniform(new osg::Uniform("u_dirFromSun_vs", osg::Vec3()));
+
+	ShadowManager *sm = Core::getWorldRef().getLightManager()->getShadowManager();
+	ss->setTextureAttributeAndModes(4, sm->getShadowAtlas());
 }
 
 void GeometryObject::updateMaterialState()
@@ -320,6 +332,24 @@ void GeometryObject::updateMaterialState()
 		ss->getUniform("u_normalMapLerp")->set(_material->getNormalMapMapLerp());
 		ss->getUniform("u_textureOffset")->set(_material->getTextureOffset());
 	}
+
+	// shadow mask properties
+	//uniform mat4 u_vwvp_sun;
+	//uniform vec2 u_atlas_uvcoord_sun;
+	//uniform float u_tex_scale_sun;
+	//uniform sampler2DShadow u_shadowAtlas;
+	//uniform vec3 u_dirFromSun_vs;
+
+	// TODO: think what if directional light is deleted during runtime?
+	// the light manager can handle, but what about the shadow mask?
+	DirectionalLight *sun = Core::getWorldRef().getLightManager()->getSunLight();
+	ShadowManager *sm = Core::getWorldRef().getLightManager()->getShadowManager();
+	// here assume regular shadow map 
+	int smIndex = sun->getShadowMapIndexForSplit(0);
+	ss->getUniform("u_vwvp_sun")->set(sm->getLightSpaceWVP(smIndex));
+	ss->getUniform("u_atlas_uvcoord_sun")->set(sm->getAtlasPosUVCoord(smIndex));
+	ss->getUniform("u_tex_scale_sun")->set(sm->getShadowMapScaleWRTAtlas(smIndex));
+	ss->getUniform("u_dirFromSun_vs")->set(sun->getLightToWorldDirection());
 }
 
 osg::ref_ptr<osg::Program> GeometryObject::getPlainShader()

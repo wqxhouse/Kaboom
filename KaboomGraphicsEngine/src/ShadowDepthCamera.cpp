@@ -122,7 +122,7 @@ void ShadowDepthCameraCallback::operator()(osg::Node *node, osg::NodeVisitor *nv
 		{
 			return;
 		}
-		shadowMapIndex = dl->getShadowMapIndex(_face);
+		shadowMapIndex = dl->getShadowMapIndexForSplit(_face);
 		shadowMapRes = dl->getShadowMapRes();
 	}
 	else if (_light->getLightType() == POINTLIGHT)

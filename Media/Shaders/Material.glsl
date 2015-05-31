@@ -4,12 +4,13 @@ struct Material
     float roughness;
     float metallic;
     // float specular;
-    float translucency;
+    // float translucency;
     vec3 position;
     vec3 normal;
 
 	vec3 specularColor;
 	vec3 diffuseColor;
+	float sunShadowMask;
 };
 
 Material getMaterialFromGBuffer(vec4 RT0, vec4 RT1, vec4 RT2, float farPlane, vec3 viewRay) 
@@ -22,7 +23,8 @@ Material getMaterialFromGBuffer(vec4 RT0, vec4 RT1, vec4 RT2, float farPlane, ve
 	
     m.roughness = max(0.001, RT1.x);
     m.metallic = RT1.z;
-    m.translucency = RT0.w;
+    // m.translucency = RT0.w;
+	m.sunShadowMask = RT0.w;
 
     vec3 baseColor = RT0.rgb;
     float specular = RT1.y;

@@ -405,6 +405,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\SMAA\edgedetection.vert" />
     <None Include="..\Media\Shaders\SMAA\neighborhood.frag" />
     <None Include="..\Media\Shaders\SMAA\neighborhood.vert" />
+    <None Include="..\Media\Shaders\sunShadowMask.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KaboomCommon\KaboomCommon.vcxproj">

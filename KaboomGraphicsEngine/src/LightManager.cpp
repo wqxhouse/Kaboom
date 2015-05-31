@@ -6,7 +6,7 @@
 #include "LightVisualizer.h"
 
 LightManager::LightManager()
-	: _shadowManager(NULL)
+	: _shadowManager(NULL), _sunLight(NULL)
 {
 	_visualizer = new LightVisualizer();
 }
@@ -57,6 +57,16 @@ bool LightManager::addDirectionalLight(const std::string &name,
 	if (castShadow && _shadowManager != NULL)
 	{
 		_shadowManager->addDirectionalLight(dirLight);
+	}
+
+	// add the first directional light to be sun light
+	// TODO : later support specifying which dirlight is sunlight
+	// or have only one directional light in the manager and make it
+	// the sun light. (though currently the shader can only have 1 
+	// directional light.
+	if (_sunLight == NULL)
+	{
+		_sunLight = dirLight;
 	}
 
 	++_numLights;
@@ -111,6 +121,11 @@ void LightManager::deleteLight(const std::string &name)
 	delete light;
 
 	--_numLights;
+}
+
+DirectionalLight *LightManager::getSunLight()
+{
+	return _sunLight;
 }
 
 bool LightManager::renameLight(const std::string &oldName, const std::string &newName)

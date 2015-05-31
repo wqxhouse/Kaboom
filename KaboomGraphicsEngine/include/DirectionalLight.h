@@ -29,7 +29,7 @@ public:
 	osg::Vec2i getShadowAtlasPos(int split);
 
 	void setShadowMapIndex(int split, int index);
-	int getShadowMapIndex(int split);
+	int getShadowMapIndexForSplit(int split);
 
 	bool hasShadowMapAtlasPos(int split);
 
