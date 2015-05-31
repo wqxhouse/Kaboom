@@ -65,12 +65,4 @@
 		<scale>1.000000 1.200000 2.750000</scale>
 	</model>
 
-	<light name="hello_world" type="point">
-		<color>0.000000 1.000000 0.000000</color>
-		<castShadow>1</castShadow>
-		<intensity>2.000000</intensity>
-		<position>1.000000 7.000000 13.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
 </world>

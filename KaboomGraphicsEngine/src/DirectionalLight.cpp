@@ -62,8 +62,13 @@ int DirectionalLight::getShadowMapIndex(int split)
 
 void DirectionalLight::initShadowMapInfo()
 {
-	_shadowMapRes = 1024;
-	_shadowNumSplits = 3; // default
+	// TODO: change back to pssm if have time
+	//_shadowMapRes = 1024;
+	//_shadowNumSplits = 3; // default
+
+	_shadowMapRes = 2048;
+	_shadowNumSplits = 1;
+
 	_cascadeSplitDists.resize(_shadowNumSplits);
 	_shadowMapInfo.resize(_shadowNumSplits);
 	_shadowFarPlane = 300; // default

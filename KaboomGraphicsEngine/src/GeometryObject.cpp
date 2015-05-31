@@ -10,6 +10,7 @@
 #include "Core.h"
 
 GeometryObject::GeometryObject(const std::string &name, osg::Node *geomNode)
+	: _receiveShadow(true)
 {
 	if (geomNode == NULL)
 	{
@@ -234,6 +235,7 @@ GeometryObject* GeometryObject::copy(const std::string &newName)
 
 	copy->setMaterial(_material);
 	copy->setMatrix(this->getMatrix());
+	copy->setReceiveShadow(this->_receiveShadow);
 	//copy->_materialNode = this->_materialNode;
 
 	return copy;
