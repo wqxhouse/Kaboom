@@ -35,7 +35,11 @@ Entity *CharacterFactory::createCharacter(
 	entity->attachComponent(new HealthComponent(100,100));
 	entity->attachComponent(new PlayerStatusComponent());
 	std::string name = std::to_string(static_cast<unsigned int>(SoundType::WALKING));
-	entity->attachComponent(new SoundComponent(name));
+	entity->attachComponent(new SoundComponent(name,walk));
 
     return entity;
+}
+
+void CharacterFactory::setWalkingSample(osg::ref_ptr<Sample> walking){
+	walk = walking;
 }

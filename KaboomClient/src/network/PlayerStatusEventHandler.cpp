@@ -19,7 +19,9 @@ void PlayerStatusEventHandler::handle(const Event &e) const {
     const PlayerStatusEvent &evt = static_cast<const PlayerStatusEvent &>(e);
 
     Entity *entity = game->getEntityManager().getEntity(evt.getEntityId());
-
+	if (entity == nullptr){
+		return;
+	}
     auto playerStatusComp = entity->getComponent<PlayerStatusComponent>();
     playerStatusComp->setAlive(evt.isAlive());
     playerStatusComp->setRunning(evt.isRunning());

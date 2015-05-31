@@ -14,13 +14,13 @@ using namespace osgAudio;
 
 class SoundComponent : public Component {
 public:
-	SoundComponent(std::string name) {
+	SoundComponent(std::string name,osg::ref_ptr<Sample> walk) {
 		//osgAudio::SoundState *s = osgAudio::SoundManager::instance()->findSoundState(name);
 		walkingSound = new osgAudio::SoundState("walker");
 		//const osgAudio::Sample *d = s->getSample();
 		//source->setSound();
 		//walkingSound->setSample(d);
-		osg::ref_ptr<osgAudio::Sample> sample = osgAudio::SoundManager::instance()->getSample("sounds\\walking.mp3", false);
+		osg::ref_ptr<osgAudio::Sample> sample = walk;
 		walkingSound->setPlay(false);
 		walkingSound->setLooping(true);
 		walkingSound->setSample(sample.get());
