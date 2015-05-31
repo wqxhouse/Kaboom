@@ -8,6 +8,7 @@
 #include "OnClickEndGameListener.h"
 #include "OnClickAddLetterListener.h"
 #include "OnClickRemoveLetterListener.h"
+#include "OnClickRespawnListener.h"
 
 void setupGUIDocuments(Game *game)
 {
@@ -15,6 +16,7 @@ void setupGUIDocuments(Game *game)
 	std::string mediaPath;
 	ConfigSettings::config->getValue("MediaPath", mediaPath);
 	
+	//load the different windows
 	std::string guiPath = mediaPath + "DefaultAssets\\LibRocketGUI\\InGame\\";
 	int i = manager->addWindow(guiPath + "window_rocket.rml", true);
 	manager->getWindow(i)->Hide();
@@ -23,6 +25,8 @@ void setupGUIDocuments(Game *game)
 	i = manager->addWindow(guiPath + "window_score.rml", true);
 	manager->getWindow(i)->Hide();
 	i = manager->addWindow(guiPath + "window_name_screen.rml", true);
+	manager->getWindow(i)->Hide();
+	i = manager->addWindow(guiPath + "window_start_death.rml", true);
 	manager->getWindow(i)->Hide();
 
 	Rocket::Core::ElementDocument* marty = manager->getWindow(1);
@@ -60,4 +64,11 @@ void setupGUIDocuments(Game *game)
 	next->setMode(START_SCREEN_MODE);
 	Rocket::Core::EventListener *something = next;
 	table->GetChild(1)->GetLastChild()->AddEventListener("click",something);
+
+	Rocket::Core::ElementDocument *deathScreen = manager->getWindow(4);
+	Rocket::Core::Element * button = deathScreen->GetFirstChild();
+	OnClickRespawnListener* respawn = new OnClickRespawnListener(game);
+	respawn->setGame(game);
+	Rocket::Core::EventListener * respawnButton = respawn;
+	button->AddEventListener("click",respawnButton);
 }

@@ -7,6 +7,8 @@
 #include <network/ScoreEvent.h>
 #include <network/MatchStateEvent.h>
 #include <network/PlayerRenameEvent.h>
+#include <network/PlayerDeathEvent.h>
+#include <network/PlayerRespawnEvent.h>
 #include <LibRocketGUIManager.h>
 #include <core/Player.h>
 
@@ -19,6 +21,8 @@ public:
     void handle(const AmmoAmountEvent &e, InventoryComponent *bombConCom) const;
 	void handle(const ScoreEvent &e, std::string name) const;
 	void handle(const PlayerRenameEvent &e, Player* player) const;
+	void handle(const PlayerDeathEvent &e) const;
+	void handle(const PlayerRespawnEvent &e) const;
 	void endGame() const;
 	void changeWeapon(int weapon) const;
 	void showScoreBoard() const;
