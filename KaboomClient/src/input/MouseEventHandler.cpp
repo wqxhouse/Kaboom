@@ -33,8 +33,7 @@ bool MouseEventHandler::bindKey(int key, KeyState state, Function func) {
 }
 
 bool MouseEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us) {
-    if (!Core::isInGameMode() || Core::isInDeath()) {
-		handleMouseUp(ea, us);
+    if (!Core::isInGameMode()) {
         return false;
     }
 
