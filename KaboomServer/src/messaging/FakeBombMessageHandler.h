@@ -3,6 +3,7 @@
 #include "MessageHandler.h"
 
 class CollisionMessage;
+class TickMessage;
 
 class FakeBombMessageHandler : public MessageHandler {
 public:
@@ -10,4 +11,5 @@ public:
 
 private:
     bool handle(const CollisionMessage &message) const;
+    bool handle(const TickMessage &message) const;
 };
