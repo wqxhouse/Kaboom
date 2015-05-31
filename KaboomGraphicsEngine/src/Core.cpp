@@ -656,7 +656,6 @@ void Core::enableGameMode()
 	if (!_gameMode)
 	{
 		_gameMode = true;
-		_isDeath = false;
 
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
@@ -668,34 +667,10 @@ void Core::disableGameMode()
 	if (_gameMode)
 	{
 		_gameMode = false;
-		_isDeath = false;
 
 		//// TODO: change back to editor key bindings
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::LeftArrowCursor);
-	}
-}
-
-void Core::enableDeathScreen()
-{
-	if (!_isDeath)
-	{
-		_isDeath = true;
-
-		//// TODO: change back to editor key bindings
-		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
-		a->setCursor(osgViewer::GraphicsWindow::LeftArrowCursor);
-	}
-}
-
-void Core::disableDeathScreen()
-{
-	if (_isDeath)
-	{
-		_isDeath = false;
-
-		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
-		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
 	}
 }
 
@@ -731,11 +706,6 @@ bool Core::isInStartScreenMode()
 bool Core::isInGameMode()
 {
 	return _gameMode ? true : false;
-}
-
-bool Core::isInDeath()
-{
-	return _isDeath ? true : false;
 }
 
 void Core::configAxisVisualizer()
@@ -921,7 +891,6 @@ osg::ref_ptr<CompositorAnalysis> Core::_analysisHUD;
 
 bool Core::_startScreenMode;
 bool Core::_gameMode;
-bool Core::_isDeath;
 bool Core::_passDataDisplay;
 bool Core::_guiEnabled;
 bool Core::_manipulatorEnabled;

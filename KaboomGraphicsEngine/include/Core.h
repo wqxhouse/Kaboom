@@ -81,8 +81,6 @@ public:
 	static void disableStartScreen();
 	static void enableGameMode();
 	static void disableGameMode();
-	static void enableDeathScreen();
-	static void disableDeathScreen();
 
 	static void enableGeometryObjectManipulator();
 	static void disableGeometryObjectManipulator();
@@ -95,7 +93,6 @@ public:
 
 	static bool isInStartScreenMode();
 	static bool isInGameMode();
-	static bool isInDeath();
 	static bool isCamLocked();
 	static bool isViewerClosed();
 	static bool isMouseOverAnyEditor();
@@ -183,7 +180,6 @@ private:
 	// on screen flags
 	static bool _startScreenMode;
 	static bool _gameMode;
-	static bool _isDeath;
 	static bool _passDataDisplay;
 	static bool _guiEnabled;
 	static bool _manipulatorEnabled;

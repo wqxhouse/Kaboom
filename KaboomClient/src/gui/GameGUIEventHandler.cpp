@@ -85,25 +85,6 @@ void  GameGUIEventHandler::handle(const ScoreEvent &e, std::string name)const {
 
 }
 
-void  GameGUIEventHandler::handle(const PlayerDeathEvent &e)const {
-	//hide main HUD
-	 _guiManager->getWindow(0)->Hide();
-	 Core::enableDeathScreen();
-
-	 //show the death screen
-	 _guiManager->getWindow(4)->Show();
-}
-
-void GameGUIEventHandler::handle(const PlayerRespawnEvent &e) const
-{
-	//hide the death screen
-	_guiManager->getWindow(4)->Hide();
-
-	//hide main HUD
-	Core::disableDeathScreen();
-	_guiManager->getWindow(0)->Show();
-}
-
 void GameGUIEventHandler::changeWeapon(int weapon) const
 {
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
