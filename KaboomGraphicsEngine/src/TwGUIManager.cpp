@@ -2351,24 +2351,33 @@ void TwGUIManager::exportMaterialXML(std::string &path)
 		write(f, tabs, matHeader);
 		tabs++;
 
-		// For plain materials
-		if (type == "plain") {
-			osg::Vec3 alb = mat->getAlbedo();
-			float rough = mat->getRoughness();
-			float specular = mat->getSpecular();
-			float metallic = mat->getMetallic();
+		// For plain and textured materials
+		osg::Vec3 alb = mat->getAlbedo();
+		float rough = mat->getRoughness();
+		float specular = mat->getSpecular();
+		float metallic = mat->getMetallic();
 
-			write(f, tabs, tagify("albedo", alb));
-			write(f, tabs, tagify("roughness", rough));
-			write(f, tabs, tagify("specular", specular));
-			write(f, tabs, tagify("metallic", metallic));
-		}
+		write(f, tabs, tagify("albedo", alb));
+		write(f, tabs, tagify("roughness", rough));
+		write(f, tabs, tagify("specular", specular));
+		write(f, tabs, tagify("metallic", metallic));
+
 		// For textured materials
-		else if (type == "textured") {
+        if (type == "textured") {
+            float albTexLerp = mat->getAlbedoTexLerp();
+            float roughTexLerp = mat->getRoughnessTexLerp();
+            float metallicTexLerp = mat->getMetallicTexLerp();
+            float normalTexLerp = mat->getNormalMapMapLerp();
+
 			std::string albPath = mat->getAlbedoTexturePath();
 			std::string roughPath = mat->getRoughnessTexturePath();
 			std::string metallicPath = mat->getMetallicTexturePath();
 			std::string normalPath = mat->getNormalMapTexturePath();
+
+            write(f, tabs, tagify("albedoTexLerp", albTexLerp));
+            write(f, tabs, tagify("roughnessTexLerp", roughTexLerp));
+            write(f, tabs, tagify("metallicTexLerp", metallicTexLerp));
+            write(f, tabs, tagify("normalTexLerp", normalTexLerp));
 
 			write(f, tabs, tagify("albedoTex", albPath));
 			write(f, tabs, tagify("roughnessTex", roughPath));
