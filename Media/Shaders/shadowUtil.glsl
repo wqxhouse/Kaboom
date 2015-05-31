@@ -32,11 +32,17 @@ vec3 reprojectShadow(ShadowDepthMap shadowInfo, vec3 pos)
 
 vec2 calcAtlasUVCoord(vec2 fullQuadCoord, ShadowDepthMap shadowInfo) 
 {
-    return clamp(fullQuadCoord, 0, 1) * shadowInfo.tex_scale + shadowInfo.altas_uvcoord;
+    return clamp(fullQuadCoord, 0.0, 1.0) * shadowInfo.tex_scale + shadowInfo.altas_uvcoord;
 }
 
 float PCF(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, float baseBias, vec2 projSize) 
 {
+	// TODO: find a more efficient way to deal with out of bounds problem without comparsion
+	if(projCoord.x > 1.0 || projCoord.y > 1.0 || projCoord.x < 0.0 || projCoord.y < 0.0) 
+	{
+		return 1.0;
+	}	
+
     vec2 atlasCoord = calcAtlasUVCoord(projCoord.xy, shadowInfo);
     float biasedDepth = projCoord.z - baseBias;
     vec2 filterRadiusUV = 2.0 * projSize;
@@ -106,11 +112,12 @@ float computeDirectionalLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMa
 	int lightSMIndices[6], vec3 position, vec3 n, vec3 l, 
     float slopeScaledBias, float normalScaledBias, float baseBias)
 {
-	vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias * (1.0 / 2048.0), 
-			normalScaledBias * (1.0 / 2048.0), n, l); // hard code resolution  
+	const float resInv = 1.0 / 2048.0;
+	vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias * resInv, 
+			normalScaledBias * resInv, n, l); // hard code resolution  
 	ShadowDepthMap sdm = depthMap[lightSMIndices[0]];
 	vec3 projCoord = reprojectShadow(sdm, biasedPos);
-	baseBias *= 1.0 / 2048.0;
+	baseBias *= resInv;
 
 	return PCF(u_shadowAtlas, sdm, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE));
 }

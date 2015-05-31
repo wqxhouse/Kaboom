@@ -107,8 +107,13 @@ void setupScene()
 
 	//l->addDirectionalLight("Sun", osg::Vec3(0.1, -0.88, -0.46), osg::Vec3(0.7, 0.7, 0.7), true);
 	l->addDirectionalLight("Sun", osg::Vec3(0, -1, -1), osg::Vec3(0.7, 0.7, 0.7), true);
-	//l->addPointLight("hello_world", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 100, true);
-	//l->getLight("hello_world")->asPointLight()->setIntensity(2.0);
+	l->addPointLight("hello_world", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 100, true);
+	l->getLight("hello_world")->asPointLight()->setIntensity(2.0);
+
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	l->addPointLight("abc" + std::to_string(i), osg::Vec3(10000, 10000, 10000), osg::Vec3(), 10, true, 1.
+	//}
 	// l->addPointLight("super_shadow", osg::Vec3(-3, 0, 4), osg::Vec3(0, 1, 0), 100, true);
 
 }

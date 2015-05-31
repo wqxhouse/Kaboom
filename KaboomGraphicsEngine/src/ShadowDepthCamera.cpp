@@ -17,7 +17,7 @@ ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas
 
 	_shadowDepthCam = new osg::Camera();
 
-	_shadowDepthCam->setClearMask(GL_DEPTH_BUFFER_BIT); // do not clear color buffer, or atlas will be destroyed
+	_shadowDepthCam->setClearMask(GL_DEPTH_BUFFER_BIT); 
 	_shadowDepthCam->setRenderOrder(osg::Camera::PRE_RENDER, -100);
 	_shadowDepthCam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
 	_shadowDepthCam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);

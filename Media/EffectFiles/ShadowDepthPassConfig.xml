@@ -6,6 +6,8 @@
     <source_format>depth</source_format>
     <source_type>float</source_type>
     <hardware_shadowmap>1</hardware_shadowmap>
+    <filter param="min_filter">linear</filter>
+    <filter param="mag_filter">linear</filter>
   </buffer>
   
   <shader name="shadowDepth_vs" type="vertex">
