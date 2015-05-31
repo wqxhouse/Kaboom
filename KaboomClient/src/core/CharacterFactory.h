@@ -1,7 +1,8 @@
 #pragma once
 
 #include <math/Quat.h>
-
+#include <osgAudio/Sample.h>
+using namespace osgAudio;
 class Entity;
 enum EntityType;
 class EntityManager;
@@ -10,6 +11,7 @@ class Vec3;
 class CharacterFactory {
 public:
     CharacterFactory(EntityManager &entityManager);
+	void setWalkingSample(osg::ref_ptr<Sample> walking);
 
     Entity *createCharacter(
             unsigned int id,
@@ -19,4 +21,5 @@ public:
 
 private:
     EntityManager &entityManager;
+	osg::ref_ptr<Sample> walk;
 };
