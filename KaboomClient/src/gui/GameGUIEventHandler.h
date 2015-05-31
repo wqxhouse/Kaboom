@@ -9,6 +9,7 @@
 #include <network/PlayerRenameEvent.h>
 #include <network/PlayerDeathEvent.h>
 #include <network/PlayerRespawnEvent.h>
+#include <network/DisconnectEvent.h>
 #include <LibRocketGUIManager.h>
 #include <core/Player.h>
 
@@ -29,6 +30,8 @@ public:
 	void hideScoreBoard() const;
 	void changeTime(Game *game) const;
 	void updateUserName(std::string * name) const;
+	void deletePlayer(const DisconnectEvent &evt)const;
+	void deleteAllPlayers()const;
 	// TODO: add more other events 
 
 private:

@@ -45,6 +45,33 @@ void GameGUIEventHandler::handle(const AmmoAmountEvent &e, InventoryComponent *b
 		ammoTable->GetChild(i)->GetFirstChild()->GetChild(1)->SetInnerRML(std::to_string(temp).c_str());
 	}
 }
+void  GameGUIEventHandler::deletePlayer(const DisconnectEvent &e)const {
+	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
+	Rocket::Core::Element * table = window2->GetChild(0);
+	bool flag = true;
+	for (int i = 1; i < table->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = table->GetChild(i);
+		Rocket::Core::String s = tr->GetChild(0)->GetId();
+		Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
+		if (s == d){
+			table->RemoveChild(tr);
+	
+		}
+	}
+}
+void  GameGUIEventHandler::deleteAllPlayers()const {
+	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
+	Rocket::Core::Element * table = window2->GetChild(0);
+	bool flag = true;
+	while (table->GetNumChildren()>1){
+		Rocket::Core::Element * tr = table->GetChild(1);
+		//Rocket::Core::String s = tr->GetChild(0)->GetId();
+		//Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
+		table->RemoveChild(tr);
+
+		
+	}
+}
 void  GameGUIEventHandler::handle(const ScoreEvent &e, std::string name)const {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
