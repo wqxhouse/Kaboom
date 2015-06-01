@@ -30,6 +30,16 @@
         <material name="____TestMaterial" />
     </type>
     
+    <type id="131076"> 
+        <mesh>DefaultAssets\GeometryObject\remoteBomb.fbx</mesh>
+        <material name="____TestMaterial" />
+    </type>
+    
+    <type id="131077"> 
+        <mesh>DefaultAssets\GeometryObject\remoteBomb.fbx</mesh>
+        <material name="____TestMaterial" />
+    </type>
+    
     <type id="196609"> 
         <mesh>DefaultAssets\GeometryObject\healthPack.fbx</mesh>
         <material name="brick1Mat" />
