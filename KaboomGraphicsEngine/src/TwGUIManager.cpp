@@ -415,7 +415,7 @@ void TwGUIManager::initAddBar()
 		[](void *clientData) {
 
 		// Light default properties
-		osg::Vec3 color;
+		osg::Vec3 color = osg::Vec3(0.1, 0.3, 0.7);
 		osg::Vec3 position;
 		float radius = 100.0f;		// Not sure if this is a good value
 		bool doShadow = false;
@@ -592,7 +592,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string rotYVarName = ROT_Y_LABEL + indexStr;
 	std::string rotZVarName = ROT_Z_LABEL + indexStr;
 
-	std::string scaleLimitVal = " step=0.05";
+	std::string scaleLimitVal = " step=0.005 min=0.0";
 
 	BarItem* item = new BarItem();
 	item->bar = bar;
