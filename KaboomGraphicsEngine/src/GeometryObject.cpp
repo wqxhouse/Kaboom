@@ -291,6 +291,10 @@ void GeometryObject::setUpMaterialState()
 	ss->addUniform(new osg::Uniform("u_tex_scale_sun", 0.0f));
 	ss->addUniform(new osg::Uniform("u_shadowAtlas", 4));
 	ss->addUniform(new osg::Uniform("u_dirFromSun_vs", osg::Vec3()));
+	
+	ss->addUniform(new osg::Uniform("u_slopeScaledBias", 40.0f));
+	ss->addUniform(new osg::Uniform("u_normalScaledBias", 60.0f));
+	ss->addUniform(new osg::Uniform("u_baseBias", 0.6f));
 
 	ShadowManager *sm = Core::getWorldRef().getLightManager()->getShadowManager();
 	ss->setTextureAttributeAndModes(4, sm->getShadowAtlas());
@@ -333,13 +337,6 @@ void GeometryObject::updateMaterialState()
 		ss->getUniform("u_textureOffset")->set(_material->getTextureOffset());
 	}
 
-	// shadow mask properties
-	//uniform mat4 u_vwvp_sun;
-	//uniform vec2 u_atlas_uvcoord_sun;
-	//uniform float u_tex_scale_sun;
-	//uniform sampler2DShadow u_shadowAtlas;
-	//uniform vec3 u_dirFromSun_vs;
-
 	// TODO: think what if directional light is deleted during runtime?
 	// the light manager can handle, but what about the shadow mask?
 	DirectionalLight *sun = Core::getWorldRef().getLightManager()->getSunLight();
@@ -350,6 +347,10 @@ void GeometryObject::updateMaterialState()
 	ss->getUniform("u_atlas_uvcoord_sun")->set(sm->getAtlasPosUVCoord(smIndex));
 	ss->getUniform("u_tex_scale_sun")->set(sm->getShadowMapScaleWRTAtlas(smIndex));
 	ss->getUniform("u_dirFromSun_vs")->set(sun->getLightToWorldDirection());
+
+	ss->getUniform("u_slopeScaledBias")->set(sun->getSlopeScaledBias());
+	ss->getUniform("u_normalScaledBias")->set(sun->getNormalScaledBias());
+	ss->getUniform("u_baseBias")->set(sun->getBaseBias());
 }
 
 osg::ref_ptr<osg::Program> GeometryObject::getPlainShader()

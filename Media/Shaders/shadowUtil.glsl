@@ -160,6 +160,7 @@ float computeDirectionalLightShadowMask(sampler2DShadow u_shadowAtlas, vec3 posi
 	const float resInv = 1.0 / 2048.0;
 	vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias * resInv, 
 			normalScaledBias * resInv, n, l); // hard code resolution  
+	// vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias, normalScaledBias, n, l); 
 
 	ShadowDepthMap sdm;
 	sdm.vwvp = vwvp;

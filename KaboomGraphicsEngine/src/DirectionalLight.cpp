@@ -78,4 +78,8 @@ void DirectionalLight::initShadowMapInfo()
 		_shadowMapInfo[i]._hasAtlasPos = false;
 		_shadowMapInfo[i]._shadowMapIndex = -1;
 	}
+
+	_slopeScaledBias = 40.0;
+	_normalScaledBias = 60.0;
+	_baseBias = 0.6;
 }
