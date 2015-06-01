@@ -122,6 +122,30 @@ void TwGUIManager::initMainBar()
 		*(float *)value = Core::getSAOPassCallback()->getIntensity();
 	}, NULL, (saoGroupDef + saoLimitDef).c_str());
 
+	TwAddVarCB(g_twBar, "SlopeBias", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getWorldRef().getLightManager()->getSunLight()->setSlopeScaledBias(*(float *)value);
+	}, [](void *value, void *clientData)
+	{
+		*(float *)value = Core::getWorldRef().getLightManager()->getSunLight()->getSlopeScaledBias();
+	}, NULL, (saoGroupDef + " min=0.0 step=0.1").c_str());
+
+	TwAddVarCB(g_twBar, "NormalBias", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getWorldRef().getLightManager()->getSunLight()->setNormalScaledBias(*(float *)value);
+	}, [](void *value, void *clientData)
+	{
+		*(float *)value = Core::getWorldRef().getLightManager()->getSunLight()->getNormalScaledBias();
+	}, NULL, (saoGroupDef + " min=0.0 step=0.1").c_str());
+
+	TwAddVarCB(g_twBar, "BaseBias", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getWorldRef().getLightManager()->getSunLight()->setBaseBias(*(float *)value);
+	}, [](void *value, void *clientData)
+	{
+		*(float *)value = Core::getWorldRef().getLightManager()->getSunLight()->getBaseBias();
+	}, NULL, (saoGroupDef + " min=0.0 step=0.0001").c_str());
+
 	std::string saofoldedStr = " Main/'SAO Settings' opened=false ";
 	TwDefine(saofoldedStr.c_str());
 

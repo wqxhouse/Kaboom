@@ -54,6 +54,36 @@ public:
 	}
 	// bool setNumSplits(int splitNum);
 
+	inline float getSlopeScaledBias()
+	{
+		return _slopeScaledBias;
+	}
+
+	inline float getNormalScaledBias()
+	{
+		return _normalScaledBias;
+	}
+
+	inline float getBaseBias()
+	{
+		return _baseBias;
+	}
+
+	inline void setSlopeScaledBias(float bias)
+	{
+		_slopeScaledBias = bias;
+	}
+
+	inline void setNormalScaledBias(float bias)
+	{
+		_normalScaledBias = bias;
+	}
+
+	inline void setBaseBias(float bias)
+	{
+		_baseBias = bias;
+	}
+
 	inline void setCascadeSplitDist(int split, float dist)
 	{
 		if (split >= _shadowNumSplits)
@@ -84,6 +114,10 @@ private:
 	int _shadowMapRes;
 	int _shadowNumSplits;
 	int _shadowFarPlane;
+
+	float _slopeScaledBias;
+	float _normalScaledBias;
+	float _baseBias;
 
 	std::vector<float> _cascadeSplitDists;
 
