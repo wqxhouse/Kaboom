@@ -23,10 +23,4 @@ private:
 	osg::ref_ptr<osg::Node> _timer_ammo;
 	osg::ref_ptr<osg::Node> _remote_ammo;
 	osg::ref_ptr<osg::Node> _health_pack;
-
-	void createBase(Entity *entity, const Vec3 &position, Quat rotation) const;
-	void createKaboomV2Pickup(Entity *entity, const Vec3 &position, Quat rotation) const;
-	void createTimeBombPickup(Entity *entity, const Vec3 &position, Quat rotation) const;
-	void createRemoteDetonatorPickup(Entity *entity, const Vec3 &position, Quat rotation) const;
-	void createHealthPackPickup(Entity *entity, const Vec3 &position, Quat rotation) const;
 };
