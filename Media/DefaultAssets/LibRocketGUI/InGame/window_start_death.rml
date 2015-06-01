@@ -4,9 +4,9 @@
 		<link type="text/rcss" href="invader-m.rcss"/>
 	  <style>
 		button{
-			position:relative;
+			position:absolute;
 			left: 45%;
-			top : 50%;
+			top : 40%;
 		}
 		button:hover{
 				color: yellow;

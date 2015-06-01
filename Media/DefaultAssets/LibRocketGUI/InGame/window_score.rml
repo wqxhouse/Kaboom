@@ -17,8 +17,9 @@
     }
     .window{
       left:20%;
+      top: 15%;
       width: 60%;
-      height: 100%;
+      height: 70%;
       background-decorator: tiled-box;
       background-top-left-image: invader.tga 0px 0px 133px 140px;
       background-top-right-image: invader.tga 136px 0px 146px 140px;

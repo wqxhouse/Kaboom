@@ -32,6 +32,10 @@ public:
 	void updateUserName(std::string * name) const;
 	void deletePlayer(const DisconnectEvent &evt)const;
 	void deleteAllPlayers()const;
+	void preGame()const;
+	void inProgress()const;
+	void postGame()const;
+	void hudScore(const ScoreEvent &evt) const;
 	// TODO: add more other events 
 
 private:

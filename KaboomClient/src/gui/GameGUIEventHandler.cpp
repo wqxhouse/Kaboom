@@ -9,11 +9,21 @@ GameGUIEventHandler::GameGUIEventHandler(Game *game)
 {
 }
 
+void GameGUIEventHandler::hudScore(const ScoreEvent &evt) const{
+	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
+	Rocket::Core::Element * health = window1->GetElementById("health");
+	Rocket::Core::Element * inner = health->GetElementById("inner");
+	inner->GetElementById("kills")->SetInnerRML(std::to_string(evt.getKills()).c_str());
+	inner->GetElementById("deaths")->SetInnerRML(std::to_string(evt.getDeaths()).c_str());
+}
+
 void GameGUIEventHandler::handle(const HealthEvent &e, HealthComponent *healthComponent) const
 {
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
 	Rocket::Core::Element * health = window1->GetElementById("health");
-
+	Rocket::Core::Element * inner = health->GetElementById("inner");
+	//Rocket::Core::String hpAmount;
+	inner->GetElementById("hp")->SetInnerRML(std::to_string(healthComponent->getAmount()).c_str());
 	int currentHP = healthComponent->getAmount();
 	if (currentHP == 100)
 		health->SetAttribute("class", "hp_100");
@@ -251,7 +261,22 @@ void GameGUIEventHandler::handle(const PlayerRenameEvent &e, Player* player) con
 
 void GameGUIEventHandler::updateUserName(std::string * name) const
 {
-	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(3);
-	Rocket::Core::Element * nameElement = window2->GetChild(1);
+	Rocket::Core::ElementDocument *window3 = _guiManager->getWindow(3);
+	Rocket::Core::Element * nameElement = window3->GetChild(1);
 	nameElement->SetInnerRML(name->c_str());
+}
+
+void GameGUIEventHandler::preGame() const
+{
+
+}
+
+void GameGUIEventHandler::inProgress() const
+{
+
+}
+
+void GameGUIEventHandler::postGame() const
+{
+
 }
