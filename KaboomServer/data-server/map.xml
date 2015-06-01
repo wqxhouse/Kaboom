@@ -27,7 +27,7 @@
         </spawn-point>
         <spawn-point>
             <object-type type="string">Pickup</object-type>
-            <id type="uint">196609</id>
+            <id type="uint">131172</id>
             <!-- HeathPack: Amount is healing amount -->
             <amount type="int">50</amount>
             <duration type="int">5000</duration>
