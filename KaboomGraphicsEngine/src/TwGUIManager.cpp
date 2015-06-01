@@ -438,7 +438,7 @@ void TwGUIManager::initAddBar()
 			addLightToGUI((TwBar*)clientData, lt, LIGHT_GROUP_NAME, _index);
 		}
 	},
-		g_twBar, NULL);
+		g_lightBar, NULL);
 
 	// 'Add plain material' button
 	TwAddButton(g_addBar, "Add plain material",
