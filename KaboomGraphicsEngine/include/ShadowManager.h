@@ -55,6 +55,7 @@ private:
 	void getPassInfo();
 	void configShadowMapFaceLookupCube();
 	int findAvailableDepthSlot();
+	bool checkHasEnoughSlotForPointLightShadow();
 
 	ShadowAtlas *_atlas;
 	osg::observer_ptr<osgFX::EffectCompositor> _passes;

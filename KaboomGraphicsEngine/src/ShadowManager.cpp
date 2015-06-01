@@ -12,7 +12,7 @@
 
 #include "Core.h"
 
-#define MAX_SHADOW_MAPS 60
+#define MAX_SHADOW_MAPS 48
 #define SHADOW_ATLAS_RESOLUTION 4096
 
 ShadowManager::ShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRoot)
@@ -160,11 +160,17 @@ void ShadowManager::addPointLight(PointLight *light)
 		resolution = tileSize;
 	}
 
+	// FIXME: later support dynamic change point light shadow map resolution to tightly fit the atlas
+	bool enough = checkHasEnoughSlotForPointLightShadow();
+	if (!enough)
+	{
+		OSG_WARN << "Not enough slots for point light shadow" << std::endl;
+		return;
+	}
+
 	// six faces
 	for (int i = 0; i < 6; i++)
 	{
-		// FIXME: this will possibly make cubemap faces incomplete in the atlas
-		// can skip all 6 faces if < 6
 		int slot = findAvailableDepthSlot();
 		if (slot == -1)
 		{
@@ -181,6 +187,11 @@ void ShadowManager::addPointLight(PointLight *light)
 	}
 }
 
+bool ShadowManager::checkHasEnoughSlotForPointLightShadow()
+{
+	return (_depthCameras.size() - _currShadowMapNum) / 6 >= 1;
+}
+
 void ShadowManager::removePointLight(PointLight *light)
 {
 	if (light->getCastShadow())
@@ -190,14 +201,12 @@ void ShadowManager::removePointLight(PointLight *light)
 			int index = light->getShadowMapIndex(i);
 			ShadowDepthCamera *depthCamera = _depthCameras[index];
 			osg::Camera *cam = depthCamera->getRoot();
-			int cc = cam->getThreadSafeReferenceCounting();
 			_depthCamGroup->removeChild(cam);
-			int dd = cam->getThreadSafeReferenceCounting();
 			
 			delete depthCamera;
-			int ee = cam->getThreadSafeReferenceCounting();
 			_depthCameras[index] = NULL;
 			_atlas->removeTile(index);
+			_currShadowMapNum--;
 		}
 	}
 }
