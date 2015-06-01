@@ -40,7 +40,7 @@
         <material name="____TestMaterial" />
     </type>
     
-    <type id="196609"> 
+    <type id="131172"> 
         <mesh>DefaultAssets\GeometryObject\healthPack.fbx</mesh>
         <material name="brick1Mat" />
     </type>
