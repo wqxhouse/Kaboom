@@ -200,11 +200,27 @@ std::vector<Light *> LightPrePassCallback::performLightCulling()
 			continue;
 		}
 
-		bool visible = l->getLightBound().intersectBound(frustum);
+		bool passFrustumCulling = l->getLightBound().intersectBound(frustum);
+		if (!passFrustumCulling)
+		{
+			OSG_WARN << "light " << l->getName() << " frustum culled." << std::endl;
+		}
 
 		ShadowManager *sm = Core::getWorldRef().getLightManager()->getShadowManager();
 		PointLight *pl = l->asPointLight();
 
+		bool passOcclusionCulling = true;
+		if (pl != NULL)
+		{
+			passOcclusionCulling = _manager->getPointLightOcclusionResult(pl);
+
+			if (!passOcclusionCulling)
+			{
+				OSG_WARN << "Occlusion: " << passOcclusionCulling << std::endl;
+			}
+		}
+
+		bool visible = passFrustumCulling && passOcclusionCulling;
 		if (visible == true)
 		{
 			visibleLights.push_back(l);
@@ -217,8 +233,8 @@ std::vector<Light *> LightPrePassCallback::performLightCulling()
 		else
 		{
 			// TODO: output light ... culled, use custom logging later
-			OSG_WARN << "light " << l->getName() << " frustum culled." << std::endl;
-
+			
+			OSG_WARN << "light " << l->getName() << " not visible" << std::endl;
 			// l->setNeedUpdate(false);
 			if (pl != NULL)
 			{
