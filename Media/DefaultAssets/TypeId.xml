@@ -15,22 +15,22 @@
         <scale>0.0031 0.0031 0.0031</scale>
     </type>
     
-    <type id="1"> 
+    <type id="131073"> 
         <mesh>DefaultAssets\GeometryObject\kaboom2_0.fbx</mesh>
         <material name="SphereMat" />
     </type>
     
-    <type id="2"> 
+    <type id="131074"> 
         <mesh>DefaultAssets\GeometryObject\timeBomb.fbx</mesh>
         <material name="roundGroundMat" />
     </type>
     
-    <type id="3"> 
+    <type id="131075"> 
         <mesh>DefaultAssets\GeometryObject\remoteBomb.fbx</mesh>
         <material name="____TestMaterial" />
     </type>
     
-    <type id="201"> 
+    <type id="196609"> 
         <mesh>DefaultAssets\GeometryObject\healthPack.fbx</mesh>
         <material name="brick1Mat" />
     </type>
