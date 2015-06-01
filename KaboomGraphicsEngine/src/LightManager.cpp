@@ -118,6 +118,12 @@ void LightManager::deleteLight(const std::string &name)
 
 	_visualizer->removeLight(light);
 
+	PointLight *pl = NULL;
+	if (light->getCastShadow() && ((pl = light->asPointLight()) != NULL))
+	{
+		_shadowManager->removePointLight(pl);
+	}
+
 	delete light;
 
 	--_numLights;

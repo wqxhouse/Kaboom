@@ -23,6 +23,7 @@ public:
 
 	void addDirectionalLight(DirectionalLight *light);
 	void addPointLight(PointLight *light);
+	void removePointLight(PointLight *light);
 
 	inline osg::ref_ptr<osg::TextureCubeMap> getShadowFaceLookupCubeTex()
 	{
