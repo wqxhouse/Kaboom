@@ -346,7 +346,7 @@ void GeometryObject::updateMaterialState()
 	ShadowManager *sm = Core::getWorldRef().getLightManager()->getShadowManager();
 	// here assume regular shadow map 
 	int smIndex = sun->getShadowMapIndexForSplit(0);
-	ss->getUniform("u_vwvp_sun")->set(sm->getLightSpaceWVP(smIndex));
+	ss->getUniform("u_vwvp_sun")->set(osg::Matrix::inverse(Core::getMainCamera().getViewMatrix()) * sm->getLightSpaceWVP(smIndex));
 	ss->getUniform("u_atlas_uvcoord_sun")->set(sm->getAtlasPosUVCoord(smIndex));
 	ss->getUniform("u_tex_scale_sun")->set(sm->getShadowMapScaleWRTAtlas(smIndex));
 	ss->getUniform("u_dirFromSun_vs")->set(sun->getLightToWorldDirection());

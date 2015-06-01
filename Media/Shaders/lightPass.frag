@@ -93,7 +93,7 @@ void main()
 
     vec3 result = vec3(0);
 	float sunShadowMask = material.sunShadowMask;
-	result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel) * sunShadowMask;
+	result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel) * mix(sunShadowMask, 1.0, 0.2);
 
     // Compute point lights
     ivec2 baseOffset = precomputeCoord + ivec2(0, 1);
@@ -146,7 +146,6 @@ void main()
     //result = 1.0f - exp(-1.0 * result);
 
 	gl_FragColor = vec4(result, 1.0);
-	gl_FragColor = vec4(sunShadowMask);
 
 	// debug sample atlas
 	//vec3 l_ws = vec3(0, 0, -1);
