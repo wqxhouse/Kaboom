@@ -33,6 +33,8 @@ public:
 		bool castShadow,
 		float intensity = 1.0f);
 
+	bool setPointLightCastShadow(PointLight *pl, bool tf);
+
 	void deleteLight(const std::string &name);
 	bool renameLight(const std::string &oldName, const std::string &newName);
 

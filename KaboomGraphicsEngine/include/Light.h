@@ -41,11 +41,6 @@ public:
 		return _color;
 	}
 
-	inline void setCastShadow(bool tf)
-	{
-		_castShadow = tf;
-	}
-
 	inline bool getCastShadow()
 	{
 		return _castShadow;
@@ -96,7 +91,11 @@ public:
 		bool _hasAtlasPos;
 	};
 
+	// let LightManager manage castShadow
+	// bool setCastShadow(bool tf);
+
 protected:
+	friend class LightManager;
 
 	std::string _name;
 	LightBound _bound;

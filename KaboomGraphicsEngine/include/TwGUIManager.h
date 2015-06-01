@@ -57,6 +57,7 @@ const std::string NORMAL_MAP_LERP_LABEL = "NormalTexLerp";
 const std::string REMOVE_LABEL = "Remove";
 const std::string EDIT_NAME_LABEL = "Edit name";
 const std::string INTENSITY_LABEL = "Intensity";
+const std::string CAST_SHAODW_LABEL = "Cast shadow";
 const std::string FIT_TO_SCREEN_LABEL = "Fit To Screen";
 const std::string RUN_MATERIAL_UPDATE_CALLBACK_LABEL = "Run";
 
