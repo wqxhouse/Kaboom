@@ -1,6 +1,7 @@
 #include "stdafx.h" 
 
 #include <osg/Depth>
+#include <osg/ColorMask>
 #include <util/ConfigSettings.h>
 #include "LightManager.h"
 #include "DirectionalLight.h"
@@ -16,8 +17,11 @@ LightManager::LightManager()
 	_pointLightOcclusionTestGroup->setNodeMask(0x20);
 	osg::Depth *depth = new osg::Depth;
 	depth->setWriteMask(false);
+	osg::ColorMask *colorMask = new osg::ColorMask;
+	colorMask->setMask(false, false, false, false);
 	// depth->setFunction(osg::Depth::ALWAYS);
 	_pointLightOcclusionTestGroup->getOrCreateStateSet()->setAttribute(depth);
+	_pointLightOcclusionTestGroup->getOrCreateStateSet()->setAttribute(colorMask);
 }
 
 LightManager::~LightManager()
