@@ -1,5 +1,6 @@
 #include "stdafx.h" 
 
+#include <util/ConfigSettings.h>
 #include "LightManager.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -9,6 +10,9 @@ LightManager::LightManager()
 	: _shadowManager(NULL), _sunLight(NULL)
 {
 	_visualizer = new LightVisualizer();
+	_pointLightOcclusionTestGroup = new osg::Group;
+	_pointLightOcclusionTestGroup->setName("pointLightOcclusionTestGroup");
+	_pointLightOcclusionTestGroup->setNodeMask(0x20);
 }
 
 LightManager::~LightManager()
@@ -25,6 +29,17 @@ LightManager::~LightManager()
 	if (_shadowManager != NULL)
 	{
 		delete _shadowManager;
+	}
+}
+
+void LightManager::configOcclusionSphere()
+{
+	if (_occlusionSphere == NULL)
+	{
+		ConfigSettings *config = ConfigSettings::config;
+		std::string mediaPath;
+		config->getValue("MediaPath", mediaPath);
+		_occlusionSphere = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\occlusionSphere.3DS");
 	}
 }
 
@@ -93,6 +108,11 @@ bool LightManager::addPointLight(const std::string &name,
 	bool castShadow,
 	float intensity)
 {
+	if (_occlusionSphere == NULL)
+	{
+		configOcclusionSphere();
+	}
+
 	// Handle duplicated (name) geoms
 	if (doesNameExist(name)) {
 		std::cout << "Name already exists: " << name << std::endl;
@@ -117,6 +137,7 @@ bool LightManager::addPointLight(const std::string &name,
 	{
 		_shadowManager->addPointLight(pointLight);
 	}
+	addPointLightToOcclusionQuery(pointLight);
 
 	++_numLights;
 
@@ -231,3 +252,28 @@ Light *LightManager::getLight(int index)
 	}
 	return _lights[index];
 }
+
+
+void LightManager::addPointLightToOcclusionQuery(PointLight *pt)
+{
+	//float radius = pt->getRadius();
+	float radius = 10;
+	osg::MatrixTransform *mt = new osg::MatrixTransform;
+	mt->setMatrix(osg::Matrix::scale(osg::Vec3(radius, radius, radius)) * osg::Matrix::translate(pt->getPosition()));
+	mt->addChild(_occlusionSphere);
+
+	osg::OcclusionQueryNode *query = new osg::OcclusionQueryNode;
+	query->addChild(mt);
+	//TODO: change it back
+	_pointLightOcclusionTestGroup->addChild(mt);
+
+	_ocQueryMap.insert(std::make_pair(pt->getName(), query));
+}
+
+bool LightManager::getPointLightOcclusionResult(PointLight *pt)
+{
+	return _ocQueryMap[pt->getName()]->getPassed(); 
+}
+
+// There is no guarantee the static var is initialized before the constructor of its class or after
+osg::ref_ptr<osg::Node> LightManager::_occlusionSphere = NULL;

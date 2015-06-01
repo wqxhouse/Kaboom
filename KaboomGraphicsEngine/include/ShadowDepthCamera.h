@@ -23,6 +23,11 @@ public:
 	{
 		return _shadowDepthCam;
 	}
+	
+	inline bool isActive()
+	{
+		return _active;
+	}
 
 private:
 
@@ -40,6 +45,8 @@ private:
 	ShadowAtlas *_atlas;
 	osg::observer_ptr<osg::Group> _geomRoot;
 	static int _highest_id;
+
+	bool _active;
 };
 
 class ShadowDepthCameraCallback : public osg::NodeCallback

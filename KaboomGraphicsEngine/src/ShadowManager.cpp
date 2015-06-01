@@ -247,6 +247,21 @@ osg::Vec2 ShadowManager::getAtlasPosUVCoord(int index)
 	return _depthCameras[index]->getAtlasPosUVCoord();
 }
 
+bool ShadowManager::setUpdatePointLightShadow(PointLight *pl, bool tf)
+{
+	if (pl == NULL) return false;
+	if (!pl->getCastShadow()) return false;
+	for (int i = 0; i < 6; i++)
+	{
+		int index = pl->getShadowMapIndex(i);
+		ShadowDepthCamera *sdc = NULL;
+		if ((sdc = _depthCameras[index]) == NULL) return false;
+		sdc->setActive(tf);
+	}
+
+	return true;
+}
+
 //=====================================================================
 DepthCamGroupCallback::DepthCamGroupCallback()
 {
