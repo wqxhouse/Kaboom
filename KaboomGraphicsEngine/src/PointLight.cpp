@@ -1,5 +1,6 @@
 #include "stdafx.h" 
 #include "PointLight.h"
+#include "Core.h"
 
 PointLight::PointLight(const std::string &name)
 	: Light(name)

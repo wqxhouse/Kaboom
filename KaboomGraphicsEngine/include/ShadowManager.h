@@ -21,8 +21,8 @@ public:
 	ShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRoot);
 	~ShadowManager();
 
-	void addDirectionalLight(DirectionalLight *light);
-	void addPointLight(PointLight *light);
+	bool addDirectionalLight(DirectionalLight *light);
+	bool addPointLight(PointLight *light);
 	void removePointLight(PointLight *light);
 
 	inline osg::ref_ptr<osg::TextureCubeMap> getShadowFaceLookupCubeTex()

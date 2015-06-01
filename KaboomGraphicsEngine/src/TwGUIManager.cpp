@@ -1090,6 +1090,21 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			*(float *)data = l->getIntensity();
 		}, pl, intensityNameDef.c_str());
 
+		std::string castShadowNameDef = nameGroupDef + " label='" + CAST_SHAODW_LABEL + "'";
+		TwAddVarCB(bar, castShadowNameDef.c_str(), TW_TYPE_BOOL8,
+			[](const void *data, void *clientData) {
+			Light *l = (Light *)clientData;
+			addLightToUndo(l);
+
+			PointLight *pl = l->asPointLight();
+			Core::getWorldRef().getLightManager()->setPointLightCastShadow(pl, *(bool *)data);
+
+			_currChange = makeUndoRedoNode(l);
+		}, [](void *data, void *clientData) {
+			Light *l = (Light *)clientData;
+			*(bool *)data = l->getCastShadow();
+		}, pl, castShadowNameDef.c_str());
+
 		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
 		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
 			[](const void *value, void *clientData) {
@@ -1723,13 +1738,14 @@ void TwGUIManager::doUndoRedo(std::vector<UndoRedoNode*> &from, std::vector<Undo
 
 					if (light != NULL) {
 						light->setColor(l_info.color);
-						light->setCastShadow(l_info.shadow);
+						// light->setCastShadow(l_info.shadow);
 						light->setIntensity(l_info.intensity);
 
 						switch (light->getLightType()) {
 							case LightType::POINTLIGHT:
 								light->asPointLight()->setPosition(l_info.posDir);
 								light->asPointLight()->setRadius(l_info.radius);
+								lm->setPointLightCastShadow(light->asPointLight(), l_info.shadow);
 								break;
 							case LightType::DIRECTIONAL:
 								light->asDirectionalLight()->setLightToWorldDirection(l_info.posDir);

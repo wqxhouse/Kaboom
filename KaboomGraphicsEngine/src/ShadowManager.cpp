@@ -103,7 +103,7 @@ void ShadowManager::getPassInfo()
 	_depthAtlasTex = static_cast<osg::Texture2D *>(_passes->getTexture("b_shadowAtlas"));
 }
 
-void ShadowManager::addDirectionalLight(DirectionalLight *light)
+bool ShadowManager::addDirectionalLight(DirectionalLight *light)
 {
 	int resolution = light->getShadowMapRes();
 	int tileSize = _atlas->getTileSize();
@@ -122,6 +122,7 @@ void ShadowManager::addDirectionalLight(DirectionalLight *light)
 		resolution = tileSize;
 	}
 
+	// TODO: check enough splits
 	for (int i = 0; i < light->getNumSplits(); i++)
 	{
 		// FIXME: same problem as pointlight;  in addPointLight()
@@ -129,7 +130,7 @@ void ShadowManager::addDirectionalLight(DirectionalLight *light)
 		if (slot == -1)
 		{
 			OSG_WARN << "no available shadow map slots" << std::endl;
-			return;
+			return false;
 		}
 
 		ShadowDepthCamera *depthCam = new ShadowDepthCamera(_depthAtlasTex.get(), _atlas, _geomRoot.get(), light, i);
@@ -139,9 +140,11 @@ void ShadowManager::addDirectionalLight(DirectionalLight *light)
 		light->setShadowMapIndex(i, slot);
 		_currShadowMapNum++;
 	}
+
+	return true;
 }
 
-void ShadowManager::addPointLight(PointLight *light)
+bool ShadowManager::addPointLight(PointLight *light)
 {
 	int resolution = light->getShadowMapRes();
 	int tileSize = _atlas->getTileSize();
@@ -165,7 +168,7 @@ void ShadowManager::addPointLight(PointLight *light)
 	if (!enough)
 	{
 		OSG_WARN << "Not enough slots for point light shadow" << std::endl;
-		return;
+		return false;
 	}
 
 	// six faces
@@ -175,7 +178,7 @@ void ShadowManager::addPointLight(PointLight *light)
 		if (slot == -1)
 		{
 			OSG_WARN << "no available shadow map slots" << std::endl;
-			return;
+			return false;
 		}
 
 		ShadowDepthCamera *depthCam = new ShadowDepthCamera(_depthAtlasTex.get(), _atlas, _geomRoot.get(), light, i);
@@ -185,6 +188,8 @@ void ShadowManager::addPointLight(PointLight *light)
 		light->setShadowMapIndex(i, slot);
 		_currShadowMapNum++;
 	}
+
+	return true;
 }
 
 bool ShadowManager::checkHasEnoughSlotForPointLightShadow()

@@ -48,16 +48,28 @@ bool LightManager::addDirectionalLight(const std::string &name,
 	DirectionalLight *dirLight = new DirectionalLight(name);
 	dirLight->setColor(color);
 	dirLight->setLightToWorldDirection(dirToWorld);
-	dirLight->setCastShadow(castShadow);
+	// dirLight->setCastShadow(castShadow);
+
+	bool res = true;
+	if (castShadow && _shadowManager != NULL)
+	{
+		res = _shadowManager->addDirectionalLight(dirLight);
+	}
+
+	if (res)
+	{
+		dirLight->_castShadow = castShadow;
+	}
+	else
+	{
+		dirLight->_castShadow = false;
+	}
+
 	dirLight->setIntensity(intensity);
 
 	_lightsMap.insert(std::make_pair(name, dirLight));
 	_lights.push_back(dirLight);
 
-	if (castShadow && _shadowManager != NULL)
-	{
-		_shadowManager->addDirectionalLight(dirLight);
-	}
 
 	// add the first directional light to be sun light
 	// TODO : later support specifying which dirlight is sunlight
@@ -91,9 +103,11 @@ bool LightManager::addPointLight(const std::string &name,
 	pointLight->setPosition(position);
 	pointLight->setColor(color);
 	pointLight->setRadius(radius);
-	pointLight->setCastShadow(castShadow);
-	pointLight->setIntensity(intensity);
+	// pointLight->setCastShadow(castShadow);
 
+	setPointLightCastShadow(pointLight, castShadow);
+
+	pointLight->setIntensity(intensity);
 	_visualizer->addLight(pointLight);
 
 	_lightsMap.insert(std::make_pair(name, pointLight));
@@ -105,6 +119,33 @@ bool LightManager::addPointLight(const std::string &name,
 	}
 
 	++_numLights;
+
+	return true;
+}
+
+bool LightManager::setPointLightCastShadow(PointLight *pl, bool tf)
+{
+	if (_shadowManager == NULL) return false;
+
+	if (tf && !pl->getCastShadow())
+	{
+		bool res = _shadowManager->addPointLight(pl);
+		if (res)
+		{
+			pl->_castShadow = tf;
+		}
+		else
+		{
+			pl->_castShadow = false;
+		}
+		return res;
+	}
+
+	if (!tf && pl->getCastShadow())
+	{
+		_shadowManager->removePointLight(pl);
+		pl->_castShadow = false;
+	}
 
 	return true;
 }
