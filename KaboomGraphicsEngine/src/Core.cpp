@@ -267,7 +267,7 @@ void Core::configCubemapPrefilterPass()
 	_passes->addChild(_cubemapPreFilter.getRoot());
 
 	//TODO: refactor
-	//_passes->addChild(Core::getWorldRef().getLightManager()->getPointLightOcclusionTestGroup());
+	_passes->addChild(Core::getWorldRef().getLightManager()->getPointLightOcclusionTestGroup());
 }
 
 void Core::configSceneNode()

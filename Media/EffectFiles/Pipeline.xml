@@ -79,6 +79,7 @@
       <clear_mask>0</clear_mask>
       <culling mask="0x20"></culling>
       <near_far preserve="0"/>
+      <near_far computation="none"></near_far>
       <output_buffer>b_shading</output_buffer>
       <output_buffer target="depth">debugDepth</output_buffer>
     </forward_pass>
@@ -138,6 +139,7 @@
       <shader>lightPass_vs</shader>
       <shader>lightPass_fs</shader>
     </deferred_pass>
+
 
     <deferred_pass name="SAOPass">
       <input_buffer unit="0" varname="u_RT2">b_RT2</input_buffer>
@@ -211,6 +213,15 @@
       <output_buffer target="depth">debugDepth</output_buffer>
       <output_buffer>b_finalLDR</output_buffer>
     </forward_pass>
+
+    <!--<forward_pass name="OcclusionQueryPass">
+      <clear_mask>0</clear_mask>
+      <culling mask="0x20"></culling>
+      <near_far preserve="0"/>
+      <near_far computation="none"></near_far>
+      <output_buffer>b_finalLDR</output_buffer>
+      <output_buffer target="depth">debugDepth</output_buffer>
+    </forward_pass>-->
 
     <deferred_pass name="EndPass">
       <input_buffer unit="0">b_finalLDR</input_buffer> 

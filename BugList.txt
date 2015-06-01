@@ -47,6 +47,14 @@ At this point the _geomObj still has its address but an invalid one, since geomm
 25. change camera type will reset the fps camera walking speed
 26. change to trackball manipulator will make walking speed display 0.0;
 
+27. in the editor, since osg manages near and far, if you do a forward pass after the shading passes with debugDepth buffer
+attached and with depth mask set to false, and DO_NOT_COMPUTE_NEAR_FAR on that pass, the depth test behave strange. 
+When the camera moves far away from that object, you some part of the depth test failed, which should not be failed. 
+If you enable manually adjust near and far in the editor (which effectively disables the near and far computation for the 
+main camera), then the depth test becomes normal.
+
+28. Light out of radius doesn't work... wtf
+
 Should be fixed, but need more tests:
 1. Geometry picker bug, crash the program: (randomly, wtf!) 
 	- reproduce: pick an object, click on a different manipulator type. 
