@@ -181,6 +181,27 @@ void ShadowManager::addPointLight(PointLight *light)
 	}
 }
 
+void ShadowManager::removePointLight(PointLight *light)
+{
+	if (light->getCastShadow())
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			int index = light->getShadowMapIndex(i);
+			ShadowDepthCamera *depthCamera = _depthCameras[index];
+			osg::Camera *cam = depthCamera->getRoot();
+			int cc = cam->getThreadSafeReferenceCounting();
+			_depthCamGroup->removeChild(cam);
+			int dd = cam->getThreadSafeReferenceCounting();
+			
+			delete depthCamera;
+			int ee = cam->getThreadSafeReferenceCounting();
+			_depthCameras[index] = NULL;
+			_atlas->removeTile(index);
+		}
+	}
+}
+
 int ShadowManager::findAvailableDepthSlot()
 {
 	for (int i = 0; i < _depthCameras.size(); i++)
@@ -222,36 +243,36 @@ DepthCamGroupCallback::DepthCamGroupCallback()
 void DepthCamGroupCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 {
 	if (nv->getFrameStamp()->getFrameNumber() == 1) return;
-	for (int i = 0; i < _lmanager->getNumLights(); i++)
-	{
-		Light *l = _lmanager->getLight(i);
-		if (l->getLightType() == DIRECTIONAL)
-		{
-			DirectionalLight *dl = l->asDirectionalLight();
-			Camera &camera = Core::getMainCamera();
-			float nearClip = camera.getNearPlane();
-			float farClip = camera.getFarPlane();
-			float clipRange = farClip - nearClip;
+	//for (int i = 0; i < _lmanager->getNumLights(); i++)
+	//{
+	//	Light *l = _lmanager->getLight(i);
+	//	if (l->getLightType() == DIRECTIONAL)
+	//	{
+	//		DirectionalLight *dl = l->asDirectionalLight();
+	//		Camera &camera = Core::getMainCamera();
+	//		float nearClip = camera.getNearPlane();
+	//		float farClip = camera.getFarPlane();
+	//		float clipRange = farClip - nearClip;
 
-			float minZ = nearClip;
-			float shadowFar = dl->getShadowFarPlane();
-			float maxZ = nearClip + ((shadowFar > farClip ? farClip : shadowFar) / farClip) * clipRange;
+	//		float minZ = nearClip;
+	//		float shadowFar = dl->getShadowFarPlane();
+	//		float maxZ = nearClip + ((shadowFar > farClip ? farClip : shadowFar) / farClip) * clipRange;
 
-			float range = maxZ - minZ;
-			float ratio = maxZ / minZ;
+	//		float range = maxZ - minZ;
+	//		float ratio = maxZ / minZ;
 
-			int numSplits = dl->getNumSplits();
-			for (int j = 0; j < numSplits; j++)
-			{
-				float p = (j + 1) / static_cast<float>(numSplits);
-				float log = minZ * std::pow(ratio, p);
-				float uniform = minZ + range * p;
-				float d = (log - uniform) + uniform;
-				float dist = (d - nearClip) / clipRange;
-				dl->setCascadeSplitDist(j, dist);
-			}
-		}
+	//		int numSplits = dl->getNumSplits();
+	//		for (int j = 0; j < numSplits; j++)
+	//		{
+	//			float p = (j + 1) / static_cast<float>(numSplits);
+	//			float log = minZ * std::pow(ratio, p);
+	//			float uniform = minZ + range * p;
+	//			float d = (log - uniform) + uniform;
+	//			float dist = (d - nearClip) / clipRange;
+	//			dl->setCascadeSplitDist(j, dist);
+	//		}
+	//	}
 
-	}
+	//}
 	traverse(node, nv);
 }
