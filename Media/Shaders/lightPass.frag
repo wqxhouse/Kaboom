@@ -93,7 +93,8 @@ void main()
 
     vec3 result = vec3(0);
 	float sunShadowMask = material.sunShadowMask;
-	result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel) * mix(sunShadowMask, 1.0, 0.2);
+	result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel) * mix(sunShadowMask, 1.0, 0.1);
+	
 
     // Compute point lights
     ivec2 baseOffset = precomputeCoord + ivec2(0, 1);
@@ -138,7 +139,7 @@ void main()
         currentOffset = ivec2(i % 8, i / 8);
         currentLightId = texelFetch(u_lightsPerTile, baseOffset + currentOffset, 0).r;
         currentLight = lights[currentLightId];
-        result += applyShadowDirectionalLight(currentLight, material, u_shadowAtlas, u_shadowDepthMaps);
+        result += applyShadowDirectionalLight(currentLight, material, u_shadowAtlas, u_shadowDepthMaps) * sunShadowMask;
     }
 
     // SRGB - gamma correction ( TODO: last step or here??? )
