@@ -1,4 +1,4 @@
-#version 130
+#version 400
 #include "Shaders/gbufferUtil.glsl"
 
 // OSG 3.2.0 shader readfile bug: commenting #incldue won't get it commented; modified effectcompositor handles that

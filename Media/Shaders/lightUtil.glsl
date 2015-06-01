@@ -99,9 +99,12 @@ vec3 applyShadowDirectionalLight(Light light, Material material, sampler2DShadow
     vec3 v = normalize(-material.position);
     vec3 n = normalize(material.normal);
     vec3 h = normalize(l + v);
-	float shadow = computeDirectionalLightShadow(u_shadowAtlas, depthMap, light.shadowMapIndex, 
-			material.position, n, l, 40.0, 60.0, 0.015);
-    return computeLightModel(light, material, l, v, n, h, 1.0, shadow);
+	//float shadow = computeDirectionalLightShadow(u_shadowAtlas, depthMap, light.shadowMapIndex, 
+	//		material.position, n, l, 40.0, 60.0, 0.015);
+	// TODO: currently use shadow mask, for only 1 directional sun light. Might need to change back when multiple directional light
+	// is supported
+	float shadow = 1.0;
+    return computeLightModel(light, material, l, v, n, h, 1.0, 1.0);
 }
 
 vec3 applyPointLight(Light light, Material material) 

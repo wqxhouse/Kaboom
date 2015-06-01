@@ -62,13 +62,44 @@ float PCF(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoo
     return 1.0 - clamp(sum, 0.0, 1.0);
 }
 
+float PCFGather(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 projCoord, float baseBias, vec2 projSize)
+{
+	if(projCoord.x > 1.0 || projCoord.y > 1.0 || projCoord.x < 0.0 || projCoord.y < 0.0) 
+	{
+		return 1.0;
+	}	
+
+    vec2 atlasCoord = calcAtlasUVCoord(projCoord.xy, shadowInfo);
+    float biasedDepth = projCoord.z - baseBias;
+	vec2 offset = fract(projCoord.xy - 0.5);
+	vec4 group1 = textureGatherOffset(u_shadowAtlas, atlasCoord, biasedDepth, ivec2(-2, -2));
+	vec4 group2 = textureGatherOffset(u_shadowAtlas, atlasCoord, biasedDepth, ivec2(0, -2));
+	vec4 group3 = textureGatherOffset(u_shadowAtlas, atlasCoord, biasedDepth, ivec2(2, -2));
+	vec4 group4 = textureGatherOffset(u_shadowAtlas, atlasCoord, biasedDepth, ivec2(-2, 0));
+	vec4 group5 = textureGatherOffset(u_shadowAtlas, atlasCoord, biasedDepth, ivec2(0, 0));
+	vec4 group6 = textureGatherOffset(u_shadowAtlas, atlasCoord, biasedDepth, ivec2(2, 0));
+	vec4 group7 = textureGatherOffset(u_shadowAtlas, atlasCoord, biasedDepth, ivec2(-2, 2));
+	vec4 group8 = textureGatherOffset(u_shadowAtlas, atlasCoord, biasedDepth, ivec2(0, 2));
+	vec4 group9 = textureGatherOffset(u_shadowAtlas, atlasCoord, biasedDepth, ivec2(2, 2));
+	vec4 locols = vec4(group1.ab, group3.ab);
+	vec4 hicols = vec4(group7.rg, group9.rg);
+	locols.yz += group2.ab;
+	hicols.yz += group8.rg;
+	vec4 midcols = vec4(group1.rg, group3.rg) +  vec4(group7.ab, group9.ab) +
+                   vec4(group4.rg, group6.rg) + vec4(group4.ab, group6.ab) +
+				   mix(locols, hicols, offset.y);
+	vec4 cols = group5 + vec4(group2.rg, group8.ab);
+                    cols.xyz += mix(midcols.xyz, midcols.yzw, offset.x);
+	return dot(cols, vec4(1.0/25.0));
+}
+
 float computePointLightShadow(sampler2DShadow u_shadowAtlas, ShadowDepthMap shadowInfo, vec3 position,
 			vec3 n, vec3 l, float slopeScaledBias, float normalScaledBias, float baseBias) 
 {
     vec3 biasedPos = computeBiasedPosition(position, slopeScaledBias, normalScaledBias, n, l); 
 	vec3 projCoord = reprojectShadow(shadowInfo, biasedPos);
 
-    return PCF(u_shadowAtlas, shadowInfo, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE) );
+    return PCFGather(u_shadowAtlas, shadowInfo, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE) );
 }
 
 void getPSSMCascade(ShadowDepthMap depthMap[MAX_SHADOW_MAPS], int lightSMIndices[6],  
@@ -138,5 +169,5 @@ float computeDirectionalLightShadowMask(sampler2DShadow u_shadowAtlas, vec3 posi
 	vec3 projCoord = reprojectShadow(sdm, biasedPos);
 	baseBias *= resInv;
 
-	return PCF(u_shadowAtlas, sdm, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE));
+	return PCFGather(u_shadowAtlas, sdm, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE));
 }
