@@ -2,7 +2,7 @@
     <type id="101"> 
         <mesh>player_idle.fbx</mesh>
         <material name="____TestMaterial" />
-        <position>1.1 0.0 -1.1</position>
+        <position>0.5 0.0 -1.1</position>
         <orientation>0.500000 -0.500000 -0.500000 0.500000</orientation>
         <scale>0.0031 0.0031 0.0031</scale>
     </type>
