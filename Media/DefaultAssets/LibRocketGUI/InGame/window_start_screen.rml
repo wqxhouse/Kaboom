@@ -3,30 +3,34 @@
 		<link type="text/rcss" href="rkt_new.rcss"/>
 		<link type="text/rcss" href="invader-m.rcss"/>
 	  <style>
-		div#title{
-		position:absolute;
-		left:40%;
-		font-size:600%;
-		color: #BA55D3;
-		}
-		button{
-			position:relative;
-			left: 45%;
-			top : 50%;
-		}
-		button:hover{
-				color: yellow;
-		}
-		body
-		{
-			width: 100%;
-			height: 100%;
-			margin: auto;
-		}
-	  </style>
+      div#title{
+      position:absolute;
+      left:40%;
+      font-size:600%;
+      color: #BA55D3;
+      }
+      div#buttons{
+      position:absolute;
+      left: 45%;
+      top : 35%;
+      }
+      button:hover{
+      color: yellow;
+      }
+      button#exitgame{
+      padding-top: 3%;
+      }
+      body
+      {
+      width: 100%;
+      height: 100%;
+      margin: auto;
+      }
+    </style>
 	</head>
 	<body>
 	  <div id="title">Kaboom!</div>
+    <div id="buttons">
 	  <button id="startgame" onclick="load_game">
 		Start Game you pleeb
 	  </button>
@@ -34,5 +38,6 @@
 	  <button id="exitgame">
 		Exit game
 	  </button>
+    </div>
 	</body>
 </rml>

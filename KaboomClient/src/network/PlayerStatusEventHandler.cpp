@@ -17,10 +17,13 @@ PlayerStatusEventHandler::PlayerStatusEventHandler(Game *game)
 
 void PlayerStatusEventHandler::handle(const Event &e) const {
     const PlayerStatusEvent &evt = static_cast<const PlayerStatusEvent &>(e);
-
+	clock_t beginTime;
     Entity *entity = game->getEntityManager().getEntity(evt.getEntityId());
 	if (entity == nullptr){
 		return;
+	}
+	if (evt.isRunning()){
+		beginTime = clock();
 	}
     auto playerStatusComp = entity->getComponent<PlayerStatusComponent>();
     playerStatusComp->setAlive(evt.isAlive());
@@ -38,10 +41,12 @@ void PlayerStatusEventHandler::handle(const Event &e) const {
 	auto soundComp = entity->getComponent<SoundComponent>();
 	if (evt.isRunning()&&!evt.isJumping()){
 		//game->getSoundManager().playSound(SoundType::WALKING, bombPos);
-		
+		clock_t t = clock();
 		soundComp->setListenerPosition(playerPos);
 		soundComp->setListenerRotation(playerRot);
 		soundComp->playSound(bombPos);
+		std::cout <<"clock time"<< clock() - t << std::endl;
+		std::cout << "afterwards" << std::endl;
 	}
 	else{
 		soundComp->stopSound();
@@ -57,7 +62,10 @@ void PlayerStatusEventHandler::handle(const Event &e) const {
 	Model* model = modelComp->getModel();
 
 	if (evt.isRunning()) {
+		clock_t t = clock();
 		model->playAnimation(RUNNING);
+		std::cout << "clock time" << ((float)clock() - (float)beginTime)/CLOCKS_PER_SEC << std::endl;
+		std::cout << "afterwards" << std::endl;
 	}
 	else {
 		model->playAnimation(IDLE);

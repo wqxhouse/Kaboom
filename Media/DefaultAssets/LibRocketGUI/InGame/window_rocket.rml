@@ -95,9 +95,8 @@
     height: 50%;
     top: 50%;
     left: 60%;
-    font-size:265%;
-    vertical-align: middle;
-    color: black;
+    font-size:200%;
+    color: #008b8b;
     }
     body
     {
@@ -106,13 +105,17 @@
     margin: auto;
     }
     div.clock{
+    color: #008b8b;
     position: absolute;
     left:40%;
     background-decorator: image;
     background-image: timer-display_v2.tga;
-    width: 20%;
-    font-size:500%;
+    width: 225px;
+    height: 125px;
+    padding-top: 3.3%;
+    font-size:300%;
     text-align: center;
+    top: 1%;
     }
     div#health{
     position: absolute;
@@ -125,6 +128,7 @@
     width: 95%;
     height: 100%;
     top: 9%;
+    color:#008b8b;
     }
     div#inner_right{
     position: absolute;
@@ -142,12 +146,37 @@
     top: 63%;
     left : 79.5%;
     }
+    div#gameStateMessage{
+    position:absolute;
+    top:15%;
+    left:40%;
+    }
+    div#kills{
+    position:absolute;
+    left:10%;
+    top:15%;
+    }
+    div#deaths{
+    position:absolute;
+    left:10%;
+    top:27%;
+    }
+    div#hp{
+    position:absolute;
+    left:15%;
+    top:62%;
+    font-size:250%;
+    }
   </style>
 
 </head>
 <body class="window">
   <div id="health" class = "hp_100">
-    <div id="inner" class ="inner_info"></div>
+    <div id="inner" class ="inner_info">
+      <div id="kills">100</div>
+      <div id="deaths">200</div>
+      <div id="hp">300</div>
+    </div>
   </div>
   <table id="bomb_counter">
     <tr id ="bombs">
@@ -178,6 +207,7 @@
   </div>
   <div class ="clock">0:00</div>
   <div id="extra"></div>
+  <div id="gameStateMessage">testing</div>
 </body>
 
 </rml>

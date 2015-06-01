@@ -35,8 +35,8 @@ void setupGUIDocuments(Game *game)
 	click->setMode(CONNECT_TO_SERVER);
 	Rocket::Core::EventListener * startGameListener = click;
 	Rocket::Core::EventListener * endGameListener = new OnClickEndGameListener(game);
-	marty->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
-	marty->GetFirstChild()->GetElementById("exitgame")->AddEventListener("click", endGameListener);
+	marty->GetFirstChild()->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
+	marty->GetFirstChild()->GetFirstChild()->GetElementById("exitgame")->AddEventListener("click", endGameListener);
 	std::string alpha[] = {"qwertyuiop","asdfghjkl","zxcvbnm"};
 	Rocket::Core::ElementDocument *letters = manager->getWindow(3);
 	Rocket::Core::Element *table = letters->GetFirstChild();

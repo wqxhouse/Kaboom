@@ -21,7 +21,16 @@ void MatchStateEventHandler::handle(const Event &e) const {
     gameMode.setTimer(Timer(evt.getDuration().count(), startTime));
 
     // TODO: Handle match state event
+	if (evt.getState() == GameMode::MatchState::PRE_MATCH) {
+		game->getGameGUIEventHandler()->preGame();
+		return;
+	}
+	if (evt.getState() == GameMode::MatchState::IN_PROGRESS) {
+		game->getGameGUIEventHandler()->inProgress();
+		return;
+	}
     if (evt.getState() == GameMode::MatchState::POST_MATCH) {
+		game->getGameGUIEventHandler()->postGame();
         return;
     }
 }
