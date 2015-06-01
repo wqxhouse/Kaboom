@@ -15,5 +15,3 @@ float getSunShadowMask(vec3 vs_position, vec3 vs_normalized_normal)
 	return computeDirectionalLightShadowMask(u_shadowAtlas, vs_position, n, l, u_vwvp_sun, u_atlas_uvcoord_sun, 
 										     u_tex_scale_sun, 40.0, 60.0, 0.015);
 }
-
-
