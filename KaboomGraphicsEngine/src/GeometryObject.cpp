@@ -28,8 +28,9 @@ GeometryObject::GeometryObject(const std::string &name, osg::Node *geomNode)
 	osg::ref_ptr<osg::CullFace> cullSettings(new osg::CullFace);
 	
 	// TODO: figure out how to deal with reflection for back faces
+    // HACK: Disabled back-face culling so that players cannot see through walls.
 	cullSettings->setMode(osg::CullFace::BACK);
-	geomNode->getOrCreateStateSet()->setAttributeAndModes(cullSettings, osg::StateAttribute::ON);
+	geomNode->getOrCreateStateSet()->setAttributeAndModes(cullSettings, osg::StateAttribute::OFF);
 	_materialNode->addChild(geomNode);
 
 	_objRoot->setUpdateCallback(new GeometryObjectNodeUpadateCallback(this));
