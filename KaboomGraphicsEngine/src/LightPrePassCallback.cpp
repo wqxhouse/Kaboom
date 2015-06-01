@@ -217,7 +217,7 @@ std::vector<Light *> LightPrePassCallback::performLightCulling()
 		else
 		{
 			// TODO: output light ... culled, use custom logging later
-			OSG_INFO << "light " << l->getName() << " frustum culled." << std::endl;
+			OSG_WARN << "light " << l->getName() << " frustum culled." << std::endl;
 
 			// l->setNeedUpdate(false);
 			if (pl != NULL)

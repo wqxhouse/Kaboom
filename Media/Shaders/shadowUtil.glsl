@@ -170,5 +170,5 @@ float computeDirectionalLightShadowMask(sampler2DShadow u_shadowAtlas, vec3 posi
 	vec3 projCoord = reprojectShadow(sdm, biasedPos);
 	baseBias *= resInv;
 
-	return PCFGather(u_shadowAtlas, sdm, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE));
+	return PCF(u_shadowAtlas, sdm, projCoord, baseBias, vec2(0.5 / SHADOW_MAP_ATLAS_SIZE));
 }

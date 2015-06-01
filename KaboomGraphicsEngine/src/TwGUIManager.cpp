@@ -609,6 +609,18 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		fitObjectToScreen(geomRoot);
 	}, item, fitToScreenDef.c_str());
 
+
+	std::string pickModelDef = nameGroupDef + " label='" + PICK_LABEL + "'";
+	TwAddButton(bar, pickModelDef.c_str(), 
+		[](void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string name = item->name;
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		GeometryObject *obj = gm->getGeometryObject(name);
+		osg::MatrixTransform *geomRoot = obj->getRoot();
+		GeometryObjectManipulator::attachTransformNode(obj->getRoot());
+	}, item, pickModelDef.c_str());
+
 	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
 	TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
 		[](const void *value, void *clientData) {

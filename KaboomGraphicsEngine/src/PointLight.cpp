@@ -84,3 +84,14 @@ void PointLight::initShadowMapInfo()
 		_shadowMapInfo[i]._shadowMapIndex = -1;
 	}
 }
+
+void PointLight::resetShadowMapProperities()
+{
+	_shadowMapRes = 512;
+	for (int i = 0; i < 6; i++)
+	{
+		_shadowMapInfo[i]._atlasPos = osg::Vec2i(-1, -1);
+		_shadowMapInfo[i]._hasAtlasPos = false;
+		_shadowMapInfo[i]._shadowMapIndex = -1;
+	}
+}

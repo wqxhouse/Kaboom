@@ -110,6 +110,10 @@ void setupScene()
 	l->addPointLight("hello_world", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 100, true);
 	l->getLight("hello_world")->asPointLight()->setIntensity(2.0);
 
+	//l->addPointLight("hello_world1", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 100, true);
+
+	//l->addPointLight("hello_world2", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 100, true);
+
 	//for (int i = 0; i < 10; i++)
 	//{
 	//	l->addPointLight("abc" + std::to_string(i), osg::Vec3(10000, 10000, 10000), osg::Vec3(), 10, true, 1.

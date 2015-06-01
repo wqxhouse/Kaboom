@@ -38,6 +38,7 @@ public:
 
 	// override setPosition for updating bbox
 	virtual void setPosition(const osg::Vec3 &pos);
+	void resetShadowMapProperities();
 
 private:
 	void initShadowMapInfo();

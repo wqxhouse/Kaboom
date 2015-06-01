@@ -90,3 +90,11 @@ private:
 	static osg::ref_ptr<osg::Node> _occlusionSphere;
 };
 
+class PointLightOcclusionNodeCallback : public osg::NodeCallback
+{
+public:
+	PointLightOcclusionNodeCallback(PointLight *pl);
+	virtual void operator()(osg::Node* node, osg::NodeVisitor* nv);
+private:
+	PointLight *_pl;
+};
