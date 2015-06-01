@@ -202,15 +202,28 @@ std::vector<Light *> LightPrePassCallback::performLightCulling()
 
 		bool visible = l->getLightBound().intersectBound(frustum);
 
+		ShadowManager *sm = Core::getWorldRef().getLightManager()->getShadowManager();
+		PointLight *pl = l->asPointLight();
+
 		if (visible == true)
 		{
 			visibleLights.push_back(l);
+
+			if (pl != NULL)
+			{
+				sm->setUpdatePointLightShadow(pl, true);
+			}
 		}
 		else
 		{
 			// TODO: output light ... culled, use custom logging later
-			OSG_WARN << "light " << l->getName() << " frustum culled." << std::endl;
+			OSG_INFO << "light " << l->getName() << " frustum culled." << std::endl;
+
 			// l->setNeedUpdate(false);
+			if (pl != NULL)
+			{
+				sm->setUpdatePointLightShadow(pl, false);
+			}
 		}
 	}
 

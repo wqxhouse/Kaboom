@@ -51,6 +51,8 @@ public:
 	float getShadowMapScaleWRTAtlas(int index);
 	osg::Vec2 getAtlasPosUVCoord(int index);
 
+	bool setUpdatePointLightShadow(PointLight *pl, bool tf);
+
 private:
 	void getPassInfo();
 	void configShadowMapFaceLookupCube();

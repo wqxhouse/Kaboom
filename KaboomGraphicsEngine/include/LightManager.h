@@ -3,7 +3,9 @@
 #include <unordered_map>
 #include <osg/Vec3>
 #include <osg/Group>
+#include <osg/OcclusionQueryNode>
 #include "ShadowManager.h"
+
 
 namespace osgFX
 {
@@ -62,8 +64,19 @@ public:
 	// TODO: refactor
 	DirectionalLight *getSunLight();
 
+	bool getPointLightOcclusionResult(PointLight *pt);
+
+	inline osg::ref_ptr<osg::Group> getPointLightOcclusionTestGroup()
+	{
+		return _pointLightOcclusionTestGroup;
+	}
+
 private:
+	void configOcclusionSphere();
+	void addPointLightToOcclusionQuery(PointLight *pt);
+
 	std::unordered_map<std::string, Light *> _lightsMap;
+	std::unordered_map<std::string, osg::ref_ptr<osg::OcclusionQueryNode> > _ocQueryMap;
 	std::vector<Light *> _lights;
 	int _numLights;
 
@@ -71,5 +84,9 @@ private:
 	ShadowManager *_shadowManager;
 
 	DirectionalLight *_sunLight;
+
+	osg::ref_ptr<osg::Group> _pointLightOcclusionTestGroup;
+
+	static osg::ref_ptr<osg::Node> _occlusionSphere;
 };
 

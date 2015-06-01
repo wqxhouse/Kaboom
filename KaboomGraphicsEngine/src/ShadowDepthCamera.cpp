@@ -11,7 +11,7 @@
 #include "FrustumHelper.h"
 
 ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas *atlas, osg::Group *geomRoot, Light *light, int face)
-	: _shadowAtlasTex(shadowAtlasTex), _atlas(atlas), _light(light), _face(face), _geomRoot(geomRoot)
+: _shadowAtlasTex(shadowAtlasTex), _atlas(atlas), _light(light), _face(face), _geomRoot(geomRoot), _active(true)
 {
 	_id = _highest_id++;
 
@@ -37,14 +37,15 @@ ShadowDepthCamera::ShadowDepthCamera(osg::Texture2D *shadowAtlasTex, ShadowAtlas
 
 void ShadowDepthCamera::setActive(bool tf)
 {
-	if (tf)
+	if (tf && !_active)
 	{
 		_shadowDepthCam->setNodeMask(~0x0);
 	}
-	else
+	else if (!tf && _active)
 	{
 		_shadowDepthCam->setNodeMask(0x0);
 	}
+	_active = tf;
 }
 
 

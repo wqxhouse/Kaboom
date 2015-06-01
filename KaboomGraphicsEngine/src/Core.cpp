@@ -265,6 +265,9 @@ void Core::configCubemapPrefilterPass()
 	cam->getOrCreateStateSet()->setTextureAttributeAndModes(7, cubeTex);
 
 	_passes->addChild(_cubemapPreFilter.getRoot());
+
+	//TODO: refactor
+	//_passes->addChild(Core::getWorldRef().getLightManager()->getPointLightOcclusionTestGroup());
 }
 
 void Core::configSceneNode()
