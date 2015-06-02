@@ -262,6 +262,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\DraggerUpdateCallback.h" />
     <ClInclude Include="include\EffectCompositor.h" />
     <ClInclude Include="include\ExplosionEffect.h" />
+    <ClInclude Include="include\FrustumHelper.h" />
     <ClInclude Include="include\GeometryCache.h" />
     <ClInclude Include="include\GeometryObject.h" />
     <ClInclude Include="include\GeometryObjectManager.h" />
@@ -279,11 +280,17 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\MaterialLoader.h" />
     <ClInclude Include="include\MaterialManager.h" />
     <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\ObjectGlowManager.h" />
     <ClInclude Include="include\ModelCache.h" />
     <ClInclude Include="include\ParticleEffect.h" />
     <ClInclude Include="include\ParticleEffectManager.h" />
     <ClInclude Include="include\ParticleTexture.h" />
     <ClInclude Include="include\PointLight.h" />
+    <ClInclude Include="include\SAOPassCallback.h" />
+    <ClInclude Include="include\ShadowAtlas.h" />
+    <ClInclude Include="include\ShadowDepthCamera.h" />
+    <ClInclude Include="include\ShadowManager.h" />
+    <ClInclude Include="include\ShadowTile.h" />
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\SparkDrawable.h" />
     <ClInclude Include="include\SparkUpdatingHandler.h" />
@@ -311,6 +318,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\EffectCompositor.cpp" />
     <ClCompile Include="src\EffectCompositorXML.cpp" />
     <ClCompile Include="src\ExplosionEffect.cpp" />
+    <ClCompile Include="src\FrustumHelper.cpp" />
     <ClCompile Include="src\GeometryCache.cpp" />
     <ClCompile Include="src\GeometryObject.cpp" />
     <ClCompile Include="src\GeometryObjectManager.cpp" />
@@ -327,11 +335,17 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\MaterialLoader.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\ObjectGlowManager.cpp" />
     <ClCompile Include="src\ModelCache.cpp" />
     <ClCompile Include="src\ParticleEffect.cpp" />
     <ClCompile Include="src\ParticleEffectManager.cpp" />
     <ClCompile Include="src\ParticleTexture.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
+    <ClCompile Include="src\SAOPassCallback.cpp" />
+    <ClCompile Include="src\ShadowAtlas.cpp" />
+    <ClCompile Include="src\ShadowDepthCamera.cpp" />
+    <ClCompile Include="src\ShadowManager.cpp" />
+    <ClCompile Include="src\ShadowTile.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\SparkDrawable.cpp" />
     <ClCompile Include="src\SparkUpdatingHandler.cpp" />
@@ -353,6 +367,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <Xml Include="..\Media\EffectFiles\Pipeline.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\Media\EffectFiles\SAOPassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\ShadowDepthPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\template.xml" />
   </ItemGroup>
@@ -369,6 +385,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\cubemapSpecularPreFilter.frag" />
     <None Include="..\Media\Shaders\cubemapPrefilter.vert" />
     <None Include="..\Media\Shaders\defaultQuad.vert" />
+    <None Include="..\Media\Shaders\emptyFragment.frag" />
+    <None Include="..\Media\Shaders\finalPass.frag" />
     <None Include="..\Media\Shaders\gbufferUtil.glsl" />
     <None Include="..\Media\Shaders\gbuffer_plain.frag" />
     <None Include="..\Media\Shaders\gbuffer_plain.vert" />
@@ -383,12 +401,19 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\lightTiling.frag" />
     <None Include="..\Media\Shaders\lightUtil.glsl" />
     <None Include="..\Media\Shaders\Material.glsl" />
+    <None Include="..\Media\Shaders\objectGlow.frag" />
+    <None Include="..\Media\Shaders\objectGlow.vert" />
+    <None Include="..\Media\Shaders\Samples.glsl" />
+    <None Include="..\Media\Shaders\sao.frag" />
+    <None Include="..\Media\Shaders\saoBlur.frag" />
+    <None Include="..\Media\Shaders\shadowUtil.glsl" />
     <None Include="..\Media\Shaders\SMAA\blend.frag" />
     <None Include="..\Media\Shaders\SMAA\blend.vert" />
     <None Include="..\Media\Shaders\SMAA\edgedetection.frag" />
     <None Include="..\Media\Shaders\SMAA\edgedetection.vert" />
     <None Include="..\Media\Shaders\SMAA\neighborhood.frag" />
     <None Include="..\Media\Shaders\SMAA\neighborhood.vert" />
+    <None Include="..\Media\Shaders\sunShadowMask.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KaboomCommon\KaboomCommon.vcxproj">

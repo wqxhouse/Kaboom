@@ -53,6 +53,16 @@ public:
 	osg::Matrix getMatrix();
 	void setMatrix(const osg::Matrix &matrix);
 
+	inline void setReceiveShadow(bool tf)
+	{
+		_receiveShadow = tf;
+	}
+
+	inline bool getReceiveShadow()
+	{
+		return _receiveShadow;
+	}
+
 	void decompose(osg::Vec3 &translate, osg::Quat &rot, osg::Vec3 &scale, osg::Quat &so);
 
 	void rename(const std::string& newName);
@@ -81,6 +91,8 @@ private:
 
 	osg::ref_ptr<osg::Group> _materialNode;
 	osg::ref_ptr<osg::MatrixTransform> _objRoot;
+
+	bool _receiveShadow;
 
 	static osg::ref_ptr<osg::Program> _plainShader;
 	static osg::ref_ptr<osg::Program> _texturedShader;

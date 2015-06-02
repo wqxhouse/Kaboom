@@ -16,9 +16,10 @@ public:
 	GeometryObjectManager();
 	~GeometryObjectManager();
 
-	bool addGeometry(const std::string &name, osg::Node *geomNode, osg::Vec3 pos = osg::Vec3(0, 0, 0));
-	bool addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName, osg::Vec3 pos = osg::Vec3(0, 0, 0));
-	bool addGeometryByTypeId(const std::string &name, const int type_id, osg::Vec3 pos = osg::Vec3(0, 0, 0));
+	bool addGeometry(const std::string &name, osg::Node *geomNode, osg::Vec3 pos = osg::Vec3(0, 0, 0), bool receiveShadow = true);
+	// TODO: right now the receiveShadow is only used to determine shadow map bounds, quite hacky but we have no time. 
+	bool addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName, osg::Vec3 pos = osg::Vec3(0, 0, 0), bool receiveShadow = true);
+	bool addGeometryByTypeId(const std::string &name, const int type_id, osg::Vec3 pos = osg::Vec3(0, 0, 0), bool receiveShadow = true);
 
 	bool setGeometryMaterial(const std::string &geomName, Material *material);
 	void deleteGeometry(const std::string &name);
@@ -26,6 +27,11 @@ public:
 	GeometryObject* copyGeometry(const std::string &name);
 
 	bool doesNameExist(const std::string &name);
+
+	inline osg::ref_ptr<osg::Group> getShadowedSceneNode()
+	{
+		return _shadowedScene;
+	}
 
 	inline const std::unordered_map<std::string, GeometryObject *> getGeometryObjectMapRef() const
 	{
@@ -44,6 +50,8 @@ private:
 	std::unordered_map<std::string, GeometryObject *> _geomObjMap;
 	osg::ref_ptr<osg::Group> _geomRoot;
 	int _suffix;
+
+	osg::ref_ptr<osg::Group> _shadowedScene; // used for calc scene bound
 
 	// TODO: add receive shadow flag when implementing shadow maps
 };

@@ -1,12 +1,11 @@
 struct Light 
 {
-    vec3 position;
-    vec3 color;
-    vec3 dirFromLight;
-    // directional light & spot light
-    float radius;
-    // point light
-	// float intensity;
+    vec3 position;  
+	float radius;
+    vec3 color;	    
+    vec3 dirFromLight;  
+	float padding;
+	int shadowMapIndex[6]; // std140 made this 16 * 6 bytes instead of 4 * 6 bytes, which sucks
 };
 
 vec3 computeSpecular(vec3 specularColor, float roughness, float NxL, float LxH, float NxV, float NxH) 
@@ -61,11 +60,9 @@ vec3 computeLightModel(Light light, Material material,
 	//vec3 diffuseContribution = DiffuseBRDF(diffuseColor, roughness, NoV, NoL, VoH);
     lightingResult += diffuseContribution;
 
-	vec3 commonTerm = NoL * light.color * shadowFactor * attenuation; // TODO: implement shadow later 
+	vec3 commonTerm = NoL * light.color * shadowFactor * attenuation;
 	lightingResult *= commonTerm;
 
-	// debug
-	// lightingResult = pow(lightingResult, vec3(1/2.2));
     return lightingResult;
 }
 
@@ -88,25 +85,63 @@ vec3 applyDirectionalLight(Light light, Material material)
     float attenuation = 1.0;
     // no att for dir light
 	
-    vec3  l = -light.dirFromLight;
-    //vec3  v = normalize(eyePosition - material.position);
-    vec3  v = normalize(-material.position);
-    vec3  n = normalize(material.normal);
-    vec3  h = normalize(l + v);
+    vec3 l = -light.dirFromLight;
+    //vec3 v = normalize(eyePosition - material.position);
+    vec3 v = normalize(-material.position);
+    vec3 n = normalize(material.normal);
+    vec3 h = normalize(l + v);
     return computeLightModel(light, material, l, v, n, h, attenuation, 1.0);
+}
+
+vec3 applyShadowDirectionalLight(Light light, Material material, sampler2DShadow u_shadowAtlas, ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
+{
+    vec3 l = -light.dirFromLight;
+    vec3 v = normalize(-material.position);
+    vec3 n = normalize(material.normal);
+    vec3 h = normalize(l + v);
+	//float shadow = computeDirectionalLightShadow(u_shadowAtlas, depthMap, light.shadowMapIndex, 
+	//		material.position, n, l, 40.0, 60.0, 0.015);
+	// TODO: currently use shadow mask, for only 1 directional sun light. Might need to change back when multiple directional light
+	// is supported
+	float shadow = 1.0;
+    return computeLightModel(light, material, l, v, n, h, 1.0, 1.0);
 }
 
 vec3 applyPointLight(Light light, Material material) 
 {
     float distanceToLight = distance(material.position, light.position);
     float attenuation = computePointLightAttenuation(light, distanceToLight);
-    vec3  l = normalize(light.position - material.position);
-    // vec3  v = normalize(eyePosition - material.position);
-    vec3  v = normalize(-material.position);
-    vec3  n = normalize(material.normal);
-    vec3  h = normalize(l + v);
+    vec3 l = normalize(light.position - material.position);
+    // vec3 v = normalize(eyePosition - material.position);
+    vec3 v = normalize(-material.position);
+    vec3 n = normalize(material.normal);
+    vec3 h = normalize(l + v);
     return computeLightModel(light, material, l ,v, n, h, attenuation, 1.0);
 	//return vec3(attenuation);
+}
+
+//vec3 applyShadowPointLight(Light light, Material material, mat4 u_viewInvMat,
+//			sampler2D u_shadowAtlas, samplerCube u_shadowCube, ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
+vec3 applyShadowPointLight(Light light, Material material, mat4 u_viewInvMat,
+			sampler2DShadow u_shadowAtlas, samplerCube u_shadowCube, ShadowDepthMap depthMap[MAX_SHADOW_MAPS])
+{
+	float distanceToLight = distance(material.position, light.position);   
+    float attenuation = computePointLightAttenuation(light, distanceToLight);
+
+    vec3 l = normalize(light.position - material.position);
+    vec3 v = normalize(-material.position);
+    vec3 n = normalize(material.normal);
+    vec3 h = normalize(l + v);
+
+	vec3 l_ws = (u_viewInvMat * vec4(-l, 0)).xyz;
+	int face = int((textureLod(u_shadowCube, l_ws, 0).r) * 5.0);
+    int shadowMapIndex = light.shadowMapIndex[face];
+	ShadowDepthMap shadowInfo = depthMap[shadowMapIndex];
+
+    float shadowFactor = computePointLightShadow(u_shadowAtlas, shadowInfo, material.position, n, l, 0.2, 0.001, 0.0015);
+
+    return computeLightModel(light, material, l, v, n, h, attenuation, shadowFactor);
+	// return vec3(1);
 }
 
 // Modified version of Unreal 4's

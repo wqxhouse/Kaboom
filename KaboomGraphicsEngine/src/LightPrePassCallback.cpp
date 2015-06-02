@@ -29,7 +29,7 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	// 2. update shader input 
 	// retrieve ubb
 	osg::UniformBufferBinding *ubb = 
-		static_cast<osg::UniformBufferBinding *>(ss->getAttribute(osg::StateAttribute::UNIFORMBUFFERBINDING));
+		static_cast<osg::UniformBufferBinding *>(ss->getAttribute(osg::StateAttribute::UNIFORMBUFFERBINDING, 0));
 
 	osg::UniformBufferObject* ubo
 		= static_cast<osg::UniformBufferObject*>(ubb->getBufferObject());
@@ -38,26 +38,20 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 	
 	std::vector<int> dirLightIds;
 	std::vector<int> pointLightIds;
+	std::vector<int> dirShadowLightIds;
+	std::vector<int> pointShadowLightIds;
+	std::vector<int> shadowMapIndex(6);
 
 	int uboIndex = 0;
-	//std::cout << Core::getMainCamera().getNearPlane() << std::endl;
-	//std::cout << Core::getMainCamera().getFarPlane() << std::endl;
 
 	// TODO: add shadow information
 	for (int i = 0; i < visible_lights.size(); i++)
 	{
 		Light *l = visible_lights[i];
-		//vec3 position;
-		//vec3 color;
-		//vec3 lookat; // directional light & spot light
-		//float radius; // point light
-
+	
 		// apply viewspace transformation here
 		// TODO: fix this, currently this causes flickering
 		osg::Vec3 position = l->getPosition() * Core::getMainCamera().getViewMatrix();
-		// std::cout << position << std::endl;
-
-		// osg::Vec3 position = l->getPosition();
 
 		// Here color is multiplied with intensity
 		osg::Vec3 color = l->getColor() * l->getIntensity();
@@ -74,17 +68,37 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 			dirFromLight.y() = dir.y();
 			dirFromLight.z() = dir.z();
 
-			// std::cout << Core::getMainCamera().getViewMatrix() << std::endl;
-			// std::cout << dir << std::endl;
-
-			dirLightIds.push_back(i);
+			if (l->getCastShadow())
+			{
+				dirShadowLightIds.push_back(i);
+				for (int j = 0; j < dirLight->getNumSplits(); j++)
+				{
+					shadowMapIndex[j] = dirLight->getShadowMapIndexForSplit(j);
+				}
+			}
+			else
+			{
+				dirLightIds.push_back(i);
+			}
 		}
 		else if (l->getLightType() == POINTLIGHT)
 		{
 			PointLight *ptLight = l->asPointLight();
 			radius = ptLight->getRadius();
 
-			pointLightIds.push_back(i);
+			if (l->getCastShadow())
+			{
+				pointShadowLightIds.push_back(i);
+				for (int j = 0; j < 6; j++)
+				{
+					shadowMapIndex[j] = ptLight->getShadowMapIndex(j);
+					// shadowMapIndex[i] = i;
+				}
+			}
+			else
+			{
+				pointLightIds.push_back(i);
+			}
 		}
 
 		// TODO: think a way to do lazy updating 
@@ -92,7 +106,9 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		(*array)[uboIndex + 0] = (float)position.x();
 		(*array)[uboIndex + 1] = (float)position.y();
 		(*array)[uboIndex + 2] = (float)position.z();
-		// padding 3
+		// radius 
+		(*array)[uboIndex + 3] = radius;
+
 		(*array)[uboIndex + 4] = (float)color.x();
 		(*array)[uboIndex + 5] = (float)color.y();
 		(*array)[uboIndex + 6] = (float)color.z();
@@ -100,10 +116,27 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		(*array)[uboIndex + 8] = (float)dirFromLight.x();
 		(*array)[uboIndex + 9] = (float)dirFromLight.y();
 		(*array)[uboIndex + 10] = (float)dirFromLight.z();
+		// padding 11
 
-		(*array)[uboIndex + 11] = radius;
+		// for int array, save int bit pattern in float array
+		(*array)[uboIndex + 12] = *(float *)&shadowMapIndex[0]; 
+		(*array)[uboIndex + 16] = *(float *)&shadowMapIndex[1]; 
+		(*array)[uboIndex + 20] = *(float *)&shadowMapIndex[2]; 
+		(*array)[uboIndex + 24] = *(float *)&shadowMapIndex[3]; 
+		(*array)[uboIndex + 28] = *(float *)&shadowMapIndex[4]; 
+		(*array)[uboIndex + 32] = *(float *)&shadowMapIndex[5]; 
 
-		uboIndex += 12; // for the next light
+		// debug
+		//(*array)[uboIndex + 12] = 1.0f;
+		//(*array)[uboIndex + 16] = 2.0f;
+		//(*array)[uboIndex + 20] = 3.0f;
+		//(*array)[uboIndex + 24] = 4.0f;
+		//(*array)[uboIndex + 28] = 5.0f;
+		//(*array)[uboIndex + 32] = 6.0f;
+
+		// padding 33 - 36
+
+		uboIndex += 36; // for the next light
 	}
 
 	array->dirty();
@@ -111,7 +144,9 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 
 	// set uniforms
 	ss->getUniform("u_countDirectionalLight")->set((int)dirLightIds.size());
+	ss->getUniform("u_countShadowDirectionalLight")->set((int)dirShadowLightIds.size());
 	ss->getUniform("u_countPointLight")->set((int)pointLightIds.size());
+	ss->getUniform("u_countShadowPointLight")->set((int)pointShadowLightIds.size());
 
 	// set dirLight array
 	osg::Uniform *dirArray = ss->getUniform("u_arrayDirectionalLight");
@@ -126,12 +161,20 @@ void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 		pointArray->setElement(i, pointLightIds[i]);
 	}
 
-	// update mvp 
-	//ss->getUniform("u_viewMat")->set(osg::Matrixf(Core::getMainCamera().getViewMatrix()));
-	ss->getUniform("u_projMat")->set(osg::Matrixf(Core::getMainCamera().getClampedProjectionMatrix()));
-	//ss->getUniform("u_viewProjMat")->set(osg::Matrixf(Core::getMainCamera().getClampedViewProjectionMatrix()));
+	osg::Uniform *pointShadowArray = ss->getUniform("u_arrayShadowPointLight");
+	for (int i = 0; i < pointShadowLightIds.size(); i++)
+	{
+		pointShadowArray->setElement(i, pointShadowLightIds[i]);
+	}
 
-	//ss->getUniform("u_viewProjMat")->set(osg::Matrixf(Core::getMainCamera().getViewMatrix()) * osg::Matrixf(Core::getMainCamera().getProjectionMatrix()));
+	osg::Uniform *dirShadowArray = ss->getUniform("u_arrayShadowDirectionalLight");
+	for (int i = 0; i < dirShadowLightIds.size(); i++)
+	{
+		dirShadowArray->setElement(i, dirShadowLightIds[i]);
+	}
+
+	// update projMat 
+	ss->getUniform("u_projMat")->set(osg::Matrixf(Core::getMainCamera().getClampedProjectionMatrix()));
 }
 
 std::vector<Light *> LightPrePassCallback::performLightCulling()
@@ -142,21 +185,6 @@ std::vector<Light *> LightPrePassCallback::performLightCulling()
 	const osg::Matrix viewMat = Core::getMainCamera().getViewMatrix();
 
 	osg::Matrix inv_vp = osg::Matrix::inverse(viewMat * projMat);
-
-	//osg::Polytope frustum;
-	//frustum.setToUnitFrustum();
-	//frustum.transformProvidingInverse(inv_vp);
-
-	// debug 
-	/*osg::Matrix dview;
-	dview.makeLookAt(osg::Vec3(0, -100, 0), osg::Vec3(0, 0, 0), osg::Vec3(0, 0, 1));
-
-	osg::Matrix dproj;
-	dproj.makeFrustum(-1, 1, -1, 1, 0.1, 1000);
-
-	osg::Matrix dmvp = dview * dproj;
-	osg::Matrix invMvp;
-	invMvp.invert(dmvp);*/
 
 	osg::Polytope frustum;
 	frustum.setToUnitFrustum();
@@ -172,16 +200,46 @@ std::vector<Light *> LightPrePassCallback::performLightCulling()
 			continue;
 		}
 
-		bool visible = l->getLightBound().intersectBound(frustum);
+		bool passFrustumCulling = l->getLightBound().intersectBound(frustum);
+		if (!passFrustumCulling)
+		{
+			OSG_WARN << "light " << l->getName() << " frustum culled." << std::endl;
+		}
 
+		ShadowManager *sm = Core::getWorldRef().getLightManager()->getShadowManager();
+		PointLight *pl = l->asPointLight();
+
+		bool passOcclusionCulling = true;
+		if (pl != NULL)
+		{
+			passOcclusionCulling = _manager->getPointLightOcclusionResult(pl);
+
+			if (!passOcclusionCulling)
+			{
+				OSG_WARN << "Occlusion: " << passOcclusionCulling << std::endl;
+			}
+		}
+
+		bool visible = passFrustumCulling && passOcclusionCulling;
 		if (visible == true)
 		{
 			visibleLights.push_back(l);
+
+			if (pl != NULL)
+			{
+				sm->setUpdatePointLightShadow(pl, true);
+			}
 		}
 		else
 		{
 			// TODO: output light ... culled, use custom logging later
-			OSG_WARN << "light " << l->getName() << " frustum culled." << std::endl;
+			
+			OSG_WARN << "light " << l->getName() << " not visible" << std::endl;
+			// l->setNeedUpdate(false);
+			if (pl != NULL)
+			{
+				sm->setUpdatePointLightShadow(pl, false);
+			}
 		}
 	}
 

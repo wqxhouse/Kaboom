@@ -40,29 +40,52 @@
   <uniform name="u_countDirectionalLight" type="int">
     <value>0</value>
   </uniform>
+  
+  <uniform name="u_countShadowDirectionalLight" type="int">
+    <value>0</value>
+  </uniform>
 
+  <uniform name="u_countShadowPointLight" type="int">
+    <value>0</value>
+  </uniform>
+  
   <!--<uniform name="u_viewMat" type="mat4"></uniform>
   <uniform name="u_projMat" type="mat4"></uniform>
   <uniform name="u_viewProjMat" type="mat4"></uniform>-->
   <uniform name="u_projMat" type="mat4"></uniform>
   
-  <uniform name="u_arrayDirectionalLight" type="int" size="1" isArray="1"/>
+  <uniform name="u_arrayDirectionalLight" type="int" size="1" isArray="1" />
+  <!--<uniform name="u_arrayShadowDirectionalLight"  type="int" size="1" isArray="1" />-->
+  
   <!--<uniform name="u_arrayPointLight" type="int" size="512" isArray="1" />-->
   <uniform name="u_arrayPointLight" type="int" size="256" isArray="1" />
+  <uniform name="u_arrayShadowPointLight" type="int" size="6" isArray="1" />
+  <uniform name="u_arrayShadowDirectionalLight" type="int" size="1" isArray="1" />
   
-  <!-- Currently set visible light maximum to 256 -->
+  <!-- Currently set visible light maximum to 128 -->
+  <!-- Intel HD4400 max ubo size 32768 bytes -->
   <uniform_buffer name="u_lightsBuffer" data_variance="dynamic" size="128">
     <!--position-->
     <value type="vec3">1.0 1.0 1.0</value>
-    <!--padding-->
-    <value type="float">0.0</value>
+    <!--radius-->
+    <value type="float">1.0</value>
     <!--color-->
     <value type="vec3">1.0 1.0 1.0</value>
     <!--padding-->
     <value type="float">0.0</value>
     <!--dirFromLight-->
     <value type="vec3">1.0 1.0 1.0</value>
-    <!--radius-->
-    <value type="float">1.0</value>
+    <!--padding-->
+    <value type="float">0.0</value>
+    <!-- 12 bytes -->
+
+    <!--shadow cube index for 6 faces-->
+    <value type="int">
+      <array>24</array>
+      <!-- due to the limitation of ubo, need to use 4 times the space for 6 ints -->
+    </value>
+    <!-- 12 + 24 = 36 bytes -->
+    <!-- total = 36 * 128 * 4 / 1024 = 18KB < 32KB -->
   </uniform_buffer>
+
 </compositor>

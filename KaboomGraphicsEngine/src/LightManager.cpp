@@ -1,13 +1,27 @@
 #include "stdafx.h" 
 
+#include <osg/Depth>
+#include <osg/ColorMask>
+#include <util/ConfigSettings.h>
 #include "LightManager.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "LightVisualizer.h"
 
 LightManager::LightManager()
+	: _shadowManager(NULL), _sunLight(NULL)
 {
 	_visualizer = new LightVisualizer();
+	_pointLightOcclusionTestGroup = new osg::Group;
+	_pointLightOcclusionTestGroup->setName("pointLightOcclusionTestGroup");
+	_pointLightOcclusionTestGroup->setNodeMask(0x20);
+	osg::Depth *depth = new osg::Depth;
+	depth->setWriteMask(false);
+	osg::ColorMask *colorMask = new osg::ColorMask;
+	colorMask->setMask(false, false, false, false);
+	// depth->setFunction(osg::Depth::ALWAYS);
+	_pointLightOcclusionTestGroup->getOrCreateStateSet()->setAttribute(depth);
+	_pointLightOcclusionTestGroup->getOrCreateStateSet()->setAttribute(colorMask);
 }
 
 LightManager::~LightManager()
@@ -20,6 +34,27 @@ LightManager::~LightManager()
 	_lightsMap.clear();
 
 	delete _visualizer;
+
+	if (_shadowManager != NULL)
+	{
+		delete _shadowManager;
+	}
+}
+
+void LightManager::configOcclusionSphere()
+{
+	if (_occlusionSphere == NULL)
+	{
+		ConfigSettings *config = ConfigSettings::config;
+		std::string mediaPath;
+		config->getValue("MediaPath", mediaPath);
+		_occlusionSphere = osgDB::readNodeFile(mediaPath + "DefaultAssets\\GeometryObject\\occlusionSphere.fbx");
+	}
+}
+
+void LightManager::initShadowManager(osgFX::EffectCompositor *passes, osg::Group *geomRoot)
+{
+	_shadowManager = new ShadowManager(passes, geomRoot);
 }
 
 bool LightManager::addDirectionalLight(const std::string &name,
@@ -37,11 +72,39 @@ bool LightManager::addDirectionalLight(const std::string &name,
 	DirectionalLight *dirLight = new DirectionalLight(name);
 	dirLight->setColor(color);
 	dirLight->setLightToWorldDirection(dirToWorld);
-	dirLight->setCastShadow(castShadow);
+	// dirLight->setCastShadow(castShadow);
+
+	bool res = true;
+	if (castShadow && _shadowManager != NULL)
+	{
+		res = _shadowManager->addDirectionalLight(dirLight);
+	}
+
+	if (res)
+	{
+		dirLight->_castShadow = castShadow;
+	}
+	else
+	{
+		dirLight->_castShadow = false;
+	}
+
 	dirLight->setIntensity(intensity);
 
 	_lightsMap.insert(std::make_pair(name, dirLight));
 	_lights.push_back(dirLight);
+
+
+	// add the first directional light to be sun light
+	// TODO : later support specifying which dirlight is sunlight
+	// or have only one directional light in the manager and make it
+	// the sun light. (though currently the shader can only have 1 
+	// directional light.
+	if (_sunLight == NULL)
+	{
+		_sunLight = dirLight;
+	}
+
 	++_numLights;
 
 	return true;
@@ -54,6 +117,11 @@ bool LightManager::addPointLight(const std::string &name,
 	bool castShadow,
 	float intensity)
 {
+	if (_occlusionSphere == NULL)
+	{
+		configOcclusionSphere();
+	}
+
 	// Handle duplicated (name) geoms
 	if (doesNameExist(name)) {
 		std::cout << "Name already exists: " << name << std::endl;
@@ -64,14 +132,51 @@ bool LightManager::addPointLight(const std::string &name,
 	pointLight->setPosition(position);
 	pointLight->setColor(color);
 	pointLight->setRadius(radius);
-	pointLight->setCastShadow(castShadow);
-	pointLight->setIntensity(intensity);
+	// pointLight->setCastShadow(castShadow);
 
+	setPointLightCastShadow(pointLight, castShadow);
+
+	pointLight->setIntensity(intensity);
 	_visualizer->addLight(pointLight);
 
 	_lightsMap.insert(std::make_pair(name, pointLight));
 	_lights.push_back(pointLight);
+
+	//if (castShadow && _shadowManager != NULL)
+	//{
+	//	_shadowManager->addPointLight(pointLight);
+	//}
+	addPointLightToOcclusionQuery(pointLight);
+
 	++_numLights;
+
+	return true;
+}
+
+bool LightManager::setPointLightCastShadow(PointLight *pl, bool tf)
+{
+	if (_shadowManager == NULL) return false;
+
+	if (tf && !pl->getCastShadow())
+	{
+		bool res = _shadowManager->addPointLight(pl);
+		if (res)
+		{
+			pl->_castShadow = tf;
+		}
+		else
+		{
+			pl->_castShadow = false;
+		}
+		return res;
+	}
+
+	if (!tf && pl->getCastShadow())
+	{
+		_shadowManager->removePointLight(pl);
+		pl->_castShadow = false;
+		pl->resetShadowMapProperities();
+	}
 
 	return true;
 }
@@ -85,9 +190,25 @@ void LightManager::deleteLight(const std::string &name)
 
 	_visualizer->removeLight(light);
 
+	PointLight *pl = NULL;
+	if (light->getCastShadow() && ((pl = light->asPointLight()) != NULL))
+	{
+		_shadowManager->removePointLight(pl);
+	}
+
+	if (pl != NULL)
+	{
+		_pointLightOcclusionTestGroup->removeChild(_ocQueryMap[name]);
+	}
+
 	delete light;
 
 	--_numLights;
+}
+
+DirectionalLight *LightManager::getSunLight()
+{
+	return _sunLight;
 }
 
 bool LightManager::renameLight(const std::string &oldName, const std::string &newName)
@@ -146,3 +267,45 @@ Light *LightManager::getLight(int index)
 	}
 	return _lights[index];
 }
+
+
+void LightManager::addPointLightToOcclusionQuery(PointLight *pt)
+{
+	float radius = pt->getRadius();
+	osg::MatrixTransform *mt = new osg::MatrixTransform;
+	mt->setMatrix(osg::Matrix::scale(osg::Vec3(radius, radius, radius)) * osg::Matrix::translate(pt->getPosition()));
+	mt->addChild(_occlusionSphere);
+	mt->setUpdateCallback(new PointLightOcclusionNodeCallback(pt));
+
+	osg::OcclusionQueryNode *query = new osg::OcclusionQueryNode;
+	query->addChild(mt);
+	//TODO: change it back
+	//_pointLightOcclusionTestGroup->addChild(mt);
+	_pointLightOcclusionTestGroup->addChild(query);
+
+	_ocQueryMap.insert(std::make_pair(pt->getName(), query));
+}
+
+bool LightManager::getPointLightOcclusionResult(PointLight *pt)
+{
+	return _ocQueryMap[pt->getName()]->getPassed(); 
+}
+
+// =======================================================================================
+
+PointLightOcclusionNodeCallback::PointLightOcclusionNodeCallback(PointLight *pl)
+: _pl(pl)
+{
+}
+
+void PointLightOcclusionNodeCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
+{
+	osg::MatrixTransform *mt = static_cast<osg::MatrixTransform *>(node);
+	float radius = _pl->getRadius();
+	osg::Vec3 pos = _pl->getPosition();
+	mt->setMatrix(osg::Matrix::scale(radius, radius, radius) * osg::Matrix::translate(pos));
+}
+
+
+// There is no guarantee the static var is initialized before the constructor of its class or after
+osg::ref_ptr<osg::Node> LightManager::_occlusionSphere = NULL;

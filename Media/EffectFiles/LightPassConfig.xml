@@ -18,6 +18,15 @@
     <file>Shaders/lightPass.frag</file>
   </shader>
 
+  <uniform_buffer name="u_shadowDepthMapBuffer" data_variance="dynamic" size="64">
+    <!-- vwvp -->
+    <value type="mat4"></value> <!--64 bytes-->
+    <value type="vec2">0.0 0.0</value> <!--8 bytes-->
+    <value type="float">0.0</value> <!--4 bytes-->
+    <value type="float">0.0</value> <!--4 bytes padding-->
+  </uniform_buffer>
+
+
   <uniform name="u_viewInvMat" type="mat4"></uniform>
   <uniform name="u_projInvMat" type="mat4"></uniform>
   <uniform name="u_maxLodLevel" type="int"></uniform>

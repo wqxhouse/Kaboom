@@ -36,7 +36,7 @@ CustomTranslateAxisDragger::CustomTranslateAxisDragger()
 	addDragger(_zDragger.get());
 
 	_axisLineWidth = 2.0f;
-	_pickCylinderRadius = 0.015f;
+	_pickCylinderRadius = 0.008f;
 	_coneHeight = 0.1f;
 
 	setParentDragger(getParentDragger());

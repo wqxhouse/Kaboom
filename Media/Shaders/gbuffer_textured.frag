@@ -1,5 +1,8 @@
-#version 130
+#version 400
 #include "Shaders/gbufferUtil.glsl"
+
+// OSG 3.2.0 shader readfile bug: commenting #incldue won't get it commented; modified effectcompositor handles that
+#include "Shaders/sunShadowMask.glsl"
 
 varying vec4 v_position;
 varying float v_depth;
@@ -50,6 +53,8 @@ void main()
 	vec3 mixedNormal = blendNormals(ws_normal, normalLerp);
 	vec3 view_normal = normalize(osg_ViewMatrix * vec4(mixedNormal, 0)).xyz;
 
+	float sunShadowMask = getSunShadowMask(v_position.xyz, view_normal);
+
 	vec3 albedoTex = texture(u_albedoTex, texSampleCoord).rgb;
 	float roughnessTex = texture(u_roughnessTex, texSampleCoord).r;
 	float metallicTex = texture(u_metallicTex, texSampleCoord).r;
@@ -59,7 +64,9 @@ void main()
 	float metallic = mix(u_metallic, metallicTex, u_metallicTexLerp);
 
 	// TODO: make transclucent tex later, as deferred shading is hard to support transparent object
-	gl_FragData[0] = vec4(albedo, 1.0); // albedo + translucent
+	gl_FragData[0] = vec4(albedo, sunShadowMask); // albedo + translucent
 	gl_FragData[1] = vec4(roughness, u_specular, metallic, 0.0); // material buffer + unshaded bit(for skybox)
 	gl_FragData[2] = vec4(encodeNormal(view_normal), splitDepth2x16(v_depth)); // encoded normal + split linDepth
+
+	//gl_FragData[3] = vec4(v_position.xyz, 1);
 }

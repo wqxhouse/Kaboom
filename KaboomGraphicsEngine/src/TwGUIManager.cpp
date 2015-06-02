@@ -119,8 +119,50 @@ void TwGUIManager::initMainBar()
 		*(bool *)data = Core::isLibRocketInEditorGUIEnabled();
 	}, NULL, NULL)*/;
 
-	std::string camGroupDef = " group='Cam Settings' ";
+	std::string saoGroupDef = " group='SAO Settings' ";
+	std::string saoLimitDef = " min=0.0 max=10 step=0.01 ";
+	TwAddVarCB(g_twBar, "Radius", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getSAOPassCallback()->setRadius(*(float *)value);
+	}, [](void *value, void *clientData) {
+		*(float *)value = Core::getSAOPassCallback()->getRadius();
+	}, NULL, (saoGroupDef + saoLimitDef).c_str());
 
+	TwAddVarCB(g_twBar, "Intensity", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getSAOPassCallback()->setIntensity(*(float *)value);
+	}, [](void *value, void *clientData) {
+		*(float *)value = Core::getSAOPassCallback()->getIntensity();
+	}, NULL, (saoGroupDef + saoLimitDef).c_str());
+
+	TwAddVarCB(g_twBar, "SlopeBias", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getWorldRef().getLightManager()->getSunLight()->setSlopeScaledBias(*(float *)value);
+	}, [](void *value, void *clientData)
+	{
+		*(float *)value = Core::getWorldRef().getLightManager()->getSunLight()->getSlopeScaledBias();
+	}, NULL, (saoGroupDef + " min=0.0 step=0.1").c_str());
+
+	TwAddVarCB(g_twBar, "NormalBias", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getWorldRef().getLightManager()->getSunLight()->setNormalScaledBias(*(float *)value);
+	}, [](void *value, void *clientData)
+	{
+		*(float *)value = Core::getWorldRef().getLightManager()->getSunLight()->getNormalScaledBias();
+	}, NULL, (saoGroupDef + " min=0.0 step=0.1").c_str());
+
+	TwAddVarCB(g_twBar, "BaseBias", TW_TYPE_FLOAT, 
+		[](const void *value, void *clientData) {
+		Core::getWorldRef().getLightManager()->getSunLight()->setBaseBias(*(float *)value);
+	}, [](void *value, void *clientData)
+	{
+		*(float *)value = Core::getWorldRef().getLightManager()->getSunLight()->getBaseBias();
+	}, NULL, (saoGroupDef + " min=0.0 step=0.0001").c_str());
+
+	std::string saofoldedStr = " Main/'SAO Settings' opened=false ";
+	TwDefine(saofoldedStr.c_str());
+
+	std::string camGroupDef = " group='Cam Settings' ";
 	TwAddVarCB(g_twBar, "Cam Control", TW_TYPE_BOOL8,
 		[](const void *value, void *clientData) {
 		bool active = *static_cast<const bool *>(value);
@@ -396,7 +438,7 @@ void TwGUIManager::initAddBar()
 		[](void *clientData) {
 
 		// Light default properties
-		osg::Vec3 color;
+		osg::Vec3 color = osg::Vec3(0.1, 0.3, 0.7);
 		osg::Vec3 position;
 		float radius = 100.0f;		// Not sure if this is a good value
 		bool doShadow = false;
@@ -419,7 +461,7 @@ void TwGUIManager::initAddBar()
 			addLightToGUI((TwBar*)clientData, lt, LIGHT_GROUP_NAME, _index);
 		}
 	},
-		g_twBar, NULL);
+		g_lightBar, NULL);
 
 	// 'Add plain material' button
 	TwAddButton(g_addBar, "Add plain material",
@@ -583,8 +625,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string rotZVarName = ROT_Z_LABEL + indexStr;
 
 	std::string posStep = " step=0.01";
-	std::string scaleLimitVal = " step=0.05";
-
+	std::string scaleLimitVal = " step=0.005 min=0.0";
 	BarItem* item = new BarItem();
 	item->bar = bar;
 	item->name = name;
@@ -599,6 +640,18 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		osg::MatrixTransform *geomRoot = obj->getRoot();
 		fitObjectToScreen(geomRoot);
 	}, item, fitToScreenDef.c_str());
+
+
+	std::string pickModelDef = nameGroupDef + " label='" + PICK_LABEL + "'";
+	TwAddButton(bar, pickModelDef.c_str(), 
+		[](void *clientData) {
+		BarItem* item = static_cast<BarItem*>(clientData);
+		std::string name = item->name;
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		GeometryObject *obj = gm->getGeometryObject(name);
+		osg::MatrixTransform *geomRoot = obj->getRoot();
+		GeometryObjectManipulator::attachTransformNode(obj->getRoot());
+	}, item, pickModelDef.c_str());
 
 	std::string editNameDef = nameGroupDef + " label='" + EDIT_NAME_LABEL + "'";
 	TwAddVarCB(bar, editNameDef.c_str(), TW_TYPE_STDSTRING,
@@ -1082,8 +1135,21 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			*(float *)data = l->getIntensity();
 		}, pl, intensityNameDef.c_str());
 
-		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'" + posStep;
-		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
+
+		std::string castShadowNameDef = nameGroupDef + " label='" + CAST_SHAODW_LABEL + "'";
+		TwAddVarCB(bar, castShadowNameDef.c_str(), TW_TYPE_BOOL8,
+			[](const void *data, void *clientData) {
+			Light *l = (Light *)clientData;
+			addLightToUndo(l);
+
+			PointLight *pl = l->asPointLight();
+			Core::getWorldRef().getLightManager()->setPointLightCastShadow(pl, *(bool *)data);
+
+			_currChange = makeUndoRedoNode(l);
+		}, [](void *data, void *clientData) {
+			Light *l = (Light *)clientData;
+			*(bool *)data = l->getCastShadow();
+		}, pl, castShadowNameDef.c_str());		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'" + posStep;		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
 			[](const void *value, void *clientData) {
 			float posX = *(const float *)value;
 			PointLight *pl = static_cast<PointLight *>(clientData);
@@ -1715,13 +1781,14 @@ void TwGUIManager::doUndoRedo(std::vector<UndoRedoNode*> &from, std::vector<Undo
 
 					if (light != NULL) {
 						light->setColor(l_info.color);
-						light->setCastShadow(l_info.shadow);
+						// light->setCastShadow(l_info.shadow);
 						light->setIntensity(l_info.intensity);
 
 						switch (light->getLightType()) {
 							case LightType::POINTLIGHT:
 								light->asPointLight()->setPosition(l_info.posDir);
 								light->asPointLight()->setRadius(l_info.radius);
+								lm->setPointLightCastShadow(light->asPointLight(), l_info.shadow);
 								break;
 							case LightType::DIRECTIONAL:
 								light->asDirectionalLight()->setLightToWorldDirection(l_info.posDir);

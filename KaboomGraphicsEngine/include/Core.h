@@ -10,6 +10,7 @@
 #include "AxisVisualizer.h"
 #include "LightVisualizer.h"
 #include "CubeMapPreFilter.h"
+#include "SAOPassCallback.h"
 
 #include "TwGUIManager.h"
 #include "LibRocketGUIManager.h"
@@ -30,6 +31,7 @@ public:
 	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath, osg::Node *soundRoot);
 
 	static osg::Vec2 getScreenSize();
+	static osg::Vec2 getRenderResolution();
 
 	static void loadMaterialFile(const std::string &filePath);
 	static void loadTypeIdFile(const std::string &filePath);
@@ -90,6 +92,9 @@ public:
 	static void enableLightVisualizer();
 	static void disableLightVisualizer();
 
+	static void enableAxisVisualizer();
+	static void diableAxisVisualizer();
+
 	static void setEditorFPSCamWalkingSpeed(float metersPerSec);
 	static float getEditorFPSCamWalkingSpeed();
 
@@ -102,6 +107,7 @@ public:
 
 	static double getLastFrameDuration();
 	static double getTimeElaspedSec();
+	static osg::ref_ptr<SAOPassCallback> getSAOPassCallback();
 
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 
@@ -135,12 +141,14 @@ private:
 	static void configGeometryPass();
 	static void configLightPass();
 	static void configParticlePass();
+	static void configSAOPass();
 
 	static void configFilePath();
 	static void configAxisVisualizer();
 	static void configLightVisualizer();
 
 	static void configLibRocketGUI();
+	static void configObjectGlowPass();
 
 	static void freezeCameraOnGUIDemand();
 
@@ -171,6 +179,8 @@ private:
 	static osg::ref_ptr<TwGUIManager> _gui;
 	static osg::ref_ptr<LibRocketGUIManager> _libRocketEditorGUI;
 	static osg::ref_ptr<LibRocketGUIManager> _libRocketInGameGUI;
+
+	static osg::ref_ptr<SAOPassCallback> _saoPassCallback;
 
 	// use as a temp for temporarily remove the manipulator when out of focus
 	// CAUTIOUS: when enabled, this variable is NULL
@@ -213,5 +223,7 @@ public:
 		osg::Camera *mainCam = static_cast<osg::Camera *>(node);
 		mainCam->setViewMatrix(Core::getMainCamera().getViewMatrix());
 		mainCam->setProjectionMatrix(Core::getMainCamera().getProjectionMatrix());
+
+		traverse(node, nv);
 	}
 };
