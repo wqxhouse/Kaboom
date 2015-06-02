@@ -223,7 +223,7 @@ void Game::run() {
 				angry = false;
 			}
 			Core::getMainCamera().setFovXAndUpdate(90);
-			Core::getMainCamera().setNearAndFarAndUpdate(1, 500);
+			Core::getMainCamera().setNearAndFarAndUpdate(0.01f, 500);
 			
 			// TODO: Robin: need to check this.
 			// Since receive fails when the packet received is zero (from the source code, not sure if it is the intended behavior)
