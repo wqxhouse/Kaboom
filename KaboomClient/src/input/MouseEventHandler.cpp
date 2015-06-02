@@ -87,7 +87,7 @@ bool MouseEventHandler::handleMouseMove(const osgGA::GUIEventAdapter &ea, osgGA:
     int dx = ea.getX() - centerX;
     int dy = ea.getY() - centerY;
 
-    if (dx != 0 || dy != 0) {
+    if ( (dx > 1 || dx < -1) || (dy > 1 || dy <-1)) {
         float dyaw = dx * Core::getLastFrameDuration() * 3; // TODO: add mouse sensitivity
         float dpitch = dy * Core::getLastFrameDuration() * 3;
 
