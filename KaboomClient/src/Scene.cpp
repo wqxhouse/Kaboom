@@ -113,8 +113,8 @@ void setupScene()
 
 	//l->addDirectionalLight("Sun", osg::Vec3(0.1, -0.88, -0.46), osg::Vec3(0.7, 0.7, 0.7), true);
 	l->addDirectionalLight("Sun", osg::Vec3(0, -1, -1), osg::Vec3(0.7, 0.7, 0.7), true);
-	l->addPointLight("hello_world", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 100, true);
-	l->getLight("hello_world")->asPointLight()->setIntensity(2.0);
+	l->addPointLight("hello_world", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 20, true);
+	l->getLight("hello_world")->asPointLight()->setIntensity(1.0);
 
 	//l->addPointLight("hello_world1", osg::Vec3(0, 7, 15), osg::Vec3(0, 1, 0), 100, true);
 
