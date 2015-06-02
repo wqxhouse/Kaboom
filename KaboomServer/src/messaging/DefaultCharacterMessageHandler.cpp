@@ -190,7 +190,7 @@ bool DefaultCharacterMessageHandler::handle(const NoAttackMessage &message) cons
 Vec3 DefaultCharacterMessageHandler::calculateBombSpawnLocation(const Vec3 &pos, const Vec3 &dir) const {
     osg::Vec3 cameraPos = osg::Vec3(dir.x, dir.y, 0.0f);
     cameraPos.normalize();
-    cameraPos *= 0.5f;
+    cameraPos *= 0.45f;
     cameraPos += pos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f);
 
     Vec3 result;
