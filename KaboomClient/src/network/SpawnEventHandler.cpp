@@ -62,6 +62,12 @@ void SpawnEventHandler::handle(const Event &e) const {
                 case KABOOM_V2: {
                     game->getSoundManager().playSound(SoundType::KABOOM_FIRE,bombPos);
                     break;
+				case TIME_BOMB:
+					game->getSoundManager().playSound(SoundType::TIME_FIRE, bombPos);
+					break;
+				case REMOTE_DETONATOR:
+					game->getSoundManager().playSound(SoundType::REMOTE_FIRE, bombPos);
+					break;
                 }
 			}
 		}

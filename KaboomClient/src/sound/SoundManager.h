@@ -12,6 +12,11 @@ enum class SoundType {
     BASIC,
     KABOOM_FIRE,
     KABOOM_EXPLODE,
+	REMOTE_FIRE,
+	REMOTE_EXPLODE,
+	TIME_FIRE,
+	TIME_EXPLODE,
+	JUMP,
 	WALKING,
 };
 namespace ours{

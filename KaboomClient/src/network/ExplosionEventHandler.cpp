@@ -31,10 +31,15 @@ void ExplosionEventHandler::handle(const Event &e) const {
 
     // TODO: Refactor this into component
     switch (bomb->getType()) {
-        case KABOOM_V2: {
+        case KABOOM_V2: 
             game->getSoundManager().playSound(SoundType::KABOOM_EXPLODE, bombPos);
             break;
-        }
+		case TIME_BOMB:
+			game->getSoundManager().playSound(SoundType::TIME_EXPLODE, bombPos);
+			break;
+		case REMOTE_DETONATOR:
+			game->getSoundManager().playSound(SoundType::REMOTE_EXPLODE, bombPos);
+			break;
     }
 
     // TODO: need to refactor the code above... probably abstract out a sound manager

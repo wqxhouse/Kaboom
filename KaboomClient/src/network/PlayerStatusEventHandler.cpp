@@ -52,7 +52,7 @@ void PlayerStatusEventHandler::handle(const Event &e) const {
 		soundComp->stopSound();
 	}
 	if (evt.isJumping()&&!playerStatusComp->getJumped()){
-		game->getSoundManager().playSound(SoundType::KABOOM_FIRE, bombPos);
+		game->getSoundManager().playSound(SoundType::JUMP, bombPos);
 	}
 	
 		playerStatusComp->setJumped(evt.isJumping());
