@@ -57,6 +57,18 @@
     <Filter Include="Header Files\Materials">
       <UniqueIdentifier>{84c3c9f8-9f4f-457b-9104-5a05ec2562c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Shadow">
+      <UniqueIdentifier>{3f322eb0-c500-4a30-becb-27e67c6c0881}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shadow">
+      <UniqueIdentifier>{498b51ce-0709-4b2e-8729-82da41450ceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PostProcess">
+      <UniqueIdentifier>{29bc2804-1fab-4a9a-88cf-ffc19478b1fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcess">
+      <UniqueIdentifier>{e3b185be-4b52-4a29-b476-00b9d700700c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -191,6 +203,27 @@
     </ClInclude>
     <ClInclude Include="include\ModelCache.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SAOPassCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShadowManager.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShadowDepthCamera.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShadowAtlas.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShadowTile.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FrustumHelper.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ObjectGlowManager.h">
+      <Filter>PostProcess</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +362,27 @@
     <ClCompile Include="src\ModelCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SAOPassCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowAtlas.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowDepthCamera.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowManager.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowTile.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FrustumHelper.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ObjectGlowManager.cpp">
+      <Filter>Source Files\PostProcess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">
@@ -350,6 +404,12 @@
       <Filter>Media\EffectFiles</Filter>
     </Xml>
     <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\SAOPassConfig.xml">
+      <Filter>Media\EffectFiles</Filter>
+    </Xml>
+    <Xml Include="..\Media\EffectFiles\ShadowDepthPassConfig.xml">
       <Filter>Media\EffectFiles</Filter>
     </Xml>
   </ItemGroup>
@@ -447,6 +507,33 @@
     </None>
     <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\window_rocket.rml">
       <Filter>Media\InEditorGUI</Filter>
+    </None>
+    <None Include="..\Media\Shaders\sao.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\saoBlur.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\finalPass.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\emptyFragment.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\shadowUtil.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\Samples.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\sunShadowMask.glsl">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\objectGlow.vert">
+      <Filter>Media\Shaders</Filter>
+    </None>
+    <None Include="..\Media\Shaders\objectGlow.frag">
+      <Filter>Media\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

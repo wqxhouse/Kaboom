@@ -5,6 +5,7 @@
 #include "Shaders/lightPBRModel.glsl"
 #include "Shaders/gbufferUtil.glsl"
 #include "Shaders/Material.glsl"
+#include "Shaders/shadowUtil.glsl"
 #include "Shaders/lightUtil.glsl"
 #include "Shaders/importanceSampling.glsl"
 

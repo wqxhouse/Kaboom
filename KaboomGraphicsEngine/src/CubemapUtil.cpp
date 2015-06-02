@@ -286,10 +286,10 @@ osg::ref_ptr<osg::Image> CubemapUtil::createSubImage(osg::Image *sourceImage, in
 		return NULL;
 	}
 
-	std::cout << "Size: " << sourceImage->s() << "x" << sourceImage->s()
-		<< std::endl;
-	std::cout << "SubImageSize: " << subImageWidth << "x" << subImageHeight
-		<< std::endl;
+	//std::cout << "Size: " << sourceImage->s() << "x" << sourceImage->s()
+	//	<< std::endl;
+	//std::cout << "SubImageSize: " << subImageWidth << "x" << subImageHeight
+	//	<< std::endl;
 
 	GLenum internalFormat = sourceImage->getInternalTextureFormat();
 	std::cout << "Image internal format " << sourceImage->getInternalTextureFormat() << std::endl;

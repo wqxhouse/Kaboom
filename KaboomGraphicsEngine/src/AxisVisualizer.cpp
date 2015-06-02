@@ -103,4 +103,6 @@ void AxisVisalizerCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	osg::Vec3 normalizeLookAt = lookAt - eye;
 	axisView.makeLookAt(osg::Vec3(), normalizeLookAt, up);
 	cam->setViewMatrix(axisView);
+
+	traverse(node, nv);
 }

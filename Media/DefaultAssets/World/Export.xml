@@ -1,4 +1,73 @@
-<?xml version="1.0" encoding="utf - 8"?>
+<!-- <?xml version="1.0" encoding="utf - 8"?>
+<world>
+	<model name="platform1">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>-17.000000 0.000000 3.000000</position>
+		<orientation>0.000000 0.629320 0.000000 0.777146</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
+
+	<model name="sphere">
+		<file></file>
+		<material name="____Default" />
+		<position>0.000000 20.000000 1.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
+
+	<model name="*__Huge_floor">
+		<file></file>
+		<material name="____TestMaterial2" />
+		<position>0.000000 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
+
+	<model name="testBox">
+		<file>DefaultAssets\GeometryObject\3boxStack.dae</file>
+		<material name="brick1Mat" />
+		<position>0.000000 1.000000 -1.000000</position>
+		<orientation>0.008727 0.000000 0.000000 0.999962</orientation>
+		<scale>0.250000 0.250000 0.250000</scale>
+	</model>
+
+	<model name="platform3">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>0.000000 0.000000 18.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
+
+
+	<model name="platform">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>2.491811 0.000000 -1.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
+
+	<model name="platform2">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>13.223345 0.000000 -1.000000</position>
+		<orientation>0.731354 0.000000 0.681998 0.000000</orientation>
+		<scale>1.000000 1.000000 1.000000</scale>
+	</model>
+
+	<model name="platform4">
+		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
+		<material name="____TestMaterial" />
+		<position>0.000000 16.000000 -1.000000</position>
+		<orientation>0.544634 0.003659 -0.002376 0.838663</orientation>
+		<scale>1.000000 1.200000 2.750000</scale>
+	</model>
+
+</world>
+ -->
+ <?xml version="1.0" encoding="utf - 8"?>
 <world>
 	<model name="*__Huge_floor">
 		<file></file>
@@ -31,7 +100,7 @@
 		<direction>0.100201 -0.881765 -0.460923</direction>
 	</light>
 
-	<light name="pt2" type="point">
+<!-- 	<light name="pt2" type="point">
 		<color>0.300000 0.700000 0.300000</color>
 		<castShadow>0</castShadow>
 		<intensity>1.000000</intensity>
@@ -85,6 +154,6 @@
 		<intensity>1.000000</intensity>
 		<position>0.000000 7.000000 3.000000</position>
 		<radius>100.000000</radius>
-	</light>
+	</light> -->
 
 </world>

@@ -21,10 +21,10 @@ MaterialManager::MaterialManager()
 MaterialManager::~MaterialManager()
 {
 	// clear built in materials
-	for (int i = 0; i < _builtInMaterial.size(); i++)
-	{
-		delete _builtInMaterial[i];
-	}
+	//for (int i = 0; i < _builtInMaterial.size(); i++)
+	//{
+	//	delete _builtInMaterial[i];
+	//}
 
 	_builtInMaterial.clear();
 

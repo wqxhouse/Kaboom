@@ -239,7 +239,8 @@ osg::Camera* EffectCompositor::createPassFromXML(osgDB::XmlNode* xmlNode)
 				// FIXME: consider a case that the actual shader is attached 
 				// in a child of the effectcompositor, then the next line 
 				// is invalid since the ubo is not bind to the correct shader
-				program->addBindUniformBlock(uniformBufferName, program->getUniformBlockBindingList().size());
+				int bindingLoc = ubb->getIndex();
+				program->addBindUniformBlock(uniformBufferName, bindingLoc);
 			}
 			else
 			{
@@ -249,11 +250,12 @@ osg::Camera* EffectCompositor::createPassFromXML(osgDB::XmlNode* xmlNode)
 				if (ubb)
 				{
 					stateset->setAttributeAndModes(ubb, osg::StateAttribute::ON);
-
+					int bindingLoc = ubb->getIndex();
 					// FIXME: consider a case that the actual shader is attached 
 					// in a child of the effectcompositor, then the next line 
 					// is invalid since the ubo is not bind to the correct shader
-					program->addBindUniformBlock(uniformBufferName, program->getUniformBlockBindingList().size());
+
+					program->addBindUniformBlock(uniformBufferName, bindingLoc);
 				}
 				else
 				{
@@ -683,6 +685,16 @@ osg::Texture* EffectCompositor::createTextureFromXML(osgDB::XmlNode* xmlNode, bo
 					<< std::hex << atoi(dataType.c_str()) << std::dec << std::endl;
 			}
 		}
+		else if (childName == "hardware_shadowmap")
+		{
+			std::string enabledStr = xmlChild->getTrimmedContents();
+			int tf = atoi(enabledStr.c_str());
+			if (tf != 0)
+			{
+				texture->setShadowComparison(true);
+				texture->setShadowCompareFunc(osg::Texture::ShadowCompareFunc::LEQUAL);
+			}
+		}
 		else if (childName == "binding")
 		{
 			std::string bindStr = xmlChild->getTrimmedContents();
@@ -761,39 +773,61 @@ osg::UniformBufferBinding* EffectCompositor::createUniformBufferFromXML(osgDB::X
 
 			if (childNode->name == "value")
 			{
-				std::stringstream ss;
-				ss << childNode->getTrimmedContents();
-				switch (dataType)
+				int times = 1;
+
+				// handle array in uniform buffer
+				if (!childNode->children.empty() && childNode->children[0]->name == "array")
 				{
-				case GL_FLOAT:
-					for (int n = 0; n < numValues; ++n)
+					osgDB::XmlNode *arrayChild = childNode->children[0].get();
+					int elemNum = atoi(arrayChild->getTrimmedContents().c_str());
+					if (elemNum > 1)
 					{
-						float v = 0.0f; ss >> v;
-						buffer->push_back(v);
+						times = elemNum;
 					}
-					break;
-				case GL_DOUBLE:
-					OSG_WARN << "Not implemented double for UBO" << std::endl;
-					break;
-				case GL_INT:
-					for (int n = 0; n < numValues; ++n)
+					else
 					{
-						int v = 0; ss >> v;
-						float vBit = *(float *)&v;
-						buffer->push_back(vBit);
+						OSG_WARN << "EffectCompositor: <array> content invalid" << std::endl;
 					}
-					break;
-				case GL_UNSIGNED_INT:
-					for (int n = 0; n < numValues; ++n)
+				}
+				
+				// times = 1 when no array
+				for (int i = 0; i < times; i++)
+				{
+					std::stringstream ss;
+					ss << childNode->getTrimmedContents();
+					switch (dataType)
 					{
-						unsigned int v = 0; ss >> v;
-						float vBit = *(float *)&v;
-						buffer->push_back(vBit);
+					case GL_FLOAT:
+						for (int n = 0; n < numValues; ++n)
+						{
+							float v = 0.0f; ss >> v;
+							buffer->push_back(v);
+						}
+						break;
+					case GL_DOUBLE:
+						OSG_WARN << "Not implemented double for UBO" << std::endl;
+						break;
+					case GL_INT:
+						for (int n = 0; n < numValues; ++n)
+						{
+							int v = 0; ss >> v;
+							float vBit = *(float *)&v;
+							buffer->push_back(vBit);
+						}
+						break;
+					case GL_UNSIGNED_INT:
+						for (int n = 0; n < numValues; ++n)
+						{
+							unsigned int v = 0; ss >> v;
+							float vBit = *(float *)&v;
+							buffer->push_back(vBit);
+						}
+						break;
+					default:
+						OSG_NOTICE << "EffectCompositor: <uniform> " << name 
+							<< " doesn't have a recognizable value type: " << typeString << std::endl;
+						break;
 					}
-					break;
-				default:
-					OSG_NOTICE << "EffectCompositor: <uniform> " << name << " doesn't have a recognizable value type: " << typeString << std::endl;
-					break;
 				}
 			}
 		}
@@ -804,7 +838,9 @@ osg::UniformBufferBinding* EffectCompositor::createUniformBufferFromXML(osgDB::X
 	osg::ref_ptr<osg::UniformBufferObject> ubo = new osg::UniformBufferObject;
 	buffer->setBufferObject(ubo);
 
-	osg::ref_ptr<osg::UniformBufferBinding> ubb = new osg::UniformBufferBinding(0, ubo.get(), 0, blockSize);
+	// FIXME: consider case that uniform buffer deleted, then this loc dependency will be messed up.
+	int bindingLoc = _uniformBufferMap.size();
+	osg::ref_ptr<osg::UniformBufferBinding> ubb = new osg::UniformBufferBinding(bindingLoc, ubo.get(), 0, blockSize);
 	std::string dataVariance = xmlNode->properties["data_variance"];
 	if (dataVariance == "static")
 	{
@@ -1122,8 +1158,38 @@ osg::Shader* EffectCompositor::createShaderFromXML(osgDB::XmlNode* xmlNode, bool
 
 	std::string code = shader->getShaderSource();
 	std::string::size_type pos = 0;
+
+	// FIXME: do not deal with recursive #include
+	// FIXME: currently not detecting comment sign /* */ 
 	while ((pos = code.find("#include", pos)) != std::string::npos)
 	{
+		std::string::iterator it = code.begin() + pos;
+		std::string subLine;
+		int commentCounter = 0;
+		bool lineCommented = false;
+		for (std::string::iterator it2 = it; it2 != code.begin(); it2--)
+		{
+			if (*it2 == '\r\n' || *it2 == '\n')
+			{
+				subLine = std::string(it2, it);
+				if (subLine.find("//") != std::string::npos)
+				{
+					lineCommented = true;
+				}
+				break;
+			}
+		}
+
+		if (lineCommented)
+		{
+			for (; *it != '\r\n' && *it != '\n'; it++)
+			{
+				++pos;
+			}
+			++pos;
+			continue;
+		}
+
 		// Find all "#include" and handle them
 		std::string::size_type pos2 = code.find_first_not_of(" ", pos + 8);
 		if (pos2 == std::string::npos || code[pos2] != '\"') break;
@@ -1138,7 +1204,19 @@ osg::Shader* EffectCompositor::createShaderFromXML(osgDB::XmlNode* xmlNode, bool
 		osg::ref_ptr<osg::Shader> innerShader = osgDB::readShaderFile(shader->getType(), filename);
 		if (!innerShader) break;
 
-		code.replace(pos, pos3 - pos + 1, innerShader->getShaderSource());
+		std::string shaderSource = innerShader->getShaderSource();
+		//std::string::size_type pragmaPos;
+		//if (pragmaPos = shaderSource.find("#pragma") != std::string::npos)
+		//{
+		//	// TODO: need more testing like #pragmaonce 
+		//	// FIXME: did not deal with // #pragma once comments
+		//	if (shaderSource.find("once", pos + 7) != std::string::npos)
+		//	{
+		//		break;
+		//	}
+		//}
+
+		code.replace(pos, pos3 - pos + 1, shaderSource);
 		pos += innerShader->getShaderSource().size();
 	}
 

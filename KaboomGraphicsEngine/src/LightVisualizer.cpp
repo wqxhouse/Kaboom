@@ -139,4 +139,6 @@ void LightVisualizerCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	{
 		billboard->setPosition(i, _lightPtrsRef[i]->getPosition());
 	}
+
+	traverse(node, nv);
 }

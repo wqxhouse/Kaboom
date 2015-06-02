@@ -27,6 +27,7 @@ public:
 
 	inline const osg::Vec3 &getPosition()
 	{
+		_needUpdate = true;
 		return _position;
 	}
 
@@ -38,11 +39,6 @@ public:
 	inline const osg::Vec3 &getColor()
 	{
 		return _color;
-	}
-
-	inline void setCastShadow(bool tf)
-	{
-		_castShadow = tf;
 	}
 
 	inline bool getCastShadow()
@@ -75,10 +71,32 @@ public:
 		_intensity = intensity;
 	}
 
+	inline void setNeedUpdate(bool tf)
+	{
+		_needUpdate = tf;
+	}
+
+	inline bool getNeedUpdate()
+	{
+		return _needUpdate;
+	}
+
 	virtual DirectionalLight *asDirectionalLight();
 	virtual PointLight *asPointLight();
 
+	struct ShadowMapInfo
+	{
+		int _shadowMapIndex;
+		osg::Vec2i _atlasPos;
+		bool _hasAtlasPos;
+	};
+
+	// let LightManager manage castShadow
+	// bool setCastShadow(bool tf);
+
 protected:
+	friend class LightManager;
+
 	std::string _name;
 	LightBound _bound;
 
