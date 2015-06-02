@@ -143,6 +143,9 @@ using namespace ours;
 		GameGUIEventHandler *_guiEventHandler;
 
 		bool abc;
+		osg::ref_ptr<Source> backGroundMusic;
+		osg::ref_ptr<Sample> angryRobot;
+		bool angry;
 
 		DeathmatchMode gameMode;
 	};

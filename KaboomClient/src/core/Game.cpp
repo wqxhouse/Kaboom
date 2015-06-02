@@ -88,16 +88,30 @@ Game::Game(ConfigSettings *config)
 	_particleEffectManager = Core::getWorldRef().getParticleEffectManager();
 
     printf("Loading KABOOM_EXPLODE sound\n");
-    soundManager.loadSound(SoundType::KABOOM_EXPLODE, "sounds\\bomb.wav");
+	soundManager.loadSound(SoundType::KABOOM_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\bomb.wav");
+	soundManager.loadSound(SoundType::REMOTE_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\c4.wav");
+	soundManager.loadSound(SoundType::TIME_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\time_explosion.mp3");
     printf("Loading KABOOM_FIRE sound\n");
-    soundManager.loadSound(SoundType::KABOOM_FIRE, "sounds\\throw.wav");
+	soundManager.loadSound(SoundType::KABOOM_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw.wav");
+	soundManager.loadSound(SoundType::REMOTE_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw2.wav");
+	soundManager.loadSound(SoundType::TIME_FIRE, str_mediaPath + "DefaultAssets\\Sound\\bounce_fire.wav");
 	printf("Loading WALKING sound\n");
-	soundManager.loadSound(SoundType::WALKING, "sounds\\walking.mp3");
-	osg::ref_ptr<Sample> walk = new Sample("sounds\\walking.mp3");
+	soundManager.loadSound(SoundType::WALKING, str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
+	osg::ref_ptr<Sample> walk = new Sample(str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
 	characterFactory.setWalkingSample(walk);
     printf("Loading BASIC sound\n");
-    soundManager.loadSound(SoundType::BASIC, "sounds\\a.wav");
+	soundManager.loadSound(SoundType::BASIC, str_mediaPath + "DefaultAssets\\Sound\\a.wav"); 
+	printf("Loading JUMP sound\n");
+	soundManager.loadSound(SoundType::JUMP, str_mediaPath + "DefaultAssets\\Sound\\jump_sound.mp3");
+	printf("Loading Background Music sound\n");
+	backGroundMusic = new Source;
+	angryRobot = new Sample(str_mediaPath + "DefaultAssets\\Sound\\angryRobot.mp3");
+	backGroundMusic->setSound(angryRobot);
+	backGroundMusic->setGain(1);
+	backGroundMusic->setLooping(true);
+	backGroundMusic->play();
 	
+	angry = true;
 
 }
 
@@ -125,11 +139,26 @@ void Game::run() {
 		// printf("duration: %lf\n", Core::getLastFrameDuration());
 		switch (gsm) {
 		case EDITOR_MODE:
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;
+				
+			}
 			if (Core::isInStartScreenMode()) { //pressed the PlayGame Button
 				gsm = NAME_SCREEN;
 			}
 			break;
 		case NAME_SCREEN:
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;
+			}
 			in_game_screen_ui->Hide();
 			start_screen_ui->Hide();
 			name_screen_ui->Show();
@@ -137,6 +166,13 @@ void Game::run() {
 			break;
 		case START_SCREEN_MODE:
 		{
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;			
+			}
 			inputManager->loadConfig();
 			in_game_screen_ui->Hide();
 			name_screen_ui->Hide();
@@ -182,7 +218,10 @@ void Game::run() {
 			// TODO: the following doesn't need to be updated for every event
 			// but need to set as soon as the game mode is on
 			// TODO: put this two as initial values in the config file
-			
+			if (angry&&!backGroundMusic->isPaused()){
+				backGroundMusic->pause();
+				angry = false;
+			}
 			Core::getMainCamera().setFovXAndUpdate(90);
 			Core::getMainCamera().setNearAndFarAndUpdate(1, 500);
 			
