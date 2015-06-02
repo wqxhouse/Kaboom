@@ -114,6 +114,7 @@ using namespace ours;
 		}
 
 		std::string *name;
+		unsigned int colorId=0;
 
 	private:
 		friend void GameGUIListener::setGameState(GameStateMachine state);
