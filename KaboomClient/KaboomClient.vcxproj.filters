@@ -196,6 +196,9 @@
     <ClCompile Include="src\gui\OnClickRespawnListenercpp.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\gui\OnClickChampSelectListener.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
@@ -344,6 +347,9 @@
       <Filter>Header Files\Entity Component System</Filter>
     </ClInclude>
     <ClInclude Include="src\gui\OnClickRespawnListener.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\OnClickChampSelectListener.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
