@@ -52,19 +52,21 @@ void GameGUIEventHandler::handle(const AmmoAmountEvent &e, InventoryComponent *b
 	for (int i = 0; i < 3; i++)
 	{
 		int temp = e.getAmmoAmount(i);
-		ammoTable->GetChild(i)->GetFirstChild()->GetChild(1)->SetInnerRML(std::to_string(temp).c_str());
+		ammoTable->GetChild(i)->GetFirstChild()->GetChild(1)->GetFirstChild()->SetInnerRML(std::to_string(temp).c_str());
 	}
 }
 void  GameGUIEventHandler::deletePlayer(const DisconnectEvent &e)const {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
+	Rocket::Core::Element * score = table->GetFirstChild();
+
 	bool flag = true;
-	for (int i = 1; i < table->GetNumChildren(); i++){
-		Rocket::Core::Element * tr = table->GetChild(i);
+	for (int i = 1; i < score->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = score->GetChild(i);
 		Rocket::Core::String s = tr->GetChild(0)->GetId();
 		Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
 		if (s == d){
-			table->RemoveChild(tr);
+			score->RemoveChild(tr);
 	
 		}
 	}
@@ -72,22 +74,24 @@ void  GameGUIEventHandler::deletePlayer(const DisconnectEvent &e)const {
 void  GameGUIEventHandler::deleteAllPlayers()const {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
+	Rocket::Core::Element * score = table->GetFirstChild();
 	bool flag = true;
-	while (table->GetNumChildren()>1){
-		Rocket::Core::Element * tr = table->GetChild(1);
+	while (score->GetNumChildren()>1){
+		Rocket::Core::Element * tr = score->GetChild(1);
 		//Rocket::Core::String s = tr->GetChild(0)->GetId();
 		//Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
-		table->RemoveChild(tr);
-
-		
+		score->RemoveChild(tr);
 	}
+	changeWeapon(0);
 }
 void  GameGUIEventHandler::handle(const ScoreEvent &e, std::string name)const {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
+	Rocket::Core::Element * score = table->GetFirstChild();
+
 	bool flag = true;
-	for (int i = 1; i<table->GetNumChildren(); i++){
-		Rocket::Core::Element * tr = table->GetChild(i);
+	for (int i = 1; i<score->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = score->GetChild(i);
 		Rocket::Core::String s=tr->GetChild(0)->GetId();
 		Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
 		if (s==d){
@@ -100,8 +104,11 @@ void  GameGUIEventHandler::handle(const ScoreEvent &e, std::string name)const {
 		//TODO add tr in with player id kills deaths
 		Rocket::Core::Element* new_tr = window2->CreateElement("p");
 		Rocket::Core::Element* new_td_id = window2->CreateElement("div");
+		new_td_id->SetClassNames("id");
 		Rocket::Core::Element* new_td_kills = window2->CreateElement("div");
+		new_td_kills->SetClassNames("kills");
 		Rocket::Core::Element* new_td_death = window2->CreateElement("div");
+		new_td_death->SetClassNames("deaths");
 
 		new_td_id->SetId(std::to_string(e.getPlayerId()).c_str());
 
@@ -116,7 +123,7 @@ void  GameGUIEventHandler::handle(const ScoreEvent &e, std::string name)const {
 		new_tr->AppendChild(new_td_id);
 		new_tr->AppendChild(new_td_kills);
 		new_tr->AppendChild(new_td_death);
-		table->AppendChild(new_tr);
+		score->AppendChild(new_tr);
 		printf("I am in\n");
 	}
 
@@ -126,6 +133,7 @@ void  GameGUIEventHandler::handle(const PlayerDeathEvent &e)const {
 	//hide main HUD
 	 _guiManager->getWindow(0)->Hide();
 	 Core::enableDeathScreen();
+	 changeWeapon(0);
 
 	 //show the death screen
 	 _guiManager->getWindow(4)->Show();
@@ -157,28 +165,34 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 	//}
 
 	Rocket::Core::Element * current_bomb = window1->GetChild(2);
+	Rocket::Core::Element * ch = window1->GetElementById("crosshair");
 	Rocket::Core::Element *bomb = current_bomb->GetFirstChild();
 	switch (weapon){
 		case 0:
 			bomb->SetClassNames("kaboom_curr");
+			ch->SetClassNames("kaboom_crosshair");
 			break;
 		case 1:
 			bomb->SetClassNames("time_curr");
+			ch->SetClassNames("time_crosshair");
 			break;
 		case 2:
 			bomb->SetClassNames("remote_curr");
+			ch->SetClassNames("sticky_crosshair");
 			break;
 	}
 }
 void GameGUIEventHandler::endGame() const{
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
+	Rocket::Core::Element * score = table->GetFirstChild();
+
 	bool flag = true;
 	int maxKills = 0;
 	int playerId = 0;
 	int location=0;
-	for (int i = 1; i<table->GetNumChildren(); i++){
-		Rocket::Core::Element * tr = table->GetChild(i);
+	for (int i = 1; i<score->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = score->GetChild(i);
 		Rocket::Core::String s = tr->GetChild(1)->GetInnerRML();
 		//Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
 		std::string numString= s.CString();
@@ -247,9 +261,10 @@ void GameGUIEventHandler::handle(const PlayerRenameEvent &e, Player* player) con
 {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
+	Rocket::Core::Element * score = table->GetFirstChild();
 	bool flag = true;
-	for (int i = 1; i<table->GetNumChildren(); i++){
-		Rocket::Core::Element * tr = table->GetChild(i);
+	for (int i = 1; i<score->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = score->GetChild(i);
 		Rocket::Core::String s = tr->GetChild(0)->GetId();
 		Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
 		if (s == d && player->getName() != ""){
