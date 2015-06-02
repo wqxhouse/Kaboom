@@ -87,7 +87,7 @@
 
     <deferred_pass name="LightPrePass">
       <input_buffer unit="0" varname="o_destination">b_PerTileStorage</input_buffer>
-      <!--<input_buffer unit="1" varname="u_normalDepthTex">b_RT2</input_buffer>-->
+      <input_buffer unit="1" varname="u_normalDepthTex">b_RT2</input_buffer>
       <!--<input_buffer unit="1" varname="u_normalDepthTex">debugDepth</input_buffer>-->
       <output_buffer target="color">b_computeShaderTrigger</output_buffer>
 
