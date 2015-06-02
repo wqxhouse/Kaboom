@@ -21,7 +21,7 @@
 #include <network/ReloadRequestEvent.h>
 #include <network/RotationEvent.h>
 #include <network/ScoreEvent.h>
-#include <network/SpawnEvent.h>'
+#include <network/SpawnEvent.h>
 
 #include "NetworkServices.h"
 #include "ClientEventHandlerLookup.h"
