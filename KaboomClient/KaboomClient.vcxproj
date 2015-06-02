@@ -263,6 +263,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClCompile Include="src\gui\GameGUIEventHandler.cpp" />
     <ClCompile Include="src\gui\GameGUIListener.cpp" />
     <ClCompile Include="src\gui\OnClickAddLetterListener.cpp" />
+    <ClCompile Include="src\gui\OnClickChampSelectListener.cpp" />
     <ClCompile Include="src\gui\OnClickEndGameListener.cpp" />
     <ClCompile Include="src\gui\OnClickListener.cpp" />
     <ClCompile Include="src\gui\OnClickRemoveLetterListener.cpp" />
@@ -318,6 +319,7 @@ xcopy "$(ProjectDir)\sounds" "$(TargetDir)\sounds" /D /I /Y</Command>
     <ClInclude Include="src\gui\GameGUIEventHandler.h" />
     <ClInclude Include="src\gui\GameGUIListener.h" />
     <ClInclude Include="src\gui\OnClickAddLetterListener.h" />
+    <ClInclude Include="src\gui\OnClickChampSelectListener.h" />
     <ClInclude Include="src\gui\OnClickEndGameListener.h" />
     <ClInclude Include="src\gui\OnClickListener.h" />
     <ClInclude Include="src\gui\OnClickRemoveLetterListener.h" />
