@@ -73,6 +73,11 @@ public:
 	{
 		return _screenSize;
 	}
+
+	inline osg::Vec2 getRenderBufferSize() const
+	{
+		return _renderBufferSize; 
+	}
 		
 	// Setters : should only be called from the input manager of the client
 	void setEyePositionAndUpdate(const osg::Vec3 &eye);
@@ -111,5 +116,6 @@ private:
 	osg::Vec3 _front;
 
 	osg::Vec2 _screenSize;
+	osg::Vec2 _renderBufferSize;
 	osg::Vec2 _euler;
 };

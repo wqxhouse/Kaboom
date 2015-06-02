@@ -107,6 +107,7 @@ public:
 
 	static double getLastFrameDuration();
 	static double getTimeElaspedSec();
+	static double getTimeElaspedMills();
 	static osg::ref_ptr<SAOPassCallback> getSAOPassCallback();
 
 	static void addEventHandler(osgGA::GUIEventHandler *handler);

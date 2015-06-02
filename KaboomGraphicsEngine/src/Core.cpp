@@ -377,6 +377,11 @@ double Core::getTimeElaspedSec()
 	return osg::Timer::instance()->delta_s(_firstFrameStartTime, _frameStartTime);
 }
 
+double Core::getTimeElaspedMills()
+{
+	return osg::Timer::instance()->delta_m(_firstFrameStartTime, _frameStartTime);
+}
+
 bool Core::isViewerClosed()
 {
 	return _viewer->done();

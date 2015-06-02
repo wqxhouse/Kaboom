@@ -503,6 +503,7 @@ void EffectCompositor::traverse( osg::NodeVisitor& nv )
 		if (_preservedZFar != -FLT_MAX) zFar = _preservedZFar;
 
 		Core::_cam._screenSize = Core::getScreenSize();
+		Core::_cam._renderBufferSize = Core::getRenderResolution();
 
 		if (!Core::isInGameMode())
 		{
