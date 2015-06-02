@@ -31,7 +31,7 @@
 extern osg::ref_ptr<CompositorAnalysis> configureViewerForMode(osgViewer::Viewer& viewer, osgFX::EffectCompositor* compositor,
 	osg::Node* model, int displayMode);
 
-void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath)
+void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath, osg::Node *soundRoot)
 {
 	_mediaPath = mediaPath;
 	// TODO: add reshape callback for winPos, winHeight, bufferSize
@@ -74,6 +74,8 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 
 	_sceneRoot->addChild(_passes);
 	_hasInit = true;
+
+    _sceneRoot->addChild(soundRoot);
 }
 
 void Core::loadMaterialFile(const std::string &filePath)
@@ -93,9 +95,25 @@ void Core::loadWorldFile(const std::string &worldFilePath)
 	_world.loadXMLFile(worldFilePath);
 }
 
+void Core::loadModelCache(int numPlayers)
+{
+	// Load models by the number of maximum players
+	_modelCache.addModels(numPlayers);
+}
+
 World &Core::getWorldRef()
 {
 	return _world;
+}
+
+ModelCache &Core::getModelCache()
+{
+	return _modelCache;
+}
+
+osg::ref_ptr<TwGUIManager> Core::getEditorGUI()
+{
+	return _gui;
 }
 
 osg::Vec2 Core::getScreenSize()
@@ -682,6 +700,7 @@ void Core::enableGameMode()
 	if (!_gameMode)
 	{
 		_gameMode = true;
+		_isDeath = false;
 
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
@@ -693,10 +712,34 @@ void Core::disableGameMode()
 	if (_gameMode)
 	{
 		_gameMode = false;
+		_isDeath = false;
 
 		//// TODO: change back to editor key bindings
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::LeftArrowCursor);
+	}
+}
+
+void Core::enableDeathScreen()
+{
+	if (!_isDeath)
+	{
+		_isDeath = true;
+
+		//// TODO: change back to editor key bindings
+		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
+		a->setCursor(osgViewer::GraphicsWindow::LeftArrowCursor);
+	}
+}
+
+void Core::disableDeathScreen()
+{
+	if (_isDeath)
+	{
+		_isDeath = false;
+
+		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
+		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
 	}
 }
 
@@ -732,6 +775,11 @@ bool Core::isInStartScreenMode()
 bool Core::isInGameMode()
 {
 	return _gameMode ? true : false;
+}
+
+bool Core::isInDeath()
+{
+	return _isDeath ? true : false;
 }
 
 void Core::configAxisVisualizer()
@@ -908,6 +956,8 @@ osg::Vec2 Core::_winPos;
 World Core::_world;
 bool Core::_hasInit = false;
 
+ModelCache Core::_modelCache;
+
 osg::ref_ptr<osgGA::CameraManipulator> Core::_camManipulatorTemp = NULL;
 bool Core::_hasEnvMap = false;
 
@@ -926,6 +976,7 @@ osg::ref_ptr<CompositorAnalysis> Core::_analysisHUD;
 
 bool Core::_startScreenMode;
 bool Core::_gameMode;
+bool Core::_isDeath;
 bool Core::_passDataDisplay;
 bool Core::_guiEnabled;
 bool Core::_manipulatorEnabled;

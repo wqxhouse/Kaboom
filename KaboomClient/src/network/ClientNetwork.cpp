@@ -142,8 +142,8 @@ void ClientNetwork::disconnectFromServer()
 	_connected = false;
 }
 
-int ClientNetwork::receivePackets(char * recvbuf) {
-    int iResult = NetworkServices::receiveMessage(clientSocket, recvbuf, MAX_PACKET_SIZE);
+int ClientNetwork::receivePackets(char * recvbuf, int bufSize) {
+    int iResult = NetworkServices::receiveMessage(clientSocket, recvbuf, bufSize);
 
     if (iResult == 0) {
         fprintf(stderr, "<Client> Server is disconnected, terminating connecting\n");

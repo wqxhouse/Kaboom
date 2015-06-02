@@ -6,16 +6,59 @@
 class PlayerStatusComponent : public Component {
 public:
     PlayerStatusComponent::PlayerStatusComponent()
-            : isKnockBacked(false),
+            : alive(false),
+              running(false),
+              jumping(false),
+              attacking(false),
+              damaged(false),
+              isKnockBacked(false),
               isStaggered(false),
-              isDamaged(false),
-              isAlive(true),
+			  jumped(false),
               knockBackTimer(0),
-              staggerTimer(0),
-              damageTimer(0) {
+              staggerTimer(0) {
     }
 
-	// Below method is only intend to be use on the Server!
+    inline bool isAlive() const {
+        return alive;
+    }
+
+    inline void setAlive(bool alive) {
+        this->alive = alive;
+    }
+
+    inline bool isRunning() const {
+        return running;
+    }
+
+    inline void setRunning(bool running) {
+        this->running = running;
+    }
+
+    inline bool isJumping() const {
+        return jumping;
+    }
+
+    inline void setJumping(bool jumping) {
+        this->jumping = jumping;
+    }
+
+    inline bool isAttacking() const {
+        return attacking;
+    }
+
+    inline void setAttacking(bool attacking) {
+        this->attacking = attacking;
+    }
+
+    inline bool isDamaged() const {
+        return damaged;
+    }
+
+    inline void setDamaged(bool damaged) {
+        this->damaged = damaged;
+    }
+
+    // Below method is only intend to be use on the Server!
     // TODO: Extract this to KaboomServer project.
     inline bool checkIsKnockBacked() {
         if (isKnockBacked) {
@@ -35,16 +78,7 @@ public:
         return isStaggered;
     }
 
-    inline bool checkIsDamaged() {
-        if (isDamaged) {
-            if (staggerTimer.isExpired()) {
-                isDamaged = false;
-            }
-        }
-        return isDamaged;
-    }
-
-	// Below method is only intend to be use on the Client!
+    // Below method is only intend to be use on the Client!
     // TODO: Extract this to KaboomClient project.
     inline bool getIsKnockBacked() const {
         return isKnockBacked;
@@ -52,14 +86,6 @@ public:
 
     inline bool getIsStaggered() const {
         return isStaggered;
-    }
-
-    inline bool getIsDamaged() const {
-        return isDamaged;
-    }
-
-    inline bool getIsAlive() const {
-        return isAlive;
     }
 
     inline void setIsKnockBacked(bool isKnockBacked) {
@@ -70,14 +96,6 @@ public:
         this->isStaggered = isStaggered;
     }
 
-    inline void setIsDamaged(bool isDamaged) {
-        this->isDamaged = isDamaged;
-    }
-
-    inline void setIsAlive(bool isAlive){
-        this->isAlive = isAlive;
-    }
-
     inline Timer &getKnockBackTimer() {
         return knockBackTimer;
     }
@@ -85,18 +103,23 @@ public:
     inline Timer &getStaggerTimer() {
         return staggerTimer;
     }
-
-    inline Timer &getDamageTimer() {
-        return damageTimer;
-    }
+	inline void setJumped(bool j){
+		jumped = j;
+	}
+	inline bool getJumped(){
+		return jumped;
+	}
 
 private:
-	bool isKnockBacked;
-	bool isStaggered;
-	bool isDamaged;
-	bool isAlive;
+    bool alive;
+    bool running;
+    bool jumping;
+    bool attacking;
+    bool damaged;
+    bool isKnockBacked;
+    bool isStaggered;
+	bool jumped;
 
-	Timer knockBackTimer;
-	Timer staggerTimer;
-	Timer damageTimer;
+    Timer knockBackTimer;
+    Timer staggerTimer;
 };

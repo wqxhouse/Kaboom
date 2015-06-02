@@ -3,14 +3,16 @@
 #include "InputEventHandler.h"
 #include "KeyboardEventHandler.h"
 #include "MouseEventHandler.h"
+#include "KaboomClient\src\core\Game.h"
 
 class GameClient;
 
 class InputManager {
 public:
-    InputManager(GameClient &client);
+    InputManager(GameClient &client, Game * game);
 
     void loadConfig();
+	void loadNameTyping();
 
     KeyboardEventHandler &getKeyboardEventHandler();
     MouseEventHandler &getMouseEventHandler();

@@ -3,8 +3,6 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
-#include <osgDB/XmlParser>
-
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <core/EntityManager.h>
@@ -19,10 +17,13 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/TimerComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../math/util.h"
 #include "../messaging/DefaultExplosionMessageHandler.h"
+#include "../messaging/FakeBombMessageHandler.h"
 #include "../messaging/KaboomV2MessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
 #include "../messaging/RemoteDetonatorMessageHandler.h"
+#include "../messaging/SaltyMartyBombMessageHandler.h"
 #include "../messaging/TimeBombMessageHandler.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
@@ -48,6 +49,14 @@ Entity *BombFactory::createBomb(
         }
         case REMOTE_DETONATOR: {
             createRemoteDetonator(entity);
+            break;
+        }
+        case SALTY_MARTY_BOMB: {
+            createSaltyMartyBomb(entity);
+            break;
+        }
+        case FAKE_BOMB: {
+            createFakeBomb(entity);
             break;
         }
     }
@@ -77,6 +86,7 @@ void BombFactory::createBase(
 
     btRigidBody *rigidBody = new btRigidBody(mass, motionState, collisionShape, localInertia);
     rigidBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    rigidBody->setAngularVelocity(btVector3(randDecimal(-2.0f, 2.0f), randDecimal(-2.0f, 2.0f), randDecimal(-2.0f, 2.0f)));
     rigidBody->setUserPointer(entity);
 
     btGhostObject *ghostObject = new btGhostObject();
@@ -130,4 +140,24 @@ void BombFactory::createRemoteDetonator(Entity *entity) const {
 
     static RemoteDetonatorMessageHandler remoteDetonatorHandler;
     chain->addHandler(&remoteDetonatorHandler);
+}
+
+void BombFactory::createSaltyMartyBomb(Entity *entity) const {
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    static SaltyMartyBombMessageHandler saltyMartyBombMessageHandler;
+    chain->addHandler(&saltyMartyBombMessageHandler);
+
+    entity->attachComponent(new CollisionComponent());
+}
+
+void BombFactory::createFakeBomb(Entity *entity) const {
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    static FakeBombMessageHandler fakeBombMessageHandler;
+    chain->addHandler(&fakeBombMessageHandler);
+
+    entity->attachComponent(new CollisionComponent());
 }

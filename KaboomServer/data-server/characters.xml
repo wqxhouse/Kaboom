@@ -19,8 +19,18 @@
                 <id type="uint">131075</id>
                 <amount type="int">20</amount>
             </item>
+            <item>
+                <id type="uint">131076</id>
+                <amount type="int">20</amount>
+            </item>
+            <item>
+                <id type="uint">131077</id>
+                <amount type="int">20</amount>
+            </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
+        <running-speed type="float">5.0</running-speed>
+        <jumping-speed type="float">5.0</jumping-speed>
     </character>
 </characters>

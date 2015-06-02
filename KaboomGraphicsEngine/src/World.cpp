@@ -8,6 +8,7 @@
 #include <osgDB/Options>
 #include <osgDB/XmlParser>
 
+#include "GeometryCache.h"
 #include "GeometryObject.h"
 #include "GeometryObjectManager.h"
 #include "LightManager.h"
@@ -21,6 +22,7 @@ World::World()
 	_materialManager = new MaterialManager;
 	_lightManager = new LightManager;
 	_particleEffectManager = new ParticleEffectManager;
+	_cache = new GeometryCache;
 	_objectGlowManager = new ObjectGlowManager;
 }
 
@@ -30,6 +32,15 @@ World::~World()
 	delete _materialManager;
 	delete _lightManager;
 	delete _particleEffectManager;
+	delete _cache;
+}
+
+void World::loadXMLFile(const std::string &filePath)
+{
+	XMLLoader::loadXMLFile(filePath);
+
+	std::size_t found = filePath.find("\\World\\");
+	_worldPath = filePath.substr(0, found);
 }
 
 void World::loadXMLNode(osgDB::XmlNode *xmlRoot)
@@ -81,7 +92,7 @@ void World::createModelFromXML(osgDB::XmlNode* xmlNode)
 			std::string file;
 			loadString(xmlChild, file);
 
-			model = osgDB::readNodeFile(file);
+			model = _cache->getNodeByFileName(file);
 			if (!_geomManager->addGeometry(name, model, file)) {
 				std::cout << "createModelFromXML(): " << name << " failed to create, trying to find if it exists already..." << std::endl;
 				if (_geomManager->getGeometryObject(name) != NULL) {

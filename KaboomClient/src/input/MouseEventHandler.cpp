@@ -33,7 +33,8 @@ bool MouseEventHandler::bindKey(int key, KeyState state, Function func) {
 }
 
 bool MouseEventHandler::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &us) {
-    if (!Core::isInGameMode()) {
+    if (!Core::isInGameMode() || Core::isInDeath()) {
+		handleMouseUp(ea, us);
         return false;
     }
 
@@ -86,7 +87,7 @@ bool MouseEventHandler::handleMouseMove(const osgGA::GUIEventAdapter &ea, osgGA:
     int dx = ea.getX() - centerX;
     int dy = ea.getY() - centerY;
 
-    if (dx != 0 || dy != 0) {
+    if ( (dx > 1 || dx < -1) || (dy > 1 || dy <-1)) {
         float dyaw = dx * Core::getLastFrameDuration() * 3; // TODO: add mouse sensitivity
         float dpitch = dy * Core::getLastFrameDuration() * 3;
 

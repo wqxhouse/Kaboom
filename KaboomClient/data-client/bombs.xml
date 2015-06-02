@@ -15,4 +15,14 @@
         <name type="string">Remote Detonator</name>
         <size type="float">0.1</size>
     </bomb>
+    <bomb>
+        <id type="uint">131076</id>
+        <name type="string">Salty Marty Bomb</name>
+        <size type="float">0.1</size>
+    </bomb>
+    <bomb>
+        <id type="uint">131077</id>
+        <name type="string">Fake Bomb</name>
+        <size type="float">0.1</size>
+    </bomb>
 </bombs>

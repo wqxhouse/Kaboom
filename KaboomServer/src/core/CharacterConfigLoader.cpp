@@ -3,7 +3,7 @@
 #include <core/EntityType.h>
 #include <util/Configuration.h>
 
-#include "common.h"
+typedef std::unordered_map<EntityType, int> InventoryType;
 
 CharacterConfigLoader::CharacterConfigLoader(std::unordered_map<EntityType, Configuration> &config)
     : config(config) {
@@ -88,6 +88,6 @@ void CharacterConfigLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string
     } else if (valueType == "string") {
         std::string val;
         loadString(xmlNode, val);
-        config[type].set(xmlNode->name.c_str(), val.c_str());
+        config[type].set(xmlNode->name.c_str(), val);
     }
 }

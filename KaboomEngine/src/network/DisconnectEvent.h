@@ -23,10 +23,6 @@ public:
         return playerId;
     }
 
-    inline void setPlayerId(unsigned int playerId) {
-        this->playerId = playerId;
-    }
-
     friend std::ostream& operator<<(std::ostream &os, const DisconnectEvent &o) {
         os << "DisconnectEvent: {" << std::endl;
         os << "    playerId: " << o.playerId << std::endl;

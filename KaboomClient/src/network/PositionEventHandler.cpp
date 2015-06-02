@@ -4,7 +4,9 @@
 
 #include <Core.h>
 #include <GeometryObject.h>
+#include <TrailingEffect.h>
 #include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
 #include <core/Entity.h>
 #include <network/PositionEvent.h>
 
@@ -28,9 +30,10 @@ void PositionEventHandler::handle(const Event &e) const {
     if (posComp == nullptr) {
         return;
     }
-
+	
     posComp->setPosition(evt.getPosition());
     const Vec3 &pos = posComp->getPosition();
+
 
     const auto name = std::to_string(entity->getId());
     const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);
@@ -38,9 +41,15 @@ void PositionEventHandler::handle(const Event &e) const {
     game->getGeometryManager()->getGeometryObject(name)->setTranslate(osgPos);
 
     //if the entity is the player entity the client is controlling, change the camera position everytime the player moves
-    if (entity->getId() == game->getGameClient().getCurrentPlayerEntityId()) {
+    if (entity->getId() == game->getCurrentPlayer()->getEntity()->getId()) {
 		// TODO: make it in the xml file
-        osg::Vec3 characterHeadPos = osgPos + osg::Vec3(0, 0, 1);
-        game->getCamera().setFpsEyePositionAndUpdate(characterHeadPos);
+        osg::Vec3 pos = game->getCamera().getFront();
+        pos.normalize();
+        pos.z() = 0.0f;
+        pos.normalize();
+        pos *= 0.45f;
+        pos += osgPos + osg::Vec3(0.0f, 0.0f, 1.0f);
+        game->getCamera().setFpsEyePositionAndUpdate(pos);
     }
+
 }

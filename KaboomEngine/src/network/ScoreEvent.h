@@ -6,8 +6,9 @@
 
 class ScoreEvent : public Event {
 public:
-    ScoreEvent(int kills = 0, int deaths = 0)
+    ScoreEvent(unsigned int playerId = 0, int kills = 0, int deaths = 0)
             : Event(EVENT_SCORE, sizeof(ScoreEvent)),
+              playerId(playerId),
               kills(kills),
               deaths(deaths) {
     }
@@ -20,6 +21,10 @@ public:
         memcpy(this, buf, sizeof(ScoreEvent));
     }
 
+    inline unsigned int getPlayerId() const {
+        return playerId;
+    }
+
     inline int getKills() const {
         return kills;
     }
@@ -30,6 +35,7 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const ScoreEvent &o) {
         os << "ScoreEvent: {" << std::endl;
+        os << "    playerId: " << o.playerId << std::endl;
         os << "    kills: " << o.kills << std::endl;
         os << "    deaths: " << o.deaths << std::endl;
         os << "}";
@@ -38,6 +44,8 @@ public:
     }
 
 private:
+    unsigned int playerId;
+
     int kills;
     int deaths;
 };

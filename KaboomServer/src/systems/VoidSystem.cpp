@@ -4,9 +4,16 @@
 #include <components/PositionComponent.h>
 #include <core/Entity.h>
 
+#include "../components/PlayerDeathComponent.h"
+#include "../components/DestroyComponent.h"
+
+VoidSystem::VoidSystem(Game *game)
+        : EntityProcessingSystem(game) {
+}
+
 bool VoidSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<PositionComponent>() &&
-            entity->hasComponent<HealthComponent>();
+    return !entity->hasComponent<PlayerDeathComponent>() &&
+		  entity->hasComponent<PositionComponent>();
 }
 
 void VoidSystem::processEntity(Entity *entity) {
@@ -14,6 +21,10 @@ void VoidSystem::processEntity(Entity *entity) {
     auto healthComp = entity->getComponent<HealthComponent>();
 
     if (posComp->getPosition().z < -100) { // TODO: Extract constant to XML
-        healthComp->setAmount(0);
+        if (healthComp != nullptr) {
+            healthComp->setAmount(0);
+        } else {
+            entity->attachComponent(new DestroyComponent());
+        }
     }
 }

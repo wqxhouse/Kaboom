@@ -245,7 +245,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     </PostBuildEvent>
     <Lib>
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
-      <AdditionalDependencies>Comdlg32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Comdlg32.lib; Shell32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OSG_LIB_PATH)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -263,6 +263,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\EffectCompositor.h" />
     <ClInclude Include="include\ExplosionEffect.h" />
     <ClInclude Include="include\FrustumHelper.h" />
+    <ClInclude Include="include\GeometryCache.h" />
     <ClInclude Include="include\GeometryObject.h" />
     <ClInclude Include="include\GeometryObjectManager.h" />
     <ClInclude Include="include\GeometryObjectManipulator.h" />
@@ -280,6 +281,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\MaterialManager.h" />
     <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\ObjectGlowManager.h" />
+    <ClInclude Include="include\ModelCache.h" />
     <ClInclude Include="include\ParticleEffect.h" />
     <ClInclude Include="include\ParticleEffectManager.h" />
     <ClInclude Include="include\ParticleTexture.h" />
@@ -317,6 +319,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\EffectCompositorXML.cpp" />
     <ClCompile Include="src\ExplosionEffect.cpp" />
     <ClCompile Include="src\FrustumHelper.cpp" />
+    <ClCompile Include="src\GeometryCache.cpp" />
     <ClCompile Include="src\GeometryObject.cpp" />
     <ClCompile Include="src\GeometryObjectManager.cpp" />
     <ClCompile Include="src\GeometryObjectManipulator.cpp" />
@@ -333,6 +336,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ObjectGlowManager.cpp" />
+    <ClCompile Include="src\ModelCache.cpp" />
     <ClCompile Include="src\ParticleEffect.cpp" />
     <ClCompile Include="src\ParticleEffectManager.cpp" />
     <ClCompile Include="src\ParticleTexture.cpp" />

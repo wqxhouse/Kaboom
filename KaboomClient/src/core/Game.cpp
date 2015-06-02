@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include <osg/Group>
-#include <osgAudio/FileStream.h>
+#include <osgAudio/SoundRoot.h>
 
 #include <Core.h>
 #include <GeometryObjectManager.h>
@@ -17,15 +17,21 @@
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
+#include <osgAudio/AudioEnvironment.h>
+#include <osgAudio/Sample.h>
+using namespace osgAudio;
 
 Game::Game(ConfigSettings *config)
         : config(config),
           characterFactory(entityManager),
           bombFactory(entityManager),
+		  jumpPadFactory(entityManager),
+		  pickupFactory(entityManager),
           eventHandlerLookup(this),
           client(eventHandlerLookup), 
 	      _camera(Core::getMainCamera()) {
-
+	name = new std::string();
+	osgAudio::AudioEnvironment::instance()->init();
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
     config->getValue(ConfigSettings::str_screenPosX, screenPosXStr);
@@ -41,9 +47,9 @@ Game::Game(ConfigSettings *config)
     int bufferH = atoi(renbufferHStr.c_str());
     int screenW = atoi(screenWStr.c_str());
     int screenH = atoi(screenHStr.c_str());
-	sounds = new std::unordered_map<SOUNDS, osg::ref_ptr<Sample> >();
 
-    Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath);
+    osg::ref_ptr<osgAudio::SoundRoot> soundRoot = new osgAudio::SoundRoot;
+    Core::init(posX, posY, screenW, screenH, bufferW, bufferH, mediaPath, soundRoot);
 	// init gui handler after Core::init() is called, so that it gets the intialized in game gui 
 	_guiEventHandler = new GameGUIEventHandler(this);
 
@@ -55,21 +61,25 @@ Game::Game(ConfigSettings *config)
 	std::string str_mediaPath = "";
 	std::string str_material_xml = "";
 	std::string str_world_xml = "";
+	std::string str_typeid_xml = "";
 
 	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
 	config->getValue(ConfigSettings::str_material_xml, str_material_xml);
 	config->getValue(ConfigSettings::str_world_xml, str_world_xml);
+	config->getValue(ConfigSettings::str_typeid_xml, str_typeid_xml);
 
 	str_world_xml = str_mediaPath + str_world_xml;
 	str_material_xml = str_mediaPath + str_material_xml;
 
 	Core::loadMaterialFile(str_material_xml);
 	Core::loadWorldFile(str_world_xml);
+	Core::loadTypeIdFile(str_typeid_xml);
+	Core::loadModelCache(4);
 	/* End testing code */
 
-    inputManager = new InputManager(client);
+    inputManager = new InputManager(client, this);
     inputManager->loadConfig();
-	
+
     Core::addEventHandler(&inputManager->getKeyboardEventHandler());
     Core::addEventHandler(&inputManager->getMouseEventHandler());
 
@@ -77,36 +87,32 @@ Game::Game(ConfigSettings *config)
 	_materialManager = Core::getWorldRef().getMaterialManager();
 	_particleEffectManager = Core::getWorldRef().getParticleEffectManager();
 
-	// source = new Source;
-	//
-	//printf("check for sound errors\n");
-	//sample = new Sample("sounds\\a.wav");
-	//soundManager.addToMap(KABOOM_EXPLODE,"sounds\\a.wav");
-	//source->setSound(sample.get());
-	//source->setGain(1);
-	//source->setLooping(false);
-	//printf("Adding KABOOM_EXPLODE TO MAP\n");
-	//sounds->insert(std::make_pair(KABOOM_EXPLODE,sample));
-	////sounds->at(KABOOM_EXPLODE)=sample;
-	//printf("Added KABOOM_EXPLODE TO MAP\n");
-	//sample = new Sample("sounds\\a.wav");
-	//printf("Adding KABOOM_FIRE TO MAP\n");
-	//sounds->insert(std::make_pair(KABOOM_FIRE, sample));
-	//printf("Added KABOOM_FIRE TO MAP\n");
-	//sample = new Sample("sounds\\a.wav");
-	//printf("Adding BASIC TO MAP\n");
-	//sounds->insert(std::make_pair(BASIC, sample));
-	//printf("Added BASIC TO MAP\n");
+    printf("Loading KABOOM_EXPLODE sound\n");
+	soundManager.loadSound(SoundType::KABOOM_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\bomb.wav");
+	soundManager.loadSound(SoundType::REMOTE_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\c4.wav");
+	soundManager.loadSound(SoundType::TIME_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\time_explosion.mp3");
+    printf("Loading KABOOM_FIRE sound\n");
+	soundManager.loadSound(SoundType::KABOOM_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw.wav");
+	soundManager.loadSound(SoundType::REMOTE_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw2.wav");
+	soundManager.loadSound(SoundType::TIME_FIRE, str_mediaPath + "DefaultAssets\\Sound\\bounce_fire.wav");
+	printf("Loading WALKING sound\n");
+	soundManager.loadSound(SoundType::WALKING, str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
+	osg::ref_ptr<Sample> walk = new Sample(str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
+	characterFactory.setWalkingSample(walk);
+    printf("Loading BASIC sound\n");
+	soundManager.loadSound(SoundType::BASIC, str_mediaPath + "DefaultAssets\\Sound\\a.wav"); 
+	printf("Loading JUMP sound\n");
+	soundManager.loadSound(SoundType::JUMP, str_mediaPath + "DefaultAssets\\Sound\\jump_sound.mp3");
+	printf("Loading Background Music sound\n");
+	backGroundMusic = new Source;
+	angryRobot = new Sample(str_mediaPath + "DefaultAssets\\Sound\\angryRobot.mp3");
+	backGroundMusic->setSound(angryRobot);
+	backGroundMusic->setGain(1);
+	backGroundMusic->setLooping(true);
+	backGroundMusic->play();
+	
+	angry = true;
 
-
-	/*sample = new Sample("C:\\Users\\melapier\\Downloads\\djsona.wav");
-	backgroundMusic = new Source;
-	backgroundMusic->setSound(sample.get());
-	backgroundMusic->setGain(1);
-	backgroundMusic->setLooping(true);
-	backgroundMusic->play();*/
-	//delete source;
-	printf("finished check sound errors");
 }
 
 Game::~Game() {
@@ -126,20 +132,53 @@ void Game::run() {
 	LibRocketGUIManager *guiManager = Core::getInGameLibRocketGUIManager();
 	Rocket::Core::ElementDocument* in_game_screen_ui = guiManager->getWindow(0);
 	Rocket::Core::ElementDocument* start_screen_ui = guiManager->getWindow(1);
-
+	Rocket::Core::ElementDocument* name_screen_ui = guiManager->getWindow(3);
+	Rocket::Core::ElementDocument* death_screen_ui = guiManager->getWindow(4);
     //while (!Core::isViewerClosed()) { // TODO: buggy right now
     while (true) {
 		// printf("duration: %lf\n", Core::getLastFrameDuration());
 		switch (gsm) {
 		case EDITOR_MODE:
-			if (Core::isInStartScreenMode()) { //pressed the PlayGame Button
-				gsm = START_SCREEN_MODE;
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;
+				
 			}
+			if (Core::isInStartScreenMode()) { //pressed the PlayGame Button
+				gsm = NAME_SCREEN;
+			}
+			break;
+		case NAME_SCREEN:
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;
+			}
+			in_game_screen_ui->Hide();
+			start_screen_ui->Hide();
+			name_screen_ui->Show();
+			inputManager->loadNameTyping();
 			break;
 		case START_SCREEN_MODE:
 		{
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;			
+			}
+			inputManager->loadConfig();
 			in_game_screen_ui->Hide();
+			name_screen_ui->Hide();
 			start_screen_ui->Show();
+			death_screen_ui->Hide();
+			abc = true;
 			break;
 		}
 		case EXIT_START_SCREEN_MODE:
@@ -152,14 +191,21 @@ void Game::run() {
 		{
 			config->getValue(ConfigSettings::str_server_address, serverAddress);
 			config->getValue(ConfigSettings::str_server_port, serverPort);
+
 			in_game_screen_ui->Show();
 			start_screen_ui->Hide();
+			name_screen_ui->Hide();
+			death_screen_ui->Hide();
 
             bool res = client.connectToServer(serverAddress, serverPort);
+
 			if (res)
 			{
 				gsm = GAME_MODE;
 				Core::enableGameMode();
+				client.sendPlayerRenameEvent(*name);
+			//abc = false;
+				
 			}
 			else
 			{
@@ -172,17 +218,20 @@ void Game::run() {
 			// TODO: the following doesn't need to be updated for every event
 			// but need to set as soon as the game mode is on
 			// TODO: put this two as initial values in the config file
-			
+			if (angry&&!backGroundMusic->isPaused()){
+				backGroundMusic->pause();
+				angry = false;
+			}
 			Core::getMainCamera().setFovXAndUpdate(90);
-			Core::getMainCamera().setNearAndFarAndUpdate(1, 500);
-
+			Core::getMainCamera().setNearAndFarAndUpdate(0.01f, 500);
+			
 			// TODO: Robin: need to check this.
 			// Since receive fails when the packet received is zero (from the source code, not sure if it is the intended behavior)
 			// and the client will be disconnected from the server 
 			// Thus, we want to check if receive fails. If fails, since we are disconnected, should fall back to editor state.
 			// E.g: close the server whlie running the game 
             client.receive();
-
+			_guiEventHandler->changeTime(this);
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
 				removeAllEntities(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;
@@ -190,10 +239,11 @@ void Game::run() {
 			break;
 		case DISCONNECT_TO_SERVER:
 			//TODO: need to remove all the dynamically genereated objects! otherwise we still see them the next time we reconnect
+			getGameGUIEventHandler()->deleteAllPlayers();
 			client.disconnectFromServer();
 			gsm = START_SCREEN_MODE;
 			break;
-		}
+		}		
         Core::AdvanceFrame();
     }
 }
@@ -225,45 +275,4 @@ void Game::removeAllEntities() {
 	for (auto it : entityManager.getEntityList()) {
         removeEntity(it);
 	}
-}
-
-EntityManager &Game::getEntityManager() {
-    return entityManager;
-}
-SoundManager &Game::getSoundManager() {
-	return soundManager;
-}
-
-const CharacterFactory &Game::getCharacterFactory() const {
-    return characterFactory;
-}
-
-const BombFactory &Game::getBombFactory() const {
-    return bombFactory;
-}
-
-const GameClient &Game::getGameClient() const {
-    return client;
-}
-
-GeometryObjectManager * Game::getGeometryManager() {
-	return _geometryManager;
-}
-
-MaterialManager *Game::getMaterialManager() {
-	return _materialManager;
-}
-
-
-ParticleEffectManager *Game::getParticleEffectManager() {
-	return _particleEffectManager;
-}
-
-Camera &Game::getCamera() {
-	return _camera;
-}
-
-const GameGUIEventHandler *Game::getGameGUIEventHandler() const
-{
-	return _guiEventHandler;
 }

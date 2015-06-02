@@ -1,21 +1,23 @@
 #include "WorldLoader.h"
 
 #include <btBulletDynamicsCommon.h>
-
 #include <osgbCollision/CollisionShapes.h>
 #include <osgbDynamics/MotionState.h>
 #include <osgDB/ReadFile>
 
 #include <util/Configuration.h>
+#include <util/Timer.h>
 
 #include "OsgObjectConfigLoader.h"
+#include "MapConfigLoader.h"
 #include "World.h"
+#include "../core/MapConfigLoader.h"
 
 WorldLoader::WorldLoader(World &world)
         : world(world) {
 }
 
-void WorldLoader::load(const std::string &filename, const std::string &mediaPath) {
+void WorldLoader::loadMap(const std::string &filename, const std::string &mediaPath) {
     std::unordered_map<std::string, Configuration> osgNodeConfigMap;
 
     OsgObjectConfigLoader osgObjectConfigLoader(osgNodeConfigMap);
@@ -46,4 +48,9 @@ void WorldLoader::load(const std::string &filename, const std::string &mediaPath
         btRigidBody *rigidbody = new btRigidBody(rigidBodyCI);
         world.addRigidBody(rigidbody);
     }
+}
+
+void WorldLoader::loadEntities(const std::string &filename) {
+    MapConfigLoader mapConfigLoader(world.getSpawnPointConfigs());
+    mapConfigLoader.load(filename);
 }

@@ -46,7 +46,7 @@ public:
     }
 
     inline bool isAttacking2() const {
-        return attacking1;
+        return attacking2;
     }
 
     inline void setMovingForward(bool movingForward) {

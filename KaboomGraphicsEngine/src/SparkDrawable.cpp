@@ -155,7 +155,6 @@ bool SparkDrawable::update(double currentTime, const osg::Vec3d& eye)
 			(*itr)->setCameraPosition(eyePos);
 			if (!(*itr)->update(deltaTime))
 			{
-				std::cout << "Destroy " << std::endl;
 				destroyParticleSystem(*itr, false);
 				itr = _particleSystems.erase(itr);
 			}

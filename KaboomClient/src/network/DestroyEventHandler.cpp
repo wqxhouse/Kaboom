@@ -2,6 +2,7 @@
 
 #include <network/DestroyEvent.h>
 
+#include "../components/TrailingEffectComponent.h"
 #include "../core/Game.h"
 
 DestroyEventHandler::DestroyEventHandler(Game *game)
@@ -11,9 +12,15 @@ DestroyEventHandler::DestroyEventHandler(Game *game)
 void DestroyEventHandler::handle(const Event &e) const {
     const DestroyEvent &evt = static_cast<const DestroyEvent &>(e);
 
-    EntityManager &entityManager = game->getEntityManager();
-    Entity *entity = entityManager.getEntity(evt.getEntityId());
-	if (entity != nullptr){
-		game->removeEntity(entity);
-	}
+    Entity *entity = game->getEntityManager().getEntity(evt.getEntityId());
+
+    if (entity != nullptr) {
+		auto trailingEffectComp = entity->getComponent<TrailingEffectComponent>();
+
+		if (trailingEffectComp != nullptr) {
+			delete trailingEffectComp->getTrailingEffect();
+		}
+
+        game->removeEntity(entity);
+    }
 }

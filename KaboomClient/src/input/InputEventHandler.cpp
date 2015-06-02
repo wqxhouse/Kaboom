@@ -6,8 +6,8 @@
 
 #include "../network/GameClient.h"
 
-InputEventHandler::InputEventHandler(GameClient &client)
-        : client(client) {
+InputEventHandler::InputEventHandler(GameClient &client, Game * game)
+        : client(client), _game(game){
 }
 
 void InputEventHandler::onMoveForwardDown() {
@@ -99,14 +99,42 @@ void InputEventHandler::onLook(float delta_yaw, float delta_pitch) {
 
 void InputEventHandler::onEquip1() {
     client.sendEquipEvent(KABOOM_V2);
+	_game->getGameGUIEventHandler()->changeWeapon(0);
 }
 
 void InputEventHandler::onEquip2() {
     client.sendEquipEvent(TIME_BOMB);
+	_game->getGameGUIEventHandler()->changeWeapon(1);
 }
 
 void InputEventHandler::onEquip3() {
     client.sendEquipEvent(REMOTE_DETONATOR);
+    _game->getGameGUIEventHandler()->changeWeapon(2);
+}
+
+void InputEventHandler::onEquip4() {
+    client.sendEquipEvent(SALTY_MARTY_BOMB);
+    _game->getGameGUIEventHandler()->changeWeapon(3);
+}
+
+void InputEventHandler::onEquip5() {
+    client.sendEquipEvent(FAKE_BOMB);
+    _game->getGameGUIEventHandler()->changeWeapon(4);
+}
+
+void InputEventHandler::typeCharacter(char c)
+{
+	_game->name->push_back(c);
+	_game->getGameGUIEventHandler()->updateUserName(_game->name);
+}
+
+void InputEventHandler::removeCharacter()
+{
+	if (_game->name->size() > 0)
+	{
+		_game->name->pop_back();
+		_game->getGameGUIEventHandler()->updateUserName(_game->name);
+	}
 }
 
 void InputEventHandler::sendPlayerInputEvent() {
@@ -123,6 +151,21 @@ void InputEventHandler::sendPlayerInputEvent() {
             pitch);
 
     client.sendMessage(evt);
+}
+void InputEventHandler::onTab(){
+
+	_game->getGameGUIEventHandler()->showScoreBoard();
+}
+void InputEventHandler::offTab(){
+	_game->getGameGUIEventHandler()->hideScoreBoard();
+}
+
+void InputEventHandler::onReloadRequest() {
+    client.sendReloadRequestEvent();
+}
+
+void InputEventHandler::onRespawnRequest() {
+	client.sendPlayerRespawnRequestEvent();
 }
 
 //void InputEventHandler::enterGameMode() {

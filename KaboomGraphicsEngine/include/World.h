@@ -13,6 +13,7 @@
 
 class LightManager;
 class MaterialManager;
+class GeometryCache;
 class GeometryObjectManager;
 class ParticleEffectManager;
 class ObjectGlowManager;
@@ -21,6 +22,8 @@ class World : public XMLLoader
 public:
 	World();
 	~World();
+
+	void loadXMLFile(const std::string &filePath);
 
 	void createModelFromXML(osgDB::XmlNode* xmlNode);
 	void createLightFromXML(osgDB::XmlNode* xmlNode);
@@ -45,6 +48,16 @@ public:
 		return _particleEffectManager;
 	}
 
+	inline GeometryCache *getGeometryCache()
+	{
+		return _cache;
+	}
+
+	inline std::string& getWorldPath()
+	{
+		return _worldPath;
+	}
+	
 	inline ObjectGlowManager *getObjectGlowManager()
 	{
 		return _objectGlowManager;
@@ -54,10 +67,13 @@ protected:
 	virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 
 private:
+	std::string _worldPath;
+
 	GeometryObjectManager *_geomManager;
 	MaterialManager *_materialManager;
 	LightManager *_lightManager;
 	ParticleEffectManager *_particleEffectManager;
 	ObjectGlowManager *_objectGlowManager;
+	GeometryCache *_cache;
 };
 

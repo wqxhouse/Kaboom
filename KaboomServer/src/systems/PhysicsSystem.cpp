@@ -5,24 +5,24 @@
 
 #include "../components/CharacterRotationComponent.h"
 #include "../components/CollisionComponent.h"
+#include "../components/PlayerDeathComponent.h"
+#include "../components/DestroyComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../core/Game.h"
 
 PhysicsSystem::PhysicsSystem(Game *game, World &world)
-        : game(game),
+        : EntityProcessingSystem(game),
           world(world) {
 }
 
 void PhysicsSystem::preprocessEntities(std::vector<Entity *> entities) {
-    const clock_t FPS = 60;
-    const float TIME_STEP = 1.0f / FPS;
-    const int MAX_SUB_STEPS = 1;
-
-    world.stepSimulation(TIME_STEP, MAX_SUB_STEPS); // TODO: Extract constant
+    world.stepSimulation(1.0f / game->FPS, game->MAX_SUB_STEPS);
 }
 
 bool PhysicsSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<PhysicsComponent>();
+    return !entity->hasComponent<DestroyComponent>() &&
+		   !entity->hasComponent<PlayerDeathComponent>() &&
+            entity->hasComponent<PhysicsComponent>();
 }
 
 void PhysicsSystem::processEntity(Entity *entity) {

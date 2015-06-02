@@ -1,0 +1,100 @@
+
+<rml>
+<head>
+	<link type="text/rcss" href="rkt_new.rcss"/>
+	<link type="text/rcss" href="invader-m.rcss"/>
+  <style>
+    div.kaboom{
+      background-decorator: image;
+      background-image: kaboom2_0.tga;
+    }
+    div.timer{
+      background-decorator: image;
+      background-image: timeBomb.tga;
+    }
+    div.remote_bomb{
+      background-decorator: image;
+      background-image: remoteBomb.tga;
+    }
+    div#items{
+      width: 50px;
+      height: 50px;
+      text-align: right;
+      display: inline-block;
+      font-size:300%;
+    }
+    div#current_bomb{
+      position: absolute;
+      top: 80%;
+      left : 90%;
+      width: 100px;
+      height: 100px;
+      text-align: right;
+      font-size:300%;
+    }
+    table#health_bar{
+      position: absolute;
+      top :90%;
+    }
+    table#bomb_counter{
+      position: absolute;
+      top: 85%;
+      left : 60%;
+    }
+    body
+    {
+      width: 100%;
+      height: 100%;
+      margin: auto;
+    }
+    div.clock{
+      font-size:500%;
+    }
+    text{
+      color: black;
+    }
+  </style>
+
+</head>
+<body class="window">
+  <table id="alphabet">
+    <tr id ="qwertyuiop">
+    <button id="q">q</button>
+    <button id="w">w</button>
+    <button id="e">e</button>
+    <button id="r">r</button>
+    <button id="t">t</button>
+    <button id="y">y</button>
+    <button id="u">u</button>
+    <button id="i">i</button>
+    <button id="o">o</button>
+    <button id="p">p</button>
+    </tr>
+    <tr id ="asdfghjkl">
+    <button id="a">a</button>
+    <button id="s">s</button>
+    <button id="d">d</button>
+    <button id="f">f</button>
+    <button id="g">g</button>
+    <button id="h">h</button>
+    <button id="j">j</button>
+    <button id="k">k</button>
+    <button id="l">l</button>
+    <button id="enter">enter</button>
+
+    </tr>
+    <tr id ="zxcvbnm">
+    <button id="z">z</button>
+    <button id="x">x</button>
+    <button id="c">c</button>
+    <button id="v">v</button>
+    <button id="b">b</button>
+    <button id="n">n</button>
+    <button id="m">m</button>
+    <button id="back_space">backspace</button>
+    </tr>
+  </table>
+  <text id="name"></text>
+</body>
+
+</rml>

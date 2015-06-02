@@ -11,5 +11,11 @@ ScoreEventHandler::ScoreEventHandler(Game *game)
 void ScoreEventHandler::handle(const Event &e) const {
     const ScoreEvent &evt = static_cast<const ScoreEvent &>(e);
 
-    // TODO: Handle score update
+    Player *player = game->getPlayers().at(evt.getPlayerId());
+    player->setKills(evt.getKills());
+    player->setDeaths(evt.getDeaths());
+	if (player == game->getCurrentPlayer()){
+		game->getGameGUIEventHandler()->hudScore(evt);
+	}
+	game->getGameGUIEventHandler()->handle(evt, player->getName());
 }

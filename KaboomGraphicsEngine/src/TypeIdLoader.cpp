@@ -47,6 +47,10 @@ void TypeIdLoader::createTypeFromXML(osgDB::XmlNode* xmlNode)
 	int id = std::stoi(id_str);
 
 	std::string meshPath, materialName;
+	osg::Matrix matrix = osg::Matrix::identity();
+	osg::Vec3 position = osg::Vec3(0.0f, 0.0f, 0.0f);
+	osg::Vec4 orientation = osg::Vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	osg::Vec3 scale = osg::Vec3(1.0f, 1.0f, 1.0f);
 
 	for (unsigned int i = 0; i < xmlNode->children.size(); ++i)
 	{
@@ -61,18 +65,30 @@ void TypeIdLoader::createTypeFromXML(osgDB::XmlNode* xmlNode)
 		else if (childName == "material") {
 			materialName = xmlChild->properties["name"];
 		}
+		else if (childName == "position") {
+			loadVec3(xmlChild, position);
+		}
+		else if (childName == "orientation") {
+			loadVec4(xmlChild, orientation);
+		}
+		else if (childName == "scale") {
+			loadVec3(xmlChild, scale);
+		}
 	}
 
 	setDefaultString(meshPath);
 	setDefaultString(materialName);
 
+	// Calculate matrix
+	osg::Quat rot = osg::Quat(orientation);
+
+	matrix.makeTranslate(position);
+	matrix.preMult(osg::Matrix::rotate(rot));
+	matrix.preMult(osg::Matrix::scale(scale));
+
 	// Get the material
 	Material* mat = Core::getWorldRef().getMaterialManager()->getMaterial(materialName);
 
-	// Load the model
-	osg::Node *model = nullptr;
-	model = osgDB::readNodeFile(meshPath);
-
-	// Pre-load geometry to manager
-	Core::getWorldRef().getGeometryManager()->storeTypeIdGeometry(id, model, meshPath, mat);
+	// Pre-load model (not GeometryObject) to cache
+	Core::getWorldRef().getGeometryCache()->addTypeId(id, meshPath, mat, matrix);
 }
