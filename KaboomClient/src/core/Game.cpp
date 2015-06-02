@@ -87,30 +87,30 @@ Game::Game(ConfigSettings *config)
 	_materialManager = Core::getWorldRef().getMaterialManager();
 	_particleEffectManager = Core::getWorldRef().getParticleEffectManager();
 
- //   printf("Loading KABOOM_EXPLODE sound\n");
-	//soundManager.loadSound(SoundType::KABOOM_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\bomb.wav");
-	//soundManager.loadSound(SoundType::REMOTE_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\c4.wav");
-	//soundManager.loadSound(SoundType::TIME_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\time_explosion.mp3");
- //   printf("Loading KABOOM_FIRE sound\n");
-	//soundManager.loadSound(SoundType::KABOOM_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw.wav");
-	//soundManager.loadSound(SoundType::REMOTE_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw2.wav");
-	//soundManager.loadSound(SoundType::TIME_FIRE, str_mediaPath + "DefaultAssets\\Sound\\bounce_fire.wav");
-	//printf("Loading WALKING sound\n");
-	//soundManager.loadSound(SoundType::WALKING, str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
-	//osg::ref_ptr<Sample> walk = new Sample(str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
-	//characterFactory.setWalkingSample(walk);
- //   printf("Loading BASIC sound\n");
-	//soundManager.loadSound(SoundType::BASIC, str_mediaPath + "DefaultAssets\\Sound\\a.wav"); 
-	//printf("Loading JUMP sound\n");
-	//soundManager.loadSound(SoundType::JUMP, str_mediaPath + "DefaultAssets\\Sound\\jump_sound.mp3");
-	//printf("Loading Background Music sound\n");
-	//backGroundMusic = new Source;
-	//angryRobot = new Sample(str_mediaPath + "DefaultAssets\\Sound\\angryRobot.mp3");
-	//backGroundMusic->setSound(angryRobot);
-	//backGroundMusic->setGain(1);
-	//backGroundMusic->setLooping(true);
-	//backGroundMusic->play();
-	//
+    printf("Loading KABOOM_EXPLODE sound\n");
+	soundManager.loadSound(SoundType::KABOOM_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\bomb.wav");
+	soundManager.loadSound(SoundType::REMOTE_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\c4.wav");
+	soundManager.loadSound(SoundType::TIME_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\time_explosion.mp3");
+    printf("Loading KABOOM_FIRE sound\n");
+	soundManager.loadSound(SoundType::KABOOM_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw.wav");
+	soundManager.loadSound(SoundType::REMOTE_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw2.wav");
+	soundManager.loadSound(SoundType::TIME_FIRE, str_mediaPath + "DefaultAssets\\Sound\\bounce_fire.wav");
+	printf("Loading WALKING sound\n");
+	soundManager.loadSound(SoundType::WALKING, str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
+	osg::ref_ptr<Sample> walk = new Sample(str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
+	characterFactory.setWalkingSample(walk);
+    printf("Loading BASIC sound\n");
+	soundManager.loadSound(SoundType::BASIC, str_mediaPath + "DefaultAssets\\Sound\\a.wav"); 
+	printf("Loading JUMP sound\n");
+	soundManager.loadSound(SoundType::JUMP, str_mediaPath + "DefaultAssets\\Sound\\jump_sound.mp3");
+	printf("Loading Background Music sound\n");
+	backGroundMusic = new Source;
+	angryRobot = new Sample(str_mediaPath + "DefaultAssets\\Sound\\angryRobot.mp3");
+	backGroundMusic->setSound(angryRobot);
+	backGroundMusic->setGain(1);
+	backGroundMusic->setLooping(true);
+	backGroundMusic->play();
+	
 	angry = true;
 
 }
@@ -139,6 +139,7 @@ void Game::run() {
 		// printf("duration: %lf\n", Core::getLastFrameDuration());
 		switch (gsm) {
 		case EDITOR_MODE:
+			
 			if (!angry){
 				backGroundMusic->setSound(angryRobot);
 				backGroundMusic->setGain(1);
@@ -152,6 +153,7 @@ void Game::run() {
 			}
 			break;
 		case NAME_SCREEN:
+			std::cout << colorId << std::endl;
 			if (!angry){
 				backGroundMusic->setSound(angryRobot);
 				backGroundMusic->setGain(1);
