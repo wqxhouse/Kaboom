@@ -81,5 +81,6 @@ void DirectionalLight::initShadowMapInfo()
 
 	_slopeScaledBias = 40.0;
 	_normalScaledBias = 60.0;
-	_baseBias = 0.6;
+	//_baseBias = 0.6;
+	_baseBias = 0.015;
 }
