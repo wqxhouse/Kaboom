@@ -213,16 +213,17 @@
       <output_buffer target="depth">debugDepth</output_buffer>
       <output_buffer>b_finalLDR</output_buffer>
     </forward_pass>
-
-    <!--<forward_pass name="OcclusionQueryPass">
+	  
+	<forward_pass name="ParticleEffectPass">
       <clear_mask>0</clear_mask>
-      <culling mask="0x20"></culling>
-      <near_far preserve="0"/>
-      <near_far computation="none"></near_far>
-      <output_buffer>b_finalLDR</output_buffer>
+      <culling mask="0x40"></culling>
+      <near_far preserve="0" />
+	  <near_far computation="none" />
+		
       <output_buffer target="depth">debugDepth</output_buffer>
-    </forward_pass>-->
-
+      <output_buffer>b_finalLDR</output_buffer>
+    </forward_pass>
+	  
     <deferred_pass name="EndPass">
       <input_buffer unit="0">b_finalLDR</input_buffer> 
     </deferred_pass>

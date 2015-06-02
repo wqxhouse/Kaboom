@@ -133,6 +133,7 @@ private:
 	static void configLightVisualizer();
 
 	static void configLibRocketGUI();
+	static void configObjectGlowPass();
 
 	static void freezeCameraOnGUIDemand();
 

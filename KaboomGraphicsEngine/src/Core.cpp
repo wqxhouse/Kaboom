@@ -23,6 +23,7 @@
 #include "GeometryPicker.h"
 #include "GeometryObjectManipulator.h"
 #include "CubemapUtil.h"
+#include "ObjectGlowManager.h"
 
 // TODO: log which one called the global functions in Core
 // for debugging
@@ -66,6 +67,7 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 
 	// need to config after config viewer
 	configParticlePass();
+	configObjectGlowPass();
 
 	// need to do it before finalize(), since client needs this before running
 	configLibRocketGUI();
@@ -888,6 +890,12 @@ const std::string &Core::getMediaPath()
 osg::ref_ptr<SAOPassCallback> Core::getSAOPassCallback()
 {
 	return _saoPassCallback;
+}
+
+void Core::configObjectGlowPass()
+{
+	osg::Group *glow = _world.getObjectGlowManager()->getRoot();
+	_passes->addChild(glow);
 }
 
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
