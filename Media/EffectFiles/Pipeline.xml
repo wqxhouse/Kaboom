@@ -49,6 +49,7 @@
       <clear_color>0 0 0 1</clear_color>
       <culling mask="0x1"></culling>
       <uniform>u_farPlane</uniform>
+      <near_far computation="none"></near_far>
       <output_buffer target="color0">b_RT0</output_buffer>
       <output_buffer target="color1">b_RT1</output_buffer>
       <output_buffer target="color2">b_RT2</output_buffer>
@@ -121,6 +122,7 @@
       <clear_mask>0</clear_mask>
       <culling mask="0x10"></culling>
       <near_far preserve="0" />
+      <near_far computation="none"></near_far>
       <!-- TODO: make sure depth write is disabled -->
       <output_buffer target="depth">debugDepth</output_buffer>
       <output_buffer>b_shading</output_buffer>
