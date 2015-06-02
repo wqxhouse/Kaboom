@@ -51,6 +51,7 @@ void createInfinitePlane(GeometryObjectManager *manager, MaterialManager *matMan
 
 	floorGeo->addDrawable(floorGeometry);
 	// Add * in front of the name to make it un-movable;
+	//manager->addGeometry("*__Huge_floor", floorGeo, osg::Vec3(0, 0, 0));
 	manager->addGeometry("*__Huge_floor", floorGeo, osg::Vec3(0, 0, 0), false);
 
 

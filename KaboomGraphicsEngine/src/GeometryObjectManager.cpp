@@ -2,6 +2,8 @@
 
 #include "GeometryObjectManager.h"
 #include "GeometryObject.h"
+#include "GeometryCache.h"
+#include "Core.h"
 
 GeometryObjectManager::GeometryObjectManager()
 {
@@ -48,7 +50,7 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 	return true;
 }
 
-bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName, bool receiveShadow)
+bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geomNode, std::string fileName, osg::Vec3 pos, bool receiveShadow)
 {
 	if (geomNode == nullptr) {
 		std::cout << "geomNode is null: " << name << std::endl;
@@ -62,6 +64,7 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 	}
 
 	GeometryObject *geomObj = new GeometryObject(name, geomNode, fileName);
+	geomObj->setTranslate(pos);
 
 	_geomObjMap.insert(std::make_pair(name, geomObj));
 	_geomRoot->addChild(geomObj->getRoot());
@@ -78,25 +81,18 @@ bool GeometryObjectManager::addGeometry(const std::string &name, osg::Node *geom
 
 bool GeometryObjectManager::addGeometryByTypeId(const std::string &name, const int type_id, osg::Vec3 pos, bool receiveShadow)
 {
-	std::unordered_map<int, GeometryObject *>::iterator itr = _typeIdGeomMap.find(type_id);
-	if (itr == _typeIdGeomMap.end())
+	GeometryCache* cache = Core::getWorldRef().getGeometryCache();
+	std::string fileName;
+
+	osg::ref_ptr<osg::Node> geomNode = cache->getNodeById(type_id, fileName);
+	Material* mat = cache->getMaterialById(type_id);
+
+	if ((geomNode.get() == NULL) || (mat == NULL)) 
 	{
 		return false;
 	}
 
-	GeometryObject* origGeom = itr->second;
-	GeometryObject* newGeom = origGeom->copy(name);
-	newGeom->setTranslate(pos);
-
-	_geomObjMap.insert(std::make_pair(name, newGeom));
-	_geomRoot->addChild(newGeom->getRoot());
-
-	if (receiveShadow)
-	{
-		_shadowedScene->addChild(newGeom->getRoot());
-	}
-
-	return true;	
+	return addGeometry(name, geomNode, fileName, pos);
 }
 
 void GeometryObjectManager::deleteGeometry(const std::string &name)
@@ -180,21 +176,6 @@ bool GeometryObjectManager::setGeometryMaterial(const std::string &geomName, Mat
 		OSG_WARN << "setGeometryMaterial: geometry named " + geomName + " not defined" << std::endl;
 		return false;
 	}
-}
-
-bool GeometryObjectManager::storeTypeIdGeometry(const int type_id, osg::Node *geomNode, std::string fileName, Material* material)
-{
-	if (geomNode == nullptr) {
-		std::cout << "geomNode from type id is null: " << type_id << std::endl;
-		return false;
-	}
-
-	std::string geomName = "type_id_" + std::to_string(type_id);
-	GeometryObject *geomObj = new GeometryObject(geomName, geomNode, fileName);
-	geomObj->setMaterial(material);
-	_typeIdGeomMap.insert(std::make_pair(type_id, geomObj));
-
-	return true;
 }
 
 GeometryObject *GeometryObjectManager::getGeometryObject(const std::string& geomName)

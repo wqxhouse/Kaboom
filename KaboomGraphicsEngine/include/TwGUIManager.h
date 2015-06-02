@@ -146,6 +146,7 @@ public:
 	static void minimizeAllBars();
 	static void maximizeAllBars();
 
+	static void loadWorldXML();
 	static void exportXML();
 	static void addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index);
 	static void addLightToGUI(TwBar* bar, Light* geom, std::string group, int& index);
@@ -201,6 +202,11 @@ protected:
 	void initPlainMaterialBar();
 	void initTexturedMaterialBar();
 	void initLightBar();
+
+	void initAddBarHelper();
+	void initPlainMaterialBarHelper();
+	void initTexturedMaterialBarHelper();
+	void initLightBarHelper();
 
 	static void fitObjectToScreen(osg::MatrixTransform *mt);
 	static void fitPointLightToScreen(PointLight *l);

@@ -6,7 +6,8 @@ class Game;
 
 class PlayerStatusEventHandler : public EventHandler {
 public:
-	PlayerStatusEventHandler(Game *game);
+    PlayerStatusEventHandler(Game *game);
+
     virtual void handle(const Event &e) const;
 
 private:

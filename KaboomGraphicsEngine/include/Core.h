@@ -14,6 +14,11 @@
 
 #include "TwGUIManager.h"
 #include "LibRocketGUIManager.h"
+#include "ModelCache.h"
+
+// Character Animations Type-ID
+static const int IDLE = 101;
+static const int RUNNING = 102;
 
 namespace osgLibRocket
 {
@@ -23,7 +28,7 @@ namespace osgLibRocket
 class Core
 {
 public:
-	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath);
+	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath, osg::Node *soundRoot);
 
 	static osg::Vec2 getScreenSize();
 	static osg::Vec2 getRenderResolution();
@@ -31,7 +36,11 @@ public:
 	static void loadMaterialFile(const std::string &filePath);
 	static void loadTypeIdFile(const std::string &filePath);
 	static void loadWorldFile(const std::string &worldFilePath);
+	static void loadModelCache(int numPlayers);
+
 	static World &getWorldRef();
+	static osg::ref_ptr<TwGUIManager> getEditorGUI();
+	static ModelCache &getModelCache();
 
 	static Camera &getMainCamera();
 	static const std::string &getMediaPath();
@@ -74,6 +83,8 @@ public:
 	static void disableStartScreen();
 	static void enableGameMode();
 	static void disableGameMode();
+	static void enableDeathScreen();
+	static void disableDeathScreen();
 
 	static void enableGeometryObjectManipulator();
 	static void disableGeometryObjectManipulator();
@@ -86,6 +97,7 @@ public:
 
 	static bool isInStartScreenMode();
 	static bool isInGameMode();
+	static bool isInDeath();
 	static bool isCamLocked();
 	static bool isViewerClosed();
 	static bool isMouseOverAnyEditor();
@@ -155,6 +167,8 @@ private:
 	static bool _hasInit;
 	static bool _hasEnvMap;
 
+	static ModelCache _modelCache;
+
 	// mainCamera
 	friend class osgFX::EffectCompositor;
 	static Camera _cam;
@@ -176,6 +190,7 @@ private:
 	// on screen flags
 	static bool _startScreenMode;
 	static bool _gameMode;
+	static bool _isDeath;
 	static bool _passDataDisplay;
 	static bool _guiEnabled;
 	static bool _manipulatorEnabled;

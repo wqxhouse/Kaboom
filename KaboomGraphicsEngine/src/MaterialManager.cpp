@@ -163,6 +163,15 @@ void MaterialManager::setMaterialUpdateCallback(const std::string &name, Materia
 	m->_userData = userData;
 }
 
+void MaterialManager::deleteMaterial(const std::string &name)
+{
+	Material *m = _materialMap[name];
+	if (_materialMap.find(name) != _materialMap.end()){
+		_materialMap.erase(name);
+		delete m;
+	}
+}
+
 bool MaterialManager::renameMaterial(const std::string &oldName, const std::string &newName)
 {
 	// Handle duplicated (name) geoms
@@ -293,4 +302,11 @@ osg::ref_ptr<osg::Texture> MaterialManager::getNormalMapTexture(Material *m)
 		// console output material not found;
 		return NULL;
 	}
+}
+
+
+void MaterialManager::reloadBuiltInMaterials()
+{
+	_builtInMaterial.clear();
+	createBuiltInMaterials();
 }

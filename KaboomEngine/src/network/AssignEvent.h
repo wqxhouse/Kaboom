@@ -7,9 +7,9 @@
 
 class AssignEvent : public Event {
 public:
-    AssignEvent(unsigned int entityId = 0)
+    AssignEvent(unsigned int playerId = 0)
             : Event(EVENT_ASSIGN, sizeof(AssignEvent)),
-              entityId(entityId) {
+              playerId(playerId) {
     }
 
     inline virtual void serialize(char *buf) const {
@@ -20,18 +20,18 @@ public:
         memcpy(this, buf, sizeof(AssignEvent));
     }
 
-    inline unsigned int getEntityId() const {
-        return entityId;
+    inline unsigned int getPlayerId() const {
+        return playerId;
     }
 
-	friend std::ostream &operator<<(std::ostream &os, const AssignEvent &o) {
+    friend std::ostream &operator<<(std::ostream &os, const AssignEvent &o) {
         os << "AssignEvent: {" << std::endl;
-        os << "    entityId: " << o.entityId << std::endl;
+        os << "    playerId: " << o.playerId << std::endl;
         os << "}";
 
         return os;
     }
 
 private:
-    unsigned int entityId;
+    unsigned int playerId;
 };

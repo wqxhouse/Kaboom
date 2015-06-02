@@ -3,10 +3,9 @@
 #include <core/EntityType.h>
 #include <util/Configuration.h>
 
-MapConfigLoader::MapConfigLoader(std::unordered_map<std::string, Configuration> &config)
+MapConfigLoader::MapConfigLoader(SpawnPointNameToConfigMap &config)
         : config(config),
-		  uniqueId(0)   
-{
+		  uniqueId(0) {
 }
 
 void MapConfigLoader::load(const std::string &filename){
@@ -25,7 +24,7 @@ void MapConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 	}
 
 	for (auto spawnsNode : xmlRoot->children) {
-		if (spawnsNode->name != "spawn-points") {
+		if (spawnsNode->name != "objects") {
 			continue;
 		}
 
@@ -33,11 +32,9 @@ void MapConfigLoader::loadXMLNode(osgDB::XmlNode *xmlRoot) {
 
 		for (auto spawnNode : spawnsNode->children) {
 
-			if (spawnNode->name == "spawn-point"){
-				std::string id = spawnNode->name + std::to_string(uniqueId++);
-				for (auto dataNode : spawnNode->children) {
-					loadValue(dataNode, dataNode->properties["type"], id);
-				}
+			std::string id = spawnNode->name + std::to_string(uniqueId++);
+			for (auto dataNode : spawnNode->children) {
+				loadValue(dataNode, dataNode->properties["type"], id);
 			}
 		}
 	}
@@ -59,7 +56,7 @@ void MapConfigLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string &valu
     } else if (valueType == "string") {
         std::string val;
         loadString(xmlNode, val);
-		config[id].set(xmlNode->name.c_str(), val.c_str());
+		config[id].set(xmlNode->name.c_str(), val);
 	} else if (valueType == "vector3") {
 		osg::Vec3 val;
 		loadVec3(xmlNode, val);

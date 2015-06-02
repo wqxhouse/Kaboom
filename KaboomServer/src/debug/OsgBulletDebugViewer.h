@@ -20,6 +20,7 @@ public:
     void addNodeWireFrame(osg::Node*);
 
     osgbCollision::GLDebugDrawer* getDbgDraw();
+
 private:
     ConfigSettings* config;
 

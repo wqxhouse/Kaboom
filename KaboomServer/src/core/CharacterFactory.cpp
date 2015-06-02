@@ -2,8 +2,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include <components/BombContainerComponent.h>
 #include <components/EquipmentComponent.h>
+#include <components/InventoryComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
@@ -11,7 +11,6 @@
 #include <core/EntityManager.h>
 #include <util/Configuration.h>
 
-#include "common.h"
 #include "EntityConfigLookup.h"
 #include "../components/CharacterRotationComponent.h"
 #include "../components/InputComponent.h"
@@ -19,8 +18,12 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
 #include "../components/JumpComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../messaging/DefaultCharacterMessageHandler.h"
+#include "../messaging/BombDropMessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
+
+typedef std::unordered_map<EntityType, int> InventoryType;
 
 CharacterFactory::CharacterFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
@@ -70,7 +73,7 @@ void CharacterFactory::createBase(
     rigidBody->setUserPointer(entity);
     rigidBody->setAngularFactor(btVector3(0, 0, 1)); // NOTE : prevent body from rotating in the x and y axis
 
-    BombContainerComponent::InventoryType inventory;
+    InventoryComponent::InventoryType inventory;
 
     for (auto kv : *startingInventory) {
         int cooldown = EntityConfigLookup::get(kv.first).getInt("cooldown");
@@ -84,7 +87,7 @@ void CharacterFactory::createBase(
     entity->attachComponent(new RotationComponent(rotation));
     entity->attachComponent(new CharacterRotationComponent());
     entity->attachComponent(new PhysicsComponent(rigidBody));
-    entity->attachComponent(new BombContainerComponent(inventory));
+    entity->attachComponent(new InventoryComponent(inventory));
     entity->attachComponent(new PlayerStatusComponent());
     entity->attachComponent(new HealthComponent(healthStart, healthCap));
     entity->attachComponent(new JumpComponent);
@@ -96,15 +99,31 @@ void CharacterFactory::createDefaultCharacter(Entity *entity) const {
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
     static DefaultCharacterMessageHandler defaultCharHandler;
+	static BombDropMessageHandler bombDropMessageHandler;
+
     chain->addHandler(&defaultCharHandler);
+	chain->addHandler(&bombDropMessageHandler);
 
     entity->attachComponent(new JetpackComponent());
     entity->attachComponent(new EquipmentComponent(KABOOM_V2));
 }
 
 void CharacterFactory::resetCharacter(Entity *entity, const Vec3 &position, const Quat &rotation) const {
+    entity->detachComponent<InputComponent>();
+    entity->detachComponent<PositionComponent>();
+    entity->detachComponent<RotationComponent>();
+    entity->detachComponent<CharacterRotationComponent>();
+    entity->detachComponent<PhysicsComponent>();
+    entity->detachComponent<InventoryComponent>();
+    entity->detachComponent<PlayerStatusComponent>();
+    entity->detachComponent<JumpComponent>();
+    entity->detachComponent<MessageHandlerComponent>();
+    entity->detachComponent<JetpackComponent>();
+    entity->detachComponent<EquipmentComponent>();
 
-	entity->detachAllComponent();
+	if (entity->hasComponent<PlayerDeathComponent>()){
+		entity->detachComponent<PlayerDeathComponent>();
+	}
 
 	auto &charConfig = EntityConfigLookup::get(entity->getType());
 	createBase(entity, position, rotation);

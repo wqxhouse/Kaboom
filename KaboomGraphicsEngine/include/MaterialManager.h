@@ -39,6 +39,7 @@ public:
 
 	void setMaterialUpdateCallback(const std::string &name, MaterialUpdateCallback callback, void *userData = NULL);
 
+	void deleteMaterial(const std::string &name);
 	bool renameMaterial(const std::string &oldName, const std::string &newName);
 
 	bool doesNameExist(const std::string &name);
@@ -50,6 +51,8 @@ public:
 	osg::ref_ptr<osg::Texture> getRoughnessTexture(Material *m);
 	osg::ref_ptr<osg::Texture> getMetallicTexture(Material *m);
 	osg::ref_ptr<osg::Texture> getNormalMapTexture(Material *m);
+
+	void reloadBuiltInMaterials();
 
 private:
 	void createBuiltInMaterials();

@@ -49,6 +49,8 @@ public:
 				return TimeBombAmount;
 			case 2:
 				return StickyBombAmount;
+			default:
+				return 0;
 		}
 	}
 

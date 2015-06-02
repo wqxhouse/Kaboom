@@ -1,6 +1,6 @@
 body
 {
-	font-family: Delicious;
+	font-family: kinishinai nbp;
 	font-weight: normal;
 	font-style: normal;
 	font-size: 15;
@@ -90,9 +90,9 @@ div#content
 	width: auto;
 	height: 100%;
 
-	overflow: hidden auto;
+	//overflow: hidden auto;
 
-	text-align: center;
+	//text-align: center;
 }
 
 
@@ -138,13 +138,13 @@ input.submit
 {
 	display: inline-block;
 
-	width: 159px;
-	height: 37px;
+	width: 170px;
+	height: 90px;
 
-	padding-top: 8px;
+	padding-top: 2.5%;
 	vertical-align: -18px;
 
-	font-size: 18;
+	font-size: 100%;
 	text-align: center;
 	tab-index: auto;
 
@@ -165,13 +165,13 @@ input.submit:focus
 button:hover,
 input.submit:hover
 {
-	background-image-t: 45px 90px;
+	//background-image-t: 45px 90px;
 }
 
 button:active,
 input.submit:active
 {
-	background-image-t: 90px 135px;
+	//background-image-t: 90px 135px;
 }
 
 
@@ -228,14 +228,14 @@ dataselect selectvalue
 	height: 28px;
 	padding: 9px 10px 0px 10px;
 
-	background-decorator: image;
-	background-image: invader.tga 162px 192px 307px 229px;
+	//background-decorator: image;
+	//background-image: invader.tga 162px 192px 307px 229px;
 }
 
 select selectvalue:hover,
 dataselect selectvalue:hover
 {
-	background-image-t: 230px 267px;
+	//background-image-t: 230px 267px;
 }
 
 select selectarrow,
@@ -244,8 +244,8 @@ dataselect selectarrow
 	width: 30px;
 	height: 37px;
 	
-	icon-decorator: image;
-	icon-image: invader.tga 307px 192px 337px 229px;
+	//icon-decorator: image;
+	//icon-image: invader.tga 307px 192px 337px 229px;
 }
 
 select selectarrow:hover,
@@ -259,7 +259,7 @@ select selectarrow:checked,
 dataselect selectarrow:active,
 dataselect selectarrow:checked
 {
-	icon-image-t: 268px 305px;
+	//icon-image-t: 268px 305px;
 }
 
 select selectbox,
@@ -275,7 +275,7 @@ select selectbox,
 dataselect selectbox,
 datagrid datagridbody
 {
-	background-decorator: tiled-box;
+	/*background-decorator: tiled-box;
 	background-top-left-image: invader.tga 281px 275px 292px 284px;
 	background-top-right-image: invader.tga 294px 275px 305px 284px;
 	background-top-image: invader.tga stretch 292px 275px 293px 284px;
@@ -283,7 +283,7 @@ datagrid datagridbody
 	background-bottom-right-image: invader.tga 294px 285px 305px 296px;
 	background-bottom-image: invader.tga stretch 292px 285px 293px 296px;
 	background-left-image: invader.tga stretch 281px 283px 292px 284px;
-	background-center-image: invader.tga stretch 292px 283px 293px 284px;
+	background-center-image: invader.tga stretch 292px 283px 293px 284px;*/
 }
 
 select selectbox option,
@@ -319,8 +319,8 @@ input.checkbox
 
 input.radio
 {
-	icon-decorator: image;
-	icon-image: invader.tga 407px 0px 437px 30px;
+	//icon-decorator: image;
+	/icon-image: invader.tga 407px 0px 437px 30px;
 }
 
 input.radio:hover

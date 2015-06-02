@@ -8,4 +8,9 @@ enum class MessageType {
     ATTACK2,
     NO_ATTACK,
     PICKUP,
+    CHARACTER_SPAWN,
+	JUMP_PAD,
+	BOMB_DROP,
+	BOMB_DROP_DESPAWN,
+    TICK,
 };

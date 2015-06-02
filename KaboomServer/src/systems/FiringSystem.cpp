@@ -2,19 +2,25 @@
 
 #include <core/Entity.h>
 
+#include "../components/DestroyComponent.h"
 #include "../components/InputComponent.h"
 #include "../components/MessageHandlerComponent.h"
+#include "../components/PlayerDeathComponent.h"
+#include "../core/Game.h"
 #include "../messaging/Attack1Message.h"
 #include "../messaging/Attack2Message.h"
 #include "../messaging/MessageHandler.h"
 #include "../messaging/NoAttackMessage.h"
 
 FiringSystem::FiringSystem(Game *game)
-        : game(game) {
+        : EntityProcessingSystem(game) {
 }
 
 bool FiringSystem::checkEntity(Entity *entity) {
-    return entity->hasComponent<InputComponent>() &&
+    return game->getGameMode().getMatchState() == GameMode::MatchState::IN_PROGRESS &&
+            !entity->hasComponent<DestroyComponent>() &&
+			!entity->hasComponent<PlayerDeathComponent>() &&
+            entity->hasComponent<InputComponent>() &&
             entity->hasComponent<MessageHandlerComponent>();
 }
 

@@ -8,7 +8,7 @@
 #include <core/Entity.h>
 #include <core/EntityManager.h>
 
-#include "../components/SpawnComponent.h"
+#include "../components/PickupRespawnComponent.h"
 #include "../components/MessageHandlerComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../messaging/BombPickupMessageHandler.h"

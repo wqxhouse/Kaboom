@@ -198,6 +198,12 @@
     <ClInclude Include="include\TestMaterial2.h">
       <Filter>Header Files\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="include\GeometryCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ModelCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\SAOPassCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -349,6 +355,12 @@
     </ClCompile>
     <ClCompile Include="src\TestMaterial2.cpp">
       <Filter>Source Files\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelCache.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SAOPassCallback.cpp">
       <Filter>Source Files</Filter>

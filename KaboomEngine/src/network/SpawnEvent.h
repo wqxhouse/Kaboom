@@ -12,11 +12,13 @@ public:
     SpawnEvent(
             unsigned int entityId = 0,
             EntityType type = NONE,
+            bool pickup = false,
             const Vec3 &position = Vec3(),
             Quat rotation = Quat())
             : Event(EVENT_SPAWN, sizeof(SpawnEvent)),
               entityId(entityId),
               type(type),
+              pickup(pickup),
               position(position),
               rotation(rotation) {
     }
@@ -37,6 +39,10 @@ public:
         return type;
     }
 
+    inline bool isPickup() const {
+        return pickup;
+    }
+
     inline const Vec3 &getPosition() const {
         return position;
     }
@@ -49,9 +55,18 @@ public:
         os << "SpawnEvent: {" << std::endl;
         os << "    entityId: " << o.entityId << std::endl;
         os << "    type: " << o.type << std::endl;
-        os << "    x: " << o.position.x << std::endl;
-        os << "    y: " << o.position.y << std::endl;
-        os << "    z: " << o.position.z << std::endl;
+        os << "    pickup: " << o.pickup << std::endl;
+        os << "    position: {" << std::endl;
+        os << "        x: " << o.position.x << std::endl;
+        os << "        y: " << o.position.x << std::endl;
+        os << "        z: " << o.position.x << std::endl;
+        os << "    }" << std::endl;
+        os << "    rotation: {" << std::endl;
+        os << "        x: " << o.rotation.x << std::endl;
+        os << "        y: " << o.rotation.y << std::endl;
+        os << "        z: " << o.rotation.z << std::endl;
+        os << "        w: " << o.rotation.w << std::endl;
+        os << "    }" << std::endl;
         os << "}";
 
         return os;
@@ -60,7 +75,7 @@ public:
 private:
     unsigned int entityId;
     EntityType type;
-
+    bool pickup;
     Vec3 position;
     Quat rotation;
 };

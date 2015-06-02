@@ -9,6 +9,7 @@ enum EntityType;
 class EntityConfigLookup {
 public:
     static const Configuration &get(EntityType type);
+    static void load();
 
 private:
     static bool initialized;

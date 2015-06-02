@@ -8,12 +8,17 @@
 
 #include "Core.h"
 #include "GeometryObject.h"
+#include "GeometryCache.h"
 #include "Material.h"
 #include "Light.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "GeometryObjectManipulator.h"
 #include <osg/ComputeBoundsVisitor>
+
+//This is needed for virtually 
+//everything in BrowseFolder.
+#include <shlobj.h>
 
 const float PI_F = 3.14159265358979f;
 
@@ -81,6 +86,14 @@ void TwGUIManager::initMainBar()
 		[](void *clientData) {
 		Core::enableStartScreen();
 	}, NULL, " label='--> Run Game :)' ");
+
+
+	// 'Load World File' button
+	TwAddButton(g_twBar, "Load World File",
+		[](void *clientData) {
+		loadWorldXML();
+	},
+		NULL, NULL);
 
 	// 'Export to XML' button
 	TwAddButton(g_twBar, "Export to XML",
@@ -237,6 +250,13 @@ void TwGUIManager::initMainBar()
 
 	TwAddSeparator(g_twBar, NULL, NULL);
 
+	initAddBarHelper();
+	//index = 0;
+}
+
+
+void TwGUIManager::initAddBarHelper()
+{
 	// Process geometries
 	const std::unordered_map<std::string, GeometryObject *> &gmMap = _gm->getGeometryObjectMapRef();
 	for (std::unordered_map<std::string, GeometryObject *>::const_iterator it = gmMap.begin();
@@ -248,8 +268,6 @@ void TwGUIManager::initMainBar()
 		// Moved code to a function
 		addModelToGUI(g_twBar, geom, GEOM_GROUP_NAME, _index);
 	}
-
-	//index = 0;
 }
 
 void TwGUIManager::initLightBar()
@@ -257,6 +275,11 @@ void TwGUIManager::initLightBar()
 	g_lightBar = TwNewBar("Lights");
 	TwDefine(" Lights label='Lights' size='300 180' color='185 185 50' position='16 515'");
 
+	initLightBarHelper();
+}
+
+void TwGUIManager::initLightBarHelper()
+{
 	// process lights
 	for (int i = 0; i < _lm->getNumLights(); i++)
 	{
@@ -366,7 +389,7 @@ void TwGUIManager::initAddBar()
 
 			// Add model to geometry manager
 			OSG_WARN << "Loading geometry object... " << fileName;
-			osg::Node *model = osgDB::readNodeFile(fileName);
+			osg::Node *model = Core::getWorldRef().getGeometryCache()->getNodeByFileName(fileName);
 			if (model != NULL)
 			{
 				OSG_WARN << "Successfully! " << std::endl;
@@ -537,6 +560,11 @@ void TwGUIManager::initPlainMaterialBar()
 	g_plainMaterialBar = TwNewBar("Plain_Materials");
 	TwDefine(" Plain_Materials label='Plain Materials' size='250 240' color='96 216 96' position='1025 140' valueswidth=100");
 
+	initPlainMaterialBarHelper();
+}
+
+void TwGUIManager::initPlainMaterialBarHelper()
+{
 	// Process materials
 	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
 	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMap.begin();
@@ -546,7 +574,7 @@ void TwGUIManager::initPlainMaterialBar()
 		Material *mat = it->second;
 
 		if (mat->getUseTexture()) continue;
-		
+
 		// Moved code to a function
 		addPlainMaterialToGUI(g_plainMaterialBar, mat, PLAIN_MATERIAL_GROUP_NAME, _index);
 	}
@@ -557,6 +585,11 @@ void TwGUIManager::initTexturedMaterialBar()
 	g_texturedMaterialBar = TwNewBar("Textured_Materials");
 	TwDefine(" Textured_Materials label='Textured Materials' size='250 240' color='216 96 96' position='1025 380' valueswidth=100");
 
+	initTexturedMaterialBarHelper();
+}
+
+void TwGUIManager::initTexturedMaterialBarHelper()
+{
 	// Process materials
 	const std::unordered_map<std::string, Material *> &mmMap = _mm->getMaterialMapRef();
 	for (std::unordered_map<std::string, Material *>::const_iterator it = mmMap.begin();
@@ -570,7 +603,6 @@ void TwGUIManager::initTexturedMaterialBar()
 		// Moved code to a function
 		addTexturedMaterialToGUI(g_texturedMaterialBar, mat, TEXTURED_MATERIAL_GROUP_NAME, _index);
 	}
-
 }
 
 void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string group, int& index) {
@@ -592,8 +624,8 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	std::string rotYVarName = ROT_Y_LABEL + indexStr;
 	std::string rotZVarName = ROT_Z_LABEL + indexStr;
 
+	std::string posStep = " step=0.01";
 	std::string scaleLimitVal = " step=0.005 min=0.0";
-
 	BarItem* item = new BarItem();
 	item->bar = bar;
 	item->name = name;
@@ -672,7 +704,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 		item, materialDef.c_str());
 
 
-	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
+	std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'" + posStep;
 	TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -695,7 +727,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, posXDef.c_str());
 
-	std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'";
+	std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'" + posStep;
 	TwAddVarCB(bar, posYVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -718,7 +750,7 @@ void TwGUIManager::addModelToGUI(TwBar* bar, GeometryObject* geom, std::string g
 	},
 		geom, posYDef.c_str());
 
-	std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'";
+	std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'" + posStep;
 	TwAddVarCB(bar, posZVarName.c_str(), TW_TYPE_FLOAT,
 		[](const void *value, void *clientData) {
 		GeometryObject *obj = static_cast<GeometryObject *>(clientData);
@@ -978,6 +1010,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 	std::string name = l->getName();
 
 	std::string nameGroupDef = " group='" + name + "' ";
+	std::string posStep = " step=0.01";
 
 	std::string indexStr = std::to_string(_index);
 	std::string posXVarName = POS_X_LABEL + indexStr;
@@ -1102,6 +1135,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 			*(float *)data = l->getIntensity();
 		}, pl, intensityNameDef.c_str());
 
+
 		std::string castShadowNameDef = nameGroupDef + " label='" + CAST_SHAODW_LABEL + "'";
 		TwAddVarCB(bar, castShadowNameDef.c_str(), TW_TYPE_BOOL8,
 			[](const void *data, void *clientData) {
@@ -1115,10 +1149,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 		}, [](void *data, void *clientData) {
 			Light *l = (Light *)clientData;
 			*(bool *)data = l->getCastShadow();
-		}, pl, castShadowNameDef.c_str());
-
-		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'";
-		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
+		}, pl, castShadowNameDef.c_str());		std::string posXDef = nameGroupDef + " label='" + POS_X_LABEL + "'" + posStep;		TwAddVarCB(bar, posXVarName.c_str(), TW_TYPE_FLOAT,
 			[](const void *value, void *clientData) {
 			float posX = *(const float *)value;
 			PointLight *pl = static_cast<PointLight *>(clientData);
@@ -1137,7 +1168,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 
 		}, pl, posXDef.c_str());
 
-		std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'";
+		std::string posYDef = nameGroupDef + " label='" + POS_Y_LABEL + "'" + posStep;
 		TwAddVarCB(bar, posYVarName.c_str(), TW_TYPE_FLOAT,
 			[](const void *value, void *clientData) {
 			float posY = *(const float *)value;
@@ -1157,7 +1188,7 @@ void TwGUIManager::addLightToGUI(TwBar* bar, Light* l, std::string group, int& i
 
 		}, pl, posYDef.c_str());
 
-		std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'";
+		std::string posZDef = nameGroupDef + " label='" + POS_Z_LABEL + "'" + posStep;
 		TwAddVarCB(bar, posZVarName.c_str(), TW_TYPE_FLOAT,
 			[](const void *value, void *clientData) {
 			float posZ = *(const float *)value;
@@ -2024,6 +2055,19 @@ int TwGUIManager::getTwKey(int key, bool useCtrl) const
 	case osgGA::GUIEventAdapter::KEY_F10: return TW_KEY_F10;
 	case osgGA::GUIEventAdapter::KEY_F11: return TW_KEY_F11;
 	case osgGA::GUIEventAdapter::KEY_F12: return TW_KEY_F12;
+	case osgGA::GUIEventAdapter::KEY_KP_Insert: return '0';
+	case osgGA::GUIEventAdapter::KEY_KP_End: return '1';
+	case osgGA::GUIEventAdapter::KEY_KP_Down: return '2';
+	case osgGA::GUIEventAdapter::KEY_KP_Page_Down: return '3';
+	case osgGA::GUIEventAdapter::KEY_KP_Left: return '4';
+	case osgGA::GUIEventAdapter::KEY_KP_Begin: return '5';
+	case osgGA::GUIEventAdapter::KEY_KP_Right: return '6';
+	case osgGA::GUIEventAdapter::KEY_KP_Home: return '7';
+	case osgGA::GUIEventAdapter::KEY_KP_Up: return '8';
+	case osgGA::GUIEventAdapter::KEY_KP_Page_Up: return '9';
+	case osgGA::GUIEventAdapter::KEY_KP_Decimal: return '.';
+	case osgGA::GUIEventAdapter::KEY_KP_Enter: return TW_KEY_RETURN;
+
 	}
 	if (useCtrl && key < 27) key += 'a' - 1;
 	return key;
@@ -2202,21 +2246,39 @@ void TwGUIManager::fitObjectToScreen(osg::MatrixTransform *mt)
 
 void TwGUIManager::exportXML()
 {
-	// Might wanna move this code somewhere else
-	ConfigSettings* config = ConfigSettings::config;
-	std::string str_export_material_xml = "";
-	std::string str_export_world_xml = "";
-	std::string str_mediaPath = "";
-	config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
-	config->getValue(ConfigSettings::str_material_xml, str_export_material_xml);
-	config->getValue(ConfigSettings::str_export_xml, str_export_world_xml);
+	TCHAR t_path[MAX_PATH];
+	BROWSEINFO bi = { 0 };
+	//bi.lpszTitle = ("All Folders Automatically Recursed.");
+	LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
 
-	// TODO: support custom file names
-	std::string exportWorldPath = str_mediaPath + str_export_world_xml;
-	std::string exportMaterialPath = str_mediaPath + str_export_material_xml;
+	if (pidl != 0)
+	{
+		// get the name of the folder and put it in path
+		SHGetPathFromIDList(pidl, t_path);
 
-	exportWorldXML(exportWorldPath);
-	exportMaterialXML(exportMaterialPath);
+		std::wstring w_path = t_path;
+		std::string destPath(w_path.begin(), w_path.end());
+
+		std::string source = Core::getWorldRef().getWorldPath();
+		std::string copyCmd = "xcopy " + source + " " + destPath + "  /e /y /i /r";
+		system(copyCmd.c_str());//"xcopy " + source.c_str() + " " + path + "  /e /y /i /r");
+
+		//// Might wanna move this code somewhere else
+		//ConfigSettings* config = ConfigSettings::config;
+		//std::string str_export_material_xml = "";
+		//std::string str_export_world_xml = "";
+		//std::string str_mediaPath = "";
+		//config->getValue(ConfigSettings::str_mediaFilePath, str_mediaPath);
+		//config->getValue(ConfigSettings::str_material_xml, str_export_material_xml);
+		//config->getValue(ConfigSettings::str_export_xml, str_export_world_xml);
+
+		//// TODO: support custom file names
+		//std::string exportWorldPath = str_mediaPath + str_export_world_xml;
+		//std::string exportMaterialPath = str_mediaPath + str_export_material_xml;
+
+		exportWorldXML(destPath + "\\World\\Export.xml");
+		exportMaterialXML(destPath + "\\World\\Materials.xml");
+	}
 }
 
 void TwGUIManager::exportWorldXML(std::string &path)
@@ -2356,24 +2418,33 @@ void TwGUIManager::exportMaterialXML(std::string &path)
 		write(f, tabs, matHeader);
 		tabs++;
 
-		// For plain materials
-		if (type == "plain") {
-			osg::Vec3 alb = mat->getAlbedo();
-			float rough = mat->getRoughness();
-			float specular = mat->getSpecular();
-			float metallic = mat->getMetallic();
+		// For plain and textured materials
+		osg::Vec3 alb = mat->getAlbedo();
+		float rough = mat->getRoughness();
+		float specular = mat->getSpecular();
+		float metallic = mat->getMetallic();
 
-			write(f, tabs, tagify("albedo", alb));
-			write(f, tabs, tagify("roughness", rough));
-			write(f, tabs, tagify("specular", specular));
-			write(f, tabs, tagify("metallic", metallic));
-		}
+		write(f, tabs, tagify("albedo", alb));
+		write(f, tabs, tagify("roughness", rough));
+		write(f, tabs, tagify("specular", specular));
+		write(f, tabs, tagify("metallic", metallic));
+
 		// For textured materials
-		else if (type == "textured") {
+        if (type == "textured") {
+            float albTexLerp = mat->getAlbedoTexLerp();
+            float roughTexLerp = mat->getRoughnessTexLerp();
+            float metallicTexLerp = mat->getMetallicTexLerp();
+            float normalTexLerp = mat->getNormalMapMapLerp();
+
 			std::string albPath = mat->getAlbedoTexturePath();
 			std::string roughPath = mat->getRoughnessTexturePath();
 			std::string metallicPath = mat->getMetallicTexturePath();
 			std::string normalPath = mat->getNormalMapTexturePath();
+
+            write(f, tabs, tagify("albedoTexLerp", albTexLerp));
+            write(f, tabs, tagify("roughnessTexLerp", roughTexLerp));
+            write(f, tabs, tagify("metallicTexLerp", metallicTexLerp));
+            write(f, tabs, tagify("normalTexLerp", normalTexLerp));
 
 			write(f, tabs, tagify("albedoTex", albPath));
 			write(f, tabs, tagify("roughnessTex", roughPath));
@@ -2389,6 +2460,70 @@ void TwGUIManager::exportMaterialXML(std::string &path)
 	tabs--;
 	write(f, tabs, "</materialList>");
 	f.close();			// Close file
+}
+
+
+void TwGUIManager::loadWorldXML()
+{
+	std::string filePath = "";
+	bool validFile = openFile(filePath);
+
+	if (validFile) {
+		std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+
+		// Get the destination path for Material.xml
+		std::string subPath = filePath.substr(0, filePath.length() - fileName.length());
+		std::string matPath = subPath + "Materials.xml";
+
+		osg::ref_ptr<TwGUIManager> gui = Core::getEditorGUI();
+
+		// Delete items from managers
+		GeometryObjectManager* gm = Core::getWorldRef().getGeometryManager();
+		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+		LightManager* lm = Core::getWorldRef().getLightManager();
+
+		// Delete GeometryObjects
+		std::unordered_map<std::string, GeometryObject *> geomObjMap = gm->getGeometryObjectMapRef();
+		for (auto& x : geomObjMap) {
+			TwRemoveVar(gui->g_twBar, x.first.c_str());
+			gm->deleteGeometry(x.first);
+		}
+
+		// Delete Materials
+		std::unordered_map<std::string, Material *> matMap = mm->getMaterialMapRef();
+		for (auto& x : matMap) {
+			bool isTexture = x.second->getUseTexture();
+			if (isTexture) {
+				TwRemoveVar(gui->g_texturedMaterialBar, x.first.c_str());
+			}
+			else {
+				TwRemoveVar(gui->g_plainMaterialBar, x.first.c_str());
+			}
+
+			mm->deleteMaterial(x.first);
+		}
+
+		// Delete Lights
+		std::unordered_map<std::string, Light *> lightMap = lm->getLightMapRef();
+		for (auto& x : lightMap) {
+			TwRemoveVar(gui->g_lightBar, x.first.c_str());
+			lm ->deleteLight(x.first);
+		}
+
+		// Re-initialize stuff
+		Core::getWorldRef().getGeometryCache()->clearCache();
+		mm->reloadBuiltInMaterials();
+		Core::loadMaterialFile(matPath);
+
+		// Load the world file
+		Core::getWorldRef().loadXMLFile(filePath);
+
+		// Refresh GUI
+		gui->initAddBarHelper();
+		gui->initPlainMaterialBarHelper();
+		gui->initTexturedMaterialBarHelper();
+		gui->initLightBarHelper();
+	}
 }
 
 bool TwGUIManager::_allBarMinimized = false;
