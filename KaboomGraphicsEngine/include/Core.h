@@ -92,6 +92,9 @@ public:
 	static void enableLightVisualizer();
 	static void disableLightVisualizer();
 
+	static void enableAxisVisualizer();
+	static void diableAxisVisualizer();
+
 	static void setEditorFPSCamWalkingSpeed(float metersPerSec);
 	static float getEditorFPSCamWalkingSpeed();
 
