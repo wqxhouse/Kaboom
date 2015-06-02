@@ -53,7 +53,7 @@ When the camera moves far away from that object, you some part of the depth test
 If you enable manually adjust near and far in the editor (which effectively disables the near and far computation for the 
 main camera), then the depth test becomes normal.
 
-28. Light out of radius doesn't work... wtf
+28. delete light crash. Happens after the merge to develop from post_processing and new_branch_name
 
 Should be fixed, but need more tests:
 1. Geometry picker bug, crash the program: (randomly, wtf!) 
@@ -65,6 +65,7 @@ Should be fixed, but need more tests:
 	- create a point light not entirely covering the geometry. 
 	  tile artifact will show on the edge
 
+28. Light out of radius doesn't work... wtf
 
 
 Fixed:
