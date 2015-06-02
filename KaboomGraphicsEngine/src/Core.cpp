@@ -575,6 +575,22 @@ void Core::disableLightVisualizer()
 	_passes->removeChild(_world.getLightManager()->getVisualizerRoot());
 }
 
+void Core::enableAxisVisualizer()
+{
+	bool enabled = _passes->containsNode(_axisVisualizer.getRoot());
+	if (enabled) return;
+
+	_passes->addChild(_axisVisualizer.getRoot());
+}
+
+void Core::diableAxisVisualizer()
+{
+	bool disabled = !_passes->containsNode(_axisVisualizer.getRoot());
+	if (disabled) return;
+
+	_passes->removeChild(_axisVisualizer.getRoot());
+}
+
 void Core::configSkyBox()
 {
 	_skybox->setNodeMask(0x2);
@@ -670,6 +686,7 @@ void Core::enableStartScreen()
 		disableTwGUI();
 		disableGeometryObjectManipulator();
 		disableLightVisualizer();
+		diableAxisVisualizer();
 
 		_libRocketEditorGUI->disableGUI();
 		_libRocketInGameGUI->enableGUI();
@@ -688,6 +705,7 @@ void Core::disableStartScreen()
 		enableCameraManipulator();
 		enableGeometryObjectManipulator();
 		enableLightVisualizer();
+		enableAxisVisualizer();
 
 		_libRocketEditorGUI->enableGUI();
 		_libRocketInGameGUI->disableGUI();
