@@ -13,6 +13,7 @@
 #include "LightManager.h"
 #include "MaterialManager.h"
 #include "ParticleEffectManager.h"
+#include "ObjectGlowManager.h"
 
 World::World()
 {
@@ -20,6 +21,7 @@ World::World()
 	_materialManager = new MaterialManager;
 	_lightManager = new LightManager;
 	_particleEffectManager = new ParticleEffectManager;
+	_objectGlowManager = new ObjectGlowManager;
 }
 
 World::~World()

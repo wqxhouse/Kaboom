@@ -279,6 +279,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\MaterialLoader.h" />
     <ClInclude Include="include\MaterialManager.h" />
     <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\ObjectGlowManager.h" />
     <ClInclude Include="include\ParticleEffect.h" />
     <ClInclude Include="include\ParticleEffectManager.h" />
     <ClInclude Include="include\ParticleTexture.h" />
@@ -331,6 +332,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\MaterialLoader.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\ObjectGlowManager.cpp" />
     <ClCompile Include="src\ParticleEffect.cpp" />
     <ClCompile Include="src\ParticleEffectManager.cpp" />
     <ClCompile Include="src\ParticleTexture.cpp" />
@@ -395,6 +397,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\lightTiling.frag" />
     <None Include="..\Media\Shaders\lightUtil.glsl" />
     <None Include="..\Media\Shaders\Material.glsl" />
+    <None Include="..\Media\Shaders\objectGlow.frag" />
+    <None Include="..\Media\Shaders\objectGlow.vert" />
     <None Include="..\Media\Shaders\Samples.glsl" />
     <None Include="..\Media\Shaders\sao.frag" />
     <None Include="..\Media\Shaders\saoBlur.frag" />
