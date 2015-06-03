@@ -149,22 +149,8 @@ void Game::run() {
 				
 			}
 			if (Core::isInStartScreenMode()) { //pressed the PlayGame Button
-				gsm = NAME_SCREEN;
+				gsm = START_SCREEN_MODE;
 			}
-			break;
-		case NAME_SCREEN:
-			std::cout << colorId << std::endl;
-			if (!angry){
-				backGroundMusic->setSound(angryRobot);
-				backGroundMusic->setGain(1);
-				backGroundMusic->setLooping();
-				backGroundMusic->play();
-				angry = true;
-			}
-			in_game_screen_ui->Hide();
-			start_screen_ui->Hide();
-			name_screen_ui->Show();
-			inputManager->loadNameTyping();
 			break;
 		case START_SCREEN_MODE:
 		{
@@ -175,7 +161,6 @@ void Game::run() {
 				backGroundMusic->play();
 				angry = true;			
 			}
-			inputManager->loadConfig();
 			in_game_screen_ui->Hide();
 			name_screen_ui->Hide();
 			start_screen_ui->Show();
@@ -189,8 +174,23 @@ void Game::run() {
 			Core::disableStartScreen();
 			break;
 		}
+		case NAME_SCREEN:
+			//std::cout << colorId << std::endl;
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;
+			}
+			in_game_screen_ui->Hide();
+			start_screen_ui->Hide();
+			name_screen_ui->Show();
+			inputManager->loadNameTyping();
+			break;
 		case CONNECT_TO_SERVER:
 		{
+			inputManager->loadConfig();
 			config->getValue(ConfigSettings::str_server_address, serverAddress);
 			config->getValue(ConfigSettings::str_server_port, serverPort);
 
@@ -234,6 +234,9 @@ void Game::run() {
 			// E.g: close the server whlie running the game 
             client.receive();
 			_guiEventHandler->changeTime(this);
+			if (gameMode.getMatchState() == GameMode::MatchState::PRE_MATCH){
+				_guiEventHandler->preGame(color, changeColor);
+			}
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
 				removeAllEntities(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;

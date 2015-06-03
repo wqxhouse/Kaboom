@@ -124,8 +124,11 @@ void InputEventHandler::onEquip5() {
 
 void InputEventHandler::typeCharacter(char c)
 {
-	_game->name->push_back(c);
-	_game->getGameGUIEventHandler()->updateUserName(_game->name);
+	if (_game->name->size() <= 20)
+	{
+		_game->name->push_back(c);
+		_game->getGameGUIEventHandler()->updateUserName(_game->name);
+	}
 }
 
 void InputEventHandler::removeCharacter()
@@ -134,6 +137,11 @@ void InputEventHandler::removeCharacter()
 	{
 		_game->name->pop_back();
 		_game->getGameGUIEventHandler()->updateUserName(_game->name);
+	}
+	else{
+		std::string *enter = new std::string("enter your name here");
+		_game->getGameGUIEventHandler()->updateUserName(enter);
+		delete enter;
 	}
 }
 
