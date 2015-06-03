@@ -10,6 +10,7 @@ public:
 	enum BuiltInParticleEffect
 	{
 		EXPLOSION,
+        EXPLOSION2,
 		TRAILING,
 	};
 
@@ -32,7 +33,8 @@ public:
 	void createBuiltInParticleEffects();
 
 private:
-	void createBuiltInExplosionEffect();
+    void createBuiltInExplosionEffect();
+    void createBuiltInExplosionEffect2();
 	void createBuiltInTrailingEffect();
 
 	std::unordered_map<std::string, ParticleTexture *> _particleTextures;
@@ -40,6 +42,7 @@ private:
 	osg::ref_ptr<osg::Group> _particleGroup;
 	osg::ref_ptr<SparkUpdatingHandler> _particleUpdateHandler;
 
-	const std::string _builtInExplsionEffectStr;
+    const std::string _builtInExplsionEffectStr;
+    const std::string _builtInExplsionEffect2Str;
 	const std::string _builtInTrailingEffectStr;
 };
