@@ -55,6 +55,7 @@ void GameGUIEventHandler::handle(const AmmoAmountEvent &e, InventoryComponent *b
 		ammoTable->GetChild(i)->GetFirstChild()->GetChild(1)->GetFirstChild()->SetInnerRML(std::to_string(temp).c_str());
 	}
 }
+
 void  GameGUIEventHandler::deletePlayer(const DisconnectEvent &e)const {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
@@ -71,6 +72,7 @@ void  GameGUIEventHandler::deletePlayer(const DisconnectEvent &e)const {
 		}
 	}
 }
+
 void  GameGUIEventHandler::deleteAllPlayers()const {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
@@ -84,6 +86,7 @@ void  GameGUIEventHandler::deleteAllPlayers()const {
 	}
 	changeWeapon(0);
 }
+
 void  GameGUIEventHandler::handle(const ScoreEvent &e, std::string name)const {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
@@ -182,6 +185,7 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 			break;
 	}
 }
+
 void GameGUIEventHandler::endGame() const{
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
@@ -281,17 +285,57 @@ void GameGUIEventHandler::updateUserName(std::string * name) const
 	nameElement->SetInnerRML(name->c_str());
 }
 
-void GameGUIEventHandler::preGame() const
+void GameGUIEventHandler::preGame(int& color, bool &change) const
 {
+	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
+	Rocket::Core::Element * gameStateMessage = window0->GetElementById("gameStateMessage");
 
+	if (change)
+	{
+		color-=5;
+		if (color <= 0)
+		{
+			change = false;
+			color = 0;
+		}
+	}
+	else
+	{
+		color+=5;
+		if (color >= 255)
+		{
+			color = 255;
+			change = true;
+		}
+	}
+
+	std::string newColor = "rgba(255,255,255,";
+	newColor +=  std::to_string(color);
+	newColor +=  ")";
+	//std::cout << newColor << std::endl;
+	gameStateMessage->SetProperty("color", newColor.c_str());
+}
+
+void GameGUIEventHandler::setPreGame() const
+{
+	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
+	Rocket::Core::Element * gameStateMessage = window0->GetElementById("gameStateMessage");
+
+	gameStateMessage->SetClassNames("preGameMessage");
+	gameStateMessage->SetInnerRML("Pregame Loading...");
 }
 
 void GameGUIEventHandler::inProgress() const
 {
-
+	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
+	Rocket::Core::Element * gameStateMessage = window0->GetElementById("gameStateMessage");
+	gameStateMessage->SetInnerRML("");
 }
 
 void GameGUIEventHandler::postGame() const
 {
-
+	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
+	Rocket::Core::Element * gameStateMessage = window0->GetElementById("gameStateMessage");
+	gameStateMessage->SetClassNames("postGameMessage");
+	gameStateMessage->SetInnerRML("Postgame");
 }

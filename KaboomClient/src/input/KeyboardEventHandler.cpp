@@ -98,8 +98,12 @@ bool KeyboardEventHandler::handleKeyDown(const osgGA::GUIEventAdapter &ea, osgGA
 	else if (itr == keyDownFuncMap.end() && !Core::isInGameMode())
 	{
 		std::cout << "key pressed '" << key << "'." << std::endl;
+		if (osgGA::GUIEventAdapter::KEY_Shift_L == key || osgGA::GUIEventAdapter::KEY_Shift_R == key)
+			return false;
 		if (osgGA::GUIEventAdapter::KEY_BackSpace == key)
 			inputEventHandler.removeCharacter();
+		else if (osgGA::GUIEventAdapter::KEY_Return == key)
+			std::cout << "enter was press" << std::endl;
 		else
 			inputEventHandler.typeCharacter(key);
 	}

@@ -22,7 +22,7 @@ void MatchStateEventHandler::handle(const Event &e) const {
 
     // TODO: Handle match state event
 	if (evt.getState() == GameMode::MatchState::PRE_MATCH) {
-		game->getGameGUIEventHandler()->preGame();
+		game->getGameGUIEventHandler()->setPreGame();
 		return;
 	}
 	if (evt.getState() == GameMode::MatchState::IN_PROGRESS) {

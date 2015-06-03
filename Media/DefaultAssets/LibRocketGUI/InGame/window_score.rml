@@ -5,7 +5,7 @@
 	<link type="text/rcss" href="invader-m.rcss"/>
   <style>
     div{
-    width: 150px;
+    //width: 150px;
     display: inline-block;
     text-align: center;
     color:black;
@@ -16,10 +16,8 @@
     color:black;
     }
     something{
-    position:absolute;
-    border-style: solid;
-    border-width: 5px;
-    left:2.5%;
+    //position:absolute;
+    //left:2.5%;
     }
     div.id{
       width:40%;
