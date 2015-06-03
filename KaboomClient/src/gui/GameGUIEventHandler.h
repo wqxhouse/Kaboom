@@ -32,13 +32,17 @@ public:
 	void updateUserName(std::string * name) const;
 	void deletePlayer(const DisconnectEvent &evt)const;
 	void deleteAllPlayers()const;
-	void preGame()const;
+	void preGame(int& color, bool& change)const;
 	void inProgress()const;
 	void postGame()const;
 	void hudScore(const ScoreEvent &evt) const;
+	void GameGUIEventHandler::setPreGame() const;
+
 	// TODO: add more other events 
 
 private:
 	Game *_game;
 	LibRocketGUIManager *_guiManager;
+	bool goingUP = true;
+
 };

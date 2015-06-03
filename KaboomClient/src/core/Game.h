@@ -7,6 +7,7 @@
 #include <core/DeathmatchMode.h>
 #include <core/EntityManager.h>
 #include <core/Player.h>
+//#include <core/GameMode.h>
 #include <util/ConfigSettings.h>
 #include "CharacterFactory.h"
 #include "BombFactory.h"
@@ -147,6 +148,8 @@ using namespace ours;
 		osg::ref_ptr<Source> backGroundMusic;
 		osg::ref_ptr<Sample> angryRobot;
 		bool angry;
+		int color = 255;
+		bool changeColor = true;
 
 		DeathmatchMode gameMode;
 	};

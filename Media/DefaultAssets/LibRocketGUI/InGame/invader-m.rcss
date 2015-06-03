@@ -136,7 +136,7 @@ input.submit
 {
 	display: inline-block;
 
-	width: 170px;
+	width: 250px;
 	height: 90px;
 
 	padding-top: 2.5%;

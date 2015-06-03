@@ -34,7 +34,7 @@ void setupGUIDocuments(Game *game)
 	Rocket::Core::ElementDocument* marty = manager->getWindow(1);
 	Rocket::Core::EventListenerInstancer;
 	OnClickListener *click = new OnClickListener(game);
-	click->setMode(CONNECT_TO_SERVER);
+	click->setMode(NAME_SCREEN);
 	Rocket::Core::EventListener * startGameListener = click;
 	Rocket::Core::EventListener * endGameListener = new OnClickEndGameListener(game);
 	marty->GetFirstChild()->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
@@ -45,7 +45,7 @@ void setupGUIDocuments(Game *game)
 	Rocket::Core::Element *table = letters->GetElementById("enter");
 	Rocket::Core::Element *nameArea = letters->GetElementById("name");
 	OnClickListener *next = new OnClickListener(game);
-	next->setMode(START_SCREEN_MODE);
+	next->setMode(CONNECT_TO_SERVER);
 	Rocket::Core::EventListener *something = next;
 	table->AddEventListener("click",something);
 

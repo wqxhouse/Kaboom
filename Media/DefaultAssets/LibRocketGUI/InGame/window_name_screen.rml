@@ -6,62 +6,61 @@
   <style>
     body
     {
-      width: 100%;
-      height: 100%;
-      margin: auto;
+    width: 100%;
+    height: 100%;
+    margin: auto;
     }
     text{
-      color: black;
-      position: absolute;
-      border-style: solid;
-          border-width: 5px;
-      width: 30%;
-      left: 36%;
+    color: black;
+    position: absolute;
+    border-style: solid;
+    border-width: 5px;
+    width: 30%;
+    left: 36%;
     }
     button{
-      position: absolute;
-      left:45%;
-      top: 10%;
+    position: absolute;
+    left:40%;
+    top: 80%;
     }
     div#robo-select{
-      color: red;  
+    color: red;
+    text-align: center;
     }
     table{
-
-      position:absolute;
-      top:23%;
-      left:20%;
-      width:60%;
-      height:70%;
+    position:absolute;
+    top:12%;
+    left:20%;
+    width:60%;
+    height:70%;
     }
     tr{
     display:block;
     height:45%;
     width:100%;
+    margin: 2%;
     }
     div.robo{
     display:inline-block;
     height:100%;
     width:45%;
     margin: 1%;
-                <!--border-style: solid;
-        border-width: 5px;-->
     }
     #0{
-      background-decorator: image;
-      background-image: salt.tga;
+    background-decorator: image;
+    background-image: salt.tga;
     }
-        #1{
-      background-decorator: image;
-      background-image: salt.tga;
+    #1{
+    background-decorator: image;
+    background-image: salt.tga;
     }
-        #2{
-      background-decorator: image;
-      background-image: salt.tga;
+    #2{
+    background-decorator: image;
+    background-image: salt.tga;
     }
-        #3{
-      background-decorator: image;
-      background-image: salt.tga;
+    #3{
+    background-decorator: image;
+    background-image: salt.tga;
     }
   </style>
 
@@ -73,6 +72,7 @@
   <text id="name">enter your name here</text>
   <div id="robo-select">
     <table>
+      Robot Selection
       <tr>      
         <div class="robo" id="0">0</div> 
         <div class="robo" id="1">1</div> 

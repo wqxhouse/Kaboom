@@ -171,10 +171,12 @@
     top: 63%;
     left : 78.5%;
     }
-    div#gameStateMessage{
+    div.preGameMessage{
     position:absolute;
-    top:15%;
+    top:25%;
     left:40%;
+    font-size: 200%;
+    //color: rgba(255,255,255,127);
     }
     div#kills{
     position:absolute;
@@ -239,7 +241,7 @@
   <div class ="clock">0:00</div>
   <div id="crosshair" class="kaboom_crosshair"></div>
   <div id="extra"></div>
-  <div id="gameStateMessage">testing</div>
+  <div id="gameStateMessage" class="preGameMessage">Pregame Loading...</div>
 </body>
 
 </rml>
