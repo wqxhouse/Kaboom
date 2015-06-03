@@ -2260,6 +2260,11 @@ void TwGUIManager::exportXML()
 		std::string destPath(w_path.begin(), w_path.end());
 
 		std::string source = Core::getWorldRef().getWorldPath();
+		std::string old_suffix = "DefaultAssets";
+		std::string new_suffix = "Assets";
+		source = source.erase(source.length() - old_suffix.length(), old_suffix.length());
+		source = source.append(new_suffix);
+
 		std::string copyCmd = "xcopy " + source + " " + destPath + "  /e /y /i /r";
 		system(copyCmd.c_str());//"xcopy " + source.c_str() + " " + path + "  /e /y /i /r");
 
