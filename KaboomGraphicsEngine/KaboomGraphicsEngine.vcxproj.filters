@@ -225,6 +225,9 @@
     <ClInclude Include="include\ObjectGlowManager.h">
       <Filter>PostProcess</Filter>
     </ClInclude>
+    <ClInclude Include="include\ExplosionEffect2.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -382,6 +385,9 @@
     </ClCompile>
     <ClCompile Include="src\ObjectGlowManager.cpp">
       <Filter>Source Files\PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ExplosionEffect2.cpp">
+      <Filter>Source Files\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

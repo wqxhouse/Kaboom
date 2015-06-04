@@ -30,24 +30,31 @@ void ExplosionEventHandler::handle(const Event &e) const {
     game->getSoundManager().setListenerRotation(playerRot);
 
     // TODO: Refactor this into component
-    switch (bomb->getType()) {
-        case KABOOM_V2: 
-            game->getSoundManager().playSound(SoundType::KABOOM_EXPLODE, bombPos);
-            break;
-		case TIME_BOMB:
-			game->getSoundManager().playSound(SoundType::TIME_EXPLODE, bombPos);
-			break;
-		case REMOTE_DETONATOR:
-			game->getSoundManager().playSound(SoundType::REMOTE_EXPLODE, bombPos);
-			break;
-    }
 
-    // TODO: need to refactor the code above... probably abstract out a sound manager
-    // trigger explosion particle effect
-    ExplosionEffect *explosionEffect =
-        static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION));
-    // TODO: can add some randomness by applying a random quat
-    // explosionEffect->setExplosionRadius(2);
-    osg::Vec3 bombPosVec = bombPos.getOsgVec3();
-    explosionEffect->run(bombPos.getOsgVec3());
+    switch (bomb->getType()) {
+        case KABOOM_V2: {
+            game->getSoundManager().playSound(SoundType::KABOOM_EXPLODE, bombPos);
+            ExplosionEffect *explosionEffect =
+                    static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION));
+            osg::Vec3 bombPosVec = bombPos.getOsgVec3();
+            explosionEffect->run(bombPos.getOsgVec3());
+            break;
+        }
+        case TIME_BOMB: {
+            game->getSoundManager().playSound(SoundType::TIME_EXPLODE, bombPos);
+            ExplosionEffect *explosionEffect =
+                    static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION));
+            osg::Vec3 bombPosVec = bombPos.getOsgVec3();
+            explosionEffect->run(bombPos.getOsgVec3());
+            break;
+        }
+        case REMOTE_DETONATOR: {
+            game->getSoundManager().playSound(SoundType::REMOTE_EXPLODE, bombPos);
+            ExplosionEffect *explosionEffect =
+                    static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION2));
+            osg::Vec3 bombPosVec = bombPos.getOsgVec3();
+            explosionEffect->run(bombPos.getOsgVec3());
+            break;
+        }
+    }
 }
