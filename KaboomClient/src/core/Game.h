@@ -20,11 +20,27 @@
 #include "../sound/SoundManager.h"
 #include "LibRocketGUIManager.h"
 #include "GameStateMachine.h"
+#include <components/PlayerStatusComponent.h>
 
 class InputManager;
 using namespace ours; 
 	class Game {
 	public:
+		enum VoiceActing{
+			END_GAME_DEFEAT_1,
+			END_GAME_DEFEAT_2,
+			END_GAME_DEFEAT_3,
+			END_GAME_VICTORY_1,
+			END_GAME_VICTORY_2,
+			END_GAME_VICTORY_3,
+			KILL_1,
+			KILL_2,
+			KILL_3,
+			DEATH_1,
+			DEATH_2,
+			DEATH_3,
+			CHAMP_SELECT,
+		};
 		typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
 
 		Game(ConfigSettings *config);
@@ -113,9 +129,11 @@ using namespace ours;
 		inline DeathmatchMode &getGameMode() {
 			return gameMode;
 		}
+		void addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voice);
 
 		std::string *name;
 		unsigned int colorId=0;
+		bool playerAlive = true;
 
 	private:
 		friend void GameGUIListener::setGameState(GameStateMachine state);
@@ -146,10 +164,13 @@ using namespace ours;
 
 		bool abc;
 		osg::ref_ptr<Source> backGroundMusic;
+		osg::ref_ptr<Source> voiceSource;
+		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voiceMap;
+		std::vector<std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>*> voiceActorList;
 		osg::ref_ptr<Sample> angryRobot;
 		bool angry;
 		int color = 255;
 		bool changeColor = true;
-
+		
 		DeathmatchMode gameMode;
 	};

@@ -16,6 +16,10 @@
     background-decorator: image;
     background-image: display-sticky-v2.tga;
     }
+    div.SM_curr{
+    background-decorator: image;
+    background-image: salt.tga;
+    }
     div.kaboom{
     background-decorator: image;
     background-image: indiv-kaboom-v2.tga;
@@ -28,29 +32,85 @@
     background-decorator: image;
     background-image: indiv-sticky-v2.tga;
     }
+    div.SM_bomb{
+    background-decorator: image;
+    background-image: salt.tga;
+    }
     div.hp_100{
     background-decorator: image;
-    background-image: hp-100-v2.tga;
+    background-image: hp-100.tga;
+    }
+    div.hp_92{
+    background-decorator: image;
+    background-image: hp-92.tga;
+    }
+    div.hp_83{
+    background-decorator: image;
+    background-image: hp-83.tga;
     }
     div.hp_75{
     background-decorator: image;
-    background-image: hp-75-v2.tga;
+    background-image: hp-75.tga;
+    }
+    div.hp_67{
+    background-decorator: image;
+    background-image: hp-67.tga;
+    }
+    div.hp_58{
+    background-decorator: image;
+    background-image: hp-58.tga;
     }
     div.hp_50{
     background-decorator: image;
-    background-image: hp-50-v2.tga;
+    background-image: hp-50.tga;
     }
-    div.hp_30{
+    div.hp_42{
     background-decorator: image;
-    background-image: hp-30-v2.tga;
+    background-image: hp-42.tga;
+    }
+    div.hp_33{
+    background-decorator: image;
+    background-image: hp-33.tga;
+    }
+    div.hp_25{
+    background-decorator: image;
+    background-image: hp-25.tga;
+    }
+    div.hp_19{
+    background-decorator: image;
+    background-image: hp-19.tga;
     }
     div.hp_15{
     background-decorator: image;
-    background-image: hp-15-v2.tga;
+    background-image: hp-15.tga;
+    }
+    div.hp_12{
+    background-decorator: image;
+    background-image: hp-12.tga;
+    }
+    div.hp_10{
+    background-decorator: image;
+    background-image: hp-10.tga;
+    }
+    div.hp_8{
+    background-decorator: image;
+    background-image: hp-8.tga;
+    }
+    div.hp_6{
+    background-decorator: image;
+    background-image: hp-6.tga;
+    }
+    div.hp_4{
+    background-decorator: image;
+    background-image: hp-4.tga;
+    }
+    div.hp_2{
+    background-decorator: image;
+    background-image: hp-2.tga;
     }
     div.hp_0{
     background-decorator: image;
-    background-image: hp-0-v2.tga;
+    background-image: hp-0.tga;
     }
     div.inner_info{
     background-decorator: image;
@@ -77,7 +137,7 @@
     table#bomb_counter{
     position: absolute;
     top: 83%;
-    left : 53%;
+    left : 43%;
     }
     div#bomb{
     position: absolute;
@@ -99,7 +159,7 @@
     color: #324E6F;
     }
     div#number{
-      padding-top:25%;
+    padding-top:25%;
     }
     body
     {
@@ -140,7 +200,10 @@
     div.time_crosshair{
     background-decorator: image;
     background-image: ch-time.tga;
-
+    }
+    div.SM_crosshair{
+    background-decorator: image;
+    background-image: salt.tga;
     }
     div#health{
     position: absolute;
@@ -229,6 +292,14 @@
            <div id="bomb_count">
              <div id="number"></div>
            </div>
+        </div>
+      </td>
+      <td id="b4" >
+        <div id="items" >
+          <div id="bomb" class="SM_bomb"></div>
+          <div id="bomb_count">
+            <div id="number"></div>
+          </div>
         </div>
       </td>
       <!--<td id="b4" style="margin: 4px 4px 4px 4px; color: purple;">Salt Marty Bomb</td>
