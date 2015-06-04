@@ -23,6 +23,9 @@ void GameGUIEventHandler::handle(const HealthEvent &e, HealthComponent *healthCo
 	Rocket::Core::Element * health = window1->GetElementById("health");
 	Rocket::Core::Element * inner = health->GetElementById("inner");
 	//Rocket::Core::String hpAmount;
+	//left:16 for 2 digits.
+	//left: for 3 digits.
+	//left: for 1 digit.
 	inner->GetElementById("hp")->SetInnerRML(std::to_string(healthComponent->getAmount()).c_str());
 	int currentHP = healthComponent->getAmount();
 	if (currentHP == 100)
