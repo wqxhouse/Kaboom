@@ -55,8 +55,8 @@ SPK::SPK_ID TrailingEffect::createTrailingEffect(
 
 	// Model
 	SPK::Model* particleModel = SPK::Model::create(SPK::FLAG_RED | SPK::FLAG_GREEN | SPK::FLAG_BLUE | SPK::FLAG_ALPHA | SPK::FLAG_SIZE, SPK::FLAG_ALPHA | SPK::FLAG_SIZE);
-	particleModel->setParam(SPK::PARAM_ALPHA, 0.5f, 0.0f);	// the particles will fade as they die
-	particleModel->setParam(SPK::PARAM_SIZE, 1.0f, 15.0f);	// the particles will enlarge over time
+	particleModel->setParam(SPK::PARAM_ALPHA, 0.3f, 0.0f);	// the particles will fade as they die
+	particleModel->setParam(SPK::PARAM_SIZE, 1.0f, 8.0f);	// the particles will enlarge over time
 	particleModel->setLifeTime(0.5f, 1.0f);
 	particleModel->setShared(true);
 
