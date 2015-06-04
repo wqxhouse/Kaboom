@@ -29,6 +29,7 @@ public:
 	void showScoreBoard() const;
 	void hideScoreBoard() const;
 	void changeTime(Game *game) const;
+	void changeDeathTime(Game *game)const;
 	void updateUserName(std::string * name) const;
 	void deletePlayer(const DisconnectEvent &evt)const;
 	void deleteAllPlayers()const;
@@ -37,6 +38,7 @@ public:
 	void postGame()const;
 	void hudScore(const ScoreEvent &evt) const;
 	void GameGUIEventHandler::setPreGame() const;
+	void resetScoreBoard() const;
 
 	// TODO: add more other events 
 

@@ -1,6 +1,7 @@
 #include "MatchStateEventHandler.h"
 
 #include <network/MatchStateEvent.h>
+#include <network/PlayerRespawnEvent.h>
 
 #include "../core/Game.h"
 
@@ -22,6 +23,11 @@ void MatchStateEventHandler::handle(const Event &e) const {
 
     // TODO: Handle match state event
 	if (evt.getState() == GameMode::MatchState::PRE_MATCH) {
+		if (!game->playerAlive){
+			PlayerRespawnEvent player;
+			game->playerAlive = true;
+			game->getGameGUIEventHandler()->handle(player);
+		}
 		game->getGameGUIEventHandler()->setPreGame();
 		return;
 	}

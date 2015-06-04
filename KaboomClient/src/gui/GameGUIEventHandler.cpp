@@ -198,17 +198,37 @@ void GameGUIEventHandler::endGame() const{
 	for (int i = 1; i<score->GetNumChildren(); i++){
 		Rocket::Core::Element * tr = score->GetChild(i);
 		Rocket::Core::String s = tr->GetChild(1)->GetInnerRML();
-		//Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
+
+		for (int j = 0; j < tr->GetNumChildren(); j++){
+			Rocket::Core::Element * child = tr->GetChild(j);
+			child->SetProperty("color", "rgba(0,0,0,55)");
+		}
 		std::string numString= s.CString();
 		int num = std::stoi(numString);
-		if (num> maxKills){
+		if (num>= maxKills){
 			maxKills = num;
-			location = 0;
-			Rocket::Core::String player = tr->GetChild(0)->GetInnerRML();
-			playerId = std::stoi(player.CString());
+			location = i;
+
 		}
 	}
+	for (int i = 1; i<score->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = score->GetChild(i);
+		Rocket::Core::String s = tr->GetChild(1)->GetInnerRML();
 
+
+		std::string numString = s.CString();
+		int num = std::stoi(numString);
+		if (num >= maxKills){
+			for (int j = 0; j < tr->GetNumChildren(); j++){
+				Rocket::Core::Element * child = tr->GetChild(j);
+				child->SetProperty("color", "rgba(0,0,0,255)");
+			}
+
+		}
+	}
+	
+
+	//->SetProperty("color", "rgba(0,0,0,255)");
 	window2->Show();
 	//TODO end game screen
 
@@ -259,6 +279,8 @@ void GameGUIEventHandler::changeTime(Game *game) const{
             std::to_string(secondsTensDigit) +
             std::to_string(secondsOnesDigit);
     clock->SetInnerRML(timerString.c_str());
+}
+void GameGUIEventHandler::changeDeathTime(Game *game)const{
 }
 
 void GameGUIEventHandler::handle(const PlayerRenameEvent &e, Player* player) const
@@ -323,6 +345,7 @@ void GameGUIEventHandler::setPreGame() const
 
 	gameStateMessage->SetClassNames("preGameMessage");
 	gameStateMessage->SetInnerRML("Pregame Loading...");
+	resetScoreBoard();
 }
 
 void GameGUIEventHandler::inProgress() const
@@ -330,6 +353,7 @@ void GameGUIEventHandler::inProgress() const
 	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
 	Rocket::Core::Element * gameStateMessage = window0->GetElementById("gameStateMessage");
 	gameStateMessage->SetInnerRML("");
+	resetScoreBoard();
 }
 
 void GameGUIEventHandler::postGame() const
@@ -338,4 +362,29 @@ void GameGUIEventHandler::postGame() const
 	Rocket::Core::Element * gameStateMessage = window0->GetElementById("gameStateMessage");
 	gameStateMessage->SetClassNames("postGameMessage");
 	gameStateMessage->SetInnerRML("Postgame");
+	endGame();
+	
+}
+void GameGUIEventHandler::resetScoreBoard() const{
+	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
+	Rocket::Core::Element * table = window2->GetChild(0);
+	Rocket::Core::Element * score = table->GetFirstChild();
+
+	bool flag = true;
+	int maxKills = 0;
+	int playerId = 0;
+	int location = 0;
+	for (int i = 1; i<score->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = score->GetChild(i);
+		Rocket::Core::String s = tr->GetChild(1)->GetInnerRML();
+		for (int j = 0; j < tr->GetNumChildren(); j++){
+			Rocket::Core::Element * child = tr->GetChild(j);
+			child->SetProperty("color", "rgba(0,0,0,255)");
+		}
+		//Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
+
+	}
+
+	window2->Hide();
+
 }
