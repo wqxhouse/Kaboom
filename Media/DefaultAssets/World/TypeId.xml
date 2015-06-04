@@ -1,18 +1,18 @@
 <dynamic_objects>
     <type id="101"> 
-        <mesh>player_idle.fbx</mesh>
-        <material name="____TestMaterial" />
-        <position>0.5 0.0 -1.1</position>
+        <mesh>DefaultAssets\GeometryObject\player_idleV2_1.fbx</mesh>
+        <material name="characterMat" />
+        <position>0.6 0.0 -1.1</position>
         <orientation>0.500000 -0.500000 -0.500000 0.500000</orientation>
-        <scale>0.0031 0.0031 0.0031</scale>
+        <scale>0.4 0.4 0.4</scale>
     </type>
 
     <type id="102"> 
-        <mesh>player_run.fbx</mesh>
-        <material name="____TestMaterial" />
+        <mesh>DefaultAssets\GeometryObject\player_runningV2_1.fbx</mesh>
+        <material name="characterMat" />
         <position>0.0 0.0 -1.1</position>
         <orientation>-0.000000 0.707107 0.707107 -0.000000</orientation>
-        <scale>0.0031 0.0031 0.0031</scale>
+        <scale>0.4 0.4 0.4</scale>
     </type>
     
     <type id="131073"> 

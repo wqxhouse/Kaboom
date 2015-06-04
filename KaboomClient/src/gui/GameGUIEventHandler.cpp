@@ -163,7 +163,7 @@ void  GameGUIEventHandler::handle(const ScoreEvent &e, std::string name)const {
 
 void  GameGUIEventHandler::handle(const PlayerDeathEvent &e)const {
 	//hide main HUD
-	 _guiManager->getWindow(0)->Hide();
+	_guiManager->getWindow(0)->GetElementById("crosshair")->SetProperty("visibility","hidden");
 	 Core::enableDeathScreen();
 	 changeWeapon(0);
 
@@ -178,7 +178,7 @@ void GameGUIEventHandler::handle(const PlayerRespawnEvent &e) const
 
 	//hide main HUD
 	Core::disableDeathScreen();
-	_guiManager->getWindow(0)->Show();
+	_guiManager->getWindow(0)->GetElementById("crosshair")->SetProperty("visibility", "visible");
 }
 
 void GameGUIEventHandler::changeWeapon(int weapon) const
