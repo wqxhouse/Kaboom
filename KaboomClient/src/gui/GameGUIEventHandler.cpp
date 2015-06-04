@@ -27,14 +27,40 @@ void GameGUIEventHandler::handle(const HealthEvent &e, HealthComponent *healthCo
 	int currentHP = healthComponent->getAmount();
 	if (currentHP == 100)
 		health->SetAttribute("class", "hp_100");
-	else if(currentHP >= 75)
+	else if (currentHP >= 92)
+		health->SetAttribute("class", "hp_92");
+	else if (currentHP >= 83)
+		health->SetAttribute("class", "hp_83");
+	else if (currentHP >= 75)
 		health->SetAttribute("class", "hp_75");
+	else if (currentHP >= 67)
+		health->SetAttribute("class", "hp_67");
+	else if (currentHP >= 58)
+		health->SetAttribute("class", "hp_58");
 	else if (currentHP >= 50)
 		health->SetAttribute("class", "hp_50");
-	else if (currentHP >= 30)
-		health->SetAttribute("class", "hp_30");
+	else if (currentHP >= 42)
+		health->SetAttribute("class", "hp_42");
+	else if (currentHP >= 33)
+		health->SetAttribute("class", "hp_33");
+	else if (currentHP >= 25)
+		health->SetAttribute("class", "hp_25");
+	else if (currentHP >= 19)
+		health->SetAttribute("class", "hp_19");
 	else if (currentHP >= 15)
 		health->SetAttribute("class", "hp_15");
+	else if (currentHP >= 12)
+		health->SetAttribute("class", "hp_12");
+	else if (currentHP >= 10)
+		health->SetAttribute("class", "hp_10");
+	else if (currentHP >= 8)
+		health->SetAttribute("class", "hp_8");
+	else if (currentHP >= 6)
+		health->SetAttribute("class", "hp_6");
+	else if (currentHP >= 4)
+		health->SetAttribute("class", "hp_4");
+	else if (currentHP >= 2)
+		health->SetAttribute("class", "hp_2");
 	else if (currentHP > 0)
 		health->SetAttribute("class", "hp_15");
 	else
@@ -49,7 +75,7 @@ void GameGUIEventHandler::handle(const AmmoAmountEvent &e, InventoryComponent *b
 	Rocket::Core::Element *ammoTable = body->GetFirstChild();
 
 	//hardcode the number amount of bomb; currently there are 3 bombs
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < ammoTable->GetNumChildren(); i++)
 	{
 		int temp = e.getAmmoAmount(i);
 		ammoTable->GetChild(i)->GetFirstChild()->GetChild(1)->GetFirstChild()->SetInnerRML(std::to_string(temp).c_str());
@@ -156,16 +182,6 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 {
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
 	Rocket::Core::Element * body = window1->GetChild(1);
-	//Rocket::Core::Element *ammoTable = body->GetFirstChild();
-
-	////hardcode the number amount of bomb; currently there are 3 bombs
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	if (weapon == i)
-	//		ammoTable->GetChild(i)->SetProperty("color", "red");
-	//	else
-	//		ammoTable->GetChild(i)->SetProperty("color", "purple");
-	//}
 
 	Rocket::Core::Element * current_bomb = window1->GetChild(2);
 	Rocket::Core::Element * ch = window1->GetElementById("crosshair");
@@ -183,6 +199,14 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 			bomb->SetClassNames("remote_curr");
 			ch->SetClassNames("sticky_crosshair");
 			break;
+		case 3:
+			bomb->SetClassNames("SM_curr");
+			ch->SetClassNames("SM_crosshair");
+			break;
+		case 4:
+			break;
+		default:
+			break;
 	}
 }
 
@@ -198,17 +222,37 @@ void GameGUIEventHandler::endGame() const{
 	for (int i = 1; i<score->GetNumChildren(); i++){
 		Rocket::Core::Element * tr = score->GetChild(i);
 		Rocket::Core::String s = tr->GetChild(1)->GetInnerRML();
-		//Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
+
+		for (int j = 0; j < tr->GetNumChildren(); j++){
+			Rocket::Core::Element * child = tr->GetChild(j);
+			child->SetProperty("color", "rgba(0,0,0,55)");
+		}
 		std::string numString= s.CString();
 		int num = std::stoi(numString);
-		if (num> maxKills){
+		if (num>= maxKills){
 			maxKills = num;
-			location = 0;
-			Rocket::Core::String player = tr->GetChild(0)->GetInnerRML();
-			playerId = std::stoi(player.CString());
+			location = i;
+
 		}
 	}
+	for (int i = 1; i<score->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = score->GetChild(i);
+		Rocket::Core::String s = tr->GetChild(1)->GetInnerRML();
 
+
+		std::string numString = s.CString();
+		int num = std::stoi(numString);
+		if (num >= maxKills){
+			for (int j = 0; j < tr->GetNumChildren(); j++){
+				Rocket::Core::Element * child = tr->GetChild(j);
+				child->SetProperty("color", "rgba(0,0,0,255)");
+			}
+
+		}
+	}
+	
+
+	//->SetProperty("color", "rgba(0,0,0,255)");
 	window2->Show();
 	//TODO end game screen
 
@@ -259,6 +303,8 @@ void GameGUIEventHandler::changeTime(Game *game) const{
             std::to_string(secondsTensDigit) +
             std::to_string(secondsOnesDigit);
     clock->SetInnerRML(timerString.c_str());
+}
+void GameGUIEventHandler::changeDeathTime(Game *game)const{
 }
 
 void GameGUIEventHandler::handle(const PlayerRenameEvent &e, Player* player) const
@@ -323,6 +369,7 @@ void GameGUIEventHandler::setPreGame() const
 
 	gameStateMessage->SetClassNames("preGameMessage");
 	gameStateMessage->SetInnerRML("Pregame Loading...");
+	resetScoreBoard();
 }
 
 void GameGUIEventHandler::inProgress() const
@@ -330,6 +377,7 @@ void GameGUIEventHandler::inProgress() const
 	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
 	Rocket::Core::Element * gameStateMessage = window0->GetElementById("gameStateMessage");
 	gameStateMessage->SetInnerRML("");
+	resetScoreBoard();
 }
 
 void GameGUIEventHandler::postGame() const
@@ -338,4 +386,29 @@ void GameGUIEventHandler::postGame() const
 	Rocket::Core::Element * gameStateMessage = window0->GetElementById("gameStateMessage");
 	gameStateMessage->SetClassNames("postGameMessage");
 	gameStateMessage->SetInnerRML("Postgame");
+	endGame();
+	
+}
+void GameGUIEventHandler::resetScoreBoard() const{
+	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
+	Rocket::Core::Element * table = window2->GetChild(0);
+	Rocket::Core::Element * score = table->GetFirstChild();
+
+	bool flag = true;
+	int maxKills = 0;
+	int playerId = 0;
+	int location = 0;
+	for (int i = 1; i<score->GetNumChildren(); i++){
+		Rocket::Core::Element * tr = score->GetChild(i);
+		Rocket::Core::String s = tr->GetChild(1)->GetInnerRML();
+		for (int j = 0; j < tr->GetNumChildren(); j++){
+			Rocket::Core::Element * child = tr->GetChild(j);
+			child->SetProperty("color", "rgba(0,0,0,255)");
+		}
+		//Rocket::Core::String d = Rocket::Core::String(std::to_string(e.getPlayerId()).c_str());
+
+	}
+
+	window2->Hide();
+
 }

@@ -327,13 +327,15 @@ void GameServer::sendAmmoEvent(Player *player) const {
     int kaboom_ammo = invComp->getAmount(KABOOM_V2);
     int time_ammo = invComp->getAmount(TIME_BOMB);
     int remote_ammo = invComp->getAmount(REMOTE_DETONATOR);
+	int SM_ammo = invComp->getAmount(SALTY_MARTY_BOMB);
+	int fake_ammo = invComp->getAmount(FAKE_BOMB);
 
 	//make sure its 0 or greater
 	kaboom_ammo = (kaboom_ammo > 0) ? kaboom_ammo : 0;
 	time_ammo = (time_ammo > 0) ? time_ammo : 0;
 	remote_ammo = (remote_ammo > 0) ? remote_ammo : 0;
 
-    AmmoAmountEvent evt(kaboom_ammo, time_ammo, remote_ammo);
+    AmmoAmountEvent evt(kaboom_ammo, time_ammo, remote_ammo, SM_ammo, fake_ammo);
     sendEvent(evt, player->getId());
 }
 
