@@ -199,6 +199,9 @@
     <ClCompile Include="src\gui\OnClickChampSelectListener.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\PlayerSelectionEventHandler.cpp">
+      <Filter>Source Files\Network\Event Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\input\KeyboardEventHandler.h">
@@ -351,6 +354,9 @@
     </ClInclude>
     <ClInclude Include="src\gui\OnClickChampSelectListener.h">
       <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerSelectionEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

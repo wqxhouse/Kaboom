@@ -40,7 +40,10 @@ Entity *CharacterFactory::createCharacter(
     createBase(entity, position, rotation);
 
     switch (characterType) {
-        case DEFAULT_CHARACTER: {
+        case BLUE_CHARACTER:
+        case GREEN_CHARACTER:
+        case PURPLE_CHARACTER:
+        case RED_CHARACTER: {
             createDefaultCharacter(entity);
             break;
         }
@@ -129,9 +132,12 @@ void CharacterFactory::resetCharacter(Entity *entity, const Vec3 &position, cons
 	createBase(entity, position, rotation);
 
 	switch (entity->getType()) {
-		case DEFAULT_CHARACTER: {
-			createDefaultCharacter(entity);
-			break;
-		}
+        case BLUE_CHARACTER:
+        case GREEN_CHARACTER:
+        case PURPLE_CHARACTER:
+        case RED_CHARACTER: {
+            createDefaultCharacter(entity);
+            break;
+        }
 	}
 }

@@ -14,6 +14,7 @@
 #include <network/PlayerDeathEvent.h>
 #include <network/PlayerInputEvent.h>
 #include <network/PlayerRenameEvent.h>
+#include <network/PlayerSelectionEvent.h>
 #include <network/PlayerRespawnEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PlayerRespawnRequestEvent.h>
@@ -126,6 +127,12 @@ void GameClient::receive() {
                 eventHandlerLookup.find(evt.getOpcode())->handle(evt);
                 break;
             }
+            case EVENT_PLAYER_SELECTION: {
+                PlayerSelectionEvent evt;
+                evt.deserialize(&networkBuffer[i]);
+                eventHandlerLookup.find(evt.getOpcode())->handle(evt);
+                break;
+            }
             case EVENT_PLAYER_RESPAWN: {
                 PlayerRespawnEvent evt;
                 evt.deserialize(&networkBuffer[i]);
@@ -209,6 +216,11 @@ void GameClient::sendMessage(const Event &evt) const {
 
 void GameClient::sendPlayerRenameEvent(const std::string &name) const {
     PlayerRenameEvent evt(0, name.c_str());
+    sendMessage(evt);
+}
+
+void GameClient::sendPlayerSelectionEvent(EntityType characterType) const {
+    PlayerSelectionEvent evt(0, characterType);
     sendMessage(evt);
 }
 
