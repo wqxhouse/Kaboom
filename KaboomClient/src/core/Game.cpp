@@ -106,17 +106,19 @@ Game::Game(ConfigSettings *config)
 	printf("Loading JUMP sound\n");
 	soundManager.loadSound(SoundType::JUMP, str_mediaPath + "DefaultAssets\\Sound\\jump_sound.mp3");
 	printf("Loading Background Music sound\n");
-	for (int i = 0; i < 4; i++){
+	for (int i = 0; i < 1; i++){
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voice = new std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>();
 		addVoiceLines(str_mediaPath,i,voice);
+		voiceActorList[i]=voice;
 	}
+	voiceMap = voiceActorList[0];
 	backGroundMusic = new Source;
 	angryRobot = new Sample(str_mediaPath + "DefaultAssets\\Sound\\angryRobot.mp3");
 	backGroundMusic->setSound(angryRobot);
 	backGroundMusic->setGain(1);
 	backGroundMusic->setLooping(true);
 	backGroundMusic->play();
-	
+	voiceSource = new Source;
 	angry = true;
 
 }
@@ -191,6 +193,14 @@ void Game::run() {
 				backGroundMusic->play();
 				angry = true;
 			}
+			if (colorId != previousValue){
+				previousValue = colorId;
+				//Change 0 to colorId once all voices are recorded
+				voiceMap = voiceActorList[0];
+				voiceSource->setSound(voiceActorList[0]->at(CHAMP_SELECT));
+				voiceSource->setGain(1);
+				voiceSource->play();
+			}
 			in_game_screen_ui->Hide();
 			start_screen_ui->Hide();
 			name_screen_ui->Show();
@@ -198,6 +208,9 @@ void Game::run() {
 			break;
 		case CONNECT_TO_SERVER:
 		{
+			if (colorId==5){
+				colorId = 0;
+			}
 			inputManager->loadConfig();
 			config->getValue(ConfigSettings::str_server_address, serverAddress);
 			config->getValue(ConfigSettings::str_server_port, serverPort);
@@ -283,6 +296,9 @@ void Game::removeAllEntities() {
 }
 void Game::addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<Game::VoiceActing, osg::ref_ptr<Sample>> *voice){
 	std::string folder = str_mediaPath + "DefaultAssets\\Sound\\actor" + std::to_string(i) + "\\";
-
-
+	//osg::ref_ptr<Sample> sample = new Sample("champ_select.wav");
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(CHAMP_SELECT, new Sample(folder+"champ_select.wav")));
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(DEATH_1, new Sample(folder + "death_1.wav")));
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(KILL_1, new Sample(folder + "kill_1.wav")));
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(END_GAME_VICTORY_1, new Sample(folder + "victory_1.wav")));
 }

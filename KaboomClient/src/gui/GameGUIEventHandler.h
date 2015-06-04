@@ -24,7 +24,7 @@ public:
 	void handle(const PlayerRenameEvent &e, Player* player) const;
 	void handle(const PlayerDeathEvent &e) const;
 	void handle(const PlayerRespawnEvent &e) const;
-	void endGame() const;
+	int endGame() const;
 	void changeWeapon(int weapon) const;
 	void showScoreBoard() const;
 	void hideScoreBoard() const;
@@ -35,7 +35,7 @@ public:
 	void deleteAllPlayers()const;
 	void preGame(int& color, bool& change)const;
 	void inProgress()const;
-	void postGame()const;
+	int postGame()const;
 	void hudScore(const ScoreEvent &evt) const;
 	void GameGUIEventHandler::setPreGame() const;
 	void resetScoreBoard() const;

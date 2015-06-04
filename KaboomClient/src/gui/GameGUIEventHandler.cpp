@@ -215,7 +215,7 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 	}
 }
 
-void GameGUIEventHandler::endGame() const{
+int GameGUIEventHandler::endGame() const{
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
 	Rocket::Core::Element * score = table->GetFirstChild();
@@ -260,6 +260,7 @@ void GameGUIEventHandler::endGame() const{
 	//->SetProperty("color", "rgba(0,0,0,255)");
 	window2->Show();
 	//TODO end game screen
+	return maxKills;
 
 
 }
@@ -387,13 +388,13 @@ void GameGUIEventHandler::inProgress() const
 	resetScoreBoard();
 }
 
-void GameGUIEventHandler::postGame() const
+int GameGUIEventHandler::postGame() const
 {
 	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
 	Rocket::Core::Element * gameStateMessage = window0->GetElementById("gameStateMessage");
 	gameStateMessage->SetClassNames("postGameMessage");
 	gameStateMessage->SetInnerRML("Postgame");
-	endGame();
+	return endGame();
 	
 }
 
