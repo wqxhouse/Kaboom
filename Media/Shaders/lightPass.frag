@@ -8,16 +8,24 @@
 #include "Shaders/shadowUtil.glsl"
 #include "Shaders/lightUtil.glsl"
 
-uniform sampler2D u_RT0;
-uniform sampler2D u_RT1;
-uniform sampler2D u_RT2;
+uniform sampler2D u_RT0; // 1
+uniform sampler2D u_RT1; // 2
+uniform sampler2D u_RT2; // 3
+uniform sampler2D u_RT3; // 10
 
 //uniform sampler2D u_position;
 
 // uniform sampler2D u_shadowAtlas;
 
-uniform sampler2DShadow u_shadowAtlas; // hardware PCF
-uniform isampler2D u_lightsPerTile;
+uniform sampler2DShadow u_shadowAtlas; // hardware PCF // 8
+uniform isampler2D u_lightsPerTile; // 0
+
+
+uniform samplerCube u_cubeMapTex; // 4
+uniform samplerCube u_cubeMapDiffuseTex; // 5
+uniform samplerCube u_shadowFaceLookup; // 7
+
+uniform sampler2D u_lutTex; // 6
 //uniform sampler2D u_lightsPerTile;
 
 layout(std140) uniform u_lightsBuffer
@@ -39,11 +47,6 @@ uniform vec3 osg_OutputBufferSize;
 // uniform vec3 u_eyePos;
 uniform float u_farPlane;
 
-uniform samplerCube u_cubeMapTex;
-uniform samplerCube u_cubeMapDiffuseTex;
-uniform samplerCube u_shadowFaceLookup;
-
-uniform sampler2D u_lutTex;
 uniform mat4 u_viewInvMat;
 
 uniform int u_maxLodLevel;
@@ -67,8 +70,9 @@ void main()
 
     vec4 rt0 = texelFetch(u_RT0, screenCoord, 0);
     vec4 rt2 = texelFetch(u_RT2, screenCoord, 0);
+	vec4 rt3 = texelFetch(u_RT3, screenCoord, 0);
 
-	Material material = getMaterialFromGBuffer(rt0, rt1, rt2, u_farPlane, v_viewRay);
+	Material material = getMaterialFromGBuffer(rt0, rt1, rt2, rt3, u_farPlane, v_viewRay);
 
 	//material.position = texelFetch(u_position, screenCoord, 0).xyz;
 
@@ -93,8 +97,9 @@ void main()
 
     vec3 result = vec3(0);
 	float sunShadowMask = material.sunShadowMask;
-	result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel) * mix(sunShadowMask, 1.0, 0.1);
+	//result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel) * mix(sunShadowMask, 1.0, 0.1);
 	
+	result = material.irradiance;
 
     // Compute point lights
     ivec2 baseOffset = precomputeCoord + ivec2(0, 1);

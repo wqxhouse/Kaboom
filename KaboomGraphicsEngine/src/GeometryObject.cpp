@@ -265,13 +265,13 @@ void GeometryObject::setUpMaterialState()
 		osg::Texture *normalMapTex = mm->getNormalMapTexture(_material);
 		ss->setTextureAttributeAndModes(3, normalMapTex);
 		osg::Texture *irradianceTex = mm->getIrradianceTexture(_material);
-		ss->setTextureAttributeAndModes(4, irradianceTex);
+		ss->setTextureAttributeAndModes(5, irradianceTex);
 
 		ss->addUniform(new osg::Uniform("u_albedoTex", 0));
 		ss->addUniform(new osg::Uniform("u_roughnessTex", 1));
 		ss->addUniform(new osg::Uniform("u_metallicTex", 2));
 		ss->addUniform(new osg::Uniform("u_normalMapTex", 3));
-		ss->addUniform(new osg::Uniform("u_irradianceTex", 4));
+		ss->addUniform(new osg::Uniform("u_irradianceTex", 5));
 
 		ss->addUniform(new osg::Uniform("u_albedoTexLerp", 0.0f));
 		ss->addUniform(new osg::Uniform("u_roughnessTexLerp", 0.0f));
@@ -333,7 +333,7 @@ void GeometryObject::updateMaterialState()
 		osg::Texture *normalMapTex = mm->getNormalMapTexture(_material);
 		ss->setTextureAttributeAndModes(3, normalMapTex);
 		osg::Texture *irradianceTex = mm->getIrradianceTexture(_material);
-		ss->setTextureAttributeAndModes(4, irradianceTex);
+		ss->setTextureAttributeAndModes(5, irradianceTex);
 
 		ss->getUniform("u_albedoTexLerp")->set(_material->getAlbedoTexLerp());
 		ss->getUniform("u_roughnessTexLerp")->set(_material->getRoughnessTexLerp());
