@@ -133,12 +133,13 @@ void InputEventHandler::typeCharacter(char c)
 
 void InputEventHandler::removeCharacter()
 {
-	if (_game->name->size() > 0)
+	if (_game->name->size() > 1)
 	{
 		_game->name->pop_back();
 		_game->getGameGUIEventHandler()->updateUserName(_game->name);
 	}
 	else{
+		_game->name->clear();
 		std::string *enter = new std::string("enter your name here");
 		_game->getGameGUIEventHandler()->updateUserName(enter);
 		delete enter;
