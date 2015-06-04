@@ -204,6 +204,8 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 			ch->SetClassNames("SM_crosshair");
 			break;
 		case 4:
+			bomb->SetClassNames("fake_curr");
+			ch->SetClassNames("fake_crosshair");
 			break;
 		default:
 			break;
@@ -273,6 +275,7 @@ void GameGUIEventHandler::hideScoreBoard() const{
 	Core::getInGameLibRocketGUIManager()->getWindow(2)->Hide();
 
 }
+
 void GameGUIEventHandler::changeTime(Game *game) const{
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
 	Rocket::Core::Element * clock = window1->GetChild(3);
@@ -304,6 +307,7 @@ void GameGUIEventHandler::changeTime(Game *game) const{
             std::to_string(secondsOnesDigit);
     clock->SetInnerRML(timerString.c_str());
 }
+
 void GameGUIEventHandler::changeDeathTime(Game *game)const{
 }
 
@@ -389,6 +393,7 @@ void GameGUIEventHandler::postGame() const
 	endGame();
 	
 }
+
 void GameGUIEventHandler::resetScoreBoard() const{
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
 	Rocket::Core::Element * table = window2->GetChild(0);
