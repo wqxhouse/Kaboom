@@ -37,8 +37,8 @@ void setupGUIDocuments(Game *game)
 	click->setMode(NAME_SCREEN);
 	Rocket::Core::EventListener * startGameListener = click;
 	Rocket::Core::EventListener * endGameListener = new OnClickEndGameListener(game);
-	marty->GetFirstChild()->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
-	marty->GetFirstChild()->GetFirstChild()->GetElementById("exitgame")->AddEventListener("click", endGameListener);
+	marty->GetElementById("buttons")->GetFirstChild()->GetElementById("startgame")->AddEventListener("click", startGameListener);
+	marty->GetElementById("buttons")->GetFirstChild()->GetElementById("exitgame")->AddEventListener("click", endGameListener);
 
 
 	Rocket::Core::ElementDocument *letters = manager->getWindow(3);
