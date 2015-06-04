@@ -27,14 +27,40 @@ void GameGUIEventHandler::handle(const HealthEvent &e, HealthComponent *healthCo
 	int currentHP = healthComponent->getAmount();
 	if (currentHP == 100)
 		health->SetAttribute("class", "hp_100");
-	else if(currentHP >= 75)
+	else if (currentHP >= 92)
+		health->SetAttribute("class", "hp_92");
+	else if (currentHP >= 83)
+		health->SetAttribute("class", "hp_83");
+	else if (currentHP >= 75)
 		health->SetAttribute("class", "hp_75");
+	else if (currentHP >= 67)
+		health->SetAttribute("class", "hp_67");
+	else if (currentHP >= 58)
+		health->SetAttribute("class", "hp_58");
 	else if (currentHP >= 50)
 		health->SetAttribute("class", "hp_50");
-	else if (currentHP >= 30)
-		health->SetAttribute("class", "hp_30");
+	else if (currentHP >= 42)
+		health->SetAttribute("class", "hp_42");
+	else if (currentHP >= 33)
+		health->SetAttribute("class", "hp_33");
+	else if (currentHP >= 25)
+		health->SetAttribute("class", "hp_25");
+	else if (currentHP >= 19)
+		health->SetAttribute("class", "hp_19");
 	else if (currentHP >= 15)
 		health->SetAttribute("class", "hp_15");
+	else if (currentHP >= 12)
+		health->SetAttribute("class", "hp_12");
+	else if (currentHP >= 10)
+		health->SetAttribute("class", "hp_10");
+	else if (currentHP >= 8)
+		health->SetAttribute("class", "hp_8");
+	else if (currentHP >= 6)
+		health->SetAttribute("class", "hp_6");
+	else if (currentHP >= 4)
+		health->SetAttribute("class", "hp_4");
+	else if (currentHP >= 2)
+		health->SetAttribute("class", "hp_2");
 	else if (currentHP > 0)
 		health->SetAttribute("class", "hp_15");
 	else
