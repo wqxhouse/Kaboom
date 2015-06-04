@@ -7,10 +7,10 @@
 class TrailingEffect : public ParticleEffect
 {
 public:
-	TrailingEffect(ParticleEffectManager *manager, SparkUpdatingHandler *handler);
+	TrailingEffect(ParticleEffectManager *manager, SparkUpdatingHandler *handler, float r, float g, float b);
 	void setTrailedObject(GeometryObject *geom);
 	void setTrailedObject(Light *light);
-	
+
 private:
 	static SPK::SPK_ID createTrailingEffect(
 		const SparkDrawable::TextureIDMap& textureIDMap,
@@ -18,4 +18,8 @@ private:
 
 	SparkUpdatingHandler *_handler;
 	GeometryObject *_trailedObject;
+
+    float r;
+    float g;
+    float b;
 };

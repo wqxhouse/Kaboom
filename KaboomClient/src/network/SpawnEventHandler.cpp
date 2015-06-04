@@ -84,7 +84,7 @@ void SpawnEventHandler::handle(const Event &e) const {
 
 		if ((entity->getType() & CAT_MASK) == CAT_BOMB) {
 			TrailingEffect *effect = static_cast<TrailingEffect *>(
-				game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::TRAILING));
+				game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::TRAILING_PURPLE));
 
 			GeometryObject *geomObj = game->getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
 			effect->setTrailedObject(geomObj);

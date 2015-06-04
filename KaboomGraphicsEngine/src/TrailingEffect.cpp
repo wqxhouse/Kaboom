@@ -1,4 +1,5 @@
 #include "TrailingEffect.h"
+#include <osg/ValueObject>
 #include <util/ConfigSettings.h>
 #include "ParticleEffect.h"
 #include "ParticleEffectManager.h"
@@ -6,8 +7,8 @@
 
 #define POINT_PTR "point"
 
-TrailingEffect::TrailingEffect(ParticleEffectManager *manager, SparkUpdatingHandler *handler)
-	: ParticleEffect(manager), _handler(handler)
+TrailingEffect::TrailingEffect(ParticleEffectManager *manager, SparkUpdatingHandler *handler, float r, float g, float b)
+    : ParticleEffect(manager), _handler(handler), r(r), g(g), b(b)
 {
 	_name = "TrailingEffect";
 
@@ -26,6 +27,9 @@ void TrailingEffect::setTrailedObject(GeometryObject *obj)
 {
 	int sparkIndex = _handler->getSparkIndex(_particleDrawable);
 	osg::MatrixTransform *matTrans = obj->getRoot();
+    matTrans->setUserValue("r", r);
+    matTrans->setUserValue("g", g);
+    matTrans->setUserValue("b", b);
 	_handler->setTrackee(sparkIndex, matTrans);
 }
 

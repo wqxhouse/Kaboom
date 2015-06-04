@@ -42,7 +42,6 @@ void ParticleEffectManager::createBuiltInParticleEffects()
 {
     createBuiltInExplosionEffect();
     createBuiltInExplosionEffect2();
-	createBuiltInTrailingEffect();
 }
 
 void ParticleEffectManager::createBuiltInExplosionEffect()
@@ -63,14 +62,6 @@ void ParticleEffectManager::createBuiltInExplosionEffect2()
 	_particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(explosion->getRoot()->getDrawable(0)));
 }
 
-void ParticleEffectManager::createBuiltInTrailingEffect()
-{
-	TrailingEffect *trailingEffect = new TrailingEffect(this, _particleUpdateHandler);
-	_particleEffects.insert(std::make_pair(_builtInTrailingEffectStr, trailingEffect));
-	_particleGroup->addChild(trailingEffect->getRoot());
-	_particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(trailingEffect->getRoot()->getDrawable(0)));
-}
-
 ParticleEffect *ParticleEffectManager::getParticleEffect(enum BuiltInParticleEffect effect)
 {
 	TrailingEffect *trailingEffect;
@@ -83,12 +74,30 @@ ParticleEffect *ParticleEffectManager::getParticleEffect(enum BuiltInParticleEff
     case EXPLOSION2:
         return _particleEffects[_builtInExplsionEffect2Str];
         break;
-	case TRAILING:
-		trailingEffect = new TrailingEffect(this, _particleUpdateHandler);
-		_particleGroup->addChild(trailingEffect->getRoot());
-		_particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(trailingEffect->getRoot()->getDrawable(0)));
-		return trailingEffect;
-		break;
+    case TRAILING_BLUE:
+        trailingEffect = new TrailingEffect(this, _particleUpdateHandler, 0.0941f, 0.9216f, 1.0f);
+        _particleGroup->addChild(trailingEffect->getRoot());
+        _particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(trailingEffect->getRoot()->getDrawable(0)));
+        return trailingEffect;
+        break;
+    case TRAILING_GREEN:
+        trailingEffect = new TrailingEffect(this, _particleUpdateHandler, 0.1765f, 1.0f, 0.0941f);
+        _particleGroup->addChild(trailingEffect->getRoot());
+        _particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(trailingEffect->getRoot()->getDrawable(0)));
+        return trailingEffect;
+        break;
+    case TRAILING_PURPLE:
+        trailingEffect = new TrailingEffect(this, _particleUpdateHandler, 0.8510f, 0.0941f, 1.0f);
+        _particleGroup->addChild(trailingEffect->getRoot());
+        _particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(trailingEffect->getRoot()->getDrawable(0)));
+        return trailingEffect;
+        break;
+    case TRAILING_RED:
+        trailingEffect = new TrailingEffect(this, _particleUpdateHandler, 1.0f, 0.2392f, 0.0941f);
+        _particleGroup->addChild(trailingEffect->getRoot());
+        _particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(trailingEffect->getRoot()->getDrawable(0)));
+        return trailingEffect;
+        break;
 	default:
 		OSG_WARN << "ParticleEffectManager:: invalid enum" << std::endl;
 		return NULL;
