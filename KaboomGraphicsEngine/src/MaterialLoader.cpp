@@ -95,10 +95,10 @@ void MaterialLoader::createTexturedMaterialFromXML(osgDB::XmlNode* xmlNode)
 	float roughness = 0.5f, specular = 0.5f, metallic = 0.0f,
         albedoTexLerp = 0.0f, roughnessTexLerp = 0.0f, metallicTexLerp = 0.0f, normalTexLerp = 0.0f;
 
-    setDefaultString(albedoTex);
-    setDefaultString(roughnessTex);
-    setDefaultString(metallicTex);
-    setDefaultString(normalPath);
+    albedoTex = "";
+	roughnessTex = "";
+	metallicTex = "";
+	normalPath = "";
 
     // Create a material first in case that not all properties are specified
     _materialManager->createTexturedMaterial(name,

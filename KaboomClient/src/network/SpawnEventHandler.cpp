@@ -12,6 +12,7 @@
 #include "../components/SceneNodeComponent.h"
 #include "../components/TrailingEffectComponent.h"
 #include <GeometryObject.h>
+#include <GeometryCache.h>
 
 SpawnEventHandler::SpawnEventHandler(Game *game)
         : game(game) {
@@ -23,20 +24,27 @@ void SpawnEventHandler::handle(const Event &e) const {
     EntityType type = evt.getType();
     Entity *entity = nullptr;
 	Entity *player = game->getCurrentPlayer()->getEntity();
+
+	int type_id = -1;
 	
-    if ((type & CAT_MASK) == CAT_CHARACTER) {
+	if ((type & CAT_MASK) == CAT_CHARACTER) {
+		type_id = IDLE;
         entity = game->getCharacterFactory().createCharacter(
                 evt.getEntityId(),
                 evt.getType(),
                 evt.getPosition(),
                 evt.getRotation());
     } else if (evt.isPickup()) { //If it's a pickup we want to create a pickup instead
+		// TODO: CHANGE THIS!!
+		//type_id = HEALTH_PACK;		
 		entity = game->getPickupFactory().createPickup(
 			evt.getEntityId(),
 			evt.getType(),
 			evt.getPosition(),
 			evt.getRotation());
-	} else if ((type & CAT_MASK) == CAT_BOMB) {
+	}
+	else if ((type & CAT_MASK) == CAT_BOMB) {
+		type_id = type;
         entity = game->getBombFactory().createBomb(
                 evt.getEntityId(),
                 evt.getType(),
@@ -91,7 +99,16 @@ void SpawnEventHandler::handle(const Event &e) const {
             const auto name = std::to_string(entity->getId());
             const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);
 
-            game->getGeometryManager()->addGeometry(name, sceneNodeComp->getNode(), osgPos);
+			GeometryObjectManager* gm = game->getGeometryManager();
+			gm->addGeometry(name, sceneNodeComp->getNode(), osgPos);
+
+			if (type_id != -1) {
+				GeometryCache* cache = Core::getWorldRef().getGeometryCache();
+				Material * mat = cache->getMaterialById(type_id);
+
+				GeometryObject* geom = gm->getGeometryObject(name);
+				geom->setMaterial(mat);
+			}
 
             if (evt.isPickup()) {
                 std::string box_name;
