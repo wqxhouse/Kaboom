@@ -20,6 +20,10 @@
     background-decorator: image;
     background-image: salt.tga;
     }
+    div.fake_curr{
+    background-decorator: image;
+    background-image: salt.tga;
+    }
     div.kaboom{
     background-decorator: image;
     background-image: indiv-kaboom-v2.tga;
@@ -33,6 +37,10 @@
     background-image: indiv-sticky-v2.tga;
     }
     div.SM_bomb{
+    background-decorator: image;
+    background-image: salt.tga;
+    }
+    div.fake_bomb{
     background-decorator: image;
     background-image: salt.tga;
     }
@@ -203,7 +211,11 @@
     }
     div.SM_crosshair{
     background-decorator: image;
-    background-image: salt.tga;
+    background-image: crosshair2.tga;
+    }
+    div.fake_crosshair{
+    background-decorator: image;
+    background-image: crosshair1.tga;
     }
     div#health{
     position: absolute;
