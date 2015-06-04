@@ -21,15 +21,15 @@ ExplosionEffect2::ExplosionEffect2(ParticleEffectManager *manager)
     std::string explosion2Path = mediaPath + "DefaultAssets\\ParticleTextures\\Explosion2\\";
 
     // cache texture
-    ParticleTexture *expTex = _manager->getOrCreateParticleTexture(explosion2Path + "flame.png");
-    ParticleTexture *flashTex = _manager->getOrCreateParticleTexture(explosion2Path + "flash.png");
-    ParticleTexture *spark1Tex = _manager->getOrCreateParticleTexture(explosion2Path + "spark.png");
+    ParticleTexture *expTex = _manager->getOrCreateParticleTexture(explosionPath + "explosion.bmp");
+    ParticleTexture *flashTex = _manager->getOrCreateParticleTexture(explosionPath + "flash.bmp");
+    ParticleTexture *spark1Tex = _manager->getOrCreateParticleTexture(explosionPath + "spark1.bmp");
     ParticleTexture *spark2Tex = _manager->getOrCreateParticleTexture(explosionPath + "point.bmp");
     ParticleTexture *waveTex = _manager->getOrCreateParticleTexture(explosion2Path + "shockwave.png");
 
     _particleDrawable->addImage(EXPLOSION_STR, expTex, GL_ALPHA);
-    _particleDrawable->addImage(FLASH_STR, flashTex, GL_ALPHA);
-    _particleDrawable->addImage(SPARK1_STR, spark1Tex, GL_ALPHA);
+    _particleDrawable->addImage(FLASH_STR, flashTex, GL_RGB);
+    _particleDrawable->addImage(SPARK1_STR, spark1Tex, GL_RGB);
     _particleDrawable->addImage(SPARK2_STR, spark2Tex, GL_ALPHA);
     _particleDrawable->addImage(WAVE_STR, waveTex, GL_ALPHA);
 
@@ -71,7 +71,7 @@ SPK::SPK_ID ExplosionEffect2::createExplosionEffect2(
     flameRenderer->setTexture(textureExplosion);
     flameRenderer->setTextureBlending(GL_MODULATE);
     flameRenderer->setAtlasDimensions(2, 2);
-    flameRenderer->setBlending(SPK::BLENDING_ALPHA);
+    flameRenderer->setBlending(SPK::BLENDING_ADD);
     flameRenderer->enableRenderingHint(SPK::DEPTH_WRITE, false);
     flameRenderer->setShared(true);
 
@@ -79,9 +79,8 @@ SPK::SPK_ID ExplosionEffect2::createExplosionEffect2(
     SPK::GL::GLQuadRenderer* flashRenderer = SPK::GL::GLQuadRenderer::create();
     flashRenderer->setTexturingMode(SPK::TEXTURE_2D);
     flashRenderer->setTexture(textureFlash);
-    flashRenderer->setTextureBlending(GL_MODULATE);
-    flameRenderer->setAtlasDimensions(2, 2);
-    flashRenderer->setBlending(SPK::BLENDING_ALPHA);
+    flashRenderer->setTextureBlending(GL_REPLACE);
+    flashRenderer->setBlending(SPK::BLENDING_ADD);
     flashRenderer->enableRenderingHint(SPK::DEPTH_WRITE, false);
     flashRenderer->setShared(true);
 
@@ -89,8 +88,8 @@ SPK::SPK_ID ExplosionEffect2::createExplosionEffect2(
     SPK::GL::GLQuadRenderer* spark1Renderer = SPK::GL::GLQuadRenderer::create();
     spark1Renderer->setTexturingMode(SPK::TEXTURE_2D);
     spark1Renderer->setTexture(textureSpark1);
-    spark1Renderer->setTextureBlending(GL_MODULATE);
-    spark1Renderer->setBlending(SPK::BLENDING_ALPHA);
+    spark1Renderer->setTextureBlending(GL_REPLACE);
+    spark1Renderer->setBlending(SPK::BLENDING_ADD);
     spark1Renderer->enableRenderingHint(SPK::DEPTH_WRITE, false);
     spark1Renderer->setOrientation(SPK::DIRECTION_ALIGNED); // sparks are oriented function o their velocity
     spark1Renderer->setScale(0.05f, 1.0f); // thin rectangles
@@ -147,13 +146,13 @@ SPK::SPK_ID ExplosionEffect2::createExplosionEffect2(
         SPK::FLAG_SIZE | SPK::FLAG_ANGLE,
         SPK::FLAG_SIZE | SPK::FLAG_ANGLE | SPK::FLAG_TEXTURE_INDEX,
         SPK::FLAG_ALPHA);
-    smokeModel->setParam(SPK::PARAM_RED, 0.7f);
-    smokeModel->setParam(SPK::PARAM_GREEN, 1.0f);
-    smokeModel->setParam(SPK::PARAM_BLUE, 1.0f);
+    smokeModel->setParam(SPK::PARAM_RED, 0.2f);
+    smokeModel->setParam(SPK::PARAM_GREEN, 0.2f);
+    smokeModel->setParam(SPK::PARAM_BLUE, 0.2f);
     smokeModel->setParam(SPK::PARAM_SIZE, 0.6f, 0.8f, 1.0f, 1.4f);
     smokeModel->setParam(SPK::PARAM_TEXTURE_INDEX, 0.0f, 4.0f);
     smokeModel->setParam(SPK::PARAM_ANGLE, 0.0f, osg::PI * 0.5f, 0.0f, osg::PI * 0.5f);
-    smokeModel->setLifeTime(2.5f, 3.0f);
+    smokeModel->setLifeTime(2.0, 2.5f);
     smokeModel->setShared(true);
 
     interpolator = smokeModel->getInterpolator(SPK::PARAM_ALPHA);
@@ -169,9 +168,9 @@ SPK::SPK_ID ExplosionEffect2::createExplosionEffect2(
         SPK::FLAG_ANGLE | SPK::FLAG_RED | SPK::FLAG_GREEN | SPK::FLAG_BLUE,
         SPK::FLAG_ANGLE | SPK::FLAG_TEXTURE_INDEX,
         SPK::FLAG_SIZE | SPK::FLAG_ALPHA);
-    flameModel->setParam(SPK::PARAM_RED, 0.3f, 0.6f);
-    flameModel->setParam(SPK::PARAM_GREEN, 1.0f, 1.0f);
-    flameModel->setParam(SPK::PARAM_BLUE, 1.0f, 1.0f);
+    flameModel->setParam(SPK::PARAM_RED, 0.1294f, 0.2f);
+    flameModel->setParam(SPK::PARAM_GREEN, 0.6510f, 0.2f);
+    flameModel->setParam(SPK::PARAM_BLUE, 0.5216f, 0.2f);
     flameModel->setParam(SPK::PARAM_TEXTURE_INDEX, 0.0f, 4.0f);
     flameModel->setParam(SPK::PARAM_ANGLE, 0.0f, osg::PI * 0.5f, 0.0f, osg::PI * 0.5f);
     flameModel->setLifeTime(1.5f, 2.0f);
@@ -206,15 +205,12 @@ SPK::SPK_ID ExplosionEffect2::createExplosionEffect2(
 
     // spark 1 model
     SPK::Model* spark1Model = SPK::Model::create(
-        SPK::FLAG_RED | SPK::FLAG_GREEN | SPK::FLAG_BLUE | SPK::FLAG_ALPHA | SPK::FLAG_SIZE,
-        SPK::FLAG_RED | SPK::FLAG_GREEN | SPK::FLAG_BLUE | SPK::FLAG_ALPHA,
+        SPK::FLAG_SIZE | SPK::FLAG_ALPHA,
+        SPK::FLAG_ALPHA,
         SPK::FLAG_SIZE);
-    spark1Model->setParam(SPK::PARAM_RED, 0.6f);
-    spark1Model->setParam(SPK::PARAM_GREEN, 1.0f);
-    spark1Model->setParam(SPK::PARAM_BLUE, 1.0f);
     spark1Model->setParam(SPK::PARAM_ALPHA, 1.0f, 0.0f);
     spark1Model->setParam(SPK::PARAM_SIZE, 0.2f, 0.4f);
-    spark1Model->setLifeTime(0.7f, 1.5f);
+    spark1Model->setLifeTime(0.2f, 1.0f);
     spark1Model->setShared(true);
 
     // spark 2 model
@@ -233,9 +229,9 @@ SPK::SPK_ID ExplosionEffect2::createExplosionEffect2(
     SPK::Model* waveModel = SPK::Model::create(
         SPK::FLAG_ALPHA | SPK::FLAG_SIZE,
         SPK::FLAG_SIZE | SPK::FLAG_ALPHA);
-    waveModel->setParam(SPK::PARAM_SIZE, 0.0f, 8.0f);
+    waveModel->setParam(SPK::PARAM_SIZE, 0.0f, 2.0f);
     waveModel->setParam(SPK::PARAM_ALPHA, 0.2f, 0.0f);
-    waveModel->setLifeTime(0.3f, 0.3f);
+    waveModel->setLifeTime(0.2f, 0.2f);
     waveModel->setShared(true);
 
     //
@@ -245,7 +241,7 @@ SPK::SPK_ID ExplosionEffect2::createExplosionEffect2(
 
     // smoke emitter
     SPK::RandomEmitter* smokeEmitter = SPK::RandomEmitter::create();
-    smokeEmitter->setZone(SPK::Sphere::create(SPK::Vector3D(0.0f, 0.0f, 0.0f), 1.4f), false);
+    smokeEmitter->setZone(SPK::Sphere::create(SPK::Vector3D(0.0f, 0.0f, 0.0f), 1.3f), false);
     smokeEmitter->setFlow(-1);
     smokeEmitter->setTank(135);
     smokeEmitter->setForce(0.02f, 0.04f);
