@@ -63,12 +63,6 @@ bool Model::loadModel(int type_id)
 	osg::ref_ptr<osg::MatrixTransform> transformNode = NULL;
 	bool retVal = loadModelHelper(tmp, transformNode, _animManager);
 
-	// Use GeometryObject to handle the Material, model will be a grandchild
-	// [TODO: Fix this memory leak]
-	GeometryObject geom = GeometryObject("Character Dummy", transformNode.get());
-	geom.setMaterial(cache->getMaterialById(type_id));
-	transformNode = geom.getRoot();
-
 	_root->addChild(transformNode);
 	return retVal;
 }
@@ -124,12 +118,6 @@ void Model::addAnimationById(int type_id, osgAnimation::Animation::PlayMode play
 
 	// Set the animation play mode (Default is loop)
 	animManager->getAnimationList()[0]->setPlayMode(playMode);
-
-	// Use GeometryObject to handle the Material, model will be a grandchild
-	// [TODO: Fix this memory leak]
-	GeometryObject* geom = new GeometryObject("Character Dummy" + type_id, node.get());
-	geom->setMaterial(cache->getMaterialById(type_id));
-	node = geom->getRoot();
 
 	node->setMatrix(cache->getMatrixById(type_id));
 

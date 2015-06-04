@@ -34,38 +34,13 @@ Entity *PickupFactory::createPickup(
 	entity->attachComponent(new PositionComponent(position));
 	entity->attachComponent(new RotationComponent(rotation));
 
-	std::string box_name;
-
-    switch (type) {
-        case KABOOM_V2:
-			box_name = "kaboom_box";
-            break;
-        case TIME_BOMB:
-			box_name = "timer_box";
-            break;
-        case REMOTE_DETONATOR:
-			box_name = "remote_box";
-            break;
-		case HEALTH_PACK:
-			box_name = "health_pack";
-			break;
-		default:
-			box_name = "kaboom_box";
-			break;
-    }
-
-
 	GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
 
 	//Currently using bomb models as pickup
 	// TODO: Change bomb models to pickup box model
-	Material * mat = geoCache->getMaterialById(type);
 	osg::ref_ptr<osg::Node> box_node = geoCache->getNodeById(type);
 
-	//this is a memory leak, hopefully it is not too bad.
-	GeometryObject *box_geom = new GeometryObject(box_name, box_node);
-	box_geom->setMaterial(mat);
-	entity->attachComponent(new SceneNodeComponent(box_geom->getRoot()));
+	entity->attachComponent(new SceneNodeComponent(box_node));//box_geom->getRoot()));
     entity->attachComponent(new WeaponPickupComponent());
 
     return entity;
