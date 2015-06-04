@@ -1,5 +1,7 @@
 #include "SpawnEventHandler.h"
 
+#include <Core.h>
+#include <ObjectGlowManager.h>
 #include <core/EntityType.h>
 #include <network/SpawnEvent.h>
 #include <components/PositionComponent.h>
@@ -80,7 +82,41 @@ void SpawnEventHandler::handle(const Event &e) const {
 	}
 
     if (entity != nullptr) {
-		game->addEntity(entity);
+        auto posComp = entity->getComponent<PositionComponent>();
+        auto sceneNodeComp = entity->getComponent<SceneNodeComponent>();
+
+        if (sceneNodeComp != nullptr) {
+            const Vec3 &pos = posComp->getPosition();
+
+            const auto name = std::to_string(entity->getId());
+            const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);
+
+            game->getGeometryManager()->addGeometry(name, sceneNodeComp->getNode(), osgPos);
+
+            if (evt.isPickup()) {
+                std::string box_name;
+                switch (type) {
+                case KABOOM_V2:
+                    box_name = "kaboom_box";
+                    break;
+                case TIME_BOMB:
+                    box_name = "timer_box";
+                    break;
+                case REMOTE_DETONATOR:
+                    box_name = "remote_box";
+                    break;
+                case HEALTH_PACK:
+                    box_name = "health_pack";
+                    break;
+                default:
+                    box_name = "kaboom_box";
+                    break;
+                }
+
+                auto obj = Core::getWorldRef().getGeometryManager()->getGeometryObject(name);
+                Core::getWorldRef().getObjectGlowManager()->addGlowGeometryObject(obj);
+            }
+        }
 
 		if ((entity->getType() & CAT_MASK) == CAT_BOMB) {
 			TrailingEffect *effect = static_cast<TrailingEffect *>(
@@ -91,6 +127,6 @@ void SpawnEventHandler::handle(const Event &e) const {
 			effect->run(geomObj->getTranslate());
 
 			entity->attachComponent(new TrailingEffectComponent(effect));
-		}
+        }
     }
 }

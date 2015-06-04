@@ -265,24 +265,6 @@ void Game::run() {
     }
 }
 
-void Game::addEntity(Entity *entity) {
-    auto *posComp = entity->getComponent<PositionComponent>();
-    auto *sceneNodeComp = entity->getComponent<SceneNodeComponent>();
-
-    if (posComp == nullptr || sceneNodeComp == nullptr) {
-        return;
-    }
-
-    if (sceneNodeComp != nullptr) {
-        const Vec3 &pos = posComp->getPosition();
-
-        const auto name = std::to_string(entity->getId());
-        const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);
-
-        getGeometryManager()->addGeometry(name, sceneNodeComp->getNode(), osgPos);
-    }
-}
-
 void Game::removeEntity(Entity *entity) {
     getGeometryManager()->deleteGeometry(std::to_string(entity->getId()));
     entityManager.destroyEntity(entity->getId());

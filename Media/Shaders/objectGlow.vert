@@ -1,5 +1,5 @@
 #version 120
-const float c_inflate = 0.3;
+const float c_inflate = 0.1;
 varying vec3 v_vsNormal;
 varying vec3 v_position;
  
