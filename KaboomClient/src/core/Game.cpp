@@ -104,6 +104,10 @@ Game::Game(ConfigSettings *config)
 	printf("Loading JUMP sound\n");
 	soundManager.loadSound(SoundType::JUMP, str_mediaPath + "DefaultAssets\\Sound\\jump_sound.mp3");
 	printf("Loading Background Music sound\n");
+	for (int i = 0; i < 4; i++){
+		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voice = new std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>();
+		addVoiceLines(str_mediaPath,i,voice);
+	}
 	backGroundMusic = new Source;
 	angryRobot = new Sample(str_mediaPath + "DefaultAssets\\Sound\\angryRobot.mp3");
 	backGroundMusic->setSound(angryRobot);
@@ -132,6 +136,7 @@ void Game::run() {
 	LibRocketGUIManager *guiManager = Core::getInGameLibRocketGUIManager();
 	Rocket::Core::ElementDocument* in_game_screen_ui = guiManager->getWindow(0);
 	Rocket::Core::ElementDocument* start_screen_ui = guiManager->getWindow(1);
+	Rocket::Core::ElementDocument* score_screen_ui = guiManager->getWindow(2);
 	Rocket::Core::ElementDocument* name_screen_ui = guiManager->getWindow(3);
 	Rocket::Core::ElementDocument* death_screen_ui = guiManager->getWindow(4);
     //while (!Core::isViewerClosed()) { // TODO: buggy right now
@@ -163,6 +168,7 @@ void Game::run() {
 			}
 			in_game_screen_ui->Hide();
 			name_screen_ui->Hide();
+			score_screen_ui->Hide();
 			start_screen_ui->Show();
 			death_screen_ui->Hide();
 			abc = true;
@@ -234,6 +240,12 @@ void Game::run() {
 			// E.g: close the server whlie running the game 
             client.receive();
 			_guiEventHandler->changeTime(this);
+			/*if (currentPlayer->getEntity() != nullptr){
+				PlayerStatusComponent *player = currentPlayer->getEntity()->getComponent<PlayerStatusComponent>();
+				if (!currentPlayer->getEntity()->getComponent<PlayerStatusComponent>()->isAlive()){
+					_guiEventHandler->changeDeathTime(this);
+				}
+			}*/
 			if (gameMode.getMatchState() == GameMode::MatchState::PRE_MATCH){
 				_guiEventHandler->preGame(color, changeColor);
 			}
@@ -280,4 +292,9 @@ void Game::removeAllEntities() {
 	for (auto it : entityManager.getEntityList()) {
         removeEntity(it);
 	}
+}
+void Game::addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<Game::VoiceActing, osg::ref_ptr<Sample>> *voice){
+	std::string folder = str_mediaPath + "DefaultAssets\\Sound\\actor" + std::to_string(i) + "\\";
+
+
 }
