@@ -251,7 +251,7 @@
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
     <ClCompile Include="src\network\PlayerSelectionEventHandler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
