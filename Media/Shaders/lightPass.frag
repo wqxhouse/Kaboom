@@ -148,7 +148,7 @@ void main()
     }
 
     // SRGB - gamma correction ( TODO: last step or here??? )
-    result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
+    //result.xyz = pow(result.xyz, vec3(1.0 / 2.2) ); 
     //result = 1.0f - exp(-1.0 * result);
 
 	gl_FragColor = vec4(result, 1.0);
