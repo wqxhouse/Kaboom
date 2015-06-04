@@ -132,8 +132,12 @@ using namespace ours;
 		void addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voice);
 
 		std::string *name;
-		unsigned int colorId=0;
+		unsigned int colorId=5;
 		bool playerAlive = true;
+		unsigned int previousValue=5;
+		osg::ref_ptr<Source> voiceSource;
+		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voiceMap;
+		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>* voiceActorList[4];
 
 	private:
 		friend void GameGUIListener::setGameState(GameStateMachine state);
@@ -164,9 +168,7 @@ using namespace ours;
 
 		bool abc;
 		osg::ref_ptr<Source> backGroundMusic;
-		osg::ref_ptr<Source> voiceSource;
-		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voiceMap;
-		std::vector<std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>*> voiceActorList;
+
 		osg::ref_ptr<Sample> angryRobot;
 		bool angry;
 		int color = 255;

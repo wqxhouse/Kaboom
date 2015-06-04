@@ -53,14 +53,14 @@ void setupGUIDocuments(Game *game)
 	Rocket::Core::Element *roboSelect = letters->GetElementById("robo-select");
 	table = roboSelect->GetFirstChild();
 	 
-	for (unsigned int j = 0; j < table->GetNumChildren(); j++){
+	for (unsigned int j = 1; j < table->GetNumChildren(); j++){
 		Rocket::Core::Element *tr = table->GetChild(j);
-		if (j == 1)
+		if (j == 2)
 			j++;
 		for (int k = 0; k <tr->GetNumChildren(); k++){
 			Rocket::Core::Element *selection = tr->GetChild(k);
 			OnClickChampSelectListener * champ = new OnClickChampSelectListener(game);
-			champ->setNumber(game->colorId, j+k);
+			champ->setNumber(game->colorId, j+k-1);
 			champ->setNameElement(table);
 			Rocket::Core::EventListener *e = champ;
 			selection->AddEventListener("click", e);
