@@ -16,6 +16,10 @@
     background-decorator: image;
     background-image: display-sticky-v2.tga;
     }
+    div.SM_curr{
+    background-decorator: image;
+    background-image: salt.tga;
+    }
     div.kaboom{
     background-decorator: image;
     background-image: indiv-kaboom-v2.tga;
@@ -27,6 +31,10 @@
     div.remote_bomb{
     background-decorator: image;
     background-image: indiv-sticky-v2.tga;
+    }
+    div.SM_bomb{
+    background-decorator: image;
+    background-image: salt.tga;
     }
     div.hp_100{
     background-decorator: image;
@@ -129,7 +137,7 @@
     table#bomb_counter{
     position: absolute;
     top: 83%;
-    left : 53%;
+    left : 43%;
     }
     div#bomb{
     position: absolute;
@@ -192,7 +200,10 @@
     div.time_crosshair{
     background-decorator: image;
     background-image: ch-time.tga;
-
+    }
+    div.SM_crosshair{
+    background-decorator: image;
+    background-image: salt.tga;
     }
     div#health{
     position: absolute;
@@ -281,6 +292,14 @@
            <div id="bomb_count">
              <div id="number"></div>
            </div>
+        </div>
+      </td>
+      <td id="b4" >
+        <div id="items" >
+          <div id="bomb" class="SM_bomb"></div>
+          <div id="bomb_count">
+            <div id="number"></div>
+          </div>
         </div>
       </td>
       <!--<td id="b4" style="margin: 4px 4px 4px 4px; color: purple;">Salt Marty Bomb</td>
