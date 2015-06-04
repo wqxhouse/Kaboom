@@ -11,7 +11,10 @@ public:
 	{
 		EXPLOSION,
         EXPLOSION2,
-		TRAILING,
+        TRAILING_BLUE,
+        TRAILING_GREEN,
+        TRAILING_PURPLE,
+        TRAILING_RED,
 	};
 
 	ParticleEffectManager();
