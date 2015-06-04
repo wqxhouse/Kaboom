@@ -227,6 +227,7 @@ void Game::run() {
 				gsm = GAME_MODE;
 				Core::enableGameMode();
 				client.sendPlayerRenameEvent(*name);
+                client.sendPlayerSelectionEvent(GREEN_CHARACTER);
 			//abc = false;
 				
 			}

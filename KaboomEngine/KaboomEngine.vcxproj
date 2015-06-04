@@ -201,6 +201,7 @@
     <ClInclude Include="src\network\AmmoAmountEvent.h" />
     <ClInclude Include="src\network\AssignEvent.h" />
     <ClInclude Include="src\network\BindEvent.h" />
+    <ClInclude Include="src\network\PlayerSelectionEvent.h" />
     <ClInclude Include="src\network\ChatEvent.h" />
     <ClInclude Include="src\network\ConnectEvent.h" />
     <ClInclude Include="src\network\DisconnectEvent.h" />

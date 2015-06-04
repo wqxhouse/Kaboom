@@ -13,6 +13,7 @@
 #include "PlayerDeathEventHandler.h"
 #include "PlayerRenameEventHandler.h"
 #include "PlayerRespawnEventHandler.h"
+#include "PlayerSelectionEventHandler.h"
 #include "PlayerStatusEventHandler.h"
 #include "PositionEventHandler.h"
 #include "RotationEventHandler.h"
@@ -28,6 +29,7 @@ ClientEventHandlerLookup::ClientEventHandlerLookup(Game *game) {
     addHandler(EVENT_CHAT, new ChatEventHandler(game));
     addHandler(EVENT_SCORE, new ScoreEventHandler(game));
     addHandler(EVENT_PLAYER_RENAME, new PlayerRenameEventHandler(game));
+    addHandler(EVENT_PLAYER_SELECTION, new PlayerSelectionEventHandler(game));
     addHandler(EVENT_PLAYER_RESPAWN, new PlayerRespawnEventHandler(game));
     addHandler(EVENT_PLAYER_DEATH, new PlayerDeathEventHandler(game));
     addHandler(EVENT_SPAWN, new SpawnEventHandler(game));

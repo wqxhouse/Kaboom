@@ -250,6 +250,9 @@
     <ClCompile Include="src\network\PlayerRespawnRequestEventHandler.cpp">
       <Filter>Source Files\Network\Event Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\network\PlayerSelectionEventHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\network\NetworkServices.h">
@@ -513,6 +516,9 @@
     </ClInclude>
     <ClInclude Include="src\messaging\TickMessage.h">
       <Filter>Header Files\Messaging\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\PlayerSelectionEventHandler.h">
+      <Filter>Header Files\Network\Event Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

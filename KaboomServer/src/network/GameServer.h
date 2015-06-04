@@ -39,6 +39,7 @@ public:
     void sendChatEvent(const std::string &message) const;
     void sendScoreEvent(Player *player) const;
     void sendPlayerRenameEvent(Player *player) const;
+    void sendPlayerSelectionEvent(Player *player) const;
     void sendPlayerRespawnEvent(Player *player) const;
     void sendPlayerDeathEvent(Player *player) const;
     void sendSpawnEvent(Entity *entity) const;

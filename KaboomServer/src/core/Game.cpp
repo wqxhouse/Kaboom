@@ -242,7 +242,7 @@ Vec3 Game::getPlayerSpawnPoint() {
 }
 
 void Game::addPlayerToWorld(Player *player) {
-    Entity *entity = characterFactory.createCharacter(DEFAULT_CHARACTER, getPlayerSpawnPoint());
+    Entity *entity = characterFactory.createCharacter(player->getCharacterType(), getPlayerSpawnPoint());
     entity->attachComponent(new PlayerComponent(player));
     player->setEntity(entity);
     player->setKills(0);

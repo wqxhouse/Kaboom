@@ -28,6 +28,7 @@
 #include <network/PlayerRenameEvent.h>
 #include <network/PlayerRespawnEvent.h>
 #include <network/PlayerRespawnRequestEvent.h>
+#include <network/PlayerSelectionEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/ReloadRequestEvent.h>
@@ -73,6 +74,7 @@ void GameServer::receive(const IdToPlayerMap &players) {
         EmptyEvent emptyEvent;
         PlayerInputEvent playerInputEvent;
         PlayerRenameEvent playerRenameEvent;
+        PlayerSelectionEvent playerSelectionEvent;
         ReloadRequestEvent reloadRequestEvent;
 		EquipEvent equipEvent;
 		PlayerRespawnRequestEvent playerRespawnRequestEvent;
@@ -103,6 +105,11 @@ void GameServer::receive(const IdToPlayerMap &players) {
                 case EVENT_PLAYER_RENAME: {
                     playerRenameEvent.deserialize(&networkBuffer[i]);
                     playerRenameEvent.setPlayerId(player->getId());
+                    break;
+                }
+                case EVENT_PLAYER_SELECTION: {
+                    playerSelectionEvent.deserialize(&networkBuffer[i]);
+                    playerSelectionEvent.setPlayerId(player->getId());
                     break;
                 }
                 case EVENT_EQUIP: {
@@ -136,6 +143,10 @@ void GameServer::receive(const IdToPlayerMap &players) {
 
         if (receivedOpcodes.count(EVENT_PLAYER_RENAME)) {
             eventHandlerLookup.find(EVENT_PLAYER_RENAME)->handle(playerRenameEvent);
+        }
+
+        if (receivedOpcodes.count(EVENT_PLAYER_SELECTION)) {
+            eventHandlerLookup.find(EVENT_PLAYER_SELECTION)->handle(playerSelectionEvent);
         }
 
         if (receivedOpcodes.count(EVENT_EQUIP)) {
@@ -227,6 +238,11 @@ void GameServer::sendScoreEvent(Player *player) const {
 
 void GameServer::sendPlayerRenameEvent(Player *player) const {
     PlayerRenameEvent evt(player->getId(), player->getName());
+    sendEvent(evt);
+}
+
+void GameServer::sendPlayerSelectionEvent(Player *player) const {
+    PlayerSelectionEvent evt(player->getId(), player->getCharacterType());
     sendEvent(evt);
 }
 
@@ -396,8 +412,12 @@ void GameServer::sendNewPlayerEnterWorldEvent(
 
         ScoreEvent scoreEvent(player->getId(), player->getKills(), player->getDeaths());
         sendEvent(scoreEvent, newPlayer->getId());
+
 		PlayerRenameEvent playerRenameEvent(player->getId(),player->getName());
 		sendEvent(playerRenameEvent,newPlayer->getId());
+
+        PlayerSelectionEvent playerSelectionEvent(player->getId(), player->getCharacterType());
+        sendEvent(playerSelectionEvent, newPlayer->getId());
     }
 
     // Tells the new player about every entity's entity ID (except itself)
