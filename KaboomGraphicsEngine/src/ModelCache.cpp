@@ -26,7 +26,6 @@ void ModelCache::addModels(int num)
 		Model *model;
 		model = new Model(IDLE, true, osgAnimation::Animation::PPONG);
 		model->addAnimationById(RUNNING);
-		model->playAnimation(IDLE);
 
 		_available.push_back(model);
 	}
