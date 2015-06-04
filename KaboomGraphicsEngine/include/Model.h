@@ -19,8 +19,8 @@ public:
 
 	void addAnimationById(int type_id, osgAnimation::Animation::PlayMode playMode =
 		osgAnimation::Animation::LOOP);
-	void playAnimation(std::string& animName = std::string("Default Take"));
-	void playAnimation(int type_id, std::string& animName = std::string("Default Take"));
+	void playAnimation(std::string& animName = std::string("Take 001"));
+	void playAnimation(int type_id, std::string& animName = std::string("Take 001"));
 	void stopAnimation();
 
 private:

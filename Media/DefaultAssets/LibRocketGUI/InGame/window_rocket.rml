@@ -178,7 +178,7 @@
     div.clock{
     color: #324E6F;
     position: absolute;
-    left:43%;
+    left:44.5%;
     background-decorator: image;
     background-image: timer-display_v2.tga;
     width: 225px;
