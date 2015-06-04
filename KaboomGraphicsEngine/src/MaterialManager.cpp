@@ -14,6 +14,7 @@ MaterialManager::MaterialManager()
 	_emptyRoughnessMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\roughness.png";
 	_emptyMetallicMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\metallic.png";
 	_emptyNormalMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\normal.png";
+	_emptyIrradianceMapPath = mediaPath + "DefaultAssets\\EmptyMaterialTexture\\albedo.png";
 
 	createBuiltInMaterials();
 }
@@ -97,7 +98,8 @@ bool MaterialManager::createTexturedMaterial(const std::string &name,
 	const std::string &roughnessPath,
 	const std::string &metallicPath,
 	const std::string &normalMapPath, 
-	osg::Texture::WrapMode mode)
+	osg::Texture::WrapMode mode, 
+	const std::string &irradianceMapPath)
 {
 	// Handle duplicated (name) geoms
 	if (doesNameExist(name)) {
@@ -117,6 +119,15 @@ bool MaterialManager::createTexturedMaterial(const std::string &name,
 	{
 		mat->setAlbedoTexturePath(albedoPath, mode);
 		mat->setAlbedoTexLerp(1.0);
+	}
+
+	if (irradianceMapPath.empty())
+	{
+		mat->setIrradianceMapPath(_emptyIrradianceMapPath, mode);
+	}
+	else
+	{
+		mat->setIrradianceMapPath(irradianceMapPath, mode);
 	}
 
 	if (roughnessPath.empty())
@@ -304,6 +315,19 @@ osg::ref_ptr<osg::Texture> MaterialManager::getNormalMapTexture(Material *m)
 	}
 }
 
+osg::ref_ptr<osg::Texture> MaterialManager::getIrradianceTexture(Material *m)
+{
+	auto it = _textureMap.find(m->getIrradianceTexturePath());
+	if (it != _textureMap.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		// console output material not found;
+		return NULL;
+	}
+}
 
 void MaterialManager::reloadBuiltInMaterials()
 {

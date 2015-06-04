@@ -15,6 +15,7 @@
 #include "MaterialManager.h"
 #include "ParticleEffectManager.h"
 #include "ObjectGlowManager.h"
+#include "CameraShakeManager.h"
 
 World::World()
 {
@@ -24,6 +25,7 @@ World::World()
 	_particleEffectManager = new ParticleEffectManager;
 	_cache = new GeometryCache;
 	_objectGlowManager = new ObjectGlowManager;
+	_cameraShakeManager = new CameraShakeManager;
 }
 
 World::~World()

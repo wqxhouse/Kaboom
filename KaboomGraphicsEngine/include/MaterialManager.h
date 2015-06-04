@@ -35,7 +35,8 @@ public:
 		const std::string &roughnessPath,
 		const std::string &metallicPath, 
 		const std::string &normalMapPath, 
-		osg::Texture::WrapMode mode=osg::Texture::CLAMP_TO_EDGE);
+		osg::Texture::WrapMode mode=osg::Texture::CLAMP_TO_EDGE, 
+		const std::string &irradianceMapPath="");
 
 	void setMaterialUpdateCallback(const std::string &name, MaterialUpdateCallback callback, void *userData = NULL);
 
@@ -51,6 +52,7 @@ public:
 	osg::ref_ptr<osg::Texture> getRoughnessTexture(Material *m);
 	osg::ref_ptr<osg::Texture> getMetallicTexture(Material *m);
 	osg::ref_ptr<osg::Texture> getNormalMapTexture(Material *m);
+	osg::ref_ptr<osg::Texture> getIrradianceTexture(Material *m);
 
 	void reloadBuiltInMaterials();
 
@@ -82,5 +84,6 @@ private:
 	std::string _emptyNormalMapPath;
 	std::string _emptyMetallicMapPath;
 	std::string _emptyRoughnessMapPath;
+	std::string _emptyIrradianceMapPath;
 };
 

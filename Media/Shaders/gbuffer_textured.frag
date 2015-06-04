@@ -15,6 +15,7 @@ uniform sampler2D u_albedoTex;
 uniform sampler2D u_roughnessTex;
 uniform sampler2D u_metallicTex;
 uniform sampler2D u_normalMapTex;
+uniform sampler2D u_irradianceTex;
 // uniform sampler2D u_translucentTex;
 
 uniform vec3 u_albedo;
@@ -67,6 +68,9 @@ void main()
 	gl_FragData[0] = vec4(albedo, sunShadowMask); // albedo + translucent
 	gl_FragData[1] = vec4(roughness, u_specular, metallic, 0.0); // material buffer + unshaded bit(for skybox)
 	gl_FragData[2] = vec4(encodeNormal(view_normal), splitDepth2x16(v_depth)); // encoded normal + split linDepth
+
+	vec3 irradiance = texture(u_irradianceTex, texSampleCoord).rgb;
+	gl_FragData[3] = vec4(irradiance, 1.0);
 
 	//gl_FragData[3] = vec4(v_position.xyz, 1);
 }

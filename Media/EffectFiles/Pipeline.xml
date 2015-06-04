@@ -66,6 +66,7 @@
       <output_buffer target="color0">b_RT0</output_buffer>
       <output_buffer target="color1">b_RT1</output_buffer>
       <output_buffer target="color2">b_RT2</output_buffer>
+      <output_buffer target="color3">b_RT3</output_buffer>
       <output_buffer target="depth">debugDepth</output_buffer>
     </forward_pass>
 

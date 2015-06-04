@@ -25,6 +25,13 @@ void CameraShake::start()
 	_isShaking = true;
 }
 
+void CameraShake::stop()
+{
+	_isShaking = false;
+	_startTime = -1.0f;
+	_currTime = -1.0f;
+}
+
 void CameraShake::update()
 {
 	if (!_isShaking) return;
@@ -32,9 +39,7 @@ void CameraShake::update()
 	_currTime = Core::getTimeElaspedMills() - _startTime;
 	if (_currTime > _duration)
 	{
-		_isShaking = false;
-		_startTime = -1.0f;
-		_currTime = -1.0f;
+		stop();
 	}
 }
 

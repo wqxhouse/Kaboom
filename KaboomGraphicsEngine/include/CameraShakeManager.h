@@ -26,7 +26,12 @@ private:
 		CameraShake *_y;
 	};
 
-	osg::Vec2 getScreenOffset();
+	osg::Vec2 getScreenOffset(int shouldPlay);
+	int getShouldPlayShake();
+	void start(int effect);
+	void stop(int effect);
+	void update(int effect);
+	bool isPlaying(int effect);
 
 	void createViolentShake();
 	void createMildShake();

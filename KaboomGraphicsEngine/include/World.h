@@ -17,6 +17,7 @@ class GeometryCache;
 class GeometryObjectManager;
 class ParticleEffectManager;
 class ObjectGlowManager;
+class CameraShakeManager;
 class World : public XMLLoader
 {
 public:
@@ -63,6 +64,11 @@ public:
 		return _objectGlowManager;
 	}
 
+	inline CameraShakeManager *getCameraShakeManager()
+	{
+		return _cameraShakeManager;
+	}
+
 protected:
 	virtual void loadXMLNode(osgDB::XmlNode *xmlRoot);
 
@@ -74,6 +80,7 @@ private:
 	LightManager *_lightManager;
 	ParticleEffectManager *_particleEffectManager;
 	ObjectGlowManager *_objectGlowManager;
+	CameraShakeManager *_cameraShakeManager;
 	GeometryCache *_cache;
 };
 

@@ -117,6 +117,12 @@ public:
 		_onTextureChangeFunc(normalMapTexPath, mode);
 	}
 
+	inline void setIrradianceMapPath(const std::string &irradianceMapPath, osg::Texture::WrapMode mode)
+	{
+		_irradianceMapPath = irradianceMapPath;
+		_onTextureChangeFunc(irradianceMapPath, mode);
+	}
+
 	inline std::string getAlbedoTexturePath()
 	{
 		return _albedoMapPath;
@@ -136,6 +142,11 @@ public:
 	inline std::string getNormalMapTexturePath()
 	{
 		return _normalMapPath;
+	}
+
+	inline std::string getIrradianceTexturePath()
+	{
+		return _irradianceMapPath;
 	}
 
 	inline float getAlbedoTexLerp()
@@ -258,6 +269,7 @@ private:
 	std::string _albedoMapPath;
 	std::string _normalMapPath;
 	std::string _emissiveMapPath;
+	std::string _irradianceMapPath;
 
 	float _albedoTexLerp;
 	float _roughnessTexLerp;

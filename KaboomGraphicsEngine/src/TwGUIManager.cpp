@@ -499,6 +499,7 @@ void TwGUIManager::initAddBar()
 		std::string roughnessPath = "";
 		std::string metallicPath = "";
 		std::string normalMapPat = "";
+		std::string irradiancePathPath = "";
 
 		// Add material to material manager
 		MaterialManager* mm = Core::getWorldRef().getMaterialManager();
@@ -508,7 +509,7 @@ void TwGUIManager::initAddBar()
 		std::cout << "Enter material name: ";
 		std::cin >> matName;
 
-		if (mm->createTexturedMaterial(matName, albedoPath, roughnessPath, metallicPath, normalMapPat)) {
+		if (mm->createTexturedMaterial(matName, albedoPath, roughnessPath, metallicPath, normalMapPat, osg::Texture::CLAMP_TO_EDGE, irradiancePathPath)) {
 			Material* mat = mm->getMaterial(matName);
 
 			addTexturedMaterialToGUI((TwBar*)clientData, mat, TEXTURED_MATERIAL_GROUP_NAME, _index);
@@ -1390,6 +1391,7 @@ void TwGUIManager::addPlainMaterialToGUI(TwBar* bar, Material* mat, std::string 
 	},
 		mat, metallicDef.c_str());
 
+
 	std::string moveStr = " Plain_Materials/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());
 	std::string foldedStr = " Plain_Materials/" + name + " opened=false ";
@@ -1650,6 +1652,26 @@ void TwGUIManager::addTexturedMaterialToGUI(TwBar* bar, Material* mat, std::stri
 		}
 	},
 		mat, normalMapPathDef.c_str());
+
+	std::string irradianceMapPath = nameGroupDef + " label='" + IRRADIANCE_PATH_LABEL + "'";
+	TwAddButton(bar, irradianceMapPath.c_str(),
+		[](void *clientData) {
+		Material *mat = static_cast<Material *>(clientData);
+
+		std::string filePath = "";
+		bool validFile = openFile(filePath);
+
+		if (validFile) {
+			const size_t newsize = 4096;
+			wchar_t fromPath[newsize];
+
+			std::string fileName = getFileName(filePath);		// Get the file name (without the path)
+			strToWCchar(fromPath, filePath);
+
+			mat->setIrradianceMapPath(filePath, mat->getMode());
+		}
+	},
+		mat, irradianceMapPath.c_str());
 
 	std::string moveStr = " Textured_Materials/" + name + " group='" + group + "'";
 	TwDefine(moveStr.c_str());

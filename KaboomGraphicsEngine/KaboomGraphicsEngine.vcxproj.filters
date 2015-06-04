@@ -383,6 +383,12 @@
     <ClCompile Include="src\ObjectGlowManager.cpp">
       <Filter>Source Files\PostProcess</Filter>
     </ClCompile>
+    <ClCompile Include="src\CameraShake.cpp">
+      <Filter>Source Files\PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraShakeManager.cpp">
+      <Filter>Source Files\PostProcess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Media\EffectFiles\GeometryPassConfig.xml">

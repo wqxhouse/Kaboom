@@ -43,11 +43,13 @@ const std::string COLOR_LABEL = "Color";
 const std::string ROUGHNESS_LABEL = "Roughness";
 const std::string SPECULAR_LABEL = "Specular";
 const std::string METALLIC_LABEL = "Metallic";
+const std::string IRRADIANCE_LABEL = "Irradiance";
 
 const std::string ALBEDO_PATH_LABEL = "Albedo path";
 const std::string ROUGHNESS_PATH_LABEL = "Roughness path";
 const std::string METALLIC_PATH_LABEL = "Metallic path";
 const std::string NORMAL_MAP_PATH_LABEL = "Normal map path";
+const std::string IRRADIANCE_PATH_LABEL = "Irradiance map path";
 
 const std::string ALBEDO_MAP_LERP_LABEL = "AlbedoTexLerp";
 const std::string METALLIC_MAP_LERP_LABEL = "MetallicTexLerp";

@@ -24,6 +24,7 @@
 #include "GeometryObjectManipulator.h"
 #include "CubemapUtil.h"
 #include "ObjectGlowManager.h"
+#include "CameraShakeManager.h"
 
 // TODO: log which one called the global functions in Core
 // for debugging
@@ -967,6 +968,29 @@ void Core::configObjectGlowPass()
 {
 	osg::Group *glow = _world.getObjectGlowManager()->getRoot();
 	_passes->addChild(glow);
+}
+
+
+void MainCameraCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
+{
+	if (!Core::isInGameMode() && !Core::allowChangeEditorProjection()) return;
+	osg::Camera *mainCam = static_cast<osg::Camera *>(node);
+
+	//const osg::Matrix &viewMat = Core::getMainCamera().getViewMatrix();
+	const osg::Matrix &projMat = Core::getMainCamera().getProjectionMatrix();
+
+	static int count = 0;
+	
+	CameraShakeManager *csm = Core::getWorldRef().getCameraShakeManager();
+	if (count % 60 == 0)
+	{
+		csm->queueCameraShakeEffect(CameraShakeManager::MILD);
+	}
+
+	 osg::Matrix viewMat = csm->getViewSpaceCamTransform();
+	mainCam->setViewMatrix(viewMat);
+	mainCam->setProjectionMatrix(projMat);
+	traverse(node, nv);
 }
 
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;

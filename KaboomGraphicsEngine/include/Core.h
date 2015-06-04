@@ -218,13 +218,13 @@ private:
 class MainCameraCallback : public osg::NodeCallback
 {
 public:
-	void operator()(osg::Node* node, osg::NodeVisitor* nv)
-	{
-		if (!Core::isInGameMode() && !Core::allowChangeEditorProjection()) return;
-		osg::Camera *mainCam = static_cast<osg::Camera *>(node);
-		mainCam->setViewMatrix(Core::getMainCamera().getViewMatrix());
-		mainCam->setProjectionMatrix(Core::getMainCamera().getProjectionMatrix());
+	void operator()(osg::Node* node, osg::NodeVisitor* nv);
+	//{
+	//	if (!Core::isInGameMode() && !Core::allowChangeEditorProjection()) return;
+	//	osg::Camera *mainCam = static_cast<osg::Camera *>(node);
+	//	mainCam->setViewMatrix(Core::getMainCamera().getViewMatrix());
+	//	mainCam->setProjectionMatrix(Core::getMainCamera().getProjectionMatrix());
 
-		traverse(node, nv);
-	}
+	//	traverse(node, nv);
+	//}
 };

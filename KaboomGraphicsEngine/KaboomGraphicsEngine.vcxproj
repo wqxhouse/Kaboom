@@ -307,6 +307,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="include\TestMaterial.cpp" />
     <ClCompile Include="src\AxisVisualizer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\CameraShake.cpp" />
+    <ClCompile Include="src\CameraShakeManager.cpp" />
     <ClCompile Include="src\Core.cpp" />
     <ClCompile Include="src\CubemapPreFilter.cpp" />
     <ClCompile Include="src\CubemapUtil.cpp" />
@@ -368,7 +370,9 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="..\Media\EffectFiles\SAOPassConfig.xml" />
-    <Xml Include="..\Media\EffectFiles\ShadowDepthPassConfig.xml" />
+    <Xml Include="..\Media\EffectFiles\ShadowDepthPassConfig.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\Media\EffectFiles\SpecularLutPassConfig.xml" />
     <Xml Include="..\Media\EffectFiles\template.xml" />
   </ItemGroup>
