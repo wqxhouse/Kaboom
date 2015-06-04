@@ -1,7 +1,9 @@
 #include "DestroyEventHandler.h"
 
+#include <Core.h>
+#include <ObjectGlowManager.h>
+#include <components/WeaponPickupComponent.h>
 #include <network/DestroyEvent.h>
-
 #include "../components/TrailingEffectComponent.h"
 #include "../core/Game.h"
 
@@ -20,6 +22,11 @@ void DestroyEventHandler::handle(const Event &e) const {
 		if (trailingEffectComp != nullptr) {
 			delete trailingEffectComp->getTrailingEffect();
 		}
+
+        if (entity->hasComponent<WeaponPickupComponent>()) {
+            auto obj = game->getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
+            Core::getWorldRef().getObjectGlowManager()->removeGlowGeometryObject(obj);
+        }
 
         game->removeEntity(entity);
     }

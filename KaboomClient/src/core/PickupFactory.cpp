@@ -10,6 +10,7 @@
 
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
+#include <components/WeaponPickupComponent.h>
 #include <core/EntityManager.h>
 #include <osgDB/ReadFile>
 
@@ -65,6 +66,7 @@ Entity *PickupFactory::createPickup(
 	GeometryObject *box_geom = new GeometryObject(box_name, box_node);
 	box_geom->setMaterial(mat);
 	entity->attachComponent(new SceneNodeComponent(box_geom->getRoot()));
+    entity->attachComponent(new WeaponPickupComponent());
 
     return entity;
 }

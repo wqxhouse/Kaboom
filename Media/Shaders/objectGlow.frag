@@ -3,7 +3,7 @@
 varying vec3 v_position;
 varying vec3 v_vsNormal;
 
-const float c_glowExp = 0.6;
+const float c_glowExp = 0.2;
 const vec3 c_glowColor = vec3(0.7, 0.7, 0.2);
 
 void main()
