@@ -75,7 +75,7 @@ void GameGUIEventHandler::handle(const AmmoAmountEvent &e, InventoryComponent *b
 	Rocket::Core::Element *ammoTable = body->GetFirstChild();
 
 	//hardcode the number amount of bomb; currently there are 3 bombs
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < ammoTable->GetNumChildren(); i++)
 	{
 		int temp = e.getAmmoAmount(i);
 		ammoTable->GetChild(i)->GetFirstChild()->GetChild(1)->GetFirstChild()->SetInnerRML(std::to_string(temp).c_str());
@@ -182,16 +182,6 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 {
 	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
 	Rocket::Core::Element * body = window1->GetChild(1);
-	//Rocket::Core::Element *ammoTable = body->GetFirstChild();
-
-	////hardcode the number amount of bomb; currently there are 3 bombs
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	if (weapon == i)
-	//		ammoTable->GetChild(i)->SetProperty("color", "red");
-	//	else
-	//		ammoTable->GetChild(i)->SetProperty("color", "purple");
-	//}
 
 	Rocket::Core::Element * current_bomb = window1->GetChild(2);
 	Rocket::Core::Element * ch = window1->GetElementById("crosshair");
@@ -208,6 +198,14 @@ void GameGUIEventHandler::changeWeapon(int weapon) const
 		case 2:
 			bomb->SetClassNames("remote_curr");
 			ch->SetClassNames("sticky_crosshair");
+			break;
+		case 3:
+			bomb->SetClassNames("SM_curr");
+			ch->SetClassNames("SM_crosshair");
+			break;
+		case 4:
+			break;
+		default:
 			break;
 	}
 }

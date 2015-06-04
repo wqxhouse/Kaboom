@@ -9,14 +9,14 @@ class AmmoAmountEvent : public Event {
 public:
 	AmmoAmountEvent() 
 		: Event(EVENT_AMMO_COUNT, sizeof(AmmoAmountEvent)), KaboomV2Amount(0),
-		TimeBombAmount(0), StickyBombAmount(0)
+		TimeBombAmount(0), StickyBombAmount(0), SMBombAmount(0), FakeBombAmount(0)
 	{
 
 	}
 
-	AmmoAmountEvent(int K,int T,int S)
+	AmmoAmountEvent(int K,int T,int S,int SM, int F)
 		: Event(EVENT_AMMO_COUNT, sizeof(AmmoAmountEvent)), KaboomV2Amount(K),
-		TimeBombAmount(T), StickyBombAmount(S)
+		TimeBombAmount(T), StickyBombAmount(S), SMBombAmount(SM), FakeBombAmount(F)
              {
     }
 
@@ -35,6 +35,8 @@ public:
         os << "    KaboomV2Amount: " << o.KaboomV2Amount << std::endl;
         os << "    TimeBombAmount: " << o.TimeBombAmount << std::endl;
         os << "    StickyBombAmount: " << o.StickyBombAmount << std::endl;
+		os << "    SMBombAmount: " << o.SMBombAmount << std::endl;
+		os << "    FakeBombAmount: " << o.FakeBombAmount << std::endl;
         os << "}";
 
         return os;
@@ -49,6 +51,10 @@ public:
 				return TimeBombAmount;
 			case 2:
 				return StickyBombAmount;
+			case 3:
+				return SMBombAmount;
+			case 4:
+				return FakeBombAmount;
 			default:
 				return 0;
 		}
@@ -59,4 +65,6 @@ private:
 	int KaboomV2Amount;
 	int TimeBombAmount;
 	int StickyBombAmount;
+	int SMBombAmount;
+	int FakeBombAmount;
 };
