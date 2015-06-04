@@ -8,7 +8,9 @@
 #include <Core.h>
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
+#include <ObjectGlowManager.h>
 #include <components/PositionComponent.h>
+#include <components/WeaponPickupComponent.h>
 #include <core/Entity.h>
 
 #include "../Scene.h"
@@ -266,6 +268,10 @@ void Game::run() {
 }
 
 void Game::removeEntity(Entity *entity) {
+    if (entity->hasComponent<WeaponPickupComponent>()) {
+        auto obj = getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
+        Core::getWorldRef().getObjectGlowManager()->removeGlowGeometryObject(obj);
+    }
     getGeometryManager()->deleteGeometry(std::to_string(entity->getId()));
     entityManager.destroyEntity(entity->getId());
 }
