@@ -3,6 +3,11 @@
 		<link type="text/rcss" href="rkt_new.rcss"/>
 		<link type="text/rcss" href="invader-m.rcss"/>
 	  <style>
+      
+      body{
+      background-decorator: image;
+      background-image: Start_Screen.tga;
+      }
       div#title{
       position:absolute;
       left:40%;
@@ -12,7 +17,29 @@
       div#buttons{
       position:absolute;
       left: 45%;
-      top : 35%;
+      top : 65%;
+      }
+      button#startgame{
+      background-decorator: image;
+      background-image: start_button.tga;
+      height:10%;
+      width:12.5%;
+      //margin: 0 auto;      
+      }
+      button#exitgame:hover{
+      background-decorator: image;
+      background-image: exit_button_ON.tga;
+      }
+      button#exitgame{
+      background-decorator: image;
+      background-image: exit_button.tga;
+      height:10%;
+      width:12.5%;
+      //margin: 0 auto;      
+      }
+      button#startgame:hover{
+      background-decorator: image;
+      background-image: start_button_ON.tga;
       }
       button:hover{
       color: yellow;
@@ -32,11 +59,10 @@
 	  <div id="title">Kaboom!</div>
     <div id="buttons">
 	  <button id="startgame" onclick="load_game">
-		Start Game you pleeb
 	  </button>
 	  <p></p>
 	  <button id="exitgame">
-		Exit game
+
 	  </button>
     </div>
 	</body>
