@@ -2,10 +2,12 @@
 #include <osgDB/ReadFile>
 
 #include "ExplosionEffect.h"
+#include "ExplosionEffect2.h"
 #include "TrailingEffect.h"
 
 ParticleEffectManager::ParticleEffectManager()
-	: _builtInExplsionEffectStr("__explosionEffect"), 
+	: _builtInExplsionEffectStr("__explosionEffect"),
+      _builtInExplsionEffect2Str("__explosionEffect2"),
 	  _builtInTrailingEffectStr("__trailingEffect")
 {
 	// TODO: make sure depth write is disabled 
@@ -38,7 +40,8 @@ ParticleEffectManager::~ParticleEffectManager()
 
 void ParticleEffectManager::createBuiltInParticleEffects()
 {
-	createBuiltInExplosionEffect();
+    createBuiltInExplosionEffect();
+    createBuiltInExplosionEffect2();
 	createBuiltInTrailingEffect();
 }
 
@@ -46,6 +49,15 @@ void ParticleEffectManager::createBuiltInExplosionEffect()
 {
 	ExplosionEffect *explosion = new ExplosionEffect(this);
 	_particleEffects.insert(std::make_pair(_builtInExplsionEffectStr, explosion));
+	_particleGroup->addChild(explosion->getRoot());
+	// TODO: refactor
+	_particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(explosion->getRoot()->getDrawable(0)));
+}
+
+void ParticleEffectManager::createBuiltInExplosionEffect2()
+{
+	ExplosionEffect2 *explosion = new ExplosionEffect2(this);
+	_particleEffects.insert(std::make_pair(_builtInExplsionEffect2Str, explosion));
 	_particleGroup->addChild(explosion->getRoot());
 	// TODO: refactor
 	_particleUpdateHandler->addSpark(static_cast<SparkDrawable *>(explosion->getRoot()->getDrawable(0)));
@@ -64,10 +76,13 @@ ParticleEffect *ParticleEffectManager::getParticleEffect(enum BuiltInParticleEff
 	TrailingEffect *trailingEffect;
 
 	switch (effect)
-	{
-	case EXPLOSION:
-		return _particleEffects[_builtInExplsionEffectStr];
-		break;
+    {
+    case EXPLOSION:
+        return _particleEffects[_builtInExplsionEffectStr];
+        break;
+    case EXPLOSION2:
+        return _particleEffects[_builtInExplsionEffect2Str];
+        break;
 	case TRAILING:
 		trailingEffect = new TrailingEffect(this, _particleUpdateHandler);
 		_particleGroup->addChild(trailingEffect->getRoot());
