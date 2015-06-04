@@ -38,6 +38,8 @@ public:
     void addEntity(Entity *entity);
     void removeEntity(Entity *entity);
 
+    void addPlayerToWorld(Player *player);
+
     Vec3 getPlayerSpawnPoint();
 
     inline SpawnPointToConfigMap &getSpawnPointConfigs() {
@@ -109,6 +111,4 @@ private:
     std::unordered_map<std::string, Timer> pickupSpawnRequest;
     std::vector<std::string> playerSpawnPointList;
     std::vector<std::string> jumpPadSpawnPointList;
-
-    void addPlayerToWorld(Player *player);
 };

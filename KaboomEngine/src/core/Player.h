@@ -10,7 +10,7 @@ class Player {
 public:
     Player(unsigned int id,
             const std::string &name = "Player",
-            EntityType characterType = BLUE_CHARACTER,
+            EntityType characterType = NONE,
             Entity *entity = nullptr,
             int kills = 0,
             int deaths = 0)
