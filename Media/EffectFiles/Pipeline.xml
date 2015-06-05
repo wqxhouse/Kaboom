@@ -45,6 +45,15 @@
     <source_type>ubyte</source_type>
   </buffer>
 
+  <texture name="t_colorLUT" type="2d" resize_npot="1">
+    <file>DefaultAssets/colorLUT/colorCorrection.png</file>
+    <filter param="min_filter">nearest</filter>
+    <filter param="mag_filter">nearest</filter>
+    <wrap param="s">clamp_to_edge</wrap>
+    <wrap param="t">clamp_to_edge</wrap>
+  
+  </texture>
+
   <technique name="deferred_shading">
     <forward_pass name="PreFilterCubeMapPass" >
       <clear_color>0 0 0 1</clear_color>
@@ -195,6 +204,7 @@
     <deferred_pass name="FinalPass">
       <input_buffer unit="0" varname="u_shadingTex">b_shading</input_buffer>
       <input_buffer unit="1" varname="u_saoTex">b_sao</input_buffer>
+      <texture unit="2" varname="u_colorLUT">t_colorLUT</texture>
       <output_buffer>b_finalLDR</output_buffer>
 
       <shader>defaultQuad_vs</shader>
