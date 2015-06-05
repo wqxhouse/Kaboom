@@ -32,6 +32,7 @@
         <health-cap type="int">100</health-cap>
         <running-speed type="float">5.0</running-speed>
         <jumping-speed type="float">5.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
     <character>
         <id type="uint">65538</id>
@@ -65,6 +66,7 @@
         <health-cap type="int">100</health-cap>
         <running-speed type="float">5.0</running-speed>
         <jumping-speed type="float">5.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
     <character>
         <id type="uint">65539</id>
@@ -98,6 +100,7 @@
         <health-cap type="int">100</health-cap>
         <running-speed type="float">5.0</running-speed>
         <jumping-speed type="float">5.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
     <character>
         <id type="uint">65540</id>
@@ -131,5 +134,6 @@
         <health-cap type="int">100</health-cap>
         <running-speed type="float">5.0</running-speed>
         <jumping-speed type="float">5.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
 </characters>
