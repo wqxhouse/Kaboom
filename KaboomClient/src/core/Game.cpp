@@ -124,6 +124,10 @@ Game::Game(ConfigSettings *config)
 	backGroundMusic->setAmbient();
 	backGroundMusic->play();
 	voiceSource = new Source;
+	voiceState = new osgAudio::SoundState("voice actor");
+	voiceState->setSource(voiceSource);
+	voiceState->setGain(1);
+	voiceState->setLooping(false);
 	angry = true;
 
 }
@@ -283,6 +287,7 @@ void Game::run() {
 			_guiEventHandler->changeTime(this);
 			damageScreenCheck();
 			SMScreenCheck();
+			chatMessageCheck();
 			/*if (currentPlayer->getEntity() != nullptr){
 				PlayerStatusComponent *player = currentPlayer->getEntity()->getComponent<PlayerStatusComponent>();
 				if (!currentPlayer->getEntity()->getComponent<PlayerStatusComponent>()->isAlive()){
@@ -373,6 +378,7 @@ void Game::addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<Ga
 	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(DEATH_1, new Sample(folder + "death_1.wav")));
 	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(KILL_1, new Sample(folder + "kill_1.wav")));
 	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(END_GAME_VICTORY_1, new Sample(folder + "victory_1.wav")));
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(END_GAME_DEFEAT_1, new Sample(folder + "defeat_1.wav")));
 }
 
 void Game::damageScreenCheck()
@@ -402,4 +408,13 @@ void Game::SMScreenCheck(){
 		smOn = false;
 		_guiEventHandler->smScreen(false);
 	}
+}
+void Game::chatMessageCheck(){
+	std::chrono::duration<double> elapsed_seconds = (std::chrono::high_resolution_clock::now() - chatTime);
+	if (elapsed_seconds.count() >= 3){
+		
+		chatOp -= 15;
+	}
+	_guiEventHandler->chatFade(chatOp);
+
 }

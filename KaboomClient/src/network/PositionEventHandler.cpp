@@ -12,6 +12,11 @@
 
 #include "../components/SceneNodeComponent.h"
 #include "../core/Game.h"
+#include <osgAudio/Source.h>
+//#include <osgAudio/AudioEnvironment.h>
+using namespace osgAudio;
+#include <osgAudio/Sample.h>
+#include <osgAudio/SoundManager.h>
 
 PositionEventHandler::PositionEventHandler(Game *game)
         : game(game) {
@@ -51,11 +56,19 @@ void PositionEventHandler::handle(const Event &e) const {
 	
     posComp->setPosition(evt.getPosition());
     const Vec3 &pos = posComp->getPosition();
+	if (game->getCurrentPlayer()->getEntity() == entity){
+		auto list = osgAudio::SoundManager::instance()->getListener();
+		list->setPosition(pos.x, pos.y, pos.z);
+		game->voiceState->setPosition(osg::Vec3(pos.x, pos.y, pos.z));
+	}
 
     const auto name = std::to_string(entity->getId());
     const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);
 
     game->getGeometryManager()->getGeometryObject(name)->setTranslate(osgPos);
+	auto s=posComp->getPosition();
+
+
 
     //if the entity is the player entity the client is controlling, change the camera position everytime the player moves
     if (entity->getId() == game->getCurrentPlayer()->getEntity()->getId()) {
