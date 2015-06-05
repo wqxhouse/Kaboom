@@ -315,7 +315,7 @@ void Game::run() {
 }
 
 void Game::removeEntity(Entity *entity) {
-    if (entity->hasComponent<WeaponPickupComponent>()) {
+    if (entity->hasComponent<WeaponPickupComponent>() || entity->getType() == FAKE_BOMB) {
         auto obj = getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
         Core::getWorldRef().getObjectGlowManager()->removeGlowGeometryObject(obj);
     }

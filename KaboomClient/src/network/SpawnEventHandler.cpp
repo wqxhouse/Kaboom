@@ -134,7 +134,7 @@ void SpawnEventHandler::handle(const Event &e) const {
 				geom->setMaterial(mat);
 			}
 
-            if (evt.isPickup()) {
+            if (evt.isPickup() || evt.getType() == FAKE_BOMB) {
                 auto obj = Core::getWorldRef().getGeometryManager()->getGeometryObject(name);
                 Core::getWorldRef().getObjectGlowManager()->addGlowGeometryObject(obj);
             }

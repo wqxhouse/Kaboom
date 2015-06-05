@@ -64,7 +64,7 @@
     <bomb>
         <id type="uint">131077</id>
         <name type="string">Fake Bomb</name>
-        <size type="float">0.5</size>
+        <size type="float">0.1</size>
         <mass type="float">1.0</mass>
         <explosion-radius type="float">4.0</explosion-radius>
         <cooldown type="int">500</cooldown>
