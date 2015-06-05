@@ -18,10 +18,13 @@
 #include "../components/CharacterRotationComponent.h"
 #include "../components/DetonatorComponent.h"
 #include "../components/ExplosionComponent.h"
+#include "../components/MessageHandlerComponent.h"
 #include "../components/OwnerComponent.h"
+#include "../components/PhysicsComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
+#include "../messaging/CollisionMessage.h"
 
 bool DefaultCharacterMessageHandler::handle(const Message &message) const {
     switch (message.getType()) {
@@ -155,7 +158,23 @@ bool DefaultCharacterMessageHandler::handle(const Attack2Message &message) const
 
     auto &bombConfig = EntityConfigLookup::get(bombType);
 
-    if (bombType == REMOTE_DETONATOR && detonatorComp != nullptr) {
+    if (bombType == FAKE_BOMB) {
+        const auto entities = message.getGame()->getEntityManager().getEntityList();
+        for (auto fakeBomb : entities) {
+            if (fakeBomb->getType() != FAKE_BOMB) {
+                continue;
+            }
+
+            const auto ownerComp = fakeBomb->getComponent<OwnerComponent>();
+
+            if (ownerComp != nullptr && ownerComp->getEntity()->getId() == entity->getId()) {
+                const auto handlerComp = fakeBomb->getComponent<MessageHandlerComponent>();
+
+                CollisionMessage msg(message.getGame(), fakeBomb, std::unordered_set<Entity *>());
+                handlerComp->getHandler()->handle(msg);
+            }
+        }
+    } else if (bombType == REMOTE_DETONATOR && detonatorComp != nullptr) {
         if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {
             auto &bombs = detonatorComp->getBombs();
             

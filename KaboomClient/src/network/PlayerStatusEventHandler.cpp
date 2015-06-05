@@ -47,9 +47,8 @@ void PlayerStatusEventHandler::handle(const Event &e) const {
 		game->getSoundManager().playSound(SoundType::JUMP, bombPos);
 	}
 	
-		playerStatusComp->setJumped(evt.isJumping());
+	playerStatusComp->setJumped(evt.isJumping());
 	
-
 	auto modelComp = entity->getComponent<ModelComponent>();
 	Model* model = modelComp->getModel();
 

@@ -62,5 +62,7 @@ void DeathSystem::processEntity(Entity *entity) {
                 bomb->attachComponent(new DestroyComponent());
             }
         }
+
+		entity->getComponent<PositionComponent>()->setPosition(Vec3(0, 0, -10000));
     }
 }
