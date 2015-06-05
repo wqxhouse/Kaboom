@@ -32,14 +32,6 @@ void ExplosionEventHandler::handle(const Event &e) const {
     // TODO: Refactor this into component
 
     switch (bomb->getType()) {
-        case KABOOM_V2: {
-            game->getSoundManager().playSound(SoundType::KABOOM_EXPLODE, bombPos);
-            ExplosionEffect *explosionEffect =
-                    static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION));
-            osg::Vec3 bombPosVec = bombPos.getOsgVec3();
-            explosionEffect->run(bombPos.getOsgVec3());
-            break;
-        }
         case TIME_BOMB: {
             game->getSoundManager().playSound(SoundType::TIME_EXPLODE, bombPos);
             ExplosionEffect *explosionEffect =
@@ -48,10 +40,19 @@ void ExplosionEventHandler::handle(const Event &e) const {
             explosionEffect->run(bombPos.getOsgVec3());
             break;
         }
+        case FAKE_BOMB:
         case REMOTE_DETONATOR: {
             game->getSoundManager().playSound(SoundType::REMOTE_EXPLODE, bombPos);
             ExplosionEffect *explosionEffect =
                     static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION2));
+            osg::Vec3 bombPosVec = bombPos.getOsgVec3();
+            explosionEffect->run(bombPos.getOsgVec3());
+            break;
+        }
+        default: {
+            game->getSoundManager().playSound(SoundType::KABOOM_EXPLODE, bombPos);
+            ExplosionEffect *explosionEffect =
+                static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION));
             osg::Vec3 bombPosVec = bombPos.getOsgVec3();
             explosionEffect->run(bombPos.getOsgVec3());
             break;

@@ -14,6 +14,7 @@
 #include "../math/util.h"
 #include "../messaging/CollisionMessage.h"
 #include "../messaging/TickMessage.h"
+#include "../messaging/TimerExpiredMessage.h"
 
 bool FakeBombMessageHandler::handle(const Message &message) const {
     switch (message.getType()) {
@@ -22,6 +23,9 @@ bool FakeBombMessageHandler::handle(const Message &message) const {
         }
         case MessageType::TICK: {
             return handle(static_cast<const TickMessage &>(message));
+        }
+        case MessageType::TIMER_EXPIRED: {
+            return handle(static_cast<const TimerExpiredMessage &>(message));
         }
     }
 
@@ -66,5 +70,10 @@ bool FakeBombMessageHandler::handle(const TickMessage &message) const {
     rotComp->setRotation(quat);
     physComp->getRigidBody()->getWorldTransform().setRotation(btQuat);
 
+    return true;
+}
+
+bool FakeBombMessageHandler::handle(const TimerExpiredMessage &message) const {
+    message.getEntity()->attachComponent(new ExplosionComponent());
     return true;
 }

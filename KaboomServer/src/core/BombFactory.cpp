@@ -153,6 +153,7 @@ void BombFactory::createSaltyMartyBomb(Entity *entity) const {
 }
 
 void BombFactory::createFakeBomb(Entity *entity) const {
+    auto &config = EntityConfigLookup::get(entity->getType());
     auto handlerComp = entity->getComponent<MessageHandlerComponent>();
     auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
 
@@ -160,4 +161,5 @@ void BombFactory::createFakeBomb(Entity *entity) const {
     chain->addHandler(&fakeBombMessageHandler);
 
     entity->attachComponent(new CollisionComponent());
+    entity->attachComponent(new TimerComponent(new Timer(config.getInt("delay"))));
 }
