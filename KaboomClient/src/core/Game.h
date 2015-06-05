@@ -149,6 +149,14 @@ using namespace ours;
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voiceMap;
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>* voiceActorList[4];
 
+        struct ExplosionLight {
+            std::string name;
+            float radius;
+            float step;
+        };
+
+        std::unordered_map<std::string, ExplosionLight *> explosionLightMap;
+
 	private:
 		friend void GameGUIListener::setGameState(GameStateMachine state);
 
