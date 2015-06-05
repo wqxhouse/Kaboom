@@ -141,6 +141,7 @@ using namespace ours;
 		bool playerAlive = true;
 		unsigned int previousValue=5;
 		osg::ref_ptr<Source> voiceSource;
+		osg::ref_ptr<SoundState> backState;
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voiceMap;
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>* voiceActorList[4];
 
