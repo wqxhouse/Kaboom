@@ -1,11 +1,11 @@
-<!-- <?xml version="1.0" encoding="utf - 8"?>
+<?xml version="1.0" encoding="utf - 8"?>
 <world>
-	<model name="platform1">
-		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
-		<material name="____TestMaterial" />
-		<position>-17.000000 0.000000 3.000000</position>
-		<orientation>0.000000 0.629320 0.000000 0.777146</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
+	<model name="TunnelB-C">
+		<file>Assets\GeometryObject\TunnelB-C.obj</file>
+		<material name="tunnelB-C" />
+		<position>0.004111 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
 	</model>
 
 	<model name="sphere">
@@ -24,136 +24,83 @@
 		<scale>1.000000 1.000000 1.000000</scale>
 	</model>
 
-	<model name="testBox">
-		<file>DefaultAssets\GeometryObject\3boxStack.dae</file>
-		<material name="brick1Mat" />
-		<position>0.000000 1.000000 -1.000000</position>
-		<orientation>0.008727 0.000000 0.000000 0.999962</orientation>
-		<scale>0.250000 0.250000 0.250000</scale>
-	</model>
-
-	<model name="platform3">
-		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
-		<material name="____TestMaterial" />
-		<position>0.000000 0.000000 18.000000</position>
+	<model name="Center">
+		<file>Assets\GeometryObject\Center.obj</file>
+		<material name="center" />
+		<position>0.004111 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
+		<scale>0.010000 0.010000 0.010000</scale>
 	</model>
 
-
-	<model name="platform">
-		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
-		<material name="____TestMaterial" />
-		<position>2.491811 0.000000 -1.000000</position>
-		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
-	</model>
-
-	<model name="platform2">
-		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
-		<material name="____TestMaterial" />
-		<position>13.223345 0.000000 -1.000000</position>
-		<orientation>0.731354 0.000000 0.681998 0.000000</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
-	</model>
-
-	<model name="platform4">
-		<file>DefaultAssets\GeometryObject\12SideCircularPlatform.DAE</file>
-		<material name="____TestMaterial" />
-		<position>0.000000 16.000000 -1.000000</position>
-		<orientation>0.544634 0.003659 -0.002376 0.838663</orientation>
-		<scale>1.000000 1.200000 2.750000</scale>
-	</model>
-
-</world>
- -->
- <?xml version="1.0" encoding="utf - 8"?>
-<world>
-	<model name="*__Huge_floor">
-		<file></file>
-		<material name="____TestMaterial2" />
+	<model name="SectionA">
+		<file>Assets\GeometryObject\SectionA.obj</file>
+		<material name="sectionA" />
 		<position>0.000000 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
+		<scale>0.010000 0.010000 0.010000</scale>
 	</model>
 
-	<model name="box">
-		<file>DefaultAssets\GeometryObject\Inner.FBX</file>
-		<material name="____Default" />
-		<position>0.000000 0.000000 0.500000</position>
-		<orientation>0.707107 0.000000 0.000000 0.707107</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
+	<model name="SectionB">
+		<file>Assets\GeometryObject\SectionB.obj</file>
+		<material name="sectionB" />
+		<position>0.004111 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
+	</model>
+    
+    <model name="SectionC">
+		<file>Assets\GeometryObject\SectionC.obj</file>
+		<material name="sectionC" />
+		<position>0.004111 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
 	</model>
 
-	<model name="cover">
-		<file>DefaultAssets\GeometryObject\Outer.FBX</file>
-		<material name="____Default" />
-		<position>0.000000 0.000000 0.500000</position>
-		<orientation>0.707107 0.000000 0.000000 0.707107</orientation>
-		<scale>1.000000 1.000000 1.000000</scale>
+	<model name="SectionD">
+		<file>Assets\GeometryObject\SectionD.obj</file>
+		<material name="sectionD" />
+		<position>0.004111 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
+	</model>
+
+	<model name="TunnelA-B">
+		<file>Assets\GeometryObject\TunnelA-B.obj</file>
+		<material name="tunnelA-B" />
+		<position>0.004111 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
+	</model>
+
+	<model name="TunnelC-D">
+		<file>Assets\GeometryObject\TunnelC-D.obj</file>
+		<material name="tunnelC-D" />
+		<position>0.004111 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
+	</model>
+
+	<model name="TunnelD-A">
+		<file>Assets\GeometryObject\TunnelD-A.obj</file>
+		<material name="tunnelD-A" />
+		<position>0.004111 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
 	</model>
 
 	<light name="Sun" type="directional">
 		<color>0.700000 0.700000 0.700000</color>
-		<castShadow>0</castShadow>
+		<castShadow>1</castShadow>
 		<intensity>1.000000</intensity>
-		<direction>0.100201 -0.881765 -0.460923</direction>
+		<direction>0.000000 -0.707107 -0.707107</direction>
 	</light>
 
-<!-- 	<light name="pt2" type="point">
-		<color>0.300000 0.700000 0.300000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>-7.000000 0.000000 0.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="debug" type="point">
-		<color>1.000000 0.160784 0.596078</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>-9.000000 -5.000000 2.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="debug1" type="point">
+	<light name="hello_world" type="point">
 		<color>0.000000 1.000000 0.000000</color>
-		<castShadow>0</castShadow>
+		<castShadow>1</castShadow>
 		<intensity>1.000000</intensity>
-		<position>0.000000 0.000000 2.000000</position>
-		<radius>100.000000</radius>
+		<position>0.000000 7.000000 15.000000</position>
+		<radius>20.000000</radius>
 	</light>
-
-	<light name="pt4" type="point">
-		<color>0.300000 0.300000 0.700000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 -7.000000 3.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="debug2" type="point">
-		<color>0.000000 1.000000 0.000000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 0.000000 2.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="pt1" type="point">
-		<color>0.700000 0.300000 0.300000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>7.000000 0.000000 3.000000</position>
-		<radius>100.000000</radius>
-	</light>
-
-	<light name="pt3" type="point">
-		<color>0.700000 0.700000 0.300000</color>
-		<castShadow>0</castShadow>
-		<intensity>1.000000</intensity>
-		<position>0.000000 7.000000 3.000000</position>
-		<radius>100.000000</radius>
-	</light> -->
 
 </world>
