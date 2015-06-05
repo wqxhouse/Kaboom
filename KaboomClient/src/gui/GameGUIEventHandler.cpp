@@ -84,6 +84,32 @@ void GameGUIEventHandler::handle(const AmmoAmountEvent &e, InventoryComponent *b
 		ammoTable->GetChild(i)->GetFirstChild()->GetChild(1)->GetFirstChild()->SetInnerRML(std::to_string(temp).c_str());
 	}
 }
+void GameGUIEventHandler::handle(const ChatEvent &e) const{
+	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
+	Rocket::Core::Element *recent_kills = window1->GetElementById("recent_kills");
+	Rocket::Core::Element* new_element = window1->CreateElement("div");
+	new_element->SetInnerRML(e.getMessage());
+	recent_kills->AppendChild(new_element);
+	if (recent_kills->GetNumChildren()>5){
+		recent_kills->RemoveChild(0);
+	}
+
+
+}
+void GameGUIEventHandler::chatFade(int chatOp) const{
+	Rocket::Core::ElementDocument *window1 = _guiManager->getWindow(0);
+	Rocket::Core::Element *recent_kills = window1->GetElementById("recent_kills");
+	for (int i = 0; i < recent_kills->GetNumChildren(); i++){
+		Rocket::Core::Element* value = recent_kills->GetChild(i);
+		std::string newColor = "rgba(255,255,255,";
+		newColor += std::to_string(chatOp);
+		newColor += ")";
+		//std::cout << newColor << std::endl;
+		value->SetProperty("color", newColor.c_str());
+
+	}
+	
+}
 
 void  GameGUIEventHandler::deletePlayer(const DisconnectEvent &e)const {
 	Rocket::Core::ElementDocument *window2 = _guiManager->getWindow(2);
@@ -436,6 +462,12 @@ void GameGUIEventHandler::resetScoreBoard() const{
 
 	window2->Hide();
 
+	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
+	Rocket::Core::Element * killTable = window0->GetElementById("recent_kills");
+	for (int i = 1; i < killTable->GetNumChildren(); i++){
+		Rocket::Core::Element * child = killTable->GetChild(i);
+		child->SetInnerRML("");
+	}
 }
 
 void GameGUIEventHandler::damageScreen(bool isOn) const{

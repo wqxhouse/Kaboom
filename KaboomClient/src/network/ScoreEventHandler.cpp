@@ -14,9 +14,9 @@ void ScoreEventHandler::handle(const Event &e) const {
     Player *player = game->getPlayers().at(evt.getPlayerId());
 	if (game->getPlayers().at(evt.getPlayerId()) == game->getCurrentPlayer()){
 		if (player->getKills() < evt.getKills()){
-			game->voiceSource->setSound(game->voiceMap->at(Game::VoiceActing::KILL_1));
-			game->voiceSource->setGain(1);
-			game->voiceSource->play();
+			game->voiceState->setSample(game->voiceMap->at(Game::VoiceActing::KILL_1));
+			game->voiceState->setGain(1);
+			game->voiceState->setPlay(true);
 		}
 	}
     player->setKills(evt.getKills());
