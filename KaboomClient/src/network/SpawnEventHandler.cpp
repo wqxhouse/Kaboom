@@ -123,7 +123,9 @@ void SpawnEventHandler::handle(const Event &e) const {
             Player *owner = nullptr;
 
             for (auto player : players) {
-                if (player.second->getEntity()->getId() == evt.getOwnerId()) {
+                const Entity *ownerEntity = player.second->getEntity();
+
+                if (ownerEntity != nullptr && ownerEntity->getId() == evt.getOwnerId()) {
                     owner = player.second;
                     break;
                 }
