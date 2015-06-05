@@ -65,7 +65,7 @@ Entity *BombFactory::createBomb(
 				node = geoCache->getNodeById(TIME_BOMB);
 				break;
 			case 2:
-				node = geoCache->getNodeById(FAKE_BOMB);
+				node = geoCache->getNodeById(REMOTE_DETONATOR);
 				break;
 			default:
 				node = geoCache->getNodeById(KABOOM_V2);
