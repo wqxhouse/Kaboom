@@ -57,5 +57,22 @@ void ExplosionEventHandler::handle(const Event &e) const {
             explosionEffect->run(bombPos.getOsgVec3());
             break;
         }
+		case SALTY_MARTY_BOMB: {
+								   //no sound yet
+			ExplosionEffect *explosionEffect =
+                    static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION2));
+            osg::Vec3 bombPosVec = bombPos.getOsgVec3();
+            explosionEffect->run(bombPos.getOsgVec3());
+			game->setSMScreen();
+			break;
+		}
+		case FAKE_BOMB: {
+							//no sound yet
+			ExplosionEffect *explosionEffect =
+				static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION));
+			osg::Vec3 bombPosVec = bombPos.getOsgVec3();
+			explosionEffect->run(bombPos.getOsgVec3());
+			break;
+		}
     }
 }

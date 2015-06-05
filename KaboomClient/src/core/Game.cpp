@@ -278,7 +278,7 @@ void Game::run() {
             client.receive();
 			_guiEventHandler->changeTime(this);
 			damageScreenCheck();
-			
+			SMScreenCheck();
 			/*if (currentPlayer->getEntity() != nullptr){
 				PlayerStatusComponent *player = currentPlayer->getEntity()->getComponent<PlayerStatusComponent>();
 				if (!currentPlayer->getEntity()->getComponent<PlayerStatusComponent>()->isAlive()){
@@ -349,4 +349,19 @@ void Game::damageScreenCheck()
 
 void Game::deathTimeUpdate(){
 	_guiEventHandler->changeDeathTime(this);
+}
+
+void Game::setSMScreen(){
+		smOn = true;
+		getGameGUIEventHandler()->smScreen(true);
+		smTime = std::chrono::high_resolution_clock::now();
+}
+
+void Game::SMScreenCheck(){
+	std::chrono::duration<double> elapsed_seconds = (std::chrono::high_resolution_clock::now() - smTime);
+	if (smOn && elapsed_seconds.count() >=3)
+	{
+		smOn = false;
+		_guiEventHandler->smScreen(false);
+	}
 }

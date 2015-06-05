@@ -41,7 +41,7 @@ public:
 	void resetScoreBoard() const;
 	void damageScreen(bool isOn) const;
 	void changeDeathTime() const;
-
+	void smScreen(bool isOn) const;
 	// TODO: add more other events 
 
 private:
