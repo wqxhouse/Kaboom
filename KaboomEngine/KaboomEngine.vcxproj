@@ -150,6 +150,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -185,6 +188,7 @@
     <ClInclude Include="src\components\Component.h" />
     <ClInclude Include="src\components\EquipmentComponent.h" />
     <ClInclude Include="src\components\HealthComponent.h" />
+    <ClInclude Include="src\components\InvulnerabilityComponent.h" />
     <ClInclude Include="src\components\PlayerComponent.h" />
     <ClInclude Include="src\components\PlayerStatusComponent.h" />
     <ClInclude Include="src\components\PositionComponent.h" />

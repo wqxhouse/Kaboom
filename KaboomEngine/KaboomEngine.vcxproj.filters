@@ -193,6 +193,9 @@
     <ClInclude Include="src\network\PlayerSelectionEvent.h">
       <Filter>Header Files\Network\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\InvulnerabilityComponent.h">
+      <Filter>Header Files\Entity Component System\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Entity.cpp">

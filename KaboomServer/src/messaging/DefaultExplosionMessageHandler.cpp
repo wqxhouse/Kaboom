@@ -2,6 +2,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include <components/InvulnerabilityComponent.h>
 #include <components/PlayerComponent.h>
 #include <components/HealthComponent.h>
 #include <components/PlayerStatusComponent.h>
@@ -49,7 +50,11 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
         auto charPhysicsComp = nearbyEntity->getComponent<PhysicsComponent>();
         auto charHealthComp = nearbyEntity->getComponent<HealthComponent>();
 
-		if (charStatusComp == nullptr || charPhysicsComp == nullptr || charHealthComp == nullptr || nearbyEntity->hasComponent<PlayerDeathComponent>()) {
+        if (charStatusComp == nullptr ||
+                charPhysicsComp == nullptr ||
+                charHealthComp == nullptr ||
+                nearbyEntity->hasComponent<PlayerDeathComponent>() ||
+                nearbyEntity->hasComponent<InvulnerabilityComponent>()) {
             continue;
         }
 

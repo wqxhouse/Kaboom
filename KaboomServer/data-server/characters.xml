@@ -21,17 +21,18 @@
             </item>
             <item>
                 <id type="uint">131076</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
             <item>
                 <id type="uint">131077</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
         <running-speed type="float">5.0</running-speed>
         <jumping-speed type="float">5.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
     <character>
         <id type="uint">65538</id>
@@ -54,17 +55,18 @@
             </item>
             <item>
                 <id type="uint">131076</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
             <item>
                 <id type="uint">131077</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
         <running-speed type="float">5.0</running-speed>
         <jumping-speed type="float">5.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
     <character>
         <id type="uint">65539</id>
@@ -87,17 +89,18 @@
             </item>
             <item>
                 <id type="uint">131076</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
             <item>
                 <id type="uint">131077</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
         <running-speed type="float">5.0</running-speed>
         <jumping-speed type="float">5.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
     <character>
         <id type="uint">65540</id>
@@ -120,16 +123,17 @@
             </item>
             <item>
                 <id type="uint">131076</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
             <item>
                 <id type="uint">131077</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
         <running-speed type="float">5.0</running-speed>
         <jumping-speed type="float">5.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
 </characters>

@@ -4,6 +4,7 @@
 
 class CollisionMessage;
 class TickMessage;
+class TimerExpiredMessage;
 
 class FakeBombMessageHandler : public MessageHandler {
 public:
@@ -12,4 +13,5 @@ public:
 private:
     bool handle(const CollisionMessage &message) const;
     bool handle(const TickMessage &message) const;
+    bool handle(const TimerExpiredMessage &message) const;
 };

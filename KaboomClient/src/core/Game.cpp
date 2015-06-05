@@ -280,7 +280,7 @@ void Game::run() {
             client.receive();
 			_guiEventHandler->changeTime(this);
 			damageScreenCheck();
-			
+			SMScreenCheck();
 			/*if (currentPlayer->getEntity() != nullptr){
 				PlayerStatusComponent *player = currentPlayer->getEntity()->getComponent<PlayerStatusComponent>();
 				if (!currentPlayer->getEntity()->getComponent<PlayerStatusComponent>()->isAlive()){
@@ -302,6 +302,13 @@ void Game::run() {
 			//TODO: need to remove all the dynamically genereated objects! otherwise we still see them the next time we reconnect
 			getGameGUIEventHandler()->deleteAllPlayers();
 			client.disconnectFromServer();
+            
+            for (auto player : players) {
+                delete player.second;
+            }
+
+            players.clear();
+
 			gsm = START_SCREEN_MODE;
 			break;
 		}		
@@ -310,7 +317,7 @@ void Game::run() {
 }
 
 void Game::removeEntity(Entity *entity) {
-    if (entity->hasComponent<WeaponPickupComponent>()) {
+    if (entity->hasComponent<WeaponPickupComponent>() || entity->getType() == FAKE_BOMB) {
         auto obj = getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
         Core::getWorldRef().getObjectGlowManager()->removeGlowGeometryObject(obj);
     }
@@ -344,4 +351,19 @@ void Game::damageScreenCheck()
 
 void Game::deathTimeUpdate(){
 	_guiEventHandler->changeDeathTime(this);
+}
+
+void Game::setSMScreen(){
+		smOn = true;
+		getGameGUIEventHandler()->smScreen(true);
+		smTime = std::chrono::high_resolution_clock::now();
+}
+
+void Game::SMScreenCheck(){
+	std::chrono::duration<double> elapsed_seconds = (std::chrono::high_resolution_clock::now() - smTime);
+	if (smOn && elapsed_seconds.count() >=3)
+	{
+		smOn = false;
+		_guiEventHandler->smScreen(false);
+	}
 }
