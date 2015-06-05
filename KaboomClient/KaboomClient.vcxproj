@@ -193,16 +193,18 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomEngine\src;$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(SolutionDir);$(SolutionDir)\KaboomGraphicsEngine;$(SolutionDir)\KaboomGraphicsEngine\include;$(SolutionDir)\3rdParty\include\Spark;$(SolutionDir)\3rdParty\include;$(OSG_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4005;4006;4088;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OSG_LIB_PATH);$(SolutionDir)\3rdParty\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;osg.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;osgViewer.lib;AntTweakBar64.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;ws2_32.lib;osg.lib;osgDB.lib;osgGA.lib;osgText.lib;osgUtil.lib;osgViewer.lib;osgAudio.lib;osgAnimation.lib;osgManipulator.lib;AntTweakBar64.lib;shell.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib;SPARK_GL.lib;SPARK.lib;OpenThreads.lib</AdditionalDependencies>
       <AdditionalOptions>/FORCE:multiple %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>

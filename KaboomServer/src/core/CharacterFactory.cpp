@@ -4,6 +4,7 @@
 
 #include <components/EquipmentComponent.h>
 #include <components/InventoryComponent.h>
+#include <components/InvulnerabilityComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
@@ -95,6 +96,7 @@ void CharacterFactory::createBase(
     entity->attachComponent(new HealthComponent(healthStart, healthCap));
     entity->attachComponent(new JumpComponent);
     entity->attachComponent(new MessageHandlerComponent(chain));
+    entity->attachComponent(new InvulnerabilityComponent(Timer(config.getInt("spawn-invulnerability"))));
 }
 
 void CharacterFactory::createDefaultCharacter(Entity *entity) const {

@@ -69,15 +69,16 @@ void SpawnEventHandler::handle(const Event &e) const {
 			game->getSoundManager().setListenerPosition(playerPoss);
 			game->getSoundManager().setListenerRotation(playerRot);
 			switch (type) {
-                case KABOOM_V2: {
-                    game->getSoundManager().playSound(SoundType::KABOOM_FIRE,bombPos);
-                    break;
 				case TIME_BOMB:
 					game->getSoundManager().playSound(SoundType::TIME_FIRE, bombPos);
 					break;
+                case FAKE_BOMB:
 				case REMOTE_DETONATOR:
 					game->getSoundManager().playSound(SoundType::REMOTE_FIRE, bombPos);
-					break;
+                    break;
+                default: {
+                    game->getSoundManager().playSound(SoundType::KABOOM_FIRE, bombPos);
+                    break;
                 }
 			}
 		}
@@ -124,7 +125,6 @@ void SpawnEventHandler::handle(const Event &e) const {
 							mat = mm->getMaterial("purpleCharMat");
 							break;
 					}
-
 				}
 				else {
 					mat = cache->getMaterialById(type_id);
@@ -134,7 +134,7 @@ void SpawnEventHandler::handle(const Event &e) const {
 				geom->setMaterial(mat);
 			}
 
-            if (evt.isPickup()) {
+            if (evt.isPickup() || evt.getType() == FAKE_BOMB) {
                 auto obj = Core::getWorldRef().getGeometryManager()->getGeometryObject(name);
                 Core::getWorldRef().getObjectGlowManager()->addGlowGeometryObject(obj);
             }
