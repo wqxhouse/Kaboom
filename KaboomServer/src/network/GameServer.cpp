@@ -253,8 +253,8 @@ void GameServer::sendPlayerRespawnEvent(Player *player) const {
 }
 
 void GameServer::sendPlayerDeathEvent(Player *player) const {
-    PlayerDeathEvent evt;
-    sendEvent(evt, player->getId());
+    PlayerDeathEvent evt(player->getId());
+    sendEvent(evt);
 }
 
 void GameServer::sendSpawnEvent(Entity *entity) const {

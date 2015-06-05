@@ -28,7 +28,7 @@ void SpawnEventHandler::handle(const Event &e) const {
 	int type_id = -1;
 	
 	if ((type & CAT_MASK) == CAT_CHARACTER) {
-		type_id = IDLE;
+		type_id = -2;
         entity = game->getCharacterFactory().createCharacter(
                 evt.getEntityId(),
                 evt.getType(),
@@ -104,7 +104,31 @@ void SpawnEventHandler::handle(const Event &e) const {
 
 			if (type_id != -1) {
 				GeometryCache* cache = Core::getWorldRef().getGeometryCache();
-				Material * mat = cache->getMaterialById(type_id);
+				Material * mat = NULL;
+				
+				// If character, get the corresponding color texture
+				if (type_id == -2) {
+					MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+					switch (type) {
+						case RED_CHARACTER:
+							mat = mm->getMaterial("redCharMat");
+							break;
+						case GREEN_CHARACTER:
+							mat = mm->getMaterial("greenCharMat");
+							break;
+						case BLUE_CHARACTER:
+							mat = mm->getMaterial("blueCharMat");
+							break;
+						case PURPLE_CHARACTER:
+							mat = mm->getMaterial("purpleCharMat");
+							break;
+					}
+
+				}
+				else {
+					mat = cache->getMaterialById(type_id);
+				}
 
 				GeometryObject* geom = gm->getGeometryObject(name);
 				geom->setMaterial(mat);
