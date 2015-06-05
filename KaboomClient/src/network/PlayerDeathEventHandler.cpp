@@ -33,4 +33,7 @@ void PlayerDeathEventHandler::handle(const Event &e) const {
         const std::string name = std::to_string(player->getEntity()->getId());
         game->getGeometryManager()->getGeometryObject(name)->setTranslate(osg::Vec3(0, 0, -10000));
     }
+
+	Core::getMainCamera().setYawAndPitchAndUpdate(0, -45);
+	Core::getMainCamera().setFpsEyePositionAndUpdate(osg::Vec3(0, 0, -10001));
 }
