@@ -71,6 +71,7 @@ void ExplosionEventHandler::handle(const Event &e) const {
         }
 		case SALTY_MARTY_BOMB: {
 								   //no sound yet
+								   game->getSoundManager().playSound(SoundType::MARTY_EXPLODE, bombPos);
 			ExplosionEffect *explosionEffect =
                     static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION2));
             osg::Vec3 bombPosVec = bombPos.getOsgVec3();
@@ -84,6 +85,7 @@ void ExplosionEventHandler::handle(const Event &e) const {
 		}
 		case FAKE_BOMB: {
 							//no sound yet
+							game->getSoundManager().playSound(SoundType::FAKE_EXPLODE, bombPos);
 			ExplosionEffect *explosionEffect =
 				static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION2));
 			osg::Vec3 bombPosVec = bombPos.getOsgVec3();
