@@ -227,7 +227,27 @@ void Game::run() {
 				gsm = GAME_MODE;
 				Core::enableGameMode();
 				client.sendPlayerRenameEvent(*name);
-                client.sendPlayerSelectionEvent(GREEN_CHARACTER);
+				//chanage this line for senting selected character.
+				EntityType characterColor = RED_CHARACTER;
+				switch (colorId)
+				{
+					case 0:
+						characterColor = RED_CHARACTER;
+						break;
+					case 1:
+						characterColor = GREEN_CHARACTER;
+						break;
+					case 2:
+						characterColor = BLUE_CHARACTER;
+						break;
+					case 3:
+						characterColor = PURPLE_CHARACTER;
+						break;
+					default:
+						characterColor = RED_CHARACTER;
+						break;
+				}
+                client.sendPlayerSelectionEvent(characterColor);
 			//abc = false;
 				
 			}
