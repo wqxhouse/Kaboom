@@ -18,7 +18,7 @@
     }
     div.SM_curr{
     background-decorator: image;
-    background-image: salt_alpha.tga;
+    background-image: display-SM.tga;
     }
     div.fake_curr{
     background-decorator: image;
@@ -38,7 +38,7 @@
     }
     div.SM_bomb{
     background-decorator: image;
-    background-image: salt_alpha.tga;
+    background-image: indiv-sm.tga;
     }
     div.fake_bomb{
     background-decorator: image;
