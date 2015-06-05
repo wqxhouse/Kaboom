@@ -113,10 +113,11 @@ Game::Game(ConfigSettings *config)
 	}
 	voiceMap = voiceActorList[0];
 	backGroundMusic = new Source;
-	angryRobot = new Sample(str_mediaPath + "DefaultAssets\\Sound\\angryRobot.mp3");
+	angryRobot = new Sample(str_mediaPath + "DefaultAssets\\Sound\\angryRobot.wav");
 	backGroundMusic->setSound(angryRobot);
 	backGroundMusic->setGain(1);
 	backGroundMusic->setLooping(true);
+	backGroundMusic->setAmbient();
 	backGroundMusic->play();
 	voiceSource = new Source;
 	angry = true;
@@ -336,7 +337,7 @@ void Game::damageScreenCheck()
 	{
 		healthChanged = false;
 		_guiEventHandler->damageScreen(false);
-	}
+	}	
 }
 
 void Game::deathTimeUpdate(){
