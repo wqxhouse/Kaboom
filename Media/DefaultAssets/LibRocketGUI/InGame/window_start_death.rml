@@ -7,13 +7,13 @@
       position:absolute;
       left: 44%;
       top : 40%;
-      //  visibility:hidden;
+        visibility:hidden;
       background-decorator: image;
       background-image: Button_Respawn.tga;
       }
       button:hover{
       color: yellow;
-
+      
       }
       body
       {
@@ -21,11 +21,18 @@
       height: 100%;
       margin: auto;
       }
+      div#clock{
+      position:absolute;
+      left: 50%;
+      top : 40%;
+      font-size:200%;
+
+      }
     </style>
 	</head>
 	<body>
 	  <button id="respawn" onclick="load_game">
-
 	  </button>
+    <div id ="clock">5</div>
 	</body>
 </rml>
