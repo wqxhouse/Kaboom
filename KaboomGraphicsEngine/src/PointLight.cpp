@@ -10,6 +10,8 @@ PointLight::PointLight(const std::string &name)
 	_shadowMapRes = 512;
 
 	initShadowMapInfo();
+
+	pickRandomRotationAxis();
 }
 
 PointLight::~PointLight()
@@ -32,6 +34,18 @@ void PointLight::setPosition(const osg::Vec3 &pos)
 	
 	// update bound
 	_bound.setLight(this, SPHERE);
+}
+
+void PointLight::pickRandomRotationAxis()
+{
+	//const int max = 30;
+	//const int min = -30;
+	//float x = (rand() % (max - min)) + min;
+	//float y = (rand() % (max - min)) + min;
+	float range = (rand() / (double)(RAND_MAX + 1));
+	_rotatingAxis.x() = 0;
+	_rotatingAxis.y() = 0;
+	_rotatingAxis.z() = (range > 0.5 ? 1 : -1);
 }
 
 void PointLight::setRadius(float radius)

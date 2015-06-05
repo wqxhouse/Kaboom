@@ -23,6 +23,48 @@ LightPrePassCallback::~LightPrePassCallback()
 
 void LightPrePassCallback::operator()(osg::StateSet *ss, osg::NodeVisitor *nv)
 {
+	// Super hack
+	int count = 0;
+	const osg::FrameStamp *fs = nv->getFrameStamp();
+	if (!fs) return;
+	float time = fs->getReferenceTime();
+	int frameNum = fs->getFrameNumber();
+	float secPerFrame = time / frameNum;
+
+	for (int i = 0; i < _manager->getNumLights(); i++)
+	{
+		Light *l = _manager->getLight(i);
+
+		PointLight *pl = l->asPointLight();
+		if (pl != NULL)
+		{
+			const int max = 30;
+			const int min = -30;
+			float x = (rand() % (max - min)) + min;
+			float y = (rand() % (max - min)) + min;
+			const int maxz = 1;
+			const int minz = -1;
+			float z = (rand() % (maxz - minz)) + minz;
+			osg::Vec3 translate(x, y, z);
+	/*		osg::Matrix m;
+			m.makeTranslate(translate);
+*/
+			float speedMax = 1.2;
+			float speedMin = 1;
+
+			float speed = (rand() % (max - min)) + min;
+			
+
+			float percent = count / _manager->getNumLights();
+			osg::Vec3 original = l->getPosition();
+			osg::Matrix mat;
+			mat.makeRotate(percent * osg::DegreesToRadians(0.2f) * speed + osg::DegreesToRadians(0.1f), pl->getRotationAxis());
+			pl->setPosition(original * mat);
+			pl->setIntensity(0.5f + 0.25f * (1.0f + cosf(time + percent* osg::PI)));
+			pl->setRadius(30 * pl->getIntensity());
+		}
+	}
+
 	// 1. light frustum culling 
 	std::vector<Light *> visible_lights = performLightCulling();
 

@@ -40,11 +40,19 @@ public:
 	virtual void setPosition(const osg::Vec3 &pos);
 	void resetShadowMapProperities();
 
+	void pickRandomRotationAxis();
+
+	inline osg::Vec3 getRotationAxis()
+	{
+		return _rotatingAxis;
+	}
+
 private:
 	void initShadowMapInfo();
 
 	float _radius;
 	int _shadowMapRes;
+	osg::Vec3 _rotatingAxis;
 
 	// indexed by cube faces
 	std::vector<ShadowMapInfo> _shadowMapInfo; 

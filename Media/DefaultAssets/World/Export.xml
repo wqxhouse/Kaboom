@@ -88,12 +88,242 @@
 		<direction>0.000000 -0.707107 -0.707107</direction>
 	</light>
 
+	<light name="Fiery3" type="point">
+		<color>1.000000 0.996078 0.000000</color>
+		<castShadow>0</castShadow>
+		<intensity>2.300000</intensity>
+		<position>-15.621021 12.499066 3.974553</position>
+		<radius>32.000000</radius>
+	</light>
+
+	<light name="A1" type="point">
+		<color>0.098039 0.658824 0.701961</color>
+		<castShadow>0</castShadow>
+		<intensity>1.000000</intensity>
+		<position>27.810001 -4.630000 2.766102</position>
+		<radius>20.000000</radius>
+	</light>
+
 	<light name="hello_world" type="point">
 		<color>0.000000 1.000000 0.000000</color>
-		<castShadow>1</castShadow>
+		<castShadow>0</castShadow>
 		<intensity>1.000000</intensity>
 		<position>0.000000 7.000000 15.000000</position>
 		<radius>20.000000</radius>
 	</light>
 
+	<light name="ATiny2" type="point">
+		<color>0.227451 0.298039 0.701961</color>
+		<castShadow>0</castShadow>
+		<intensity>2.400000</intensity>
+		<position>24.873377 -0.223507 1.383291</position>
+		<radius>7.000000</radius>
+	</light>
+
+	<light name="Sun" type="directional">
+		<color>0.700000 0.700000 0.700000</color>
+		<castShadow>1</castShadow>
+		<intensity>1.000000</intensity>
+		<direction>0.000000 -0.707107 -0.707107</direction>
+	</light>
+
+	<light name="A2" type="point">
+		<color>0.031373 0.917647 0.701961</color>
+		<castShadow>0</castShadow>
+		<intensity>1.000000</intensity>
+		<position>25.414070 -16.654583 2.949764</position>
+		<radius>20.000000</radius>
+	</light>
+
+	<light name="A3" type="point">
+		<color>0.752941 0.298039 0.701961</color>
+		<castShadow>0</castShadow>
+		<intensity>0.800000</intensity>
+		<position>28.311995 -10.905226 2.967896</position>
+		<radius>21.000000</radius>
+	</light>
+
+	<light name="ATiny4" type="point">
+		<color>0.909804 0.298039 0.701961</color>
+		<castShadow>0</castShadow>
+		<intensity>1.100000</intensity>
+		<position>20.380619 -0.792206 2.023756</position>
+		<radius>19.000000</radius>
+	</light>
+
+	<light name="ATiny1" type="point">
+		<color>0.098039 0.929412 0.180392</color>
+		<castShadow>0</castShadow>
+		<intensity>1.300000</intensity>
+		<position>28.861074 -0.365196 2.500798</position>
+		<radius>8.000000</radius>
+	</light>
+
+	<light name="ATiny3" type="point">
+		<color>0.917647 0.905882 0.000000</color>
+		<castShadow>0</castShadow>
+		<intensity>1.100000</intensity>
+		<position>22.844421 -0.424703 3.904611</position>
+		<radius>7.000000</radius>
+	</light>
+
+	<light name="ATiny5" type="point">
+		<color>0.937255 0.796079 0.133333</color>
+		<castShadow>0</castShadow>
+		<intensity>16.200001</intensity>
+		<position>17.138905 -16.732166 2.965839</position>
+		<radius>15.000000</radius>
+	</light>
+
+	<light name="ATiny6" type="point">
+		<color>0.400000 0.050980 0.882353</color>
+		<castShadow>0</castShadow>
+		<intensity>1.500000</intensity>
+		<position>12.152219 -11.063707 1.645958</position>
+		<radius>13.000000</radius>
+	</light>
+
+	<light name="ATiny7" type="point">
+		<color>0.098039 0.854902 0.701961</color>
+		<castShadow>0</castShadow>
+		<intensity>8.000000</intensity>
+		<position>14.952061 -14.154020 1.470000</position>
+		<radius>10.000000</radius>
+	</light>
+
+	<light name="ATiny8" type="point">
+		<color>1.000000 0.298039 0.000000</color>
+		<castShadow>0</castShadow>
+		<intensity>10.900001</intensity>
+		<position>7.310735 -7.565581 2.985178</position>
+		<radius>68.000000</radius>
+	</light>
+
+	<light name="Hall1" type="point">
+		<color>0.501961 0.298039 0.701961</color>
+		<castShadow>0</castShadow>
+		<intensity>3.600000</intensity>
+		<position>15.791340 8.608478 2.128019</position>
+		<radius>409.000000</radius>
+	</light>
+
+	<light name="Fiery5" type="point">
+		<color>0.764706 0.572549 0.000000</color>
+		<castShadow>0</castShadow>
+		<intensity>1.300000</intensity>
+		<position>-23.000004 9.160000 2.620000</position>
+		<radius>24.000000</radius>
+	</light>
+
+	<light name="Mini1" type="point">
+		<color>1.000000 0.874510 0.207843</color>
+		<castShadow>0</castShadow>
+		<intensity>2.900000</intensity>
+		<position>20.112921 8.319167 4.981130</position>
+		<radius>25.000000</radius>
+	</light>
+
+	<light name="Mini2" type="point">
+		<color>0.854902 0.227451 0.219608</color>
+		<castShadow>0</castShadow>
+		<intensity>0.000000</intensity>
+		<position>20.062298 7.537053 4.185095</position>
+		<radius>31.000000</radius>
+	</light>
+
+	<light name="Mini3" type="point">
+		<color>0.823529 0.372549 0.235294</color>
+		<castShadow>0</castShadow>
+		<intensity>6.500001</intensity>
+		<position>19.892298 8.977053 4.185095</position>
+		<radius>5.000000</radius>
+	</light>
+
+	<light name="Fiery" type="point">
+		<color>0.890196 0.223529 0.039216</color>
+		<castShadow>0</castShadow>
+		<intensity>1.800000</intensity>
+		<position>-17.230835 7.054427 0.783132</position>
+		<radius>70.000000</radius>
+	</light>
+
+	<light name="Fiery2" type="point">
+		<color>0.650980 0.000000 0.000000</color>
+		<castShadow>0</castShadow>
+		<intensity>2.600000</intensity>
+		<position>-20.007723 2.249140 3.900000</position>
+		<radius>32.000000</radius>
+	</light>
+
+	<light name="Hall2" type="point">
+		<color>0.631373 0.231373 0.000000</color>
+		<castShadow>0</castShadow>
+		<intensity>3.400000</intensity>
+		<position>-10.137141 29.212185 1.952409</position>
+		<radius>100.000000</radius>
+	</light>
+
+	<light name="Fiery6" type="point">
+		<color>0.968628 0.203922 0.007843</color>
+		<castShadow>0</castShadow>
+		<intensity>1.000000</intensity>
+		<position>-23.269379 20.735016 5.337542</position>
+		<radius>100.000000</radius>
+	</light>
+
+	<light name="Black" type="point">
+		<color>0.525490 0.894118 0.560784</color>
+		<castShadow>0</castShadow>
+		<intensity>0.900000</intensity>
+		<position>10.974883 17.653450 2.039082</position>
+		<radius>111.000000</radius>
+	</light>
+
+	<light name="Purple" type="point">
+		<color>0.184314 0.145098 0.505882</color>
+		<castShadow>0</castShadow>
+		<intensity>10.700000</intensity>
+		<position>-10.191160 -23.653091 2.785782</position>
+		<radius>17.000000</radius>
+	</light>
+
+	<light name="Fiery4" type="point">
+		<color>0.980392 0.298039 0.000000</color>
+		<castShadow>0</castShadow>
+		<intensity>1.700000</intensity>
+		<position>-30.850945 1.760569 5.250000</position>
+		<radius>29.000000</radius>
+	</light>
+
+	<light name="Purple2" type="point">
+		<color>0.100000 0.300000 0.700000</color>
+		<castShadow>0</castShadow>
+		<intensity>1.500000</intensity>
+		<position>-4.876527 -26.043432 2.324678</position>
+		<radius>28.000000</radius>
+	</light>
+
+	<light name="Purple3" type="point">
+		<color>0.100000 0.300000 0.700000</color>
+		<castShadow>0</castShadow>
+		<intensity>1.400000</intensity>
+		<position>-16.531544 -23.011311 1.272149</position>
+		<radius>33.000000</radius>
+	</light>
+
+	<light name="Hall3" type="point">
+		<color>0.098039 0.835294 0.701961</color>
+		<castShadow>0</castShadow>
+		<intensity>1.000000</intensity>
+		<position>-15.774519 -8.587165 2.321969</position>
+		<radius>7.000000</radius>
+	</light>
+
+	<light name="Black2" type="point">
+		<color>0.098039 0.768628 0.701961</color>
+		<castShadow>0</castShadow>
+		<intensity>2.000000</intensity>
+		<position>5.204392 25.343407 2.588209</position>
+		<radius>17.000000</radius>
+	</light>
 </world>
