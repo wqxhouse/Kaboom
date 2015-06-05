@@ -404,6 +404,13 @@ void GameServer::sendNewPlayerEnterWorldEvent(
     sendScoreEvent(newPlayer); // Tells everyone about the new player's score
     sendPlayerSelectionEvent(newPlayer); // Tells everyone about the new player's character
 
+    // Tells the new player about every entity's entity ID (except itself)
+    for (auto entity : entities) {
+        if (entity->getId() != newPlayer->getEntity()->getId()) {
+            sendSpawnEvent(entity, newPlayer->getId());
+        }
+    }
+
     // Tells the new player about everyone else's entity ID and score
     for (auto kv : players) {
         const auto player = kv.second;
@@ -423,13 +430,6 @@ void GameServer::sendNewPlayerEnterWorldEvent(
 
         PlayerSelectionEvent playerSelectionEvent(player->getId(), player->getCharacterType());
         sendEvent(playerSelectionEvent, newPlayer->getId());
-    }
-
-    // Tells the new player about every entity's entity ID (except itself)
-    for (auto entity : entities) {
-        if (entity->getId() != newPlayer->getEntity()->getId()) {
-            sendSpawnEvent(entity, newPlayer->getId());
-        }
     }
 
     // Tells the new player about the current game state
