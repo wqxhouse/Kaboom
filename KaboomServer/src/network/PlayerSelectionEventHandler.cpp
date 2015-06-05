@@ -16,5 +16,16 @@ void PlayerSelectionEventHandler::handle(const Event &e) const {
     Player *player = game->getPlayers().at(evt.getPlayerId());
     player->setCharacterType(evt.getCharacterType());
 
-    game->getGameServer().sendPlayerSelectionEvent(player);
+    switch (game->getGameMode().getMatchState()) {
+        case GameMode::MatchState::PRE_MATCH:
+        case GameMode::MatchState::IN_PROGRESS:
+        case GameMode::MatchState::POST_MATCH: {
+            game->addPlayerToWorld(player);
+            game->getGameServer().sendNewPlayerEnterWorldEvent(
+                    player,
+                    game->getPlayers(),
+                    game->getEntityManager().getEntityList());
+            break;
+        }
+    }
 }

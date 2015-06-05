@@ -40,7 +40,7 @@ Entity *PickupFactory::createPickup(
 	// TODO: Change bomb models to pickup box model
 	osg::ref_ptr<osg::Node> box_node = geoCache->getNodeById(type);
 
-	entity->attachComponent(new SceneNodeComponent(box_node));//box_geom->getRoot()));
+	entity->attachComponent(new SceneNodeComponent(box_node));
     entity->attachComponent(new WeaponPickupComponent());
 
     return entity;
