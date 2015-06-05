@@ -111,33 +111,40 @@ void SpawnEventHandler::handle(const Event &e) const {
 			}
 
             if (evt.isPickup()) {
-                std::string box_name;
-                switch (type) {
-                case KABOOM_V2:
-                    box_name = "kaboom_box";
-                    break;
-                case TIME_BOMB:
-                    box_name = "timer_box";
-                    break;
-                case REMOTE_DETONATOR:
-                    box_name = "remote_box";
-                    break;
-                case HEALTH_PACK:
-                    box_name = "health_pack";
-                    break;
-                default:
-                    box_name = "kaboom_box";
-                    break;
-                }
-
                 auto obj = Core::getWorldRef().getGeometryManager()->getGeometryObject(name);
                 Core::getWorldRef().getObjectGlowManager()->addGlowGeometryObject(obj);
             }
         }
 
 		if ((entity->getType() & CAT_MASK) == CAT_BOMB) {
+            ParticleEffectManager::BuiltInParticleEffect trailingEffect = ParticleEffectManager::BuiltInParticleEffect::TRAILING_BLUE;
+
+            auto &players = game->getPlayers();
+            Entity *ownerEntity = game->getEntityManager().getEntity(evt.getOwnerId());
+
+            if (ownerEntity != nullptr) {
+                switch (ownerEntity->getType()) {
+                    case BLUE_CHARACTER: {
+                        trailingEffect = ParticleEffectManager::TRAILING_BLUE;
+                        break;
+                    }
+                    case GREEN_CHARACTER: {
+                        trailingEffect = ParticleEffectManager::TRAILING_GREEN;
+                        break;
+                    }
+                    case PURPLE_CHARACTER: {
+                        trailingEffect = ParticleEffectManager::TRAILING_PURPLE;
+                        break;
+                    }
+                    case RED_CHARACTER: {
+                        trailingEffect = ParticleEffectManager::TRAILING_RED;
+                        break;
+                    }
+                }
+            }
+
 			TrailingEffect *effect = static_cast<TrailingEffect *>(
-				game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::TRAILING_PURPLE));
+                game->getParticleEffectManager()->getParticleEffect(trailingEffect));
 
 			GeometryObject *geomObj = game->getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
 			effect->setTrailedObject(geomObj);

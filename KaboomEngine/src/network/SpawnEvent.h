@@ -14,13 +14,15 @@ public:
             EntityType type = NONE,
             bool pickup = false,
             const Vec3 &position = Vec3(),
-            Quat rotation = Quat())
+            Quat rotation = Quat(),
+            unsigned int ownerId = 0)
             : Event(EVENT_SPAWN, sizeof(SpawnEvent)),
               entityId(entityId),
               type(type),
               pickup(pickup),
               position(position),
-              rotation(rotation) {
+              rotation(rotation),
+              ownerId(ownerId) {
     }
 
     inline virtual void serialize(char *buf) const {
@@ -51,6 +53,10 @@ public:
         return rotation;
     }
 
+    inline unsigned int getOwnerId() const {
+        return ownerId;
+    }
+
 	friend std::ostream& operator<<(std::ostream &os, const SpawnEvent &o) {
         os << "SpawnEvent: {" << std::endl;
         os << "    entityId: " << o.entityId << std::endl;
@@ -67,6 +73,7 @@ public:
         os << "        z: " << o.rotation.z << std::endl;
         os << "        w: " << o.rotation.w << std::endl;
         os << "    }" << std::endl;
+        os << "    ownerId: " << o.ownerId << std::endl;
         os << "}";
 
         return os;
@@ -78,4 +85,5 @@ private:
     bool pickup;
     Vec3 position;
     Quat rotation;
+    unsigned int ownerId;
 };

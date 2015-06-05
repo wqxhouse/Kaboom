@@ -134,7 +134,7 @@ using namespace ours;
 		void deathTimeUpdate();
 
 		std::string *name;
-		unsigned int colorId=5;
+		unsigned int colorId=0;
 		std::chrono::high_resolution_clock::time_point damageTime;
 		std::chrono::high_resolution_clock::time_point deathTime;
 		bool healthChanged = false;
