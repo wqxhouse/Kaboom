@@ -229,7 +229,7 @@ SPK::SPK_ID ExplosionEffect2::createExplosionEffect2(
     SPK::Model* waveModel = SPK::Model::create(
         SPK::FLAG_ALPHA | SPK::FLAG_SIZE,
         SPK::FLAG_SIZE | SPK::FLAG_ALPHA);
-    waveModel->setParam(SPK::PARAM_SIZE, 0.0f, 2.0f);
+    waveModel->setParam(SPK::PARAM_SIZE, 0.0f, 4.0f);
     waveModel->setParam(SPK::PARAM_ALPHA, 0.2f, 0.0f);
     waveModel->setLifeTime(0.2f, 0.2f);
     waveModel->setShared(true);
