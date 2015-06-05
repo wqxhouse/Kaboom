@@ -106,7 +106,7 @@ Game::Game(ConfigSettings *config)
 	printf("Loading JUMP sound\n");
 	soundManager.loadSound(SoundType::JUMP, str_mediaPath + "DefaultAssets\\Sound\\jump_sound.mp3");
 	printf("Loading Background Music sound\n");
-	for (int i = 0; i < 1; i++){
+	for (int i = 0; i < 4; i++){
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voice = new std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>();
 		addVoiceLines(str_mediaPath,i,voice);
 		voiceActorList[i]=voice;
@@ -197,8 +197,8 @@ void Game::run() {
 			if (colorId != previousValue){
 				previousValue = colorId;
 				//Change 0 to colorId once all voices are recorded
-				voiceMap = voiceActorList[0];
-				voiceSource->setSound(voiceActorList[0]->at(CHAMP_SELECT));
+				voiceMap = voiceActorList[colorId];
+				voiceSource->setSound(voiceActorList[colorId]->at(CHAMP_SELECT));
 				voiceSource->setGain(1);
 				voiceSource->play();
 			}
