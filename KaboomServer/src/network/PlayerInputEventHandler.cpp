@@ -21,6 +21,10 @@ void PlayerInputEventHandler::handle(const Event &e) const {
 
     Entity *entity = game->getPlayers().at(evt.getPlayerId())->getEntity();
 
+    if (entity == nullptr) {
+        return;
+    }
+
     auto inputComp = entity->getComponent<InputComponent>();
 
     if (inputComp != nullptr) {
