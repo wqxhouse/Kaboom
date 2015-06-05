@@ -45,6 +45,18 @@
     <source_type>ubyte</source_type>
   </buffer>
 
+  <!--<buffer name="b_temp" type="2d">
+    <internal_format>rgba</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>ubyte</source_type>
+  </buffer>
+
+  <buffer name="b_blur" type="2d">
+    <internal_format>rgba</internal_format>
+    <source_format>rgba</source_format>
+    <source_type>ubyte</source_type>
+  </buffer>-->
+
   <texture name="t_colorLUT" type="2d" resize_npot="1">
     <file>DefaultAssets/colorLUT/colorCorrection.png</file>
     <filter param="min_filter">linear</filter>
@@ -53,6 +65,11 @@
     <wrap param="t">clamp_to_edge</wrap>
   
   </texture>
+
+  <shader name="motionblur_combine_ps" type="fragment">
+    <version>400</version>
+    <file>Shaders/MotionBlur.frag</file>
+  </shader>
 
   <technique name="deferred_shading">
     <forward_pass name="PreFilterCubeMapPass" >
@@ -201,10 +218,24 @@
       <shader>saoBlur_fs</shader>
     </deferred_pass>
 
+    <!--<deferred_pass name="MotionBlurPass">
+      <input_buffer unit="0" varname="u_currFrame">b_shading</input_buffer>
+      <input_buffer unit="1" varname="u_lastFrame">b_temp</input_buffer>
+      <output_buffer target="color">b_blur</output_buffer>
+      <shader>defaultQuad_vs</shader>
+      <shader>motionblur_combine_ps</shader>
+    </deferred_pass>
+
+    <deferred_pass name="TempPass">
+      <input_buffer unit="0">b_shading</input_buffer>
+      <output_buffer>b_temp</output_buffer>
+    </deferred_pass>-->
+
     <deferred_pass name="FinalPass">
       <input_buffer unit="0" varname="u_shadingTex">b_shading</input_buffer>
       <input_buffer unit="1" varname="u_saoTex">b_sao</input_buffer>
       <texture unit="2" varname="u_colorLUT">t_colorLUT</texture>
+      
       <output_buffer>b_finalLDR</output_buffer>
 
       <shader>defaultQuad_vs</shader>

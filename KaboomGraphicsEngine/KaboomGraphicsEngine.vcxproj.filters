@@ -553,5 +553,13 @@
     <None Include="..\Media\Shaders\objectGlow.frag">
       <Filter>Media\Shaders</Filter>
     </None>
+    <None Include="..\Media\Shaders\MotionBlur.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Media\Shader\motionblur.frag\Text.txt">
+      <Filter>Media\Shaders</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 uniform sampler2D u_saoTex;
 uniform sampler2D u_shadingTex;
 uniform sampler2D u_colorLUT;
+uniform sampler2D u_lastFrame;
 
 varying vec2 v_uvcoord;
 

@@ -409,6 +409,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\Shaders\lightTiling.frag" />
     <None Include="..\Media\Shaders\lightUtil.glsl" />
     <None Include="..\Media\Shaders\Material.glsl" />
+    <None Include="..\Media\Shaders\MotionBlur.frag" />
     <None Include="..\Media\Shaders\objectGlow.frag" />
     <None Include="..\Media\Shaders\objectGlow.vert" />
     <None Include="..\Media\Shaders\Samples.glsl" />
@@ -430,6 +431,9 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ProjectReference Include="..\osgLibRocket\osgLibRocket.vcxproj">
       <Project>{a1ff5fd6-d463-4b85-899b-278229c4aa04}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Media\Shader\motionblur.frag\Text.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
