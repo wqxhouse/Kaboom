@@ -6,7 +6,7 @@
 class PlayerStatusComponent : public Component {
 public:
     PlayerStatusComponent::PlayerStatusComponent()
-            : alive(false),
+            : alive(true),
               running(false),
               jumping(false),
               attacking(false),

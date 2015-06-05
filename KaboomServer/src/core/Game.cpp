@@ -133,13 +133,13 @@ void Game::update() {
                 const auto player = kv.second;
                 if (player->getCharacterType() != NONE) {
                     addPlayerToWorld(player);
-                    server.sendBindEvent(player);
-                    server.sendScoreEvent(player);
                     for (auto entity : entityManager.getEntityList()) {
                         if (!entity->hasComponent<PlayerComponent>()) {
                             server.sendSpawnEvent(entity, player->getId());
                         }
                     }
+                    server.sendBindEvent(player);
+                    server.sendScoreEvent(player);
                 }
             }
             break;

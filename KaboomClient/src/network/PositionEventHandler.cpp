@@ -30,10 +30,27 @@ void PositionEventHandler::handle(const Event &e) const {
     if (posComp == nullptr) {
         return;
     }
+
+    for (auto kv : game->getPlayers()) {
+        const auto player = kv.second;
+
+        if (player->getEntity() != nullptr && player->getEntity()->getId() == entity->getId()) {
+            auto statusComp = player->getEntity()->getComponent<PlayerStatusComponent>();
+            
+            if (statusComp != nullptr) {
+                if (!statusComp->isAlive()) {
+                    const std::string name = std::to_string(player->getEntity()->getId());
+                    game->getGeometryManager()->getGeometryObject(name)->setTranslate(osg::Vec3(0, 0, -10000));
+                    return;
+                }
+            }
+
+            break;
+        }
+    }
 	
     posComp->setPosition(evt.getPosition());
     const Vec3 &pos = posComp->getPosition();
-
 
     const auto name = std::to_string(entity->getId());
     const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);

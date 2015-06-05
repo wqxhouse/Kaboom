@@ -1,11 +1,13 @@
 #include "PlayerDeathEventHandler.h"
 
 #include <Core.h>
+#include <GeometryCache.h>
 #include <network/PlayerDeathEvent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <GeometryObject.h>
 
+#include "../components/ModelComponent.h"
 #include "../core/Game.h"
 
 PlayerDeathEventHandler::PlayerDeathEventHandler(Game *game)
@@ -22,7 +24,12 @@ void PlayerDeathEventHandler::handle(const Event &e) const {
         game->voiceSource->setGain(1);
         game->voiceSource->play();
         game->getGameGUIEventHandler()->handle(evt);
+    }
 
-		Core::getMainCamera().setYawAndPitchAndUpdate(0, -45);
+    const auto player = game->getPlayers().at(evt.getPlayerId());
+
+    if (player->getEntity() != nullptr) {
+        const std::string name = std::to_string(player->getEntity()->getId());
+        game->getGeometryManager()->getGeometryObject(name)->setTranslate(osg::Vec3(0, 0, -10000));
     }
 }
