@@ -24,5 +24,8 @@ private:
 	std::vector<CubemapProbe *> _probes;
 	osgFX::EffectCompositor *_passes;
 
+	osg::observer_ptr<osg::Texture> _shadingBuffer;
+
 	osg::ref_ptr<osg::Group> _probeGroup;
+	osg::ref_ptr<osg::Program> _program;
 };

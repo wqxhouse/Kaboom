@@ -3,11 +3,12 @@
 #include <osg/BoundingSphere>
 #include <osg/TextureCubeMap>
 #include "EffectCompositor.h"
+#include <osg/Program>
 
 class CubemapProbe
 {
 public:
-	CubemapProbe(osgFX::EffectCompositor *passes);
+	CubemapProbe(osgFX::EffectCompositor *passes, osg::Program *shader);
 
 	inline osg::ref_ptr<osg::Group> getRoot()
 	{
@@ -37,6 +38,10 @@ private:
 	osgFX::EffectCompositor *_passes;
 	osg::ref_ptr<osg::TextureCubeMap> _sampleCube;
 	osg::ref_ptr<osg::Group> _camGroup;
+
+	osg::observer_ptr<osg::Texture> _shadingBuf;
+
+	osg::ref_ptr<osg::Program> _shader;
 
 	bool _isInit;
 };

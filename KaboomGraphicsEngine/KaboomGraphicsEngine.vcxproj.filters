@@ -553,5 +553,8 @@
     <None Include="..\Media\Shaders\objectGlow.frag">
       <Filter>Media\Shaders</Filter>
     </None>
+    <None Include="..\Media\Shaders\copyPixel.frag">
+      <Filter>Media\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

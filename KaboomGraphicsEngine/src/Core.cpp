@@ -346,7 +346,11 @@ void Core::AdvanceFrame()
 		{ 
 			_cubemapProbeManager.addProbe(osg::Vec3(), 100);
 			_cubemapProbeManager.enableComputing();
-			_requestCaptureCubemapProbe = false;
+
+			if (_currentFrameNum > 3)
+			{
+				_requestCaptureCubemapProbe = false;
+			}
 		}
 
 		if (_requestPrefilterCubeMap)

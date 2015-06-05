@@ -264,9 +264,11 @@ public:
 	{
 		return _isDirty;
 	}
+
+	osg::Geode* createScreenQuad( float width, float height, float scale=1.0f );
     
 protected:
-    osg::Geode* createScreenQuad( float width, float height, float scale=1.0f );
+  /*  osg::Geode* createScreenQuad( float width, float height, float scale=1.0f );*/
     void traverseAllPasses( osg::NodeVisitor& nv )
     {
         PassList& passList = getPassList();

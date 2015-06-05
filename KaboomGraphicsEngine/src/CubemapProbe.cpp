@@ -1,10 +1,9 @@
 #include "CubemapProbe.h"
 
-
 #define CAPTURE_RESOLUTION 1024
 
-CubemapProbe::CubemapProbe(osgFX::EffectCompositor *passes)
-	: _passes(passes), _isInit(false)
+CubemapProbe::CubemapProbe(osgFX::EffectCompositor *passes, osg::Program *shader)
+	: _passes(passes), _isInit(false), _shader(shader)
 {
 	_radius = 10.0f;
 	_position = osg::Vec3();
@@ -18,6 +17,12 @@ CubemapProbe::CubemapProbe(osgFX::EffectCompositor *passes)
 	setupCubeMap();
 	setupProbeCamera();
 
+	// TODO: make sure is the first or second technique, though it doesn't matter
+	osgFX::EffectCompositor::PassData passData;
+	passes->getPassData("LightPass", passData);
+	osg::Camera *cam = passData.pass;
+	_shadingBuf = cam->getBufferAttachmentMap().begin()->second._texture;
+
 	_isInit = true;
 }
 
@@ -26,8 +31,8 @@ void CubemapProbe::setupCubeMap()
 	_sampleCube->setTextureSize(CAPTURE_RESOLUTION, CAPTURE_RESOLUTION);
 
 	//_generatedSpecularCubemap->setInternalFormat(GL_RGBA16F_ARB);
-	_sampleCube->setInternalFormat(GL_RGBA);
-	_sampleCube->setSourceFormat(GL_RGBA);
+	_sampleCube->setInternalFormat(GL_RGB);
+	_sampleCube->setSourceFormat(GL_RGB);
 	_sampleCube->setSourceType(GL_UNSIGNED_BYTE);
 	_sampleCube->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP_TO_EDGE);
 	_sampleCube->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP_TO_EDGE);
@@ -98,23 +103,44 @@ void CubemapProbe::setupProbeCamera()
 {
 	for (int i = 0; i < 6; i++)
 	{
-		osg::Camera *cam = new osg::Camera;
-		_cameraList.push_back(cam);
+		//osg::Camera *cam = new osg::Camera;
+		//_cameraList.push_back(cam);
 
-		osg::Matrix projMat;
-		projMat.makePerspective(90, 1, 1, _radius);
-		cam->setProjectionMatrix(projMat);
-		cam->setViewMatrix(calcViewMatrix(i, _position));
+		//osg::Matrix projMat;
+		//projMat.makePerspective(90, 1, 1, _radius);
+		//cam->setProjectionMatrix(projMat);
+		//cam->setViewMatrix(calcViewMatrix(i, _position));
 
-		cam->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		cam->setViewport(0, 0, CAPTURE_RESOLUTION, CAPTURE_RESOLUTION); // default
-		cam->setRenderOrder(osg::Camera::PRE_RENDER);
-		cam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
-		cam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
-		cam->attach(osg::Camera::COLOR_BUFFER, _sampleCube, 0, osg::TextureCubeMap::POSITIVE_X + i, false, 0, 0);
-		cam->addChild(_passes);
+		////cam->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		////cam->setViewport(0, 0, CAPTURE_RESOLUTION, CAPTURE_RESOLUTION); // default
+		//cam->setRenderOrder(osg::Camera::PRE_RENDER, -200);
+		//// cam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
+		//cam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
 
-		_camGroup->addChild(cam);
+		//// cam->attach
+		////cam->attach(osg::Camera::COLOR_BUFFER0, _sampleCube, 0, osg::TextureCubeMap::POSITIVE_X + i, false, 0, 0);
+		//cam->setImplicitBufferAttachmentMask(0x0, 0x0);
+
+		//cam->addChild(_passes);
+		//_camGroup->addChild(cam);
+
+		// rtt to cubemap
+		osg::Camera *rtt = new osg::Camera;
+		rtt->getOrCreateStateSet()->setAttributeAndModes(_shader, osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE);
+
+		rtt->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		rtt->setViewport(0, 0, CAPTURE_RESOLUTION, CAPTURE_RESOLUTION); // default
+		rtt->setClearColor(osg::Vec4(1, 1, 0, 1));
+		rtt->setRenderOrder(osg::Camera::PRE_RENDER, -200);
+		rtt->setAllowEventFocus(false);
+		rtt->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
+		rtt->setProjectionMatrix(osg::Matrix::ortho2D(0.0, 1.0, 0.0, 1.0));
+		rtt->setViewMatrix(osg::Matrix::identity());
+		rtt->addChild(_passes->createScreenQuad(1.0, 1.0));
+		// rtt->getOrCreateStateSet()->setTextureAttributeAndModes(0, _shadingBuf.get());
+		rtt->attach(osg::Camera::COLOR_BUFFER, _sampleCube, 0, osg::TextureCubeMap::POSITIVE_X + i, false, 0, 0);
+
+		_camGroup->addChild(rtt);
 	}
 }
 

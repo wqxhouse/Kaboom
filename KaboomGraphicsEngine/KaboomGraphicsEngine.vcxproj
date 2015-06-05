@@ -389,6 +389,7 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <None Include="..\Media\DefaultAssets\LibRocketGUI\InEditor\window_rocket.rml" />
     <None Include="..\Media\EffectFiles\smaa.xml" />
     <None Include="..\Media\Shaders\constant.glsl" />
+    <None Include="..\Media\Shaders\copyPixel.frag" />
     <None Include="..\Media\Shaders\cubemapDiffusePreFilter.frag" />
     <None Include="..\Media\Shaders\cubemapSpecularPreFilter.frag" />
     <None Include="..\Media\Shaders\cubemapPrefilter.vert" />
