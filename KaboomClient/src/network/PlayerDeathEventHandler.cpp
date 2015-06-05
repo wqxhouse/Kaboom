@@ -1,6 +1,10 @@
 #include "PlayerDeathEventHandler.h"
 
+#include <Core.h>
 #include <network/PlayerDeathEvent.h>
+#include <components/PositionComponent.h>
+#include <components/RotationComponent.h>
+#include <GeometryObject.h>
 
 #include "../core/Game.h"
 
@@ -18,5 +22,7 @@ void PlayerDeathEventHandler::handle(const Event &e) const {
         game->voiceSource->setGain(1);
         game->voiceSource->play();
         game->getGameGUIEventHandler()->handle(evt);
+
+		Core::getMainCamera().setYawAndPitchAndUpdate(0, -45);
     }
 }

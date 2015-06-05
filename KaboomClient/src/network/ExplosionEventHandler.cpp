@@ -48,14 +48,6 @@ void ExplosionEventHandler::handle(const Event &e) const {
             explosionEffect->run(bombPos.getOsgVec3());
             break;
         }
-        default: {
-            game->getSoundManager().playSound(SoundType::KABOOM_EXPLODE, bombPos);
-            ExplosionEffect *explosionEffect =
-                static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION));
-            osg::Vec3 bombPosVec = bombPos.getOsgVec3();
-            explosionEffect->run(bombPos.getOsgVec3());
-            break;
-        }
 		case SALTY_MARTY_BOMB: {
 								   //no sound yet
 								   game->getSoundManager().playSound(SoundType::MARTY_EXPLODE, bombPos);
@@ -75,5 +67,13 @@ void ExplosionEventHandler::handle(const Event &e) const {
 			explosionEffect->run(bombPos.getOsgVec3());
 			break;
 		}
+        default: {
+            game->getSoundManager().playSound(SoundType::KABOOM_EXPLODE, bombPos);
+            ExplosionEffect *explosionEffect =
+                static_cast<ExplosionEffect *>(game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::EXPLOSION));
+            osg::Vec3 bombPosVec = bombPos.getOsgVec3();
+            explosionEffect->run(bombPos.getOsgVec3());
+            break;
+        }
     }
 }
