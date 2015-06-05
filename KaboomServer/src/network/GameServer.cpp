@@ -39,6 +39,7 @@
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
 #include "../components/JumpComponent.h"
+#include "../components/OwnerComponent.h"
 
 GameServer::GameServer(ConfigSettings *config, const ServerEventHandlerLookup &eventHandlerLookup)
         : eventHandlerLookup(eventHandlerLookup) {
@@ -260,15 +261,18 @@ void GameServer::sendSpawnEvent(Entity *entity) const {
     auto posComp = entity->getComponent<PositionComponent>();
     auto rotComp = entity->getComponent<RotationComponent>();
     auto weaponPickupComp = entity->getComponent<WeaponPickupComponent>();
+    auto ownerComp = entity->getComponent<OwnerComponent>();
 
     const bool pickup = weaponPickupComp != nullptr;
+    const unsigned int ownerId = ownerComp != nullptr ? ownerComp->getEntity()->getId() : 0;
 
     SpawnEvent evt(
             entity->getId(),
             entity->getType(),
             pickup,
             posComp->getPosition(),
-            rotComp->getRotation());
+            rotComp->getRotation(),
+            ownerId);
     sendEvent(evt);
 }
 
@@ -398,6 +402,7 @@ void GameServer::sendNewPlayerEnterWorldEvent(
         const std::vector<Entity *> &entities) const {
     sendBindEvent(newPlayer); // Tells everyone about the new player's entity ID
     sendScoreEvent(newPlayer); // Tells everyone about the new player's score
+    sendPlayerSelectionEvent(newPlayer); // Tells everyone about the new player's character
 
     // Tells the new player about everyone else's entity ID and score
     for (auto kv : players) {
