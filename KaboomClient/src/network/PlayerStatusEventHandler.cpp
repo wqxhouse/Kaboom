@@ -49,16 +49,13 @@ void PlayerStatusEventHandler::handle(const Event &e) const {
 	
 	playerStatusComp->setJumped(evt.isJumping());
 	
-	if (evt.isAlive()) {
-		auto modelComp = entity->getComponent<ModelComponent>();
-		Model* model = modelComp->getModel();
+	auto modelComp = entity->getComponent<ModelComponent>();
+	Model* model = modelComp->getModel();
 
-		if (evt.isRunning()) {
-			model->playAnimation(RUNNING);
-		}
-		else {
-			model->playAnimation(IDLE);
-		}
-
+	if (evt.isRunning()) {
+		model->playAnimation(RUNNING);
+	}
+	else {
+		model->playAnimation(IDLE);
 	}
 }
