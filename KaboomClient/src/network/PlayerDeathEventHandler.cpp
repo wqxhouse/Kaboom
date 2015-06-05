@@ -11,11 +11,12 @@ PlayerDeathEventHandler::PlayerDeathEventHandler(Game *game)
 void PlayerDeathEventHandler::handle(const Event &e) const {
     const PlayerDeathEvent &evt = static_cast<const PlayerDeathEvent &>(e);
 
-    // TODO: Handle player death event
-	game->playerAlive = false;
-	game->voiceSource->setSound(game->voiceMap->at(Game::VoiceActing::DEATH_1));
-	game->deathTime = std::chrono::high_resolution_clock::now();
-	game->voiceSource->setGain(1);
-	game->voiceSource->play();
-	game->getGameGUIEventHandler()->handle(evt);
+    if (game->getCurrentPlayer()->getId() == evt.getPlayerId()) {
+        game->playerAlive = false;
+        game->voiceSource->setSound(game->voiceMap->at(Game::VoiceActing::DEATH_1));
+        game->deathTime = std::chrono::high_resolution_clock::now();
+        game->voiceSource->setGain(1);
+        game->voiceSource->play();
+        game->getGameGUIEventHandler()->handle(evt);
+    }
 }
