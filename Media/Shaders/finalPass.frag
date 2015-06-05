@@ -32,8 +32,27 @@ vec3 applyColorLUT(sampler2D lut, vec3 color)
     vec3 sample1 = texture(lut, texcXY + vec2(frameZ / lutSize, 0)).rgb;
     vec3 sample2 = texture(lut, texcXY + vec2( (frameZ + 1) / lutSize, 0)).rgb;
 
-    //return mix(sample1, sample2, offsZ);
-	return color;
+    return mix(sample1, sample2, offsZ);
+	//return color;
+}
+
+vec3 applyChromaticAbberation(sampler2D source, vec2 texcoord, float strength)
+{
+    float chromaticFactor = clamp((length( (texcoord-vec2(0.5)) * vec2(0.5,0.4)  )-0.15) * 20.0 * strength, 0.0, 1.0);
+    ivec2 screenSize = textureSize(source, 0);
+
+    float multiplier = texcoord.x > 0.5 ? -1.0 : 1.0;
+
+    vec2 redAbVector = vec2(chromaticFactor,0) / screenSize * multiplier;
+    vec2 greenAbVector = vec2(0);
+    vec2 blueAbVector = vec2(-chromaticFactor,0) / screenSize * multiplier;
+
+    vec3 result;
+    result.r = textureLod(source, texcoord + redAbVector, 0).r;
+    result.g = textureLod(source, texcoord + greenAbVector, 0).g;
+    result.b = textureLod(source, texcoord + blueAbVector, 0).b;
+
+    return result;
 }
 
 // TODO: tweak effectcompositor to make this buffer the same as
@@ -45,19 +64,20 @@ void main()
 	float ao = texelFetch(u_saoTex, ssCoord, 0).r;
 	ao = (ao + MIN_AMBIENT) / (1.0 + MIN_AMBIENT);
 
-	vec3 shading = texelFetch(u_shadingTex, ssCoord, 0).rgb;
+	vec3 abberationShadingBuffer = applyChromaticAbberation(u_shadingTex, v_uvcoord, 1.0);
+	// vec3 shading = texelFetch(u_shadingTex, ssCoord, 0).rgb;
 
 	// consider if ao should go into hdr tonemap or not
 	// ao = pow(ao, 1.0 / 2.2);
 
-	vec3 result = ao * shading;
+	vec3 result = ao * abberationShadingBuffer;
 
 	// tone mapping
 	float ExposureBias = 3.0;
     vec3 curr = Uncharted2Tonemap(ExposureBias * result);
-    
     vec3 whiteScale = 1.0 / Uncharted2Tonemap(vec3(W));
     result = curr * whiteScale;
+
 
 	// gamma correction
 	result = pow(result, vec3(1.0 / 2.2));

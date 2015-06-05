@@ -47,8 +47,8 @@
 
   <texture name="t_colorLUT" type="2d" resize_npot="1">
     <file>DefaultAssets/colorLUT/colorCorrection.png</file>
-    <filter param="min_filter">nearest</filter>
-    <filter param="mag_filter">nearest</filter>
+    <filter param="min_filter">linear</filter>
+    <filter param="mag_filter">linear</filter>
     <wrap param="s">clamp_to_edge</wrap>
     <wrap param="t">clamp_to_edge</wrap>
   
