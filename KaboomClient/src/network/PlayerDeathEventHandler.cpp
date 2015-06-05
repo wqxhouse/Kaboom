@@ -17,12 +17,12 @@ void PlayerDeathEventHandler::handle(const Event &e) const {
 
     if (game->getCurrentPlayer()->getId() == evt.getPlayerId()) {
         game->playerAlive = false;
-        game->voiceSource->setSound(game->voiceMap->at(Game::VoiceActing::DEATH_1));
+       // game->voiceSource->setSound(game->voiceMap->at(Game::VoiceActing::DEATH_1));
         game->deathTime = std::chrono::high_resolution_clock::now();
-        game->voiceSource->setGain(1);
-        game->voiceSource->play();
+        //game->voiceSource->setGain(1);
+        //game->voiceSource->play();
         game->getGameGUIEventHandler()->handle(evt);
-
+		game->justDied = true;
 		Core::getMainCamera().setYawAndPitchAndUpdate(0, -45);
     }
 }

@@ -134,20 +134,24 @@ using namespace ours;
 		void deathTimeUpdate();
 		void setSMScreen();
 		void SMScreenCheck();
+		void chatMessageCheck();
 
 		std::string *name;
 		unsigned int colorId=0;
 		std::chrono::high_resolution_clock::time_point damageTime;
 		std::chrono::high_resolution_clock::time_point deathTime;
 		std::chrono::high_resolution_clock::time_point smTime;
+		std::chrono::high_resolution_clock::time_point chatTime;
 		bool healthChanged = false;
 		bool playerAlive = true;
 		bool smOn = false;
+		bool justDied = false;
 		unsigned int previousValue=5;
 		osg::ref_ptr<Source> voiceSource;
-		osg::ref_ptr<SoundState> backState;
+		osg::ref_ptr<SoundState> voiceState;
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voiceMap;
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>* voiceActorList[4];
+		int chatOp = 255;
 
         struct ExplosionLight {
             std::string name;
@@ -191,6 +195,7 @@ using namespace ours;
 		bool angry;
 		int color = 255;
 		bool changeColor = true;
+		
 		
 		DeathmatchMode gameMode;
 	};

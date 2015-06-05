@@ -274,6 +274,10 @@
     top:64%;
     font-size:350%;
     }
+    table#recent_kills{
+    position: absolute;
+    top: 45%;
+    }
   </style>
 
 </head>
@@ -336,6 +340,13 @@
   <div id="crosshair" class="kaboom_crosshair"></div>
   <div id="extra"></div>
   <div id="gameStateMessage" class="preGameMessage">Pregame Loading...</div>
+  <table id="recent_kills">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </table>
 </body>
 
 </rml>

@@ -33,15 +33,32 @@ Entity *BombFactory::createBomb(
 	entity->attachComponent(new PositionComponent(position));
 	entity->attachComponent(new RotationComponent(rotation));
 
-	GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
+	if (type == SALTY_MARTY_BOMB)
+	{
+		auto &config = EntityConfigLookup::get(entity->getType());
 
-	//Material * mat = geoCache->getMaterialById(type);
-	osg::ref_ptr<osg::Node> node = geoCache->getNodeById(type);
+		osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere();
+		sphere->setRadius(config.getFloat("size"));
+		osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(sphere);
+		osg::ref_ptr<osg::Geode> model = new osg::Geode;
+		model->addDrawable(drawable);
 
-	//this is a memory leak, hopefully it is not too bad.
-	//GeometryObject *bomb_geom = new GeometryObject(bomb_name, node);
-	//bomb_geom->setMaterial(mat);
-	entity->attachComponent(new SceneNodeComponent(node));// bomb_geom->getRoot()));
+		osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
+		transformation->addChild(model);
+
+		osg::ref_ptr<osg::Group> bombNode = new osg::Group;
+
+		bombNode->addChild(transformation);
+
+		entity->attachComponent(new SceneNodeComponent(bombNode));
+	}
+	else{
+		GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
+
+		//Material * mat = geoCache->getMaterialById(type);
+		osg::ref_ptr<osg::Node> node = geoCache->getNodeById(type);
+		entity->attachComponent(new SceneNodeComponent(node));
+	}
 
     return entity;
 }
