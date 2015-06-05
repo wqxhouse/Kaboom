@@ -18,11 +18,11 @@
     }
     div.SM_curr{
     background-decorator: image;
-    background-image: salt.tga;
+    background-image: salt_alpha.tga;
     }
     div.fake_curr{
     background-decorator: image;
-    background-image: salt.tga;
+    background-image: display-fake.tga;
     }
     div.kaboom{
     background-decorator: image;
@@ -38,15 +38,19 @@
     }
     div.SM_bomb{
     background-decorator: image;
-    background-image: salt.tga;
+    background-image: salt_alpha.tga;
     }
     div.fake_bomb{
     background-decorator: image;
-    background-image: salt.tga;
+    background-image: indiv-fake.tga;
     }
     #damage_screen{
     background-decorator: image;
     background-image: damage-skin-v2.tga;
+    }
+    .sm_screen{
+    background-decorator: image;
+    background-image: marty_v3.tga;
     }
     div.hp_100{
     background-decorator: image;

@@ -445,3 +445,10 @@ void GameGUIEventHandler::damageScreen(bool isOn) const{
 	else window0->SetId("");
 	
 }
+
+void GameGUIEventHandler::smScreen(bool isOn) const{
+	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
+
+	if (isOn) window0->SetClass("sm_screen", true);
+	else window0->SetClassNames("window");
+}

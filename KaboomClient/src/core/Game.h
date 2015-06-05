@@ -132,13 +132,17 @@ using namespace ours;
 		void addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voice);
 		void damageScreenCheck();
 		void deathTimeUpdate();
+		void setSMScreen();
+		void SMScreenCheck();
 
 		std::string *name;
 		unsigned int colorId=0;
 		std::chrono::high_resolution_clock::time_point damageTime;
 		std::chrono::high_resolution_clock::time_point deathTime;
+		std::chrono::high_resolution_clock::time_point smTime;
 		bool healthChanged = false;
 		bool playerAlive = true;
+		bool smOn = false;
 		unsigned int previousValue=5;
 		osg::ref_ptr<Source> voiceSource;
 		osg::ref_ptr<SoundState> backState;
