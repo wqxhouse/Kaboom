@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KaboomClient", "KaboomClient\KaboomClient.vcxproj", "{A743928E-D773-42A3-89C1-A72D1319FAFD}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -50,6 +50,7 @@ Global
 		{A743928E-D773-42A3-89C1-A72D1319FAFD}.Release|Win32.ActiveCfg = Release|Win32
 		{A743928E-D773-42A3-89C1-A72D1319FAFD}.Release|Win32.Build.0 = Release|Win32
 		{A743928E-D773-42A3-89C1-A72D1319FAFD}.Release|x64.ActiveCfg = Release|x64
+		{A743928E-D773-42A3-89C1-A72D1319FAFD}.Release|x64.Build.0 = Release|x64
 		{A743928E-D773-42A3-89C1-A72D1319FAFD}.SemiDebug|Mixed Platforms.ActiveCfg = SemiDebug|Win32
 		{A743928E-D773-42A3-89C1-A72D1319FAFD}.SemiDebug|Mixed Platforms.Build.0 = SemiDebug|Win32
 		{A743928E-D773-42A3-89C1-A72D1319FAFD}.SemiDebug|Win32.ActiveCfg = SemiDebug|Win32
@@ -65,6 +66,7 @@ Global
 		{56B7232B-1CBB-489A-B34A-EDF3151698B6}.Release|Win32.ActiveCfg = Release|Win32
 		{56B7232B-1CBB-489A-B34A-EDF3151698B6}.Release|Win32.Build.0 = Release|Win32
 		{56B7232B-1CBB-489A-B34A-EDF3151698B6}.Release|x64.ActiveCfg = Release|x64
+		{56B7232B-1CBB-489A-B34A-EDF3151698B6}.Release|x64.Build.0 = Release|x64
 		{56B7232B-1CBB-489A-B34A-EDF3151698B6}.SemiDebug|Mixed Platforms.ActiveCfg = SemiDebug|Win32
 		{56B7232B-1CBB-489A-B34A-EDF3151698B6}.SemiDebug|Mixed Platforms.Build.0 = SemiDebug|Win32
 		{56B7232B-1CBB-489A-B34A-EDF3151698B6}.SemiDebug|Win32.ActiveCfg = SemiDebug|Win32
@@ -80,6 +82,7 @@ Global
 		{BC9338C4-75A3-4853-841C-0C8963E2CA58}.Release|Win32.ActiveCfg = Release|Win32
 		{BC9338C4-75A3-4853-841C-0C8963E2CA58}.Release|Win32.Build.0 = Release|Win32
 		{BC9338C4-75A3-4853-841C-0C8963E2CA58}.Release|x64.ActiveCfg = Release|x64
+		{BC9338C4-75A3-4853-841C-0C8963E2CA58}.Release|x64.Build.0 = Release|x64
 		{BC9338C4-75A3-4853-841C-0C8963E2CA58}.SemiDebug|Mixed Platforms.ActiveCfg = SemiDebug|Win32
 		{BC9338C4-75A3-4853-841C-0C8963E2CA58}.SemiDebug|Mixed Platforms.Build.0 = SemiDebug|Win32
 		{BC9338C4-75A3-4853-841C-0C8963E2CA58}.SemiDebug|Win32.ActiveCfg = SemiDebug|Win32
@@ -95,6 +98,7 @@ Global
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|Win32.ActiveCfg = Release|Win32
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|Win32.Build.0 = Release|Win32
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|x64.ActiveCfg = Release|x64
+		{E24D41A4-8D90-45FF-9C55-6466187744AD}.Release|x64.Build.0 = Release|x64
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.SemiDebug|Mixed Platforms.ActiveCfg = SemiDebug|Win32
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.SemiDebug|Mixed Platforms.Build.0 = SemiDebug|Win32
 		{E24D41A4-8D90-45FF-9C55-6466187744AD}.SemiDebug|Win32.ActiveCfg = SemiDebug|Win32
@@ -110,6 +114,7 @@ Global
 		{1608D432-D1E3-4CAC-AB94-4CF307A6D9AA}.Release|Win32.ActiveCfg = Release|Win32
 		{1608D432-D1E3-4CAC-AB94-4CF307A6D9AA}.Release|Win32.Build.0 = Release|Win32
 		{1608D432-D1E3-4CAC-AB94-4CF307A6D9AA}.Release|x64.ActiveCfg = Release|x64
+		{1608D432-D1E3-4CAC-AB94-4CF307A6D9AA}.Release|x64.Build.0 = Release|x64
 		{1608D432-D1E3-4CAC-AB94-4CF307A6D9AA}.SemiDebug|Mixed Platforms.ActiveCfg = SemiDebug|Win32
 		{1608D432-D1E3-4CAC-AB94-4CF307A6D9AA}.SemiDebug|Mixed Platforms.Build.0 = SemiDebug|Win32
 		{1608D432-D1E3-4CAC-AB94-4CF307A6D9AA}.SemiDebug|Win32.ActiveCfg = SemiDebug|Win32
@@ -124,7 +129,8 @@ Global
 		{A1FF5FD6-D463-4B85-899B-278229C4AA04}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{A1FF5FD6-D463-4B85-899B-278229C4AA04}.Release|Win32.ActiveCfg = Release|Win32
 		{A1FF5FD6-D463-4B85-899B-278229C4AA04}.Release|Win32.Build.0 = Release|Win32
-		{A1FF5FD6-D463-4B85-899B-278229C4AA04}.Release|x64.ActiveCfg = Release|Win32
+		{A1FF5FD6-D463-4B85-899B-278229C4AA04}.Release|x64.ActiveCfg = Release|x64
+		{A1FF5FD6-D463-4B85-899B-278229C4AA04}.Release|x64.Build.0 = Release|x64
 		{A1FF5FD6-D463-4B85-899B-278229C4AA04}.SemiDebug|Mixed Platforms.ActiveCfg = SemiDebug|Win32
 		{A1FF5FD6-D463-4B85-899B-278229C4AA04}.SemiDebug|Mixed Platforms.Build.0 = SemiDebug|Win32
 		{A1FF5FD6-D463-4B85-899B-278229C4AA04}.SemiDebug|Win32.ActiveCfg = Debug|Win32
