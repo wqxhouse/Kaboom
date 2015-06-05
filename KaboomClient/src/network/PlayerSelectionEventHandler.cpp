@@ -10,6 +10,6 @@ PlayerSelectionEventHandler::PlayerSelectionEventHandler(Game *game)
 
 void PlayerSelectionEventHandler::handle(const Event &e) const {
     const PlayerSelectionEvent &evt = static_cast<const PlayerSelectionEvent &>(e);
-    printf("%d\n", evt.getCharacterType());
-    // TODO: Handle player selection event
+
+    game->getPlayers().at(evt.getPlayerId())->setCharacterType(evt.getCharacterType());
 }
