@@ -29,10 +29,10 @@
 	</material>
 
 	<material name="____TestMaterial2" type="textured">
-		<albedoTex>E:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_baseColor.png</albedoTex>
-		<roughnessTex>E:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_roughness.png</roughnessTex>
-		<metallicTex>E:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_metallic.png</metallicTex>
-		<normalPath>E:\3DEngine\Kaboom\Media\DefaultAssets\GeometryObject\__ground\textures\ground_normal.tga</normalPath>
+		<albedoTex>DefaultAssets\GeometryObject\__ground\textures\ground_baseColor.png</albedoTex>
+		<roughnessTex>DefaultAssets\GeometryObject\__ground\textures\ground_roughness.png</roughnessTex>
+		<metallicTex>DefaultAssets\GeometryObject\__ground\textures\ground_metallic.png</metallicTex>
+		<normalPath>DefaultAssets\GeometryObject\__ground\textures\ground_normal.tga</normalPath>
 	</material>
 
 	<material name="brick1Mat" type="plain">
@@ -50,9 +50,9 @@
 		<albedoTexLerp>1.000000</albedoTexLerp>
 		<metallicTexLerp>1.0000</metallicTexLerp>
 		<roughnessTexLerp>1.000000</roughnessTexLerp>
-		<albedoTex>C:\Users\brla\Desktop\Kaboom\Media\DefaultAssets\GeometryObject\characterMat\final_albedo_purple.png</albedoTex>
-		<metallicTex>C:\Users\brla\Desktop\Kaboom\Media\DefaultAssets\GeometryObject\characterMat\final_metallic.png</metallicTex>
-		<roughnessTex>C:\Users\brla\Desktop\Kaboom\Media\DefaultAssets\GeometryObject\characterMat\final_roughness.png</roughnessTex>
+		<albedoTex>DefaultAssets\GeometryObject\characterMat\final_albedo_purple.png</albedoTex>
+		<metallicTex>DefaultAssets\GeometryObject\characterMat\final_metallic.png</metallicTex>
+		<roughnessTex>DefaultAssets\GeometryObject\characterMat\final_roughness.png</roughnessTex>
 	</material>
 	
 	
