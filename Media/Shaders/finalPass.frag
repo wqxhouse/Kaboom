@@ -35,7 +35,7 @@ void main()
 	vec3 result = ao * shading;
 
 	// tone mapping
-	float ExposureBias = 1.3;
+	float ExposureBias = 3.0;
     vec3 curr = Uncharted2Tonemap(ExposureBias * result);
     
     vec3 whiteScale = 1.0 / Uncharted2Tonemap(vec3(W));

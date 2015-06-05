@@ -276,7 +276,21 @@ void Core::configCubemapPrefilterPass()
 	//osg::Camera *cam = passData.pass;
 	//_cubemapPreFilter = CubeMapPreFilter(cam); // is there an elegant way?
 
-	_cubemapPreFilter.initWithCubeMap(cubemap);
+	// TODO: currently hard coded
+	CubemapUtil util;
+	std::string factory = _mediaPath + "DefaultAssets\\Cubemap\\factory_cubemap.hdr";
+	util.loadVerticalCross(factory);
+	// osg::TextureCubeMap *factoryCube = util.getImage();
+	osg::TextureCubeMap *map = new osg::TextureCubeMap;
+	map->setImage(0, util.getImage(osg::TextureCubeMap::POSITIVE_X));
+	map->setImage(1, util.getImage(osg::TextureCubeMap::NEGATIVE_X));
+	map->setImage(2, util.getImage(osg::TextureCubeMap::POSITIVE_Y));
+	map->setImage(3, util.getImage(osg::TextureCubeMap::NEGATIVE_Y));
+	map->setImage(4, util.getImage(osg::TextureCubeMap::POSITIVE_Z));
+	map->setImage(5, util.getImage(osg::TextureCubeMap::NEGATIVE_Z));
+
+	//_cubemapPreFilter.initWithCubeMap(cubemap);
+	_cubemapPreFilter.initWithCubeMap(map);
 	osgFX::EffectCompositor::PassData lightPass;
 	_passes->getPassData("LightPass", lightPass);
 	osg::Camera *cam = lightPass.pass;
