@@ -21,11 +21,11 @@
             </item>
             <item>
                 <id type="uint">131076</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
             <item>
                 <id type="uint">131077</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
@@ -54,11 +54,11 @@
             </item>
             <item>
                 <id type="uint">131076</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
             <item>
                 <id type="uint">131077</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
@@ -87,11 +87,11 @@
             </item>
             <item>
                 <id type="uint">131076</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
             <item>
                 <id type="uint">131077</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
@@ -120,11 +120,11 @@
             </item>
             <item>
                 <id type="uint">131076</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
             <item>
                 <id type="uint">131077</id>
-                <amount type="int">20</amount>
+                <amount type="int">1</amount>
             </item>
         </starting-inventory>
         <health-start type="int">100</health-start>

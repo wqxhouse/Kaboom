@@ -134,13 +134,14 @@ using namespace ours;
 		void deathTimeUpdate();
 
 		std::string *name;
-		unsigned int colorId=5;
+		unsigned int colorId=0;
 		std::chrono::high_resolution_clock::time_point damageTime;
 		std::chrono::high_resolution_clock::time_point deathTime;
 		bool healthChanged = false;
 		bool playerAlive = true;
 		unsigned int previousValue=5;
 		osg::ref_ptr<Source> voiceSource;
+		osg::ref_ptr<SoundState> backState;
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voiceMap;
 		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>* voiceActorList[4];
 
