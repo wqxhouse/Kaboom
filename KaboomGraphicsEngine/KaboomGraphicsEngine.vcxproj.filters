@@ -225,6 +225,12 @@
     <ClInclude Include="include\ObjectGlowManager.h">
       <Filter>PostProcess</Filter>
     </ClInclude>
+    <ClInclude Include="include\CubemapProbe.h">
+      <Filter>Header Files\CubemapUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CubemapProbeManager.h">
+      <Filter>Header Files\CubemapUtil</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core.cpp">
@@ -388,6 +394,12 @@
     </ClCompile>
     <ClCompile Include="src\CameraShakeManager.cpp">
       <Filter>Source Files\PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CubemapProbe.cpp">
+      <Filter>Source Files\CubemapUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CubemapProbeManager.cpp">
+      <Filter>Source Files\CubemapUtil</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

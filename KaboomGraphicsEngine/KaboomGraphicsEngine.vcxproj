@@ -255,6 +255,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClInclude Include="include\CompositorAnalysis.h" />
     <ClInclude Include="include\Core.h" />
     <ClInclude Include="include\CubeMapPreFilter.h" />
+    <ClInclude Include="include\CubemapProbe.h" />
+    <ClInclude Include="include\CubemapProbeManager.h" />
     <ClInclude Include="include\CubemapUtil.h" />
     <ClInclude Include="include\CustomFirstPersonManipulator.h" />
     <ClInclude Include="include\CustomTranslateAxisDragger.h" />
@@ -311,6 +313,8 @@ xcopy "$(SolutionDir)\Media\Config\config.ini" "$(TargetDir)" /y</Command>
     <ClCompile Include="src\CameraShakeManager.cpp" />
     <ClCompile Include="src\Core.cpp" />
     <ClCompile Include="src\CubemapPreFilter.cpp" />
+    <ClCompile Include="src\CubemapProbe.cpp" />
+    <ClCompile Include="src\CubemapProbeManager.cpp" />
     <ClCompile Include="src\CubemapUtil.cpp" />
     <ClCompile Include="src\CustomFirstPersonManipulator.cpp" />
     <ClCompile Include="src\CustomTranslateAxisDragger.cpp" />
