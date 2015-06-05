@@ -191,7 +191,7 @@ void LightManager::deleteLight(const std::string &name)
 	_visualizer->removeLight(light);
 
 	PointLight *pl = NULL;
-	if (light->getCastShadow() && ((pl = light->asPointLight()) != NULL))
+    if (((pl = light->asPointLight()) != NULL) && light->getCastShadow())
 	{
 		_shadowManager->removePointLight(pl);
 	}
@@ -199,6 +199,7 @@ void LightManager::deleteLight(const std::string &name)
 	if (pl != NULL)
 	{
 		_pointLightOcclusionTestGroup->removeChild(_ocQueryMap[name]);
+        _ocQueryMap.erase(name);
 	}
 
 	delete light;

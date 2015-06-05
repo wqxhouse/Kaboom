@@ -311,7 +311,41 @@ void Game::run() {
 
 			gsm = START_SCREEN_MODE;
 			break;
-		}		
+		}
+
+        for (auto it = explosionLightMap.begin(); it != explosionLightMap.end();) {
+            auto expLight = it->second;
+            const auto lightManager = Core::getWorldRef().getLightManager();
+
+            if (lightManager->doesNameExist(expLight->name)) {
+                const auto light = lightManager->getLight(expLight->name);
+
+                expLight->step += 1.0f / 60.0f;
+
+                float newIntensity;
+                float newRadius;
+
+                if (expLight->step < 0.0625f) {
+                    newRadius = expLight->radius * (-256.0f * (expLight->step) * (expLight->step) + 32.0f * (expLight->step));
+                    newIntensity = newRadius * 20.0f;
+                } else {
+                    newRadius = expLight->radius * (256.0f * (expLight->step) * (expLight->step) - 256.0f * (expLight->step) + 64.0f) / 49.0f;
+                    newIntensity = newRadius * 20.0f;
+                }
+
+                if (newIntensity > 0 && newRadius > 0 && expLight->step < 0.5f) {
+                    light->setIntensity(newIntensity);
+                    light->asPointLight()->setRadius(newRadius);
+                    ++it;
+                } else {
+                    lightManager->deleteLight(expLight->name);
+                    it = explosionLightMap.erase(it);
+
+                    delete expLight;
+                }
+            }
+        }
+
         Core::AdvanceFrame();
     }
 }
