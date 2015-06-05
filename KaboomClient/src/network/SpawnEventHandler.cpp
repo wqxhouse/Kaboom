@@ -120,19 +120,10 @@ void SpawnEventHandler::handle(const Event &e) const {
             ParticleEffectManager::BuiltInParticleEffect trailingEffect = ParticleEffectManager::BuiltInParticleEffect::TRAILING_BLUE;
 
             auto &players = game->getPlayers();
-            Player *owner = nullptr;
+            Entity *ownerEntity = game->getEntityManager().getEntity(evt.getOwnerId());
 
-            for (auto player : players) {
-                const Entity *ownerEntity = player.second->getEntity();
-
-                if (ownerEntity != nullptr && ownerEntity->getId() == evt.getOwnerId()) {
-                    owner = player.second;
-                    break;
-                }
-            }
-
-            if (owner != nullptr) {
-                switch (owner->getCharacterType()) {
+            if (ownerEntity != nullptr) {
+                switch (ownerEntity->getType()) {
                     case BLUE_CHARACTER: {
                         trailingEffect = ParticleEffectManager::TRAILING_BLUE;
                         break;
