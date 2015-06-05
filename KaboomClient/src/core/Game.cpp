@@ -93,10 +93,12 @@ Game::Game(ConfigSettings *config)
 	soundManager.loadSound(SoundType::KABOOM_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\bomb.wav");
 	soundManager.loadSound(SoundType::REMOTE_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\c4.wav");
 	soundManager.loadSound(SoundType::TIME_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\time_explosion.mp3");
+	soundManager.loadSound(SoundType::FAKE_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\fake_bomb_explode.wav");
     printf("Loading KABOOM_FIRE sound\n");
 	soundManager.loadSound(SoundType::KABOOM_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw.wav");
 	soundManager.loadSound(SoundType::REMOTE_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw2.wav");
 	soundManager.loadSound(SoundType::TIME_FIRE, str_mediaPath + "DefaultAssets\\Sound\\bounce_fire.wav");
+	soundManager.loadSound(SoundType::FAKE_FIRE, str_mediaPath + "DefaultAssets\\Sound\\plop.wav");
 	printf("Loading WALKING sound\n");
 	soundManager.loadSound(SoundType::WALKING, str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
 	osg::ref_ptr<Sample> walk = new Sample(str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
