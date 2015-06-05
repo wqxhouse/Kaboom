@@ -30,8 +30,8 @@
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
-        <running-speed type="float">5.0</running-speed>
-        <jumping-speed type="float">5.0</jumping-speed>
+        <running-speed type="float">8.0</running-speed>
+        <jumping-speed type="float">3.0</jumping-speed>
         <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
     <character>
@@ -64,8 +64,8 @@
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
-        <running-speed type="float">5.0</running-speed>
-        <jumping-speed type="float">5.0</jumping-speed>
+        <running-speed type="float">8.0</running-speed>
+        <jumping-speed type="float">3.0</jumping-speed>
         <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
     <character>
@@ -98,8 +98,8 @@
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
-        <running-speed type="float">5.0</running-speed>
-        <jumping-speed type="float">5.0</jumping-speed>
+        <running-speed type="float">8.0</running-speed>
+        <jumping-speed type="float">3.0</jumping-speed>
         <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
     <character>
@@ -132,8 +132,8 @@
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
-        <running-speed type="float">5.0</running-speed>
-        <jumping-speed type="float">5.0</jumping-speed>
+        <running-speed type="float">8.0</running-speed>
+        <jumping-speed type="float">3.0</jumping-speed>
         <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
 </characters>

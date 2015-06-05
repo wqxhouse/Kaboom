@@ -32,6 +32,7 @@ void PlayerStatusEventHandler::handle(const Event &e) const {
 	auto bombPos = entity->getComponent<PositionComponent>()->getPosition();
 	auto playerRot = player->getComponent<RotationComponent>()->getRotation();
 	auto playerPos = player->getComponent<PositionComponent>()->getPosition();
+	//std::cout << playerPos.x << "  " << playerPos.y << "  " << playerPos.z << std::endl; //remove later
 	game->getSoundManager().setListenerPosition(playerPos);
 	game->getSoundManager().setListenerRotation(playerRot);
 	auto soundComp = entity->getComponent<SoundComponent>();
