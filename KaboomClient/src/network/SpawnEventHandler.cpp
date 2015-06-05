@@ -73,9 +73,13 @@ void SpawnEventHandler::handle(const Event &e) const {
 					game->getSoundManager().playSound(SoundType::TIME_FIRE, bombPos);
 					break;
                 case FAKE_BOMB:
+					game->getSoundManager().playSound(SoundType::FAKE_FIRE, bombPos);
+					break;
 				case REMOTE_DETONATOR:
 					game->getSoundManager().playSound(SoundType::REMOTE_FIRE, bombPos);
                     break;
+				case SALTY_MARTY_BOMB:
+					game->getSoundManager().playSound(SoundType::MARTY_FIRE, bombPos);
                 default: {
                     game->getSoundManager().playSound(SoundType::KABOOM_FIRE, bombPos);
                     break;
