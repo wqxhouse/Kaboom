@@ -131,12 +131,14 @@ void Game::update() {
 
             for (auto kv : players) {
                 const auto player = kv.second;
-                addPlayerToWorld(player);
-                server.sendBindEvent(player);
-                server.sendScoreEvent(player);
-                for (auto entity : entityManager.getEntityList()) {
-                    if (!entity->hasComponent<PlayerComponent>()) {
-                        server.sendSpawnEvent(entity, player->getId());
+                if (player->getCharacterType() != NONE) {
+                    addPlayerToWorld(player);
+                    server.sendBindEvent(player);
+                    server.sendScoreEvent(player);
+                    for (auto entity : entityManager.getEntityList()) {
+                        if (!entity->hasComponent<PlayerComponent>()) {
+                            server.sendSpawnEvent(entity, player->getId());
+                        }
                     }
                 }
             }
@@ -145,11 +147,6 @@ void Game::update() {
         case GameMode::MatchState::PRE_MATCH:
         case GameMode::MatchState::IN_PROGRESS:
         case GameMode::MatchState::POST_MATCH: {
-            if (hasNewPlayer) {
-                addPlayerToWorld(newPlayer);
-                server.sendNewPlayerEnterWorldEvent(newPlayer, players, entityManager.getEntityList());
-            }
-
             server.receive(players);
             systemManager.processSystems(this);
             server.sendGameStatePackets(players, entityManager.getEntityList());
@@ -230,6 +227,16 @@ void Game::removeEntity(Entity *entity) {
     entityManager.destroyEntity(entity->getId());
 }
 
+void Game::addPlayerToWorld(Player *player) {
+    Entity *entity = characterFactory.createCharacter(player->getCharacterType(), getPlayerSpawnPoint());
+    entity->attachComponent(new PlayerComponent(player));
+    player->setEntity(entity);
+    player->setKills(0);
+    player->setDeaths(0);
+
+    addEntity(entity);
+}
+
 Vec3 Game::getPlayerSpawnPoint() {
     auto spawnPoint = playerSpawnPointList.at(rand() % playerSpawnPointList.size());
 
@@ -239,14 +246,4 @@ Vec3 Game::getPlayerSpawnPoint() {
     pos.setOsgVec3(spawnConfig.getVec3("position"));
 
     return pos;
-}
-
-void Game::addPlayerToWorld(Player *player) {
-    Entity *entity = characterFactory.createCharacter(player->getCharacterType(), getPlayerSpawnPoint());
-    entity->attachComponent(new PlayerComponent(player));
-    player->setEntity(entity);
-    player->setKills(0);
-    player->setDeaths(0);
-
-    addEntity(entity);
 }
