@@ -169,6 +169,9 @@ void  GameGUIEventHandler::handle(const PlayerDeathEvent &e)const {
 
 	 //show the death screen
 	 _guiManager->getWindow(4)->Show();
+	 _guiManager->getWindow(4)->GetElementById("clock")->SetInnerRML("5");
+	 _guiManager->getWindow(4)->GetElementById("clock")->SetProperty("visibility","visible");
+	 _guiManager->getWindow(4)->GetElementById("respawn")->SetProperty("visibility","hidden");
 }
 
 void GameGUIEventHandler::handle(const PlayerRespawnEvent &e) const
@@ -313,6 +316,19 @@ void GameGUIEventHandler::changeTime(Game *game) const{
 }
 
 void GameGUIEventHandler::changeDeathTime(Game *game)const{
+	Rocket::Core::ElementDocument *window4 = _guiManager->getWindow(4);
+	std::chrono::duration<double> elapsed_seconds = (std::chrono::high_resolution_clock::now() - game->deathTime); 
+	
+
+	if (elapsed_seconds.count()<=5){
+		_guiManager->getWindow(4)->GetElementById("clock")->SetInnerRML((std::to_string(5-(int)elapsed_seconds.count()).c_str()));
+	}
+	else{
+		_guiManager->getWindow(4)->GetElementById("clock")->SetProperty("visibility", "hidden");
+		_guiManager->getWindow(4)->GetElementById("respawn")->SetProperty("visibility", "visible");
+	
+	}
+
 }
 
 void GameGUIEventHandler::handle(const PlayerRenameEvent &e, Player* player) const
@@ -420,4 +436,12 @@ void GameGUIEventHandler::resetScoreBoard() const{
 
 	window2->Hide();
 
+}
+
+void GameGUIEventHandler::damageScreen(bool isOn) const{
+	Rocket::Core::ElementDocument *window0 = _guiManager->getWindow(0);
+
+	if (isOn) window0->SetId("damage_screen");
+	else window0->SetId("");
+	
 }

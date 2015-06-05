@@ -44,6 +44,10 @@
     background-decorator: image;
     background-image: salt.tga;
     }
+    #damage_screen{
+    background-decorator: image;
+    background-image: damage-skin-v2.tga;
+    }
     div.hp_100{
     background-decorator: image;
     background-image: hp-100.tga;

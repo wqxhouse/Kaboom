@@ -219,7 +219,7 @@ void Game::run() {
 			start_screen_ui->Hide();
 			name_screen_ui->Hide();
 			death_screen_ui->Hide();
-
+			playerAlive = true;
             bool res = client.connectToServer(serverAddress, serverPort);
 
 			if (res)
@@ -256,12 +256,17 @@ void Game::run() {
 			// E.g: close the server whlie running the game 
             client.receive();
 			_guiEventHandler->changeTime(this);
+			damageScreenCheck();
+			
 			/*if (currentPlayer->getEntity() != nullptr){
 				PlayerStatusComponent *player = currentPlayer->getEntity()->getComponent<PlayerStatusComponent>();
 				if (!currentPlayer->getEntity()->getComponent<PlayerStatusComponent>()->isAlive()){
 					_guiEventHandler->changeDeathTime(this);
 				}
 			}*/
+			if (!playerAlive){
+				deathTimeUpdate();
+			}
 			if (gameMode.getMatchState() == GameMode::MatchState::PRE_MATCH){
 				_guiEventHandler->preGame(color, changeColor);
 			}
@@ -302,4 +307,18 @@ void Game::addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<Ga
 	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(DEATH_1, new Sample(folder + "death_1.wav")));
 	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(KILL_1, new Sample(folder + "kill_1.wav")));
 	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(END_GAME_VICTORY_1, new Sample(folder + "victory_1.wav")));
+}
+
+void Game::damageScreenCheck()
+{
+	std::chrono::duration<double> elapsed_seconds = (std::chrono::high_resolution_clock::now() - damageTime);
+	if (healthChanged && elapsed_seconds.count() >= 1&&playerAlive)
+	{
+		healthChanged = false;
+		_guiEventHandler->damageScreen(false);
+	}
+}
+
+void Game::deathTimeUpdate(){
+	_guiEventHandler->changeDeathTime(this);
 }

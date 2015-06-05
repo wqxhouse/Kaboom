@@ -39,6 +39,8 @@ public:
 	void hudScore(const ScoreEvent &evt) const;
 	void GameGUIEventHandler::setPreGame() const;
 	void resetScoreBoard() const;
+	void damageScreen(bool isOn) const;
+	void changeDeathTime() const;
 
 	// TODO: add more other events 
 

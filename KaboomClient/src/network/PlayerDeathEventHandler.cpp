@@ -14,6 +14,7 @@ void PlayerDeathEventHandler::handle(const Event &e) const {
     // TODO: Handle player death event
 	game->playerAlive = false;
 	game->voiceSource->setSound(game->voiceMap->at(Game::VoiceActing::DEATH_1));
+	game->deathTime = std::chrono::high_resolution_clock::now();
 	game->voiceSource->setGain(1);
 	game->voiceSource->play();
 	game->getGameGUIEventHandler()->handle(evt);

@@ -130,9 +130,14 @@ using namespace ours;
 			return gameMode;
 		}
 		void addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voice);
+		void damageScreenCheck();
+		void deathTimeUpdate();
 
 		std::string *name;
 		unsigned int colorId=5;
+		std::chrono::high_resolution_clock::time_point damageTime;
+		std::chrono::high_resolution_clock::time_point deathTime;
+		bool healthChanged = false;
 		bool playerAlive = true;
 		unsigned int previousValue=5;
 		osg::ref_ptr<Source> voiceSource;
