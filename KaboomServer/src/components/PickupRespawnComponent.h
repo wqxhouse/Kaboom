@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <btBulletDynamicsCommon.h>
 
 #include <components/Component.h>

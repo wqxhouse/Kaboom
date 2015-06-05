@@ -279,6 +279,13 @@ void Game::run() {
 			//TODO: need to remove all the dynamically genereated objects! otherwise we still see them the next time we reconnect
 			getGameGUIEventHandler()->deleteAllPlayers();
 			client.disconnectFromServer();
+            
+            for (auto player : players) {
+                delete player.second;
+            }
+
+            players.clear();
+
 			gsm = START_SCREEN_MODE;
 			break;
 		}		
