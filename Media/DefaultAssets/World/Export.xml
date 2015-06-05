@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf - 8"?>
 <world>
-	<model name="TunnelB-C">
-		<file>Assets\GeometryObject\TunnelB-C.obj</file>
-		<material name="tunnelB-C" />
-		<position>0.004111 0.000000 0.000000</position>
-		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
-		<scale>0.010000 0.010000 0.010000</scale>
-	</model>
+
 
 	<model name="sphere">
 		<file></file>
@@ -71,7 +65,15 @@
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
 		<scale>0.010000 0.010000 0.010000</scale>
 	</model>
-
+    
+	<model name="TunnelB-C">
+		<file>Assets\GeometryObject\TunnelB-C.obj</file>
+		<material name="tunnelB-C" />
+		<position>0.004111 0.000000 0.000000</position>
+		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
+		<scale>0.010000 0.010000 0.010000</scale>
+	</model>
+    
 	<model name="TunnelC-D">
 		<file>Assets\GeometryObject\TunnelC-D.obj</file>
 		<material name="tunnelC-D" />
