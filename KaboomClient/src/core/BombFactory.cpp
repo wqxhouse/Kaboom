@@ -18,7 +18,7 @@
 
 BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
-
+	srand(11171992);
 }
 
 Entity *BombFactory::createBomb(
@@ -51,6 +51,27 @@ Entity *BombFactory::createBomb(
 		bombNode->addChild(transformation);
 
 		entity->attachComponent(new SceneNodeComponent(bombNode));
+	}
+	else if (type == FAKE_BOMB)
+	{
+		GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
+		osg::ref_ptr<osg::Node> node;
+		switch(rand()%3)
+		{
+			case 0:
+				node = geoCache->getNodeById(KABOOM_V2);
+				break;
+			case 1:
+				node = geoCache->getNodeById(TIME_BOMB);
+				break;
+			case 2:
+				node = geoCache->getNodeById(FAKE_BOMB);
+				break;
+			default:
+				node = geoCache->getNodeById(KABOOM_V2);
+				break;
+		}
+		entity->attachComponent(new SceneNodeComponent(node));
 	}
 	else{
 		GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();

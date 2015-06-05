@@ -36,7 +36,7 @@
     </type>
     
     <type id="131077"> 
-        <mesh>DefaultAssets\GeometryObject\remoteBomb.fbx</mesh>
+        <mesh>DefaultAssets\GeometryObject\timeBomb.fbx</mesh>
         <material name="____TestMaterial" />
     </type>
     
