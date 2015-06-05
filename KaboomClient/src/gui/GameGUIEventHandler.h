@@ -10,6 +10,7 @@
 #include <network/PlayerDeathEvent.h>
 #include <network/PlayerRespawnEvent.h>
 #include <network/DisconnectEvent.h>
+#include <network/ChatEvent.h>
 #include <LibRocketGUIManager.h>
 #include <core/Player.h>
 
@@ -24,6 +25,7 @@ public:
 	void handle(const PlayerRenameEvent &e, Player* player) const;
 	void handle(const PlayerDeathEvent &e) const;
 	void handle(const PlayerRespawnEvent &e) const;
+	void handle(const ChatEvent &e) const;
 	int endGame() const;
 	void changeWeapon(int weapon) const;
 	void showScoreBoard() const;
@@ -42,6 +44,7 @@ public:
 	void damageScreen(bool isOn) const;
 	void changeDeathTime() const;
 	void smScreen(bool isOn) const;
+	void chatFade(int chatOp) const;
 	// TODO: add more other events 
 
 private:

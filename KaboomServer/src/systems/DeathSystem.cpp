@@ -63,6 +63,6 @@ void DeathSystem::processEntity(Entity *entity) {
             }
         }
 
-		entity->getComponent<PositionComponent>()->setPosition(Vec3(0, 0, -10000));
+		entity->getComponent<PositionComponent>()->setPosition(Vec3(0, 0, -1000));
     }
 }

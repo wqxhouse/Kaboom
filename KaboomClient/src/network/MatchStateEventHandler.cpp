@@ -38,12 +38,15 @@ void MatchStateEventHandler::handle(const Event &e) const {
     if (evt.getState() == GameMode::MatchState::POST_MATCH) {
 		int max=game->getGameGUIEventHandler()->postGame();
 		if (game->getCurrentPlayer()->getKills()>=max){
-			game->voiceSource->setSound(game->voiceMap->at(Game::VoiceActing::END_GAME_VICTORY_1));
-			game->voiceSource->setGain(1);
-			game->voiceSource->play();
+			game->voiceState->setSample(game->voiceMap->at(Game::VoiceActing::END_GAME_VICTORY_1));
+			game->voiceState->setGain(1);
+			game->voiceState->setPlay(true);
 		}
 		else{
 			//TODO add in end game lose
+			game->voiceState->setSample(game->voiceMap->at(Game::VoiceActing::END_GAME_DEFEAT_1));
+			game->voiceState->setGain(1);
+			game->voiceState->setPlay(true);
 		}
         return;
     }
