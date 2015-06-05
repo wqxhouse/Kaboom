@@ -42,17 +42,64 @@
 		<metallic>0.490000</metallic>
 	</material>
 
-	<material name="characterMat" type="textured">
-		<albedo>1.000000 0.980392 0.184314</albedo>
-		<roughness>0.350000</roughness>
-		<specular>0.500000</specular>
-		<metallic>0.490000</metallic>
+	<material name="redCharMat" type="textured">
+		<albedo>1.000000 1.000000 1.000000</albedo>
+		<roughness>0.110000</roughness>
+		<specular>0.890000</specular>
+		<metallic>0.730000</metallic>
 		<albedoTexLerp>1.000000</albedoTexLerp>
-		<metallicTexLerp>1.0000</metallicTexLerp>
-		<roughnessTexLerp>1.000000</roughnessTexLerp>
-		<albedoTex>DefaultAssets\GeometryObject\characterMat\final_albedo_purple.png</albedoTex>
-		<metallicTex>DefaultAssets\GeometryObject\characterMat\final_metallic.png</metallicTex>
+		<roughnessTexLerp>0.350000</roughnessTexLerp>
+		<metallicTexLerp>0.250000</metallicTexLerp>
+		<normalTexLerp>0.000000</normalTexLerp>
+		<albedoTex>DefaultAssets\GeometryObject\characterMat\final_albedo_red.png</albedoTex>
 		<roughnessTex>DefaultAssets\GeometryObject\characterMat\final_roughness.png</roughnessTex>
+		<metallicTex>DefaultAssets\GeometryObject\characterMat\final_metallic.png</metallicTex>
+		<normalPath>DefaultAssets\EmptyMaterialTexture\normal.png</normalPath>
+	</material>
+
+	<material name="greenCharMat" type="textured">
+		<albedo>1.000000 1.000000 1.000000</albedo>
+		<roughness>0.110000</roughness>
+		<specular>0.890000</specular>
+		<metallic>0.730000</metallic>
+		<albedoTexLerp>1.000000</albedoTexLerp>
+		<roughnessTexLerp>0.350000</roughnessTexLerp>
+		<metallicTexLerp>0.250000</metallicTexLerp>
+		<normalTexLerp>0.000000</normalTexLerp>
+		<albedoTex>DefaultAssets\GeometryObject\characterMat\final_albedo_green.png</albedoTex>
+		<roughnessTex>DefaultAssets\GeometryObject\characterMat\final_roughness.png</roughnessTex>
+		<metallicTex>DefaultAssets\GeometryObject\characterMat\final_metallic.png</metallicTex>
+		<normalPath>DefaultAssets\EmptyMaterialTexture\normal.png</normalPath>
+	</material>
+
+	<material name="blueCharMat" type="textured">
+		<albedo>1.000000 1.000000 1.000000</albedo>
+		<roughness>0.110000</roughness>
+		<specular>0.890000</specular>
+		<metallic>0.730000</metallic>
+		<albedoTexLerp>1.000000</albedoTexLerp>
+		<roughnessTexLerp>0.350000</roughnessTexLerp>
+		<metallicTexLerp>0.250000</metallicTexLerp>
+		<normalTexLerp>0.000000</normalTexLerp>
+		<albedoTex>DefaultAssets\GeometryObject\characterMat\final_albedo_blue.png</albedoTex>
+		<roughnessTex>DefaultAssets\GeometryObject\characterMat\final_roughness.png</roughnessTex>
+		<metallicTex>DefaultAssets\GeometryObject\characterMat\final_metallic.png</metallicTex>
+		<normalPath>DefaultAssets\EmptyMaterialTexture\normal.png</normalPath>
+	</material>
+
+	<material name="purpleCharMat" type="textured">
+		<albedo>1.000000 1.000000 1.000000</albedo>
+		<roughness>0.110000</roughness>
+		<specular>0.890000</specular>
+		<metallic>0.730000</metallic>
+		<albedoTexLerp>1.000000</albedoTexLerp>
+		<roughnessTexLerp>0.350000</roughnessTexLerp>
+		<metallicTexLerp>0.250000</metallicTexLerp>
+		<normalTexLerp>0.000000</normalTexLerp>
+		<albedoTex>DefaultAssets\GeometryObject\characterMat\final_albedo_purple.png</albedoTex>
+		<roughnessTex>DefaultAssets\GeometryObject\characterMat\final_roughness.png</roughnessTex>
+		<metallicTex>DefaultAssets\GeometryObject\characterMat\final_metallic.png</metallicTex>
+		<normalPath>DefaultAssets\EmptyMaterialTexture\normal.png</normalPath>
 	</material>
 	
 	
