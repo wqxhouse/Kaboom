@@ -415,6 +415,8 @@ void TwGUIManager::initAddBar()
 
 			CreateDirectory(toPath, NULL);
 
+			fileName = "Assets\\GeometryObject\\" + fileName;
+
 			wcscat_s(toPath, newFile);
 			CopyFile(fromPath, toPath, FALSE);
 			DWORD dw = GetLastError();							// [Debug] Should be 0
