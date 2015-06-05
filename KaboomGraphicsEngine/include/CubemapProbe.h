@@ -8,6 +8,14 @@ class CubemapProbe
 {
 public:
 	CubemapProbe(osgFX::EffectCompositor *passes);
+
+	inline osg::ref_ptr<osg::Group> getRoot()
+	{
+		return _camGroup;
+	}
+
+	void enableCompute();
+	void disableCompute();
 	
 private:
 	void setupProbeCamera();
@@ -15,9 +23,6 @@ private:
 	void setupPasses();
 	void disablePasses();
 	void updateProbeCamera();
-
-	void enableCompute();
-	void disableCompute();
 
 	osg::Matrix calcViewMatrix(int axis, const osg::Vec3 &eyePos);
 
@@ -31,6 +36,7 @@ private:
 	std::vector<osg::ref_ptr<osg::Camera> > _cameraList;
 	osgFX::EffectCompositor *_passes;
 	osg::ref_ptr<osg::TextureCubeMap> _sampleCube;
+	osg::ref_ptr<osg::Group> _camGroup;
 
 	bool _isInit;
 };

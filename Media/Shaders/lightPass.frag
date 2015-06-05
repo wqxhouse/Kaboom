@@ -97,9 +97,8 @@ void main()
 
     vec3 result = vec3(0);
 	float sunShadowMask = material.sunShadowMask;
-	//result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel) * mix(sunShadowMask, 1.0, 0.1);
-	
-	result = material.irradiance;
+	result += calcEnvContribution(material, u_cubeMapDiffuseTex, u_cubeMapTex, u_lutTex, u_viewInvMat, u_maxLodLevel) * mix(sunShadowMask, 1.0, 0.1);
+	result += material.irradiance;
 
     // Compute point lights
     ivec2 baseOffset = precomputeCoord + ivec2(0, 1);

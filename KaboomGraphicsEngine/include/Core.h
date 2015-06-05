@@ -10,6 +10,7 @@
 #include "AxisVisualizer.h"
 #include "LightVisualizer.h"
 #include "CubeMapPreFilter.h"
+#include "CubemapProbeManager.h"
 #include "SAOPassCallback.h"
 
 #include "TwGUIManager.h"
@@ -137,6 +138,7 @@ private:
 	static void configSkyBox();
 	static void configGeometryObjectManipulator();
 
+	static void configCubemapProbePass();
 	static void configCubemapPrefilterPass();
 	static void configSpecularIBLLutPass();
 	static void configGeometryPass();
@@ -205,6 +207,8 @@ private:
 	static bool _requestPrefilterCubeMap;
 	static bool _requestDisableCameraManipulator;
 
+	static bool _requestCaptureCubemapProbe;
+
 	static osg::Timer_t _lastFrameStartTime; 
 	static osg::Timer_t _frameStartTime; 
 	static osg::Timer_t _firstFrameStartTime;
@@ -213,6 +217,7 @@ private:
 
 	static AxisVisualizer _axisVisualizer;
 	static CubeMapPreFilter _cubemapPreFilter;
+	static CubemapProbeManager _cubemapProbeManager;
 };
 
 class MainCameraCallback : public osg::NodeCallback

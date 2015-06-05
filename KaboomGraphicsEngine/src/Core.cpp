@@ -73,7 +73,7 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	// need to do it before finalize(), since client needs this before running
 	configLibRocketGUI();
 
-	_sceneRoot->addChild(_passes);
+	//_sceneRoot->addChild(_passes);
 	_hasInit = true;
 
     _sceneRoot->addChild(soundRoot);
@@ -260,6 +260,12 @@ void Core::configGeometryObjectManipulator()
 	GeometryObjectManipulator::initWithRootNode(_passes);
 }
 
+void Core::configCubemapProbePass()
+{
+	_cubemapProbeManager.init(_passes);
+	_sceneRoot->addChild(_cubemapProbeManager.getRoot());
+}
+
 void Core::configCubemapPrefilterPass()
 {
 	osg::TextureCubeMap *cubemap = _skybox->getCubeMap();
@@ -331,7 +337,16 @@ void Core::AdvanceFrame()
 			_firstFrameStartTime = _lastFrameStartTime = _frameStartTime
 				= osg::Timer::instance()->getStartTick();
 
+			_requestPrefilterCubeMap = true;
+			_requestCaptureCubemapProbe = true;
 			_isFirstFrame = false;
+		}
+
+		if (_requestCaptureCubemapProbe)
+		{ 
+			_cubemapProbeManager.addProbe(osg::Vec3(), 100);
+			_cubemapProbeManager.enableComputing();
+			_requestCaptureCubemapProbe = false;
 		}
 
 		if (_requestPrefilterCubeMap)
@@ -358,6 +373,7 @@ void Core::AdvanceFrame()
 
 		// _cubemapPreFilter.saveImagesToFile("C:\\3DEngine\\temp");
 		_cubemapPreFilter.disableCompute();
+		_cubemapProbeManager.disableComputing();
 		_passes->setPassActivated("SpecularLutPass", false);
 
 		// handle mouse over of libRocket
@@ -412,7 +428,6 @@ void Core::freezeCameraOnGUIDemand()
 }
 
 void Core::finalize()
-
 {
 	if (!_hasInit)
 	{
@@ -436,6 +451,10 @@ void Core::finalize()
 	configAxisVisualizer();
 	configLightVisualizer();
 	configGeometryObjectManipulator();
+
+	configCubemapProbePass();
+	_sceneRoot->addChild(_cubemapProbeManager.getRoot());
+	_sceneRoot->addChild(_passes);
 
 	_analysisHUD = configureViewerForMode(*_viewer, _passes, NULL, 1);
 	_analysisHUD->toggleHelper(); // disabled by default
@@ -1033,6 +1052,7 @@ bool Core::_isFirstFrame;
 bool Core::_allowEditorChangeProjection;
 bool Core::_requestPrefilterCubeMap = false;
 bool Core::_requestDisableCameraManipulator = false;
+bool Core::_requestCaptureCubemapProbe = false;
 
 osg::Timer_t Core::_lastFrameStartTime;
 osg::Timer_t Core::_frameStartTime;
@@ -1043,5 +1063,6 @@ int Core::_currentFrameNum;
 AxisVisualizer Core::_axisVisualizer;
 
 CubeMapPreFilter Core::_cubemapPreFilter;
+CubemapProbeManager Core::_cubemapProbeManager;
 
 enum Core::CamManipulatorType Core::_currCamManipulatorType;

@@ -12,6 +12,7 @@ CubemapProbe::CubemapProbe(osgFX::EffectCompositor *passes)
 
 	_bsphere.set(_position, _radius);
 
+	_camGroup = new osg::Group;
 	_cameraList.resize(6);
 	_sampleCube = new osg::TextureCubeMap;
 	setupCubeMap();
@@ -39,12 +40,14 @@ void CubemapProbe::setPosition(const osg::Vec3 &position)
 {
 	_position = position;
 	_bsphere.set(_position, _radius);
+	updateProbeCamera();
 }
 
 void CubemapProbe::setRadius(float radius)
 {
 	_radius = radius;
 	_bsphere.set(_position, _radius);
+	updateProbeCamera();
 }
 
 void CubemapProbe::setupPasses()
@@ -62,25 +65,33 @@ void CubemapProbe::enableCompute()
 {
 	if (!_isInit) return;
 
-	for (int i = 0; i < 6; i++)
-	{
-		if (_cameraList[i]->getNodeMask() == 0x0)
-		{
-			_cameraList[i]->setNodeMask(0x40);
-		}
-	}
+	//for (int i = 0; i < 6; i++)
+	//{
+	//	if (_cameraList[i]->getNodeMask() == 0x0)
+	//	{
+	//		_cameraList[i]->setNodeMask(0x40);
+	//	}
+	//}
+	_camGroup->setNodeMask(~0x0);
 }
 
 void CubemapProbe::disableCompute()
 {
 	if(!_isInit) return;
-	for (int i = 0; i < 6; i++)
+	/*for (int i = 0; i < 6; i++)
 	{
 		if (_cameraList[i]->getNodeMask() == 0x40)
 		{
 			_cameraList[i]->setNodeMask(0x0);
 		}
-	}
+	}*/
+
+	//if (_camGroup->getNodeMask() == 0x40)
+	//{
+	//	_camGroup->
+	//}
+
+	_camGroup->setNodeMask(0x0);
 }
 
 void CubemapProbe::setupProbeCamera()
@@ -102,6 +113,8 @@ void CubemapProbe::setupProbeCamera()
 		cam->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
 		cam->attach(osg::Camera::COLOR_BUFFER, _sampleCube, 0, osg::TextureCubeMap::POSITIVE_X + i, false, 0, 0);
 		cam->addChild(_passes);
+
+		_camGroup->addChild(cam);
 	}
 }
 
