@@ -19,7 +19,7 @@
 	</model>
 
 	<model name="Center">
-		<file>Assets\GeometryObject\Center.obj</file>
+		<file>DefaultAssets\GeometryObject\Center.obj</file>
 		<material name="center" />
 		<position>0.004111 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
@@ -27,7 +27,7 @@
 	</model>
 
 	<model name="SectionA">
-		<file>Assets\GeometryObject\SectionA.obj</file>
+		<file>DefaultAssets\GeometryObject\SectionA.obj</file>
 		<material name="sectionA" />
 		<position>0.000000 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
@@ -35,7 +35,7 @@
 	</model>
 
 	<model name="SectionB">
-		<file>Assets\GeometryObject\SectionB.obj</file>
+		<file>DefaultAssets\GeometryObject\SectionB.obj</file>
 		<material name="sectionB" />
 		<position>0.004111 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
@@ -43,7 +43,7 @@
 	</model>
     
     <model name="SectionC">
-		<file>Assets\GeometryObject\SectionC.obj</file>
+		<file>DefaultAssets\GeometryObject\SectionC.obj</file>
 		<material name="sectionC" />
 		<position>0.004111 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
@@ -51,7 +51,7 @@
 	</model>
 
 	<model name="SectionD">
-		<file>Assets\GeometryObject\SectionD.obj</file>
+		<file>DefaultAssets\GeometryObject\SectionD.obj</file>
 		<material name="sectionD" />
 		<position>0.004111 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
@@ -59,7 +59,7 @@
 	</model>
 
 	<model name="TunnelA-B">
-		<file>Assets\GeometryObject\TunnelA-B.obj</file>
+		<file>DefaultAssets\GeometryObject\TunnelA-B.obj</file>
 		<material name="tunnelA-B" />
 		<position>0.004111 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
@@ -67,7 +67,7 @@
 	</model>
     
 	<model name="TunnelB-C">
-		<file>Assets\GeometryObject\TunnelB-C.obj</file>
+		<file>DefaultAssets\GeometryObject\TunnelB-C.obj</file>
 		<material name="tunnelB-C" />
 		<position>0.004111 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
@@ -75,7 +75,7 @@
 	</model>
     
 	<model name="TunnelC-D">
-		<file>Assets\GeometryObject\TunnelC-D.obj</file>
+		<file>DefaultAssets\GeometryObject\TunnelC-D.obj</file>
 		<material name="tunnelC-D" />
 		<position>0.004111 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
@@ -83,7 +83,7 @@
 	</model>
 
 	<model name="TunnelD-A">
-		<file>Assets\GeometryObject\TunnelD-A.obj</file>
+		<file>DefaultAssets\GeometryObject\TunnelD-A.obj</file>
 		<material name="tunnelD-A" />
 		<position>0.004111 0.000000 0.000000</position>
 		<orientation>0.000000 0.000000 0.000000 1.000000</orientation>
