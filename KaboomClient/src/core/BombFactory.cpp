@@ -18,7 +18,7 @@
 
 BombFactory::BombFactory(EntityManager &entityManager)
         : entityManager(entityManager) {
-
+	srand(11171992);
 }
 
 Entity *BombFactory::createBomb(
@@ -33,86 +33,53 @@ Entity *BombFactory::createBomb(
 	entity->attachComponent(new PositionComponent(position));
 	entity->attachComponent(new RotationComponent(rotation));
 
-    switch (type) {
-        case KABOOM_V2: {
-			createKaboomV2(entity);
-            break;
-        }
-        case TIME_BOMB: {
-			createTimeBomb(entity);
-            break;
-        }
-        case REMOTE_DETONATOR: {
-			createRemoteDetonator(entity);
-            break;
-        }
-		default:{
-			createBase(entity, position, rotation);
-			break;
+	if (type == SALTY_MARTY_BOMB)
+	{
+		auto &config = EntityConfigLookup::get(entity->getType());
+
+		osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere();
+		sphere->setRadius(config.getFloat("size"));
+		osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(sphere);
+		osg::ref_ptr<osg::Geode> model = new osg::Geode;
+		model->addDrawable(drawable);
+
+		osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
+		transformation->addChild(model);
+
+		osg::ref_ptr<osg::Group> bombNode = new osg::Group;
+
+		bombNode->addChild(transformation);
+
+		entity->attachComponent(new SceneNodeComponent(bombNode));
+	}
+	else if (type == FAKE_BOMB)
+	{
+		GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
+		osg::ref_ptr<osg::Node> node;
+		switch(rand()%3)
+		{
+			case 0:
+				node = geoCache->getNodeById(KABOOM_V2);
+				break;
+			case 1:
+				node = geoCache->getNodeById(TIME_BOMB);
+				break;
+			case 2:
+				node = geoCache->getNodeById(REMOTE_DETONATOR);
+				break;
+			default:
+				node = geoCache->getNodeById(KABOOM_V2);
+				break;
 		}
-    }
+		entity->attachComponent(new SceneNodeComponent(node));
+	}
+	else{
+		GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
+
+		//Material * mat = geoCache->getMaterialById(type);
+		osg::ref_ptr<osg::Node> node = geoCache->getNodeById(type);
+		entity->attachComponent(new SceneNodeComponent(node));
+	}
 
     return entity;
-}
-
-void BombFactory::createBase(Entity *entity, const Vec3 &position, Quat rotation) const {
-
-    auto &config = EntityConfigLookup::get(entity->getType());
-
-    osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere();
-    sphere->setRadius(config.getFloat("size"));
-    osg::ref_ptr<osg::ShapeDrawable> drawable = new osg::ShapeDrawable(sphere);
-    osg::ref_ptr<osg::Geode> model = new osg::Geode;
-    model->addDrawable(drawable);
-
-    osg::ref_ptr<osg::MatrixTransform> transformation = new osg::MatrixTransform;
-    transformation->addChild(model);
-
-    osg::ref_ptr<osg::Group> bombNode = new osg::Group;
-
-    bombNode->addChild(transformation);
-
-    entity->attachComponent(new SceneNodeComponent(bombNode));
-}
-
-void BombFactory::createKaboomV2(Entity *entity) const {
-	
-	GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
-
-	//Kaboom has an id of 1.
-	Material * mat = geoCache->getMaterialById(1);
-	osg::ref_ptr<osg::Node> kaboom = geoCache->getNodeById(1);
-
-	//this is a memory leak, hopefully it is not too bad.
-	GeometryObject *kaboom2_0 = new GeometryObject("kaboom", kaboom);
-	kaboom2_0->setMaterial(mat);
-	entity->attachComponent(new SceneNodeComponent(kaboom2_0->getRoot()));
-}
-
-void BombFactory::createTimeBomb(Entity *entity) const {
-
-	GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
-
-	//Timer has an id of 2.
-	Material * mat = geoCache->getMaterialById(2);
-	osg::ref_ptr<osg::Node> timer = geoCache->getNodeById(2);
-
-	//this is a memory leak, hopefully it is not too bad.
-	GeometryObject *timer_bomb = new GeometryObject("timer", timer);
-	timer_bomb->setMaterial(mat);
-	entity->attachComponent(new SceneNodeComponent(timer_bomb->getRoot()));
-}
-
-void BombFactory::createRemoteDetonator(Entity *entity) const {
-
-	GeometryCache *geoCache = Core::getWorldRef().getGeometryCache();
-
-	//Remote has an id of 3.
-	Material * mat = geoCache->getMaterialById(3);
-	osg::ref_ptr<osg::Node> remote = geoCache->getNodeById(3);
-
-	//this is a memory leak, hopefully it is not too bad.
-	GeometryObject *remote_bomb = new GeometryObject("remote", remote);
-	remote_bomb->setMaterial(mat);
-	entity->attachComponent(new SceneNodeComponent(remote_bomb->getRoot()));
 }

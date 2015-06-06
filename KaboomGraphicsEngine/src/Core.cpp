@@ -17,11 +17,13 @@
 #include "LightManager.h"
 #include "ParticleEffectManager.h"
 #include "LightPrePassCallback.h"
+#include "SAOPassCallback.h"
 #include "LightPassCallback.h"
 #include "CustomFirstPersonManipulator.h"
 #include "GeometryPicker.h"
 #include "GeometryObjectManipulator.h"
 #include "CubemapUtil.h"
+#include "ObjectGlowManager.h"
 
 // TODO: log which one called the global functions in Core
 // for debugging
@@ -60,8 +62,12 @@ void Core::init(int winPosX, int winPosY, int winWidth, int winHeight, int resol
 	configPasses();
 	configViewer();
 
+	_world.getLightManager()->initShadowManager(_passes, _world.getGeometryManager()->getRootNode());
+	_sceneRoot->addChild(_world.getLightManager()->getShadowManager()->getRoot());
+
 	// need to config after config viewer
 	configParticlePass();
+	configObjectGlowPass();
 
 	// need to do it before finalize(), since client needs this before running
 	configLibRocketGUI();
@@ -89,9 +95,20 @@ void Core::loadWorldFile(const std::string &worldFilePath)
 	_world.loadXMLFile(worldFilePath);
 }
 
+void Core::loadModelCache(int numPlayers)
+{
+	// Load models by the number of maximum players
+	_modelCache.addModels(numPlayers);
+}
+
 World &Core::getWorldRef()
 {
 	return _world;
+}
+
+ModelCache &Core::getModelCache()
+{
+	return _modelCache;
 }
 
 osg::ref_ptr<TwGUIManager> Core::getEditorGUI()
@@ -102,6 +119,11 @@ osg::ref_ptr<TwGUIManager> Core::getEditorGUI()
 osg::Vec2 Core::getScreenSize()
 {
 	return _screenSize;
+}
+
+osg::Vec2 Core::getRenderResolution()
+{
+	return _renderResolution;
 }
 
 void Core::configFilePath()
@@ -159,6 +181,7 @@ void Core::configPasses()
 
 	configGeometryPass();
 	configLightPass();
+	configSAOPass();
 
 	_passes->getOrCreateStateSet()->setMode(GL_TEXTURE_CUBE_MAP_SEAMLESS, osg::StateAttribute::ON);
 }
@@ -193,7 +216,7 @@ void Core::configLightPass()
 	if (lightPass.pass != NULL)
 	{
 		lightPass.pass->getOrCreateStateSet()->
-			setUpdateCallback(new LightPassCallback(&_cubemapPreFilter));
+			setUpdateCallback(new LightPassCallback(&_cubemapPreFilter, _world.getLightManager()));
 	}
 	else
 	{
@@ -206,6 +229,29 @@ void Core::configParticlePass()
 	ParticleEffectManager *manager = _world.getParticleEffectManager();
 	_passes->addChild(manager->getRoot());
 	_viewer->addEventHandler(manager->getParticleUpdateHandler());
+}
+
+void Core::configSAOPass()
+{
+	osgFX::EffectCompositor::PassData saoPassData;
+	_passes->getPassData("SAOPass", saoPassData);
+	osg::Camera *passCam = saoPassData.pass;
+	_saoPassCallback = new SAOPassCallback(passCam);
+	passCam->getOrCreateStateSet()->setUpdateCallback(_saoPassCallback);
+
+	//osgFX::EffectCompositor::PassData blurXPassData;
+	//_passes->getPassData("SAOBlurXPass", blurXPassData);
+	//osg::Camera *blurX = blurXPassData.pass;
+	//osg::Depth *depth = new osg::Depth;
+	//depth->setFunction(osg::Depth::ALWAYS);
+	//blurX->getOrCreateStateSet()->setAttribute(depth);
+
+	//osgFX::EffectCompositor::PassData blurYPassData;
+	//_passes->getPassData("SAOBlurYPass", blurYPassData);
+	//osg::Camera *blurY = blurYPassData.pass;
+	//blurY->getOrCreateStateSet()->setAttribute(depth);
+
+
 }
 
 void Core::configGeometryObjectManipulator()
@@ -232,13 +278,23 @@ void Core::configCubemapPrefilterPass()
 	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_cubeMapDiffuseTex", 5));
 	cam->getOrCreateStateSet()->setTextureAttributeAndModes(5, _cubemapPreFilter.getGeneratedDiffuseCubemap());
 
+	// at this stage shadow manager is already initialized so safe to get
+	osg::TextureCubeMap *cubeTex = _world.getLightManager()->getShadowManager()->getShadowFaceLookupCubeTex();
+	// texture unit 6 is split sum lut
+	cam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_shadowFaceLookup", 7));
+	cam->getOrCreateStateSet()->setTextureAttributeAndModes(7, cubeTex);
+
 	_passes->addChild(_cubemapPreFilter.getRoot());
+
+	//TODO: refactor
+	_passes->addChild(Core::getWorldRef().getLightManager()->getPointLightOcclusionTestGroup());
 }
 
 void Core::configSceneNode()
 {
 	_geomRoot = new osg::Group;
 	_geomRoot->addChild(_world.getGeometryManager()->getRootNode());
+	_sceneRoot->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 }
 
 void Core::configViewer()
@@ -519,6 +575,22 @@ void Core::disableLightVisualizer()
 	_passes->removeChild(_world.getLightManager()->getVisualizerRoot());
 }
 
+void Core::enableAxisVisualizer()
+{
+	bool enabled = _passes->containsNode(_axisVisualizer.getRoot());
+	if (enabled) return;
+
+	_passes->addChild(_axisVisualizer.getRoot());
+}
+
+void Core::diableAxisVisualizer()
+{
+	bool disabled = !_passes->containsNode(_axisVisualizer.getRoot());
+	if (disabled) return;
+
+	_passes->removeChild(_axisVisualizer.getRoot());
+}
+
 void Core::configSkyBox()
 {
 	_skybox->setNodeMask(0x2);
@@ -614,13 +686,13 @@ void Core::enableStartScreen()
 		disableTwGUI();
 		disableGeometryObjectManipulator();
 		disableLightVisualizer();
+		diableAxisVisualizer();
 
 		_libRocketEditorGUI->disableGUI();
 		_libRocketInGameGUI->enableGUI();
 
 		LibRocketGUIManager::bindDebugWindow(_libRocketInGameGUI);
 	}
-
 }
 
 void Core::disableStartScreen()
@@ -633,6 +705,7 @@ void Core::disableStartScreen()
 		enableCameraManipulator();
 		enableGeometryObjectManipulator();
 		enableLightVisualizer();
+		enableAxisVisualizer();
 
 		_libRocketEditorGUI->enableGUI();
 		_libRocketInGameGUI->disableGUI();
@@ -645,6 +718,7 @@ void Core::enableGameMode()
 	if (!_gameMode)
 	{
 		_gameMode = true;
+		_isDeath = false;
 
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
@@ -656,10 +730,34 @@ void Core::disableGameMode()
 	if (_gameMode)
 	{
 		_gameMode = false;
+		_isDeath = false;
 
 		//// TODO: change back to editor key bindings
 		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
 		a->setCursor(osgViewer::GraphicsWindow::LeftArrowCursor);
+	}
+}
+
+void Core::enableDeathScreen()
+{
+	if (!_isDeath)
+	{
+		_isDeath = true;
+
+		//// TODO: change back to editor key bindings
+		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
+		a->setCursor(osgViewer::GraphicsWindow::LeftArrowCursor);
+	}
+}
+
+void Core::disableDeathScreen()
+{
+	if (_isDeath)
+	{
+		_isDeath = false;
+
+		auto a = static_cast<osgViewer::GraphicsWindow *>(_viewer->getCamera()->getGraphicsContext());
+		a->setCursor(osgViewer::GraphicsWindow::NoCursor);
 	}
 }
 
@@ -695,6 +793,11 @@ bool Core::isInStartScreenMode()
 bool Core::isInGameMode()
 {
 	return _gameMode ? true : false;
+}
+
+bool Core::isInDeath()
+{
+	return _isDeath ? true : false;
 }
 
 void Core::configAxisVisualizer()
@@ -748,7 +851,6 @@ void Core::configSpecularIBLLutPass()
 	lightPassCam->getOrCreateStateSet()->addUniform(new osg::Uniform("u_lutTex", 6));
 	lightPassCam->getOrCreateStateSet()->setTextureAttributeAndModes(6, lutTex);
 }
-
 
 void Core::configLibRocketGUI()
 {
@@ -813,7 +915,6 @@ float Core::getEditorFPSCamWalkingSpeed()
 	}
 }
 
-
 void Core::enableLibRocketInEditorGUI()
 {
 	if (_libRocketEditorGUI == NULL) return;
@@ -852,6 +953,17 @@ const std::string &Core::getMediaPath()
 	return _mediaPath;
 }
 
+osg::ref_ptr<SAOPassCallback> Core::getSAOPassCallback()
+{
+	return _saoPassCallback;
+}
+
+void Core::configObjectGlowPass()
+{
+	osg::Group *glow = _world.getObjectGlowManager()->getRoot();
+	_passes->addChild(glow);
+}
+
 osg::ref_ptr<osgFX::EffectCompositor> Core::_passes;
 osg::ref_ptr<osg::Group> Core::_sceneRoot;
 osg::ref_ptr<osg::Group> Core::_geomRoot;
@@ -861,6 +973,8 @@ osg::Vec2 Core::_renderResolution;
 osg::Vec2 Core::_winPos;
 World Core::_world;
 bool Core::_hasInit = false;
+
+ModelCache Core::_modelCache;
 
 osg::ref_ptr<osgGA::CameraManipulator> Core::_camManipulatorTemp = NULL;
 bool Core::_hasEnvMap = false;
@@ -872,12 +986,15 @@ osg::ref_ptr<TwGUIManager> Core::_gui;
 osg::ref_ptr<LibRocketGUIManager> Core::_libRocketEditorGUI;
 osg::ref_ptr<LibRocketGUIManager> Core::_libRocketInGameGUI;
 
+osg::ref_ptr<SAOPassCallback> Core::_saoPassCallback;
+
 osg::ref_ptr<SkyBox> Core::_skybox;
 std::string Core::_mediaPath;
 osg::ref_ptr<CompositorAnalysis> Core::_analysisHUD;
 
 bool Core::_startScreenMode;
 bool Core::_gameMode;
+bool Core::_isDeath;
 bool Core::_passDataDisplay;
 bool Core::_guiEnabled;
 bool Core::_manipulatorEnabled;

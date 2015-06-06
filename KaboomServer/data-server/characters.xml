@@ -2,27 +2,138 @@
 <characters>
     <character>
         <id type="uint">65537</id>
-        <name type="string">Default Character</name>
+        <name type="string">Blue Character</name>
         <mass type="float">1.0</mass>
         <collision-radius type="float">0.5</collision-radius>
         <collision-height type="float">1</collision-height>
         <starting-inventory>
             <item>
                 <id type="uint">131073</id>
-                <amount type="int">20</amount>
+                <amount type="int">10</amount>
             </item>
             <item>
                 <id type="uint">131074</id>
-                <amount type="int">20</amount>
+                <amount type="int">5</amount>
             </item>
             <item>
                 <id type="uint">131075</id>
-                <amount type="int">20</amount>
+                <amount type="int">5</amount>
+            </item>
+            <item>
+                <id type="uint">131076</id>
+                <amount type="int">0</amount>
+            </item>
+            <item>
+                <id type="uint">131077</id>
+                <amount type="int">3</amount>
             </item>
         </starting-inventory>
         <health-start type="int">100</health-start>
         <health-cap type="int">100</health-cap>
-        <running-speed type="float">5.0</running-speed>
-        <jumping-speed type="float">5.0</jumping-speed>
+        <running-speed type="float">8.0</running-speed>
+        <jumping-speed type="float">3.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
+    </character>
+    <character>
+        <id type="uint">65538</id>
+        <name type="string">Green Character</name>
+        <mass type="float">1.0</mass>
+        <collision-radius type="float">0.5</collision-radius>
+        <collision-height type="float">1</collision-height>
+        <starting-inventory>
+            <item>
+                <id type="uint">131073</id>
+                <amount type="int">10</amount>
+            </item>
+            <item>
+                <id type="uint">131074</id>
+                <amount type="int">5</amount>
+            </item>
+            <item>
+                <id type="uint">131075</id>
+                <amount type="int">5</amount>
+            </item>
+            <item>
+                <id type="uint">131076</id>
+                <amount type="int">0</amount>
+            </item>
+            <item>
+                <id type="uint">131077</id>
+                <amount type="int">3</amount>
+            </item>
+        </starting-inventory>
+        <health-start type="int">100</health-start>
+        <health-cap type="int">100</health-cap>
+        <running-speed type="float">8.0</running-speed>
+        <jumping-speed type="float">3.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
+    </character>
+    <character>
+        <id type="uint">65539</id>
+        <name type="string">Purple Character</name>
+        <mass type="float">1.0</mass>
+        <collision-radius type="float">0.5</collision-radius>
+        <collision-height type="float">1</collision-height>
+        <starting-inventory>
+            <item>
+                <id type="uint">131073</id>
+                <amount type="int">10</amount>
+            </item>
+            <item>
+                <id type="uint">131074</id>
+                <amount type="int">5</amount>
+            </item>
+            <item>
+                <id type="uint">131075</id>
+                <amount type="int">5</amount>
+            </item>
+            <item>
+                <id type="uint">131076</id>
+                <amount type="int">1</amount>
+            </item>
+            <item>
+                <id type="uint">131077</id>
+                <amount type="int">3</amount>
+            </item>
+        </starting-inventory>
+        <health-start type="int">100</health-start>
+        <health-cap type="int">100</health-cap>
+        <running-speed type="float">8.0</running-speed>
+        <jumping-speed type="float">3.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
+    </character>
+    <character>
+        <id type="uint">65540</id>
+        <name type="string">Red Character</name>
+        <mass type="float">1.0</mass>
+        <collision-radius type="float">0.5</collision-radius>
+        <collision-height type="float">1</collision-height>
+        <starting-inventory>
+            <item>
+                <id type="uint">131073</id>
+                <amount type="int">10</amount>
+            </item>
+            <item>
+                <id type="uint">131074</id>
+                <amount type="int">5</amount>
+            </item>
+            <item>
+                <id type="uint">131075</id>
+                <amount type="int">5</amount>
+            </item>
+            <item>
+                <id type="uint">131076</id>
+                <amount type="int">0</amount>
+            </item>
+            <item>
+                <id type="uint">131077</id>
+                <amount type="int">3</amount>
+            </item>
+        </starting-inventory>
+        <health-start type="int">100</health-start>
+        <health-cap type="int">100</health-cap>
+        <running-speed type="float">8.0</running-speed>
+        <jumping-speed type="float">3.0</jumping-speed>
+        <spawn-invulnerability type="int">3000</spawn-invulnerability>
     </character>
 </characters>

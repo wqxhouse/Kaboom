@@ -1,4 +1,5 @@
 #include "TrailingEffect.h"
+#include <osg/ValueObject>
 #include <util/ConfigSettings.h>
 #include "ParticleEffect.h"
 #include "ParticleEffectManager.h"
@@ -6,8 +7,8 @@
 
 #define POINT_PTR "point"
 
-TrailingEffect::TrailingEffect(ParticleEffectManager *manager, SparkUpdatingHandler *handler)
-	: ParticleEffect(manager), _handler(handler)
+TrailingEffect::TrailingEffect(ParticleEffectManager *manager, SparkUpdatingHandler *handler, float r, float g, float b)
+    : ParticleEffect(manager), _handler(handler), r(r), g(g), b(b)
 {
 	_name = "TrailingEffect";
 
@@ -26,6 +27,9 @@ void TrailingEffect::setTrailedObject(GeometryObject *obj)
 {
 	int sparkIndex = _handler->getSparkIndex(_particleDrawable);
 	osg::MatrixTransform *matTrans = obj->getRoot();
+    matTrans->setUserValue("r", r);
+    matTrans->setUserValue("g", g);
+    matTrans->setUserValue("b", b);
 	_handler->setTrackee(sparkIndex, matTrans);
 }
 
@@ -55,8 +59,8 @@ SPK::SPK_ID TrailingEffect::createTrailingEffect(
 
 	// Model
 	SPK::Model* particleModel = SPK::Model::create(SPK::FLAG_RED | SPK::FLAG_GREEN | SPK::FLAG_BLUE | SPK::FLAG_ALPHA | SPK::FLAG_SIZE, SPK::FLAG_ALPHA | SPK::FLAG_SIZE);
-	particleModel->setParam(SPK::PARAM_ALPHA, 0.5f, 0.0f);	// the particles will fade as they die
-	particleModel->setParam(SPK::PARAM_SIZE, 1.0f, 15.0f);	// the particles will enlarge over time
+	particleModel->setParam(SPK::PARAM_ALPHA, 0.3f, 0.0f);	// the particles will fade as they die
+	particleModel->setParam(SPK::PARAM_SIZE, 1.0f, 8.0f);	// the particles will enlarge over time
 	particleModel->setLifeTime(0.5f, 1.0f);
 	particleModel->setShared(true);
 

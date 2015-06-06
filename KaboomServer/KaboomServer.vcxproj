@@ -49,10 +49,12 @@
     <ClCompile Include="src\messaging\BombPickupMessageHandler.cpp" />
     <ClCompile Include="src\messaging\DefaultCharacterMessageHandler.cpp" />
     <ClCompile Include="src\messaging\DefaultExplosionMessageHandler.cpp" />
+    <ClCompile Include="src\messaging\FakeBombMessageHandler.cpp" />
     <ClCompile Include="src\messaging\JumpPadMessageHandler.cpp" />
     <ClCompile Include="src\messaging\KaboomV2MessageHandler.cpp" />
     <ClCompile Include="src\messaging\MessageHandlerChain.cpp" />
     <ClCompile Include="src\messaging\RemoteDetonatorMessageHandler.cpp" />
+    <ClCompile Include="src\messaging\SaltyMartyBombMessageHandler.cpp" />
     <ClCompile Include="src\messaging\TimeBombMessageHandler.cpp" />
     <ClCompile Include="src\network\DisconnectEventHandler.cpp" />
     <ClCompile Include="src\network\EquipEventHandler.cpp" />
@@ -60,6 +62,8 @@
     <ClCompile Include="src\network\NetworkServices.cpp" />
     <ClCompile Include="src\network\PlayerInputEventHandler.cpp" />
     <ClCompile Include="src\network\PlayerRenameEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerRespawnRequestEventHandler.cpp" />
+    <ClCompile Include="src\network\PlayerSelectionEventHandler.cpp" />
     <ClCompile Include="src\network\ReloadRequestEventHandler.cpp" />
     <ClCompile Include="src\network\ServerEventHandlerLookup.cpp" />
     <ClCompile Include="src\network\ServerNetwork.cpp" />
@@ -87,7 +91,7 @@
   <ItemGroup>
     <ClInclude Include="src\components\CharacterRotationComponent.h" />
     <ClInclude Include="src\components\CollisionComponent.h" />
-    <ClInclude Include="src\components\DeathComponent.h" />
+    <ClInclude Include="src\components\KilledByComponent.h" />
     <ClInclude Include="src\components\DestroyComponent.h" />
     <ClInclude Include="src\components\DetonatorComponent.h" />
     <ClInclude Include="src\components\ExplosionComponent.h" />
@@ -98,7 +102,8 @@
     <ClInclude Include="src\components\MessageHandlerComponent.h" />
     <ClInclude Include="src\components\OwnerComponent.h" />
     <ClInclude Include="src\components\PhysicsComponent.h" />
-    <ClInclude Include="src\components\RespawnComponent.h" />
+    <ClInclude Include="src\components\PlayerDeathComponent.h" />
+    <ClInclude Include="src\components\PickupRespawnComponent.h" />
     <ClInclude Include="src\components\TimerComponent.h" />
     <ClInclude Include="src\components\TriggerComponent.h" />
     <ClInclude Include="src\core\BombConfigLoader.h" />
@@ -129,6 +134,7 @@
     <ClInclude Include="src\messaging\DefaultCharacterMessageHandler.h" />
     <ClInclude Include="src\messaging\DefaultExplosionMessageHandler.h" />
     <ClInclude Include="src\messaging\ExplosionMessage.h" />
+    <ClInclude Include="src\messaging\FakeBombMessageHandler.h" />
     <ClInclude Include="src\messaging\JumpPadMessage.h" />
     <ClInclude Include="src\messaging\JumpPadMessageHandler.h" />
     <ClInclude Include="src\messaging\KaboomV2MessageHandler.h" />
@@ -139,6 +145,8 @@
     <ClInclude Include="src\messaging\NoAttackMessage.h" />
     <ClInclude Include="src\messaging\PickupMessage.h" />
     <ClInclude Include="src\messaging\RemoteDetonatorMessageHandler.h" />
+    <ClInclude Include="src\messaging\SaltyMartyBombMessageHandler.h" />
+    <ClInclude Include="src\messaging\TickMessage.h" />
     <ClInclude Include="src\messaging\TimerExpiredMessage.h" />
     <ClInclude Include="src\messaging\TimeBombMessageHandler.h" />
     <ClInclude Include="src\network\DisconnectEventHandler.h" />
@@ -147,6 +155,8 @@
     <ClInclude Include="src\network\NetworkServices.h" />
     <ClInclude Include="src\network\PlayerInputEventHandler.h" />
     <ClInclude Include="src\network\PlayerRenameEventHandler.h" />
+    <ClInclude Include="src\network\PlayerRespawnRequestEventHandler.h" />
+    <ClInclude Include="src\network\PlayerSelectionEventHandler.h" />
     <ClInclude Include="src\network\ReloadRequestEventHandler.h" />
     <ClInclude Include="src\network\ServerEventHandlerLookup.h" />
     <ClInclude Include="src\network\ServerNetwork.h" />
@@ -339,16 +349,20 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomEngine\src;$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4005</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(SolutionDir)\KaboomCommon\src;$(SolutionDir)\KaboomEngine\src;$(OSG_INCLUDE_PATH);$(OSGBULLET_INCLUDE_PATH);$(OSGWORKS_INCLUDE_PATH);$(BULLET_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINSOCKAPI_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(BULLET_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BULLET_LIB_PATH);$(OSG_LIB_PATH);$(OSGBULLET_LIB_PATH);$(OSGWORKS_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;osg.lib;osgDB.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;osgbDynamics.lib;osgbCollision.lib;osgwTools.lib;osgbInteraction.lib;osgViewer.lib;osgGA.lib;OpenThreads.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SemiDebug|x64'">

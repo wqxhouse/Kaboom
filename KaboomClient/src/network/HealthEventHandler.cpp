@@ -20,6 +20,12 @@ void HealthEventHandler::handle(const Event &e) const {
 
     Entity *entity = game->getCurrentPlayer()->getEntity();
     HealthComponent *health = entity->getComponent<HealthComponent>();
+	if (health->getAmount() > evt.getAmount())
+	{
+		game->healthChanged = true;
+		game->getGameGUIEventHandler()->damageScreen(true);
+		game->damageTime = std::chrono::high_resolution_clock::now();
+	}
 	health->setAmount(evt.getAmount());
 	game->getGameGUIEventHandler()->handle(evt, health);
 }

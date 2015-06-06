@@ -2,6 +2,18 @@
 <characters>
     <character>
         <id type="uint">65537</id>
-        <name type="string">Default Character</name>
+        <name type="string">Blue Character</name>
+    </character>
+    <character>
+        <id type="uint">65538</id>
+        <name type="string">Green Character</name>
+    </character>
+    <character>
+        <id type="uint">65539</id>
+        <name type="string">Purple Character</name>
+    </character>
+    <character>
+        <id type="uint">65540</id>
+        <name type="string">Red Character</name>
     </character>
 </characters>

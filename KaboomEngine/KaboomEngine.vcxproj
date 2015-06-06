@@ -150,6 +150,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(OSG_INCLUDE_PATH)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -185,6 +188,7 @@
     <ClInclude Include="src\components\Component.h" />
     <ClInclude Include="src\components\EquipmentComponent.h" />
     <ClInclude Include="src\components\HealthComponent.h" />
+    <ClInclude Include="src\components\InvulnerabilityComponent.h" />
     <ClInclude Include="src\components\PlayerComponent.h" />
     <ClInclude Include="src\components\PlayerStatusComponent.h" />
     <ClInclude Include="src\components\PositionComponent.h" />
@@ -201,6 +205,7 @@
     <ClInclude Include="src\network\AmmoAmountEvent.h" />
     <ClInclude Include="src\network\AssignEvent.h" />
     <ClInclude Include="src\network\BindEvent.h" />
+    <ClInclude Include="src\network\PlayerSelectionEvent.h" />
     <ClInclude Include="src\network\ChatEvent.h" />
     <ClInclude Include="src\network\ConnectEvent.h" />
     <ClInclude Include="src\network\DisconnectEvent.h" />
@@ -219,6 +224,7 @@
     <ClInclude Include="src\network\PlayerInputEvent.h" />
     <ClInclude Include="src\network\PlayerRenameEvent.h" />
     <ClInclude Include="src\network\PlayerRespawnEvent.h" />
+    <ClInclude Include="src\network\PlayerRespawnRequestEvent.h" />
     <ClInclude Include="src\network\PlayerStatusEvent.h" />
     <ClInclude Include="src\network\PositionEvent.h" />
     <ClInclude Include="src\network\ReloadRequestEvent.h" />

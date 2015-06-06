@@ -20,7 +20,7 @@ bool SparkUpdatingHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAc
 		{
 			SparkDrawable* spark = itr->_spark.get();
 			if (!spark) continue;
-
+            
 			osg::Transform* trackee = itr->_trackee.get();
 			if (trackee)
 			{
@@ -46,9 +46,14 @@ bool SparkUpdatingHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAc
 						
 						float step = ea.getTime();
 
-						model->setParam(SPK::PARAM_RED, 0.6f + 0.4f * sin(step));
-						model->setParam(SPK::PARAM_GREEN, 0.6f + 0.4f * sin(step + 3.14159f * 2.0f / 3.0f));
-						model->setParam(SPK::PARAM_BLUE, 0.6f + 0.4f * sin(step + 3.14159f * 4.0f / 3.0f));
+                        float r, g, b;
+                        trackee->getUserValue("r", r);
+                        trackee->getUserValue("g", g);
+                        trackee->getUserValue("b", b);
+
+						model->setParam(SPK::PARAM_RED, r);
+						model->setParam(SPK::PARAM_GREEN, g);
+						model->setParam(SPK::PARAM_BLUE, b);
 					}
 				}
 			}

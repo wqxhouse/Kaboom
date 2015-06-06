@@ -12,6 +12,7 @@ public:
 
 	virtual void operator()(osg::StateSet *ss, osg::NodeVisitor *nv);
 private:
+
 	std::vector<Light *> performLightCulling();
 
 	LightManager *_manager;

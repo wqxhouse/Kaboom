@@ -8,9 +8,12 @@
 #include "../components/CharacterRotationComponent.h"
 #include "../components/CollisionComponent.h"
 #include "../components/DestroyComponent.h"
+#include "../components/MessageHandlerComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/TriggerComponent.h"
 #include "../core/Game.h"
+#include "../messaging/MessageHandler.h"
+#include "../messaging/TickMessage.h"
 
 InitializationSystem::InitializationSystem(Game *game)
         : EntityProcessingSystem(game) {
@@ -75,5 +78,12 @@ void InitializationSystem::processEntity(Entity *entity) {
 
     if (playerStatusComp != nullptr) {
         playerStatusComp->setDamaged(false);
+    }
+
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+
+    if (handlerComp != nullptr) {
+        TickMessage msg(game, entity);
+        handlerComp->getHandler()->handle(msg);
     }
 }

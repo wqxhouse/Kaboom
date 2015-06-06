@@ -7,8 +7,8 @@
 #include <core/DeathmatchMode.h>
 #include <core/EntityManager.h>
 #include <core/Player.h>
+//#include <core/GameMode.h>
 #include <util/ConfigSettings.h>
-
 #include "CharacterFactory.h"
 #include "BombFactory.h"
 #include "JumpPadFactory.h"
@@ -20,130 +20,182 @@
 #include "../sound/SoundManager.h"
 #include "LibRocketGUIManager.h"
 #include "GameStateMachine.h"
+#include <components/PlayerStatusComponent.h>
 
 class InputManager;
+using namespace ours; 
+	class Game {
+	public:
+		enum VoiceActing{
+			END_GAME_DEFEAT_1,
+			END_GAME_DEFEAT_2,
+			END_GAME_DEFEAT_3,
+			END_GAME_VICTORY_1,
+			END_GAME_VICTORY_2,
+			END_GAME_VICTORY_3,
+			KILL_1,
+			KILL_2,
+			KILL_3,
+			DEATH_1,
+			DEATH_2,
+			DEATH_3,
+			CHAMP_SELECT,
+		};
+		typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
 
-class Game {
-public:
-    typedef std::unordered_map<unsigned int, Player *> IdToPlayerMap;
+		Game(ConfigSettings *config);
+		~Game();
 
-    Game(ConfigSettings *config);
-    ~Game();
+		void run();
 
-    void run();
+		inline void addPlayer(Player *player) {
+			players[player->getId()] = player;
+		}
 
-    inline void addPlayer(Player *player) {
-        players[player->getId()] = player;
-    }
+		inline void removePlayer(Player *player) {
+			players.erase(players.find(player->getId()));
 
-    inline void removePlayer(Player *player) {
-        players.erase(players.find(player->getId()));
+			delete player;
+		}
 
-        delete player;
-    }
+		void addEntity(Entity *entity);
+		void removeEntity(Entity *entity);
+		void removeAllEntities();
 
-    void addEntity(Entity *entity);
-    void removeEntity(Entity *entity);
-    void removeAllEntities();
+		inline ours::SoundManager &getSoundManager() {
+			return soundManager;
+		}
 
-    inline SoundManager &getSoundManager() {
-        return soundManager;
-    }
+		inline EntityManager &getEntityManager() {
+			return entityManager;
+		}
 
-    inline EntityManager &getEntityManager() {
-        return entityManager;
-    }
+		inline const CharacterFactory &getCharacterFactory() const {
+			return characterFactory;
+		}
 
-    inline const CharacterFactory &getCharacterFactory() const {
-        return characterFactory;
-    }
+		inline const BombFactory &getBombFactory() const {
+			return bombFactory;
+		}
 
-    inline const BombFactory &getBombFactory() const {
-        return bombFactory;
-    }
+		inline const JumpPadFactory &getJumpPadFactory() const {
+			return jumpPadFactory;
+		}
 
-    inline const JumpPadFactory &getJumpPadFactory() const {
-        return jumpPadFactory;
-    }
+		inline const PickupFactory &getPickupFactory() const {
+			return pickupFactory;
+		}
 
-    inline const PickupFactory &getPickupFactory() const {
-        return pickupFactory;
-    }
+		inline const GameClient &getGameClient() const {
+			return client;
+		}
 
-    inline const GameClient &getGameClient() const {
-        return client;
-    }
+		inline GeometryObjectManager *getGeometryManager() {
+			return _geometryManager;
+		}
 
-    inline GeometryObjectManager *getGeometryManager() {
-        return _geometryManager;
-    }
+		inline MaterialManager *getMaterialManager() {
+			return _materialManager;
+		}
 
-    inline MaterialManager *getMaterialManager() {
-        return _materialManager;
-    }
+		inline ParticleEffectManager *getParticleEffectManager() {
+			return _particleEffectManager;
+		}
 
-    inline ParticleEffectManager *getParticleEffectManager() {
-        return _particleEffectManager;
-    }
+		inline const GameGUIEventHandler *getGameGUIEventHandler() const {
+			return _guiEventHandler;
+		}
 
-    inline const GameGUIEventHandler *getGameGUIEventHandler() const {
-        return _guiEventHandler;
-    }
+		inline const GameStateMachine getCurrentGameState() const {
+			return gsm;
+		}
 
-    inline const GameStateMachine getCurrentGameState() const {
-        return gsm;
-    }
+		inline Camera &getCamera() {
+			return _camera;
+		}
 
-    inline Camera &getCamera() {
-        return _camera;
-    }
+		inline Player *getCurrentPlayer() const {
+			return currentPlayer;
+		}
 
-    inline Player *getCurrentPlayer() const {
-        return currentPlayer;
-    }
+		inline void setCurrentPlayer(Player *currentPlayer) {
+			this->currentPlayer = currentPlayer;
+		}
 
-    inline void setCurrentPlayer(Player *currentPlayer) {
-        this->currentPlayer = currentPlayer;
-    }
+		inline const IdToPlayerMap &getPlayers() const {
+			return players;
+		}
 
-    inline const IdToPlayerMap &getPlayers() const {
-        return players;
-    }
+		inline DeathmatchMode &getGameMode() {
+			return gameMode;
+		}
+		void addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voice);
+		void damageScreenCheck();
+		void deathTimeUpdate();
+		void setSMScreen();
+		void SMScreenCheck();
+		void chatMessageCheck();
 
-    inline DeathmatchMode &getGameMode() {
-        return gameMode;
-    }
+		std::string *name;
+		unsigned int colorId=0;
+		std::chrono::high_resolution_clock::time_point damageTime;
+		std::chrono::high_resolution_clock::time_point deathTime;
+		std::chrono::high_resolution_clock::time_point smTime;
+		std::chrono::high_resolution_clock::time_point chatTime;
+		bool healthChanged = false;
+		bool playerAlive = true;
+		bool smOn = false;
+		bool justDied = false;
+		unsigned int previousValue=5;
+		osg::ref_ptr<Source> voiceSource;
+		osg::ref_ptr<SoundState> voiceState;
+		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voiceMap;
+		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>* voiceActorList[4];
+		int chatOp = 255;
 
-	std::string *name;
+        struct ExplosionLight {
+            std::string name;
+            float radius;
+            float step;
+        };
 
-private:
-    friend void GameGUIListener::setGameState(GameStateMachine state);
+        std::unordered_map<std::string, ExplosionLight *> explosionLightMap;
 
-    GameStateMachine gsm = EDITOR_MODE;
-    ConfigSettings *config;
-    InputManager *inputManager;
-    SoundManager soundManager;
+	private:
+		friend void GameGUIListener::setGameState(GameStateMachine state);
 
-    EntityManager entityManager;
-    CharacterFactory characterFactory;
-    BombFactory bombFactory;
-    JumpPadFactory jumpPadFactory;
-    PickupFactory pickupFactory;
+		GameStateMachine gsm = EDITOR_MODE;
+		ConfigSettings *config;
+		InputManager *inputManager;
+		ours::SoundManager soundManager;
 
-    ClientEventHandlerLookup eventHandlerLookup;
-    GameClient client;
+		EntityManager entityManager;
+		CharacterFactory characterFactory;
+		BombFactory bombFactory;
+		JumpPadFactory jumpPadFactory;
+		PickupFactory pickupFactory;
 
-    Player *currentPlayer;
-    IdToPlayerMap players;
+		ClientEventHandlerLookup eventHandlerLookup;
+		GameClient client;
 
-    GeometryObjectManager *_geometryManager;
-    MaterialManager *_materialManager;
-    ParticleEffectManager *_particleEffectManager;
+		Player *currentPlayer;
+		IdToPlayerMap players;
 
-    Camera &_camera;
-    GameGUIEventHandler *_guiEventHandler;
+		GeometryObjectManager *_geometryManager;
+		MaterialManager *_materialManager;
+		ParticleEffectManager *_particleEffectManager;
 
-	bool abc;
+		Camera &_camera;
+		GameGUIEventHandler *_guiEventHandler;
 
-    DeathmatchMode gameMode;
-};
+		bool abc;
+		osg::ref_ptr<Source> backGroundMusic;
+
+		osg::ref_ptr<Sample> angryRobot;
+		bool angry;
+		int color = 255;
+		bool changeColor = true;
+		
+		
+		DeathmatchMode gameMode;
+	};

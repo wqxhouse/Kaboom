@@ -10,9 +10,15 @@
 #include "AxisVisualizer.h"
 #include "LightVisualizer.h"
 #include "CubeMapPreFilter.h"
+#include "SAOPassCallback.h"
 
 #include "TwGUIManager.h"
 #include "LibRocketGUIManager.h"
+#include "ModelCache.h"
+
+// Character Animations Type-ID
+static const int IDLE = 101;
+static const int RUNNING = 102;
 
 namespace osgLibRocket
 {
@@ -25,12 +31,16 @@ public:
 	static void init(int winPosX, int winPosY, int winWidth, int winHeight, int resolutionWidth, int resolutionHeight, const std::string &mediaPath, osg::Node *soundRoot);
 
 	static osg::Vec2 getScreenSize();
+	static osg::Vec2 getRenderResolution();
 
 	static void loadMaterialFile(const std::string &filePath);
 	static void loadTypeIdFile(const std::string &filePath);
 	static void loadWorldFile(const std::string &worldFilePath);
+	static void loadModelCache(int numPlayers);
+
 	static World &getWorldRef();
 	static osg::ref_ptr<TwGUIManager> getEditorGUI();
+	static ModelCache &getModelCache();
 
 	static Camera &getMainCamera();
 	static const std::string &getMediaPath();
@@ -73,6 +83,8 @@ public:
 	static void disableStartScreen();
 	static void enableGameMode();
 	static void disableGameMode();
+	static void enableDeathScreen();
+	static void disableDeathScreen();
 
 	static void enableGeometryObjectManipulator();
 	static void disableGeometryObjectManipulator();
@@ -80,17 +92,22 @@ public:
 	static void enableLightVisualizer();
 	static void disableLightVisualizer();
 
+	static void enableAxisVisualizer();
+	static void diableAxisVisualizer();
+
 	static void setEditorFPSCamWalkingSpeed(float metersPerSec);
 	static float getEditorFPSCamWalkingSpeed();
 
 	static bool isInStartScreenMode();
 	static bool isInGameMode();
+	static bool isInDeath();
 	static bool isCamLocked();
 	static bool isViewerClosed();
 	static bool isMouseOverAnyEditor();
 
 	static double getLastFrameDuration();
 	static double getTimeElaspedSec();
+	static osg::ref_ptr<SAOPassCallback> getSAOPassCallback();
 
 	static void addEventHandler(osgGA::GUIEventHandler *handler);
 
@@ -124,12 +141,14 @@ private:
 	static void configGeometryPass();
 	static void configLightPass();
 	static void configParticlePass();
+	static void configSAOPass();
 
 	static void configFilePath();
 	static void configAxisVisualizer();
 	static void configLightVisualizer();
 
 	static void configLibRocketGUI();
+	static void configObjectGlowPass();
 
 	static void freezeCameraOnGUIDemand();
 
@@ -151,6 +170,8 @@ private:
 	static bool _hasInit;
 	static bool _hasEnvMap;
 
+	static ModelCache _modelCache;
+
 	// mainCamera
 	friend class osgFX::EffectCompositor;
 	static Camera _cam;
@@ -158,6 +179,8 @@ private:
 	static osg::ref_ptr<TwGUIManager> _gui;
 	static osg::ref_ptr<LibRocketGUIManager> _libRocketEditorGUI;
 	static osg::ref_ptr<LibRocketGUIManager> _libRocketInGameGUI;
+
+	static osg::ref_ptr<SAOPassCallback> _saoPassCallback;
 
 	// use as a temp for temporarily remove the manipulator when out of focus
 	// CAUTIOUS: when enabled, this variable is NULL
@@ -170,6 +193,7 @@ private:
 	// on screen flags
 	static bool _startScreenMode;
 	static bool _gameMode;
+	static bool _isDeath;
 	static bool _passDataDisplay;
 	static bool _guiEnabled;
 	static bool _manipulatorEnabled;
@@ -199,5 +223,7 @@ public:
 		osg::Camera *mainCam = static_cast<osg::Camera *>(node);
 		mainCam->setViewMatrix(Core::getMainCamera().getViewMatrix());
 		mainCam->setProjectionMatrix(Core::getMainCamera().getProjectionMatrix());
+
+		traverse(node, nv);
 	}
 };

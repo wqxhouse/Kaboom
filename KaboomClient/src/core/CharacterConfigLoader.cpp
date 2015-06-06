@@ -56,6 +56,6 @@ void CharacterConfigLoader::loadValue(osgDB::XmlNode *xmlNode, const std::string
     } else if (valueType == "string") {
         std::string val;
         loadString(xmlNode, val);
-        config[type].set(xmlNode->name.c_str(), val.c_str());
+        config[type].set(xmlNode->name.c_str(), val);
     }
 }

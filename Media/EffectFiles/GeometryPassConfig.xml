@@ -32,5 +32,8 @@
   <buffer name="b_RT0" template="buf_rgba8u" /> <!--32bit-->
   <buffer name="b_RT1" template="buf_rgba8u" /> <!--32bit-->
   <buffer name="b_RT2" template="buf_rgba16f" /> <!--64bit-->
+
+
+  <!--<buffer name="b_position" template="buf_rgba32f" />-->
   
 </compositor>

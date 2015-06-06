@@ -29,6 +29,8 @@ void InputManager::loadConfig() {
     keyboardEventHandler.bindKey('1', &InputEventHandler::onEquip1);
     keyboardEventHandler.bindKey('2', &InputEventHandler::onEquip2);
     keyboardEventHandler.bindKey('3', &InputEventHandler::onEquip3);
+    keyboardEventHandler.bindKey('4', &InputEventHandler::onEquip4);
+    keyboardEventHandler.bindKey('5', &InputEventHandler::onEquip5);
     keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_F5, &InputEventHandler::onReloadRequest);
 	keyboardEventHandler.bindKey(osgGA::GUIEventAdapter::KEY_Escape, KeyboardEventHandler::KEY_UP, &InputEventHandler::quitGameMode);
 

@@ -4,76 +4,349 @@
 	<link type="text/rcss" href="rkt_new.rcss"/>
 	<link type="text/rcss" href="invader-m.rcss"/>
   <style>
+    div.kaboom_curr{
+    background-decorator: image;
+    background-image: display-kaboom-v2.tga;
+    }
+    div.time_curr{
+    background-decorator: image;
+    background-image: display-time-v2.tga;
+    }
+    div.remote_curr{
+    background-decorator: image;
+    background-image: display-sticky-v2.tga;
+    }
+    div.SM_curr{
+    background-decorator: image;
+    background-image: display-SM.tga;
+    }
+    div.fake_curr{
+    background-decorator: image;
+    background-image: display-fake.tga;
+    }
     div.kaboom{
-      background-decorator: image;
-      background-image: kaboom2_0.tga;
+    background-decorator: image;
+    background-image: indiv-kaboom-v2.tga;
     }
     div.timer{
-      background-decorator: image;
-      background-image: timeBomb.tga;
+    background-decorator: image;
+    background-image: indiv-time-v2.tga;
     }
     div.remote_bomb{
-      background-decorator: image;
-      background-image: remoteBomb.tga;
+    background-decorator: image;
+    background-image: indiv-sticky-v2.tga;
+    }
+    div.SM_bomb{
+    background-decorator: image;
+    background-image: indiv-sm.tga;
+    }
+    div.fake_bomb{
+    background-decorator: image;
+    background-image: indiv-fake.tga;
+    }
+    #damage_screen{
+    background-decorator: image;
+    background-image: damage-skin-v2.tga;
+    }
+    .sm_screen{
+    background-decorator: image;
+    background-image: marty_v3.tga;
+    }
+    div.hp_100{
+    background-decorator: image;
+    background-image: hp-100.tga;
+    }
+    div.hp_92{
+    background-decorator: image;
+    background-image: hp-92.tga;
+    }
+    div.hp_83{
+    background-decorator: image;
+    background-image: hp-83.tga;
+    }
+    div.hp_75{
+    background-decorator: image;
+    background-image: hp-75.tga;
+    }
+    div.hp_67{
+    background-decorator: image;
+    background-image: hp-67.tga;
+    }
+    div.hp_58{
+    background-decorator: image;
+    background-image: hp-58.tga;
+    }
+    div.hp_50{
+    background-decorator: image;
+    background-image: hp-50.tga;
+    }
+    div.hp_42{
+    background-decorator: image;
+    background-image: hp-42.tga;
+    }
+    div.hp_33{
+    background-decorator: image;
+    background-image: hp-33.tga;
+    }
+    div.hp_25{
+    background-decorator: image;
+    background-image: hp-25.tga;
+    }
+    div.hp_19{
+    background-decorator: image;
+    background-image: hp-19.tga;
+    }
+    div.hp_15{
+    background-decorator: image;
+    background-image: hp-15.tga;
+    }
+    div.hp_12{
+    background-decorator: image;
+    background-image: hp-12.tga;
+    }
+    div.hp_10{
+    background-decorator: image;
+    background-image: hp-10.tga;
+    }
+    div.hp_8{
+    background-decorator: image;
+    background-image: hp-8.tga;
+    }
+    div.hp_6{
+    background-decorator: image;
+    background-image: hp-6.tga;
+    }
+    div.hp_4{
+    background-decorator: image;
+    background-image: hp-4.tga;
+    }
+    div.hp_2{
+    background-decorator: image;
+    background-image: hp-2.tga;
+    }
+    div.hp_0{
+    background-decorator: image;
+    background-image: hp-0.tga;
+    }
+    div.inner_info{
+    background-decorator: image;
+    background-image: health-KDA-display-v2.tga;
     }
     div#items{
-      width: 50px;
-      height: 50px;
-      text-align: right;
-      display: inline-block;
-      font-size:300%;
+    background-decorator: image;
+    background-image: individual-circle-v2.tga;
+    width: 9%;
+    height: 16%;
+    text-align: right;
+    display: inline-block;
     }
     div#current_bomb{
-      position: absolute;
-      top: 80%;
-      left : 90%;
-      width: 100px;
-      height: 100px;
-      text-align: right;
-      font-size:300%;
-    }
-    table#health_bar{
-      position: absolute;
-      top :90%;
+    position: absolute;
+    top: 66.8%;
+    left : 83%;
+    width: 16.9%;
+    height: 30%;
+
+    background-decorator: image;
+    background-image: current-bomb-display-v2.tga;
     }
     table#bomb_counter{
-      position: absolute;
-      top: 85%;
-      left : 60%;
+    position: absolute;
+    top: 80%;
+    left : 38%;
+    }
+    div#bomb{
+    position: absolute;
+    width:70%;
+    height:70%;
+    top: 20%;
+    left: 18%;
+    }
+    div#bomb_count{
+    position: absolute;
+    background-decorator: image;
+    background-image: indiv-number-glow-v2.tga;
+    text-align: center;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 58%;
+    font-size:200%;
+    color: #324E6F;
+    }
+    div#number{
+    padding-top:25%;
     }
     body
     {
-      width: 100%;
-      height: 100%;
-      margin: auto;
+    width: 100%;
+    height: 100%;
+    margin: auto;
     }
     div.clock{
-      font-size:500%;
+    color: #324E6F;
+    position: absolute;
+    left:44.5%;
+    background-decorator: image;
+    background-image: timer-display_v2.tga;
+    width: 225px;
+    height: 125px;
+    padding-top: 3.3%;
+    font-size:300%;
+    text-align: center;
+    top: 1%;
+    }
+    div#crosshair{
+    width:5.0%;
+    height:8.9%;
+    position: absolute;
+    left:47.5%;
+    top:48%;
+    }
+    div.kaboom_crosshair{
+    background-decorator: image;
+    background-image: ch-kaboom.tga;
+    }
+    div.sticky_crosshair{
+    background-decorator: image;
+    background-image: ch-sticky.tga;
+    }
+    div.time_crosshair{
+    background-decorator: image;
+    background-image: ch-time.tga;
+    }
+    div.SM_crosshair{
+    background-decorator: image;
+    background-image: crosshair2.tga;
+    }
+    div.fake_crosshair{
+    background-decorator: image;
+    background-image: crosshair1.tga;
+    }
+    div#health{
+    position: absolute;
+    top: 65%;
+    width: 20%;
+    height: 31.5%;
+    }
+    div#inner{
+    position: absolute;
+    width: 91%;
+    height: 100%;
+    top: 9%;
+    color:#324E6F;
+    }
+    div#inner_right{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 3%;
+    left: 3%;
+    }
+    div#extra{
+    width: 19%;
+    height: 30%;
+    background-decorator: image;
+    background-image: bomb-display-extra-v2.tga;
+    position: absolute;
+    top: 62.5%;
+    left : 81.4%;
+    }
+    div.preGameMessage{
+    position:absolute;
+    top:25%;
+    left:40%;
+    font-size: 200%;
+    }
+    div#kills{
+    position:absolute;
+    left:12%;
+    top:25%;
+    }
+    div#deaths{
+    position:absolute;
+    left:13%;
+    top:37%;
+    }
+    div#hp{
+    position:absolute;
+    left:16%;
+    top:64%;
+    font-size:350%;
+    }
+    table#recent_kills{
+    position: absolute;
+    top: 45%;
     }
   </style>
 
 </head>
 <body class="window">
-  <table id="health_bar">
-    <tr>
-      <td id="1">three</td>
-      <td id="2">three</td>
-      <td id="3">three</td>
-      <td id="4">three</td>
-      <td id="5">three</td>
-    </tr>
-  </table>
+  <div id="health" class = "hp_100">
+    <div id="inner" class ="inner_info">
+      <div id="kills">100</div>
+      <div id="deaths">200</div>
+      <div id="hp">300</div>
+    </div>
+  </div>
   <table id="bomb_counter">
     <tr id ="bombs">
-      <td id="b1" style="margin: 4px 4px 4px 4px; color: black;"><div id="items" class ="kaboom">Kaboom</div></td>
-      <td id="b2" style="margin: 4px 4px 4px 4px; color: purple;"><div id="items" class ="timer">Timer</div></td>
-      <td id="b3" style="margin: 4px 4px 4px 4px; color: purple;"><div id="items" class="remote_bomb">Remote Bomb</div></td>
-      <td id="b4" style="margin: 4px 4px 4px 4px; color: purple;">Salt Marty Bomb</td>
-      <td id="b5" style="margin: 4px 4px 4px 4px; color: purple;">Fake Bomb</td>
+      <td id="b1">
+        <div id="items">
+          <div id="bomb" class ="kaboom"></div>
+          <div id="bomb_count">
+            <div id="number"></div>
+          </div>
+        </div>
+      </td>
+      <td id="b2">
+        <div id="items" >
+          <div id="bomb" class ="timer"></div>
+          <div id="bomb_count">
+            <div id="number"></div>
+          </div>
+        </div>
+      </td>
+      <td id="b3" >
+        <div id="items" >
+           <div id="bomb" class="remote_bomb"></div>
+           <div id="bomb_count">
+             <div id="number"></div>
+           </div>
+        </div>
+      </td>
+      <td id="b4" >
+        <div id="items" >
+          <div id="bomb" class="SM_bomb"></div>
+          <div id="bomb_count">
+            <div id="number"></div>
+          </div>
+        </div>
+      </td>
+      <td id="b5" >
+        <div id="items" >
+          <div id="bomb" class="fake_bomb"></div>
+          <div id="bomb_count">
+            <div id="number"></div>
+          </div>
+        </div>
+      </td>
     </tr>
   </table>
-  <div id="current_bomb" class ="kaboom"></div>
+  <div id="current_bomb" >
+    <div id="inner_right" class ="kaboom_curr"></div>
+  </div>
   <div class ="clock">0:00</div>
+  <div id="crosshair" class="kaboom_crosshair"></div>
+  <div id="extra"></div>
+  <div id="gameStateMessage" class="preGameMessage">Pregame Loading...</div>
+  <table id="recent_kills">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </table>
 </body>
 
 </rml>

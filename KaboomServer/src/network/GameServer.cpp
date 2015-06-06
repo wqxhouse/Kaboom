@@ -27,6 +27,8 @@
 #include <network/PlayerInputEvent.h>
 #include <network/PlayerRenameEvent.h>
 #include <network/PlayerRespawnEvent.h>
+#include <network/PlayerRespawnRequestEvent.h>
+#include <network/PlayerSelectionEvent.h>
 #include <network/PlayerStatusEvent.h>
 #include <network/PositionEvent.h>
 #include <network/ReloadRequestEvent.h>
@@ -36,6 +38,8 @@
 #include <util/ConfigSettings.h>
 #include "ServerEventHandlerLookup.h"
 #include "ServerNetwork.h"
+#include "../components/JumpComponent.h"
+#include "../components/OwnerComponent.h"
 
 GameServer::GameServer(ConfigSettings *config, const ServerEventHandlerLookup &eventHandlerLookup)
         : eventHandlerLookup(eventHandlerLookup) {
@@ -71,8 +75,10 @@ void GameServer::receive(const IdToPlayerMap &players) {
         EmptyEvent emptyEvent;
         PlayerInputEvent playerInputEvent;
         PlayerRenameEvent playerRenameEvent;
+        PlayerSelectionEvent playerSelectionEvent;
         ReloadRequestEvent reloadRequestEvent;
-        EquipEvent equipEvent;
+		EquipEvent equipEvent;
+		PlayerRespawnRequestEvent playerRespawnRequestEvent;
 
         std::unordered_set<unsigned int> receivedOpcodes;
 
@@ -102,6 +108,11 @@ void GameServer::receive(const IdToPlayerMap &players) {
                     playerRenameEvent.setPlayerId(player->getId());
                     break;
                 }
+                case EVENT_PLAYER_SELECTION: {
+                    playerSelectionEvent.deserialize(&networkBuffer[i]);
+                    playerSelectionEvent.setPlayerId(player->getId());
+                    break;
+                }
                 case EVENT_EQUIP: {
                     equipEvent.deserialize(&networkBuffer[i]);
                     if (player->getEntity() != nullptr) {
@@ -113,6 +124,11 @@ void GameServer::receive(const IdToPlayerMap &players) {
                     reloadRequestEvent.deserialize(&networkBuffer[i]);
                     break;
                 }
+				case EVENT_PLAYER_RESPAWN_REQUEST: {
+					playerRespawnRequestEvent.deserialize(&networkBuffer[i]);
+					playerRespawnRequestEvent.setPlayerId(player->getId());
+					break;
+				}
                 default: {
                     printf("<Server> error in packet types\n");
                     break;
@@ -130,6 +146,10 @@ void GameServer::receive(const IdToPlayerMap &players) {
             eventHandlerLookup.find(EVENT_PLAYER_RENAME)->handle(playerRenameEvent);
         }
 
+        if (receivedOpcodes.count(EVENT_PLAYER_SELECTION)) {
+            eventHandlerLookup.find(EVENT_PLAYER_SELECTION)->handle(playerSelectionEvent);
+        }
+
         if (receivedOpcodes.count(EVENT_EQUIP)) {
             eventHandlerLookup.find(EVENT_EQUIP)->handle(equipEvent);
         }
@@ -137,6 +157,10 @@ void GameServer::receive(const IdToPlayerMap &players) {
         if (receivedOpcodes.count(EVENT_RELOAD_REQUEST)) {
             eventHandlerLookup.find(EVENT_RELOAD_REQUEST)->handle(reloadRequestEvent);
         }
+
+		if (receivedOpcodes.count(EVENT_PLAYER_RESPAWN_REQUEST)){
+			eventHandlerLookup.find(EVENT_PLAYER_RESPAWN_REQUEST)->handle(playerRespawnRequestEvent);
+		}
     }
 
     auto disconnectedPlayerIds = network->getDisconnectedPlayerIds();
@@ -191,7 +215,15 @@ void GameServer::sendBindEvent(Player *player) const {
 }
 
 void GameServer::sendMatchStateEvent(const GameMode &gameMode) const {
-    MatchStateEvent evt(gameMode.getMatchState(), gameMode.getTimer());
+    const auto remainingTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+            gameMode.getTimer().getStartTime() +
+            gameMode.getTimer().getDuration() -
+            std::chrono::high_resolution_clock::now());
+
+    MatchStateEvent evt(
+            gameMode.getMatchState(),
+            gameMode.getTimer().getDuration(),
+            remainingTime);
     sendEvent(evt);
 }
 
@@ -210,13 +242,18 @@ void GameServer::sendPlayerRenameEvent(Player *player) const {
     sendEvent(evt);
 }
 
-void GameServer::sendPlayerRespawnEvent(Player *player) const {
-    PlayerRespawnEvent evt;
+void GameServer::sendPlayerSelectionEvent(Player *player) const {
+    PlayerSelectionEvent evt(player->getId(), player->getCharacterType());
     sendEvent(evt);
 }
 
+void GameServer::sendPlayerRespawnEvent(Player *player) const {
+    PlayerRespawnEvent evt;
+    sendEvent(evt, player->getId());
+}
+
 void GameServer::sendPlayerDeathEvent(Player *player) const {
-    PlayerDeathEvent evt;
+    PlayerDeathEvent evt(player->getId());
     sendEvent(evt);
 }
 
@@ -224,15 +261,18 @@ void GameServer::sendSpawnEvent(Entity *entity) const {
     auto posComp = entity->getComponent<PositionComponent>();
     auto rotComp = entity->getComponent<RotationComponent>();
     auto weaponPickupComp = entity->getComponent<WeaponPickupComponent>();
+    auto ownerComp = entity->getComponent<OwnerComponent>();
 
     const bool pickup = weaponPickupComp != nullptr;
+    const unsigned int ownerId = ownerComp != nullptr ? ownerComp->getEntity()->getId() : 0;
 
     SpawnEvent evt(
             entity->getId(),
             entity->getType(),
             pickup,
             posComp->getPosition(),
-            rotComp->getRotation());
+            rotComp->getRotation(),
+            ownerId);
     sendEvent(evt);
 }
 
@@ -307,20 +347,23 @@ void GameServer::sendAmmoEvent(Player *player) const {
     int kaboom_ammo = invComp->getAmount(KABOOM_V2);
     int time_ammo = invComp->getAmount(TIME_BOMB);
     int remote_ammo = invComp->getAmount(REMOTE_DETONATOR);
+	int SM_ammo = invComp->getAmount(SALTY_MARTY_BOMB);
+	int fake_ammo = invComp->getAmount(FAKE_BOMB);
 
 	//make sure its 0 or greater
 	kaboom_ammo = (kaboom_ammo > 0) ? kaboom_ammo : 0;
 	time_ammo = (time_ammo > 0) ? time_ammo : 0;
 	remote_ammo = (remote_ammo > 0) ? remote_ammo : 0;
 
-    AmmoAmountEvent evt(kaboom_ammo, time_ammo, remote_ammo);
+    AmmoAmountEvent evt(kaboom_ammo, time_ammo, remote_ammo, SM_ammo, fake_ammo);
     sendEvent(evt, player->getId());
 }
 
 void GameServer::sendPlayerStatusEvent(Entity *entity) const {
     PlayerStatusComponent *playerStatusComp = entity->getComponent<PlayerStatusComponent>();
+	JumpComponent *jumpComp = entity->getComponent<JumpComponent>();
 
-    if (playerStatusComp == nullptr) {
+    if (playerStatusComp == nullptr && jumpComp == nullptr) {
         return;
     }
 
@@ -328,7 +371,7 @@ void GameServer::sendPlayerStatusEvent(Entity *entity) const {
             entity->getId(),
             playerStatusComp->isAlive(),
             playerStatusComp->isRunning(),
-            playerStatusComp->isJumping(),
+            jumpComp->isJumping(),
             playerStatusComp->isAttacking(),
             playerStatusComp->isDamaged());
     sendEvent(evt);
@@ -359,6 +402,14 @@ void GameServer::sendNewPlayerEnterWorldEvent(
         const std::vector<Entity *> &entities) const {
     sendBindEvent(newPlayer); // Tells everyone about the new player's entity ID
     sendScoreEvent(newPlayer); // Tells everyone about the new player's score
+    sendPlayerSelectionEvent(newPlayer); // Tells everyone about the new player's character
+
+    // Tells the new player about every entity's entity ID (except itself)
+    for (auto entity : entities) {
+        if (entity->getId() != newPlayer->getEntity()->getId()) {
+            sendSpawnEvent(entity, newPlayer->getId());
+        }
+    }
 
     // Tells the new player about everyone else's entity ID and score
     for (auto kv : players) {
@@ -373,13 +424,12 @@ void GameServer::sendNewPlayerEnterWorldEvent(
 
         ScoreEvent scoreEvent(player->getId(), player->getKills(), player->getDeaths());
         sendEvent(scoreEvent, newPlayer->getId());
-    }
 
-    // Tells the new player about every entity's entity ID (except itself)
-    for (auto entity : entities) {
-        if (entity->getId() != newPlayer->getEntity()->getId()) {
-            sendSpawnEvent(entity, newPlayer->getId());
-        }
+		PlayerRenameEvent playerRenameEvent(player->getId(),player->getName());
+		sendEvent(playerRenameEvent,newPlayer->getId());
+
+        PlayerSelectionEvent playerSelectionEvent(player->getId(), player->getCharacterType());
+        sendEvent(playerSelectionEvent, newPlayer->getId());
     }
 
     // Tells the new player about the current game state

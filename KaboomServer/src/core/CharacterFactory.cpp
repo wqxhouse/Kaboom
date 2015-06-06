@@ -4,6 +4,7 @@
 
 #include <components/EquipmentComponent.h>
 #include <components/InventoryComponent.h>
+#include <components/InvulnerabilityComponent.h>
 #include <components/PositionComponent.h>
 #include <components/RotationComponent.h>
 #include <components/PlayerStatusComponent.h>
@@ -18,7 +19,7 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/JetpackComponent.h"
 #include "../components/JumpComponent.h"
-#include "../components/RespawnComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../messaging/DefaultCharacterMessageHandler.h"
 #include "../messaging/BombDropMessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
@@ -40,7 +41,10 @@ Entity *CharacterFactory::createCharacter(
     createBase(entity, position, rotation);
 
     switch (characterType) {
-        case DEFAULT_CHARACTER: {
+        case BLUE_CHARACTER:
+        case GREEN_CHARACTER:
+        case PURPLE_CHARACTER:
+        case RED_CHARACTER: {
             createDefaultCharacter(entity);
             break;
         }
@@ -92,6 +96,7 @@ void CharacterFactory::createBase(
     entity->attachComponent(new HealthComponent(healthStart, healthCap));
     entity->attachComponent(new JumpComponent);
     entity->attachComponent(new MessageHandlerComponent(chain));
+    entity->attachComponent(new InvulnerabilityComponent(Timer(config.getInt("spawn-invulnerability"))));
 }
 
 void CharacterFactory::createDefaultCharacter(Entity *entity) const {
@@ -120,17 +125,21 @@ void CharacterFactory::resetCharacter(Entity *entity, const Vec3 &position, cons
     entity->detachComponent<MessageHandlerComponent>();
     entity->detachComponent<JetpackComponent>();
     entity->detachComponent<EquipmentComponent>();
-	if (entity->hasComponent<RespawnComponent>()){
-		entity->detachComponent<RespawnComponent>();
+
+	if (entity->hasComponent<PlayerDeathComponent>()){
+		entity->detachComponent<PlayerDeathComponent>();
 	}
 
 	auto &charConfig = EntityConfigLookup::get(entity->getType());
 	createBase(entity, position, rotation);
 
 	switch (entity->getType()) {
-		case DEFAULT_CHARACTER: {
-			createDefaultCharacter(entity);
-			break;
-		}
+        case BLUE_CHARACTER:
+        case GREEN_CHARACTER:
+        case PURPLE_CHARACTER:
+        case RED_CHARACTER: {
+            createDefaultCharacter(entity);
+            break;
+        }
 	}
 }

@@ -18,10 +18,13 @@
 #include "../components/CharacterRotationComponent.h"
 #include "../components/DetonatorComponent.h"
 #include "../components/ExplosionComponent.h"
+#include "../components/MessageHandlerComponent.h"
 #include "../components/OwnerComponent.h"
+#include "../components/PhysicsComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 #include "../math/util.h"
+#include "../messaging/CollisionMessage.h"
 
 bool DefaultCharacterMessageHandler::handle(const Message &message) const {
     switch (message.getType()) {
@@ -77,14 +80,6 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
     vel.setOsgVec3(viewDir.getOsgVec3() * launchSpeed);
 
     switch (bombType) {
-        case KABOOM_V2: {
-            Entity *bomb = factory.createBomb(bombType, pos, vel);
-            bomb->attachComponent(new OwnerComponent(entity));
-            game->addEntity(bomb);
-
-            invComp->remove(bombType);
-            break;
-        }
         case TIME_BOMB: {
             const int numBombs = bombConfig.getInt("amount");
             const float deltaAngle = bombConfig.getFloat("delta-angle");
@@ -135,6 +130,14 @@ bool DefaultCharacterMessageHandler::handle(const Attack1Message &message) const
 
             break;
         }
+        default: {
+            Entity *bomb = factory.createBomb(bombType, pos, vel);
+            bomb->attachComponent(new OwnerComponent(entity));
+            game->addEntity(bomb);
+
+            invComp->remove(bombType);
+            break;
+        }
     }
 
     return true;
@@ -155,7 +158,23 @@ bool DefaultCharacterMessageHandler::handle(const Attack2Message &message) const
 
     auto &bombConfig = EntityConfigLookup::get(bombType);
 
-    if (bombType == REMOTE_DETONATOR && detonatorComp != nullptr) {
+    if (bombType == FAKE_BOMB) {
+        const auto entities = message.getGame()->getEntityManager().getEntityList();
+        for (auto fakeBomb : entities) {
+            if (fakeBomb->getType() != FAKE_BOMB) {
+                continue;
+            }
+
+            const auto ownerComp = fakeBomb->getComponent<OwnerComponent>();
+
+            if (ownerComp != nullptr && ownerComp->getEntity()->getId() == entity->getId()) {
+                const auto handlerComp = fakeBomb->getComponent<MessageHandlerComponent>();
+
+                CollisionMessage msg(message.getGame(), fakeBomb, std::unordered_set<Entity *>());
+                handlerComp->getHandler()->handle(msg);
+            }
+        }
+    } else if (bombType == REMOTE_DETONATOR && detonatorComp != nullptr) {
         if (detonatorComp->isReady() && !detonatorComp->isDetonated()) {
             auto &bombs = detonatorComp->getBombs();
             
@@ -190,7 +209,7 @@ bool DefaultCharacterMessageHandler::handle(const NoAttackMessage &message) cons
 Vec3 DefaultCharacterMessageHandler::calculateBombSpawnLocation(const Vec3 &pos, const Vec3 &dir) const {
     osg::Vec3 cameraPos = osg::Vec3(dir.x, dir.y, 0.0f);
     cameraPos.normalize();
-    cameraPos *= 0.5f;
+    cameraPos *= 0.45f;
     cameraPos += pos.getOsgVec3() + osg::Vec3(0.0f, 0.0f, 1.0f);
 
     Vec3 result;

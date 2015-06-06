@@ -1,5 +1,7 @@
 #include "SpawnEventHandler.h"
 
+#include <Core.h>
+#include <ObjectGlowManager.h>
 #include <core/EntityType.h>
 #include <network/SpawnEvent.h>
 #include <components/PositionComponent.h>
@@ -10,6 +12,7 @@
 #include "../components/SceneNodeComponent.h"
 #include "../components/TrailingEffectComponent.h"
 #include <GeometryObject.h>
+#include <GeometryCache.h>
 
 SpawnEventHandler::SpawnEventHandler(Game *game)
         : game(game) {
@@ -21,20 +24,27 @@ void SpawnEventHandler::handle(const Event &e) const {
     EntityType type = evt.getType();
     Entity *entity = nullptr;
 	Entity *player = game->getCurrentPlayer()->getEntity();
+
+	int type_id = -1;
 	
-    if ((type & CAT_MASK) == CAT_CHARACTER) {
+	if ((type & CAT_MASK) == CAT_CHARACTER) {
+		type_id = -2;
         entity = game->getCharacterFactory().createCharacter(
                 evt.getEntityId(),
                 evt.getType(),
                 evt.getPosition(),
                 evt.getRotation());
     } else if (evt.isPickup()) { //If it's a pickup we want to create a pickup instead
+		// TODO: CHANGE THIS!!
+		//type_id = HEALTH_PACK;		
 		entity = game->getPickupFactory().createPickup(
 			evt.getEntityId(),
 			evt.getType(),
 			evt.getPosition(),
 			evt.getRotation());
-	} else if ((type & CAT_MASK) == CAT_BOMB) {
+	}
+	else if ((type & CAT_MASK) == CAT_BOMB) {
+		type_id = type;
         entity = game->getBombFactory().createBomb(
                 evt.getEntityId(),
                 evt.getType(),
@@ -59,8 +69,19 @@ void SpawnEventHandler::handle(const Event &e) const {
 			game->getSoundManager().setListenerPosition(playerPoss);
 			game->getSoundManager().setListenerRotation(playerRot);
 			switch (type) {
-                case KABOOM_V2: {
-                    game->getSoundManager().playSound(SoundType::KABOOM_FIRE,bombPos);
+				case TIME_BOMB:
+					game->getSoundManager().playSound(SoundType::TIME_FIRE, bombPos);
+					break;
+                case FAKE_BOMB:
+					game->getSoundManager().playSound(SoundType::FAKE_FIRE, bombPos);
+					break;
+				case REMOTE_DETONATOR:
+					game->getSoundManager().playSound(SoundType::REMOTE_FIRE, bombPos);
+                    break;
+				case SALTY_MARTY_BOMB:
+					game->getSoundManager().playSound(SoundType::MARTY_FIRE, bombPos);
+                default: {
+                    game->getSoundManager().playSound(SoundType::KABOOM_FIRE, bombPos);
                     break;
                 }
 			}
@@ -74,17 +95,90 @@ void SpawnEventHandler::handle(const Event &e) const {
 	}
 
     if (entity != nullptr) {
-		game->addEntity(entity);
+        auto posComp = entity->getComponent<PositionComponent>();
+        auto sceneNodeComp = entity->getComponent<SceneNodeComponent>();
+
+        if (sceneNodeComp != nullptr) {
+            const Vec3 &pos = posComp->getPosition();
+
+            const auto name = std::to_string(entity->getId());
+            const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);
+
+			GeometryObjectManager* gm = game->getGeometryManager();
+			gm->addGeometry(name, sceneNodeComp->getNode(), osgPos);
+
+			if (type_id != -1) {
+				GeometryCache* cache = Core::getWorldRef().getGeometryCache();
+				Material * mat = NULL;
+				
+				// If character, get the corresponding color texture
+				if (type_id == -2) {
+					MaterialManager* mm = Core::getWorldRef().getMaterialManager();
+
+					switch (type) {
+						case RED_CHARACTER:
+							mat = mm->getMaterial("redCharMat");
+							break;
+						case GREEN_CHARACTER:
+							mat = mm->getMaterial("greenCharMat");
+							break;
+						case BLUE_CHARACTER:
+							mat = mm->getMaterial("blueCharMat");
+							break;
+						case PURPLE_CHARACTER:
+							mat = mm->getMaterial("purpleCharMat");
+							break;
+					}
+				}
+				else {
+					mat = cache->getMaterialById(type_id);
+				}
+
+				GeometryObject* geom = gm->getGeometryObject(name);
+				geom->setMaterial(mat);
+			}
+
+            if (evt.isPickup() || evt.getType() == FAKE_BOMB) {
+                auto obj = Core::getWorldRef().getGeometryManager()->getGeometryObject(name);
+                Core::getWorldRef().getObjectGlowManager()->addGlowGeometryObject(obj);
+            }
+        }
 
 		if ((entity->getType() & CAT_MASK) == CAT_BOMB) {
+            ParticleEffectManager::BuiltInParticleEffect trailingEffect = ParticleEffectManager::BuiltInParticleEffect::TRAILING_BLUE;
+
+            auto &players = game->getPlayers();
+            Entity *ownerEntity = game->getEntityManager().getEntity(evt.getOwnerId());
+
+            if (ownerEntity != nullptr) {
+                switch (ownerEntity->getType()) {
+                    case BLUE_CHARACTER: {
+                        trailingEffect = ParticleEffectManager::TRAILING_BLUE;
+                        break;
+                    }
+                    case GREEN_CHARACTER: {
+                        trailingEffect = ParticleEffectManager::TRAILING_GREEN;
+                        break;
+                    }
+                    case PURPLE_CHARACTER: {
+                        trailingEffect = ParticleEffectManager::TRAILING_PURPLE;
+                        break;
+                    }
+                    case RED_CHARACTER: {
+                        trailingEffect = ParticleEffectManager::TRAILING_RED;
+                        break;
+                    }
+                }
+            }
+
 			TrailingEffect *effect = static_cast<TrailingEffect *>(
-				game->getParticleEffectManager()->getParticleEffect(ParticleEffectManager::TRAILING));
+                game->getParticleEffectManager()->getParticleEffect(trailingEffect));
 
 			GeometryObject *geomObj = game->getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
 			effect->setTrailedObject(geomObj);
 			effect->run(geomObj->getTranslate());
 
 			entity->attachComponent(new TrailingEffectComponent(effect));
-		}
+        }
     }
 }

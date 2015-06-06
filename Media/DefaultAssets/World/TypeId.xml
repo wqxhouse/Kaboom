@@ -1,0 +1,47 @@
+<dynamic_objects>
+    <type id="101"> 
+        <mesh>DefaultAssets\GeometryObject\player_idleV2_1.fbx</mesh>
+        <material name="redCharMat" />
+        <position>0.6 0.0 -1.1</position>
+        <orientation>0.500000 -0.500000 -0.500000 0.500000</orientation>
+        <scale>0.30 0.30 0.30</scale>
+    </type>
+
+    <type id="102"> 
+        <mesh>DefaultAssets\GeometryObject\player_runningV2_1.fbx</mesh>
+        <material name="redCharMat" />
+        <position>0.0 0.0 -1.1</position>
+        <orientation>-0.000000 0.707107 0.707107 -0.000000</orientation>
+        <scale>0.35 0.35 0.35</scale>
+    </type>
+    
+    <type id="131073"> 
+        <mesh>DefaultAssets\GeometryObject\kaboom2_0.fbx</mesh>
+        <material name="SphereMat" />
+    </type>
+    
+    <type id="131074"> 
+        <mesh>DefaultAssets\GeometryObject\timeBomb.fbx</mesh>
+        <material name="roundGroundMat" />
+    </type>
+    
+    <type id="131075"> 
+        <mesh>DefaultAssets\GeometryObject\remoteBomb.fbx</mesh>
+        <material name="____TestMaterial" />
+    </type>
+    
+    <type id="131076"> 
+        <mesh>DefaultAssets\GeometryObject\remoteBomb.fbx</mesh>
+        <material name="____TestMaterial" />
+    </type>
+    
+    <type id="131077"> 
+        <mesh>DefaultAssets\GeometryObject\timeBomb.fbx</mesh>
+        <material name="____TestMaterial" />
+    </type>
+    
+    <type id="131172"> 
+        <mesh>DefaultAssets\GeometryObject\healthPack.fbx</mesh>
+        <material name="brick1Mat" />
+    </type>
+</dynamic_objects>

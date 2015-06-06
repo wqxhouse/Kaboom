@@ -8,7 +8,9 @@
 #include <Core.h>
 #include <GeometryObjectManager.h>
 #include <MaterialManager.h>
+#include <ObjectGlowManager.h>
 #include <components/PositionComponent.h>
+#include <components/WeaponPickupComponent.h>
 #include <core/Entity.h>
 
 #include "../Scene.h"
@@ -17,6 +19,9 @@
 #include "../input/InputManager.h"
 #include "../network/ClientEventHandlerLookup.h"
 #include "../network/GameClient.h"
+#include <osgAudio/AudioEnvironment.h>
+#include <osgAudio/Sample.h>
+using namespace osgAudio;
 
 Game::Game(ConfigSettings *config)
         : config(config),
@@ -28,6 +33,7 @@ Game::Game(ConfigSettings *config)
           client(eventHandlerLookup), 
 	      _camera(Core::getMainCamera()) {
 	name = new std::string();
+	osgAudio::AudioEnvironment::instance()->init();
     std::string mediaPath, screenPosXStr, screenPosYStr, renbufferWStr, renbufferHStr, screenWStr, screenHStr;
     config->getValue(ConfigSettings::str_mediaFilePath, mediaPath);
     config->getValue(ConfigSettings::str_screenPosX, screenPosXStr);
@@ -70,6 +76,7 @@ Game::Game(ConfigSettings *config)
 	Core::loadMaterialFile(str_material_xml);
 	Core::loadWorldFile(str_world_xml);
 	Core::loadTypeIdFile(str_typeid_xml);
+	Core::loadModelCache(4);
 	/* End testing code */
 
     inputManager = new InputManager(client, this);
@@ -83,14 +90,45 @@ Game::Game(ConfigSettings *config)
 	_particleEffectManager = Core::getWorldRef().getParticleEffectManager();
 
     printf("Loading KABOOM_EXPLODE sound\n");
-    soundManager.loadSound(SoundType::KABOOM_EXPLODE, "sounds\\bomb.wav");
+	soundManager.loadSound(SoundType::KABOOM_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\bomb.wav");
+	soundManager.loadSound(SoundType::REMOTE_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\c4.wav");
+	soundManager.loadSound(SoundType::TIME_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\time_explosion.mp3");
+	soundManager.loadSound(SoundType::FAKE_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\fake_bomb_explode.wav");
+	soundManager.loadSound(SoundType::MARTY_EXPLODE, str_mediaPath + "DefaultAssets\\Sound\\marty_bomb.wav");
     printf("Loading KABOOM_FIRE sound\n");
-    soundManager.loadSound(SoundType::KABOOM_FIRE, "sounds\\throw.wav");
+	soundManager.loadSound(SoundType::KABOOM_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw.wav");
+	soundManager.loadSound(SoundType::REMOTE_FIRE, str_mediaPath + "DefaultAssets\\Sound\\throw2.wav");
+	soundManager.loadSound(SoundType::TIME_FIRE, str_mediaPath + "DefaultAssets\\Sound\\bounce_fire.wav");
+	soundManager.loadSound(SoundType::FAKE_FIRE, str_mediaPath + "DefaultAssets\\Sound\\plop.wav");
+	soundManager.loadSound(SoundType::MARTY_FIRE, str_mediaPath + "DefaultAssets\\Sound\\salt.wav");
 	printf("Loading WALKING sound\n");
-	soundManager.loadSound(SoundType::WALKING, "sounds\\walking.mp3");
+	soundManager.loadSound(SoundType::WALKING, str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
+	osg::ref_ptr<Sample> walk = new Sample(str_mediaPath + "DefaultAssets\\Sound\\walking.mp3");
+	characterFactory.setWalkingSample(walk);
     printf("Loading BASIC sound\n");
-    soundManager.loadSound(SoundType::BASIC, "sounds\\a.wav");
-	
+	soundManager.loadSound(SoundType::BASIC, str_mediaPath + "DefaultAssets\\Sound\\a.wav"); 
+	printf("Loading JUMP sound\n");
+	soundManager.loadSound(SoundType::JUMP, str_mediaPath + "DefaultAssets\\Sound\\jump_sound.mp3");
+	printf("Loading Background Music sound\n");
+	for (int i = 0; i < 4; i++){
+		std::unordered_map<VoiceActing, osg::ref_ptr<Sample>> *voice = new std::unordered_map<VoiceActing, osg::ref_ptr<Sample>>();
+		addVoiceLines(str_mediaPath,i,voice);
+		voiceActorList[i]=voice;
+	}
+	voiceMap = voiceActorList[0];
+	backGroundMusic = new Source;
+	angryRobot = new Sample(str_mediaPath + "DefaultAssets\\Sound\\angryRobot.wav");
+	backGroundMusic->setSound(angryRobot);
+	backGroundMusic->setGain(1);
+	backGroundMusic->setLooping(true);
+	backGroundMusic->setAmbient();
+	backGroundMusic->play();
+	voiceSource = new Source;
+	voiceState = new osgAudio::SoundState("voice actor");
+	voiceState->setSource(voiceSource);
+	voiceState->setGain(1);
+	voiceState->setLooping(false);
+	angry = true;
 
 }
 
@@ -111,28 +149,41 @@ void Game::run() {
 	LibRocketGUIManager *guiManager = Core::getInGameLibRocketGUIManager();
 	Rocket::Core::ElementDocument* in_game_screen_ui = guiManager->getWindow(0);
 	Rocket::Core::ElementDocument* start_screen_ui = guiManager->getWindow(1);
+	Rocket::Core::ElementDocument* score_screen_ui = guiManager->getWindow(2);
 	Rocket::Core::ElementDocument* name_screen_ui = guiManager->getWindow(3);
+	Rocket::Core::ElementDocument* death_screen_ui = guiManager->getWindow(4);
     //while (!Core::isViewerClosed()) { // TODO: buggy right now
     while (true) {
 		// printf("duration: %lf\n", Core::getLastFrameDuration());
 		switch (gsm) {
 		case EDITOR_MODE:
-			if (Core::isInStartScreenMode()) { //pressed the PlayGame Button
-				gsm = NAME_SCREEN;
+			
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;
+				
 			}
-			break;
-		case NAME_SCREEN:
-			in_game_screen_ui->Hide();
-			start_screen_ui->Hide();
-			name_screen_ui->Show();
-			inputManager->loadNameTyping();
+			if (Core::isInStartScreenMode()) { //pressed the PlayGame Button
+				gsm = START_SCREEN_MODE;
+			}
 			break;
 		case START_SCREEN_MODE:
 		{
-			inputManager->loadConfig();
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;			
+			}
 			in_game_screen_ui->Hide();
 			name_screen_ui->Hide();
+			score_screen_ui->Hide();
 			start_screen_ui->Show();
+			death_screen_ui->Hide();
 			abc = true;
 			break;
 		}
@@ -142,26 +193,72 @@ void Game::run() {
 			Core::disableStartScreen();
 			break;
 		}
+		case NAME_SCREEN:
+			//std::cout << colorId << std::endl;
+			if (!angry){
+				backGroundMusic->setSound(angryRobot);
+				backGroundMusic->setGain(1);
+				backGroundMusic->setLooping();
+				backGroundMusic->play();
+				angry = true;
+			}
+			if (colorId != previousValue){
+				previousValue = colorId;
+				//Change 0 to colorId once all voices are recorded
+				voiceMap = voiceActorList[colorId];
+				voiceSource->setSound(voiceActorList[colorId]->at(CHAMP_SELECT));
+				voiceSource->setGain(1);
+				voiceSource->play();
+			}
+			in_game_screen_ui->Hide();
+			start_screen_ui->Hide();
+			name_screen_ui->Show();
+			inputManager->loadNameTyping();
+			break;
 		case CONNECT_TO_SERVER:
 		{
+			if (colorId==5){
+				colorId = 0;
+			}
+			inputManager->loadConfig();
 			config->getValue(ConfigSettings::str_server_address, serverAddress);
 			config->getValue(ConfigSettings::str_server_port, serverPort);
 
 			in_game_screen_ui->Show();
 			start_screen_ui->Hide();
 			name_screen_ui->Hide();
-
-
+			death_screen_ui->Hide();
+			playerAlive = true;
             bool res = client.connectToServer(serverAddress, serverPort);
 
 			if (res)
 			{
 				gsm = GAME_MODE;
 				Core::enableGameMode();
-				if (abc){
-					client.sendPlayerRenameEvent(*name);
-					abc = false;
+				client.sendPlayerRenameEvent(*name);
+				//chanage this line for senting selected character.
+				EntityType characterColor = RED_CHARACTER;
+				switch (colorId)
+				{
+					case 0:
+						characterColor = RED_CHARACTER;
+						break;
+					case 1:
+						characterColor = GREEN_CHARACTER;
+						break;
+					case 2:
+						characterColor = BLUE_CHARACTER;
+						break;
+					case 3:
+						characterColor = PURPLE_CHARACTER;
+						break;
+					default:
+						characterColor = RED_CHARACTER;
+						break;
 				}
+                client.sendPlayerSelectionEvent(characterColor);
+			//abc = false;
+				
 			}
 			else
 			{
@@ -174,9 +271,12 @@ void Game::run() {
 			// TODO: the following doesn't need to be updated for every event
 			// but need to set as soon as the game mode is on
 			// TODO: put this two as initial values in the config file
-			
+			if (angry&&!backGroundMusic->isPaused()){
+				backGroundMusic->pause();
+				angry = false;
+			}
 			Core::getMainCamera().setFovXAndUpdate(90);
-			Core::getMainCamera().setNearAndFarAndUpdate(1, 500);
+			Core::getMainCamera().setNearAndFarAndUpdate(0.01f, 500);
 			
 			// TODO: Robin: need to check this.
 			// Since receive fails when the packet received is zero (from the source code, not sure if it is the intended behavior)
@@ -185,6 +285,21 @@ void Game::run() {
 			// E.g: close the server whlie running the game 
             client.receive();
 			_guiEventHandler->changeTime(this);
+			damageScreenCheck();
+			SMScreenCheck();
+			chatMessageCheck();
+			/*if (currentPlayer->getEntity() != nullptr){
+				PlayerStatusComponent *player = currentPlayer->getEntity()->getComponent<PlayerStatusComponent>();
+				if (!currentPlayer->getEntity()->getComponent<PlayerStatusComponent>()->isAlive()){
+					_guiEventHandler->changeDeathTime(this);
+				}
+			}*/
+			if (!playerAlive){
+				deathTimeUpdate();
+			}
+			if (gameMode.getMatchState() == GameMode::MatchState::PRE_MATCH){
+				_guiEventHandler->preGame(color, changeColor);
+			}
 			if (!Core::isInGameMode()) { //have a way to switch back to the editor
 				removeAllEntities(); //remove all entity created dynamically when connected to the client
 				gsm = DISCONNECT_TO_SERVER;
@@ -192,33 +307,61 @@ void Game::run() {
 			break;
 		case DISCONNECT_TO_SERVER:
 			//TODO: need to remove all the dynamically genereated objects! otherwise we still see them the next time we reconnect
+			getGameGUIEventHandler()->deleteAllPlayers();
 			client.disconnectFromServer();
+            
+            for (auto player : players) {
+                delete player.second;
+            }
+
+            players.clear();
+
 			gsm = START_SCREEN_MODE;
 			break;
-		}		
+		}
+
+        for (auto it = explosionLightMap.begin(); it != explosionLightMap.end();) {
+            auto expLight = it->second;
+            const auto lightManager = Core::getWorldRef().getLightManager();
+
+            if (lightManager->doesNameExist(expLight->name)) {
+                const auto light = lightManager->getLight(expLight->name);
+
+                expLight->step += 1.0f / 60.0f;
+
+                float newIntensity;
+                float newRadius;
+
+                if (expLight->step < 0.0625f) {
+                    newRadius = expLight->radius * (-256.0f * (expLight->step) * (expLight->step) + 32.0f * (expLight->step));
+                    newIntensity = newRadius * 20.0f;
+                } else {
+                    newRadius = expLight->radius * (256.0f * (expLight->step) * (expLight->step) - 256.0f * (expLight->step) + 64.0f) / 49.0f;
+                    newIntensity = newRadius * 20.0f;
+                }
+
+                if (newIntensity > 0 && newRadius > 0 && expLight->step < 0.5f) {
+                    light->setIntensity(newIntensity);
+                    light->asPointLight()->setRadius(newRadius);
+                    ++it;
+                } else {
+                    lightManager->deleteLight(expLight->name);
+                    it = explosionLightMap.erase(it);
+
+                    delete expLight;
+                }
+            }
+        }
+
         Core::AdvanceFrame();
     }
 }
 
-void Game::addEntity(Entity *entity) {
-    auto *posComp = entity->getComponent<PositionComponent>();
-    auto *sceneNodeComp = entity->getComponent<SceneNodeComponent>();
-
-    if (posComp == nullptr || sceneNodeComp == nullptr) {
-        return;
-    }
-
-    if (sceneNodeComp != nullptr) {
-        const Vec3 &pos = posComp->getPosition();
-
-        const auto name = std::to_string(entity->getId());
-        const auto osgPos = osg::Vec3(pos.x, pos.y, pos.z);
-
-        getGeometryManager()->addGeometry(name, sceneNodeComp->getNode(), osgPos);
-    }
-}
-
 void Game::removeEntity(Entity *entity) {
+    if (entity->hasComponent<WeaponPickupComponent>() || entity->getType() == FAKE_BOMB) {
+        auto obj = getGeometryManager()->getGeometryObject(std::to_string(entity->getId()));
+        Core::getWorldRef().getObjectGlowManager()->removeGlowGeometryObject(obj);
+    }
     getGeometryManager()->deleteGeometry(std::to_string(entity->getId()));
     entityManager.destroyEntity(entity->getId());
 }
@@ -227,4 +370,51 @@ void Game::removeAllEntities() {
 	for (auto it : entityManager.getEntityList()) {
         removeEntity(it);
 	}
+}
+void Game::addVoiceLines(std::string str_mediaPath, int i, std::unordered_map<Game::VoiceActing, osg::ref_ptr<Sample>> *voice){
+	std::string folder = str_mediaPath + "DefaultAssets\\Sound\\actor" + std::to_string(i) + "\\";
+	//osg::ref_ptr<Sample> sample = new Sample("champ_select.wav");
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(CHAMP_SELECT, new Sample(folder+"champ_select.wav")));
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(DEATH_1, new Sample(folder + "death_1.wav")));
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(KILL_1, new Sample(folder + "kill_1.wav")));
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(END_GAME_VICTORY_1, new Sample(folder + "victory_1.wav")));
+	voice->insert(std::make_pair	<VoiceActing, osg::ref_ptr<Sample>>(END_GAME_DEFEAT_1, new Sample(folder + "defeat_1.wav")));
+}
+
+void Game::damageScreenCheck()
+{
+	std::chrono::duration<double> elapsed_seconds = (std::chrono::high_resolution_clock::now() - damageTime);
+	if (healthChanged && elapsed_seconds.count() >= 1&&playerAlive)
+	{
+		healthChanged = false;
+		_guiEventHandler->damageScreen(false);
+	}	
+}
+
+void Game::deathTimeUpdate(){
+	_guiEventHandler->changeDeathTime(this);
+}
+
+void Game::setSMScreen(){
+		smOn = true;
+		getGameGUIEventHandler()->smScreen(true);
+		smTime = std::chrono::high_resolution_clock::now();
+}
+
+void Game::SMScreenCheck(){
+	std::chrono::duration<double> elapsed_seconds = (std::chrono::high_resolution_clock::now() - smTime);
+	if (smOn && elapsed_seconds.count() >=3)
+	{
+		smOn = false;
+		_guiEventHandler->smScreen(false);
+	}
+}
+void Game::chatMessageCheck(){
+	std::chrono::duration<double> elapsed_seconds = (std::chrono::high_resolution_clock::now() - chatTime);
+	if (elapsed_seconds.count() >= 3){
+		
+		chatOp -= 15;
+	}
+	_guiEventHandler->chatFade(chatOp);
+
 }

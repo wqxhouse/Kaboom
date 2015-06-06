@@ -1,7 +1,6 @@
 #include "DestroyEventHandler.h"
 
 #include <network/DestroyEvent.h>
-
 #include "../components/TrailingEffectComponent.h"
 #include "../core/Game.h"
 

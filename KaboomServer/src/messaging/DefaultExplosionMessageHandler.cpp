@@ -2,6 +2,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include <components/InvulnerabilityComponent.h>
 #include <components/PlayerComponent.h>
 #include <components/HealthComponent.h>
 #include <components/PlayerStatusComponent.h>
@@ -17,6 +18,7 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/OwnerComponent.h"
 #include "../components/TriggerComponent.h"
+#include "../components/PlayerDeathComponent.h"
 #include "../core/EntityConfigLookup.h"
 #include "../core/Game.h"
 
@@ -48,7 +50,11 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
         auto charPhysicsComp = nearbyEntity->getComponent<PhysicsComponent>();
         auto charHealthComp = nearbyEntity->getComponent<HealthComponent>();
 
-        if (charStatusComp == nullptr || charPhysicsComp == nullptr || charHealthComp == nullptr) {
+        if (charStatusComp == nullptr ||
+                charPhysicsComp == nullptr ||
+                charHealthComp == nullptr ||
+                nearbyEntity->hasComponent<PlayerDeathComponent>() ||
+                nearbyEntity->hasComponent<InvulnerabilityComponent>()) {
             continue;
         }
 
@@ -109,6 +115,7 @@ bool DefaultExplosionMessageHandler::handle(const ExplosionMessage &message) con
                 killer->setKills(killer->getKills() + 1);
                 game->getGameServer().sendChatEvent(victim->getName() + " was killed by " + killer->getName() + ".");
             } else {
+                killer->setKills(killer->getKills() - 1);
                 game->getGameServer().sendChatEvent(victim->getName() + " committed suicide.");
             }
 

@@ -11,7 +11,7 @@ Model::Model()
 	_curr_type_id = -1;
 }
 
-Model::Model(int type_id, bool hasAnim)
+Model::Model(int type_id, bool hasAnim, osgAnimation::Animation::PlayMode playMode)
 	: Model()
 {
 	GeometryCache* cache = Core::getWorldRef().getGeometryCache();
@@ -25,7 +25,7 @@ Model::Model(int type_id, bool hasAnim)
 		transformNode->setMatrix(cache->getMatrixById(type_id));
 	}
 	else {
-		addAnimationById(type_id);
+		addAnimationById(type_id, playMode);
 		std::unordered_map<int, osg::ref_ptr<osg::MatrixTransform>>::iterator itr = _modelMap.find(type_id);
 		if (itr == _modelMap.end())
 		{
@@ -62,12 +62,6 @@ bool Model::loadModel(int type_id)
 	osg::ref_ptr<osg::Node> tmp = cache->getNodeById(type_id);
 	osg::ref_ptr<osg::MatrixTransform> transformNode = NULL;
 	bool retVal = loadModelHelper(tmp, transformNode, _animManager);
-
-	// Use GeometryObject to handle the Material, model will be a grandchild
-	// [TODO: Fix this memory leak]
-	GeometryObject geom = GeometryObject("Character Dummy", transformNode.get());
-	geom.setMaterial(cache->getMaterialById(type_id));
-	transformNode = geom.getRoot();
 
 	_root->addChild(transformNode);
 	return retVal;
@@ -112,7 +106,7 @@ osg::ref_ptr<osg::MatrixTransform> Model::getRootNode()
 	return _root;
 }
 
-void Model::addAnimationById(int type_id)
+void Model::addAnimationById(int type_id, osgAnimation::Animation::PlayMode playMode)
 {
 	osg::ref_ptr<osg::MatrixTransform> node = new osg::MatrixTransform();
 	osg::ref_ptr<osgAnimation::BasicAnimationManager> animManager = NULL;
@@ -122,11 +116,8 @@ void Model::addAnimationById(int type_id)
 
 	loadModelHelper(tmp, node, animManager);
 
-	// Use GeometryObject to handle the Material, model will be a grandchild
-	// [TODO: Fix this memory leak]
-	GeometryObject* geom = new GeometryObject("Character Dummy" + type_id, node.get());
-	geom->setMaterial(cache->getMaterialById(type_id));
-	node = geom->getRoot();
+	// Set the animation play mode (Default is loop)
+	animManager->getAnimationList()[0]->setPlayMode(playMode);
 
 	node->setMatrix(cache->getMatrixById(type_id));
 

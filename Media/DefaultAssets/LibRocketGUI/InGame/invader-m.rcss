@@ -1,6 +1,6 @@
 body
 {
-	font-family: Delicious;
+	font-family: kinishinai nbp;
 	font-weight: normal;
 	font-style: normal;
 	font-size: 15;
@@ -99,8 +99,6 @@ div#content
 
 p
 {
-	text-align: left;
-	margin-bottom: 1em;
 }
 
 h1
@@ -138,13 +136,13 @@ input.submit
 {
 	display: inline-block;
 
-	width: 159px;
-	height: 37px;
+	width: 250px;
+	height: 90px;
 
-	padding-top: 8px;
+	padding-top: 2.5%;
 	vertical-align: -18px;
 
-	font-size: 18;
+	font-size: 100%;
 	text-align: center;
 	tab-index: auto;
 

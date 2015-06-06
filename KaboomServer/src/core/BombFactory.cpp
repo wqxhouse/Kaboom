@@ -19,9 +19,11 @@
 #include "../components/TriggerComponent.h"
 #include "../math/util.h"
 #include "../messaging/DefaultExplosionMessageHandler.h"
+#include "../messaging/FakeBombMessageHandler.h"
 #include "../messaging/KaboomV2MessageHandler.h"
 #include "../messaging/MessageHandlerChain.h"
 #include "../messaging/RemoteDetonatorMessageHandler.h"
+#include "../messaging/SaltyMartyBombMessageHandler.h"
 #include "../messaging/TimeBombMessageHandler.h"
 
 BombFactory::BombFactory(EntityManager &entityManager)
@@ -47,6 +49,14 @@ Entity *BombFactory::createBomb(
         }
         case REMOTE_DETONATOR: {
             createRemoteDetonator(entity);
+            break;
+        }
+        case SALTY_MARTY_BOMB: {
+            createSaltyMartyBomb(entity);
+            break;
+        }
+        case FAKE_BOMB: {
+            createFakeBomb(entity);
             break;
         }
     }
@@ -130,4 +140,26 @@ void BombFactory::createRemoteDetonator(Entity *entity) const {
 
     static RemoteDetonatorMessageHandler remoteDetonatorHandler;
     chain->addHandler(&remoteDetonatorHandler);
+}
+
+void BombFactory::createSaltyMartyBomb(Entity *entity) const {
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    static SaltyMartyBombMessageHandler saltyMartyBombMessageHandler;
+    chain->addHandler(&saltyMartyBombMessageHandler);
+
+    entity->attachComponent(new CollisionComponent());
+}
+
+void BombFactory::createFakeBomb(Entity *entity) const {
+    auto &config = EntityConfigLookup::get(entity->getType());
+    auto handlerComp = entity->getComponent<MessageHandlerComponent>();
+    auto chain = static_cast<MessageHandlerChain *>(handlerComp->getHandler());
+
+    static FakeBombMessageHandler fakeBombMessageHandler;
+    chain->addHandler(&fakeBombMessageHandler);
+
+    entity->attachComponent(new CollisionComponent());
+    entity->attachComponent(new TimerComponent(new Timer(config.getInt("delay"))));
 }

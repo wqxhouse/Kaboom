@@ -4,9 +4,11 @@
 
 class Timer {
 public:
-    Timer::Timer(long long duration = 0)
+    Timer::Timer(
+            long long duration = 0,
+            std::chrono::high_resolution_clock::time_point startTime = std::chrono::high_resolution_clock::now())
             : duration(std::chrono::milliseconds(duration)),
-              startTime(std::chrono::high_resolution_clock::now()) {
+              startTime(startTime) {
     }
 
     inline void start() {

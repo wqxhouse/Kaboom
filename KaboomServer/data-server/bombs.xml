@@ -5,29 +5,29 @@
         <name type="string">Kaboom 2.0</name>
         <size type="float">0.1</size>
         <mass type="float">1.0</mass>
-        <explosion-radius type="float">4.0</explosion-radius>
+        <explosion-radius type="float">2.0</explosion-radius>
         <cooldown type="int">500</cooldown>
-        <launch-speed type="float">12.0</launch-speed>
+        <launch-speed type="float">30.0</launch-speed>
         <capacity type="int">20</capacity>
         <knockback-amount type="float">5.0</knockback-amount>
         <knockback-duration type="int">250</knockback-duration>
-        <max-damage type="int">80</max-damage>
-        <min-damage type="int">20</min-damage>
+        <max-damage type="int">35</max-damage>
+        <min-damage type="int">25</min-damage>
     </bomb>
     <bomb>
         <id type="uint">131074</id>
         <name type="string">Time Bomb</name>
         <size type="float">0.1</size>
         <mass type="float">1.0</mass>
-        <explosion-radius type="float">4.0</explosion-radius>
+        <explosion-radius type="float">3.0</explosion-radius>
         <cooldown type="int">1500</cooldown>
         <launch-speed type="float">15.0</launch-speed>
         <capacity type="int">20</capacity>
         <knockback-amount type="float">5.0</knockback-amount>
         <knockback-duration type="int">250</knockback-duration>
-        <max-damage type="int">80</max-damage>
-        <min-damage type="int">20</min-damage>
-        <delay type="int">1000</delay>
+        <max-damage type="int">40</max-damage>
+        <min-damage type="int">30</min-damage>
+        <delay type="int">2000</delay>
         <restitution type="float">0.8</restitution>
         <delta-angle type="float">15.0</delta-angle>
         <amount type="int">3</amount> <!-- Set to 24 for funsies -->
@@ -40,11 +40,40 @@
         <explosion-radius type="float">4.0</explosion-radius>
         <cooldown type="int">500</cooldown>
         <launch-speed type="float">13.0</launch-speed>
-        <capacity type="int">20</capacity>
+        <capacity type="int">10</capacity>
         <knockback-amount type="float">13.0</knockback-amount>
         <knockback-duration type="int">250</knockback-duration>
-        <max-damage type="int">50</max-damage>
-        <min-damage type="int">10</min-damage>
+        <max-damage type="int">40</max-damage>
+        <min-damage type="int">20</min-damage>
         <max-active type="int">5</max-active>
+    </bomb>
+    <bomb>
+        <id type="uint">131076</id>
+        <name type="string">Salty Marty Bomb</name>
+        <size type="float">0.1</size>
+        <mass type="float">1.0</mass>
+        <explosion-radius type="float">4.0</explosion-radius>
+        <cooldown type="int">500</cooldown>
+        <launch-speed type="float">12.0</launch-speed>
+        <capacity type="int">20</capacity>
+        <knockback-amount type="float">5.0</knockback-amount>
+        <knockback-duration type="int">250</knockback-duration>
+        <max-damage type="int">0</max-damage>
+        <min-damage type="int">0</min-damage>
+    </bomb>
+    <bomb>
+        <id type="uint">131077</id>
+        <name type="string">Fake Bomb</name>
+        <size type="float">0.1</size>
+        <mass type="float">1.0</mass>
+        <explosion-radius type="float">4.0</explosion-radius>
+        <cooldown type="int">500</cooldown>
+        <launch-speed type="float">12.0</launch-speed>
+        <capacity type="int">10</capacity>
+        <knockback-amount type="float">5.0</knockback-amount>
+        <knockback-duration type="int">250</knockback-duration>
+        <max-damage type="int">80</max-damage>
+        <min-damage type="int">20</min-damage>
+        <delay type="int">30000</delay>
     </bomb>
 </bombs>
