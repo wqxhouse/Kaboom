@@ -4,7 +4,7 @@ An 3D FPS Multiplier shooter inspired by the arcade style Bomberman Game.
 
 Bombs Away!
 
-This is a course project made in CSE 125 @ UCSD in the course of 10 weeks from concept to completion.
+This is a course project made in CSE 125 @ UCSD in the course for 10 weeks from concept to completion.
 
 Check out the game in action here:
 https://www.youtube.com/watch?v=nPgTGf4SnZw
