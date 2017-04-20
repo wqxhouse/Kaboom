@@ -14,11 +14,17 @@ This Repo is inteded for demonstration purpose and is not inteded for building o
 Brought to you by:
 
 Phillip Ho
+
 Brian La
+
 Martin La Pierre
+
 Wai Ho Leung
+
 Wai Kit Leung (Steven)
+
 Zonglin Wu
+
 Alexie Sousa
 
 Last modified By Steven @ 4/19/2017
